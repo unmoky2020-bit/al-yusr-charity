@@ -1,0 +1,158 @@
+import { Helmet } from "react-helmet-async";
+import { useLang } from "@/i18n/LangContext";
+import { absoluteSiteUrl } from "@/lib/site-runtime";
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  image?: string;
+  ogType?: "website" | "article";
+  keywords?: string;
+}
+
+const HIGH_VOLUME_KEYWORDS = [
+  // هوية المؤسسة
+  "اليسر", "مؤسسة اليسر", "مؤسسة اليسر الخيرية", "جمعية اليسر", "جمعية اليسر الخيرية", "اليسر الخيرية",
+  // الموقع الجغرافي
+  "المنصورة", "الدقهلية", "جمعية خيرية بالمنصورة", "تبرع الدقهلية",
+  // الخدمات
+  "تبرع", "زكاة", "صدقة جارية", "كفالة أيتام", "صك أضحية", "تيسير زواج", "سقيا الماء",
+  // English
+  "Al-Yusr Charity Foundation", "Al-Yusr Egypt", "Donate Egypt", "Zakat Egypt", "Orphan sponsorship Egypt",
+].join(", ");
+
+export const SEOHelmet = ({ title, description, path = "/", image, ogType = "website", keywords }: Props) => {
+  const { lang } = useLang();
+  const url = absoluteSiteUrl(path);
+
+  // Clamp to Google's preferred limits to avoid SEO warnings.
+  const clamp = (s: string, max: number) => {
+    const v = (s || "").replace(/\s+/g, " ").trim();
+    if (v.length <= max) return v;
+    const cut = v.slice(0, max - 1);
+    const lastSpace = cut.lastIndexOf(" ");
+    return (lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).trimEnd() + "…";
+  };
+
+  const safeTitle = clamp(title, 60);
+  const safeDescription = clamp(description, 160);
+  const safeKeywords = keywords ? `${keywords}, ${HIGH_VOLUME_KEYWORDS}` : HIGH_VOLUME_KEYWORDS;
+
+  // Default lang-specific OG image if caller didn't pass one.
+  const toAbsolute = (v?: string) => {
+    if (!v) return absoluteSiteUrl(`/og-${lang}.jpg`);
+    if (/^https?:\/\//.test(v)) return v;
+    if (v.startsWith("/")) return absoluteSiteUrl(v);
+    return absoluteSiteUrl(`/og-${lang}.jpg`);
+  };
+
+  const ogImage = toAbsolute(image);
+  const brandIcon = absoluteSiteUrl("/icons/icon-512.png");
+  const hreflangAr = absoluteSiteUrl(path);
+
+  return (
+    <Helmet>
+      <html lang={lang} dir={lang === "ar" ? "rtl" : "ltr"} />
+      <title>{safeTitle}</title>
+      <meta name="description" content={safeDescription} />
+      <meta name="keywords" content={safeKeywords} />
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <link rel="canonical" href={url} />
+      <link rel="alternate" hrefLang="ar-EG" href={hreflangAr} />
+      <link rel="alternate" hrefLang="ar" href={hreflangAr} />
+      <link rel="alternate" hrefLang="x-default" href={hreflangAr} />
+
+      {/* OpenGraph Meta Tags */}
+      <meta property="og:title" content={safeTitle} />
+      <meta property="og:description" content={safeDescription} />
+      <meta property="og:url" content={url} />
+      <meta property="og:type" content={ogType} />
+      <meta property="og:site_name" content={lang === "ar" ? "اليسر" : "Al-Yusr Charity Foundation"} />
+      <meta property="og:locale" content={lang === "ar" ? "ar_EG" : "en_US"} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:image:secure_url" content={ogImage} />
+      <meta property="og:image:alt" content={safeTitle} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:type" content="image/jpeg" />
+      <meta property="og:logo" content={brandIcon} />
+
+      {/* Twitter Cards Meta */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@elyusrcharity" />
+      <meta name="twitter:title" content={safeTitle} />
+      <meta name="twitter:description" content={safeDescription} />
+      <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image:alt" content={safeTitle} />
+
+      {/* 2026 Technical & Generative AI Overview JSON-LD Schema */}
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": ["NGO", "EmergencyService"],
+            "@id": "https://elyusr.org/#ngo",
+            name: lang === "ar" ? "اليسر" : "Al-Yusr Charity Foundation",
+            alternateName: [
+              "مؤسسة اليسر",
+              "جمعية اليسر",
+              "جمعية اليسر الخيرية",
+              "مؤسسة اليسر الخيرية",
+              "اليسر الخيرية",
+              "Al-Yusr",
+              "Al-Yusr Charity Foundation",
+              "مؤسسة اليسر بالمنصورة"
+            ],
+            url: "https://elyusr.org/",
+            logo: brandIcon,
+            image: ogImage,
+            description: safeDescription,
+            taxID: "2655/2019",
+            foundingDate: "2019",
+            knowsAbout: [
+              "Zakat Calculation",
+              "Qurbani Share Distribution Eid 2026",
+              "Orphan Care & Sponsorship",
+              "Food Security & Boxes",
+              "Clean Water Supply Stations",
+              "Orphan Bride Trousseau",
+              "Corporate Social Responsibility CSR Egypt"
+            ],
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "تقسيم خطاب، بجوار وكالة المنصورة",
+              addressLocality: "المنصورة",
+              addressRegion: "الدقهلية",
+              addressCountry: "EG"
+            },
+            telephone: "+201097000137",
+            areaServed: [
+              { "@type": "City", name: "المنصورة" },
+              { "@type": "AdministrativeArea", name: "محافظة الدقهلية" },
+              { "@type": "Country", name: "مصر" }
+            ],
+            sameAs: [
+              "https://facebook.com/elyusrcharity",
+              "https://instagram.com/elyusrcharity"
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": `${url}#webpage`,
+            url,
+            name: safeTitle,
+            description: safeDescription,
+            inLanguage: lang === "ar" ? "ar-EG" : "en",
+            isPartOf: { "@id": "https://elyusr.org/#website" },
+            about: { "@id": "https://elyusr.org/#ngo" },
+            speakable: {
+              "@type": "SpeakableSpecification",
+              cssSelector: ["h1", "h2", "blockquote"]
+            }
+          }
+        ]
+      })}</script>
+    </Helmet>
+  );
+};

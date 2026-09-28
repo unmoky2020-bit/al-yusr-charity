@@ -1,0 +1,42 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+.env*.local
+
+# Build artifacts & temp files
+build-output.txt
+vite.config.ts.timestamp-*.mjs
+.playwright-mcp/
+.lovable/
+scratch/
+video_*.mp4
+
+# Root screenshot artifacts
+contact-*.png
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

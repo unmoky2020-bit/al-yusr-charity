@@ -1,0 +1,312 @@
+/**
+ * Generates public/sitemap.xml from a static base + every active
+ * `donation_nodes` row (programs + their option children) so each
+ * /programs/:slug and /programs/:slug/:option page is indexable with
+ * proper hreflang pairs (ar-EG ↔ /en mirror).
+ *
+ * Runs on `predev` and `prebuild` so dev preview and prod publish stay
+ * in sync with the database.
+ */
+import { writeFileSync, readFileSync } from "fs";
+import { resolve } from "path";
+import { createClient } from "@supabase/supabase-js";
+import { ALL_GEO_PAIRS } from "../src/data/geoPages";
+import { DAKAHLIA_CITIES } from "../src/data/dakahliaCities";
+
+const BASE_URL = "https://elyusr.org";
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || "https://iqxpfsvqpitjmflvypel.supabase.co";
+const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeHBmc3ZxcGl0am1mbHZ5cGVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDE4NzAsImV4cCI6MjA5MzY3Nzg3MH0.ehAbwmWgns88Xvo4pxHCafs3VShj-F1PfsYZrn7O5eQ";
+
+type Entry = { path: string; lastmod?: string; changefreq?: string; priority?: string; noindex?: boolean };
+
+const today = new Date().toISOString().slice(0, 10);
+
+const staticEntries: Entry[] = [
+  { path: "/", changefreq: "daily", priority: "1.0" },
+  { path: "/qurbani", changefreq: "daily", priority: "0.95" },
+  { path: "/donate", changefreq: "weekly", priority: "0.9" },
+  { path: "/programs", changefreq: "weekly", priority: "0.85" },
+  { path: "/zakat", changefreq: "weekly", priority: "0.85" },
+  { path: "/blog", changefreq: "weekly", priority: "0.6" },
+  { path: "/about", changefreq: "monthly", priority: "0.7" },
+  { path: "/contact", changefreq: "monthly", priority: "0.7" },
+  { path: "/stories", changefreq: "weekly", priority: "0.7" },
+  { path: "/projects", changefreq: "weekly", priority: "0.85" },
+  { path: "/cases", changefreq: "daily", priority: "0.9" },
+  { path: "/gallery", changefreq: "weekly", priority: "0.6" },
+  { path: "/services-map", changefreq: "weekly", priority: "0.7" },
+  { path: "/privacy", changefreq: "yearly", priority: "0.3" },
+  { path: "/terms", changefreq: "yearly", priority: "0.3" },
+];
+
+function escapeXml(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function urlEntry(e: Entry): string {
+  const loc = `${BASE_URL}${e.path}`;
+  const altAr = `${BASE_URL}${e.path}`;
+  return [
+    "  <url>",
+    `    <loc>${escapeXml(loc)}</loc>`,
+    `    <lastmod>${e.lastmod || today}</lastmod>`,
+    e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : "",
+    e.priority ? `    <priority>${e.priority}</priority>` : "",
+    `    <xhtml:link rel="alternate" hreflang="ar-EG" href="${escapeXml(altAr)}" />`,
+    `    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(altAr)}" />`,
+    "  </url>",
+  ].filter(Boolean).join("\n");
+}
+
+async function fetchNodes(): Promise<Entry[]> {
+  try {
+    const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data, error } = await sb
+      .from("donation_nodes")
+      .select("slug, parent_id, active, updated_at, metadata, type")
+      .eq("active", true)
+      .order("sort_order");
+    if (error || !data) return [];
+    const byId = new Map<string, any>();
+    // Need ids — re-query with id
+    const { data: full } = await sb
+      .from("donation_nodes")
+      .select("id, slug, parent_id, active, updated_at, metadata")
+      .eq("active", true);
+    (full || []).forEach((r: any) => byId.set(r.id, r));
+    // Exclude alias programs (they 301-redirect to canonical) and hidden items
+    const ALIAS_OF: Record<string, string> = { satr: "shelter", food: "box" };
+    const isAlias = (n: any) => {
+      const canonical = (n.metadata || {}).canonical_slug || ALIAS_OF[n.slug];
+      return !!(canonical && canonical !== n.slug);
+    };
+    const aliasIds = new Set((full || []).filter(isAlias).map((n: any) => n.id));
+    const entries: Entry[] = [];
+    (full || []).forEach((n: any) => {
+      const meta = (n.metadata || {}) as any;
+      if (meta.noindex || meta.hidden_from_public) return;
+      if (aliasIds.has(n.id)) return;
+      if (n.parent_id && aliasIds.has(n.parent_id)) return;
+      const lastmod = (n.updated_at || "").slice(0, 10) || today;
+      if (!n.parent_id) {
+        entries.push({ path: `/programs/${n.slug}`, lastmod, changefreq: "weekly", priority: "0.85" });
+      } else {
+        const parent = byId.get(n.parent_id);
+        if (parent) {
+          entries.push({ path: `/programs/${parent.slug}/${n.slug}`, lastmod, changefreq: "weekly", priority: "0.7" });
+        }
+      }
+    });
+    return entries;
+  } catch (e) {
+    console.warn("[sitemap] could not fetch donation_nodes:", (e as Error).message);
+    return [];
+  }
+}
+
+async function fetchBlogPosts(): Promise<Entry[]> {
+  const map = new Map<string, Entry>();
+
+  // 1. Extract all 52 static blog posts from src/data/blog.ts
+  try {
+    const blogFile = readFileSync(resolve("src/data/blog.ts"), "utf8");
+    const slugRegex = /slug:\s*["']([^"']+)["']/g;
+    const dateRegex = /date:\s*["']([^"']+)["']/g;
+    const slugs: string[] = [];
+    let match: RegExpExecArray | null;
+    while ((match = slugRegex.exec(blogFile)) !== null) {
+      slugs.push(match[1]);
+    }
+    const dates: string[] = [];
+    while ((match = dateRegex.exec(blogFile)) !== null) {
+      dates.push(match[1]);
+    }
+    slugs.forEach((slug, idx) => {
+      const date = dates[idx] || today;
+      map.set(slug, {
+        path: `/blog/${slug}`,
+        lastmod: date,
+        changefreq: "weekly",
+        priority: "0.75",
+      });
+    });
+  } catch (e) {
+    console.warn("[sitemap] could not parse static blog posts:", (e as Error).message);
+  }
+
+  // 2. Fetch from Supabase if available
+  try {
+    const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data } = await sb
+      .from("blog_posts")
+      .select("slug, updated_at, status")
+      .eq("status", "published");
+    (data || []).forEach((p: any) => {
+      if (p.slug) {
+        map.set(p.slug, {
+          path: `/blog/${p.slug}`,
+          lastmod: (p.updated_at || "").slice(0, 10) || today,
+          changefreq: "weekly",
+          priority: "0.75",
+        });
+      }
+    });
+  } catch (e) {
+    console.warn("[sitemap] could not fetch blog_posts from Supabase:", (e as Error).message);
+  }
+
+  // 3. Fetch from Laravel /content?type=article if available
+  try {
+    const res = await fetch("https://elyusr-api.pyramedx.com/api/v1/content?type=article", {
+      headers: {
+        Authorization: "Bearer 129|thYAm59JeAVBOGJRaC7eMJQ7Vv1v3pdHygBTdSGM495cd1d8",
+        Accept: "application/json",
+      },
+    });
+    if (res.ok) {
+      const json: any = await res.json();
+      const articles = Array.isArray(json) ? json : (json?.data || []);
+      articles.forEach((a: any) => {
+        if (a.slug && (a.status === "published" || !a.status)) {
+          map.set(a.slug, {
+            path: `/blog/${a.slug}`,
+            lastmod: (a.updated_at || a.created_at || "").slice(0, 10) || today,
+            changefreq: "weekly",
+            priority: "0.75",
+          });
+        }
+      });
+    }
+  } catch (e) {
+    console.warn("[sitemap] could not fetch articles from Laravel:", (e as Error).message);
+  }
+
+  return Array.from(map.values());
+}
+
+async function fetchStories(): Promise<Entry[]> {
+  const map = new Map<string, Entry>();
+
+  // 1. Fetch from Supabase
+  try {
+    const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data } = await sb
+      .from("stories")
+      .select("slug, updated_at, is_published")
+      .eq("is_published", true);
+    (data || []).forEach((s: any) => {
+      if (s.slug) {
+        map.set(s.slug, {
+          path: `/stories/${s.slug}`,
+          lastmod: (s.updated_at || "").slice(0, 10) || today,
+          changefreq: "monthly",
+          priority: "0.6",
+        });
+      }
+    });
+  } catch (e) {
+    console.warn("[sitemap] could not fetch stories:", (e as Error).message);
+  }
+
+  // 2. Fetch from Laravel /stories
+  try {
+    const res = await fetch("https://elyusr-api.pyramedx.com/api/v1/stories", {
+      headers: {
+        Authorization: "Bearer 129|thYAm59JeAVBOGJRaC7eMJQ7Vv1v3pdHygBTdSGM495cd1d8",
+        Accept: "application/json",
+      },
+    });
+    if (res.ok) {
+      const json: any = await res.json();
+      const stories = Array.isArray(json) ? json : (json?.data || []);
+      stories.forEach((s: any) => {
+        if (s.slug && (s.status === "published" || s.is_published !== false)) {
+          map.set(s.slug, {
+            path: `/stories/${s.slug}`,
+            lastmod: (s.updated_at || s.created_at || "").slice(0, 10) || today,
+            changefreq: "monthly",
+            priority: "0.6",
+          });
+        }
+      });
+    }
+  } catch (e) {
+    console.warn("[sitemap] could not fetch stories from Laravel:", (e as Error).message);
+  }
+
+  return Array.from(map.values());
+}
+
+async function fetchCases(): Promise<Entry[]> {
+  try {
+    const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data } = await sb
+      .from("cases")
+      .select("ref_code, updated_at, status")
+      .in("status", ["active", "approved", "open", "funded"]);
+    return (data || [])
+      .filter((c: any) => c.ref_code)
+      .map((c: any) => ({
+        path: `/cases/${c.ref_code}`,
+        lastmod: (c.updated_at || "").slice(0, 10) || today,
+        changefreq: "weekly",
+        priority: "0.75",
+      }));
+  } catch (e) {
+    console.warn("[sitemap] could not fetch cases:", (e as Error).message);
+    return [];
+  }
+}
+
+// Static seed blog slugs that live in src/data/blog.ts (not in DB).
+// Listed inline to avoid importing the blog module (which pulls Vite asset aliases).
+const STATIC_BLOG_SLUGS: { slug: string; date: string }[] = [
+  { slug: "dalil-sak-odhya-dakahlia-2026-13-yom", date: "2026-05-14" },
+  { slug: "odhya-2026-mansoura", date: "2026-04-10" },
+  { slug: "zakat-mal-2026-calculator", date: "2026-01-05" },
+];
+
+(async () => {
+  const [nodes, blog, stories, cases] = await Promise.all([fetchNodes(), fetchBlogPosts(), fetchStories(), fetchCases()]);
+  const blogSlugs = new Set(blog.map((b) => b.path));
+  const staticBlog: Entry[] = STATIC_BLOG_SLUGS
+    .map((p) => ({ path: `/blog/${p.slug}`, lastmod: p.date, changefreq: "weekly" as const, priority: "0.7" }))
+    .filter((b) => !blogSlugs.has(b.path));
+  const geo: Entry[] = ALL_GEO_PAIRS.map(({ governorate, program }) => ({
+    path: `/geo/${governorate}/${program}`,
+    lastmod: today,
+    changefreq: "weekly",
+    priority: "0.8",
+  }));
+  // Dakahlia city Qurbani pages — high-intent local SEO targets.
+  const cities: Entry[] = DAKAHLIA_CITIES.map((c) => ({
+    path: `/qurbani/${c.slug}`,
+    lastmod: today,
+    changefreq: "weekly",
+    priority: "0.9",
+  }));
+  // Local-intent /donate/:city landing pages (currently MVP: Mansoura only).
+  const donateCities: Entry[] = [
+    { path: "/donate/mansoura", lastmod: today, changefreq: "weekly", priority: "0.9" },
+  ];
+  // City × program landings — /dakahlia/:city/:program
+  const cityPrograms: Entry[] = DAKAHLIA_CITIES.flatMap((c) =>
+    (c.programs || []).map((p) => ({
+      path: `/dakahlia/${c.slug}/${p}`,
+      lastmod: today,
+      changefreq: "weekly" as const,
+      priority: "0.8",
+    })),
+  );
+  const dyn = [...nodes, ...blog, ...staticBlog, ...stories, ...cases, ...geo, ...cities, ...donateCities, ...cityPrograms];
+  const all = [...staticEntries, ...dyn];
+  const xml = [
+    `<?xml version="1.0" encoding="UTF-8"?>`,
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">`,
+    ...all.map(urlEntry),
+    `</urlset>`,
+  ].join("\n");
+  writeFileSync(resolve("public/sitemap.xml"), xml);
+  console.log(`sitemap.xml written (${all.length} entries; ${dyn.length} dynamic)`);
+})();

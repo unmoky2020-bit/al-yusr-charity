@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://elyusr.org/gallery</loc>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/family-hope.jpg</image:loc>
+      <image:caption>أسر مستفيدة من مساعدات مؤسسة اليسر الخيرية — المنصورة، الدقهلية</image:caption>
+      <image:title>مساعدات مؤسسة اليسر الخيرية</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/hands-sprout.jpg</image:loc>
+      <image:caption>أثر التبرعات والصدقات مع مؤسسة اليسر الخيرية</image:caption>
+      <image:title>أثر الخير — اليسر الخيرية</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/hero-child.jpg</image:loc>
+      <image:caption>فرحة طفل بعد وصول الدعم من مؤسسة اليسر — الدقهلية</image:caption>
+      <image:title>فرحة الأطفال — مؤسسة اليسر</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/program-education.jpg</image:loc>
+      <image:caption>مشروع دعم التعليم والمدارس — مؤسسة اليسر الخيرية</image:caption>
+      <image:title>برنامج التعليم — مؤسسة اليسر</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/program-orphans.jpg</image:loc>
+      <image:caption>كفالة الأيتام وتوفير الرعاية الكريمة — مؤسسة اليسر بالمنصورة</image:caption>
+      <image:title>كفالة الأيتام — مؤسسة اليسر</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/program-food.jpg</image:loc>
+      <image:caption>توزيع كراتين المواد الغذائية على الأسر المتعففة — اليسر الخيرية</image:caption>
+      <image:title>توزيع الإطعام والمساعدات الغذائية</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/program-health.jpg</image:loc>
+      <image:caption>برنامج الرعاية الصحية والعلاج وإجراء العمليات — مؤسسة اليسر</image:caption>
+      <image:title>الرعاية الصحية والدواء — اليسر</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/hero-happy.png</image:loc>
+      <image:caption>سعادة أسرة مستفيدة من لحوم الأضاحي ومشاريع الإغاثة</image:caption>
+      <image:title>فرحة الأسر — اليسر الخيرية</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/poster-odhya.png</image:loc>
+      <image:caption>حملة صكوك الأضاحي وتوزيع اللحوم الطازجة في محافظات مصر — مؤسسة اليسر</image:caption>
+      <image:title>صكوك الأضاحي — مؤسسة اليسر الخيرية</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/poster-box.png</image:loc>
+      <image:caption>حملة كرتونة الخير وسلات الإطعام — مؤسسة اليسر الخيرية</image:caption>
+      <image:title>كرتونة الخير — مؤسسة اليسر</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://elyusr.org/images/gallery/poster-water.png</image:loc>
+      <image:caption>مشروع توصيل مياه الشرب النقية وحفر الآبار في القرى — مؤسسة اليسر</image:caption>
+      <image:title>سقيا الماء — مؤسسة اليسر الخيرية</image:title>
+    </image:image>
+  </url>
+</urlset>

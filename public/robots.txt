@@ -1,0 +1,29 @@
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: *
+Allow: /
+
+# Alias program slugs (canonicalized via 301 in-app); block direct indexing
+Disallow: /programs/satr
+Disallow: /programs/satr/
+Disallow: /programs/food
+Disallow: /programs/food/
+
+# Hidden / internal areas
+Disallow: /admin
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /donation/status
+
+Sitemap: https://elyusr.org/sitemap.xml
+Sitemap: https://elyusr.org/image-sitemap.xml

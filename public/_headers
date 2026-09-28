@@ -1,0 +1,64 @@
+# Global security headers for all routes (fixes SEMrush "No HSTS support" and hardens HTTPS)
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Aggressive caching for hashed assets (Vite outputs hashed filenames)
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# JavaScript modules — prevents CDN/proxy MIME sniffing mistakes when cached.
+/assets/*.js
+  Content-Type: application/javascript; charset=utf-8
+  X-Content-Type-Options: nosniff
+/*.js
+  Content-Type: application/javascript; charset=utf-8
+  X-Content-Type-Options: nosniff
+
+# Static images & media — long cache + revalidation (ETag handled by host)
+/*.jpg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.jpeg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.webp
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.avif
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.svg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.mp4
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.webm
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+# Fonts
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML — always revalidate
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+/
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+
+# SEO files
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+/image-sitemap.xml
+  Cache-Control: public, max-age=3600
+/robots.txt
+  Cache-Control: public, max-age=86400
+
+# Brand pattern tiles — rarely change, served as bg-images on every page.
+# Long-cache immutable so repeat views hit memory/disk cache instantly.
+/patterns/*
+  Cache-Control: public, max-age=31536000, immutable

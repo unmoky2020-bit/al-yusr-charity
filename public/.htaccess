@@ -1,0 +1,81 @@
+# ==============================================================================
+# Hostinger (LiteSpeed / Apache) Configuration for Al-Yusr (elyusr.org)
+# ==============================================================================
+
+# 1. SECURITY HEADERS (Fixes SEMrush "No HSTS support" and hardens security)
+<IfModule mod_headers.c>
+    # Strict-Transport-Security (HSTS) — 1 year + subdomains + preload
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    
+    # Prevent MIME sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # Clickjacking protection
+    Header always set X-Frame-Options "SAMEORIGIN"
+    
+    # Referrer policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# 2. REWRITE RULES (HTTPS, Non-WWW 301 Redirect, & SPA Routing)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # A. Force HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # B. Force non-www (Redirect www.elyusr.org -> https://elyusr.org)
+    # Fixes SEMrush duplicate page crawl and hreflang conflict on www
+    RewriteCond %{HTTP_HOST} ^www\.elyusr\.org$ [NC]
+    RewriteRule ^(.*)$ https://elyusr.org/$1 [L,R=301]
+
+    # C. Allow direct access to existing files and directories
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # D. React SPA Fallback: route everything else to index.html
+    RewriteRule ^ index.html [L]
+</IfModule>
+
+# 3. CACHING & PERFORMANCE (LiteSpeed & Apache Expires)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+
+    # HTML: never cache (always check for app updates)
+    ExpiresByType text/html "access plus 0 seconds"
+
+    # Hashed JS & CSS
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+
+    # Images & Media
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/avif "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # Fonts
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+
+    # XML Sitemaps
+    ExpiresByType application/xml "access plus 1 hour"
+    ExpiresByType text/xml "access plus 1 hour"
+</IfModule>
+
+# 4. GZIP / DEFLATE COMPRESSION
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json
+    AddOutputFilterByType DEFLATE application/xml application/xhtml+xml application/rss+xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>

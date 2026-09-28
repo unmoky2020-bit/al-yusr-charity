@@ -1,0 +1,1 @@
+UPDATE public.donation_nodes SET active = false WHERE slug LIKE '%-whole' AND active = true;

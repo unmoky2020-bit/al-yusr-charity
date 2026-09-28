@@ -1,0 +1,91 @@
+import { useEffect, useState } from "react";
+import { track } from "@/lib/track";
+
+/**
+ * Lightweight client-side metrics for the homepage "Al-Yusr Campaigns"
+ * carousel. Persists per-slug counters in localStorage so the admin panel
+ * at /admin/campaigns-section can show what's viewed/clicked. Also forwards
+ * each event to the global `track()` sink (GTM / GA / Pixel).
+ */
+export type CampaignMetricKind = "details_click" | "donate_click";
+
+export interface CampaignMetricsRow {
+  details_click: number;
+  donate_click: number;
+}
+
+export interface CampaignsMetricsState {
+  /** Per-slug counters. The "__cta__" key tracks the final CTA card. */
+  bySlug: Record<string, CampaignMetricsRow>;
+  /** Total times the section header came into view (once per page load). */
+  sectionViews: number;
+  /** Last time anything was recorded (ISO). */
+  updatedAt?: string;
+}
+
+const KEY = "alyusr_campaigns_metrics_v1";
+const EMPTY_ROW: CampaignMetricsRow = { details_click: 0, donate_click: 0 };
+
+const blank = (): CampaignsMetricsState => ({ bySlug: {}, sectionViews: 0 });
+
+const load = (): CampaignsMetricsState => {
+  if (typeof window === "undefined") return blank();
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return blank();
+    const parsed = JSON.parse(raw) as CampaignsMetricsState;
+    return { ...blank(), ...parsed, bySlug: parsed.bySlug || {} };
+  } catch {
+    return blank();
+  }
+};
+
+const save = (s: CampaignsMetricsState) => {
+  try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* ignore */ }
+  try {
+    // Notify same-tab listeners (storage event only fires cross-tab).
+    window.dispatchEvent(new CustomEvent("alyusr:campaigns-metrics"));
+  } catch { /* ignore */ }
+};
+
+const bump = (slug: string, kind: CampaignMetricKind) => {
+  const state = load();
+  const row = { ...EMPTY_ROW, ...(state.bySlug[slug] || {}) };
+  row[kind] = (row[kind] || 0) + 1;
+  state.bySlug = { ...state.bySlug, [slug]: row };
+  state.updatedAt = new Date().toISOString();
+  save(state);
+};
+
+export const recordCampaignClick = (slug: string, kind: "details_click" | "donate_click") => {
+  bump(slug, kind);
+  track(kind === "donate_click" ? "campaign_donate_click" : "campaign_details_click", {
+    payload: { slug },
+    fbEvent: kind === "donate_click" ? "Lead" : undefined,
+  });
+};
+
+export const recordSectionView = () => {
+  const state = load();
+  state.sectionViews = (state.sectionViews || 0) + 1;
+  state.updatedAt = new Date().toISOString();
+  save(state);
+  track("campaigns_section_view");
+};
+
+export const resetCampaignsMetrics = () => save(blank());
+
+export const useCampaignsMetrics = () => {
+  const [state, setState] = useState<CampaignsMetricsState>(() => load());
+  useEffect(() => {
+    const refresh = () => setState(load());
+    const onStorage = (e: StorageEvent) => { if (e.key === KEY) refresh(); };
+    window.addEventListener("storage", onStorage);
+    window.addEventListener("alyusr:campaigns-metrics", refresh as EventListener);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener("alyusr:campaigns-metrics", refresh as EventListener);
+    };
+  }, []);
+  return { metrics: state, reset: () => { resetCampaignsMetrics(); setState(blank()); } };
+};

@@ -1,0 +1,1033 @@
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Droid Arabic Kufi';
+  src: url('/fonts/DroidArabicKufi.woff2') format('woff2');
+  font-weight: 600 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TWK Lausanne';
+  src: url('/fonts/TWKLausanne-650.woff2') format('woff2');
+  font-weight: 600 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DIN Next Arabic';
+  src: url('/fonts/DINNextLTArabic-Bold.woff2') format('woff2');
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    /* Al-Yusr brand — light surface */
+    --background: 60 33% 98%;
+    --foreground: 155 60% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 155 60% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 155 60% 10%;
+
+    /* Deep brand green */
+    --primary: 152 65% 18%;
+    --primary-foreground: 60 33% 98%;
+    --primary-glow: 150 55% 28%;
+
+    /* Lime accent */
+    --secondary: 75 85% 60%;
+    --secondary-foreground: 152 65% 12%;
+
+    /* Orange CTA */
+    --accent: 22 88% 58%;
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 28 92% 65%;
+
+    /* WhatsApp CTA */
+    --whatsapp: 142 70% 49%;
+    --whatsapp-foreground: 0 0% 100%;
+
+    --muted: 60 20% 94%;
+    --muted-foreground: 155 15% 35%;
+
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 150 20% 88%;
+    --input: 150 20% 88%;
+    --ring: 152 65% 18%;
+
+    --radius: 1rem;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(152 65% 12%) 0%, hsl(155 70% 18%) 50%, hsl(150 55% 25%) 100%);
+    --gradient-lime: linear-gradient(135deg, hsl(75 85% 60%), hsl(85 80% 55%));
+    --gradient-orange: linear-gradient(135deg, hsl(22 88% 58%), hsl(28 92% 65%));
+    --gradient-leaf: radial-gradient(ellipse at top, hsl(150 55% 28% / 0.18), transparent 55%),
+                     radial-gradient(ellipse at bottom, hsl(75 85% 60% / 0.08), transparent 60%);
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(152 65% 18% / 0.12);
+    --shadow-card: 0 10px 40px -12px hsl(152 65% 18% / 0.18);
+    --shadow-cta: 0 12px 30px -8px hsl(22 88% 58% / 0.45);
+    --shadow-whatsapp: 0 12px 30px -10px hsl(var(--whatsapp) / 0.45);
+    --shadow-glow: 0 0 60px hsl(75 85% 60% / 0.35);
+
+    /* Motion */
+    --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-base: all 0.3s var(--ease-out-soft);
+
+    --sidebar-background: 152 65% 14%;
+    --sidebar-foreground: 60 33% 96%;
+    --sidebar-primary: 75 85% 60%;
+    --sidebar-primary-foreground: 152 65% 12%;
+    --sidebar-accent: 152 50% 22%;
+    --sidebar-accent-foreground: 60 33% 96%;
+    --sidebar-border: 152 50% 22%;
+    --sidebar-ring: 75 85% 60%;
+  }
+
+  .dark {
+    --background: 152 60% 7%;
+    --foreground: 60 33% 96%;
+    --card: 152 55% 10%;
+    --card-foreground: 60 33% 96%;
+    --popover: 152 55% 10%;
+    --popover-foreground: 60 33% 96%;
+    --primary: 75 85% 60%;
+    --primary-foreground: 152 65% 12%;
+    --secondary: 152 50% 18%;
+    --secondary-foreground: 60 33% 96%;
+    --accent: 22 88% 58%;
+    --accent-foreground: 0 0% 100%;
+    --muted: 152 40% 14%;
+    --muted-foreground: 150 20% 70%;
+    --border: 152 40% 18%;
+    --input: 152 40% 18%;
+    --ring: 75 85% 60%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  html, body {
+    scroll-behavior: auto;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overscroll-behavior-y: auto;
+    /* Don't reserve any space for the scrollbar gutter */
+    scrollbar-gutter: auto;
+  }
+  /* Hidden but functional scrollbar — Firefox */
+  html { scrollbar-width: none; -ms-overflow-style: none; }
+  /* Hidden but functional scrollbar — WebKit/Blink */
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  *::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none; background: transparent; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DIN Next Arabic', 'Droid Arabic Kufi', 'TWK Lausanne', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-feature-settings: "kern", "liga";
+    font-weight: 800;
+    overflow-anchor: none;
+  }
+  [dir="rtl"] body {
+    font-family: 'DIN Next Arabic', 'Droid Arabic Kufi', 'TWK Lausanne', system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: 0;
+  }
+  [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+    font-family: 'DIN Next Arabic', 'Droid Arabic Kufi', 'TWK Lausanne', system-ui, sans-serif;
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+  [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6,
+  [dir="rtl"] .font-bold, [dir="rtl"] .font-extrabold, [dir="rtl"] .font-black {
+    font-family: 'DIN Next Arabic', 'Droid Arabic Kufi', 'TWK Lausanne', system-ui, sans-serif;
+  }
+  [dir="ltr"] h1, [dir="ltr"] h2, [dir="ltr"] h3, [dir="ltr"] h4, [dir="ltr"] h5, [dir="ltr"] h6 {
+    font-family: 'DIN Next Arabic', 'TWK Lausanne', system-ui, sans-serif;
+    font-weight: 700;
+  }
+  [dir="ltr"] body {
+    font-family: 'DIN Next Arabic', 'TWK Lausanne', system-ui, sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 { @apply tracking-tight; }
+}
+
+@layer utilities {
+  /* Brand "hero" band — same luxury pattern as the homepage Hero, applied to every `bg-hero` section automatically. */
+  .bg-hero {
+    position: relative;
+    background-color: hsl(152 65% 12%);
+    background-image:
+      linear-gradient(180deg, hsl(152 65% 10% / 0.55), hsl(152 65% 14% / 0.25) 55%, hsl(152 65% 10% / 0.85)),
+      url("/patterns/hero-bg-luxury.webp");
+    background-size: cover, cover;
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
+    isolation: isolate;
+    /* Pull the inner-page hero up by 2px so it visually meets the white
+       navbar without a hairline gap from sub-pixel rounding. */
+    margin-top: -2px;
+  }
+  /* Subtle gold glow accent layer on top of the image */
+  .bg-hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at top, hsl(75 85% 60% / 0.10), transparent 55%),
+      radial-gradient(ellipse at bottom right, hsl(22 88% 58% / 0.10), transparent 55%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-hero > * { position: relative; z-index: 1; }
+  /* Subtle film grain over hero — gives a luxury feel without harming legibility */
+  .bg-hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.92  0 0 0 0 0.78  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.45'/></svg>");
+    background-size: 160px 160px;
+    mix-blend-mode: overlay;
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+  /* Sub-hero — lighter pattern for dashboard/section headers and table toolbars.
+     Same brand DNA as `.bg-hero` but tuned for compact bars and on-light surfaces. */
+  .bg-subhero {
+    position: relative;
+    background-color: hsl(152 55% 16%);
+    background-image:
+      linear-gradient(180deg, hsl(152 65% 12% / 0.55), hsl(152 55% 18% / 0.25) 60%, hsl(152 65% 10% / 0.7)),
+      url("/patterns/hero-bg-luxury.webp");
+    background-size: cover, 140% auto;
+    background-position: center, center 30%;
+    background-repeat: no-repeat, no-repeat;
+    isolation: isolate;
+    color: hsl(var(--primary-foreground));
+  }
+  .bg-subhero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at top, hsl(75 85% 60% / 0.08), transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+  .bg-subhero > * { position: relative; z-index: 1; }
+  /* Light variant for table headers / cards on white surfaces */
+  .bg-subhero-soft {
+    background-color: hsl(var(--muted));
+    background-image:
+      linear-gradient(180deg, hsl(0 0% 100% / 0.75), hsl(0 0% 100% / 0.55)),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='140' viewBox='0 0 120 140'><g><g fill='%23166534' fill-opacity='0.07'><path d='M60 10 C 80 32, 80 56, 60 72 C 40 56, 40 32, 60 10 Z'/><path d='M60 70 C 80 86, 80 110, 60 132 C 40 110, 40 86, 60 70 Z'/></g><g fill='%23d4a64a' fill-opacity='0.05'><path d='M0 80 C 18 96, 18 118, 0 138 C -18 118, -18 96, 0 80 Z'/><path d='M120 80 C 138 96, 138 118, 120 138 C 102 118, 102 96, 120 80 Z'/></g></g></svg>");
+    background-size: cover, 120px 140px;
+    background-repeat: no-repeat, repeat;
+  }
+  .bg-lime { background: var(--gradient-lime); }
+  .bg-orange-grad { background: var(--gradient-orange); }
+  .leaf-bg { background-image: var(--gradient-leaf); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-cta { box-shadow: var(--shadow-cta); }
+  .shadow-whatsapp { box-shadow: var(--shadow-whatsapp); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  .text-gradient-lime {
+    background: var(--gradient-lime);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* Prevent Arabic descenders/diacritics from being clipped by bg-clip:text */
+    padding-block: 0.12em;
+    line-height: 1.35;
+  }
+  /* Brand single-leaf tile — matches Al-Yusr print campaigns (tight staggered grid).
+     Single drop/leaf shape repeated on offset rows, like the reference posters. */
+  .leaf-pattern {
+    background-color: transparent;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='44' height='56' viewBox='0 0 44 56'><g fill='%23a3e635' fill-opacity='0.16'><path d='M22 6 C 32 16, 32 30, 22 44 C 12 30, 12 16, 22 6 Z'/><path d='M44 34 C 54 44, 54 58, 44 72 C 34 58, 34 44, 44 34 Z' transform='translate(-22 -28)'/></g></svg>");
+    background-size: 44px 56px;
+  }
+  /* Same motif on the deep brand green — for hero/dark sections */
+  .brand-pattern {
+    background-color: hsl(152 65% 14%);
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='140' viewBox='0 0 120 140'><g><g fill='%23a3e635' fill-opacity='0.20'><path d='M60 10 C 80 32, 80 56, 60 72 C 40 56, 40 32, 60 10 Z'/><path d='M60 70 C 80 86, 80 110, 60 132 C 40 110, 40 86, 60 70 Z'/></g><g fill='%23a3e635' fill-opacity='0.12'><path d='M0 80 C 18 96, 18 118, 0 138 C -18 118, -18 96, 0 80 Z'/><path d='M120 80 C 138 96, 138 118, 120 138 C 102 118, 102 96, 120 80 Z'/><path d='M0 -10 C 18 6, 18 28, 0 48 C -18 28, -18 6, 0 -10 Z'/><path d='M120 -10 C 138 6, 138 28, 120 48 C 102 28, 102 6, 120 -10 Z'/></g></g></svg>");
+    background-size: clamp(80px, 9vw, 140px) clamp(94px, 10.5vw, 164px);
+    background-position: 0 0;
+  }
+  .leaf-mosaic {
+    background-color: hsl(152 65% 14%);
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='140' viewBox='0 0 120 140'><g><g fill='%23a3e635' fill-opacity='0.18'><path d='M60 10 C 80 32, 80 56, 60 72 C 40 56, 40 32, 60 10 Z'/><path d='M60 70 C 80 86, 80 110, 60 132 C 40 110, 40 86, 60 70 Z'/></g><g fill='%23a3e635' fill-opacity='0.10'><path d='M0 80 C 18 96, 18 118, 0 138 C -18 118, -18 96, 0 80 Z'/><path d='M120 80 C 138 96, 138 118, 120 138 C 102 118, 102 96, 120 80 Z'/></g></g></svg>");
+    background-size: clamp(80px, 9vw, 140px) clamp(94px, 10.5vw, 164px);
+  }
+  /* Soft brand leaf pattern for light surfaces (white/cream) */
+  .brand-pattern-soft {
+    background-color: transparent;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='140' viewBox='0 0 120 140'><g><g fill='%23166534' fill-opacity='0.06'><path d='M60 10 C 80 32, 80 56, 60 72 C 40 56, 40 32, 60 10 Z'/><path d='M60 70 C 80 86, 80 110, 60 132 C 40 110, 40 86, 60 70 Z'/></g><g fill='%23166534' fill-opacity='0.035'><path d='M0 80 C 18 96, 18 118, 0 138 C -18 118, -18 96, 0 80 Z'/><path d='M120 80 C 138 96, 138 118, 120 138 C 102 118, 102 96, 120 80 Z'/><path d='M0 -10 C 18 6, 18 28, 0 48 C -18 28, -18 6, 0 -10 Z'/><path d='M120 -10 C 138 6, 138 28, 120 48 C 102 28, 102 6, 120 -10 Z'/></g></g></svg>");
+    background-size: clamp(90px, 10vw, 150px) clamp(105px, 11.5vw, 175px);
+  }
+  /* Luxury dark brand pattern with gold accents — for hero/dark CTAs */
+  .brand-pattern-luxury {
+    background-color: hsl(152 65% 12%);
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='220' viewBox='0 0 200 220'><g fill='none' stroke='%23d4a64a' stroke-opacity='0.18' stroke-width='1.1'><circle cx='100' cy='110' r='70'/><circle cx='100' cy='110' r='52'/><circle cx='100' cy='110' r='34'/><path d='M30 110 Q100 30 170 110 Q100 190 30 110 Z'/><path d='M100 40 Q170 110 100 180 Q30 110 100 40 Z'/></g><g fill='%23d4a64a' fill-opacity='0.14'><circle cx='100' cy='110' r='2.2'/><circle cx='30' cy='110' r='1.6'/><circle cx='170' cy='110' r='1.6'/><circle cx='100' cy='40' r='1.6'/><circle cx='100' cy='180' r='1.6'/></g><g fill='%23a3e635' fill-opacity='0.10'><path d='M100 86 C 116 102, 116 122, 100 138 C 84 122, 84 102, 100 86 Z'/></g></svg>"),
+      radial-gradient(ellipse at top, hsl(75 85% 60% / 0.10), transparent 60%),
+      radial-gradient(circle at 20% 80%, hsl(45 75% 55% / 0.10), transparent 45%),
+      radial-gradient(circle at 80% 20%, hsl(45 75% 55% / 0.08), transparent 45%);
+    background-size: clamp(160px, 18vw, 240px) auto, 100% 100%, 100% 100%, 100% 100%;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+  }
+  /* Faint dotted texture overlay for cards / muted areas */
+  .brand-dots {
+    background-image: radial-gradient(hsl(152 65% 18% / 0.10) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  /* Compact, gap-less leaf tile — same DNA as BrandValues block.
+     Use as ::before overlay on dark green sections so the pattern reads
+     clearly without empty space. */
+  .brand-leaf-tile {
+    background-color: transparent;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='40' viewBox='0 0 32 40'><g fill='%23a3e635' fill-opacity='0.18'><path d='M16 3 C 24 12, 24 24, 16 33 C 8 24, 8 12, 16 3 Z'/><path d='M0 23 C 8 32, 8 44, 0 53 C -8 44, -8 32, 0 23 Z'/><path d='M32 23 C 40 32, 40 44, 32 53 C 24 44, 24 32, 32 23 Z'/></g></svg>");
+    background-size: 32px 40px;
+    background-repeat: repeat;
+  }
+  /* === Al-Yusr signature leaf-tile pattern (using brand artwork) ===
+     Tiled across deep brand green with soft vignette. Use for hero,
+     dark CTAs, footer bands, sub-hero strips. */
+  .bg-yusr-leaves {
+    position: relative;
+    background-color: hsl(152 65% 11%);
+    background-image:
+      linear-gradient(180deg, hsl(152 65% 9% / 0.35), hsl(152 65% 13% / 0.0) 40%, hsl(152 65% 9% / 0.55)),
+      url("/patterns/yusr-leaf-tile.png");
+    background-size: cover, 280px auto;
+    background-position: center, center;
+    background-repeat: no-repeat, repeat;
+    isolation: isolate;
+  }
+  .bg-yusr-leaves::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at top, hsl(75 85% 60% / 0.06), transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+  .bg-yusr-leaves > * { position: relative; z-index: 1; }
+  /* Lighter variant tile — for compact strips and footers */
+  .bg-yusr-leaves-soft {
+    background-color: hsl(152 65% 13%);
+    background-image:
+      linear-gradient(180deg, hsl(152 65% 11% / 0.65), hsl(152 65% 13% / 0.55)),
+      url("/patterns/yusr-leaf-tile.png");
+    background-size: cover, 220px auto;
+    background-repeat: no-repeat, repeat;
+  }
+  /* Soft top→bottom opacity falloff overlay for hero */
+  .hero-pattern-fade::before {
+    content: "";
+    position: absolute; inset: 0;
+    /* Softer dark veil — keeps text readable without crushing the brand pattern. */
+    background: linear-gradient(180deg, hsl(152 65% 10% / 0.0) 0%, hsl(152 65% 10% / 0.14) 60%, hsl(152 65% 10% / 0.32) 100%);
+    pointer-events: none;
+  }
+  .text-shadow-soft { text-shadow: 0 2px 14px hsl(152 65% 8% / 0.45); }
+}
+
+/* ============================================================
+   Per-section signature patterns (Al-Yusr).
+   Each pattern shares the brand DNA (leaves/dots/lines on green),
+   but has a distinct motif so different sections feel unique.
+   All are pure inline SVG → crisp on every DPR, no extra requests.
+   ============================================================ */
+@layer utilities {
+  /* Unified brand pattern scale — single source of truth shared by the
+     hero, "خيرك بيوصل لحد الباب" and "اختار حملتك" so the carpet feels
+     premium and consistent across the whole page. */
+  :root {
+    --brand-pattern-size: clamp(820px, 108vw, 1440px);
+    --brand-pattern-size-mobile: 185vw;
+  }
+  /* Hero — luxury big leaves + gold dots, deep brand green */
+  .pattern-hero-luxe {
+    position: relative;
+    /* Match the "Why Al-Yusr" section tone for visual consistency. */
+    background-color: hsl(152 70% 8%);
+    /* Pull the inner-page hero up by 2px so it visually meets the white
+       navbar without a hairline gap from sub-pixel rounding. */
+    margin-top: -2px;
+    background-image: url("/patterns/p-ph-5.svg");
+    /* Unified premium scale (see --brand-pattern-size). */
+    background-size: var(--brand-pattern-size) auto;
+    background-repeat: repeat;
+    background-position: center;
+    will-change: auto;
+  }
+  /* Match the BrandValues "Why Al-Yusr" treatment: same green tone, same
+     pattern scale, plus an overlay blend + darkening wash so the pattern
+     reads as a quiet carpet rather than a bright tile. */
+  .pattern-hero-luxe::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      /* Subtle film grain overlay — breaks up the repeat and adds a
+         premium, non-flat texture. Inline SVG keeps it 0-request. */
+      url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, hsl(0 0% 0% / 0.30), transparent 40%, hsl(0 0% 0% / 0.50)),
+      hsl(152 70% 6% / 0.55);
+    background-size: 180px 180px, auto, auto;
+    background-repeat: repeat, no-repeat, no-repeat;
+    mix-blend-mode: normal;
+    opacity: 1;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .pattern-hero-luxe > * { position: relative; z-index: 1; }
+  /* Shared quatrefoil tile (retina-aware) — used by all section patterns. */
+  .pattern-programs,
+  .pattern-axes,
+  .pattern-why,
+  .pattern-campaigns,
+  .pattern-eid,
+  .pattern-promise {
+    position: relative;
+    isolation: isolate;
+    background-image: image-set(
+      url("/patterns/yusr-quatrefoil.png") 1x,
+      url("/patterns/yusr-quatrefoil@2x.png") 2x
+    );
+    background-image: -webkit-image-set(
+      url("/patterns/yusr-quatrefoil.png") 1x,
+      url("/patterns/yusr-quatrefoil@2x.png") 2x
+    );
+    background-repeat: repeat;
+  }
+  /* Light surfaces: tile is multiplied so it reads as a soft watermark on cream. */
+  .pattern-programs,
+  .pattern-axes,
+  .pattern-campaigns,
+  .pattern-promise {
+    background-blend-mode: multiply;
+  }
+  /* Dark surfaces: tile is screened so it glows quietly on deep brand green. */
+  .pattern-why,
+  .pattern-eid,
+  .pattern-eid {
+    background-blend-mode: soft-light;
+  }
+  /* Hero uses overlay blend to match the BrandValues "Why Al-Yusr" carpet. */
+  .pattern-hero-luxe {
+    background-blend-mode: overlay;
+  }
+  /* Mobile-only override: a dedicated tile size so the motif keeps its
+     premium proportions on small screens without clipping or feeling busy. */
+  @media (max-width: 640px) {
+    .pattern-hero-luxe {
+      background-size: var(--brand-pattern-size-mobile) auto;
+      background-position: center top;
+    }
+  }
+  /* ----------------------------------------------------------
+     Reusable hero-pattern variants (same SVG motif as the hero,
+     no green wash). Use on light surfaces or as a calm silver
+     watermark on secondary sections / CTAs.
+     ---------------------------------------------------------- */
+  .pattern-hero-soft {
+    position: relative;
+    isolation: isolate;
+  }
+  .pattern-hero-soft::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("/patterns/p-ph-5.svg");
+    background-size: var(--brand-pattern-size) auto;
+    background-repeat: repeat;
+    background-position: center;
+    opacity: 0.22;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .pattern-hero-soft > * { position: relative; z-index: 1; }
+  @media (max-width: 640px) {
+    .pattern-hero-soft::before {
+      background-size: var(--brand-pattern-size-mobile) auto;
+      background-position: center top;
+    }
+  }
+
+  /* WorkAxes & BrandPromise — signature luxury soft silver sheen watermark pattern */
+  .pattern-work-axes {
+    position: relative;
+    isolation: isolate;
+    background-color: hsl(145 10% 92%);
+  }
+  .pattern-work-axes::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/patterns/p-ph-5.svg");
+    background-size: max(100vw, 1500px) auto;
+    background-repeat: repeat-y;
+    background-position: center top;
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .pattern-work-axes::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 15%, hsl(0 0% 100% / 0.35), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .pattern-work-axes > * {
+    position: relative;
+    z-index: 1;
+  }
+  @media (max-width: 768px) {
+    .pattern-work-axes::before {
+      background-size: 200vw auto;
+      background-repeat: repeat;
+    }
+  }
+
+  /* Bridges the cream `pattern-programs` (BrandPromise) into the white
+     qurbani documentation section that follows WorkAxes. Keeps the
+     quatrefoil watermark visible at the top, then washes to pure white
+     at the bottom edge. */
+  .axes-fade-to-white::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      hsl(0 0% 100% / 0) 0%,
+      hsl(0 0% 100% / 0) 35%,
+      hsl(0 0% 100% / 0.55) 75%,
+      hsl(0 0% 100% / 1) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Silver variant — calm, slightly cool slate background with the
+     same motif. For secondary maps / CTA strips that should feel
+     premium but quieter than the dark-green hero. */
+  .pattern-hero-silver {
+    position: relative;
+    isolation: isolate;
+    background-color: hsl(220 12% 92%);
+    background-image:
+      linear-gradient(180deg, hsl(220 14% 96%), hsl(220 12% 88%)),
+      url("/patterns/p-ph-5.svg");
+    background-size: cover, clamp(560px, 78vw, 960px) auto;
+    background-repeat: no-repeat, repeat;
+    background-position: center, center;
+    background-blend-mode: normal, multiply;
+  }
+  .pattern-hero-silver::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at top, hsl(0 0% 100% / 0.45), transparent 60%),
+      linear-gradient(180deg, hsl(220 12% 96% / 0.35), hsl(220 14% 86% / 0.55));
+    pointer-events: none; z-index: 0;
+  }
+  .pattern-hero-silver > * { position: relative; z-index: 1; }
+  /* ---------------------------------------------------------------
+     Unified warm pattern — single source of truth for light sections
+     that need the Al-Yusr motif in a warm/orange tint (impact map,
+     campaigns backdrop, blog content). Bigger tile, no expensive
+     mix-blend on mobile (only ≥md), no filters — buttery on touch
+     scroll/swipe. Drop-in: `<section class="pattern-warm-soft">…`.
+     --------------------------------------------------------------- */
+  .pattern-warm-soft {
+    position: relative;
+    isolation: isolate;
+    background-color: hsl(32 60% 97%);
+  }
+  .pattern-warm-soft::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("/patterns/p-ph-5.svg");
+    /* Same unified scale as the hero for a coherent premium carpet. */
+    background-size: var(--brand-pattern-size) auto;
+    background-repeat: repeat;
+    background-position: center;
+    opacity: 0.22;
+    pointer-events: none;
+    z-index: 0;
+    /* Warm orange tint via a CSS filter is too costly during scroll;
+       instead we colour-wash the tile through an ::after overlay. */
+  }
+  .pattern-warm-soft::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 35%, hsl(0 0% 100% / 0.75), transparent 70%),
+      linear-gradient(180deg, hsl(28 85% 60% / 0.05), hsl(28 85% 60% / 0.10));
+    pointer-events: none;
+    z-index: 0;
+  }
+  .pattern-warm-soft > * { position: relative; z-index: 1; }
+  /* Only enable the warm multiply blend on ≥md so mobile stays smooth. */
+  @media (min-width: 768px) {
+    .pattern-warm-soft::before { mix-blend-mode: multiply; }
+  }
+  /* Mobile-only tile sizing for the warm pattern, matching the hero's
+     small-screen treatment so the brand carpet feels consistent. */
+  @media (max-width: 640px) {
+    .pattern-warm-soft::before {
+      background-size: var(--brand-pattern-size-mobile) auto;
+      background-position: center top;
+    }
+  }
+  /* Programs — light cream surface, faded tile */
+  .pattern-programs {
+    background-color: hsl(60 33% 97%);
+    background-size: clamp(110px, 12vw, 170px) auto;
+  }
+  /* Light overlay — softens tile and lifts text contrast on cream surfaces. */
+  .pattern-programs::before,
+  .pattern-axes::before,
+  .pattern-campaigns::before,
+  .pattern-promise::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at top, hsl(0 0% 100% / 0.55), transparent 60%),
+      linear-gradient(180deg, hsl(60 33% 98% / 0.78), hsl(60 33% 97% / 0.88));
+    pointer-events: none; z-index: 0;
+  }
+  .pattern-programs > *,
+  .pattern-axes > *,
+  .pattern-campaigns > *,
+  .pattern-why > *,
+  .pattern-eid > *,
+  .pattern-promise > * { position: relative; z-index: 1; }
+  /* Promise — shares the cream + quatrefoil watermark with Programs/Axes. */
+  .pattern-promise {
+    background-color: hsl(60 33% 97%);
+    background-size: clamp(110px, 12vw, 170px) auto;
+  }
+  /* Promise intentionally keeps the exact same overlay as Programs/WorkAxes
+     so the boundary has no color or pattern shift. */
+  /* Axes — light surface */
+  .pattern-axes {
+    background-color: hsl(60 33% 98%);
+    background-size: clamp(120px, 13vw, 180px) auto;
+  }
+  /* WhyUs — dark brand */
+  .pattern-why {
+    background-color: hsl(152 65% 14%);
+    background-size: clamp(110px, 12vw, 170px) auto;
+  }
+  /* Dark overlay — vignette + brand wash so the tile recedes behind content. */
+  .pattern-why::before,
+  .pattern-eid::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at top, hsl(75 85% 60% / 0.06), transparent 55%),
+      linear-gradient(180deg, hsl(152 65% 11% / 0.62), hsl(152 65% 9% / 0.82));
+    pointer-events: none; z-index: 0;
+  }
+  /* Campaigns — light surface */
+  .pattern-campaigns {
+    background-color: hsl(60 33% 98%);
+    background-size: clamp(120px, 13vw, 180px) auto;
+  }
+  /* Eid Journey — dark brand */
+  .pattern-eid {
+    background-color: hsl(152 65% 11%);
+    background-size: clamp(130px, 14vw, 190px) auto;
+  }
+  /* CTA closing — radiating rays */
+  .pattern-cta-rays {
+    background-color: hsl(152 65% 12%);
+    background-image:
+      radial-gradient(circle at 50% 0%, hsl(75 85% 60% / 0.18), transparent 55%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'><g fill='none' stroke='%23d4a64a' stroke-opacity='0.10' stroke-width='1'><path d='M120 120 L 0 0'/><path d='M120 120 L 240 0'/><path d='M120 120 L 0 240'/><path d='M120 120 L 240 240'/><path d='M120 120 L 120 0'/><path d='M120 120 L 120 240'/><path d='M120 120 L 0 120'/><path d='M120 120 L 240 120'/></g></svg>");
+    background-size: 100% 100%, 280px 280px;
+    background-position: center top, center;
+  }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+@keyframes leaf-drift {
+  0% { transform: translateY(-10vh) translateX(0) rotate(0); opacity: 0; }
+  10% { opacity: 0.6; }
+  100% { transform: translateY(110vh) translateX(40px) rotate(360deg); opacity: 0; }
+}
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.04); opacity: 0.92; }
+}
+.animate-fade-in-up { animation: fade-in-up 0.7s var(--ease-out-soft) both; }
+.transition-stats-panel {
+  transition: opacity 1s var(--ease-out-soft), transform 1s var(--ease-out-soft);
+  will-change: opacity, transform;
+}
+.animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+.animate-leaf-drift { animation: leaf-drift 14s linear infinite; }
+.animate-pulse-glow { animation: pulse-glow 2.4s ease-in-out infinite; }
+
+/* Marquee — infinite horizontal scroll for the field gallery rows.
+   The track contains the items twice; we translate by -50% so the loop
+   is seamless. Two variants (LTR / RTL) so we can run opposite directions. */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes marquee-x-reverse {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+.animate-marquee        { animation: marquee-x        var(--marquee-duration, 60s) linear infinite; }
+.animate-marquee-reverse{ animation: marquee-x-reverse var(--marquee-duration, 60s) linear infinite; }
+.marquee-row:hover .animate-marquee,
+.marquee-row:hover .animate-marquee-reverse { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee, .animate-marquee-reverse { animation: none; }
+}
+
+/* Journey reveal-on-scroll */
+.journey-card {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease-out-soft), transform 0.7s var(--ease-out-soft);
+  will-change: opacity, transform;
+}
+.journey-card.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hide horizontal scrollbar but keep scrollability */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* Global slim scrollbar — keeps scrollability but visually minimal */
+html { scrollbar-width: thin; scrollbar-color: hsl(var(--primary) / 0.35) transparent; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.35);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.55); }
+
+/* Mobile RTL polish — keep bold display headings readable on 320–420px */
+@media (max-width: 420px) {
+  h1 { font-size: clamp(1.75rem, 8vw, 2.25rem) !important; line-height: 1.15 !important; }
+  h2 { font-size: clamp(1.5rem, 7vw, 2rem) !important; line-height: 1.2 !important; }
+  .container { padding-left: 1rem !important; padding-right: 1rem !important; }
+  /* Footer columns center cleanly */
+  footer .grid > * { text-align: center; }
+
+  /* When a grid or flex container has a single child on small screens,
+     center that child for nicer lone-item layouts in header/footer. */
+  .container .grid > *:only-child,
+  .container .flex > *:only-child,
+  nav .grid > *:only-child,
+  nav .flex > *:only-child,
+  footer .grid > *:only-child,
+  footer .flex > *:only-child {
+    justify-self: center;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+  /* Ensure lone links shrink to content width so margin auto centers them */
+  .container .grid > *:only-child > a,
+  footer .grid > *:only-child > a,
+  nav .grid > *:only-child > a {
+    display: inline-block;
+  }
+}
+
+/* Print: receipt only */
+@media print {
+  body * { visibility: hidden; }
+  .receipt-print-area, .receipt-print-area * { visibility: visible; }
+  .receipt-print-area { position: absolute; inset: 0; margin: 0; padding: 24px; box-shadow: none; border: 0; }
+  .no-print { display: none !important; }
+}
+
+/* Perf: skip layout/paint for off-screen sections to reduce reflow on long pages */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
+}
+
+img { content-visibility: auto; }
+
+[data-sticky-stack] img {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
+}
+
+/* Scroll-reveal utility for /about (and reusable elsewhere) */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  will-change: opacity, transform;
+}
+.reveal-up.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+
+/* ── Article body — stable RTL typography ───────────────────────────────
+ * Prevents drop-cap clipping, figure overflow, and line-height jumps in
+ * Arabic / RTL contexts. Applied via the `.article-body` wrapper class. */
+.article-body {
+  max-width: 100%;
+  overflow: visible;
+  line-height: 2.05;
+  text-wrap: pretty;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+.article-body > * { max-width: 100%; }
+.article-body p {
+  margin: 0 0 1.25em;
+  overflow: visible;
+}
+.article-body figure {
+  margin: 1.5em auto;
+  max-width: 100%;
+  overflow: visible;
+}
+.article-body figure img,
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-inline: auto;
+}
+.article-body figcaption {
+  margin-top: 0.6em;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+}
+/* Drop-cap — capped sizes so RTL glyphs never get cropped */
+.article-body > p:first-of-type::first-letter {
+  float: inline-start;
+  margin-inline-end: 0.35rem;
+  margin-block-start: 0.18rem;
+  font-size: 2.6rem;
+  line-height: 0.95;
+  font-weight: 900;
+  color: hsl(var(--primary));
+  padding-block: 0.05em;
+}
+@media (min-width: 768px) {
+  .article-body { line-height: 2.1; }
+  .article-body > p:first-of-type::first-letter { font-size: 3.2rem; }
+}
+[dir="rtl"] .article-body > p:first-of-type::first-letter {
+  /* Arabic letters need a touch more breathing room to avoid clipping */
+  padding-inline-end: 0.05em;
+  line-height: 1;
+}
+
+/* ================================================================
+   Global anti-horizontal-scroll guard
+   Prevents any rogue 100vw / oversized element from breaking layout
+   on mobile (where viewport width can be < the scrollbar width).
+   Uses `overflow-x: clip` so position:sticky keeps working.
+   ================================================================ */
+html, body {
+  max-width: 100vw;
+  overflow-x: clip;
+}
+#root {
+  max-width: 100vw;
+  overflow-x: clip;
+  overflow-anchor: none;
+}
+/* Cap any image to its container width by default */
+img, video, svg, canvas {
+  max-width: 100%;
+}
+/* Replace any 100vw width with 100% to dodge scrollbar overflow on mobile */
+@media (max-width: 1024px) {
+  [class*="w-screen"], .w-\[100vw\] {
+    width: 100% !important;
+    max-width: 100%;
+  }
+}
+
+/* ── Hand-drawn green underline for headings ─────────────────────────── */
+.hand-underline {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.35em;
+  isolation: isolate;
+}
+.hand-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.55em;
+  z-index: -1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 16' fill='none'><path d='M3 11 C 40 4, 90 14, 130 7 S 200 11, 217 5' stroke='%2384cc16' stroke-width='4' stroke-linecap='round' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  opacity: 0.95;
+  pointer-events: none;
+  animation: handUnderlineDraw 1.2s ease-out both;
+}
+@keyframes handUnderlineDraw {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+[dir="rtl"] .hand-underline::after { transform: scaleX(-1); }
+@media (prefers-reduced-motion: reduce) {
+  .hand-underline::after { animation: none; clip-path: none; }
+}
+
+/* ── Hero stage mobile stable viewport & zero-jitter fix ──────────────────
+   Using static 100lvh / 100vh ensures the pinned hero matches the full viewport
+   with browser toolbars collapsed from frame 0. It never resizes, reflows,
+   or leaves a gap when mobile address bars (Chrome, Safari, Firefox) collapse. */
+.hc-pin {
+  overflow-anchor: none;
+  height: 100vh;
+  height: 100lvh;
+  min-height: 100vh;
+  min-height: 100lvh;
+}
+@media (max-width: 767px) {
+  .hc-pin {
+    height: 100vh;
+    height: 100lvh;
+    min-height: 100vh;
+    min-height: 100lvh;
+    max-height: none;
+  }
+}
+.pin-spacer:has(.hc-pin) { background-color: #083820 !important; }
+#hero,
+#stats,
+#axes,
+[data-sticky-stack] {
+  overflow-anchor: none;
+}
+
+/* ── PyramedX Luxury Micro-Motion & Soft Glow ────────────────────────── */
+@keyframes pyra-gentle-float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.02);
+  }
+}
+@keyframes pyra-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 16px -2px rgba(255, 115, 0, 0.25), inset 0 0 12px rgba(255, 115, 0, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 26px 2px rgba(255, 130, 20, 0.48), inset 0 0 16px rgba(255, 140, 30, 0.16);
+  }
+}
+@keyframes pyra-logo-breathe {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    filter: drop-shadow(0 0 8px rgba(255, 102, 0, 0.75));
+  }
+  50% {
+    transform: translateY(-1.5px) rotate(-3deg) scale(1.08);
+    filter: drop-shadow(0 0 14px rgba(255, 130, 30, 0.95));
+  }
+}
+.animate-pyra-badge {
+  animation: pyra-gentle-float 4s ease-in-out infinite, pyra-glow-pulse 3.2s ease-in-out infinite;
+}
+.animate-pyra-logo {
+  animation: pyra-logo-breathe 4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-pyra-badge,
+  .animate-pyra-logo {
+    animation: none !important;
+  }
+}
+
+/* Ensure toast notifications float on top but NEVER block clicking or scrolling */
+[data-sonner-toaster],
+.toaster {
+  z-index: 99999 !important;
+  pointer-events: none !important;
+  font-family: 'Droid Arabic Kufi', 'DIN Next Arabic', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast],
+.toaster [data-sonner-toast] {
+  pointer-events: auto !important;
+  font-family: 'Droid Arabic Kufi', 'DIN Next Arabic', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  border-radius: 1.1rem !important;
+  transform-origin: center top !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: subpixel-antialiased !important;
+  will-change: transform, opacity !important;
+  box-shadow: 0 16px 45px -10px rgba(0, 0, 0, 0.18), 0 0 24px rgba(16, 185, 129, 0.12) !important;
+}
+
+/* Larger, more prominent design on desktop and large screens */
+@media (min-width: 768px) {
+  [data-sonner-toaster] [data-sonner-toast] {
+    min-width: 420px !important;
+    padding: 1rem 1.4rem !important;
+  }
+  [data-sonner-toaster] [data-sonner-toast] [data-title] {
+    font-size: 0.95rem !important;
+    font-weight: 800 !important;
+    line-height: 1.4 !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-sonner-toaster] [data-sonner-toast] {
+    min-width: 460px !important;
+    padding: 1.1rem 1.6rem !important;
+  }
+  [data-sonner-toaster] [data-sonner-toast] [data-title] {
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    line-height: 1.45 !important;
+  }
+}
+
+

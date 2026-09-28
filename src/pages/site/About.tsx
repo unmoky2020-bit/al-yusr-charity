@@ -1,0 +1,1072 @@
+import { Link } from "react-router-dom";
+import { useEffect, useRef, useState, useMemo } from "react";
+import {
+  ShieldCheck,
+  Heart,
+  Target,
+  Eye,
+  Sparkles,
+  CheckCircle2,
+  Quote,
+  Building2,
+  HandHeart,
+  Globe2,
+  BadgeCheck,
+  HeartHandshake,
+  Sprout,
+  ArrowLeft,
+  ArrowRight,
+  Beef,
+  GraduationCap,
+  Utensils,
+  Droplets,
+  Home,
+  BookOpen,
+  Users,
+  Stethoscope,
+  HeartPulse,
+  HandCoins,
+  Baby,
+  Accessibility,
+  MapPin,
+  Phone,
+  Mail,
+  Facebook,
+  Instagram,
+  Camera,
+  FileCheck2,
+  ChevronDown,
+  TrendingUp,
+  Hospital,
+  Briefcase,
+  Layers,
+  Award,
+} from "lucide-react";
+import { PageLayout } from "@/components/layout/PageLayout";
+import { SEOHelmet } from "@/components/common/SEOHelmet";
+import { SiteSchemas, BreadcrumbSchema, FAQSchema } from "@/components/common/Schemas";
+import { Breadcrumbs } from "@/components/common/Breadcrumbs";
+import { Button } from "@/components/ui/button";
+import { useLang } from "@/i18n/LangContext";
+import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
+import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
+import aboutHero from "@/assets/about-hero-classroom.jpg";
+import axisFood from "@/assets/axis-food.jpg";
+import axisHealth from "@/assets/axis-health.jpg";
+import axisEducation from "@/assets/axis-education.jpg";
+import imgHandsSprout from "@/assets/hands-sprout.jpg";
+import { useSiteStats } from "@/hooks/useSiteStats";
+import { getLucideIcon } from "@/lib/lucide-icon";
+import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, resolveStorageUrl } from "@/data/laravelApi";
+
+/** Lightweight scroll-trigger reveal hook (IntersectionObserver — no JS deps). */
+const useReveal = () => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      el.querySelectorAll<HTMLElement>("[data-reveal]").forEach((n) => n.classList.add("is-visible"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            (e.target as HTMLElement).classList.add("is-visible");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
+    );
+    const observeAll = () => {
+      el.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-visible)").forEach((n) => {
+        io.observe(n);
+      });
+    };
+    observeAll();
+    const mo = new MutationObserver(() => observeAll());
+    mo.observe(el, { childList: true, subtree: true });
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
+  }, []);
+  return ref;
+};
+
+const About = () => {
+  const { lang } = useLang();
+  const isRTL = lang === "ar";
+  const base = "https://elyusr.org";
+  const root = useReveal();
+
+  const [loading, setLoading] = useState(true);
+  const [liveData, setLiveData] = useState<AboutUsData | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    aboutUsApi.getAboutUs()
+      .then((res) => {
+        if (alive && res) {
+          setLiveData(res);
+        } else if (alive) {
+          setLiveData(ABOUT_US_DEFAULT_DATA);
+        }
+      })
+      .catch(() => {
+        if (alive) setLiveData(ABOUT_US_DEFAULT_DATA);
+      })
+      .finally(() => {
+        if (alive) setLoading(false);
+      });
+
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const aboutData = liveData || ABOUT_US_DEFAULT_DATA;
+
+  // Map values from API (aboutData.values) — falls back to static defaults if API is empty
+  const STATIC_VALUE_ICONS = [Sparkles, HeartHandshake, ShieldCheck, Award, BadgeCheck];
+  const defaultValuesAr = [
+    { title: "التمكين", desc: "بناء الإنسان: تعليم وعلاج وفرص أفضل." },
+    { title: "الإحسان", desc: "نسعى لباب البيت بكرامة." },
+    { title: "الأمانة", desc: "كل تبرع موثق بالصور والفيديو." },
+    { title: "القوة", desc: "برامج تنموية متجددة ومستمرة." },
+    { title: "الثقة", desc: "كيان مشهر رسميًا بوزارة التضامن." },
+  ];
+  const defaultValuesEn = [
+    { title: "Empowerment", desc: "Human development: education, health, and sustainable self-reliance." },
+    { title: "Excellence (Ihsan)", desc: "Serving with dignity at the doorstep, honoring each family." },
+    { title: "Honesty & Integrity", desc: "Transparent accounting, photo and video documentation." },
+    { title: "Strength", desc: "Sustainable long-term developmental programs across Egypt." },
+    { title: "Trust", desc: "Building enduring trust with donors and beneficiaries alike." },
+  ];
+  const values = useMemo(() => {
+    if (aboutData.values && aboutData.values.length > 0) {
+      return aboutData.values.map((v, i) => ({
+        icon: getLucideIcon(v.icon) || STATIC_VALUE_ICONS[i % STATIC_VALUE_ICONS.length],
+        t: isRTL ? (v.title_ar || "") : (v.title_en || v.title_ar || ""),
+        d: isRTL ? (v.description_ar || "") : (v.description_en || v.description_ar || ""),
+      }));
+    }
+    const defs = isRTL ? defaultValuesAr : defaultValuesEn;
+    return defs.map((d, i) => ({
+      icon: STATIC_VALUE_ICONS[i % STATIC_VALUE_ICONS.length],
+      t: d.title,
+      d: d.desc,
+    }));
+  }, [aboutData.values, isRTL]);
+
+  // Timeline is not in the API yet — keep static until backend adds it
+  const timeline = isRTL
+    ? [
+        { y: "2000–2019", t: "أكثر من 20 عاماً من العمل الميداني", d: "تطوع وعمل خيري شعبي مباشر في قرى ومحافظات مصر قبل التأسيس الرسمي." },
+        { y: "2019", t: "تأسيس وإشهار مؤسسة اليسر", d: "في آخر شهرين من 2019 — إشهار رسمي رقم 2665 من وزارة التضامن الاجتماعي." },
+        { y: "2020", t: "إطلاق محاور الغذاء والتعليم والصحة", d: "بناء الإنسان محوراً مركزياً لكل المبادرات والقوافل الميدانية." },
+        { y: "2022", t: "حملة سِتْر للشتاء", d: "أسقف عازلة، ألحفة فايبر، ملابس شتوية، وأبواب وشبابيك لبيوت أهالينا." },
+        { y: "2023", t: "حملة ظِلّ ومبادرة مَرْكُون", d: "سقيا الماء وتوصيل خطوط القرى، وإعادة تدوير الأثاث والأجهزة والأدوية." },
+        { y: "2025", t: "إنجازات قياسية في كافة المحافظات", d: "1400 كرتونة رمضان، 3000+ كرتونة شهرية، 385 وصلة مياه، 122 سقف، و4 طن لحوم." },
+      ]
+    : [
+        { y: "2000–2019", t: "Over 20 Years of Grassroots Charity", d: "Direct field aid and voluntary work across Egypt prior to official incorporation." },
+        { y: "2019", t: "Incorporation of Al-Yusr", d: "Officially registered NGO (#2665 / 2019) with the Ministry of Social Solidarity." },
+        { y: "2020", t: "Food, Health & Education Pillars", d: "Placing human development at the heart of all programs." },
+        { y: "2022", t: "Winter Setr Campaign", d: "Insulated roofs, thermal comforters, warm clothing, doors & windows." },
+        { y: "2023", t: "Dhill & Markoun Initiatives", d: "Clean water taps, village supply lines, and in-kind recycling." },
+        { y: "2025", t: "Record Impact Year Across Egypt", d: "1,400 Ramadan boxes, 3,000+ monthly food boxes, 385 water taps, 122 roofs, and 4 tons of meat." },
+      ];
+
+  const stickyOffsets = ["top-[84px] md:top-[96px]", "top-[100px] md:top-[116px]", "top-[116px] md:top-[136px]"];
+  const Arrow = isRTL ? ArrowLeft : ArrowRight;
+
+  const { data: liveAchievements } = useSiteStats("achievements");
+
+  // Display stats mapped from About Us API stats, falling back to live achievements
+  const displayStats = useMemo(() => {
+    if (aboutData.stats && aboutData.stats.length > 0) {
+      return aboutData.stats.map((s, idx) => {
+        const rawNum = typeof s.number === "number" ? s.number : parseFloat(String(s.number).replace(/[^\d.]/g, ""));
+        return {
+          id: `about-stat-${idx}`,
+          section: "achievements",
+          sort_order: idx + 1,
+          active: true,
+          label_ar: s.title_ar || s.label_ar || "",
+          label_en: s.title_en || s.label_en || s.title_ar || "",
+          value_number: isNaN(rawNum) ? null : rawNum,
+          value_text: isNaN(rawNum) ? String(s.number || "") : null,
+          suffix_ar: s.suffix || (typeof s.number === "string" && s.number.includes("+") ? "+" : ""),
+          suffix_en: s.suffix || (typeof s.number === "string" && s.number.includes("+") ? "+" : ""),
+          icon_name: (s as any).icon || (idx === 0 ? "Utensils" : idx === 1 ? "Utensils" : idx === 2 ? "Home" : "Droplets"),
+          image_url: null,
+          link_url: null,
+        };
+      });
+    }
+    if (liveAchievements.length > 0) return liveAchievements;
+    return [
+      {
+        id: "s1",
+        section: "achievements",
+        sort_order: 1,
+        active: true,
+        label_ar: "كرتونة رمضان",
+        label_en: "Ramadan boxes",
+        value_number: 1400,
+        value_text: null,
+        suffix_ar: " كرتونة",
+        suffix_en: " boxes",
+        icon_name: "Utensils",
+        image_url: null,
+        link_url: null,
+      },
+      {
+        id: "s2",
+        section: "achievements",
+        sort_order: 2,
+        active: true,
+        label_ar: "كرتونة غذائية",
+        label_en: "Food boxes",
+        value_number: 3000,
+        value_text: null,
+        suffix_ar: "+",
+        suffix_en: "+",
+        icon_name: "Utensils",
+        image_url: null,
+        link_url: null,
+      },
+      {
+        id: "s3",
+        section: "achievements",
+        sort_order: 3,
+        active: true,
+        label_ar: "سقف منزل",
+        label_en: "Homes roofed",
+        value_number: 122,
+        value_text: null,
+        suffix_ar: " سقف",
+        suffix_en: " roofs",
+        icon_name: "Home",
+        image_url: null,
+        link_url: null,
+      },
+      {
+        id: "s4",
+        section: "achievements",
+        sort_order: 4,
+        active: true,
+        label_ar: "وصلة مياه نقية",
+        label_en: "Water connections",
+        value_number: 385,
+        value_text: null,
+        suffix_ar: " وصلة",
+        suffix_en: " connections",
+        icon_name: "Droplets",
+        image_url: null,
+        link_url: null,
+      },
+    ];
+  }, [aboutData.stats, liveAchievements]);
+
+  // Certifications / Trust cards from API aboutData.trust
+  const certs = useMemo(() => {
+    if (aboutData.trust && aboutData.trust.length > 0) {
+      return aboutData.trust.map((t, i) => ({
+        I: getLucideIcon(t.icon) || (i === 0 ? BadgeCheck : i === 1 ? ShieldCheck : Globe2),
+        t: isRTL ? t.title_ar : (t.title_en || t.title_ar),
+        d: isRTL ? t.description_ar : (t.description_en || t.description_ar),
+      }));
+    }
+    return isRTL
+      ? [
+          { I: BadgeCheck, t: "ترخيص وزارة التضامن", d: "إشهار رسمي رقم 2665 لسنة 2019." },
+          { I: ShieldCheck, t: "مراجعة محاسبية مستقلة", d: "تقارير مالية سنوية معتمدة وإيصالات رسمية." },
+          { I: Globe2, t: "تغطية شاملة في مصر", d: "مقر رئيسي بالمنصورة وقوافل تغطي ربوع محافظات مصر." },
+        ]
+      : [
+          { I: BadgeCheck, t: "Ministry of Solidarity License", d: "Official NGO Registration #2665 (2019)." },
+          { I: ShieldCheck, t: "Audited & Transparent", d: "Annual certified financial accounting and official receipts." },
+          { I: Globe2, t: "Nationwide Egyptian Reach", d: "Headquarters in Mansoura with field convoys covering all of Egypt." },
+        ];
+  }, [aboutData.trust, isRTL]);
+
+  const faq = isRTL
+    ? [
+        { q: "أين مقر مؤسسة اليسر الخيرية؟", a: "المقر الرئيسي في المنصورة — تقسيم خطاب، بجوار وكالة المنصورة، محافظة الدقهلية، وتغطي قوافلنا ومشاريعنا كل محافظات مصر." },
+        { q: "هل تبرعاتي مُعفاة ضريبياً؟", a: "نعم، مؤسسة اليسر مرخصة رسمياً برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي وتبرعاتك تخضع للإعفاء الضريبي وفق القانون المصري." },
+        { q: "كيف أتأكد من وصول تبرعي بنفسي؟", a: "نوفر ميزة 'الحضور بنفسك'؛ يمكنك مرافقة مندوبينا للميدان لتسليم تبرعك أو معاينة وصلة المياه والسقف، بالإضافة إلى توثيق فوري بالصور والفيديو مع كود تتبع." },
+        { q: "هل أستطيع التطوع معكم؟", a: "نعم، نرحب بالمتطوعين والشباب والعائلات ليكونوا جزءاً من فريقنا الميداني عبر صفحة التطوع بالموقع." },
+      ]
+    : [
+        { q: "Where is Al-Yusr Charity headquartered?", a: "Headquarters in Mansoura — Khattab District, next to Mansoura Agency, Dakahlia, with active convoys and aid operations serving families all across Egypt." },
+        { q: "Are donations tax-exempt?", a: "Yes — Al-Yusr is a registered NGO under license #2665/2019, fully compliant with Egyptian tax-deduction regulations." },
+        { q: "How can I verify my donation?", a: "We offer 'In-Person Delivery' where donors can join our field teams, along with real-time video/photo reporting and tracking codes." },
+        { q: "Can my family and I volunteer?", a: "Yes — we welcome volunteers of all ages to join our distribution drives through our volunteer portal." },
+      ];
+
+  return (
+    <PageLayout>
+      <SEOHelmet
+        title={isRTL ? "من نحن | مؤسسة اليسر الخيرية" : "About Us | Al-Yusr Charity Foundation"}
+        description={isRTL ? "تعرف على مسيرة مؤسسة اليسر الخيرية، رسالتنا، ومشاريعنا الميدانية الموثقة في رعاية الأيتام، الإغاثة، والتنمية المستدامة في مصر." : "Learn about Al-Yusr Charity Foundation, our mission, values, and verified humanitarian initiatives across Egypt."}
+        path="/about"
+        image={aboutHero}
+      />
+      <SiteSchemas />
+      <BreadcrumbSchema items={[
+        { name: isRTL ? "الرئيسية" : "Home", url: `${base}/` },
+        { name: isRTL ? "من نحن" : "About", url: `${base}/about` },
+        { name: isRTL ? "قصتنا"   : "Our story",  url: `${base}/about#story` },
+        { name: isRTL ? "رؤية 2030" : "Vision 2030", url: `${base}/about#vision2030` },
+        { name: isRTL ? "لماذا تثق بنا" : "Why Trust Us", url: `${base}/about#trust` },
+        { name: isRTL ? "قيمنا"   : "Our values", url: `${base}/about#values` },
+        { name: isRTL ? "إنجازاتنا" : "Achievements", url: `${base}/about#achievements` },
+      ]} />
+      <FAQSchema items={[
+        { q: "أين مقر مؤسسة اليسر الخيرية؟", a: "المقر الرئيسي في المنصورة - تقسيم خطاب، بجوار وكالة المنصورة، الدقهلية، جمهورية مصر العربية." },
+        { q: "هل تبرعاتي لمؤسسة اليسر مُعفاة ضريبياً؟", a: "نعم، مؤسسة اليسر الخيرية مرخصة رسمياً برقم إشهار 2665 لسنة 2019 من وزارة التضامن الاجتماعي، والتبرعات تخضع للإعفاء وفق القانون المصري." },
+        { q: "كيف أتأكد من وصول تبرعي للمستحقين؟", a: "كل تبرع له رقم تتبع فريد، تستلم عبره صور وفيديو من الميدان وإيصال PDF فور الحجز ومتابعة لحظية لحالة التبرع أو الحضور بنفسك." },
+        { q: "هل أستطيع التطوع مع مؤسسة اليسر؟", a: "نعم، عندنا فريق متطوعين ميداني مفتوح للانضمام لكل أفراد العائلة عبر صفحة التطوع على الموقع." },
+      ]} />
+
+      <div ref={root}>
+        {/* HERO SECTION */}
+        <section className="relative overflow-visible pattern-hero-luxe hero-pattern-fade text-primary-foreground">
+          <div className="absolute inset-0 leaf-bg opacity-40" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(150_55%_28%/0.45),transparent_60%)]" />
+          <div className="container relative mx-auto px-4 pt-16 sm:pt-20 pb-14 md:pt-28 md:pb-20">
+            <div className="flex justify-center text-primary-foreground/80">
+              <Breadcrumbs items={[{ name: isRTL ? "الرئيسية" : "Home", href: "/" }, { name: isRTL ? "من نحن" : "About" }]} />
+            </div>
+
+            <div className="mt-8 grid items-center gap-10 md:grid-cols-2">
+              <div data-reveal className="reveal-up text-center md:text-start">
+                {loading && !liveData ? (
+                  <div className="space-y-4 max-w-xl mx-auto md:mx-0">
+                    <div className="h-6 w-48 rounded-full bg-white/20 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-10 sm:h-12 w-3/4 rounded-xl bg-white/20 animate-pulse mx-auto md:mx-0" />
+                    <div className="space-y-2 pt-2">
+                      <div className="h-4 w-full rounded bg-white/20 animate-pulse" />
+                      <div className="h-4 w-5/6 rounded bg-white/20 animate-pulse" />
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary/15 px-3.5 py-1.5 text-xs font-black text-secondary backdrop-blur-xs">
+                      <ShieldCheck className="h-4 w-4" />
+                      {isRTL
+                        ? (aboutData.hero.badge_ar || "مشهرة برقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي")
+                        : (aboutData.hero.badge_en || "Licensed NGO #2665 (2019)")}
+                    </span>
+
+                    <h1 className="mt-4 mx-auto md:mx-0 max-w-xl text-3xl font-black leading-tight sm:text-4xl md:text-5xl">
+                      {isRTL
+                        ? (aboutData.hero.title_ar || "مؤسسة اليسر الخيرية")
+                        : (aboutData.hero.title_en || "Al-Yusr Charity Foundation")}
+                    </h1>
+                    
+                    <p className="mt-4 mx-auto md:mx-0 max-w-xl text-base leading-relaxed text-primary-foreground/90 md:text-lg">
+                      {isRTL
+                        ? (aboutData.hero.description_ar || "مؤسسة غير ربحية تم إنشاؤها عام 2019، تابعة لوزارة التضامن الاجتماعي. هدفنا أن تصل الصدقة لمستحقها — في المنصورة والدقهلية وكل محافظات مصر.")
+                        : (aboutData.hero.description_en || "A registered non-profit foundation established in 2019 under the Ministry of Social Solidarity, delivering verified aid across Mansoura, Dakahlia, and all of Egypt.")}
+                    </p>
+
+                    <blockquote className="mt-5 mx-auto md:mx-0 max-w-xl text-lg font-black text-secondary sm:text-xl">
+                      {isRTL
+                        ? (aboutData.hero.quote_ar ? `«${aboutData.hero.quote_ar.replace(/[«»]/g, "")}»` : "«تبرعك يترك أثراً ويغير حياة»")
+                        : (aboutData.hero.quote_en ? `'${aboutData.hero.quote_en.replace(/['"]/g, "")}'` : "'Your donation leaves lasting impact and transforms lives'")}
+                    </blockquote>
+                  </>
+                )}
+
+                <div className="mt-7 flex flex-wrap justify-center gap-3 md:justify-start">
+                  <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95 font-black">
+                    <Link to="/donate">
+                      <Heart className="h-5 w-5 me-1" />
+                      {isRTL
+                        ? (aboutData.hero.donate_label_ar || (aboutData.hero as any).donate_button_text || "تبرع الآن")
+                        : (aboutData.hero.donate_label_en || "Donate now")}
+                    </Link>
+                  </Button>
+                  <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 font-bold">
+                    <a href="#story">
+                      {isRTL
+                        ? (aboutData.hero.story_label_ar || (aboutData.hero as any).story_button_text || "اعرف قصتنا")
+                        : (aboutData.hero.story_label_en || "Our story")}
+                    </a>
+                  </Button>
+                </div>
+              </div>
+
+              <div data-reveal className="reveal-up relative mt-6 md:mt-0">
+                <div className="absolute -inset-4 rounded-[2.5rem] bg-secondary/15 blur-2xl" aria-hidden />
+                <img
+                  src={aboutData.hero.image ? resolveStorageUrl(aboutData.hero.image) : aboutHero}
+                  alt={isRTL ? "أطفال داخل فصل تعليمي ضمن مبادرات مؤسسة اليسر الخيرية" : "Children in classroom — Al-Yusr education initiative"}
+                  width={1600} height={1024}
+                  loading="eager"
+                  decoding="async"
+                  className="relative w-full rounded-[2rem] border-4 border-secondary/40 object-cover shadow-card"
+                />
+              </div>
+            </div>
+
+            {/* Quick Stats Panel — 2 columns on mobile */}
+            <div
+              data-reveal
+              className="reveal-up relative mx-auto mt-12 max-w-5xl rounded-[2rem] border border-secondary/25 bg-[hsl(150_45%_8%/0.85)] p-4 shadow-[0_30px_80px_-40px_hsl(150_60%_5%/0.9)] backdrop-blur-md sm:p-5 md:mt-14 md:p-6"
+            >
+              <h2 className="sr-only">{isRTL ? "إحصائيات عام 2025" : "2025 Impact numbers"}</h2>
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-4">
+                {displayStats.map((s, idx) => {
+                  const Icon = getLucideIcon(s.icon_name);
+                  const suffix = isRTL ? s.suffix_ar : s.suffix_en;
+                  const label = isRTL ? s.label_ar : s.label_en;
+                  const numFormatted = s.value_number !== null
+                    ? `${s.value_number.toLocaleString(isRTL ? "ar-EG" : "en-US")}${suffix ? ` ${suffix}` : ""}`
+                    : (s.value_text || "—");
+
+                  return (
+                    <div
+                      key={s.id || idx}
+                      className="group flex items-center gap-2.5 rounded-xl bg-[hsl(150_40%_10%/0.6)] px-2.5 py-2.5 ring-1 ring-secondary/15 transition hover:bg-[hsl(150_40%_12%/0.75)] hover:ring-secondary/40 sm:px-3 sm:py-3"
+                    >
+                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-secondary/10 ring-[1.5px] ring-secondary/60 transition group-hover:bg-secondary/20 group-hover:ring-secondary sm:h-10 sm:w-10">
+                        {s.image_url ? (
+                          <img src={s.image_url} alt="" className="h-5 w-5 rounded-full object-cover" />
+                        ) : (
+                          <Icon className="h-4 w-4 text-secondary sm:h-5 sm:w-5" strokeWidth={1.75} />
+                        )}
+                      </span>
+                      <div className="min-w-0">
+                        <div className="font-mono text-base font-black leading-none text-secondary sm:text-lg md:text-xl">
+                          {numFormatted}
+                        </div>
+                        <div className="mt-1 truncate text-[10px] font-extrabold text-primary-foreground/85 sm:text-[11px] md:text-xs">
+                          {label}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-3 text-center text-[11px] font-bold text-primary-foreground/75 sm:text-xs">
+                {isRTL ? "إحصائيات عام 2025 — موثّقة بالميدان في المنصورة والدقهلية ومصر" : "2025 impact — verified across Egypt"}
+              </div>
+            </div>
+
+            {/* Scroll-down Arrow */}
+            <div className="mt-8 flex justify-center md:mt-10">
+              <a
+                href="#story"
+                className="group inline-flex flex-col items-center gap-2 text-primary-foreground/85 transition hover:text-secondary"
+                aria-label={isRTL ? "اعرف أكثر — انتقل للمحتوى" : "Learn more — scroll down"}
+              >
+                <span className="text-[12px] font-extrabold tracking-wide sm:text-sm">
+                  {isRTL ? "اعرف أكثر" : "Learn more"}
+                </span>
+                <span className="grid h-10 w-10 place-items-center rounded-full border border-secondary/40 bg-secondary/10 backdrop-blur transition group-hover:translate-y-1 group-hover:border-secondary group-hover:bg-secondary/25 sm:h-12 sm:w-12">
+                  <ChevronDown className="h-5 w-5 animate-bounce text-secondary sm:h-6 sm:w-6" />
+                </span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* OUR STORY */}
+        <section id="story" className="scroll-mt-24 pattern-programs py-16 md:py-24">
+          <div className="container mx-auto max-w-5xl px-4 text-center">
+            <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-primary">
+              <Sparkles className="h-3.5 w-3.5 text-secondary" />
+              {isRTL ? "نشأة المؤسسة وتاريخنا" : "Our Origin Story"}
+            </span>
+
+            <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-3xl lg:text-4xl">
+              {isRTL ? (aboutData.story?.title_ar || "قصتنا") : (aboutData.story?.title_en || "Our Story")}
+            </h2>
+
+            <p data-reveal className="reveal-up mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-foreground/90 sm:text-base md:text-lg">
+              {isRTL
+                ? (aboutData.story?.description_ar || "بعد العمل لأكثر من عشر سنوات في العمل الخيري كان لابد من كيان منظم ومرخص يجمع أعمالنا ويكبر ويساعدنا في بناء العمل الخيري في جمع تبرعات وتوزيعها لمؤسسة قادرة تغير مفهوم العمل الخيري وتنمو بالأثر من خلال مبادراتنا.")
+                : (aboutData.story?.description_en || "Al-Yusr Charity Foundation was born after more than a decade of direct grassroots volunteering across Egyptian villages, officially incorporated in 2019 (#2665) to maximize donation impact with transparency.")}
+            </p>
+
+            <div data-reveal className="reveal-up mx-auto mt-6 flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-muted-foreground">
+              <span className="rounded-full bg-card px-3.5 py-1.5 border border-border shadow-xs">
+                {isRTL
+                  ? `إشهار رقم ${aboutData.story?.registration_number || "2665 لسنة 2019"} — وزارة التضامن الاجتماعي`
+                  : `License #${aboutData.story?.registration_number || "2665 / 2019"} — Ministry of Social Solidarity`}
+              </span>
+              <span className="rounded-full bg-card px-3.5 py-1.5 border border-border shadow-xs text-primary font-black">
+                {isRTL
+                  ? `حساب ${aboutData.story?.bank_name || "CIB: 100043605733"}`
+                  : `Account ${aboutData.story?.bank_name || "CIB: 100043605733"}`}
+              </span>
+            </div>
+
+            {/* Mission & Goal Cards — from API story data */}
+            <div className="mt-10 grid gap-6 md:grid-cols-2 text-start">
+              <div data-reveal className="reveal-up rounded-3xl border border-border bg-card p-6 shadow-soft md:p-8">
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary/15 text-primary">
+                  <Target className="h-6 w-6 text-secondary" />
+                </div>
+                <h3 className="mt-4 text-xl font-black text-primary">{isRTL ? "رسالتنا" : "Our Mission"}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-foreground/85 md:text-base font-medium">
+                  {isRTL
+                    ? (aboutData.story?.mission_ar ||
+                       (typeof aboutData.story?.mission === "object" ? (aboutData.story.mission as any)?.description_ar : null) ||
+                       "بناء إنسان واعٍ جسدياً، ثقافياً، وصحياً.")
+                    : (aboutData.story?.mission_en ||
+                       (typeof aboutData.story?.mission === "object" ? (aboutData.story.mission as any)?.description_en : null) ||
+                       "Building an individual who is physically, culturally, and medically empowered.")}
+                </p>
+              </div>
+
+              <div data-reveal className="reveal-up rounded-3xl border border-border bg-card p-6 shadow-soft md:p-8">
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary/15 text-primary">
+                  <Eye className="h-6 w-6 text-secondary" />
+                </div>
+                <h3 className="mt-4 text-xl font-black text-primary">{isRTL ? "هدفنا" : "Our Goal"}</h3>
+                <ul className="mt-2 space-y-2 text-sm leading-relaxed text-foreground/85 md:text-base font-medium">
+                  {(() => {
+                    // Try API goals array first, then fallback to static
+                    const apiGoals = Array.isArray(aboutData.story?.goals_ar)
+                      ? aboutData.story.goals_ar
+                      : (typeof aboutData.story?.goals === "object" && Array.isArray((aboutData.story.goals as any)?.items)
+                          ? ((aboutData.story.goals as any).items as string[])
+                          : null);
+                    const staticGoalsAr = [
+                      "أن تصل الصدقة لمن يستحقها بأعلى معايير الأمانة.",
+                      "تغيير مفهوم العمل الخيري في مصر — من إعطاء صدقة لحظية إلى تغيير حياة كاملة.",
+                      "الحفاظ على أموال المتبرعين وتوفير طرق تبرع آمنة وموثقة.",
+                    ];
+                    const staticGoalsEn = [
+                      "Ensure charity reaches verified deserving families directly.",
+                      "Shift charity from temporary relief to complete life transformation.",
+                      "Safeguard donor funds with secure, transparent, and audited channels.",
+                    ];
+                    const goals = apiGoals || (isRTL ? staticGoalsAr : staticGoalsEn);
+                    return goals.map((g: string, gi: number) => (
+                      <li key={gi} className="flex items-start gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-secondary shrink-0 mt-1" />
+                        <span>{g}</span>
+                      </li>
+                    ));
+                  })()}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* VISION 2030 WITH 22.7% PROGRESS SLIDER */}
+        <section id="vision2030" className="scroll-mt-24 py-16 md:py-24 bg-gradient-to-b from-card via-background to-card border-y border-border/60">
+          <div className="container mx-auto max-w-6xl px-4">
+            <div className="text-center max-w-3xl mx-auto">
+              <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3.5 py-1 text-xs font-black text-primary ring-1 ring-secondary/30">
+                <TrendingUp className="h-3.5 w-3.5 text-secondary" />
+                {isRTL ? "الخطة الاستراتيجية المستدامة" : "Strategic Vision"}
+              </span>
+
+              <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-3xl lg:text-4xl">
+                {isRTL ? "رؤيتنا لعام 2030" : "Vision 2030 Roadmap"}
+              </h2>
+
+              <p data-reveal className="reveal-up mt-3 text-sm text-muted-foreground md:text-base">
+                {isRTL
+                  ? "مستهدفات طموحة للانتقال بالمجتمعات الأكثر احتياجاً من دائرة الاحتياج إلى الاكتفاء الذاتي والإنتاج:"
+                  : "Ambitious milestones moving communities from poverty to self-reliance:"}
+              </p>
+            </div>
+
+            {/* Vision 2030 Pillars — from API */}
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {(() => {
+                const staticItems = [
+                  { icon: Sprout, titleAr: "مشاريع استثمارية وقف لله", titleEn: "Endowment Investments", descAr: "بناء مشاريع استثمارية وقف لله، يُستخدم ريعها وأرباحها في كفالة الأسر وتغطية المصاريف التشغيلية بصفة مستدامة.", descEn: "Endowment ventures funding ongoing family stipends and operating sustainability." },
+                  { icon: Hospital, titleAr: "مستشفى طبية متكاملة", titleEn: "Comprehensive Hospital", descAr: "بناء مستشفى طبية كبرى لخدمة أكثر من 100 ألف مريض سنوياً بأحدث الأجهزة الطبية ورعاية مجانية لغير القادرين.", descEn: "State-of-the-art charitable hospital serving over 100,000 underprivileged patients annually." },
+                  { icon: GraduationCap, titleAr: "كفالة 20 ألف طالب", titleEn: "20,000 Student Sponsorships", descAr: "كفالة تعليمية متكاملة لأكثر من 20,000 طالب وطالبة للنجاة بهم من الفقر وكسر حلقة التسرّب الدراسي.", descEn: "Comprehensive tuition and support securing 20,000 young learners from poverty." },
+                  { icon: Briefcase, titleAr: "مشاريع صغيرة للمستحقين", titleEn: "Micro-Enterprises", descAr: "تمويل وتأسيس مشاريع إنتاجية صغيرة للأسر المستحقة لتمكينهم من الاعتماد على أنفسهم والتحول لأسر منتجة.", descEn: "Funding sustainable micro-businesses enabling families to become independent and productive." },
+                ];
+                const apiItems = aboutData.vision_2030?.items;
+                const useApi = Array.isArray(apiItems) && apiItems.length > 0;
+                return (useApi ? apiItems : staticItems).map((v: any, i: number) => {
+                  const Icon = useApi ? getLucideIcon(v.icon) : (v as typeof staticItems[0]).icon;
+                  return (
+                    <div key={i} data-reveal className="reveal-up rounded-3xl border border-border bg-card p-6 shadow-soft text-center sm:text-start flex flex-col justify-between">
+                      <div>
+                        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary/15 text-primary mx-auto sm:mx-0">
+                          <Icon className="h-6 w-6 text-secondary" />
+                        </span>
+                        <h3 className="mt-4 text-lg font-black text-primary">
+                          {useApi ? (isRTL ? (v.title_ar || v.titleAr) : (v.title_en || v.titleEn)) : (isRTL ? (v as any).titleAr : (v as any).titleEn)}
+                        </h3>
+                        <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm font-medium">
+                          {useApi ? (isRTL ? (v.description_ar || v.descAr) : (v.description_en || v.descEn)) : (isRTL ? (v as any).descAr : (v as any).descEn)}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+
+            {/* Achievement Meter: Dynamic from Vision 2030 progress */}
+            {(() => {
+              const progressVal = (aboutData.vision_2030?.progress !== undefined && aboutData.vision_2030?.progress !== null && !isNaN(Number(aboutData.vision_2030.progress)))
+                ? Number(aboutData.vision_2030.progress)
+                : 23.1;
+              return (
+                <div data-reveal className="reveal-up mt-10 rounded-3xl border border-secondary/30 bg-gradient-to-r from-primary/95 via-primary to-[#06331c] p-6 text-primary-foreground shadow-card sm:p-8">
+                  <div className="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
+                    <div className="md:col-span-8 text-center md:text-start">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3 py-1 text-xs font-black text-secondary">
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                        {isRTL ? "مؤشر الإنجاز الفعلي" : "Verified Milestone Progress"}
+                      </span>
+                      <h3 className="mt-2 text-xl font-black sm:text-2xl">
+                        {isRTL ? "ما تم تحقيقه حتى الآن من مستهدفات 2030" : "Achieved So Far Towards Vision 2030"}
+                      </h3>
+                      <p className="mt-1 text-xs sm:text-sm text-primary-foreground/85">
+                        {isRTL ? (
+                          <>
+                            تم بفضل الله وتبرعاتكم إنجاز{" "}
+                            <span className="font-black text-secondary tabular-nums" dir="ltr">{progressVal}%</span>{" "}
+                            من الخطة التنموية عبر مزارع الوقف والمجمعات الطبية وكفالات التعليم وسقيا الماء.
+                          </>
+                        ) : (
+                          <>
+                            <span className="font-black text-secondary tabular-nums" dir="ltr">{progressVal}%</span>{" "}
+                            of the vision achieved through endowment farms, medical clinics, education aid, and pure water lines.
+                          </>
+                        )}
+                      </p>
+
+                      {/* Progress Bar — from API */}
+                      <div className="mt-4 w-full bg-white/20 h-4 rounded-full overflow-hidden p-0.5">
+                        <div
+                          className="bg-orange-grad h-full rounded-full transition-all duration-1000 shadow-sm"
+                          style={{ width: `${Math.min(100, Math.max(0, progressVal))}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="md:col-span-4 flex flex-col items-center justify-center text-center">
+                      <div className="font-mono text-4xl sm:text-5xl font-black text-secondary tabular-nums" dir="ltr">
+                        {progressVal}%
+                      </div>
+                      <div className="mt-1 text-xs font-black text-primary-foreground/90 uppercase tracking-wider">
+                        {isRTL ? "معدل الإنجاز المحقق" : "Completed Goal Ratio"}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        </section>
+
+        {/* WHY TRUST US? */}
+        <section id="trust" className="scroll-mt-24 pattern-programs py-16 md:py-24">
+          <div className="container mx-auto max-w-5xl px-4">
+            <div className="mx-auto max-w-3xl text-center">
+              <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-primary">
+                <ShieldCheck className="h-3.5 w-3.5 text-secondary" />
+                {isRTL ? "ضمانات حقيقية لراحة بالك" : "Genuine Donor Guarantees"}
+              </span>
+              <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-3xl lg:text-4xl">
+                {isRTL ? "لماذا تثق بنا؟" : "Why Trust Al-Yusr?"}
+              </h2>
+              <p data-reveal className="reveal-up mt-3 text-sm text-muted-foreground md:text-lg">
+                {isRTL ? "إحنا بنوفر ضمان حقيقي لضمان تبرعك وراحة بالك وهو:" : "We offer concrete institutional guarantees over every single donation:"}
+              </p>
+            </div>
+
+            {/* Why Trust Us cards — from API why_us, fallback to static */}
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {(() => {
+                const staticWhy = [
+                  { icon: Users, titleAr: "الحضور بنفسك", titleEn: "Join in Person", descAr: "وصّل تبرعك بنفسك؛ بتطلب مننا التبرع والحضور وبنبعتلك حد من فريقنا يتحرك معاك للمستحق لإيصال صدقتك أو تنفيذ العمل (وصلة مياه، أسقف منازل).", descEn: "Deliver your aid by hand: join our representatives on the ground to witness water taps and roof installations." },
+                  { icon: Camera, titleAr: "التوثيق الفوري", titleEn: "Direct Proof", descAr: "بنوثق إيصال تبرعك بالفيديو والصور وإشعار رسمي يوضح الأثر المحقق في حياة الأسرة مع الحفاظ على كرامتهم.", descEn: "We document the delivery of your aid with photo/video proof while preserving beneficiary dignity." },
+                  { icon: HandHeart, titleAr: "تطوع عائلتك", titleEn: "Family Volunteering", descAr: "أولادك وعائلتك ممكن يتطوعوا معانا ويكونوا جزءاً من فريقنا الميداني في قوافل الإطعام والزيارات الميدانية.", descEn: "Your children and youth can join our field convoy teams and experience the joy of direct giving." },
+                  { icon: BadgeCheck, titleAr: "الكيان والحسابات الرسمية", titleEn: "Licensed Entity", descAr: "كيان مشهر برقم 2665 لعام 2019 بوزارة التضامن الاجتماعي، مع حسابات بنكية رسمية (CIB: 100043605733).", descEn: "Officially registered NGO (#2665/2019) with institutional transparent CIB bank accounts." },
+                ];
+                const apiWhy = aboutData.why_us;
+                const useApi = Array.isArray(apiWhy) && apiWhy.length > 0;
+                const items = useApi ? apiWhy : staticWhy;
+                return items.map((c: any, i: number) => {
+                  const Icon = useApi ? getLucideIcon(c.icon) : (c as typeof staticWhy[0]).icon;
+                  return (
+                    <div key={i} data-reveal className="reveal-up rounded-3xl border border-border bg-card p-6 text-start shadow-soft flex flex-col justify-between">
+                      <div>
+                        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary/15 text-primary">
+                          <Icon className="h-6 w-6 text-secondary" />
+                        </div>
+                        <h3 className="mt-4 text-lg font-black text-primary">
+                          {useApi ? (isRTL ? (c.title_ar || c.titleAr) : (c.title_en || c.titleEn)) : (isRTL ? (c as any).titleAr : (c as any).titleEn)}
+                        </h3>
+                        <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm font-medium">
+                          {useApi ? (isRTL ? (c.description_ar || c.descAr) : (c.description_en || c.descEn)) : (isRTL ? (c as any).descAr : (c as any).descEn)}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+          </div>
+        </section>
+
+        {/* SPROUT BANNER */}
+        <section className="relative overflow-hidden">
+          <img src={imgHandsSprout} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/75 to-primary/50" aria-hidden />
+          <div className="container relative mx-auto px-4 py-16 text-center text-primary-foreground md:py-20">
+            <h2 data-reveal className="reveal-up mx-auto max-w-3xl text-2xl font-black md:text-4xl">
+              {isRTL ? "نزرع اليوم… ليثمر غداً في كل بيت في مصر" : "We plant today — to bloom tomorrow in every home across Egypt"}
+            </h2>
+          </div>
+        </section>
+
+        {/* VALUES */}
+        <section id="values" className="py-16 md:py-24 bg-muted/30 border-y border-border/60">
+          <div className="container mx-auto max-w-6xl px-4">
+            <h2 data-reveal className="reveal-up text-center text-2xl font-black text-primary md:text-3xl">{isRTL ? "قيمنا" : "Our Values"}</h2>
+            <p data-reveal className="reveal-up mx-auto mt-3 max-w-2xl text-center text-muted-foreground text-sm sm:text-base">
+              {isRTL ? "قيم بنشتغل بيها كل يوم في كل قرية بالدقهلية ومحافظات مصر." : "Guiding principles lived daily across every village in Egypt."}
+            </p>
+            <div className="mx-auto mt-10 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-5">
+              {values.map((v, i) => (
+                <div key={i} data-reveal className="reveal-up rounded-2xl border border-border bg-card p-5 text-center shadow-soft transition hover:-translate-y-1 hover:shadow-card">
+                  <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-secondary/15 text-primary">
+                    <v.icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="mt-3 font-extrabold text-primary">{v.t}</h3>
+                  <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-muted-foreground">{v.d}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 2025 ACHIEVEMENTS (2 cards per row on mobile) */}
+        <AchievementsSection isRTL={isRTL} />
+
+        {/* TESTIMONIAL / SLOGAN */}
+        <section className="bg-primary text-primary-foreground py-16 md:py-20">
+          <div className="container mx-auto max-w-4xl px-4 text-center">
+            <Quote className="mx-auto h-8 w-8 text-secondary" />
+            <p data-reveal className="reveal-up mt-4 text-xl sm:text-2xl md:text-3xl font-black leading-relaxed text-secondary">
+              {isRTL
+                ? "«نترك أثراً في حياتك وأثراً في حياة المستحق»"
+                : "“We leave a lasting impact in your life, and an enduring impact in the recipient's life.”"}
+            </p>
+            <div className="mt-4 text-xs sm:text-sm font-bold text-primary-foreground/80">
+              {isRTL ? "مؤسسة اليسر الخيرية — المنصورة والدقهلية وكل محافظات مصر" : "Al-Yusr Charity Foundation — Egypt"}
+            </div>
+          </div>
+        </section>
+
+        {/* ONGOING PERMANENT ACTIVITIES */}
+        <section id="activities" className="scroll-mt-24 pattern-programs py-16 md:py-24">
+          <div className="container mx-auto max-w-6xl px-4">
+            <div className="mx-auto max-w-3xl text-center">
+              <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-primary">
+                <Layers className="h-3.5 w-3.5 text-secondary" />
+                {isRTL ? "برامج ومسارات الخير" : "Active Initiatives"}
+              </span>
+              <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-3xl lg:text-4xl">
+                {isRTL ? "أنشطتنا الدائمة" : "Our Ongoing Activities"}
+              </h2>
+              <p data-reveal className="reveal-up mt-3 text-muted-foreground text-sm sm:text-base">
+                {isRTL ? "مبادرات نوعية مدروسة تعمل طوال العام في كل جوانب الحياة:" : "Continuous year-round programs touching every facet of life:"}
+              </p>
+            </div>
+            <div className="mt-10 grid gap-3.5 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3">
+              {(() => {
+                const staticActivities = [
+                  { I: Droplets, ar: "حملة ظِلّ (سقيا وأسقف)", en: "Dhill (Water & Roofs)", href: "/dhill" },
+                  { I: Home, ar: "حملة سِتْر (دفء الشتاء)", en: "Setr (Winter Aid)", href: "/setr" },
+                  { I: Baby, ar: "باب الجنة (كفالة الأيتام)", en: "Bab Al-Jannah (Orphans)", href: "/programs/orphans" },
+                  { I: Sparkles, ar: "مبادرة عربون خير (المستقلين)", en: "Arboun Khair (Freelancers)", href: "/arboun" },
+                  { I: HandCoins, ar: "كفالات ومساعدات شهرية", en: "Monthly Family Stipends", href: "/programs" },
+                  { I: Utensils, ar: "غذاء شهري (كراتين وسلال)", en: "Monthly Food Boxes", href: "/food-box" },
+                  { I: Beef, ar: "صكوك الأضاحي ومزارع الوقف", en: "Qurbani & Farms", href: "/qurbani" },
+                  { I: Heart, ar: "زكاة المال والصدقات", en: "Zakat & General Charity", href: "/zakat" },
+                  { I: HeartPulse, ar: "مساعدات طبية طارئة وقوافل", en: "Urgent Medical Convoys", href: "/programs/health" },
+                  { I: HandHeart, ar: "تيسير زواج الفتيات اليتيمات", en: "Orphan Bride Marriage Aid", href: "/programs" },
+                  { I: Home, ar: "حملة مَرْكُون (أثاث وأجهزة)", en: "Markoun In-Kind Reuse", href: "/markoun" },
+                  { I: BookOpen, ar: "دور وحلقات تحفيظ القرآن", en: "Quran Learning Centers", href: "/programs/education" },
+                ];
+                const hasApiPrograms = Array.isArray(aboutData.programs) && aboutData.programs.length > 0;
+                const items = hasApiPrograms
+                  ? aboutData.programs.map((p) => ({
+                      I: getLucideIcon(p.icon) || Layers,
+                      ar: p.title_ar,
+                      en: p.title_en || p.title_ar,
+                      href: "/programs",
+                    }))
+                  : staticActivities;
+
+                return items.map((a, i) => (
+                  <Link
+                    key={i}
+                    to={a.href}
+                    data-reveal
+                    className="reveal-up flex items-center gap-2.5 sm:gap-3 rounded-2xl border border-border bg-card p-3.5 sm:p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-secondary/60 hover:shadow-card"
+                  >
+                    <div className="grid h-10 w-10 sm:h-11 sm:w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary">
+                      <a.I className="h-5 w-5 text-secondary" />
+                    </div>
+                    <span className="text-xs sm:text-sm font-extrabold text-primary truncate">{isRTL ? a.ar : a.en}</span>
+                  </Link>
+                ));
+              })()}
+            </div>
+          </div>
+        </section>
+
+        {/* CERTIFICATIONS */}
+        <section className="pattern-hero-luxe py-16 md:py-24 text-primary-foreground">
+          <div className="container mx-auto max-w-5xl px-4">
+            <h2 data-reveal className="reveal-up text-center text-2xl font-black text-secondary md:text-3xl mb-3">
+              {isRTL ? "اعتماد وثقة رسمية" : "Official Accreditation"}
+            </h2>
+            <p data-reveal className="reveal-up mx-auto mt-3 max-w-2xl text-center text-white/85 text-sm sm:text-base">
+              {isRTL
+                ? "مشهرة رسمياً من وزارة التضامن الاجتماعي مع تقارير محاسبية سنوية وإشراف كامل."
+                : "Officially registered by the Ministry of Social Solidarity with certified annual accounting."}
+            </p>
+            <div className="mt-10 grid gap-4 md:grid-cols-3">
+              {certs.map((c, i) => (
+                <div key={i} data-reveal className="reveal-up rounded-3xl border border-border bg-card p-6 text-center shadow-soft text-foreground">
+                  <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-secondary/15 text-primary">
+                    <c.I className="h-7 w-7 text-secondary" />
+                  </div>
+                  <h3 className="mt-3 font-black text-primary">{c.t}</h3>
+                  <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground font-medium">{c.d}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* TIMELINE */}
+        <section id="timeline" className="scroll-mt-24 pattern-programs py-16 md:py-24">
+          <div className="container mx-auto max-w-4xl px-4">
+            <div className="mx-auto max-w-2xl text-center mb-12">
+              <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-primary">
+                <CheckCircle2 className="h-3.5 w-3.5 text-secondary" />
+                {isRTL ? "محطات من تاريخ العطاء" : "History & Milestones"}
+              </span>
+              <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-4xl">
+                {isRTL ? "رحلتنا وتاريخنا" : "Our Journey & Milestones"}
+              </h2>
+              <p data-reveal className="reveal-up mt-3 text-sm text-muted-foreground md:text-base">
+                {isRTL ? "من العمل الميداني البسيط وحتى أوسع مظلة خيرية معتمدة بالدقهلية." : "From humble field relief to a premier registered foundation in Dakahlia."}
+              </p>
+            </div>
+
+            <div className="relative mx-auto max-w-3xl">
+              {/* Central Vertical Axis Line */}
+              <div className="absolute top-4 bottom-4 start-[15px] sm:start-[19px] w-1 bg-gradient-to-b from-secondary via-secondary/70 to-secondary/20 rounded-full" aria-hidden="true" />
+
+              <StickyStack className="space-y-6 sm:space-y-8">
+                {timeline.map((m, i) => {
+                  const offsets = [
+                    "top-[84px] md:top-[96px]",
+                    "top-[96px] md:top-[112px]",
+                    "top-[108px] md:top-[128px]",
+                    "top-[120px] md:top-[144px]",
+                    "top-[132px] md:top-[160px]",
+                    "top-[144px] md:top-[176px]",
+                  ];
+                  return (
+                    <StickyStackItem
+                      key={i}
+                      index={i}
+                      top={offsets[i % offsets.length]}
+                      className="mb-0"
+                    >
+                      <div className="group relative flex items-start gap-4 sm:gap-6 ps-10 sm:ps-14 transition-all duration-300">
+                        {/* Centered Node Icon exactly on the line */}
+                        <div className="absolute start-0 top-3 grid h-8 w-8 sm:h-10 sm:w-10 place-items-center rounded-full border-2 border-background bg-secondary text-white shadow-cta transition-transform duration-300 group-hover:scale-110">
+                          <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />
+                        </div>
+
+                        {/* Milestone Card with subtle shadow and border */}
+                        <div className="w-full rounded-3xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all duration-300 hover:border-secondary/50">
+                          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-3">
+                            <h3 className="text-base sm:text-lg font-black text-primary">{m.t}</h3>
+                            <span className="inline-flex items-center rounded-full bg-secondary/15 px-3 py-1 font-mono text-xs sm:text-sm font-black text-secondary">
+                              {m.y}
+                            </span>
+                          </div>
+                          <p className="mt-3 text-xs sm:text-sm leading-relaxed text-muted-foreground font-medium">
+                            {m.d}
+                          </p>
+                        </div>
+                      </div>
+                    </StickyStackItem>
+                  );
+                })}
+              </StickyStack>
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT + MAP */}
+        <section id="contact" className="scroll-mt-24 pattern-programs py-16 md:py-24">
+          <div className="container mx-auto max-w-6xl px-4">
+            <div className="mx-auto max-w-3xl text-center">
+              <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
+                <MapPin className="h-3.5 w-3.5" /> {isRTL ? "المقر والتواصل" : "Headquarters & Contact"}
+              </span>
+              <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-4xl">
+                {isRTL ? "تواصل ومقر المؤسسة" : "Contact & Headquarters"}
+              </h2>
+              <p data-reveal className="reveal-up mt-3 text-muted-foreground text-sm sm:text-base">
+                {isRTL ? "أبوابنا مفتوحة يومياً لخدمتكم واستقبال مساهماتكم بالمنصورة وكافة المحافظات." : "Our headquarters welcome donors and beneficiaries daily in Mansoura and nationwide."}
+              </p>
+            </div>
+            <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_1.3fr]">
+              {/* Contact cards */}
+              <div className="space-y-3">
+                <a href="tel:+201097000137" data-source="about" data-label="about-phone" className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><Phone className="h-5 w-5 text-secondary" /></div>
+                  <div><div className="font-extrabold text-primary">{isRTL ? "هاتف" : "Phone"}</div><div dir="ltr" className="text-sm text-muted-foreground font-bold">+20 109 700 0137</div></div>
+                </a>
+                <a href="https://wa.me/201097000137" target="_blank" rel="noopener" data-source="about" data-label="about-whatsapp" className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><WhatsAppIcon className="h-5 w-5 text-secondary" /></div>
+                  <div><div className="font-extrabold text-primary">WhatsApp</div><div className="text-sm text-muted-foreground">{isRTL ? "رد فوري — اضغط للمحادثة" : "Instant reply — tap to chat"}</div></div>
+                </a>
+                <a href="mailto:info@elyosrcharity.com" data-source="about" data-label="about-email" className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><Mail className="h-5 w-5 text-secondary" /></div>
+                  <div><div className="font-extrabold text-primary">{isRTL ? "بريد" : "Email"}</div><div className="text-sm text-muted-foreground">info@elyosrcharity.com</div></div>
+                </a>
+                <div className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><MapPin className="h-5 w-5 text-secondary" /></div>
+                  <div><div className="font-extrabold text-primary">{isRTL ? "العنوان" : "Address"}</div><div className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{isRTL ? "المنصورة، تقسيم خطاب، بجوار وكالة المنصورة — الدقهلية، مصر" : "Mansoura, Khattab District, next to Mansoura Agency — Dakahlia, Egypt"}</div></div>
+                </div>
+                <div className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><Building2 className="h-5 w-5 text-secondary" /></div>
+                  <div><div className="font-extrabold text-primary">{isRTL ? "حساب CIB الرسمي" : "Official CIB Account"}</div><div dir="ltr" className="text-sm font-black text-secondary font-mono">100043605733</div></div>
+                </div>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <a href="https://facebook.com/Elyosr.Charity" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-extrabold text-primary transition hover:border-secondary/60 hover:text-secondary"><Facebook className="h-3.5 w-3.5" /> Facebook</a>
+                  <a href="https://instagram.com/elyosr.charity" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-extrabold text-primary transition hover:border-secondary/60 hover:text-secondary"><Instagram className="h-3.5 w-3.5" /> Instagram</a>
+                  <Link to="/contact" className="inline-flex items-center gap-1.5 rounded-full bg-orange-grad px-3 py-1.5 text-xs font-extrabold text-accent-foreground shadow-cta">{isRTL ? "صفحة التواصل الكاملة" : "Full contact page"} <ArrowLeft className="h-3.5 w-3.5 hidden rtl:inline" /><ArrowRight className="h-3.5 w-3.5 rtl:hidden" /></Link>
+                </div>
+              </div>
+
+              {/* Map */}
+              <div data-reveal className="reveal-up overflow-hidden rounded-3xl border border-border shadow-card">
+                <iframe
+                  title={isRTL ? "موقع مؤسسة اليسر — المنصورة" : "Al-Yusr location — Mansoura"}
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(isRTL ? "المنصورة، الدقهلية، مصر" : "Mansoura, Dakahlia, Egypt")}&hl=${isRTL ? "ar" : "en"}&z=13&output=embed`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="block h-full min-h-[320px] w-full border-0 lg:min-h-[460px]"
+                  style={{ display: "block" }}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ SECTION */}
+        <section id="faq" className="scroll-mt-24 pattern-programs py-16 md:py-24">
+          <div className="container mx-auto max-w-3xl px-4">
+            <h2 data-reveal className="reveal-up text-center text-2xl font-black text-primary md:text-3xl">
+              {isRTL ? "أسئلة شائعة عن مؤسسة اليسر" : "Frequently Asked Questions"}
+            </h2>
+            <div className="mt-8 space-y-3">
+              {faq.map((f, i) => (
+                <details key={i} data-reveal className="reveal-up group rounded-2xl border border-border bg-card p-4 shadow-soft">
+                  <summary className="flex cursor-pointer items-start justify-between gap-3 font-extrabold text-primary text-sm sm:text-base">
+                    <span>{f.q}</span>
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-secondary transition group-open:rotate-90" />
+                  </summary>
+                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-foreground/80 font-medium">{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </PageLayout>
+  );
+};
+export default About;
+
+/* ---------------- Dynamic Achievements (2 cards per row on mobile) ---------------- */
+const FALLBACK_ACHIEVEMENTS = [
+  { n: "1,400", ar: "كرتونة رمضان", en: "Ramadan boxes" },
+  { n: "+3,000", ar: "كرتونة غذائية", en: "Food boxes" },
+  { n: "122", ar: "سقف منزل", en: "Homes roofed" },
+  { n: "385", ar: "وصلة مياه نقية", en: "Water taps" },
+  { n: "4 طن", ar: "لحوم ودواجن موزعة", en: "Tons of meat" },
+  { n: "9", ar: "عرايس تم تيسير زواجهن", en: "Brides married" },
+  { n: "354", ar: "طالب — مساعدات تعليم", en: "Education aid" },
+  { n: "365", ar: "يوم عطاء بدون توقف", en: "Days of non-stop giving" },
+];
+
+const AchievementsSection = ({ isRTL }: { isRTL: boolean }) => {
+  const { data, loading } = useSiteStats("achievements");
+  const stats = !loading && data.length > 0 ? data : FALLBACK_ACHIEVEMENTS;
+  return (
+    <section id="achievements" className="pattern-programs relative scroll-mt-24 overflow-x-clip py-16 md:py-24">
+      <div className="container relative mx-auto max-w-6xl px-4">
+        <div className="mx-auto max-w-3xl text-center">
+          <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 text-[11px] font-bold text-accent">
+            <BadgeCheck className="h-3.5 w-3.5" /> {isRTL ? "إنجازات موثقة بالأرقام" : "Documented Figures"}
+          </span>
+          <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-4xl">
+            {isRTL ? "إنجازات 2025" : "2025 Achievements"}
+          </h2>
+          <p data-reveal className="reveal-up mt-3 text-muted-foreground text-sm sm:text-base">
+            {isRTL ? "أرقام حقيقية موثّقة من الميدان — وكل سنة الأثر بيكبر في كل أنحاء مصر." : "Real, documented field achievements expanding across Egypt."}
+          </p>
+        </div>
+
+        {/* 2 columns on mobile, 4 columns on desktop */}
+        <div className="mt-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {stats.map((s, i) => {
+            if (loading || !data.length) {
+              const a = s as typeof FALLBACK_ACHIEVEMENTS[number];
+              return (
+                <div key={i} data-reveal className="reveal-up rounded-2xl border border-border bg-card p-4 sm:p-5 text-center shadow-soft transition hover:-translate-y-1 hover:shadow-card">
+                  <div className="font-mono text-xl sm:text-2xl md:text-3xl font-black text-secondary">{a.n}</div>
+                  <div className="mt-1 text-xs sm:text-sm font-extrabold text-primary">{isRTL ? a.ar : a.en}</div>
+                </div>
+              );
+            }
+
+            const stat = s as typeof data[number];
+            const Icon = getLucideIcon(stat.icon_name);
+            const suffix = (isRTL ? stat.suffix_ar : stat.suffix_en) || "";
+            const display = stat.value_text && stat.value_text.trim().length > 0
+              ? stat.value_text
+              : (typeof stat.value_number === "number" ? `${stat.value_number.toLocaleString()}${suffix}` : "—");
+            const label = (isRTL ? stat.label_ar : stat.label_en) || stat.label_ar || stat.label_en;
+            return (
+              <div key={stat.id} data-reveal className="reveal-up flex items-center gap-2.5 sm:gap-3 rounded-2xl border border-border bg-card p-3.5 sm:p-5 text-start shadow-soft transition hover:-translate-y-1 hover:shadow-card">
+                <div className="grid h-10 w-10 sm:h-12 sm:w-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-secondary/15 text-primary">
+                  {stat.image_url ? <img src={stat.image_url} alt="" className="h-full w-full object-cover" loading="lazy" /> : <Icon className="h-5 w-5 text-secondary" />}
+                </div>
+                <div className="min-w-0">
+                  <div className="font-mono text-lg sm:text-xl md:text-2xl font-black text-secondary truncate">{display}</div>
+                  <div className="mt-0.5 text-xs sm:text-sm font-extrabold text-primary truncate">{label}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
