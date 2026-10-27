@@ -283,7 +283,7 @@ const QurbaniCity = () => {
         <div className="container mx-auto max-w-5xl px-4">
           <div className="grid gap-4 md:grid-cols-3">
             {[
-              { I: ShieldCheck, t: isAr ? `مرخصة رسمياً برقم 2655 لسنة 2019 — وزارة التضامن` : "Officially licensed (2655/2019) — Ministry of Solidarity" },
+              { I: ShieldCheck, t: isAr ? `مرخصة رسمياً برقم 2665 لسنة 2019 — وزارة التضامن` : "Officially licensed (2665/2019) — Ministry of Solidarity" },
               { I: Camera,      t: isAr ? `صور وفيديو لكل صك في ${city.ar}` : `Photo & video proof for every ${city.en} share` },
               { I: FileText,    t: isAr ? "إيصال PDF فوري + رقم تتبع لكل تبرع" : "Instant PDF receipt + tracking ID per donation" },
             ].map((b, i) => (

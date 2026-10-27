@@ -43,12 +43,16 @@ import {
   Award,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { useQuery } from "@tanstack/react-query";
+import { fetchFaqs } from "@/data/faqsApi";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema, FAQSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
+import { TrustJourney, type TrustStep } from "@/components/about/TrustJourney";
+import { WhyUsChecklist } from "@/components/about/WhyUsChecklist";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import aboutHero from "@/assets/about-hero-classroom.jpg";
 import axisFood from "@/assets/axis-food.jpg";
@@ -57,7 +61,7 @@ import axisEducation from "@/assets/axis-education.jpg";
 import imgHandsSprout from "@/assets/hands-sprout.jpg";
 import { useSiteStats } from "@/hooks/useSiteStats";
 import { getLucideIcon } from "@/lib/lucide-icon";
-import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, resolveStorageUrl } from "@/data/laravelApi";
+import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, resolveStorageUrl, contentApi, formatServerImageUrl, getApiToken } from "@/data/laravelApi";
 
 /** Lightweight scroll-trigger reveal hook (IntersectionObserver — no JS deps). */
 const useReveal = () => {
@@ -102,32 +106,20 @@ const About = () => {
   const base = "https://elyusr.org";
   const root = useReveal();
 
-  const [loading, setLoading] = useState(true);
-  const [liveData, setLiveData] = useState<AboutUsData | null>(null);
+  const isAdmin = !!getApiToken();
+  const { data: aboutDataLive, isLoading: loading } = useQuery({
+    queryKey: ["about-us-content"],
+    queryFn: () => aboutUsApi.getAboutUs(),
+    staleTime: isAdmin ? 0 : 30_000,
+  });
 
-  useEffect(() => {
-    let alive = true;
-    aboutUsApi.getAboutUs()
-      .then((res) => {
-        if (alive && res) {
-          setLiveData(res);
-        } else if (alive) {
-          setLiveData(ABOUT_US_DEFAULT_DATA);
-        }
-      })
-      .catch(() => {
-        if (alive) setLiveData(ABOUT_US_DEFAULT_DATA);
-      })
-      .finally(() => {
-        if (alive) setLoading(false);
-      });
+  const { data: homeContent } = useQuery({
+    queryKey: ["homepage-content"],
+    queryFn: () => contentApi.homepage(),
+    staleTime: isAdmin ? 0 : 30_000,
+  });
 
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  const aboutData = liveData || ABOUT_US_DEFAULT_DATA;
+  const aboutData = aboutDataLive || ABOUT_US_DEFAULT_DATA;
 
   // Map values from API (aboutData.values) — falls back to static defaults if API is empty
   const STATIC_VALUE_ICONS = [Sparkles, HeartHandshake, ShieldCheck, Award, BadgeCheck];
@@ -294,19 +286,57 @@ const About = () => {
         ];
   }, [aboutData.trust, isRTL]);
 
-  const faq = isRTL
-    ? [
-        { q: "أين مقر مؤسسة اليسر الخيرية؟", a: "المقر الرئيسي في المنصورة — تقسيم خطاب، بجوار وكالة المنصورة، محافظة الدقهلية، وتغطي قوافلنا ومشاريعنا كل محافظات مصر." },
-        { q: "هل تبرعاتي مُعفاة ضريبياً؟", a: "نعم، مؤسسة اليسر مرخصة رسمياً برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي وتبرعاتك تخضع للإعفاء الضريبي وفق القانون المصري." },
-        { q: "كيف أتأكد من وصول تبرعي بنفسي؟", a: "نوفر ميزة 'الحضور بنفسك'؛ يمكنك مرافقة مندوبينا للميدان لتسليم تبرعك أو معاينة وصلة المياه والسقف، بالإضافة إلى توثيق فوري بالصور والفيديو مع كود تتبع." },
-        { q: "هل أستطيع التطوع معكم؟", a: "نعم، نرحب بالمتطوعين والشباب والعائلات ليكونوا جزءاً من فريقنا الميداني عبر صفحة التطوع بالموقع." },
-      ]
-    : [
-        { q: "Where is Al-Yusr Charity headquartered?", a: "Headquarters in Mansoura — Khattab District, next to Mansoura Agency, Dakahlia, with active convoys and aid operations serving families all across Egypt." },
-        { q: "Are donations tax-exempt?", a: "Yes — Al-Yusr is a registered NGO under license #2665/2019, fully compliant with Egyptian tax-deduction regulations." },
-        { q: "How can I verify my donation?", a: "We offer 'In-Person Delivery' where donors can join our field teams, along with real-time video/photo reporting and tracking codes." },
-        { q: "Can my family and I volunteer?", a: "Yes — we welcome volunteers of all ages to join our distribution drives through our volunteer portal." },
-      ];
+  // Ordered as a donor's journey: official entity → proof → in person → family
+  const trustSteps = useMemo<TrustStep[]>(() => {
+    if (Array.isArray(aboutData.why_us) && aboutData.why_us.length > 0) {
+      return aboutData.why_us.map((c: any, i: number) => ({
+        icon: getLucideIcon(c.icon) || [BadgeCheck, Camera, Users, HandHeart][i % 4],
+        title: isRTL ? (c.title_ar || c.titleAr || "") : (c.title_en || c.titleEn || c.title_ar || ""),
+        desc: isRTL ? (c.description_ar || c.descAr || "") : (c.description_en || c.descEn || c.description_ar || ""),
+      }));
+    }
+    return isRTL
+      ? [
+          { icon: BadgeCheck, title: "كيان رسمي وحسابات معلنة", desc: "بتتبرع لمؤسسة مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي، على حساب بنكي رسمي (CIB: 100043605733)." },
+          { icon: Camera, title: "التوثيق الفوري", desc: "بنوثق إيصال تبرعك بالفيديو والصور وإشعار رسمي يوضح الأثر في حياة الأسرة، مع الحفاظ على كرامتهم." },
+          { icon: Users, title: "الحضور بنفسك", desc: "تقدر توصّل تبرعك بإيدك: بنبعتلك حد من فريقنا يتحرك معاك للمستحق أو لتنفيذ العمل (وصلة مياه، سقف منزل)." },
+          { icon: HandHeart, title: "عيلتك جزء من الفريق", desc: "أولادك وعائلتك ممكن يتطوعوا معانا في قوافل الإطعام والزيارات الميدانية ويشوفوا الأثر بعينهم." },
+        ]
+      : [
+          { icon: BadgeCheck, title: "A licensed entity, public accounts", desc: "You give to an NGO registered under No. 2665/2019 with the Ministry of Social Solidarity, through an official bank account (CIB: 100043605733)." },
+          { icon: Camera, title: "Immediate proof", desc: "We document the delivery of your gift with photo, video and an official notice, while preserving the family's dignity." },
+          { icon: Users, title: "Come in person", desc: "Deliver it by hand: a team member goes with you to the family or to the work itself (a water tap, a new roof)." },
+          { icon: HandHeart, title: "Your family joins in", desc: "Your children and family can volunteer on our food convoys and field visits and see the impact themselves." },
+        ];
+  }, [aboutData.why_us, isRTL]);
+
+  const { data: rawAboutFaqs } = useQuery({
+    queryKey: ["faqs-about"],
+    queryFn: () => fetchFaqs({ categorySlug: "about" }),
+    staleTime: 60_000,
+  });
+
+  const faq = useMemo(() => {
+    if (rawAboutFaqs && rawAboutFaqs.length > 0) {
+      return rawAboutFaqs.map((f) => ({
+        q: isRTL ? f.question_ar : (f.question_en || f.question_ar),
+        a: isRTL ? f.answer_ar : (f.answer_en || f.answer_ar),
+      }));
+    }
+    return isRTL
+      ? [
+          { q: "أين مقر مؤسسة اليسر الخيرية؟", a: "المقر الرئيسي في المنصورة — تقسيم خطاب، بجوار وكالة المنصورة، محافظة الدقهلية، وتغطي قوافلنا ومشاريعنا كل محافظات مصر." },
+          { q: "هل تبرعاتي مُعفاة ضريبياً؟", a: "نعم، مؤسسة اليسر مرخصة رسمياً برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي وتبرعاتك تخضع للإعفاء الضريبي وفق القانون المصري." },
+          { q: "كيف أتأكد من وصول تبرعي بنفسي؟", a: "نوفر ميزة 'الحضور بنفسك'؛ يمكنك مرافقة مندوبينا للميدان لتسليم تبرعك أو معاينة وصلة المياه والسقف، بالإضافة إلى توثيق فوري بالصور والفيديو مع كود تتبع." },
+          { q: "هل أستطيع التطوع معكم؟", a: "نعم، نرحب بالمتطوعين والشباب والعائلات ليكونوا جزءاً من فريقنا الميداني عبر صفحة التطوع بالموقع." },
+        ]
+      : [
+          { q: "Where is Al-Yusr Charity headquartered?", a: "Headquarters in Mansoura — Khattab District, next to Mansoura Agency, Dakahlia, with active convoys and aid operations serving families all across Egypt." },
+          { q: "Are donations tax-exempt?", a: "Yes — Al-Yusr is a registered NGO under license #2665/2019, fully compliant with Egyptian tax-deduction regulations." },
+          { q: "How can I verify my donation?", a: "We offer 'In-Person Delivery' where donors can join our field teams, along with real-time video/photo reporting and tracking codes." },
+          { q: "Can my family and I volunteer?", a: "Yes — we welcome volunteers of all ages to join our distribution drives through our volunteer portal." },
+        ];
+  }, [rawAboutFaqs, isRTL]);
 
   return (
     <PageLayout>
@@ -326,12 +356,7 @@ const About = () => {
         { name: isRTL ? "قيمنا"   : "Our values", url: `${base}/about#values` },
         { name: isRTL ? "إنجازاتنا" : "Achievements", url: `${base}/about#achievements` },
       ]} />
-      <FAQSchema items={[
-        { q: "أين مقر مؤسسة اليسر الخيرية؟", a: "المقر الرئيسي في المنصورة - تقسيم خطاب، بجوار وكالة المنصورة، الدقهلية، جمهورية مصر العربية." },
-        { q: "هل تبرعاتي لمؤسسة اليسر مُعفاة ضريبياً؟", a: "نعم، مؤسسة اليسر الخيرية مرخصة رسمياً برقم إشهار 2665 لسنة 2019 من وزارة التضامن الاجتماعي، والتبرعات تخضع للإعفاء وفق القانون المصري." },
-        { q: "كيف أتأكد من وصول تبرعي للمستحقين؟", a: "كل تبرع له رقم تتبع فريد، تستلم عبره صور وفيديو من الميدان وإيصال PDF فور الحجز ومتابعة لحظية لحالة التبرع أو الحضور بنفسك." },
-        { q: "هل أستطيع التطوع مع مؤسسة اليسر؟", a: "نعم، عندنا فريق متطوعين ميداني مفتوح للانضمام لكل أفراد العائلة عبر صفحة التطوع على الموقع." },
-      ]} />
+      <FAQSchema items={faq} />
 
       <div ref={root}>
         {/* HERO SECTION */}
@@ -345,7 +370,7 @@ const About = () => {
 
             <div className="mt-8 grid items-center gap-10 md:grid-cols-2">
               <div data-reveal className="reveal-up text-center md:text-start">
-                {loading && !liveData ? (
+                {loading && !aboutDataLive ? (
                   <div className="space-y-4 max-w-xl mx-auto md:mx-0">
                     <div className="h-6 w-48 rounded-full bg-white/20 animate-pulse mx-auto md:mx-0" />
                     <div className="h-10 sm:h-12 w-3/4 rounded-xl bg-white/20 animate-pulse mx-auto md:mx-0" />
@@ -404,14 +429,26 @@ const About = () => {
 
               <div data-reveal className="reveal-up relative mt-6 md:mt-0">
                 <div className="absolute -inset-4 rounded-[2.5rem] bg-secondary/15 blur-2xl" aria-hidden />
-                <img
-                  src={aboutData.hero.image ? resolveStorageUrl(aboutData.hero.image) : aboutHero}
-                  alt={isRTL ? "أطفال داخل فصل تعليمي ضمن مبادرات مؤسسة اليسر الخيرية" : "Children in classroom — Al-Yusr education initiative"}
-                  width={1600} height={1024}
-                  loading="eager"
-                  decoding="async"
-                  className="relative w-full rounded-[2rem] border-4 border-secondary/40 object-cover shadow-card"
-                />
+                {loading && !aboutDataLive ? (
+                  <div className="relative w-full aspect-[16/10] sm:aspect-[16/10] md:aspect-[4/3] rounded-[2rem] border-4 border-secondary/30 bg-white/10 animate-pulse shadow-card flex items-center justify-center">
+                    <div className="h-10 w-10 rounded-full border-2 border-secondary/40 border-t-secondary animate-spin" />
+                  </div>
+                ) : (
+                  <img
+                    src={aboutData.hero.image ? resolveStorageUrl(aboutData.hero.image) : aboutHero}
+                    alt={isRTL ? "مؤسسة اليسر الخيرية" : "Al-Yusr Charity Foundation"}
+                    width={1600} height={1024}
+                    loading="eager"
+                    decoding="async"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (target.src !== aboutHero) {
+                        target.src = aboutHero;
+                      }
+                    }}
+                    className="relative w-full rounded-[2rem] border-4 border-secondary/40 object-cover shadow-card"
+                  />
+                )}
               </div>
             </div>
 
@@ -470,7 +507,7 @@ const About = () => {
                   {isRTL ? "اعرف أكثر" : "Learn more"}
                 </span>
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-secondary/40 bg-secondary/10 backdrop-blur transition group-hover:translate-y-1 group-hover:border-secondary group-hover:bg-secondary/25 sm:h-12 sm:w-12">
-                  <ChevronDown className="h-5 w-5 animate-bounce text-secondary sm:h-6 sm:w-6" />
+                  <ChevronDown className="h-5 w-5 text-secondary sm:h-6 sm:w-6" />
                 </span>
               </a>
             </div>
@@ -478,7 +515,7 @@ const About = () => {
         </section>
 
         {/* OUR STORY */}
-        <section id="story" className="scroll-mt-24 pattern-programs py-16 md:py-24">
+        <section id="story" className="scroll-mt-24 py-16 md:py-24 bg-background">
           <div className="container mx-auto max-w-5xl px-4 text-center">
             <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-primary">
               <Sparkles className="h-3.5 w-3.5 text-secondary" />
@@ -563,20 +600,23 @@ const About = () => {
           </div>
         </section>
 
+        {/* WHY US — not just a registered NGO */}
+        <WhyUsChecklist isRTL={isRTL} />
+
         {/* VISION 2030 WITH 22.7% PROGRESS SLIDER */}
-        <section id="vision2030" className="scroll-mt-24 py-16 md:py-24 bg-gradient-to-b from-card via-background to-card border-y border-border/60">
+        <section id="vision2030" className="scroll-mt-24 py-16 md:py-24 pattern-why text-primary-foreground border-y border-primary/30">
           <div className="container mx-auto max-w-6xl px-4">
             <div className="text-center max-w-3xl mx-auto">
-              <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3.5 py-1 text-xs font-black text-primary ring-1 ring-secondary/30">
+              <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/25 px-3.5 py-1 text-xs font-black text-secondary ring-1 ring-secondary/30">
                 <TrendingUp className="h-3.5 w-3.5 text-secondary" />
                 {isRTL ? "الخطة الاستراتيجية المستدامة" : "Strategic Vision"}
               </span>
 
-              <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-3xl lg:text-4xl">
+              <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary-foreground md:text-3xl lg:text-4xl">
                 {isRTL ? "رؤيتنا لعام 2030" : "Vision 2030 Roadmap"}
               </h2>
 
-              <p data-reveal className="reveal-up mt-3 text-sm text-muted-foreground md:text-base">
+              <p data-reveal className="reveal-up mt-3 text-sm text-primary-foreground/75 md:text-base">
                 {isRTL
                   ? "مستهدفات طموحة للانتقال بالمجتمعات الأكثر احتياجاً من دائرة الاحتياج إلى الاكتفاء الذاتي والإنتاج:"
                   : "Ambitious milestones moving communities from poverty to self-reliance:"}
@@ -670,56 +710,8 @@ const About = () => {
           </div>
         </section>
 
-        {/* WHY TRUST US? */}
-        <section id="trust" className="scroll-mt-24 pattern-programs py-16 md:py-24">
-          <div className="container mx-auto max-w-5xl px-4">
-            <div className="mx-auto max-w-3xl text-center">
-              <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-primary">
-                <ShieldCheck className="h-3.5 w-3.5 text-secondary" />
-                {isRTL ? "ضمانات حقيقية لراحة بالك" : "Genuine Donor Guarantees"}
-              </span>
-              <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-3xl lg:text-4xl">
-                {isRTL ? "لماذا تثق بنا؟" : "Why Trust Al-Yusr?"}
-              </h2>
-              <p data-reveal className="reveal-up mt-3 text-sm text-muted-foreground md:text-lg">
-                {isRTL ? "إحنا بنوفر ضمان حقيقي لضمان تبرعك وراحة بالك وهو:" : "We offer concrete institutional guarantees over every single donation:"}
-              </p>
-            </div>
-
-            {/* Why Trust Us cards — from API why_us, fallback to static */}
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {(() => {
-                const staticWhy = [
-                  { icon: Users, titleAr: "الحضور بنفسك", titleEn: "Join in Person", descAr: "وصّل تبرعك بنفسك؛ بتطلب مننا التبرع والحضور وبنبعتلك حد من فريقنا يتحرك معاك للمستحق لإيصال صدقتك أو تنفيذ العمل (وصلة مياه، أسقف منازل).", descEn: "Deliver your aid by hand: join our representatives on the ground to witness water taps and roof installations." },
-                  { icon: Camera, titleAr: "التوثيق الفوري", titleEn: "Direct Proof", descAr: "بنوثق إيصال تبرعك بالفيديو والصور وإشعار رسمي يوضح الأثر المحقق في حياة الأسرة مع الحفاظ على كرامتهم.", descEn: "We document the delivery of your aid with photo/video proof while preserving beneficiary dignity." },
-                  { icon: HandHeart, titleAr: "تطوع عائلتك", titleEn: "Family Volunteering", descAr: "أولادك وعائلتك ممكن يتطوعوا معانا ويكونوا جزءاً من فريقنا الميداني في قوافل الإطعام والزيارات الميدانية.", descEn: "Your children and youth can join our field convoy teams and experience the joy of direct giving." },
-                  { icon: BadgeCheck, titleAr: "الكيان والحسابات الرسمية", titleEn: "Licensed Entity", descAr: "كيان مشهر برقم 2665 لعام 2019 بوزارة التضامن الاجتماعي، مع حسابات بنكية رسمية (CIB: 100043605733).", descEn: "Officially registered NGO (#2665/2019) with institutional transparent CIB bank accounts." },
-                ];
-                const apiWhy = aboutData.why_us;
-                const useApi = Array.isArray(apiWhy) && apiWhy.length > 0;
-                const items = useApi ? apiWhy : staticWhy;
-                return items.map((c: any, i: number) => {
-                  const Icon = useApi ? getLucideIcon(c.icon) : (c as typeof staticWhy[0]).icon;
-                  return (
-                    <div key={i} data-reveal className="reveal-up rounded-3xl border border-border bg-card p-6 text-start shadow-soft flex flex-col justify-between">
-                      <div>
-                        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary/15 text-primary">
-                          <Icon className="h-6 w-6 text-secondary" />
-                        </div>
-                        <h3 className="mt-4 text-lg font-black text-primary">
-                          {useApi ? (isRTL ? (c.title_ar || c.titleAr) : (c.title_en || c.titleEn)) : (isRTL ? (c as any).titleAr : (c as any).titleEn)}
-                        </h3>
-                        <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm font-medium">
-                          {useApi ? (isRTL ? (c.description_ar || c.descAr) : (c.description_en || c.descEn)) : (isRTL ? (c as any).descAr : (c as any).descEn)}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
-          </div>
-        </section>
+        {/* WHY TRUST US? — the path a donation walks, from API why_us with static fallback */}
+        <TrustJourney isRTL={isRTL} steps={trustSteps} />
 
         {/* SPROUT BANNER */}
         <section className="relative overflow-hidden">
@@ -733,7 +725,7 @@ const About = () => {
         </section>
 
         {/* VALUES */}
-        <section id="values" className="py-16 md:py-24 bg-muted/30 border-y border-border/60">
+        <section id="values" className="py-16 md:py-24 pattern-programs border-y border-border/40">
           <div className="container mx-auto max-w-6xl px-4">
             <h2 data-reveal className="reveal-up text-center text-2xl font-black text-primary md:text-3xl">{isRTL ? "قيمنا" : "Our Values"}</h2>
             <p data-reveal className="reveal-up mx-auto mt-3 max-w-2xl text-center text-muted-foreground text-sm sm:text-base">
@@ -772,7 +764,7 @@ const About = () => {
         </section>
 
         {/* ONGOING PERMANENT ACTIVITIES */}
-        <section id="activities" className="scroll-mt-24 pattern-programs py-16 md:py-24">
+        <section id="activities" className="scroll-mt-24 py-16 md:py-24 bg-background border-y border-border/40">
           <div className="container mx-auto max-w-6xl px-4">
             <div className="mx-auto max-w-3xl text-center">
               <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-primary">
@@ -831,19 +823,19 @@ const About = () => {
         </section>
 
         {/* CERTIFICATIONS */}
-        <section className="pattern-hero-luxe py-16 md:py-24 text-primary-foreground">
-          <div className="container mx-auto max-w-5xl px-4">
-            <h2 data-reveal className="reveal-up text-center text-2xl font-black text-secondary md:text-3xl mb-3">
+        <section className="pattern-programs py-16 md:py-24">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 data-reveal className="reveal-up text-center text-2xl font-black text-primary md:text-3xl mb-3">
               {isRTL ? "اعتماد وثقة رسمية" : "Official Accreditation"}
             </h2>
-            <p data-reveal className="reveal-up mx-auto mt-3 max-w-2xl text-center text-white/85 text-sm sm:text-base">
+            <p data-reveal className="reveal-up mx-auto mt-3 max-w-2xl text-center text-muted-foreground text-sm sm:text-base">
               {isRTL
                 ? "مشهرة رسمياً من وزارة التضامن الاجتماعي مع تقارير محاسبية سنوية وإشراف كامل."
                 : "Officially registered by the Ministry of Social Solidarity with certified annual accounting."}
             </p>
             <div className="mt-10 grid gap-4 md:grid-cols-3">
               {certs.map((c, i) => (
-                <div key={i} data-reveal className="reveal-up rounded-3xl border border-border bg-card p-6 text-center shadow-soft text-foreground">
+                <div key={i} data-reveal className="reveal-up rounded-3xl border border-border bg-card p-6 text-center shadow-soft">
                   <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-secondary/15 text-primary">
                     <c.I className="h-7 w-7 text-secondary" />
                   </div>
@@ -855,10 +847,10 @@ const About = () => {
           </div>
         </section>
 
-        {/* TIMELINE */}
-        <section id="timeline" className="scroll-mt-24 pattern-programs py-16 md:py-24">
-          <div className="container mx-auto max-w-4xl px-4">
-            <div className="mx-auto max-w-2xl text-center mb-12">
+        {/* TIMELINE / MILESTONES — Sticky Milestone Cards & Photo Collage */}
+        <section id="timeline" className="scroll-mt-24 py-16 md:py-24 pb-28 md:pb-36 bg-background border-y border-border/40">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-3xl text-center mb-10 sm:mb-14">
               <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-primary">
                 <CheckCircle2 className="h-3.5 w-3.5 text-secondary" />
                 {isRTL ? "محطات من تاريخ العطاء" : "History & Milestones"}
@@ -871,60 +863,127 @@ const About = () => {
               </p>
             </div>
 
-            <div className="relative mx-auto max-w-3xl">
-              {/* Central Vertical Axis Line */}
-              <div className="absolute top-4 bottom-4 start-[15px] sm:start-[19px] w-1 bg-gradient-to-b from-secondary via-secondary/70 to-secondary/20 rounded-full" aria-hidden="true" />
+            {/* 2 cols on desktop: Sticky Milestone Cards on one side, Sticky Photo Collage on the other */}
+            <div className="grid items-start gap-8 sm:gap-10 md:gap-12 lg:gap-16 md:grid-cols-2">
+              {/* Column 1: Milestone Cards with vertical timeline axis & Sticky Stack */}
+              <div className="order-2 md:order-1 relative">
+                {/* Vertical Axis Line */}
+                <div className="absolute top-4 bottom-12 start-[17px] sm:start-[21px] w-[3px] bg-gradient-to-b from-secondary via-secondary/60 to-secondary/10 rounded-full" aria-hidden="true" />
 
-              <StickyStack className="space-y-6 sm:space-y-8">
-                {timeline.map((m, i) => {
-                  const offsets = [
-                    "top-[84px] md:top-[96px]",
-                    "top-[96px] md:top-[112px]",
-                    "top-[108px] md:top-[128px]",
-                    "top-[120px] md:top-[144px]",
-                    "top-[132px] md:top-[160px]",
-                    "top-[144px] md:top-[176px]",
-                  ];
-                  return (
-                    <StickyStackItem
-                      key={i}
-                      index={i}
-                      top={offsets[i % offsets.length]}
-                      className="mb-0"
-                    >
-                      <div className="group relative flex items-start gap-4 sm:gap-6 ps-10 sm:ps-14 transition-all duration-300">
-                        {/* Centered Node Icon exactly on the line */}
-                        <div className="absolute start-0 top-3 grid h-8 w-8 sm:h-10 sm:w-10 place-items-center rounded-full border-2 border-background bg-secondary text-white shadow-cta transition-transform duration-300 group-hover:scale-110">
-                          <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />
-                        </div>
-
-                        {/* Milestone Card with subtle shadow and border */}
-                        <div className="w-full rounded-3xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all duration-300 hover:border-secondary/50">
-                          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-3">
-                            <h3 className="text-base sm:text-lg font-black text-primary">{m.t}</h3>
-                            <span className="inline-flex items-center rounded-full bg-secondary/15 px-3 py-1 font-mono text-xs sm:text-sm font-black text-secondary">
-                              {m.y}
-                            </span>
+                <StickyStack className="space-y-4 sm:space-y-5">
+                  {timeline.map((m, i) => {
+                    const offsets = [
+                      "top-[84px] md:top-[96px]",
+                      "top-[96px] md:top-[112px]",
+                      "top-[108px] md:top-[128px]",
+                      "top-[120px] md:top-[144px]",
+                      "top-[132px] md:top-[160px]",
+                      "top-[144px] md:top-[176px]",
+                    ];
+                    return (
+                      <StickyStackItem
+                        key={i}
+                        index={i}
+                        top={offsets[i % offsets.length]}
+                      >
+                        <div className="group relative flex items-start gap-3 sm:gap-5 ps-11 sm:ps-14">
+                          {/* Node on the axis line */}
+                          <div className="absolute start-0 top-3 grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full border-2 border-background bg-secondary text-secondary-foreground shadow-cta transition-transform duration-300 group-hover:scale-110">
+                            <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />
                           </div>
-                          <p className="mt-3 text-xs sm:text-sm leading-relaxed text-muted-foreground font-medium">
-                            {m.d}
-                          </p>
+
+                          {/* Milestone Card */}
+                          <div className="w-full rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-soft transition-all duration-300 hover:border-secondary/40 hover:shadow-card">
+                            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 pb-2.5">
+                              <h3 className="text-sm sm:text-base font-black text-primary leading-snug">{m.t}</h3>
+                              <span className="inline-flex items-center rounded-full bg-secondary/15 px-2.5 py-0.5 font-mono text-xs font-black text-secondary border border-secondary/20">
+                                {m.y}
+                              </span>
+                            </div>
+                            <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-muted-foreground font-medium">
+                              {m.d}
+                            </p>
+                          </div>
                         </div>
+                      </StickyStackItem>
+                    );
+                  })}
+                </StickyStack>
+              </div>
+
+              {/* Column 2: Photo Collage + Registration badge — sticky while scrolling */}
+              <div className="order-1 md:order-2 md:sticky md:top-24 self-start flex flex-col gap-5 sm:gap-6">
+                {/* 5-col collage grid: big poster (col-span-3) + side column (col-span-2) */}
+                <div
+                  className="relative mx-auto grid w-full grid-cols-5 gap-3 sm:gap-4 overflow-hidden rounded-[1.5rem]"
+                  style={{ height: "clamp(300px, 34vw, 380px)" }}
+                >
+                  {/* Big poster — col-span-3 */}
+                  <div className="col-span-3 h-full min-h-0 overflow-hidden rounded-[1.25rem] sm:rounded-[1.5rem] border-2 border-secondary/40 shadow-card bg-muted group">
+                    <img
+                      src={(homeContent?.section2_main_image ? formatServerImageUrl(homeContent.section2_main_image) : null)
+                        || (aboutData.hero.image ? resolveStorageUrl(aboutData.hero.image) : null)
+                        || axisFood}
+                      alt={isRTL ? "توثيق ميداني لمسيرة مؤسسة اليسر" : "Al-Yusr field documentation"}
+                      className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = axisFood; }}
+                    />
+                  </div>
+
+                  {/* Side column — col-span-2 */}
+                  <div className="col-span-2 flex h-full min-h-0 flex-col gap-3 sm:gap-4">
+                    {/* Top image */}
+                    <div className="relative flex-[1.4] min-h-0 overflow-hidden rounded-[1rem] sm:rounded-[1.25rem] border-2 border-accent/40 shadow-soft bg-muted group">
+                      <img
+                        src={(homeContent?.section2_left_top_image ? formatServerImageUrl(homeContent.section2_left_top_image) : null)
+                          || axisHealth}
+                        alt={isRTL ? "قوافل اليسر الخيرية" : "Al-Yusr aid convoys"}
+                        className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = axisHealth; }}
+                      />
+                    </div>
+
+                    {/* Bottom CTA card */}
+                    <Link
+                      to="/donate"
+                      className="group relative flex flex-1 min-h-0 w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.25rem] bg-gradient-to-br from-[#fb923c] to-[#ea580c] px-3 py-2 sm:px-4 sm:py-3 text-center text-white shadow-cta hover:shadow-lg transition-shadow duration-300"
+                    >
+                      <div className="inline-flex items-center justify-center gap-1.5 text-[11px] sm:text-xs font-black text-white/95 transition-transform duration-200 group-hover:scale-105">
+                        <Heart className="h-4 w-4 shrink-0" />
+                        <span>{isRTL ? "كن جزءاً من مسيرتنا" : "Be Part of Our Story"}</span>
                       </div>
-                    </StickyStackItem>
-                  );
-                })}
-              </StickyStack>
+                      <p className="mt-1 sm:mt-1.5 text-[10.5px] sm:text-[11.5px] font-bold leading-normal text-white/95 px-1">
+                        {isRTL ? "تبرعك يكتب فصلاً جديداً من الأمل" : "Your donation writes a new chapter"}
+                      </p>
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Registration badge below collage with balanced, comfortable spacing */}
+                <div className="flex items-center gap-3.5 rounded-2xl border border-secondary/30 bg-gradient-to-br from-[#0c492c] via-[#093e24] to-[#062c19] p-4 sm:p-5 text-white shadow-soft relative z-10">
+                  <div className="h-11 w-11 rounded-xl bg-secondary/20 flex items-center justify-center shrink-0 border border-secondary/30 text-secondary shadow-sm">
+                    <CheckCircle2 className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <div className="font-mono text-xl font-black text-secondary tracking-wide">2665 / 2019</div>
+                    <div className="mt-0.5 text-xs text-white/95 font-bold leading-snug">
+                      {isRTL ? "إشهار رسمي معتمد بوزارة التضامن الاجتماعي" : "Officially Registered NGO — Ministry of Social Solidarity"}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
         {/* CONTACT + MAP */}
-        <section id="contact" className="scroll-mt-24 pattern-programs py-16 md:py-24">
+        <section id="contact" className="scroll-mt-24 py-16 md:py-24 bg-muted/30 border-y border-border/50">
           <div className="container mx-auto max-w-6xl px-4">
             <div className="mx-auto max-w-3xl text-center">
-              <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-                <MapPin className="h-3.5 w-3.5" /> {isRTL ? "المقر والتواصل" : "Headquarters & Contact"}
+              <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-secondary/25 border border-secondary/40 px-3.5 py-1 text-xs font-black text-black shadow-xs">
+                <MapPin className="h-3.5 w-3.5 text-primary" /> {isRTL ? "المقر والتواصل" : "Headquarters & Contact"}
               </span>
               <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-4xl">
                 {isRTL ? "تواصل ومقر المؤسسة" : "Contact & Headquarters"}
@@ -933,9 +992,21 @@ const About = () => {
                 {isRTL ? "أبوابنا مفتوحة يومياً لخدمتكم واستقبال مساهماتكم بالمنصورة وكافة المحافظات." : "Our headquarters welcome donors and beneficiaries daily in Mansoura and nationwide."}
               </p>
             </div>
-            <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_1.3fr]">
-              {/* Contact cards */}
-              <div className="space-y-3">
+            <div className="mt-10 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
+              {/* Map (Column 1 on desktop) */}
+              <div data-reveal className="reveal-up overflow-hidden rounded-3xl border border-border shadow-card order-2 lg:order-1">
+                <iframe
+                  title={isRTL ? "موقع مؤسسة اليسر — المنصورة" : "Al-Yusr location — Mansoura"}
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(isRTL ? "المنصورة، الدقهلية، مصر" : "Mansoura, Dakahlia, Egypt")}&hl=${isRTL ? "ar" : "en"}&z=13&output=embed`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="block h-full min-h-[320px] w-full border-0 lg:min-h-[460px]"
+                  style={{ display: "block" }}
+                />
+              </div>
+
+              {/* Contact cards (Column 2 on desktop) */}
+              <div className="space-y-3 order-1 lg:order-2">
                 <a href="tel:+201097000137" data-source="about" data-label="about-phone" className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><Phone className="h-5 w-5 text-secondary" /></div>
                   <div><div className="font-extrabold text-primary">{isRTL ? "هاتف" : "Phone"}</div><div dir="ltr" className="text-sm text-muted-foreground font-bold">+20 109 700 0137</div></div>
@@ -962,38 +1033,36 @@ const About = () => {
                   <Link to="/contact" className="inline-flex items-center gap-1.5 rounded-full bg-orange-grad px-3 py-1.5 text-xs font-extrabold text-accent-foreground shadow-cta">{isRTL ? "صفحة التواصل الكاملة" : "Full contact page"} <ArrowLeft className="h-3.5 w-3.5 hidden rtl:inline" /><ArrowRight className="h-3.5 w-3.5 rtl:hidden" /></Link>
                 </div>
               </div>
-
-              {/* Map */}
-              <div data-reveal className="reveal-up overflow-hidden rounded-3xl border border-border shadow-card">
-                <iframe
-                  title={isRTL ? "موقع مؤسسة اليسر — المنصورة" : "Al-Yusr location — Mansoura"}
-                  src={`https://www.google.com/maps?q=${encodeURIComponent(isRTL ? "المنصورة، الدقهلية، مصر" : "Mansoura, Dakahlia, Egypt")}&hl=${isRTL ? "ar" : "en"}&z=13&output=embed`}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="block h-full min-h-[320px] w-full border-0 lg:min-h-[460px]"
-                  style={{ display: "block" }}
-                />
-              </div>
             </div>
           </div>
         </section>
 
         {/* FAQ SECTION */}
-        <section id="faq" className="scroll-mt-24 pattern-programs py-16 md:py-24">
+        <section id="faq" className="scroll-mt-24 py-16 md:py-24 pattern-programs">
           <div className="container mx-auto max-w-3xl px-4">
             <h2 data-reveal className="reveal-up text-center text-2xl font-black text-primary md:text-3xl">
               {isRTL ? "أسئلة شائعة عن مؤسسة اليسر" : "Frequently Asked Questions"}
             </h2>
             <div className="mt-8 space-y-3">
               {faq.map((f, i) => (
-                <details key={i} data-reveal className="reveal-up group rounded-2xl border border-border bg-card p-4 shadow-soft">
-                  <summary className="flex cursor-pointer items-start justify-between gap-3 font-extrabold text-primary text-sm sm:text-base">
-                    <span>{f.q}</span>
+                <details key={i} data-reveal className="reveal-up group rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-soft">
+                  <summary className="flex cursor-pointer items-center justify-between gap-3 font-extrabold text-primary text-sm sm:text-base">
+                    <span className="leading-snug">{f.q}</span>
                     <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-secondary transition group-open:rotate-90" />
                   </summary>
-                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-foreground/80 font-medium">{f.a}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-foreground/80 font-medium border-t border-border/40 pt-3">{f.a}</p>
                 </details>
               ))}
+            </div>
+
+            <div className="mt-8 text-center" data-reveal>
+              <Link
+                to="/faqs"
+                className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-secondary/40 bg-card px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-bold text-primary shadow-sm hover:bg-secondary/10 transition"
+              >
+                <span>{isRTL ? "مركز الأسئلة الشائعة" : "FAQ Center"}</span>
+                {isRTL ? <ArrowLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-secondary" /> : <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-secondary" />}
+              </Link>
             </div>
           </div>
         </section>

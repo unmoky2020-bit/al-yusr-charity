@@ -108,7 +108,7 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
             logo: brandIcon,
             image: ogImage,
             description: safeDescription,
-            taxID: "2655/2019",
+            taxID: "2665/2019",
             foundingDate: "2019",
             knowsAbout: [
               "Zakat Calculation",

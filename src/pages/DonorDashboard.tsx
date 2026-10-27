@@ -224,7 +224,7 @@ const Inner = () => {
         <div className="rounded-3xl bg-card p-6 shadow-soft md:p-8">
           <h3 className="text-lg font-extrabold text-primary">{lang === "ar" ? "طرق الدفع" : "Payment methods"}</h3>
           <div className="mt-4 grid gap-2 sm:grid-cols-3">
-            {[{i: CreditCard, ar: "بطاقة (Paymob)", en: "Card (Paymob)"},
+            {[{i: CreditCard, ar: "بطاقة (Kashier)", en: "Card (Kashier)"},
               {i: Wallet, ar: "Vodafone Cash", en: "Vodafone Cash"},
               {i: Smartphone, ar: "InstaPay", en: "InstaPay"}].map((m) => (
               <button key={m.en} className="flex items-center gap-2 rounded-2xl border-2 border-border p-3 text-start text-sm font-extrabold transition hover:border-secondary">

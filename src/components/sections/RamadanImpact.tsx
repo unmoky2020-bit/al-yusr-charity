@@ -28,40 +28,46 @@ export const RamadanImpact = () => {
     if (typeof window === "undefined" || !root.current) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
+    const el = root.current;
     const ctx = gsap.context(() => {
-      // RTL-aware card entrance: cards slide in from the reading direction
       const dir = isAR ? -1 : 1;
-      gsap.fromTo("[data-ri='card']",
-        { y: 36, x: 24 * dir, opacity: 0, rotateX: -6, transformPerspective: 800 },
-        { y: 0, x: 0, opacity: 1, rotateX: 0, duration: 0.75, stagger: 0.12, ease: "power3.out",
-          scrollTrigger: { trigger: "[data-ri='grid']", start: "top 88%" } });
-      gsap.fromTo("[data-ri='photo']",
-        { scale: 0.95, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power2.out",
-          scrollTrigger: { trigger: "[data-ri='strip']", start: "top 92%" } });
-      // Closing banner reveal
-      gsap.fromTo("[data-ri='cta-banner']",
-        { y: 30, opacity: 0, scale: 0.98 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "power3.out",
-          scrollTrigger: { trigger: "[data-ri='cta-banner']", start: "top 92%" } });
-      gsap.fromTo("[data-ri='cta-trust'] > *",
-        { y: 14, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, stagger: 0.07, ease: "power2.out",
-          scrollTrigger: { trigger: "[data-ri='cta-banner']", start: "top 88%" } });
-      // Light parallax for banner decor (no layout thrash)
-      gsap.to("[data-ri='banner-decor-a']", {
-        yPercent: -18, ease: "none",
-        scrollTrigger: { trigger: "[data-ri='cta-banner']", start: "top bottom", end: "bottom top", scrub: 0.6 },
-      });
-      gsap.to("[data-ri='banner-decor-b']", {
-        yPercent: 14, ease: "none",
-        scrollTrigger: { trigger: "[data-ri='cta-banner']", start: "top bottom", end: "bottom top", scrub: 0.8 },
-      });
-      gsap.to("[data-ri='banner-decor-c']", {
-        yPercent: -10, xPercent: isAR ? 6 : -6, ease: "none",
-        scrollTrigger: { trigger: "[data-ri='cta-banner']", start: "top bottom", end: "bottom top", scrub: 0.7 },
-      });
-    }, root);
+      const cards = el.querySelectorAll("[data-ri='card']");
+      const grid = el.querySelector("[data-ri='grid']");
+      if (cards.length && grid) {
+        gsap.fromTo(cards,
+          { y: 36, x: 24 * dir, opacity: 0, rotateX: -6, transformPerspective: 800 },
+          { y: 0, x: 0, opacity: 1, rotateX: 0, duration: 0.75, stagger: 0.12, ease: "power3.out",
+            scrollTrigger: { trigger: grid, start: "top 88%" } });
+      }
+      const photos = el.querySelectorAll("[data-ri='photo']");
+      const strip = el.querySelector("[data-ri='strip']");
+      if (photos.length && strip) {
+        gsap.fromTo(photos,
+          { scale: 0.95, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power2.out",
+            scrollTrigger: { trigger: strip, start: "top 92%" } });
+      }
+      const ctaBanner = el.querySelector("[data-ri='cta-banner']");
+      if (ctaBanner) {
+        gsap.fromTo(ctaBanner,
+          { y: 30, opacity: 0, scale: 0.98 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "power3.out",
+            scrollTrigger: { trigger: ctaBanner, start: "top 92%" } });
+        const trustItems = el.querySelectorAll("[data-ri='cta-trust'] > *");
+        if (trustItems.length) {
+          gsap.fromTo(trustItems,
+            { y: 14, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, stagger: 0.07, ease: "power2.out",
+              scrollTrigger: { trigger: ctaBanner, start: "top 88%" } });
+        }
+        const decorA = el.querySelector("[data-ri='banner-decor-a']");
+        const decorB = el.querySelector("[data-ri='banner-decor-b']");
+        const decorC = el.querySelector("[data-ri='banner-decor-c']");
+        if (decorA) gsap.to(decorA, { yPercent: -18, ease: "none", scrollTrigger: { trigger: ctaBanner, start: "top bottom", end: "bottom top", scrub: 0.6 } });
+        if (decorB) gsap.to(decorB, { yPercent: 14, ease: "none", scrollTrigger: { trigger: ctaBanner, start: "top bottom", end: "bottom top", scrub: 0.8 } });
+        if (decorC) gsap.to(decorC, { yPercent: -10, xPercent: isAR ? 6 : -6, ease: "none", scrollTrigger: { trigger: ctaBanner, start: "top bottom", end: "bottom top", scrub: 0.7 } });
+      }
+    }, el);
     return () => ctx.revert();
   }, [isAR]);
 
@@ -169,7 +175,7 @@ export const RamadanImpact = () => {
           <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-[10px] sm:text-[11px]">
             {[
               isAR ? "%99 شفافية" : "99% Transparency",
-              isAR ? "مشهرة 2655/2019" : "Reg. 2655/2019",
+              isAR ? "مشهرة 2665/2019" : "Reg. 2665/2019",
               isAR ? "توثيق بالصور" : "Photo-documented",
             ].map((label) => (
               <span key={label} className="inline-flex items-center gap-1.5 rounded-full border border-secondary/25 bg-primary-foreground/5 px-2.5 py-1 font-extrabold text-primary-foreground/90 backdrop-blur">
@@ -290,7 +296,7 @@ export const RamadanImpact = () => {
             <div data-ri="cta-trust" className="mx-auto mt-5 grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
               {[
                 { I: BadgeCheck, t: isAR ? "%99 شفافية" : "99% Transparency" },
-                { I: FileCheck2, t: isAR ? "مشهرة 2655/2019" : "Reg. 2655/2019" },
+                { I: FileCheck2, t: isAR ? "مشهرة 2665/2019" : "Reg. 2665/2019" },
                 { I: Camera,     t: isAR ? "توثيق بالصور" : "Photo proof" },
                 { I: ShieldCheck,t: isAR ? "أمانة شرعية" : "Shariah-compliant" },
               ].map(({ I, t }) => (

@@ -86,7 +86,7 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
       ],
       payments: [
         "فودافون كاش وإنستاباي للتبرعات السريعة",
-        "فيزا وماستر كارد عبر بوابة دفع آمنة (Paymob)",
+        "فيزا وماستر كارد عبر بوابة دفع آمنة (Kashier)",
         "تحويل بنكي على حساب المؤسسة الرسمي بالدقهلية",
         "استلام كاش من المقر الرئيسي في المنصورة",
         "تبرع بالكرتونة أو الأضحية عينيًا — بنستلم من بيتك",
@@ -168,7 +168,7 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
       ],
       payments: [
         "Vodafone Cash & InstaPay for instant donations",
-        "Visa & Mastercard via secure Paymob gateway",
+        "Visa & Mastercard via secure Kashier gateway",
         "Bank transfer to our official Dakahlia account",
         "Cash drop-off at our Mansoura headquarters",
         "In-kind donations (boxes, Qurbani) — we collect from your home",

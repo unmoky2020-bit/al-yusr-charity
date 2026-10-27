@@ -149,7 +149,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
         <p>
           {isAr
             ? "مؤسسة اليسر الخيرية للتنمية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع."
-            : "Al-Yusr Charity Foundation is officially registered under No. 2655/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors."}
+            : "Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors."}
         </p>
       </div>
 
@@ -229,7 +229,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
         <div className="container mx-auto max-w-6xl px-4 py-4">
           <ul className="grid grid-cols-2 gap-2 text-[11px] font-extrabold text-primary md:grid-cols-4 md:text-xs">
             {[
-              { icon: ShieldCheck, ar: "ترخيص ٢٦٥٥/٢٠١٩", en: "License 2655/2019" },
+              { icon: ShieldCheck, ar: "ترخيص ٢٦٦٥/٢٠١٩", en: "License 2665/2019" },
               { icon: FileCheck2,  ar: "توثيق صور وفيديو", en: "Photo & video proof" },
               { icon: Truck,       ar: "توصيل مجاني للباب", en: "Free doorstep delivery" },
               { icon: CheckCircle2,ar: "مصاريف إدارية أقل من ٨٪", en: "Admin costs under 8%" },

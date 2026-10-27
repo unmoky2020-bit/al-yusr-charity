@@ -386,7 +386,7 @@ const ArbounLanding = () => {
         }
         description={
           isRTL
-            ? "استقطع نسبة من مشروعك القادم لكفالة يتيم أو تيسير زواج. مبادرة اليسر الخيرية الأولى للمستقلين والفريلانسرز في مصر، مشهرة برقم 2655."
+            ? "استقطع نسبة من مشروعك القادم لكفالة يتيم أو تيسير زواج. مبادرة اليسر الخيرية الأولى للمستقلين والفريلانسرز في مصر، مشهرة برقم 2665."
             : "Pledge a portion of your next project to sponsor an orphan or support a marriage. Al-Yusr's first giving initiative for freelancers & independents in Egypt."
         }
         path="/arboun"
@@ -457,10 +457,7 @@ const ArbounLanding = () => {
       <section className="pattern-hero-luxe relative overflow-hidden text-primary-foreground border-b border-lime-400/20 bg-gradient-to-b from-[#082f1b] via-[#052113] to-background">
         <div aria-hidden className="brand-leaf-tile pointer-events-none absolute inset-0 opacity-30" />
 
-        {/* Ambient floating brand stars ✦ */}
-        <span aria-hidden className="pointer-events-none absolute top-6 left-8 select-none text-lime-400/20 text-xl sm:text-2xl animate-pulse">✦</span>
-        <span aria-hidden className="pointer-events-none absolute top-14 right-10 select-none text-lime-400/20 text-lg sm:text-xl animate-pulse" style={{ animationDelay: "1s" }}>✦</span>
-        <span aria-hidden className="pointer-events-none absolute bottom-8 left-16 select-none text-emerald-400/20 text-base animate-pulse" style={{ animationDelay: "1.8s" }}>✦</span>
+
 
         <div className="container relative mx-auto max-w-4xl px-4 py-8 text-center md:py-12">
           {/* Breadcrumbs */}
@@ -474,12 +471,7 @@ const ArbounLanding = () => {
             />
           </div>
 
-          {/* Decorative ✦✦✦ brand accent */}
-          <div className="flex items-center justify-center gap-2 text-lime-400/70 text-xs font-black select-none mt-4 -mb-2 tracking-widest">
-            <span className="text-[10px] opacity-40">✦</span>
-            <span className="text-sm opacity-90 text-lime-300">✦</span>
-            <span className="text-[10px] opacity-40">✦</span>
-          </div>
+
 
           {/* Main Title (Two Distinct Rows) */}
           <h1 className="mt-6 text-3xl font-black leading-tight sm:text-4xl md:text-5xl lg:text-[3.35rem]">

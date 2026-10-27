@@ -32,7 +32,7 @@ const QurbaniGuaranteeLanding = () => (
       { titleAr: "توزيع نفس يوم العيد", titleEn: "Same-day Eid distribution", descAr: "اللحمة بتوصل لأسر المنصورة وميت غمر وطلخا وكفر الشيخ في نفس يوم العيد — طازجة وموثّقة.", descEn: "Meat reaches families in Mansoura, Mit Ghamr, Talkha and Kafr El Sheikh on Eid day itself — fresh and documented." },
     ]}
     steps={[
-      { titleAr: "احجز صكّك", titleEn: "Reserve your receipt", descAr: "اختار سُبع بقرة أو خروف كامل وادفع أونلاين بأمان (Paymob / Vodafone Cash / InstaPay).", descEn: "Pick a 1/7 cow or full sheep and pay securely (Paymob / Vodafone Cash / InstaPay)." },
+      { titleAr: "احجز صكّك", titleEn: "Reserve your receipt", descAr: "اختار سُبع بقرة أو خروف كامل وادفع أونلاين بأمان (Kashier / Vodafone Cash / InstaPay).", descEn: "Pick a 1/7 cow or full sheep and pay securely (Kashier / Vodafone Cash / InstaPay)." },
       { titleAr: "معاينة قبل الذبح", titleEn: "Pre-slaughter check", descAr: "نرسل لك صورة الحيوان ووزنه وفيديو معاينة، مع إيصال صك يحمل رقم تتبّع.", descEn: "We send you the animal photo, weight, inspection video and a receipt with a tracking number." },
       { titleAr: "ذبح وتوثيق", titleEn: "Slaughter & document", descAr: "الذبح شرعيًا فجر يوم العيد، مع تصوير كامل وعدّاد رقمي على كل ذبيحة.", descEn: "Halal slaughter at Eid dawn with full filming and a digital counter per animal." },
       { titleAr: "توزيع وضمان", titleEn: "Distribute & guarantee", descAr: "توزيع اللحمة على الأسر المستحقة بالدقهلية وكفر الشيخ، وتقرير ضمان جودة لكل متبرّع.", descEn: "Distribution to deserving families across Dakahlia & Kafr El Sheikh, with a quality-guarantee report for each donor." },
@@ -57,7 +57,7 @@ const QurbaniGuaranteeLanding = () => (
         { q: "إيه أسعار صك الأضحية ٢٠٢٦؟", a: "سُبع البقرة بـ١٤٠٠ جنيه، الخروف الكامل بـ٤٥٠٠ جنيه، البقرة الكاملة بـ٩٨٠٠ جنيه. الأسعار شاملة كل الخدمات." },
         { q: "أقدر أحضر الذبح بنفسي؟", a: "نعم، تقدر تزور المزرعة الوقفية بالدقهلية بحجز مسبق، أو نبعت لك فيديو لايف لذبيحتك من غير ما تتنقل." },
         { q: "اللحمة بتوصل لمين بالظبط؟", a: "بنوزّع على الأسر المستحقة في المنصورة وميت غمر وطلخا وبلقاس وأجا والسنبلاوين، إضافة لقرى مختارة بكفر الشيخ — بقوائم مدروسة من فريق العمل الاجتماعي." },
-        { q: "إزاي أحجز من خارج مصر؟", a: "تقدر تحجز أونلاين من أيّ دولة عبر Paymob أو InstaPay، وتستلم رقم التتبّع والصور على الواتس أو الإيميل." },
+        { q: "إزاي أحجز من خارج مصر؟", a: "تقدر تحجز أونلاين من أيّ دولة عبر Kashier أو InstaPay، وتستلم رقم التتبّع والصور على الواتس أو الإيميل." },
         { q: "هل في إيصال أو صك ورقي؟", a: "نعم، بنرسل صك الأضحية موثّق برقم تسلسلي ورقم تتبّع، وتقدر تتابعه من /donation-tracking." },
       ],
       en: [
@@ -65,7 +65,7 @@ const QurbaniGuaranteeLanding = () => (
         { q: "What are 2026 Qurbani prices?", a: "1/7 cow: EGP 1,400 — Whole sheep: EGP 4,500 — Whole cow: EGP 9,800. All services included." },
         { q: "Can I attend the slaughter?", a: "Yes — visit our Dakahlia endowment farm by appointment, or receive a live video of your specific animal." },
         { q: "Who exactly receives the meat?", a: "Vetted families in Mansoura, Mit Ghamr, Talkha, Belqas, Aga, Sinbillawein and selected Kafr El Sheikh villages — via our social-work team's lists." },
-        { q: "Can I reserve from abroad?", a: "Yes — book online from any country via Paymob or InstaPay; you receive a tracking number, photos and video on WhatsApp/email." },
+        { q: "Can I reserve from abroad?", a: "Yes — book online from any country via Kashier or InstaPay; you receive a tracking number, photos and video on WhatsApp/email." },
         { q: "Is there a paper receipt?", a: "Yes — a serialized Qurbani receipt with tracking number, viewable on /donation-tracking." },
       ],
     }}

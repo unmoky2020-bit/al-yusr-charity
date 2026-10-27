@@ -211,7 +211,7 @@ const SeasonDetail = () => {
         <div className="container mx-auto max-w-6xl px-4 py-4">
           <ul className="grid grid-cols-2 gap-2 text-[11px] font-extrabold text-primary md:grid-cols-4 md:text-xs">
             {[
-              { ar: "ترخيص ٢٦٥٥/٢٠١٩", en: "License 2655/2019" },
+              { ar: "ترخيص ٢٦٦٥/٢٠١٩", en: "License 2665/2019" },
               { ar: "توثيق صور وفيديو", en: "Photo & video proof" },
               { ar: "توصيل مجاني للباب", en: "Free doorstep delivery" },
               { ar: "مصاريف إدارية أقل من ٨٪", en: "Admin costs under 8%" },

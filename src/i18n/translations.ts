@@ -12,7 +12,7 @@ export const translations = {
       donate: "تبرع الآن",
     },
     hero: {
-      badge: "مؤسسة خيرية مشهرة 2655/2019 — شفافية 99%",
+      badge: "مؤسسة خيرية مشهرة 2665/2019 — شفافية 99%",
       title1: "معًا",
       title2: "نصل بصدقتك",
       titleAccent: "لمن يستحق",
@@ -99,13 +99,13 @@ export const translations = {
     contact: {
       bankLabel: "الحساب البنكي CIB",
       bank: "100043605733",
-      reg: "مشهرة برقم 2655 لسنة 2019 — وزارة التضامن الاجتماعي",
+      reg: "مشهرة برقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي",
       facebook: "Elyosr.Charity",
     },
     notFoundCta: {
       title: "تبرعك دلوقتي بيكمل الرحلة",
       sub: "اختار طريقة الدفع الأنسب ليك — كله آمن ومضمون",
-      paymob: "تبرع عبر Paymob (فيزا)",
+      paymob: "تبرع بالبطاقة عبر كاشير",
       vodafone: "Vodafone Cash",
       instapay: "InstaPay",
     },
@@ -244,13 +244,13 @@ export const translations = {
     contact: {
       bankLabel: "CIB Bank Account",
       bank: "100043605733",
-      reg: "Licensed NGO No. 2655/2019 — Ministry of Social Solidarity",
+      reg: "Licensed NGO No. 2665/2019 — Ministry of Social Solidarity",
       facebook: "Elyosr.Charity",
     },
     notFoundCta: {
       title: "Your donation continues the journey",
       sub: "Pick your preferred payment method — all secure",
-      paymob: "Donate via Paymob (Visa)",
+      paymob: "Donate by card via Kashier",
       vodafone: "Vodafone Cash",
       instapay: "InstaPay",
     },

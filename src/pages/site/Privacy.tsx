@@ -33,7 +33,7 @@ const Privacy = () => {
         <div className="container mx-auto max-w-3xl px-4">
           <div className="prose prose-slate max-w-none space-y-5 text-foreground/85">
             <h2 className="text-xl font-extrabold text-primary">{isRTL ? "ما البيانات التي نجمعها؟" : "What data we collect"}</h2>
-            <p>{isRTL ? "نجمع فقط البيانات الضرورية لإتمام التبرع أو التسجيل: الاسم، البريد، رقم الهاتف، وبيانات الدفع المعالَجة بأمان عبر شركاء معتمدين (Paymob/Stripe)." : "We collect only data necessary to process donations or registrations: name, email, phone, and payment information processed securely via certified partners (Paymob/Stripe)."}</p>
+            <p>{isRTL ? "نجمع فقط البيانات الضرورية لإتمام التبرع أو التسجيل: الاسم، البريد، رقم الهاتف، وبيانات الدفع المعالَجة بأمان عبر شركاء معتمدين (Kashier)." : "We collect only data necessary to process donations or registrations: name, email, phone, and payment information processed securely via certified partners (Kashier)."}</p>
 
             <h2 className="text-xl font-extrabold text-primary">{isRTL ? "كيف نستخدم البيانات؟" : "How we use data"}</h2>
             <ul className="list-inside list-disc space-y-2">
@@ -52,7 +52,7 @@ const Privacy = () => {
             <p>{isRTL ? "للاستفسارات حول الخصوصية: info@elyosrcharity.com — هاتف: 01097000137" : "For privacy enquiries: info@elyosrcharity.com — phone: +20 109 700 0137"}</p>
 
             <h2 className="text-xl font-extrabold text-primary">{isRTL ? "أمان البيانات" : "Data security"}</h2>
-            <p>{isRTL ? "نستخدم تشفير TLS لكل عمليات الدفع، ولا تُخزَّن بيانات البطاقات على خوادمنا — تُعالَج مباشرة عبر بوابات معتمدة (Paymob/Stripe)." : "We use TLS encryption for all payments. Card data is never stored on our servers — processed directly by certified gateways (Paymob/Stripe)."}</p>
+            <p>{isRTL ? "نستخدم تشفير TLS لكل عمليات الدفع، ولا تُخزَّن بيانات البطاقات على خوادمنا — تُعالَج مباشرة عبر بوابات معتمدة (Kashier)." : "We use TLS encryption for all payments. Card data is never stored on our servers — processed directly by certified gateways (Kashier)."}</p>
 
             <h2 className="text-xl font-extrabold text-primary">{isRTL ? "الأطفال" : "Children"}</h2>
             <p>{isRTL ? "لا نجمع عمداً أي بيانات من أطفال دون 13 عاماً. صور المستفيدين الأطفال تُنشَر فقط بإذن وليّ الأمر." : "We do not knowingly collect data from children under 13. Beneficiary photos of minors are only published with parental consent."}</p>

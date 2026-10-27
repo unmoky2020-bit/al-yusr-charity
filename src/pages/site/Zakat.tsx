@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchFaqs, type FaqItem } from "@/data/faqsApi";
 import { Calculator, Coins, Wheat, Sprout, Banknote, Heart, ShieldCheck, BookOpen, ArrowLeft, ArrowRight, Sparkles, RefreshCw, Wifi, WifiOff, Users, Droplets, Home as HomeIcon, Stethoscope, GraduationCap, Tractor, MapPin, Eye, HandHeart } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
@@ -47,6 +49,34 @@ const Zakat = () => {
   // Zakat al-Fitr
   const [persons, setPersons] = useState(4);
   const [fitrPerPerson, setFitrPerPerson] = useState(FITR_PER_PERSON_DEFAULT);
+
+  const { data: dynamicZakatFaqs } = useQuery<FaqItem[]>({
+    queryKey: ["faqs-zakat"],
+    queryFn: () => fetchFaqs({ categorySlug: "zakat" }),
+    staleTime: 60_000,
+  });
+
+  const zakatFaqs = useMemo(() => {
+    if (dynamicZakatFaqs && dynamicZakatFaqs.length > 0) {
+      return dynamicZakatFaqs.map((f) => ({
+        q: isRTL ? f.question_ar : (f.question_en || f.question_ar),
+        a: isRTL ? f.answer_ar : (f.answer_en || f.answer_ar),
+      }));
+    }
+    return isRTL ? [
+      { q: "هل سعر الذهب في الحاسبة لحظي؟", a: "نعم، نسحب سعر الأونصة العالمي وسعر الدولار مقابل الجنيه آنيًا، ونحتسب الجرام عيار 24/21/18 تلقائيًا. تقدر تحدّثه يدويًا أيضًا." },
+      { q: "ما الفرق بين زكاة المال وزكاة الفطر؟", a: "زكاة المال 2.5% من صافي مالك إذا بلغ النصاب وحال عليه الحول. زكاة الفطر صاع من غالب القوت أو قيمته النقدية عن كل فرد قبل صلاة العيد." },
+      { q: "هل تُخصم الديون من وعاء الزكاة؟", a: "نعم، الديون المستحقة عليك حاليًا تُخصم. أما الأقساط طويلة المدى فيُخصم منها قسط السنة." },
+      { q: "هل اليسر تستحق الزكاة؟", a: "نوجّه زكاتك مباشرة لمصارفها الشرعية الثمانية: الفقراء، المساكين، الغارمين، وفي الرقاب… عبر حالات موثّقة بأبحاث ميدانية." },
+      { q: "كيف أتأكد أن زكاتي وصلت؟", a: "تصلك تقارير صور وفيديو، ويمكنك زيارة الأسرة بنفسك أو طلب تقرير الأثر من فريق الشفافية." },
+    ] : [
+      { q: "Is the gold price in the calculator live?", a: "Yes — we fetch the global ounce price and USD/EGP rate in real time and compute 24/21/18K gram prices automatically. Manual override is supported." },
+      { q: "Difference between Zakat al-mal and Zakat al-Fitr?", a: "Zakat al-mal is 2.5% of net wealth above nisab held for a lunar year. Zakat al-Fitr is a per-person grain (or cash equivalent) due before Eid prayer." },
+      { q: "Are debts deducted from Zakatable wealth?", a: "Yes — debts currently due are deducted. For long-term installments, only the year's portion is deducted." },
+      { q: "Is Al-Yusr Zakat-eligible?", a: "We channel Zakat directly to its 8 Quranic categories — verified through field assessments." },
+      { q: "How do I confirm my Zakat was delivered?", a: "You receive photo and video reports, can visit the family in person, or request an impact report from our transparency team." },
+    ];
+  }, [dynamicZakatFaqs, isRTL]);
 
   const fetchLiveGold = async () => {
     setLiveStatus("loading");
@@ -144,7 +174,7 @@ const Zakat = () => {
         <div className="container mx-auto px-4 py-12 md:py-16 text-center">
           <div className="flex justify-center text-primary-foreground/85"><Breadcrumbs items={[{ name: isRTL ? "الرئيسية" : "Home", href: "/" }, { name: isRTL ? "الزكاة" : "Zakat" }]} /></div>
           <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold backdrop-blur">
-            <ShieldCheck className="h-3.5 w-3.5" /> {isRTL ? "مشهرة 2655/2019 — شفافية 99%" : "Licensed 2655/2019"}
+            <ShieldCheck className="h-3.5 w-3.5" /> {isRTL ? "مشهرة 2665/2019 — شفافية 99%" : "Licensed 2665/2019"}
           </span>
           <h1 className="mt-3 text-3xl font-black leading-tight text-shadow-soft md:text-5xl">
             {isRTL ? "حاسبة الزكاة 2026 بالدقهلية — زكاتُك بركة مالِك" : "Zakat Calculator 2026 (Dakahlia) — your Zakat, your wealth's blessing"}
@@ -554,56 +584,49 @@ const Zakat = () => {
             ))}
           </div>
           <p className="mx-auto mt-6 max-w-2xl text-center text-xs text-muted-foreground">
-            {isRTL ? "مؤسسة مشهرة برقم 2655/2019 تحت رقابة وزارة التضامن الاجتماعي. حساب CIB: 100043605733." : "Licensed NGO 2655/2019 under the Ministry of Social Solidarity. CIB account: 100043605733."}
+            {isRTL ? "مؤسسة مشهرة برقم 2665/2019 تحت رقابة وزارة التضامن الاجتماعي. حساب CIB: 100043605733." : "Licensed NGO 2665/2019 under the Ministry of Social Solidarity. CIB account: 100043605733."}
           </p>
         </div>
       </section>
 
       {/* FAQ + JSON-LD */}
-      <section className="bg-background py-12 md:py-16">
+      <section className="bg-background py-12 md:py-16" dir={isRTL ? "rtl" : "ltr"}>
         <div className="container mx-auto max-w-3xl px-4">
           <h2 className="text-center text-2xl font-black text-primary md:text-3xl">{isRTL ? "أسئلة شائعة عن الزكاة" : "Frequently asked questions"}</h2>
           <div className="mt-8 space-y-3">
-            {(isRTL ? [
-              { q: "هل سعر الذهب في الحاسبة لحظي؟", a: "نعم، نسحب سعر الأونصة العالمي وسعر الدولار مقابل الجنيه آنيًا، ونحتسب الجرام عيار 24/21/18 تلقائيًا. تقدر تحدّثه يدويًا أيضًا." },
-              { q: "ما الفرق بين زكاة المال وزكاة الفطر؟", a: "زكاة المال 2.5% من صافي مالك إذا بلغ النصاب وحال عليه الحول. زكاة الفطر صاع من غالب القوت أو قيمته النقدية عن كل فرد قبل صلاة العيد." },
-              { q: "هل تُخصم الديون من وعاء الزكاة؟", a: "نعم، الديون المستحقة عليك حاليًا تُخصم. أما الأقساط طويلة المدى فيُخصم منها قسط السنة." },
-              { q: "هل اليسر تستحق الزكاة؟", a: "نوجّه زكاتك مباشرة لمصارفها الشرعية الثمانية: الفقراء، المساكين، الغارمين، وفي الرقاب… عبر حالات موثّقة بأبحاث ميدانية." },
-              { q: "كيف أتأكد أن زكاتي وصلت؟", a: "تصلك تقارير صور وفيديو، ويمكنك زيارة الأسرة بنفسك أو طلب تقرير الأثر من فريق الشفافية." },
-            ] : [
-              { q: "Is the gold price in the calculator live?", a: "Yes — we fetch the global ounce price and USD/EGP rate in real time and compute 24/21/18K gram prices automatically. Manual override is supported." },
-              { q: "Difference between Zakat al-mal and Zakat al-Fitr?", a: "Zakat al-mal is 2.5% of net wealth above nisab held for a lunar year. Zakat al-Fitr is a per-person grain (or cash equivalent) due before Eid prayer." },
-              { q: "Are debts deducted from Zakatable wealth?", a: "Yes — debts currently due are deducted. For long-term installments, only the year's portion is deducted." },
-              { q: "Is Al-Yusr Zakat-eligible?", a: "We channel Zakat directly to its 8 Quranic categories — verified through field assessments." },
-              { q: "How do I confirm my Zakat was delivered?", a: "You receive photo and video reports, can visit the family in person, or request an impact report from our transparency team." },
-            ]).map((f, i) => (
-              <details key={i} className="group rounded-2xl border border-border bg-card p-4 shadow-soft open:shadow-card">
-                <summary className="cursor-pointer list-none text-sm font-extrabold text-primary marker:hidden">
-                  <span className="me-2 text-secondary">Q{i + 1}.</span>{f.q}
+            {zakatFaqs.map((f, i) => (
+              <details key={i} className="group rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-soft open:shadow-card">
+                <summary className="cursor-pointer list-none text-sm sm:text-base font-extrabold text-primary marker:hidden flex items-center gap-2">
+                  <span className="shrink-0 text-secondary font-black">Q{i + 1}.</span>
+                  <span className="leading-snug">{f.q}</span>
                 </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground border-t border-border/40 pt-3">{f.a}</p>
               </details>
             ))}
           </div>
+
+          {/* Center link to FAQ Hub */}
+          <div className="mt-8 flex justify-center">
+            <Link
+              to="/faqs"
+              className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-secondary/40 bg-card px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-bold text-primary shadow-sm hover:bg-secondary/10 transition"
+            >
+              <span>{isRTL ? "مركز الأسئلة الشائعة" : "FAQ Center"}</span>
+              <Arrow className="h-3.5 w-3.5 text-secondary" />
+            </Link>
+          </div>
+
           <script
             type="application/ld+json"
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "FAQPage",
-              mainEntity: (isRTL ? [
-                ["هل سعر الذهب في الحاسبة لحظي؟", "نعم، نسحب سعر الأونصة العالمي وسعر الدولار مقابل الجنيه آنيًا."],
-                ["ما الفرق بين زكاة المال وزكاة الفطر؟", "زكاة المال 2.5% من صافي المال فوق النصاب بعد حول. زكاة الفطر عن كل فرد قبل صلاة العيد."],
-                ["هل تُخصم الديون من وعاء الزكاة؟", "نعم، الديون المستحقة حاليًا تُخصم."],
-                ["هل اليسر تستحق الزكاة؟", "نعم، عبر مصارف الزكاة الشرعية الثمانية بحالات موثّقة."],
-                ["كيف أتأكد أن زكاتي وصلت؟", "تصلك تقارير صور وفيديو ويمكنك زيارة الأسرة بنفسك."],
-              ] : [
-                ["Is the gold price in the calculator live?", "Yes — we fetch global ounce and USD/EGP in real time."],
-                ["Difference between Zakat al-mal and Zakat al-Fitr?", "Mal is 2.5% of net wealth held a lunar year. Fitr is per-person before Eid prayer."],
-                ["Are debts deducted?", "Yes — debts currently due are deducted."],
-                ["Is Al-Yusr Zakat-eligible?", "Yes, channeled to the 8 Quranic categories."],
-                ["How do I confirm delivery?", "Photo/video reports and on-site visits are available."],
-              ]).map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+              mainEntity: zakatFaqs.map((f) => ({
+                "@type": "Question",
+                name: f.q,
+                acceptedAnswer: { "@type": "Answer", text: f.a },
+              })),
             }) }}
           />
         </div>

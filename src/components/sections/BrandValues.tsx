@@ -16,14 +16,14 @@ export const BrandValues = () => {
         { I: Sparkles, t: "التمكين", d: "ندعم الأسر لتعتمد على نفسها لا على الإحسان وحده." },
         { I: HeartHandshake, t: "الرحمة", d: "نسلّم الخير بكرامة، نحفظ ماء الوجه قبل الكرتونة." },
         { I: ShieldCheck, t: "الشفافية", d: "كل تبرع موثّق بالصور والفيديو وتقرير مفتوح." },
-        { I: BadgeCheck, t: "المسؤولية", d: "أمانة شرعية وقانونية لكل قرش — مرخّصة 2655/2019." },
+        { I: BadgeCheck, t: "المسؤولية", d: "أمانة شرعية وقانونية لكل قرش — مرخّصة 2665/2019." },
         { I: Sprout, t: "الاستدامة", d: "برامج تنموية، مش مجرد إغاثة لحظية." },
       ]
     : [
         { I: Sparkles, t: "Empowerment", d: "We help families stand on their own — beyond one-off aid." },
         { I: HeartHandshake, t: "Mercy", d: "Doorstep delivery — dignity before the box." },
         { I: ShieldCheck, t: "Transparency", d: "Every donation documented with photo, video and open report." },
-        { I: BadgeCheck, t: "Responsibility", d: "Trust over every penny — Licensed NGO 2655/2019." },
+        { I: BadgeCheck, t: "Responsibility", d: "Trust over every penny — Licensed NGO 2665/2019." },
         { I: Sprout, t: "Sustainability", d: "Development programs, not just one-time relief." },
       ];
 
@@ -47,7 +47,7 @@ export const BrandValues = () => {
       <div aria-hidden className="pointer-events-none absolute -left-24 top-0 h-64 w-64 rounded-full bg-secondary/15 blur-[120px]" />
       <div aria-hidden className="pointer-events-none absolute -right-24 bottom-0 h-64 w-64 rounded-full bg-accent/15 blur-[120px]" />
 
-      <div className="container relative mx-auto max-w-5xl px-4">
+      <div className="container relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary/30 bg-secondary/15 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-secondary">
             <Sparkles className="h-3 w-3" />
@@ -63,7 +63,7 @@ export const BrandValues = () => {
           </p>
         </div>
 
-        <ul className="mx-auto mt-5 grid max-w-5xl grid-cols-2 gap-2.5 md:mt-7 md:gap-3 lg:grid-cols-5">
+        <ul className="mx-auto mt-5 grid max-w-7xl grid-cols-2 gap-2.5 md:mt-7 md:gap-3 lg:grid-cols-5">
           {values.map((v, i) => {
             const isLastOdd = values.length % 2 === 1 && i === values.length - 1;
             return (

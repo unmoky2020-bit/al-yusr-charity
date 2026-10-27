@@ -327,7 +327,7 @@ export const Journey = () => {
 
               {/* Trust strip */}
               <ul className="mt-6 grid grid-cols-3 items-center justify-center gap-2 text-[10px] font-extrabold text-primary-foreground/95 sm:flex sm:flex-wrap sm:gap-x-5 sm:gap-y-2 sm:text-xs">
-                <li className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-secondary" />{isRTL ? "مرخصة 2655/2019" : "Licensed 2655/2019"}</li>
+                <li className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-secondary" />{isRTL ? "مرخصة 2665/2019" : "Licensed 2665/2019"}</li>
                 <li className="inline-flex items-center gap-1.5"><Users className="h-4 w-4 text-secondary" />{isRTL ? "+75 ألف أسرة" : "75K+ families"}</li>
                 <li className="inline-flex items-center gap-1.5"><Heart className="h-4 w-4 text-secondary" />{isRTL ? "98% توثيق" : "98% documented"}</li>
               </ul>

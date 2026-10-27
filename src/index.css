@@ -122,7 +122,7 @@
   * { @apply border-border; }
   html, body {
     scroll-behavior: auto;
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -474,7 +474,7 @@
   .pattern-work-axes {
     position: relative;
     isolation: isolate;
-    background-color: hsl(145 10% 92%);
+    background-color: hsl(145 12% 95%);
   }
   .pattern-work-axes::before {
     content: "";
@@ -484,7 +484,7 @@
     background-size: max(100vw, 1500px) auto;
     background-repeat: repeat-y;
     background-position: center top;
-    opacity: 0.18;
+    opacity: 0.05;
     mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 0;
@@ -1031,3 +1031,69 @@ img, video, svg, canvas {
 }
 
 
+
+/* ── About: "Why trust us" donation path ─────────────────────────────── */
+.trust-journey .trust-node {
+  background: hsl(var(--background));
+  border-color: hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+  transition: background-color 240ms var(--ease-out-soft), border-color 240ms var(--ease-out-soft), color 240ms var(--ease-out-soft), transform 240ms var(--ease-out-soft);
+}
+.trust-journey .trust-card {
+  border-color: hsl(var(--border));
+  opacity: 0.55;
+  transform: translateY(8px);
+  transition: opacity 360ms var(--ease-out-soft), transform 360ms var(--ease-out-soft), border-color 240ms var(--ease-out-soft);
+}
+.trust-journey .trust-icon { color: hsl(var(--muted-foreground)); transition: color 240ms var(--ease-out-soft); }
+.trust-journey [data-on] .trust-node {
+  background: hsl(var(--secondary));
+  border-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  transform: scale(1.06);
+}
+.trust-journey [data-on] .trust-card { opacity: 1; transform: none; border-color: hsl(var(--secondary) / 0.7); }
+.trust-journey [data-on] .trust-icon { color: hsl(var(--accent)); }
+.trust-journey .trust-rail-fill { transition: transform 120ms linear; }
+
+.trust-seal {
+  opacity: 0.22;
+  transform: rotate(-16deg) scale(1.14);
+  transition: opacity 280ms cubic-bezier(0.2, 0.9, 0.3, 1), transform 280ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.trust-seal[data-stamped] { opacity: 1; transform: rotate(-8deg) scale(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-journey .trust-node,
+  .trust-journey .trust-card,
+  .trust-journey .trust-icon,
+  .trust-journey .trust-rail-fill,
+  .trust-seal { transition: none; }
+  .reveal-up { opacity: 1; transform: none; transition: none; }
+}
+
+/* ── Home: About teaser timeline ─────────────────────────────────────── */
+.about-teaser .about-teaser-line { transform: scaleX(0); transition: transform 900ms var(--ease-out-soft); }
+.about-teaser .about-teaser-stop { opacity: 0; transform: translateY(10px); transition: opacity 420ms var(--ease-out-soft), transform 420ms var(--ease-out-soft); }
+.about-teaser .about-teaser-dot { transform: scale(0.2); opacity: 0; transition: transform 300ms var(--ease-out-soft), opacity 300ms var(--ease-out-soft); }
+.about-teaser[data-in] .about-teaser-line { transform: scaleX(1); }
+.about-teaser[data-in] .about-teaser-stop { opacity: 1; transform: none; }
+.about-teaser[data-in] .about-teaser-dot { transform: scale(1); opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .about-teaser .about-teaser-line,
+  .about-teaser .about-teaser-stop,
+  .about-teaser .about-teaser-dot { transition: none; }
+}
+
+/* ── About: "Why us" checklist ───────────────────────────────────────── */
+.whyus .whyus-tick-bg { fill: hsl(var(--secondary) / 0.18); transition: fill 300ms var(--ease-out-soft) var(--d, 0ms); }
+.whyus .whyus-tick-path { stroke: hsl(var(--primary)); stroke-dasharray: 16; stroke-dashoffset: 16; transition: stroke-dashoffset 420ms var(--ease-out-soft) var(--d, 0ms); }
+.whyus[data-in] .whyus-tick-bg { fill: hsl(var(--secondary)); }
+.whyus[data-in] .whyus-tick-path { stroke-dashoffset: 0; }
+.whyus .whyus-track-fill { transform: scaleY(0); transition: transform 900ms var(--ease-out-soft) 300ms; }
+.whyus[data-in] .whyus-track-fill { transform: scaleY(1); }
+.whyus .whyus-stage { opacity: 0.35; transition: opacity 360ms var(--ease-out-soft) var(--d, 0ms); }
+.whyus[data-in] .whyus-stage { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .whyus .whyus-tick-bg, .whyus .whyus-tick-path, .whyus .whyus-track-fill, .whyus .whyus-stage { transition: none; }
+}

@@ -41,13 +41,13 @@ const Trust = () => {
 
   const docs = isRTL
     ? [
-        { t: "ترخيص وزارة التضامن الاجتماعي", d: "إشهار رسمي رقم 2655 لسنة 2019." },
+        { t: "ترخيص وزارة التضامن الاجتماعي", d: "إشهار رسمي رقم 2665 لسنة 2019." },
         { t: "صفة النفع العام", d: "حاصلون على صفة النفع العام بعد تحقيق أثر ميداني." },
         { t: "مراجعة محاسبية مستقلة", d: "تقارير مالية سنوية معتمدة من مكتب محاسبة خارجي." },
         { t: "تقرير الأثر السنوي", d: "إنجازات 2025 موثقة بأرقام وصور وفيديو." },
       ]
     : [
-        { t: "Ministry of Social Solidarity license", d: "Official NGO registration No. 2655/2019." },
+        { t: "Ministry of Social Solidarity license", d: "Official NGO registration No. 2665/2019." },
         { t: "Public benefit status", d: "Granted after proven field impact." },
         { t: "Independent audit", d: "Annual financials reviewed by an external accounting firm." },
         { t: "Annual impact report", d: "2025 achievements documented with numbers, photos and video." },
@@ -85,10 +85,10 @@ const Trust = () => {
               url: `${base}/`,
               logo: `${base}/icon-192.png`,
               foundingDate: "2019",
-              taxID: "2655/2019",
+              taxID: "2665/2019",
               areaServed: ["Dakahlia, Egypt", "Mansoura", "Mit Ghamr", "Talkha"],
               hasCredential: [
-                { "@type": "EducationalOccupationalCredential", name: "Ministry of Social Solidarity license", identifier: "2655/2019" },
+                { "@type": "EducationalOccupationalCredential", name: "Ministry of Social Solidarity license", identifier: "2665/2019" },
                 { "@type": "EducationalOccupationalCredential", name: "Public Benefit Status" },
               ],
             },
@@ -118,7 +118,7 @@ const Trust = () => {
                 {
                   "@type": "Question",
                   name: isRTL ? "هل اليسر مرخصة رسمياً؟" : "Is Al-Yusr officially licensed?",
-                  acceptedAnswer: { "@type": "Answer", text: isRTL ? "نعم — إشهار وزارة التضامن الاجتماعي رقم 2655 لسنة 2019، وحاصلون على صفة النفع العام." : "Yes — Ministry of Social Solidarity registration No. 2655/2019, with Public Benefit status." },
+                  acceptedAnswer: { "@type": "Answer", text: isRTL ? "نعم — إشهار وزارة التضامن الاجتماعي رقم 2665 لسنة 2019، وحاصلون على صفة النفع العام." : "Yes — Ministry of Social Solidarity registration No. 2665/2019, with Public Benefit status." },
                 },
                 {
                   "@type": "Question",
@@ -179,8 +179,8 @@ const Trust = () => {
               {/* AI/voice-search answer block — speakable target. */}
               <p className="ai-answer mt-3 max-w-xl text-sm text-primary-foreground/75">
                 {isRTL
-                  ? "اليسر مؤسسة خيرية مرخّصة (إشهار 2655/2019) بمقر المنصورة، تخدم الدقهلية الشرقية وميت غمر وطلخا وكفر الشيخ — توثيق صور/فيديو لكل تبرع، 88% للبرامج، ومراجعة محاسبية مستقلة."
-                  : "Al-Yusr is a licensed Egyptian NGO (No. 2655/2019) based in Mansoura, serving East Dakahlia, Mit Ghamr, Talkha and Kafr El Sheikh — photo/video proof per donation, 88% to programs, independent audit."}
+                  ? "اليسر مؤسسة خيرية مرخّصة (إشهار 2665/2019) بمقر المنصورة، تخدم الدقهلية الشرقية وميت غمر وطلخا وكفر الشيخ — توثيق صور/فيديو لكل تبرع، 88% للبرامج، ومراجعة محاسبية مستقلة."
+                  : "Al-Yusr is a licensed Egyptian NGO (No. 2665/2019) based in Mansoura, serving East Dakahlia, Mit Ghamr, Talkha and Kafr El Sheikh — photo/video proof per donation, 88% to programs, independent audit."}
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
@@ -524,18 +524,19 @@ const Trust = () => {
       </section>
 
       <LocalFAQ
+        categorySlug="trust"
         donateHref="/donate"
         title={isRTL ? "أسئلة شائعة عن الشفافية وتتبع التبرع" : "Transparency & donation tracking FAQs"}
         intro={isRTL ? "كل ما يخص توثيق التبرع، الترخيص، والتقارير المالية لمؤسسة اليسر بالدقهلية والمنصورة." : "Everything about donation proof, licensing, and financials for Al-Yusr in Dakahlia & Mansoura."}
         items={isRTL ? [
-          { q: "هل مؤسسة اليسر مرخّصة رسميًا في مصر؟", a: "أيوه، اليسر مشهرة بوزارة التضامن الاجتماعي تحت رقم 2655 لسنة 2019، وحاصلة على صفة النفع العام، ومقرها الرئيسي في المنصورة بالدقهلية." },
+          { q: "هل مؤسسة اليسر مرخّصة رسميًا في مصر؟", a: "أيوه، اليسر مشهرة بوزارة التضامن الاجتماعي تحت رقم 2665 لسنة 2019، وحاصلة على صفة النفع العام، ومقرها الرئيسي في المنصورة بالدقهلية." },
           { q: "إزاي أتتبع تبرعي بعد ما أدفع؟", a: "بتوصلك رسالة وإيميل فيهم رقم متابعة، تقدر تستخدمه في صفحة /donation-tracking لمعرفة حالة التبرع وصور التسليم لحظة بلحظة." },
           { q: "إيه نسبة المصاريف الإدارية من تبرعي؟", a: "أقل من 8% من إجمالي التبرعات بتذهب للمصاريف الإدارية، والباقي بيوصل للمستحقين فعليًا — والتقرير المحاسبي السنوي متاح للتحميل من صفحة الشفافية." },
           { q: "هل أقدر أزور حالة تبرعت لها بنفسي؟", a: "أيوه، بننسّق مع المتبرعين زيارات ميدانية للحالات في المنصورة وميت غمر وطلخا والقرى المحيطة، مع الحفاظ على كرامة الأسرة." },
           { q: "مين بيراجع حسابات اليسر سنويًا؟", a: "مكتب محاسبة قانونية مستقل بيراجع كل التقارير المالية سنويًا، والنتائج بتتنشر في تقرير الأثر السنوي على الموقع." },
           { q: "هل بتشتغلوا في محافظات تانية غير الدقهلية؟", a: "أيوه، اليسر بتنفّذ مشاريع في كفر الشيخ والفيوم والمنيا والقاهرة، لكن المقر الرئيسي والمزرعة الوقفية في الدقهلية." },
         ] : [
-          { q: "Is Al-Yusr officially licensed in Egypt?", a: "Yes — registered with the Ministry of Social Solidarity under No. 2655/2019, granted public-benefit status, and headquartered in Mansoura, Dakahlia." },
+          { q: "Is Al-Yusr officially licensed in Egypt?", a: "Yes — registered with the Ministry of Social Solidarity under No. 2665/2019, granted public-benefit status, and headquartered in Mansoura, Dakahlia." },
           { q: "How do I track my donation after paying?", a: "You receive an SMS/email with a tracking reference. Use it on /donation-tracking to see delivery status and photos in real time." },
           { q: "What percentage goes to admin costs?", a: "Under 8% of total donations covers admin; the rest reaches beneficiaries. The annual audit is downloadable from the Transparency page." },
           { q: "Can I personally visit a case I supported?", a: "Yes — we coordinate donor field visits in Mansoura, Mit Ghamr, Talkha and surrounding villages, while preserving family dignity." },

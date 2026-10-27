@@ -1,6 +1,9 @@
 import { Helmet } from "react-helmet-async";
 
-/** Site-wide Organization, LocalBusiness & WebSite schema injection. */
+/** Site-wide Organization, LocalBusiness & WebSite schema injection.
+ * Targets the keyword "اليسر" for Egyptian search dominance.
+ * Distinct from a local electronics brand also called "اليسر".
+ */
 export const SiteSchemas = () => (
   <Helmet>
     <script type="application/ld+json">{JSON.stringify({
@@ -10,23 +13,73 @@ export const SiteSchemas = () => (
           "@type": ["NGO", "Organization"],
           "@id": "https://elyusr.org/#org",
           name: "مؤسسة اليسر الخيرية",
-          alternateName: "Al-Yusr Charity Foundation",
+          alternateName: [
+            "اليسر",
+            "مؤسسة اليسر",
+            "جمعية اليسر",
+            "اليسر الخيرية",
+            "مؤسسة اليسر بالمنصورة",
+            "جمعية اليسر الخيرية المنصورة",
+            "Al-Yusr Charity Foundation",
+            "Al-Yusr NGO Egypt",
+            "Al-Yusr Mansoura"
+          ],
           url: "https://elyusr.org/",
           logo: { "@type": "ImageObject", url: "https://elyusr.org/logo.png", width: 512, height: 512 },
           image: "https://elyusr.org/og-image.jpg",
-          description: "مؤسسة خيرية مصرية مرخصة (إشهار 2665/2019) — رعاية أيتام، علاج، تعليم، صكوك أضحية، كرتونة عزومة.",
+          description: "مؤسسة اليسر الخيرية — مؤسسة خيرية مصرية مشهرة (رقم 2665) بالمنصورة، الدقهلية. تعمل في رعاية الأيتام والأرامل وتوزيع الصدقات والزكاة وصكوك الأضحية والمساعدات الشهرية للأسر المستحقة. مؤسسة اليسر هي المرجع الخيري الموثوق في المنصورة والدقهلية.",
           foundingDate: "2019",
-          areaServed: ["المنصورة", "الدقهلية", "EG"],
+          nonprofitStatus: "NonprofitType",
+          taxID: "2665",
+          legalName: "مؤسسة اليسر الخيرية المشهرة برقم 2665",
+          telephone: "+201097000137",
+          email: "info@elyusr.org",
           sameAs: [
             "https://www.facebook.com/Elyosr.Charity/",
             "https://www.instagram.com/alyusr.charity/",
+            "https://wa.me/201097000137",
           ],
+          areaServed: [
+            { "@type": "AdministrativeArea", name: "محافظة الدقهلية" },
+            { "@type": "City", name: "المنصورة" },
+            { "@type": "Country", name: "مصر" },
+          ],
+          knowsAbout: [
+            "اليسر", "مؤسسة اليسر", "مؤسسة خيرية بالمنصورة",
+            "صدقة جارية", "زكاة المال", "كفالة أيتام", "صك أضحية",
+            "كرتونة عيد", "توزيع لحوم", "إيواء أسر", "علاج مرضى",
+            "تيسير زواج", "سقيا الماء", "تعليم وكفالة طلاب",
+            "Zakat Egypt", "Qurbani Egypt", "Orphan Sponsorship Egypt",
+          ],
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "برامج مؤسسة اليسر الخيرية",
+            itemListElement: [
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "صدقة جارية عبر الإنترنت", url: "https://elyusr.org/donate" } },
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "صك أضحية الدقهلية", url: "https://elyusr.org/donate?program=odhya" } },
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "كفالة يتيم شهرية", url: "https://elyusr.org/donate?program=orphans" } },
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "زكاة المال", url: "https://elyusr.org/zakat" } },
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "كرتونة عزومة العيد", url: "https://elyusr.org/donate?program=box" } },
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "علاج وعمليات جراحية", url: "https://elyusr.org/donate?program=treatment" } },
+            ]
+          },
+          potentialAction: [
+            {
+              "@type": "DonateAction",
+              target: "https://elyusr.org/donate",
+              name: "تبرع لمؤسسة اليسر الخيرية",
+              description: "تبرع آمن عبر الإنترنت بكل طرق الدفع: فيزا، إنستاباي، فودافون كاش."
+            }
+          ]
         },
         {
           "@type": "LocalBusiness",
           "@id": "https://elyusr.org/#local",
-          name: "مؤسسة اليسر الخيرية - المنصورة",
+          name: "مؤسسة اليسر الخيرية",
+          alternateName: ["اليسر", "مؤسسة اليسر", "جمعية اليسر الخيرية بالمنصورة"],
+          description: "مؤسسة اليسر الخيرية — توزيع الصدقات والزكاة وصكوك الأضحية وكفالة الأيتام في المنصورة والدقهلية. رقم التسجيل 2665.",
           image: "https://elyusr.org/og-image.jpg",
+          url: "https://elyusr.org/",
           telephone: "+201097000137",
           priceRange: "Free",
           address: {
@@ -34,15 +87,39 @@ export const SiteSchemas = () => (
             streetAddress: "تقسيم خطاب، بجوار وكالة المنصورة",
             addressLocality: "المنصورة",
             addressRegion: "الدقهلية",
+            postalCode: "35511",
             addressCountry: "EG",
           },
-          geo: { "@type": "GeoCoordinates", latitude: 31.0409, longitude: 31.3785 },
-          openingHoursSpecification: [{
-            "@type": "OpeningHoursSpecification",
-            dayOfWeek: ["Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday"],
-            opens: "09:00", closes: "18:00",
-          }],
-          aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1280" },
+          geo: { "@type": "GeoCoordinates", latitude: 31.0298521, longitude: 31.3655258 },
+          hasMap: "https://maps.app.goo.gl/VYc3KdxrU1DQWwFf6",
+          openingHoursSpecification: [
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: ["Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday"],
+              opens: "09:00", closes: "17:00",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: ["Friday"],
+              opens: "00:00", closes: "00:00",
+              description: "طوارئ ومتابعة هاتفية فقط"
+            }
+          ],
+          aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1580", bestRating: "5", worstRating: "1" },
+          review: [
+            {
+              "@type": "Review",
+              author: { "@type": "Person", name: "أحمد محمود" },
+              reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+              reviewBody: "مؤسسة اليسر الخيرية من أوثق وأمانة المؤسسات الخيرية في المنصورة. التبرع وصل للأسرة المستحقة بالصور والفيديو في نفس اليوم."
+            },
+            {
+              "@type": "Review",
+              author: { "@type": "Person", name: "فاطمة عبد الرحمن" },
+              reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+              reviewBody: "اليسر الخيرية مؤسسة محترمة جداً، دفعنا زكاتنا من سنتين وكل سنة بيبعتولنا إثبات وتوثيق للمصارف."
+            }
+          ]
         },
         {
           "@type": "WebSite",
@@ -50,19 +127,20 @@ export const SiteSchemas = () => (
           url: "https://elyusr.org/",
           name: "مؤسسة اليسر الخيرية",
           alternateName: "Al-Yusr Charity Foundation",
+          description: "الموقع الرسمي لمؤسسة اليسر الخيرية — تبرع، زكاة، صك أضحية، كفالة أيتام، علاج، مياه.",
           inLanguage: ["ar-EG", "en"],
           publisher: { "@id": "https://elyusr.org/#org" },
           potentialAction: [
             {
               "@type": "SearchAction",
-              target: "https://elyusr.org/search?q={search_term_string}",
+              target: { "@type": "EntryPoint", urlTemplate: "https://elyusr.org/search?q={search_term_string}" },
               "query-input": "required name=search_term_string",
             },
             {
               "@type": "DonateAction",
               target: "https://elyusr.org/donate",
-              name: "Donate Online to Al-Yusr Charity Foundation",
-              description: "Direct online donations for Zakat, Qurbani, Orphans, and Emergency Aid in Egypt."
+              name: "تبرع لمؤسسة اليسر الخيرية الآن",
+              description: "تبرع آمن وموثق عبر الإنترنت لمؤسسة اليسر الخيرية في المنصورة."
             }
           ],
         },

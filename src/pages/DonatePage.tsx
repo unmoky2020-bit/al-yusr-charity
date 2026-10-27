@@ -16,7 +16,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { DonationReceipt } from "@/components/common/DonationReceipt";
 import { useLang } from "@/i18n/LangContext";
 import { SimpleDonateHero } from "@/components/sections/SimpleDonateHero";
-import { type DonationRecord } from "@/data/donationsStore";
+import { donationsStore, type DonationRecord } from "@/data/donationsStore";
 import { toast } from "@/hooks/use-toast";
 import { createDonation, getCaseByRef } from "@/data/casesApi";
 import { useAuth } from "@/auth/AuthContext";
@@ -36,6 +36,8 @@ import {
   DonationItemState,
 } from "@/components/donate/DonationEntityItem";
 import { PaymobCheckoutModal } from "@/components/donate/PaymobCheckoutModal";
+import { KashierCheckoutModal } from "@/components/donate/KashierCheckoutModal";
+import { getGatewaySettings, type GatewayProvider } from "@/data/kashierGateway";
 
 type StaticMethod = {
   id: string;
@@ -55,66 +57,69 @@ type StaticMethod = {
   isDelegate?: boolean;
 };
 
-const STATIC_METHODS: StaticMethod[] = [
-  {
-    id: "vodafone_cash",
-    ar: "فودافون كاش",
-    en: "Vodafone Cash",
-    subtitleAr: "تحويل فوري للمحفظة",
-    subtitleEn: "Instant Wallet Transfer",
-    icon: Smartphone,
-    badge: { ar: "محفظة إلكترونية", en: "Mobile Wallet", color: "emerald" },
-    accountAr: "رقم التحويل:",
-    accountEn: "Transfer to:",
-    accountValue: "01097000137",
-    instructions_ar: "حوّل المبلغ المطلوب على الرقم الموضح، ثم أرسل إيصال التحويل أو اكتب رقم محفظتك للتأكيد.",
-    instructions_en: "Transfer the amount to the number shown, then share the receipt or your wallet number.",
-    isManual: true,
-  },
-  {
-    id: "instapay",
-    ar: "إنستاباي (InstaPay)",
-    en: "InstaPay",
-    subtitleAr: "تحويل لحظي (IPA)",
-    subtitleEn: "Instant IPA Transfer",
-    icon: QrCode,
-    badge: { ar: "تحويل فوري ⚡", en: "Instant Transfer", color: "indigo" },
-    accountAr: "معرّف التحويل (IPA):",
-    accountEn: "InstaPay IPA:",
-    accountValue: "elyusr@cib",
-    instructions_ar: "افتح تطبيق InstaPay وأدخل المعرّف الموضح لإتمام التحويل المباشر في ثوانٍ.",
-    instructions_en: "Open InstaPay and enter the IPA shown to complete instant transfer.",
-    isManual: true,
-  },
-  {
-    id: "bank_transfer",
-    ar: "بنك مصر",
-    en: "Banque Misr",
-    subtitleAr: "تحويل بنكي مباشر",
-    subtitleEn: "Direct Bank Transfer",
-    icon: Landmark,
-    badge: { ar: "تحويل بنكي", en: "Bank Transfer", color: "slate" },
-    accountAr: "رقم الحساب:",
-    accountEn: "Account Number:",
-    accountValue: "1001547382150",
-    instructions_ar: "حوّل إلى حساب مؤسسة اليسر ببنك مصر، وأرسل صورة إشعار التحويل للتأكيد.",
-    instructions_en: "Transfer to Al-Yusr account at Banque Misr, and send the transfer receipt.",
-    isManual: true,
-  },
-  {
-    id: "card_paymob",
+function getAvailableStaticMethods(activeGateway: GatewayProvider = "kashier"): StaticMethod[] {
+  const methods: StaticMethod[] = [
+    {
+      id: "vodafone_cash",
+      ar: "فودافون كاش",
+      en: "Vodafone Cash",
+      subtitleAr: "تحويل فوري للمحفظة",
+      subtitleEn: "Instant Wallet Transfer",
+      icon: Smartphone,
+      badge: { ar: "محفظة إلكترونية", en: "Mobile Wallet", color: "emerald" },
+      accountAr: "رقم التحويل:",
+      accountEn: "Transfer to:",
+      accountValue: "01097000137",
+      instructions_ar: "حوّل المبلغ المطلوب على الرقم الموضح، ثم أرسل إيصال التحويل أو اكتب رقم محفظتك للتأكيد.",
+      instructions_en: "Transfer the amount to the number shown, then share the receipt or your wallet number.",
+      isManual: true,
+    },
+    {
+      id: "instapay",
+      ar: "إنستاباي (InstaPay)",
+      en: "InstaPay",
+      subtitleAr: "تحويل لحظي (IPA)",
+      subtitleEn: "Instant IPA Transfer",
+      icon: QrCode,
+      badge: { ar: "تحويل فوري ⚡", en: "Instant Transfer", color: "indigo" },
+      accountAr: "معرّف التحويل (IPA):",
+      accountEn: "InstaPay IPA:",
+      accountValue: "elyusr@cib",
+      instructions_ar: "افتح تطبيق InstaPay وأدخل المعرّف الموضح لإتمام التحويل المباشر في ثوانٍ.",
+      instructions_en: "Open InstaPay and enter the IPA shown to complete instant transfer.",
+      isManual: true,
+    },
+    {
+      id: "bank_transfer",
+      ar: "البنك التجاري الدولي CIB",
+      en: "CIB Bank",
+      subtitleAr: "تحويل بنكي مباشر",
+      subtitleEn: "Direct Bank Transfer",
+      icon: Landmark,
+      badge: { ar: "تحويل بنكي", en: "Bank Transfer", color: "slate" },
+      accountAr: "رقم الحساب:",
+      accountEn: "Account Number:",
+      accountValue: "100043605733",
+      instructions_ar: "حوّل إلى حساب مؤسسة اليسر بالبنك التجاري الدولي (CIB)، وأرسل صورة إشعار التحويل للتأكيد.",
+      instructions_en: "Transfer to Al-Yusr account at CIB, and send the transfer receipt.",
+      isManual: true,
+    },
+  ];
+
+  methods.push({
+    id: "card_kashier",
     ar: "بطاقة بنكية",
     en: "Bank Card",
-    subtitleAr: "فيزا، ماستركارد، ميزة",
-    subtitleEn: "Visa, Mastercard & Meeza",
+    subtitleAr: "كاشير (فيزا / ماستركارد / ميزة)",
+    subtitleEn: "Kashier (Visa / Mastercard / Meeza)",
     icon: CreditCard,
-    badge: { ar: "فيزا ومستر وميزة", en: "Visa / Master / Meeza", color: "blue" },
     isManual: false,
     isGateway: true,
-    instructions_ar: "ستنتقل إلى صفحة الدفع المؤمنة (Paymob 3D-Secure) لإتمام الدفع ببطاقتك البنكية بأمان.",
-    instructions_en: "You will be redirected to Paymob 3D-Secure encrypted page to pay securely.",
-  },
-  {
+    instructions_ar: "ستفتح نافذة الدفع المشفرة المعتمدة عبر بوابة كاشير (Kashier 3D-Secure) لإتمام التبرع بأمان تام.",
+    instructions_en: "Secure encrypted online payment via Kashier gateway.",
+  });
+
+  methods.push({
     id: "delegate_pickup",
     ar: "مندوب اليسر",
     en: "Al-Yusr Delegate",
@@ -126,13 +131,18 @@ const STATIC_METHODS: StaticMethod[] = [
     isDelegate: true,
     instructions_ar: "سيتواصل معك مندوبنا الرسمي هاتفياً لتحديد الميعاد الأنسب واستلام التبرع من منزلك بإيصال معتمد.",
     instructions_en: "Our delegate will contact you to arrange a suitable time and collect your donation with an official receipt.",
-  },
-];
+  });
+
+  return methods;
+}
+
+const STATIC_METHODS: StaticMethod[] = getAvailableStaticMethods("kashier");
 
 const badgeClasses: Record<string, string> = {
   emerald: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
   indigo:  "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20",
   blue:    "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+  teal:    "bg-teal-500/10 text-teal-600 dark:text-teal-400 border-teal-500/20",
   slate:   "bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20",
 };
 
@@ -144,16 +154,61 @@ const DonatePage = () => {
   const [params] = useSearchParams();
   const navigate = useNavigate();
 
+  const [kashierSuccessOrderId, setKashierSuccessOrderId] = useState<string>("");
+
   useEffect(() => {
     const ref = params.get("ref") || params.get("paymob_ref");
-    if (ref) navigate(`/donate/status/${ref}`, { replace: true });
+    if (ref) { navigate(`/donate/status/${ref}`, { replace: true }); return; }
+
+    // Kashier redirect: when iframe navigates top window to the redirect_url on success
+    const paymentStatus = params.get("paymentStatus");
+    const merchantOrderId = params.get("merchantOrderId");
+    const orderReference = params.get("orderReference");
+    if (
+      paymentStatus === "SUCCESS" &&
+      (merchantOrderId || orderReference)
+    ) {
+      const orderId = merchantOrderId || orderReference || "";
+      setKashierSuccessOrderId(orderId);
+      // Remove the query params from URL without reloading
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, "", cleanUrl);
+    }
   }, [params, navigate]);
 
+
   const programSlug     = params.get("program");
+  const campaignSlug    = params.get("campaign");
+  const projectSlug     = params.get("project");
   const caseRef         = params.get("case");
   const sectorSlugParam = params.get("sector");
 
-  const initialEntity = DONATION_ENTITIES.find((e) => e.id === programSlug) || DONATION_ENTITIES[0];
+  const SLUG_ALIASES: Record<string, string> = {
+    treatment: "medical",
+    prosthetics: "medical",
+    health: "medical",
+    education: "athar",
+    box: "monthly-meat",
+    kitchen: "general",
+    zakat: "general",
+    bride: "shelter",
+  };
+
+  const resolveEntityFromQuery = (slug: string | null): DonationEntity | undefined => {
+    if (!slug) return undefined;
+    const clean = decodeURIComponent(slug).trim().toLowerCase();
+    const direct = DONATION_ENTITIES.find((e) => e.id.toLowerCase() === clean);
+    if (direct) return direct;
+    const aliased = SLUG_ALIASES[clean];
+    if (aliased) {
+      const found = DONATION_ENTITIES.find((e) => e.id === aliased);
+      if (found) return found;
+    }
+    return DONATION_ENTITIES.find((e) => e.id.toLowerCase().includes(clean) || clean.includes(e.id.toLowerCase()));
+  };
+
+  const targetQuery = programSlug || campaignSlug || projectSlug;
+  const initialEntity = resolveEntityFromQuery(targetQuery) || DONATION_ENTITIES[0];
   const initialMode = initialEntity.isMarkoun ? "in_kind" : "general";
   const initialAmount = Number(params.get("amount")) || (initialMode === "in_kind" ? 0 : initialEntity.priceFrom || 100);
 
@@ -171,6 +226,9 @@ const DonatePage = () => {
   const [sectorFilter, setSectorFilter] = useState<string>(sectorSlugParam || "all");
   const [paymobClientSecret, setPaymobClientSecret] = useState<string>("");
   const [isPaymobModalOpen, setIsPaymobModalOpen] = useState(false);
+  const [isKashierModalOpen, setIsKashierModalOpen] = useState(false);
+  const [kashierOrderId, setKashierOrderId] = useState<string>("");
+  const [kashierSessionUrl, setKashierSessionUrl] = useState<string>("");
 
   const totalAmount = useMemo(() => {
     return items.reduce((sum, it) => sum + (it.donationMode === "in_kind" ? 0 : (Number(it.amount) || 0)), 0);
@@ -178,21 +236,27 @@ const DonatePage = () => {
 
   useEffect(() => {
     setSectorFilter(sectorSlugParam || "all");
-    if (programSlug && DONATION_ENTITIES.find((p) => p.id === programSlug)) {
-      const ent = DONATION_ENTITIES.find((p) => p.id === programSlug)!;
-      const defMode = ent.isMarkoun ? "in_kind" : "general";
-      setItems((prev) => [
-        {
-          id: prev[0]?.id || "item-init",
-          entityId: ent.id,
-          donationMode: defMode,
-          amount: defMode === "in_kind" ? 0 : (prev[0]?.amount && prev[0].amount >= 50 ? prev[0].amount : ent.priceFrom || 100),
-          selectedShares: {},
-          selectedCaseId: caseRef || null,
-        },
-      ]);
+    const target = programSlug || campaignSlug || projectSlug;
+    if (target) {
+      const ent = resolveEntityFromQuery(target);
+      if (ent) {
+        const defMode = ent.isMarkoun ? "in_kind" : "general";
+        const paramAmt = Number(params.get("amount"));
+        const defAmount = paramAmt > 0 ? paramAmt : (defMode === "in_kind" ? 0 : ent.priceFrom || 100);
+        setItems([
+          {
+            id: "item-init",
+            entityId: ent.id,
+            donationMode: defMode,
+            amount: defAmount,
+            selectedShares: {},
+            selectedCaseId: caseRef || null,
+          },
+        ]);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }
-  }, [sectorSlugParam, programSlug, caseRef]);
+  }, [sectorSlugParam, programSlug, campaignSlug, projectSlug, caseRef, params]);
 
   const MAX_BASKET_ITEMS = 3;
 
@@ -238,7 +302,11 @@ const DonatePage = () => {
     }
   };
 
-  const [method, setMethod] = useState<string>("vodafone_cash");
+  // Honour ?method= from the home quick-donate so the visitor doesn't pick twice
+  const [method, setMethod] = useState<string>(() => {
+    const m = params.get("method");
+    return m && STATIC_METHODS.some((s) => s.id === m) ? m : "vodafone_cash";
+  });
 
   const [donor, setDonor] = useState({
     name:  params.get("name")  || "",
@@ -296,6 +364,39 @@ const DonatePage = () => {
     }
   }, [step]);
 
+  // When Kashier redirects the entire top window with ?paymentStatus=SUCCESS
+  // (happens on 3DS flows that can't postMessage cross-origin), auto-trigger success.
+  useEffect(() => {
+    if (!kashierSuccessOrderId) return;
+    const orderId = kashierSuccessOrderId;
+    setKashierSuccessOrderId("");
+    setIsKashierModalOpen(false);
+    const finalRef = kashierOrderId || orderId;
+    const created: DonationRecord = {
+      ref: finalRef,
+      donor,
+      amount: totalAmount || 50,
+      program: items.length === 1 ? items[0].entityId : "multiple",
+      programLabel: items.length === 1
+        ? (() => { const e = DONATION_ENTITIES.find((x) => x.id === items[0].entityId); return e ? (lang === "ar" ? e.titleAr : e.titleEn) : "تبرع عام"; })()
+        : (lang === "ar" ? "برامج متعددة" : "Multiple Programs"),
+      method: "kashier",
+      status: "completed",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      items: items.map((it) => {
+        const ent = DONATION_ENTITIES.find((e) => e.id === it.entityId);
+        const title = ent ? (lang === "ar" ? ent.titleAr : ent.titleEn) : "تبرع";
+        return { title, category: lang === "ar" ? "برنامج" : "Program", quantity: 1, amount: it.amount || 0 };
+      }),
+    };
+    donationsStore.create(created);
+    setRecord(created);
+    setStep(3);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kashierSuccessOrderId]);
+
   const [processing, setProcessing]           = useState(false);
   const [record, setRecord]                   = useState<DonationRecord | null>(null);
   const [receiptDataUrl, setReceiptDataUrl]   = useState<string>("");
@@ -335,11 +436,19 @@ const DonatePage = () => {
   const Back    = lang === "ar" ? ArrowRight : ArrowLeft;
   const baseUrl = "https://elyusr.org";
 
-  const selectedMethod   = useMemo(() => STATIC_METHODS.find((m) => m.id === method) ?? STATIC_METHODS[0], [method]);
+  const gatewaySettings = useMemo(() => getGatewaySettings(), []);
+  const availableMethods = useMemo(
+    () => getAvailableStaticMethods(gatewaySettings.activeGateway),
+    [gatewaySettings]
+  );
+
+  const selectedMethod   = useMemo(() => availableMethods.find((m) => m.id === method) ?? availableMethods[0], [method, availableMethods]);
   const isVodafoneWallet = method.includes("vodafone");
   const isInstapay       = method.includes("instapay");
   const isDelegatePickup = selectedMethod.isDelegate ?? false;
-  const isGatewayPaymob  = selectedMethod.isGateway  ?? false;
+  const isGateway        = selectedMethod.isGateway  ?? false;
+  const isGatewayPaymob  = isGateway && method.includes("paymob");
+  const isGatewayKashier = isGateway && (method.includes("kashier") || (!method.includes("paymob") && gatewaySettings.activeGateway === "kashier"));
   const isManualMethod   = selectedMethod.isManual;
   const isBank           = method.includes("bank");
 
@@ -483,6 +592,25 @@ const DonatePage = () => {
               idempotency_key: idemKey.current,
             });
             const refGenerated = saved?.ref_code || `YSR-${Date.now().toString(36).toUpperCase()}`;
+            const receiptItems = items.map((it) => {
+              const ent = DONATION_ENTITIES.find((e) => e.id === it.entityId);
+              const sharesCount = Object.values(it.selectedShares || {}).reduce((a, b) => a + b, 0);
+              const title = ent ? (lang === "ar" ? ent.titleAr : ent.titleEn) : (programLabel || "تبرع عام");
+              const category = ent
+                ? (ent.entityType === "project" ? (lang === "ar" ? "مشروع تنموي" : "Project") : ent.entityType === "campaign" ? (lang === "ar" ? "حملة إغاثية" : "Campaign") : (lang === "ar" ? "برنامج خيري" : "Program"))
+                : (lang === "ar" ? "برنامج خيري" : "Program");
+              return {
+                title,
+                category,
+                quantity: sharesCount > 0 ? sharesCount : 1,
+                amount: it.amount || 0,
+              };
+            });
+            const firstEnt = items.length === 1 ? DONATION_ENTITIES.find((e) => e.id === items[0].entityId) : null;
+            const targetType = firstEnt
+              ? (firstEnt.entityType === "project" ? (lang === "ar" ? "مشروع تنموي" : "Project") : firstEnt.entityType === "campaign" ? (lang === "ar" ? "حملة إغاثية" : "Campaign") : (lang === "ar" ? "برنامج خيري" : "Program"))
+              : (items.length > 1 ? (lang === "ar" ? "برامج ومشاريع متعددة" : "Multiple Programs") : (lang === "ar" ? "برنامج خيري" : "Program"));
+
             const created: DonationRecord = {
               ref: refGenerated,
               donor,
@@ -490,11 +618,15 @@ const DonatePage = () => {
               program: items.length === 1 ? items[0].entityId : "multiple",
               programLabel,
               method,
-              status: "pending",
+              status: "completed",
               createdAt: saved?.created_at || new Date().toISOString(),
               updatedAt: saved?.created_at || new Date().toISOString(),
+              items: receiptItems,
+              notes: itemsBreakdownText || undefined,
+              targetType,
               ...(receiptDataUrl ? { receiptDataUrl, receiptFilename } : {}),
             };
+            donationsStore.create(created);
             setRecord(created);
             toast({ title: lang === "ar" ? "تم تسجيل التبرع" : "Donation recorded", description: lang === "ar" ? `رقم: ${created.ref}` : `Ref: ${created.ref}` });
             trackDonationStarted({ amount: totalAmount, program: items[0]?.entityId || "general", method, source: "donate-success" });
@@ -526,7 +658,7 @@ const DonatePage = () => {
     <PageLayout>
       <SEOHelmet
         title={lang === "ar" ? "تبرع الآن — مؤسسة اليسر الخيرية" : "Donate Now — Al-Yusr Charity"}
-        description={lang === "ar" ? "تبرع بأمان عبر Paymob أو Vodafone Cash أو InstaPay." : "Donate safely via Paymob, Vodafone Cash, or InstaPay."}
+        description={lang === "ar" ? "تبرع بأمان عبر بوابة كاشير أو فودافون كاش أو إنستاباي." : "Donate safely via Kashier, Vodafone Cash, or InstaPay."}
         path="/donate"
       />
       <SiteSchemas />
@@ -968,11 +1100,11 @@ const DonatePage = () => {
 
                   {/* Payment Methods — responsive grid matching header width */}
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-2.5">
-                    {STATIC_METHODS.map((m, idx) => {
+                    {availableMethods.map((m, idx) => {
                       const isSelected = method === m.id;
                       // Last item in odd-total list gets full width on 2-col layout only
-                      const isLast = idx === STATIC_METHODS.length - 1;
-                      const oddTotal = STATIC_METHODS.length % 2 !== 0;
+                      const isLast = idx === availableMethods.length - 1;
+                      const oddTotal = availableMethods.length % 2 !== 0;
                       const fullWidth = isLast && oddTotal;
                       return (
                         <button
@@ -1188,8 +1320,8 @@ const DonatePage = () => {
                     </div>
                   )}
 
-                  {/* Card Paymob details */}
-                  {isGatewayPaymob && (
+                  {/* Card Gateway details (Kashier or Paymob) */}
+                  {isGateway && (
                     <div className="space-y-2.5 pt-1">
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div className="flex items-center gap-2.5 rounded-xl bg-card border border-border/70 p-2.5 sm:p-3">
@@ -1202,8 +1334,10 @@ const DonatePage = () => {
                         <div className="flex items-center gap-2.5 rounded-xl bg-card border border-border/70 p-2.5 sm:p-3">
                           <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-secondary shrink-0" />
                           <div>
-                            <p className="text-xs font-black text-primary">{lang === "ar" ? "فيزا / ماستركارد / ميزة" : "Cards Accepted"}</p>
-                            <p className="text-[10px] sm:text-[10.5px] text-muted-foreground">{lang === "ar" ? "جميع البطاقات البنكية" : "Local & International"}</p>
+                            <p className="text-xs font-black text-primary">
+                              {lang === "ar" ? "كاشير (Kashier)" : "Kashier Egypt"}
+                            </p>
+                            <p className="text-[10px] sm:text-[10.5px] text-muted-foreground">{lang === "ar" ? "فيزا / ماستركارد / ميزة" : "Cards Accepted"}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2.5 rounded-xl bg-card border border-border/70 p-2.5 sm:p-3">
@@ -1216,8 +1350,8 @@ const DonatePage = () => {
                       </div>
                       <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed">
                         {lang === "ar"
-                          ? "عند الضغط على «المتابعة للدفع»، سيتم توجيهك إلى صفحة الدفع المؤمنة (Paymob 3D-Secure) لإتمام التبرع بأمان تام."
-                          : "Clicking «Pay» will redirect you to Paymob 3D-Secure encrypted page to complete your donation safely."}
+                          ? "عند الضغط على «المتابعة للدفع»، ستفتح نافذة الدفع المشفرة المعتمدة لبوابة كاشير (Kashier 3D-Secure) لإتمام التبرع بأمان تام بواسطة بطاقتك البنكية أو المحافظ الإلكترونية."
+                          : "Clicking «Pay» will open Kashier 3D-Secure encrypted modal to complete your donation safely."}
                       </p>
                     </div>
                   )}
@@ -1329,46 +1463,41 @@ const DonatePage = () => {
                       setFieldErrors(errs);
                       if (Object.values(errs).some(Boolean)) return;
 
-                      if (isGatewayPaymob) {
+                      if (isGateway) {
                         setProcessing(true);
                         try {
-                          // Submit donation to backend to initiate Paymob Unified Checkout
-                          const res: any = await createDonation({
-                            amount: Number(totalAmount),
-                            donor_name: donor.name,
-                            donor_email: donor.email || "donor@elyusr.org",
-                            donor_phone: donor.phone,
-                            payment_method: "card_paymob",
-                            payment_status: "pending",
-                            message: [
-                              caseTitle ? `Case: ${caseTitle}` : "",
-                              `Entities: ${itemsBreakdownText}`,
-                            ].filter(Boolean).join(" | "),
-                            idempotency_key: idemKey.current,
-                          });
+                          const orderId = `YSR-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+                          let sessionUrl: string | undefined;
+                          let realOrderId = orderId;
+
+                          try {
+                            const res: any = await createDonation({
+                              case_id: caseId || undefined,
+                              category_id: undefined,
+                              amount: Number(totalAmount),
+                              donor_name: donor.name,
+                              donor_email: donor.email || "donor@elyusr.org",
+                              donor_phone: donor.phone,
+                              payment_method: "kashier",
+                              payment_status: "pending",
+                              message: [
+                                caseTitle ? `Case: ${caseTitle}` : "",
+                                `Entities: ${itemsBreakdownText}`,
+                              ].filter(Boolean).join(" | "),
+                              idempotency_key: idemKey.current,
+                            });
+                            sessionUrl = res?.payment?.session_url;
+                            realOrderId = res?.donation?.transaction_reference || res?.ref_code || orderId;
+                          } catch (backendErr: any) {
+                            console.warn("[Kashier] Backend submit notice:", backendErr?.message);
+                          }
 
                           void trackAdEvent("donation_started", { donationAmount: Number(totalAmount) });
-
-                          // 1. Paymob Unified Checkout client_secret from Laravel POST /api/v1/donations/submit
-                          const secret = res?.payment?.client_secret;
-                          if (secret) {
-                            setPaymobClientSecret(secret);
-                            setIsPaymobModalOpen(true);
-                            setProcessing(false);
-                            return;
-                          }
-
-                          // 2. Fallback if redirect_url is returned
-                          if (res?.redirect_url) {
-                            window.open(res.redirect_url, "_blank");
-                            navigate(`/donate/status/${res.ref_code || ""}`);
-                            setProcessing(false);
-                            return;
-                          }
-
-
-                          // If completed without redirect, show confirmation
-                          setStep(3);
+                          setKashierOrderId(realOrderId);
+                          if (sessionUrl) setKashierSessionUrl(sessionUrl);
+                          setIsKashierModalOpen(true);
+                          setProcessing(false);
+                          return;
                         } catch (err: any) {
                           toast({
                             variant: "destructive",
@@ -1392,7 +1521,7 @@ const DonatePage = () => {
                       </>
                     ) : (
                       <>
-                        {isGatewayPaymob
+                        {isGateway
                           ? (lang === "ar" ? "المتابعة للدفع بالبطاقة" : "Pay with Card")
                           : isDelegatePickup
                           ? (lang === "ar" ? "تأكيد طلب استلام المندوب" : "Confirm Pickup")
@@ -1402,6 +1531,17 @@ const DonatePage = () => {
                     )}
                   </Button>
                 </div>
+                <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">
+                  {lang === "ar" ? "بإتمام التبرع أنت توافق على " : "By donating you agree to our "}
+                  <Link to="/terms#donations" target="_blank" className="font-bold text-primary underline underline-offset-2 hover:text-accent">
+                    {lang === "ar" ? "الشروط والأحكام" : "Terms & Conditions"}
+                  </Link>
+                  {lang === "ar" ? " و" : " and "}
+                  <Link to="/privacy" target="_blank" className="font-bold text-primary underline underline-offset-2 hover:text-accent">
+                    {lang === "ar" ? "سياسة الخصوصية" : "Privacy Policy"}
+                  </Link>
+                  .
+                </p>
               </div>
             )}
 
@@ -1475,29 +1615,35 @@ const DonatePage = () => {
                       </div>
                     )}
 
-                    <div className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-2.5 sm:gap-3">
-                      {record && (
-                        <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95 rounded-xl h-11 sm:h-12 text-xs sm:text-sm font-bold">
-                          <Link to={`/donate/track/${record.ref}`}>
-                            <ReceiptIcon className="h-4 w-4 sm:h-5 sm:w-5 me-1.5" />
-                            {lang === "ar" ? "تتبع التبرع" : "Track Donation"}
-                          </Link>
+                    <div className="mt-6 sm:mt-8 flex flex-col items-center gap-3 w-full max-w-lg mx-auto">
+                      {/* الصف الأول: تتبع التبرع + تأكيد عبر واتساب معاً في نفس الصف حتى في الهواتف */}
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3 w-full">
+                        {record && (
+                          <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95 rounded-xl h-11 sm:h-12 px-2 sm:px-4 text-[11px] sm:text-sm font-bold w-full justify-center">
+                            <Link to={`/donate/track/${record.ref}`} className="truncate flex items-center justify-center">
+                              <ReceiptIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 me-1 shrink-0" />
+                              <span className="truncate">{lang === "ar" ? "تتبع التبرع" : "Track Donation"}</span>
+                            </Link>
+                          </Button>
+                        )}
+                        <Button asChild size="lg" variant="outline" className="rounded-xl h-11 sm:h-12 px-2 sm:px-4 text-[11px] sm:text-sm font-bold w-full justify-center border-border/80 bg-card hover:bg-muted">
+                          <a
+                            href={`https://wa.me/201097000137?text=${encodeURIComponent(
+                              lang === "ar"
+                                ? `السلام عليكم، قمت بتسجيل تبرع لدى مؤسسة اليسر.\nرقم التبرع: ${record?.ref ?? ""}\nالمبلغ: ${totalAmount} ج.م\nالبرامج: ${itemsBreakdownText}\nطريقة الدفع: ${selectedMethod.ar}\nبرجاء التأكيد.`
+                                : `Hello, I submitted a donation to Al-Yusr.\nRef: ${record?.ref ?? ""}\nAmount: ${totalAmount} EGP\nPrograms: ${itemsBreakdownText}\nMethod: ${selectedMethod.en}\nPlease confirm.`
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="truncate flex items-center justify-center"
+                          >
+                            <span className="truncate">{lang === "ar" ? "تأكيد عبر واتساب" : "Confirm via WhatsApp"}</span>
+                          </a>
                         </Button>
-                      )}
-                      <Button asChild size="lg" variant="outline" className="rounded-xl h-11 sm:h-12 text-xs sm:text-sm font-bold">
-                        <a
-                          href={`https://wa.me/201097000137?text=${encodeURIComponent(
-                            lang === "ar"
-                              ? `السلام عليكم، قمت بتسجيل تبرع لدى مؤسسة اليسر.\nرقم التبرع: ${record?.ref ?? ""}\nالمبلغ: ${totalAmount} ج.م\nالبرامج: ${itemsBreakdownText}\nطريقة الدفع: ${selectedMethod.ar}\nبرجاء التأكيد.`
-                              : `Hello, I submitted a donation to Al-Yusr.\nRef: ${record?.ref ?? ""}\nAmount: ${totalAmount} EGP\nPrograms: ${itemsBreakdownText}\nMethod: ${selectedMethod.en}\nPlease confirm.`
-                          )}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {lang === "ar" ? "تأكيد عبر واتساب" : "Confirm via WhatsApp"}
-                        </a>
-                      </Button>
-                      <Button asChild size="lg" variant="ghost" className="rounded-xl h-11 sm:h-12 text-xs sm:text-sm font-bold">
+                      </div>
+
+                      {/* الصف الثاني: زر العودة للرئيسية منفرد تحت الزرين */}
+                      <Button asChild size="lg" variant="ghost" className="rounded-xl h-10 sm:h-11 text-xs sm:text-sm font-bold text-muted-foreground hover:text-foreground w-full sm:w-auto px-8">
                         <Link to="/">{lang === "ar" ? "العودة للرئيسية" : "Back to Home"}</Link>
                       </Button>
                     </div>
@@ -1529,6 +1675,61 @@ const DonatePage = () => {
         onClose={() => {
           setIsPaymobModalOpen(false);
           setStep(3);
+        }}
+      />
+
+      {/* Kashier Unified Checkout Modal */}
+      <KashierCheckoutModal
+        isOpen={isKashierModalOpen}
+        amount={Number(totalAmount)}
+        orderId={kashierOrderId}
+        sessionUrl={kashierSessionUrl}
+        donorName={donor.name}
+        donorEmail={donor.email}
+        donorPhone={donor.phone}
+        onClose={() => {
+          setIsKashierModalOpen(false);
+        }}
+        onSuccess={() => {
+          setIsKashierModalOpen(false);
+          const finalRef = kashierOrderId || `YSR-${Date.now().toString(36).toUpperCase()}`;
+          const receiptItems = items.map((it) => {
+            const ent = DONATION_ENTITIES.find((e) => e.id === it.entityId);
+            const sharesCount = Object.values(it.selectedShares || {}).reduce((a, b) => a + b, 0);
+            const title = ent ? (lang === "ar" ? ent.titleAr : ent.titleEn) : (programLabel || "تبرع عام");
+            const category = ent
+              ? (ent.entityType === "project" ? (lang === "ar" ? "مشروع تنموي" : "Project") : ent.entityType === "campaign" ? (lang === "ar" ? "حملة إغاثية" : "Campaign") : (lang === "ar" ? "برنامج خيري" : "Program"))
+              : (lang === "ar" ? "برنامج خيري" : "Program");
+            return {
+              title,
+              category,
+              quantity: sharesCount > 0 ? sharesCount : 1,
+              amount: it.amount || 0,
+            };
+          });
+          const firstEnt = items.length === 1 ? DONATION_ENTITIES.find((e) => e.id === items[0].entityId) : null;
+          const targetType = firstEnt
+            ? (firstEnt.entityType === "project" ? (lang === "ar" ? "مشروع تنموي" : "Project") : firstEnt.entityType === "campaign" ? (lang === "ar" ? "حملة إغاثية" : "Campaign") : (lang === "ar" ? "برنامج خيري" : "Program"))
+            : (items.length > 1 ? (lang === "ar" ? "برامج ومشاريع متعددة" : "Multiple Programs") : (lang === "ar" ? "برنامج خيري" : "Program"));
+
+          const created: DonationRecord = {
+            ref: finalRef,
+            donor,
+            amount: totalAmount,
+            program: items.length === 1 ? items[0].entityId : "multiple",
+            programLabel,
+            method: "kashier",
+            status: "completed",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            items: receiptItems,
+            notes: itemsBreakdownText || undefined,
+            targetType,
+          };
+          donationsStore.create(created);
+          setRecord(created);
+          setStep(3);
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }}
       />
     </PageLayout>

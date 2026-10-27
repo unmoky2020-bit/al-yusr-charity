@@ -284,7 +284,7 @@ export const QuickDonateDialog = ({
 
           <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] font-semibold text-muted-foreground">
             <span className="inline-flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-secondary" /> {isAr ? "دفع مشفّر SSL" : "SSL encrypted"}</span>
-            <span className="inline-flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-secondary" /> Paymob · VF Cash · InstaPay</span>
+            <span className="inline-flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-secondary" /> Kashier · VF Cash · InstaPay</span>
           </div>
         </form>
       </DialogContent>

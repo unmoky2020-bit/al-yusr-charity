@@ -109,7 +109,7 @@ const QurbaniConfirm = () => {
                 </Field>
                 <Field label={isAr ? "طريقة الدفع" : "Payment method"}>
                   <span className="font-extrabold text-primary">
-                    {rec.method === "paymob" ? "Paymob (Visa/Master)"
+                    {rec.method === "paymob" ? "Kashier (Visa/Master)"
                       : rec.method === "vodafone" ? "Vodafone Cash"
                       : rec.method === "instapay" ? "InstaPay"
                       : (isAr ? "تحويل بنكي CIB" : "CIB Bank Transfer")}

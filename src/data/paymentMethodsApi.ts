@@ -51,36 +51,52 @@ export const DEFAULT_PAYMENT_METHODS: PaymentMethodRow[] = [
     sort_order: 2,
   },
   {
+    id: "pm-kashier-card",
+    key: "card_kashier",
+    kind: "gateway",
+    provider: "Kashier",
+    label_ar: "بطاقة بنكية — كاشير (Kashier)",
+    label_en: "Bank Card — Kashier",
+    account_label_ar: "بوابة كاشير المعتمدة",
+    account_label_en: "Kashier Verified Gateway",
+    account_value: "Kashier Online",
+    instructions_ar: "دفع إلكتروني فوري وآمن ومشفر بالكامل عبر بوابة كاشير (Kashier) المعتمدة لبطاقات فيزا وماستركارد وميزة ومحافظ الهاتف.",
+    instructions_en: "Instant and secure encrypted card payment via Kashier gateway.",
+    qr_image_url: null,
+    active: true,
+    sort_order: 3,
+  },
+  {
     id: "pm-paymob-card",
-    key: "credit_card",
+    key: "card_paymob",
     kind: "gateway",
     provider: "Paymob",
-    label_ar: "بطاقة بنكية (فيزا / ماستركارد)",
-    label_en: "Credit Card (Visa / Mastercard)",
+    label_ar: "بطاقة بنكية — باي موب (Paymob)",
+    label_en: "Bank Card — Paymob",
     account_label_ar: "بوابة إلكترونية آمنة",
     account_label_en: "Secure Online Gateway",
     account_value: "Paymob Online",
     instructions_ar: "دفع إلكتروني فوري وآمن ومشفر بالكامل عبر بوابة Paymob المعتمدة.",
     instructions_en: "Instant and secure encrypted payment via Paymob.",
     qr_image_url: null,
-    active: true,
-    sort_order: 3,
+    active: false,
+    sort_order: 4,
   },
   {
     id: "pm-bank-transfer",
     key: "bank_transfer",
     kind: "manual",
-    provider: "Banque Misr",
-    label_ar: "تحويل بنكي (بنك مصر)",
-    label_en: "Bank Transfer (Banque Misr)",
-    account_label_ar: "رقم الحساب (IBAN)",
-    account_label_en: "Account Number (IBAN)",
-    account_value: "EG00000000000000000000000000",
-    instructions_ar: "التحويل على حساب مؤسسة اليسر للأعمال الخيرية ببنك مصر.",
+    provider: "CIB",
+    label_ar: "تحويل بنكي (البنك التجاري الدولي CIB)",
+    label_en: "Bank Transfer (CIB)",
+    account_label_ar: "رقم الحساب",
+    account_label_en: "Account Number",
+    account_value: "100043605733",
+    instructions_ar: "التحويل على حساب مؤسسة اليسر الخيرية بالبنك التجاري الدولي (CIB).",
     instructions_en: "Direct bank transfer to Al-Yusr Charity account.",
     qr_image_url: null,
     active: true,
-    sort_order: 4,
+    sort_order: 5,
   },
   {
     id: "pm-delegate",
@@ -96,7 +112,7 @@ export const DEFAULT_PAYMENT_METHODS: PaymentMethodRow[] = [
     instructions_en: "Our official representative arrives at your door with a stamped receipt.",
     qr_image_url: null,
     active: true,
-    sort_order: 5,
+    sort_order: 6,
   },
 ];
 
@@ -187,6 +203,17 @@ export async function updatePaymentMethod(id: string, patch: Partial<PaymentMeth
     if (patch.provider) { payload.provider_ar = patch.provider; payload.provider_en = patch.provider; }
     if (patch.kind) payload.type = patch.kind === "gateway" ? "card" : "manual";
 
+    if (patch.account_value !== undefined) {
+      const k = patch.key || "";
+      if (k.includes("vodafone") || k.includes("orange") || k.includes("wallet")) {
+        payload.details = { wallet_number: patch.account_value };
+      } else if (k.includes("insta")) {
+        payload.details = { ipa: patch.account_value };
+      } else if (k.includes("bank")) {
+        payload.details = { iban: patch.account_value, account_number: patch.account_value };
+      }
+    }
+
     if (Object.keys(payload).length > 0 && !id.startsWith("pm-")) {
       await paymentMethodsApi.update(id, payload as any);
     }
@@ -204,4 +231,38 @@ export async function updatePaymentMethod(id: string, patch: Partial<PaymentMeth
 
 export async function setPaymentMethodActive(id: string, active: boolean) {
   return updatePaymentMethod(id, { active });
+}
+
+export async function createPaymentMethod(row: Omit<PaymentMethodRow, "id">): Promise<PaymentMethodRow> {
+  const { paymentMethodsApi } = await import("@/data/laravelApi");
+  const payload: Record<string, unknown> = {
+    name_ar: row.label_ar,
+    name_en: row.label_en,
+    slug: row.key,
+    type: row.kind === "gateway" ? "card" : "wallet",
+    provider_ar: row.provider || row.label_ar,
+    provider_en: row.provider || row.label_en,
+    description_ar: row.instructions_ar || "",
+    description_en: row.instructions_en || "",
+    sort_order: row.sort_order || 1,
+    is_active: row.active ?? true,
+    details: row.account_value ? { wallet_number: row.account_value } : {},
+  };
+
+  const res = await paymentMethodsApi.create(payload as any);
+  const data = (res as any)?.data || res;
+  return mapLaravelPaymentMethod(data);
+}
+
+export async function deletePaymentMethod(id: string): Promise<boolean> {
+  if (!id.startsWith("pm-")) {
+    const { paymentMethodsApi } = await import("@/data/laravelApi");
+    await paymentMethodsApi.remove(id);
+  }
+  const all = await listAllPaymentMethods();
+  const next = all.filter((x) => x.id !== id);
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  } catch {}
+  return true;
 }

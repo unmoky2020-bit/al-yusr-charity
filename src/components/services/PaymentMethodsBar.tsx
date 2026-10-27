@@ -2,15 +2,15 @@ import { Copy, CheckCircle2, ShieldCheck, Smartphone, CreditCard, Wallet } from 
 import { useState } from "react";
 import { useLang } from "@/i18n/LangContext";
 
-/** Visual-only payment options bar (Paymob, Vodafone Cash, InstaPay) with copy-to-clipboard for wallet/IPA. */
+/** Visual-only payment options bar (Kashier, Vodafone Cash, InstaPay) with copy-to-clipboard for wallet/IPA. */
 const METHODS = [
   {
     id: "paymob",
     Icon: CreditCard,
-    ar: "Paymob — بطاقة فيزا/ماستركارد",
-    en: "Paymob — Visa/Mastercard",
-    note_ar: "ادفع بأمان عبر بوابة Paymob المعتمدة من البنك المركزي.",
-    note_en: "Pay securely via Paymob (Central Bank licensed gateway).",
+    ar: "Kashier — بطاقة فيزا/ماستركارد",
+    en: "Kashier — Visa/Mastercard",
+    note_ar: "ادفع بأمان عبر بوابة كاشير (Kashier) المعتمدة.",
+    note_en: "Pay securely via the Kashier gateway.",
     badge_ar: "آمن",
     badge_en: "Secure",
     color: "from-[hsl(20_90%_55%)] to-[hsl(35_95%_60%)]",
