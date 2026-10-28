@@ -299,6 +299,7 @@ const RamadanLanding = () => {
   return (
     <CampaignLandingShell
       slug="ramadan"
+      seo={c.seo}
       path="/ramadan"
       titleAr={`موسم الخير — «${c.hero.title.ar} ${c.hero.title2.ar}»`}
       titleEn={`Ramadan Season — '${c.hero.title.en} ${c.hero.title2.en}'`}

@@ -60,7 +60,6 @@ const AdminPrograms = lazy(() => import("./pages/admin/AdminPrograms.tsx"));
 const AdminProgramDetail = lazy(() => import("./pages/admin/AdminProgramDetail.tsx"));
 const AdminHomepageContent = lazy(() => import("./pages/admin/AdminHomepageContent.tsx"));
 const AdminAboutUs = lazy(() => import("./pages/admin/AdminAboutUs.tsx"));
-const AdminCampaignPages = lazy(() => import("./pages/admin/AdminCampaignPages.tsx"));
 const AdminAxes = lazy(() => import("./pages/admin/AdminAxes.tsx"));
 const AdminAxisDetail = lazy(() => import("./pages/admin/AdminAxisDetail.tsx"));
 const AdminContent = lazy(() => import("./pages/admin/AdminContent.tsx"));
@@ -256,8 +255,6 @@ const App = () => (
                   <Route path="/admin/programs-carousel" element={<Navigate to="/admin/campaigns-section" replace />} />
                   <Route path="/admin/homepage-content" element={<RequireAuth roles={["admin", "editor"]}><AdminHomepageContent /></RequireAuth>} />
                   <Route path="/admin/about-us" element={<RequireAuth roles={["admin", "editor"]}><AdminAboutUs /></RequireAuth>} />
-                  <Route path="/admin/campaign-pages" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignPages /></RequireAuth>} />
-                  <Route path="/admin/campaign-pages/:slug" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignPages /></RequireAuth>} />
                   <Route path="/admin/axes" element={<RequireAuth roles={["admin", "editor"]}><AdminAxes /></RequireAuth>} />
                   <Route path="/admin/axes/:id" element={<RequireAuth roles={["admin", "editor"]}><AdminAxisDetail /></RequireAuth>} />
                   <Route path="/admin/content" element={<RequireAuth roles={["admin", "editor"]}><AdminContent /></RequireAuth>} />

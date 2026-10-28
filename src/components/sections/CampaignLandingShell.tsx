@@ -37,6 +37,8 @@ export type LandingProps = {
   bottomCtaEn?: string;
   bottomSubAr?: string;
   bottomSubEn?: string;
+  /** Dashboard SEO override; empty strings fall back to the static title/description. */
+  seo?: { title?: { ar: string; en: string }; description?: { ar: string; en: string } };
   body?: ReactNode;
   /** Bespoke hero for campaigns with their own visual identity (replaces the default hero). */
   hero?: ReactNode;
@@ -110,8 +112,8 @@ export const CampaignLandingShell = (p: LandingProps) => {
   return (
     <PageLayout>
       <SEOHelmet
-        title={isAr ? `${p.titleAr} | مؤسسة اليسر — الدقهلية والمنصورة وكافة محافظات مصر` : `${p.titleEn} | Al-Yusr Charity Foundation — Egypt`}
-        description={isAr ? p.metaDescAr : p.metaDescEn}
+        title={(isAr ? p.seo?.title?.ar : p.seo?.title?.en) || (isAr ? `${p.titleAr} | مؤسسة اليسر — الدقهلية والمنصورة وكافة محافظات مصر` : `${p.titleEn} | Al-Yusr Charity Foundation — Egypt`)}
+        description={(isAr ? p.seo?.description?.ar : p.seo?.description?.en) || (isAr ? p.metaDescAr : p.metaDescEn)}
         path={p.path}
         image={p.heroImage}
       />

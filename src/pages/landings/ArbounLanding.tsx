@@ -237,16 +237,8 @@ const ArbounLanding = () => {
   return (
     <PageLayout>
       <SEOHelmet
-        title={
-          isRTL
-            ? "عربون خير — مبادرة اليسر للمستقلين | مؤسسة اليسر الخيرية"
-            : "Arboun Khair Initiative | Al-Yusr Charity Foundation"
-        }
-        description={
-          isRTL
-            ? "استقطع نسبة من مشروعك القادم لكفالة يتيم أو تيسير زواج. مبادرة اليسر الخيرية الأولى للمستقلين والفريلانسرز في مصر، مشهرة برقم 2665."
-            : "Pledge a portion of your next project to sponsor an orphan or support a marriage. Al-Yusr's first giving initiative for freelancers & independents in Egypt."
-        }
+        title={c.seo?.title?.[isRTL ? "ar" : "en"] || (isRTL ? "عربون خير — مبادرة اليسر للمستقلين | مؤسسة اليسر الخيرية" : "Arboun Khair Initiative | Al-Yusr Charity Foundation")}
+        description={c.seo?.description?.[isRTL ? "ar" : "en"] || (isRTL ? "استقطع نسبة من مشروعك القادم لكفالة يتيم أو تيسير زواج. مبادرة اليسر الخيرية الأولى للمستقلين والفريلانسرز في مصر، مشهرة برقم 2665." : "Pledge a portion of your next project to sponsor an orphan or support a marriage. Al-Yusr's first giving initiative for freelancers & independents in Egypt.")}
         path="/arboun"
         keywords={
           isRTL

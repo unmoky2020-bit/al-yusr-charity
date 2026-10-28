@@ -297,6 +297,7 @@ const DhillLanding = () => {
   return (
     <CampaignLandingShell
       slug="dhill"
+      seo={c.seo}
       path="/dhill"
       titleAr={seo?.title.ar ?? ""}
       titleEn={seo?.title.en ?? ""}

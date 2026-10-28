@@ -47,7 +47,6 @@ const ALL_NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/admin/homepage-content", ar: "الهيرو والبراند بروميس", en: "Hero & Brand Promise", icon: Sparkles },
       { href: "/admin/about-us", ar: "محتوى من نحن", en: "About Us CMS", icon: Building2 },
-      { href: "/admin/campaign-pages", ar: "صفحات الحملات", en: "Campaign Pages", icon: Megaphone },
       { href: "/admin/axes", ar: "محاور رسالتنا", en: "Work Axes", icon: Compass },
       { href: "/admin/site-stats", ar: "الأرقام والإنجازات", en: "Stats & Numbers", icon: BarChart3 },
       { href: "/admin/campaigns-section", ar: "كاروسيل الرئيسية", en: "Homepage Carousel", icon: SlidersHorizontal },

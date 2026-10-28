@@ -124,16 +124,8 @@ const MarkounLanding = () => {
     <PageLayout>
       <FAQSchema items={c.faq.map((f) => ({ q: t(f.q), a: t(f.a) }))} />
       <SEOHelmet
-        title={
-          isRTL
-            ? "حملة مَرْكون — أول حملة مصرية تُحيي أُسرة بالمركون في بيتك | مؤسسة اليسر الخيرية"
-            : "Markoun Campaign — What's Idle at Home is Life for Another | Al-Yusr"
-        }
-        description={
-          isRTL
-            ? "حملة مَرْكُون: كنزك المركون يبني حياة لغيرك. أول حملة مصرية منظمة لإعادة استخدام الأثاث المنزلي، الأجهزة الكهربائية، الملابس، الصيدلية المستدامة، والكتب. مندوبنا يصلك لباب بيتك مجاناً بالمنصورة والدقهلية: 01097000137."
-            : "Markoun Campaign: Egypt's premier in-kind reuse initiative. Repurposing surplus furniture, electronics, clothing, medicine, and books with free doorstep pickup across Mansoura & Dakahlia."
-        }
+        title={c.seo?.title?.[isRTL ? "ar" : "en"] || (isRTL ? "حملة مَرْكون — أول حملة مصرية تُحيي أُسرة بالمركون في بيتك | مؤسسة اليسر الخيرية" : "Markoun Campaign — What's Idle at Home is Life for Another | Al-Yusr")}
+        description={c.seo?.description?.[isRTL ? "ar" : "en"] || (isRTL ? "حملة مَرْكُون: كنزك المركون يبني حياة لغيرك. أول حملة مصرية منظمة لإعادة استخدام الأثاث المنزلي، الأجهزة الكهربائية، الملابس، الصيدلية المستدامة، والكتب. مندوبنا يصلك لباب بيتك مجاناً بالمنصورة والدقهلية: 01097000137." : "Markoun Campaign: Egypt's premier in-kind reuse initiative. Repurposing surplus furniture, electronics, clothing, medicine, and books with free doorstep pickup across Mansoura & Dakahlia.")}
         path="/markoun"
         image={posterFurniture}
         keywords={

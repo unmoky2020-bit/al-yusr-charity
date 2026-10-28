@@ -469,6 +469,7 @@ const SetrLanding = () => {
   return (
     <CampaignLandingShell
       slug="setr"
+      seo={c.seo}
       path="/setr"
       titleAr="حملة سِتْر — «مَن سَتَرَ مسلمًا في الدنيا، سَتَرَهُ الله في الدنيا والآخرة»"
       titleEn="Setr Campaign — 'Whoever covers a Muslim in this world, Allah will cover them in this world and the Hereafter'"

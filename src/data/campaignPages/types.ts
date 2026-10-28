@@ -28,6 +28,8 @@ export interface CampaignPageContent {
   sections: Record<string, Section>;
   faq: FaqItem[];
   cta: { title: L; sub: L };
+  /** Optional SEO override (dashboard "SEO & Meta" tab). Empty strings mean "use the page's static meta". */
+  seo?: { title: L; description: L; keywords: L; canonical?: string; noindex?: boolean; nofollow?: boolean };
 }
 
 const isL = (v: unknown): v is L =>
@@ -68,6 +70,19 @@ export function mergeCampaignContent(defaults: CampaignPageContent, saved: unkno
       : d;
   }
 
+  const sseo = (s.seo && typeof s.seo === "object" ? s.seo : null) as Record<string, unknown> | null;
+  const empty: L = { ar: "", en: "" };
+  const seo = sseo
+    ? {
+        title: mergeL(defaults.seo?.title ?? empty, sseo.title),
+        description: mergeL(defaults.seo?.description ?? empty, sseo.description),
+        keywords: mergeL(defaults.seo?.keywords ?? empty, sseo.keywords),
+        canonical: typeof sseo.canonical === "string" ? sseo.canonical : defaults.seo?.canonical,
+        noindex: typeof sseo.noindex === "boolean" ? sseo.noindex : defaults.seo?.noindex,
+        nofollow: typeof sseo.nofollow === "boolean" ? sseo.nofollow : defaults.seo?.nofollow,
+      }
+    : defaults.seo;
+
   const faqOk = Array.isArray(s.faq) && s.faq.length > 0 && s.faq.every((f) => f && isL((f as FaqItem).q) && isL((f as FaqItem).a));
 
   return {
@@ -95,5 +110,6 @@ export function mergeCampaignContent(defaults: CampaignPageContent, saved: unkno
     sections,
     faq: faqOk ? (s.faq as FaqItem[]) : defaults.faq,
     cta: { title: mergeL(defaults.cta.title, sc.title), sub: mergeL(defaults.cta.sub, sc.sub) },
+    ...(seo ? { seo } : {}),
   };
 }
