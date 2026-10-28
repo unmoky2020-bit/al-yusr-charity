@@ -19,8 +19,8 @@ const tokens = (v: string) =>
 /**
  * A package matches a price item only when the names agree at word level: exact match, or EVERY
  * word of the shorter name appears in the longer one (so "وصلة مياه كاملة" never takes the price of
- * "سهم وصلة مياه"). One-word labels only match one- or two-word package names containing the word,
- * so "باب" never matches "تسقيف وباب وشباك". No match → the code default price is shown.
+ * "سهم وصلة مياه"). One-word labels ("باب", "شباك") match only a one-word package name, so "باب"
+ * never matches "تسقيف وباب وشباك". No match → the code default price is shown.
  */
 function namesMatch(a: string, b: string): boolean {
   const na = normalise(a), nb = normalise(b);
@@ -30,17 +30,14 @@ function namesMatch(a: string, b: string): boolean {
   const [short, long] = ta.length <= tb.length ? [ta, tb] : [tb, ta];
   if (short.length === 0) return false;
   const hits = short.filter((w) => long.includes(w)).length;
-  if (short.length === 1) return long.length <= 2 && hits === 1;
+  if (short.length === 1) return long.length === 1 && hits === 1;
   return hits === short.length;
 }
 
 function findPackage(packages: Pkg[], label: { ar: string; en: string }): Pkg | undefined {
   const active = packages.filter((p) => p.is_active !== false).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
-  return (
-    active.find((p) => normalise(p.name_ar) === normalise(label.ar)) ||
-    active.find((p) => namesMatch(p.name_ar, label.ar)) ||
-    active.find((p) => !!label.en && !!p.name_en && namesMatch(p.name_en, label.en))
-  );
+  // Arabic names only: English package names are short and generic ("Roof Share") and over-match.
+  return active.find((p) => normalise(p.name_ar) === normalise(label.ar)) || active.find((p) => namesMatch(p.name_ar, label.ar));
 }
 
 async function fetchPackages(apiId?: number, apiSlugs?: string[]): Promise<Pkg[]> {
