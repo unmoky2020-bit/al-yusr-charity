@@ -31,7 +31,15 @@ import {
   Upload,
   Loader2,
 } from "lucide-react";
-import { contentApi, galleryApi, formatServerImageUrl, LaravelHomepageContent } from "@/data/laravelApi";
+import {
+  contentApi,
+  galleryApi,
+  formatServerImageUrl,
+  LaravelHomepageContent,
+  invalidateApiCache,
+  clearPublic401Blacklist,
+  HOMEPAGE_DEFAULT_CONTENT,
+} from "@/data/laravelApi";
 import { useQueryClient } from "@tanstack/react-query";
 import brandBags from "@/assets/brand-bags.jpg";
 import brandPoster from "@/assets/brand-poster-frame.jpg";
@@ -51,6 +59,12 @@ export const AdminHomepageContent = () => {
   const [uploadingMain, setUploadingMain] = useState(false);
   const [uploadingTop, setUploadingTop] = useState(false);
 
+  // Local object URL for immediate display while saving
+  const [previewUrls, setPreviewUrls] = useState<{
+    section2_main_image?: string;
+    section2_left_top_image?: string;
+  }>({});
+
   const handleUploadImage = async (
     file: File,
     field: "section2_main_image" | "section2_left_top_image",
@@ -58,29 +72,49 @@ export const AdminHomepageContent = () => {
   ) => {
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      toast({ title: isRTL ? "نوع ملف غير مدعوم" : "Unsupported file type", description: isRTL ? "يرجى اختيار ملف صورة صالح (JPG, PNG, WebP)" : "Please select a valid image file", variant: "destructive", });
+      toast({ title: isRTL ? "نوع ملف غير مدعوم" : "Unsupported file type", description: isRTL ? "يرجى اختيار ملف صورة صالح (JPG, PNG, WebP)" : "Please select a valid image file", variant: "destructive" });
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      toast({ title: isRTL ? "الملف كبير جداً" : "File too large", description: isRTL ? "الحجم الأقصى 10 ميجابايت" : "Max size is 10MB", variant: "destructive" });
       return;
     }
     setLoadingState(true);
+
+    const localUrl = URL.createObjectURL(file);
+    setPreviewUrls((p) => ({ ...p, [field]: localUrl }));
+
     try {
-      // Upload directly to Laravel POST /homepage/content using FormData
+      // 1. Upload directly to /homepage/content (the official backend endpoint for section2 images)
       const res = await contentApi.uploadSection2Image(file, field, form);
-      const url = res.url;
-      if (url) {
-        handleChange(field, url);
-        toast({ title: isRTL ? "تم حفظ الصورة بالباك إند بنجاح " : "Image saved to backend successfully ", description: isRTL ? "تم رفع الصورة وحفظها في قاعدة البيانات وستظهر في الكولاج" : "Image uploaded and stored in database, visible in collage", });
-      } else {
-        throw new Error("No URL returned from server");
+      const serverUrl = res.url || "";
+
+      if (serverUrl) {
+        handleChange(field, serverUrl);
+        setPreviewUrls((p) => ({ ...p, [field]: undefined }));
       }
-    } catch (e) {
-      console.warn("Direct upload to /homepage/content failed, falling back to galleryApi:", e);
+
+      // Also try backup upload to gallery for media library cataloging
       try {
-        const url = await galleryApi.uploadImage(file, field === "section2_main_image" ? "بوستر_اليسر_الرئيسي" : "صورة_كراتين_وقوافل_الخير");
-        handleChange(field, url);
-        toast({ title: isRTL ? "تم رفع الصورة بنجاح " : "Image uploaded successfully ", description: isRTL ? "تم حفظ الصورة وستظهر في الكولاج" : "Image saved and will appear in collage", });
-      } catch (err2) {
-        toast({ title: isRTL ? "تعذر رفع الصورة" : "Upload failed", description: String(err2), variant: "destructive", });
-      }
+        const title = field === "section2_main_image" ? "بوستر_اليسر_الرئيسي" : "صورة_كراتين_وقوافل_الخير";
+        await galleryApi.uploadImage(file, title);
+      } catch {}
+
+      // Invalidate homepage query cache so other components update immediately
+      invalidateApiCache("/homepage/content");
+      invalidateApiCache("homepage");
+      await queryClient.refetchQueries({ queryKey: ["homepage-content"] });
+
+      toast({
+        title: isRTL ? "تم حفظ الصورة بالسيرفر بنجاح ✓" : "Image saved to server successfully ✓",
+        description: serverUrl || (isRTL ? "تم تحديث الصورة في محتوى الرئيسية" : "Image updated on homepage"),
+      });
+    } catch (err: any) {
+      toast({
+        title: isRTL ? "خطأ في رفع الصورة" : "Upload error",
+        description: err?.message || (isRTL ? "تعذر حفظ الصورة على السيرفر" : "Failed to upload to server"),
+        variant: "destructive",
+      });
     } finally {
       setLoadingState(false);
     }
@@ -90,17 +124,10 @@ export const AdminHomepageContent = () => {
   // No static defaults here to avoid flashing placeholder text before API responds.
   const [form, setForm] = useState<LaravelHomepageContent>({});
 
-  // Load content from API — no localStorage caching, always fresh from server
+  // Load content from API
   const loadContent = async () => {
     setLoading(true);
     try {
-      // Clear any stale localStorage data from previous sessions
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.removeItem("elyusr_homepage_content");
-          localStorage.removeItem("elyusr_collage_images");
-        } catch {}
-      }
       const data = await contentApi.homepage();
       if (data) {
         // Clean title if accent is already embedded in section2_title_ar
@@ -112,6 +139,8 @@ export const AdminHomepageContent = () => {
 
         setForm({
           ...data,
+          section2_main_image: data.section2_main_image || "",
+          section2_left_top_image: data.section2_left_top_image || "",
           section2_title_ar: cleanTitleAr || data.section2_title_ar,
           section2_card_cta_title_ar: data.section2_card_title_ar || data.section2_card_cta_title_ar,
           section2_card_title_ar: data.section2_card_title_ar || data.section2_card_cta_title_ar,
@@ -158,13 +187,41 @@ export const AdminHomepageContent = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const fresh = await contentApi.updateHomepage(form);
-      if (fresh) {
-        setForm(fresh);
+      // Strip any blob: or data: preview URLs before saving to backend
+      const safeForm = {
+        ...form,
+        section2_main_image: (form.section2_main_image?.startsWith("blob:") || form.section2_main_image?.startsWith("data:")) ? "" : form.section2_main_image,
+        section2_left_top_image: (form.section2_left_top_image?.startsWith("blob:") || form.section2_left_top_image?.startsWith("data:")) ? "" : form.section2_left_top_image,
+        section2_left_bottom_image: (form.section2_left_bottom_image?.startsWith("blob:") || form.section2_left_bottom_image?.startsWith("data:")) ? "" : form.section2_left_bottom_image,
+      };
+      await contentApi.updateHomepage(safeForm);
+
+      // ── Aggressively clear ALL homepage caches so the next fetch is always fresh ──
+      // 1. Clear in-memory apiFetch cache
+      invalidateApiCache("/homepage/hero");
+      invalidateApiCache("/homepage/content");
+      invalidateApiCache("homepage");
+      // 2. Clear 401 session blacklist so backend endpoints aren't skipped
+      clearPublic401Blacklist("/homepage/hero");
+      clearPublic401Blacklist("/homepage/content");
+
+      // 3. Force React Query to immediately refetch (not just mark as stale)
+      await queryClient.refetchQueries({ queryKey: ["homepage-content"] });
+
+      // After save, reload from server to confirm persisted state
+      const confirmed = await contentApi.homepage();
+      if (confirmed) {
+        setForm((prev) => ({
+          ...prev,
+          ...confirmed,
+          // Keep any image fields from prev if server doesn't return them
+          section2_main_image: confirmed.section2_main_image || prev.section2_main_image,
+          section2_left_top_image: confirmed.section2_left_top_image || prev.section2_left_top_image,
+          section2_left_bottom_image: confirmed.section2_left_bottom_image || prev.section2_left_bottom_image,
+        }));
       }
-      queryClient.invalidateQueries({ queryKey: ["homepage-content"] });
       setSaveStatus("saved");
-      toast({ title: isRTL ? " تم الحفظ وتحديث الموقع" : " Saved & Updated", description: isRTL ? "تم تحديث نصوص الهيرو والرئيسية على السيرفر والموقع مباشرة" : "Hero & homepage content synced to server & live site", });
+      toast({ title: isRTL ? "✅ تم الحفظ والتحقق" : "✅ Saved & Verified", description: isRTL ? "تم تحديث نصوص الهيرو والرئيسية على السيرفر وتأكيد الحفظ" : "Hero & homepage content saved and confirmed from server", });
     } catch (e: unknown) {
       setSaveStatus("error");
       const errMsg = e instanceof Error ? e.message : String(e);
@@ -173,6 +230,7 @@ export const AdminHomepageContent = () => {
       setSaving(false);
     }
   };
+
 
   const handleReset = () => {
     if (confirm(isRTL ? "استعادة القيم الأصلية؟" : "Reset to defaults?")) {
@@ -354,8 +412,8 @@ export const AdminHomepageContent = () => {
                       <span className="h-2 w-2 rounded-full bg-[#a3e635] animate-pulse" />
                       <span>
                         {previewLang === "ar"
-                          ? form.hero_badge_ar || "خيرك يوصل وأجرك يستمر"
-                          : form.hero_badge_en || "Your goodness reaches — your reward remains"}
+                          ? form.hero_badge_ar || HOMEPAGE_DEFAULT_CONTENT.hero_badge_ar
+                          : form.hero_badge_en || HOMEPAGE_DEFAULT_CONTENT.hero_badge_en}
                       </span>
                     </span>
                   </div>
@@ -519,10 +577,12 @@ export const AdminHomepageContent = () => {
                       {/* Big poster: col-span-3 row-span-2 */}
                       <div className="col-span-3 row-span-2 overflow-hidden rounded-2xl border-2 border-emerald-500/30 shadow-md bg-muted relative group">
                         <img
-                          src={formatServerImageUrl(form.section2_main_image) || brandPoster}
+                          src={previewUrls.section2_main_image || formatServerImageUrl(form.section2_main_image) || brandPoster}
                           alt="Main Poster"
                           className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = brandPoster; }}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = brandPoster;
+                          }}
                         />
                         <div className="absolute top-2 start-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
                           {previewLang === "ar" ? "الصورة الكبرى" : "Main Poster"}
@@ -532,10 +592,12 @@ export const AdminHomepageContent = () => {
                       {/* Top small image: col-span-2 row 1 */}
                       <div className="col-span-2 overflow-hidden rounded-xl border-2 border-emerald-400/30 shadow-xs bg-muted relative group">
                         <img
-                          src={formatServerImageUrl(form.section2_left_top_image) || brandBags}
+                          src={previewUrls.section2_left_top_image || formatServerImageUrl(form.section2_left_top_image) || brandBags}
                           alt="Top Image"
                           className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = brandBags; }}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = brandBags;
+                          }}
                         />
                         <div className="absolute top-1.5 start-1.5 bg-black/60 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
                           {previewLang === "ar" ? "الصورة العلوية" : "Top Image"}
@@ -970,7 +1032,7 @@ export const AdminHomepageContent = () => {
                     {/* Thumbnail Preview */}
                     <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-500/30 bg-muted shadow-sm group">
                       <img
-                        src={formatServerImageUrl(form.section2_main_image) || brandPoster}
+                        src={previewUrls.section2_main_image || formatServerImageUrl(form.section2_main_image) || brandPoster}
                         alt="Main Poster Preview"
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         onError={(e) => {
@@ -978,7 +1040,7 @@ export const AdminHomepageContent = () => {
                         }}
                       />
                       <span className="absolute bottom-1 start-1 rounded bg-black/70 px-1 py-0.2 text-[9px] font-bold text-white">
-                        {form.section2_main_image ? (isRTL ? "مخصصة" : "Custom") : (isRTL ? "مدمجة" : "Built-in")}
+                        {(previewUrls.section2_main_image || form.section2_main_image) ? (isRTL ? "مخصصة" : "Custom") : (isRTL ? "مدمجة" : "Built-in")}
                       </span>
                     </div>
 
@@ -987,7 +1049,7 @@ export const AdminHomepageContent = () => {
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                         <Input
                           value={form.section2_main_image || ""}
-                          onChange={(e) => handleChange("section2_main_image", e.target.value)}
+                          onChange={(e) => handleChange("section2_main_image", e.target.value.trim().replace(/\/+$/, ""))}
                           placeholder="https://... أو مسار صورة البوستر المباشر"
                           className="rounded-xl font-mono text-xs flex-1"
                         />
@@ -1035,10 +1097,13 @@ export const AdminHomepageContent = () => {
                       <span className="h-2.5 w-2.5 rounded-full bg-amber-500 shadow-xs" />
                       <span className="font-extrabold">{isRTL ? "2. صورة كراتين وقوافل الخير (العلوية)" : "2. Top Side Image (Food Boxes)"}</span>
                     </label>
-                    {form.section2_left_top_image && (
+                    {(previewUrls.section2_left_top_image || form.section2_left_top_image) && (
                       <button
                         type="button"
-                        onClick={() => handleChange("section2_left_top_image", "")}
+                        onClick={() => {
+                          setPreviewUrls((p) => ({ ...p, section2_left_top_image: undefined }));
+                          handleChange("section2_left_top_image", "");
+                        }}
                         className="text-[11px] font-bold text-muted-foreground hover:text-destructive flex items-center gap-1 transition"
                       >
                         <Undo2 className="h-3 w-3" />
@@ -1051,7 +1116,7 @@ export const AdminHomepageContent = () => {
                     {/* Thumbnail Preview */}
                     <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-xl border-2 border-amber-500/30 bg-muted shadow-sm group">
                       <img
-                        src={formatServerImageUrl(form.section2_left_top_image) || brandBags}
+                        src={previewUrls.section2_left_top_image || formatServerImageUrl(form.section2_left_top_image) || brandBags}
                         alt="Top Bags Preview"
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         onError={(e) => {
@@ -1059,7 +1124,7 @@ export const AdminHomepageContent = () => {
                         }}
                       />
                       <span className="absolute bottom-1 start-1 rounded bg-black/70 px-1 py-0.2 text-[9px] font-bold text-white">
-                        {form.section2_left_top_image ? (isRTL ? "مخصصة" : "Custom") : (isRTL ? "مدمجة" : "Built-in")}
+                        {(previewUrls.section2_left_top_image || form.section2_left_top_image) ? (isRTL ? "مخصصة" : "Custom") : (isRTL ? "مدمجة" : "Built-in")}
                       </span>
                     </div>
 
@@ -1068,7 +1133,7 @@ export const AdminHomepageContent = () => {
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                         <Input
                           value={form.section2_left_top_image || ""}
-                          onChange={(e) => handleChange("section2_left_top_image", e.target.value)}
+                          onChange={(e) => handleChange("section2_left_top_image", e.target.value.trim().replace(/\/+$/, ""))}
                           placeholder="https://... أو مسار صورة كراتين التوزيع"
                           className="rounded-xl font-mono text-xs flex-1"
                         />

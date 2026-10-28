@@ -32,14 +32,17 @@ export async function compressImage(
   ctx.imageSmoothingQuality = "high";
   ctx.drawImage(bitmap, 0, 0, targetW, targetH);
 
+  // Determine target MIME type — preserve PNG for icons/transparency, use JPEG for photos
+  const isPng = file.type === "image/png";
+  const targetMime = isPng ? "image/png" : "image/jpeg";
+  const ext = isPng ? "png" : "jpg";
+
   // Iteratively compress until under maxSizeBytes
   let q = quality;
   let blob: Blob | null = null;
   let attempts = 0;
   while (attempts < 8) {
-    blob =
-      (await canvasToBlob(canvas, "image/webp", q)) ||
-      (await canvasToBlob(canvas, "image/jpeg", q));
+    blob = await canvasToBlob(canvas, targetMime, q);
     if (!blob) break;
     if (blob.size <= maxSizeBytes) break;
     q = Math.max(0.3, q - 0.1); // reduce quality by 10% each iteration
@@ -60,9 +63,7 @@ export async function compressImage(
     if (ctx2) {
       ctx2.imageSmoothingQuality = "high";
       ctx2.drawImage(canvas, 0, 0, sw, sh);
-      blob =
-        (await canvasToBlob(canvas2, "image/webp", q)) ||
-        (await canvasToBlob(canvas2, "image/jpeg", q));
+      blob = await canvasToBlob(canvas2, targetMime, q);
     }
   }
 
@@ -71,7 +72,6 @@ export async function compressImage(
   // Bail out if compression actually grew the file
   if (blob.size >= file.size && scale === 1) return file;
 
-  const ext = blob.type === "image/webp" ? "webp" : "jpg";
   const baseName = file.name.replace(/\.[^.]+$/, "") || "image";
   return new File([blob], `${baseName}.${ext}`, { type: blob.type, lastModified: Date.now() });
 }

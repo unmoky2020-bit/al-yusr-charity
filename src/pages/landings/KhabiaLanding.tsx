@@ -39,7 +39,7 @@ const KhabiaLanding = () => (
       { href: "/programs/khabia", ar: "برنامج الخبيئة التفصيلي", en: "Khabiaa program" },
       { href: "/zakat", ar: "زكاة المال", en: "Zakat" },
       { href: "/markoun", ar: "حملة مَرْكون", en: "Markoun campaign" },
-      { href: "/food-box", ar: "كرتونة الغذاء الشهرية", en: "Monthly food box" },
+      { href: "/food-box", ar: "الغذاء الشهري (لحوم وكرتونة ووجبات)", en: "Monthly food (meat, carton & meals)" },
       { href: "/trust", ar: "الشفافية والتقارير", en: "Trust & reports" },
     ]}
     faq={{

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Plus, Megaphone, Users2, MapPin, CalendarDays, Trash2, Pencil, Search, X, CheckCircle2, XCircle, Clock, Phone, Mail } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { Input } from "@/components/ui/input";
@@ -164,8 +164,10 @@ const Inner = () => {
               <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input className="ps-9" placeholder={lang === "ar" ? "بحث…" : "Search…"} value={q} onChange={(e) => setQ(e.target.value)} />
             </div>
-            <Button onClick={startNew} className="bg-orange-grad font-extrabold text-accent-foreground">
-              <Plus className="me-1 h-4 w-4" /> {lang === "ar" ? "حملة جديدة" : "New campaign"}
+            <Button asChild className="bg-orange-grad font-extrabold text-accent-foreground">
+              <Link to="/admin/campaigns/new">
+                <Plus className="me-1 h-4 w-4" /> {lang === "ar" ? "حملة جديدة" : "New campaign"}
+              </Link>
             </Button>
           </div>
         </div>
@@ -204,12 +206,10 @@ const Inner = () => {
                     <button onClick={() => loadApps(c)} className="rounded-lg bg-primary px-2.5 py-1 text-xs font-bold text-primary-foreground hover:opacity-90">
                       {lang === "ar" ? "الطلبات" : "Applications"}
                     </button>
-                    <a href={`/admin/campaigns/${c.id}`} className="rounded-lg bg-secondary/15 px-2.5 py-1 text-xs font-extrabold text-primary hover:bg-secondary/30">
-                      {lang === "ar" ? "تفاصيل" : "Details"}
-                    </a>
-                    <button onClick={() => startEdit(c)} className="rounded-lg bg-secondary/30 px-2.5 py-1 text-xs font-bold text-primary hover:bg-secondary/50">
-                      <Pencil className="me-1 inline h-3 w-3" /> {lang === "ar" ? "تعديل" : "Edit"}
-                    </button>
+                    <Link to={`/admin/campaigns/${c.id}`} className="rounded-lg bg-secondary/15 px-2.5 py-1 text-xs font-extrabold text-primary hover:bg-secondary/30 flex items-center gap-1">
+                      <Pencil className="h-3 w-3" />
+                      <span>{lang === "ar" ? "تفاصيل وتعديل" : "Details & Edit"}</span>
+                    </Link>
                     <button onClick={() => remove(c.id)} className="rounded-lg bg-destructive/10 px-2.5 py-1 text-xs font-bold text-destructive hover:bg-destructive/20">
                       <Trash2 className="me-1 inline h-3 w-3" /> {lang === "ar" ? "حذف" : "Delete"}
                     </button>

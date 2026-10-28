@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
-import { CheckCircle2, Clock, XCircle, Loader2, Search, History, UserRound, Copy, MessageCircle, Calendar, Wallet, User, Sparkles, ShieldCheck, Mail } from "lucide-react";
+import { CheckCircle2, Clock, XCircle, Loader2, Search, Copy, MessageCircle, Calendar, Wallet, User, Sparkles, ShieldCheck, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,71 +29,105 @@ const statusLabel = (s: string, lang: "ar" | "en") => {
   return map[s]?.[lang] || s;
 };
 
-const sourceLabel = (s: string | null | undefined, lang: "ar" | "en") => {
-  const map: Record<string, { ar: string; en: string }> = {
-    created: { ar: "إنشاء الطلب", en: "Created" },
-    admin:   { ar: "الإدارة",     en: "Admin" },
-    webhook: { ar: "بوابة الدفع", en: "Payment gateway" },
-    system:  { ar: "النظام",      en: "System" },
-  };
-  return s ? map[s]?.[lang] || s : (lang === "ar" ? "النظام" : "System");
-};
-
 /** Map Laravel payment_status → internal tracking step */
-const mapStatus = (s: string): DonationStatus =>
-  s === "paid" || s === "completed"
+const mapStatus = (s: string): DonationStatus => {
+  const norm = String(s || "").toLowerCase();
+  return norm === "paid" || norm === "completed" || norm === "succeeded" || norm === "success" || norm === "approved"
     ? "completed"
-    : s === "failed" || s === "refunded"
+    : norm === "failed" || norm === "cancelled" || norm === "canceled" || norm === "refunded"
     ? "failed"
     : "pending";
+};
 
 /** Convert a raw Laravel donation object to a DonationRecord */
-const fromLaravelRow = (row: any): DonationRecord => ({
-  ref: row.code || row.reference_code || row.ref_code || String(row.id),
-  donor: {
-    name:  row.donor_name  || row.donor?.name  || "",
-    email: row.donor_email || row.donor?.email || "",
-    phone: row.donor_phone || row.donor?.phone || "",
-  },
-  amount:       Number(row.amount || 0),
-  program:      row.category_id || row.program || "general",
-  programLabel: row.message || row.note || "",
-  method:       (row.payment_method || row.method || "paymob") as any,
-  status:       mapStatus(row.payment_status || row.status || "pending"),
-  createdAt:    row.created_at || new Date().toISOString(),
-  updatedAt:    row.updated_at || row.created_at || new Date().toISOString(),
-});
+const fromLaravelRow = (row: any): DonationRecord => {
+  const methodVal =
+    row.payment_method?.name_ar ||
+    row.payment_method?.slug ||
+    (typeof row.payment_method === "string" ? row.payment_method : null) ||
+    row.method ||
+    "تحويل بنكي";
+
+  const programName =
+    row.program?.name_ar ||
+    row.program?.title_ar ||
+    row.project?.name_ar ||
+    row.project?.name ||
+    row.donation_campaign?.title_ar ||
+    row.donation_package?.name_ar ||
+    row.message ||
+    row.note ||
+    "تبرع عام للمؤسسة";
+
+  let targetType = "تبرع عام";
+  if (row.case) targetType = "حالة إنسانية";
+  else if (row.project) targetType = "مشروع تنموي";
+  else if (row.program) targetType = "برنامج خيري";
+  else if (row.donation_campaign) targetType = "حملة خيرية";
+
+  const rawItems = Array.isArray(row.items) && row.items.length > 0 ? row.items : [];
+  const items = rawItems.length > 0
+    ? rawItems.map((it: any) => ({
+        title: it.title || it.name || it.item_name || it.program_name || it.description || programName,
+        category: it.category || it.type || targetType,
+        quantity: Number(it.quantity || it.qty || 1),
+        amount: Number(it.amount || it.total || it.price || 0),
+        unit_price: Number(it.unit_price || it.price || 0),
+      }))
+    : [
+        {
+          title: programName,
+          category: targetType,
+          quantity: 1,
+          amount: Number(row.amount || 0),
+        },
+      ];
+
+  const notesText = row.notes || row.note || row.message || row.donor_notes || "";
+
+  return {
+    ref: row.transaction_reference || row.code || row.reference_code || row.ref_code || String(row.id || ""),
+    donor: {
+      name:  row.donor_name  || row.donor?.name  || "متبرع فاعل خير",
+      email: row.donor_email || row.donor?.email || "",
+      phone: row.donor_phone || row.donor?.phone || "",
+    },
+    amount:       Number(row.amount || 0),
+    program:      row.program?.slug || row.project?.slug || row.category_id || row.program || "general",
+    programLabel: programName,
+    method:       methodVal as any,
+    status:       mapStatus(row.payment_status || row.status || "pending"),
+    createdAt:    row.created_at || new Date().toISOString(),
+    updatedAt:    row.updated_at || row.created_at || new Date().toISOString(),
+    items,
+    notes:        notesText,
+    note:         notesText,
+    targetType,
+  };
+};
 
 /** Find a donation by ref code from the Laravel API */
 async function loadFromLaravel(ref: string): Promise<DonationRecord | null> {
+  const cleanRef = ref.trim();
+  if (!cleanRef) return null;
+
   try {
-    // Try direct lookup by code/id first
-    const cleanRef = ref.startsWith("YSR-") || ref.startsWith("DON-") ? ref : ref;
-
-    // First attempt: query by code param
-    const list = await donationsApiV1.listAll({ code: cleanRef });
-    const found = list.find((d: any) =>
-      d.code === ref ||
-      d.reference_code === ref ||
-      d.ref_code === ref ||
-      String(d.id) === ref
-    );
-    if (found) return fromLaravelRow(found);
-
-    // Second attempt: search all donations for a match (limited to 100 recent)
-    const all = await donationsApiV1.listAll({ per_page: 200, page: 1 });
-    const match = all.find((d: any) =>
-      d.code === ref ||
-      d.reference_code === ref ||
-      d.ref_code === ref
-    );
-    if (match) return fromLaravelRow(match);
-
-    return null;
-  } catch (err) {
-    console.warn("DonationTracking: Laravel API error:", err);
-    return null;
+    // 1. Primary: Query the dedicated live tracking endpoint /donations/track/:ref
+    const trackRes = await donationsApiV1.track(cleanRef);
+    const data = (trackRes as any)?.data || trackRes;
+    if (data && (data.transaction_reference || data.id || data.amount !== undefined)) {
+      return fromLaravelRow(data);
+    }
+  } catch (_err) {
+    // Graceful fallback to local store if not yet found on backend
   }
+
+  // 2. Secondary fallback: this browser's own local record.
+  //    (No admin list lookup here — this is a public page.)
+  const local = donationsStore.byRef(cleanRef);
+  if (local) return local;
+
+  return null;
 }
 
 const DonationTracking = () => {
@@ -101,7 +135,6 @@ const DonationTracking = () => {
   const { ref: routeRef } = useParams();
   const [search, setSearch]   = useState(routeRef || "");
   const [record, setRecord]   = useState<DonationRecord | null>(null);
-  const [audit,  setAudit]    = useState<any[]>([]);
   const [notFound, setNotFound] = useState(false);
   const [loading, setLoading]  = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -122,7 +155,7 @@ const DonationTracking = () => {
     setLoading(true);
     // Immediately show local record if available
     const local = donationsStore.byRef(ref);
-    if (local) { setRecord({ ...local, status: "pending" }); setAudit([]); setNotFound(false); }
+    if (local) { setRecord(local); setNotFound(false); }
 
     const remote = await loadFromLaravel(ref);
     setLoading(false);
@@ -130,11 +163,9 @@ const DonationTracking = () => {
     if (remote) {
       setRecord(remote);
       setNotFound(false);
-      setAudit([]); // audit log not available from Laravel yet
       startPolling(ref);
     } else if (!local) {
       setRecord(null);
-      setAudit([]);
       setNotFound(true);
     }
   }, [startPolling]);
@@ -339,63 +370,18 @@ const DonationTracking = () => {
                 )}
               </div>
 
-              {record.status === "completed" && (
+              {record && (
                 <div className="mt-6">
                   <DonationReceipt d={record} />
+                  {record.status !== "completed" && (
+                    <div className="mt-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs font-bold text-amber-900 dark:text-amber-200">
+                      {lang === "ar"
+                        ? "ملاحظة: هذا الإيصال مبدئي برقم مرجعي معتمد وجاري مطابقة وتأكيد الدفع نهائياً من قبل الإدارة المالية لمؤسسة اليسر."
+                        : "Note: This is a preliminary verified receipt. Final confirmation is being processed by Al-Yusr Financial Admin."}
+                    </div>
+                  )}
                 </div>
               )}
-              {record.status !== "completed" && (
-                <div className="mt-6 rounded-3xl border border-accent/30 bg-accent/5 p-6 text-sm font-bold text-muted-foreground">
-                  {lang === "ar"
-                    ? "الإيصال الرسمي لا يظهر إلا بعد اعتماد الدفع من الإدارة أو بوابة الدفع. الطلب الحالي ليس تأكيد دفع."
-                    : "The official receipt appears only after admin or gateway payment approval. This request is not payment confirmation."}
-                </div>
-              )}
-
-              <div className="mt-6 rounded-3xl bg-card p-6 shadow-card md:p-8">
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{lang === "ar" ? "سجل تغيّر الحالة" : "Status audit log"}</p>
-                    <h2 className="mt-1 text-xl font-black text-primary">{lang === "ar" ? "من غيّر الحالة ومتى" : "Who changed what and when"}</h2>
-                  </div>
-                  <History className="h-5 w-5 text-secondary" />
-                </div>
-                {audit.length === 0 ? (
-                  <p className="rounded-2xl bg-muted/40 p-4 text-sm font-bold text-muted-foreground">
-                    {lang === "ar"
-                      ? "لا يوجد سجل حالة من قاعدة البيانات لهذه العملية حتى الآن. الطلب المحلي لا يعني تأكيد دفع."
-                      : "No database status log exists for this donation yet. A local request is not payment confirmation."}
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {audit.map((item) => (
-                      <div key={item.id} className="flex items-start gap-3 rounded-2xl border border-border bg-muted/20 p-3 text-start">
-                        <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-secondary/20 text-primary">
-                          <UserRound className="h-4 w-4" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <p className="text-sm font-black text-primary">
-                              <span>{statusLabel(item.old_status || "created", lang as "ar" | "en")}</span>
-                              <span className="mx-2 text-muted-foreground">→</span>
-                              <span>{statusLabel(item.new_status, lang as "ar" | "en")}</span>
-                            </p>
-                            <time className="text-[11px] font-bold text-muted-foreground" dateTime={item.created_at}>
-                              {new Date(item.created_at).toLocaleString(lang === "ar" ? "ar-EG" : "en-US")}
-                            </time>
-                          </div>
-                          <p className="mt-1 text-xs text-muted-foreground">
-                            {lang === "ar" ? "بواسطة" : "By"}: <span className="font-extrabold text-foreground">{item.changed_by_label || item.source || "system"}</span>
-                            <span className="mx-2">·</span>
-                            {lang === "ar" ? "المصدر" : "Source"}: <span>{sourceLabel(item.source, lang as "ar" | "en")}</span>
-                          </p>
-                          {item.note && <p className="mt-1 text-xs font-bold text-muted-foreground">{item.note}</p>}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
             </>
           )}
         </div>

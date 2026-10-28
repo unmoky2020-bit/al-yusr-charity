@@ -1,14 +1,18 @@
+import { useState } from "react";
 import { HandHeart } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
-import { useSiteStats, type SiteStat } from "@/hooks/useSiteStats";
+import { useSiteStats, type SiteStat, DEFAULT_STATS } from "@/hooks/useSiteStats";
 import { getLucideIcon } from "@/lib/lucide-icon";
 import { CountUp } from "@/components/ui/count-up";
+import { formatServerImageUrl } from "@/data/laravelApi";
 
 const StatCard = ({ stat, lang }: { stat: SiteStat; lang: string }) => {
   const isAr = lang === "ar";
   const suffix = (isAr ? stat.suffix_ar : stat.suffix_en) || "";
   const label = (isAr ? stat.label_ar : stat.label_en) || stat.label_ar || stat.label_en;
   const Icon = getLucideIcon(stat.icon_name);
+  const [imgError, setImgError] = useState(false);
+  const resolvedImg = !imgError && stat.image_url ? formatServerImageUrl(stat.image_url) || stat.image_url : null;
   // Extract numeric content from either field. If `value_text` already contains
   // digits ("5 طن", "+9,520"), countup that leading number and treat the
   // remainder as its inline suffix so we don't double-render the unit.
@@ -44,8 +48,14 @@ const StatCard = ({ stat, lang }: { stat: SiteStat; lang: string }) => {
   return (
     <div className="group flex w-full min-w-0 flex-col items-center gap-1 rounded-xl p-2 text-center transition hover:bg-secondary/10 sm:gap-1.5 sm:p-2.5 md:rounded-2xl md:p-3">
       <div className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-secondary/15 text-primary transition group-hover:bg-secondary/30 sm:h-9 sm:w-9 md:h-10 md:w-10">
-        {stat.image_url ? (
-          <img src={stat.image_url} alt="" className="h-full w-full object-cover" loading="lazy" />
+        {resolvedImg ? (
+          <img
+            src={resolvedImg}
+            alt=""
+            className="h-full w-full object-cover"
+            loading="lazy"
+            onError={() => setImgError(true)}
+          />
         ) : (
           <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-4.5 md:w-4.5" />
         )}
@@ -77,7 +87,9 @@ export const StatsGrid = ({
   const { data, loading } = useSiteStats(section);
   const gridCols = cols ?? "grid-cols-2 md:grid-cols-3 lg:grid-cols-6";
 
-  if (loading && (!data || data.length === 0)) {
+  const resolvedData = data && data.length > 0 ? data : (DEFAULT_STATS[section] || []);
+
+  if (loading && resolvedData.length === 0) {
     return (
       <div className={`grid gap-2 md:gap-2 ${gridCols} ${className}`}>
         {[...Array(6)].map((_, i) => (
@@ -91,11 +103,9 @@ export const StatsGrid = ({
     );
   }
 
-  if (!data || !data.length) return null;
-
   return (
     <div className={`grid gap-2 md:gap-2 ${gridCols} ${className}`}>
-      {data.map((s, index) => (
+      {resolvedData.map((s, index) => (
         <StatCard key={s.sort_order ?? index} stat={s} lang={lang} />
       ))}
     </div>

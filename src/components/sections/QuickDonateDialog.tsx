@@ -126,12 +126,13 @@ export const QuickDonateDialog = ({
       program,
       amount:  String(amount),
       method,
-      name,
-      phone,
-      ...(email ? { email } : {}),
       autostart: "1",
     });
-    navigate(`/donate?${params.toString()}`);
+    // Donor details travel in router state, not in the URL, so they never land in
+    // browser history, server logs, referrers or analytics.
+    navigate(`/donate?${params.toString()}`, {
+      state: { donor: { name: parsed.data.name, phone: parsed.data.phone, email: parsed.data.email || "" } },
+    });
     onOpenChange(false);
     setSubmitting(false);
   };

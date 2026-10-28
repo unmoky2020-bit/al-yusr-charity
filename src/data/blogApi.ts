@@ -1,5 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
-import { apiFetch } from "./laravelApi";
+import { apiFetch, formatServerImageUrl } from "./laravelApi";
 import type { BlogPost } from "./blog";
 import { blogPosts } from "./blog";
 
@@ -31,11 +30,13 @@ export type DbBlogPost = {
 
 export const dbToBlogPost = (r: DbBlogPost): BlogPost => ({
   slug: r.slug || "",
-  image: r.image_url || "/placeholder.svg",
+  image: formatServerImageUrl(r.image_url) || "/placeholder.svg",
   date: (r.published_at || r.scheduled_at || r.created_at || new Date().toISOString()).slice(0, 10),
   category: { ar: r.category_ar || "", en: r.category_en || "" },
   ar: { title: r.title_ar || "", excerpt: r.excerpt_ar || "", body: r.body_ar || [], tags: r.tags_ar || [] },
   en: { title: r.title_en || "", excerpt: r.excerpt_en || "", body: r.body_en || [], tags: r.tags_en || [] },
+  focus_keyword: r.focus_keyword || undefined,
+  tags: [...(r.tags_ar || []), ...(r.tags_en || [])],
 });
 
 const staticAsDb: DbBlogPost[] = (blogPosts || []).map((p) => ({
@@ -44,7 +45,7 @@ const staticAsDb: DbBlogPost[] = (blogPosts || []).map((p) => ({
   status: "published" as DbStatus,
   published_at: p.date || new Date().toISOString(),
   scheduled_at: null,
-  image_url: p.image,
+  image_url: (p as any).image || null,
   og_image_url: null,
   category_ar: p.category?.ar || "عام",
   category_en: p.category?.en || "General",
@@ -83,11 +84,43 @@ export function saveStoredCustomPosts(posts: DbBlogPost[]): void {
   } catch {}
 }
 
+/** Map a Laravel /content article to DbBlogPost */
+function laravelToBlogPost(item: any): DbBlogPost {
+  const rawImg = item.cover_image || item.image || item.image_url || null;
+  return {
+    id: `laravel-${item.id || item.slug}`,
+    slug: item.slug || "",
+    status: (item.status || "published") as DbStatus,
+    published_at: item.published_at || item.created_at || new Date().toISOString(),
+    scheduled_at: item.scheduled_at || null,
+    image_url: rawImg ? formatServerImageUrl(rawImg) : null,
+    og_image_url: null,
+    category_ar: item.category_ar || "مقالات",
+    category_en: item.category_en || "Articles",
+    focus_keyword: item.focus_keyword || item.slug || null,
+    title_ar: item.title_ar || item.title || "",
+    title_en: item.title_en || item.title_ar || item.title || "",
+    excerpt_ar: item.summary_ar || item.excerpt_ar || item.excerpt || "",
+    excerpt_en: item.summary_en || item.excerpt_en || item.summary_ar || "",
+    body_ar: item.content_ar
+      ? (typeof item.content_ar === "string" ? item.content_ar.split(/\n\s*\n/) : [])
+      : [],
+    body_en: item.content_en
+      ? (typeof item.content_en === "string" ? item.content_en.split(/\n\s*\n/) : [])
+      : [],
+    tags_ar: Array.isArray(item.tags) ? item.tags : (Array.isArray(item.tags_ar) ? item.tags_ar : []),
+    tags_en: Array.isArray(item.tags_en) ? item.tags_en : [],
+    seo_score: item.seo_score || 90,
+    created_at: item.created_at || new Date().toISOString(),
+    updated_at: item.updated_at || item.created_at || new Date().toISOString(),
+  };
+}
+
 /** Admin: full row including status + scheduled_at — used by SEO panel. */
 export const fetchAllRowsAdmin = async (): Promise<DbBlogPost[]> => {
   const map = new Map<string, DbBlogPost>();
 
-  // 1. Seed with static posts (52 rich posts)
+  // 1. Seed with static posts (rich posts from blog data)
   for (const p of staticAsDb) {
     map.set(p.slug, p);
   }
@@ -98,50 +131,16 @@ export const fetchAllRowsAdmin = async (): Promise<DbBlogPost[]> => {
     map.set(c.slug, c);
   }
 
-  // 3. Overlay Supabase if available
-  try {
-    const { data, error } = await supabase
-      .from("blog_posts" as never).select("*")
-      .order("created_at", { ascending: false });
-    if (!error && Array.isArray(data) && data.length > 0) {
-      for (const sp of (data as unknown as DbBlogPost[])) {
-        map.set(sp.slug, sp);
-      }
-    }
-  } catch {}
-
-  // 4. Overlay Laravel /content (type: article) if available
+  // 3. Overlay Laravel /content (type: article) — primary source
   try {
     const res = await apiFetch<{ data?: any[] } | any[]>("/content?type=article", {
       method: "GET",
       ttlMs: 30000,
     });
-    const items = Array.isArray(res) ? res : (res && Array.isArray(res.data) ? res.data : []);
+    const items = Array.isArray(res) ? res : (res && Array.isArray((res as any).data) ? (res as any).data : []);
     for (const item of items) {
       if (item && item.slug) {
-        map.set(item.slug, {
-          id: `laravel-${item.id || item.slug}`,
-          slug: item.slug,
-          status: (item.status || "published") as DbStatus,
-          published_at: item.created_at || new Date().toISOString(),
-          scheduled_at: null,
-          image_url: item.cover_image || null,
-          og_image_url: null,
-          category_ar: "مقالات",
-          category_en: "Articles",
-          focus_keyword: item.slug,
-          title_ar: item.title_ar || "",
-          title_en: item.title_en || item.title_ar || "",
-          excerpt_ar: item.summary_ar || "",
-          excerpt_en: item.summary_en || item.summary_ar || "",
-          body_ar: item.content_ar ? item.content_ar.split(/\n\s*\n/) : [],
-          body_en: item.content_en ? item.content_en.split(/\n\s*\n/) : [],
-          tags_ar: Array.isArray(item.tags) ? item.tags : [],
-          tags_en: [],
-          seo_score: 90,
-          created_at: item.created_at || new Date().toISOString(),
-          updated_at: item.updated_at || item.created_at || new Date().toISOString(),
-        });
+        map.set(item.slug, laravelToBlogPost(item));
       }
     }
   } catch {}
@@ -162,6 +161,19 @@ export const fetchAllPostsAdmin = async (): Promise<BlogPost[]> => {
 };
 
 export const fetchPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+  // Try Laravel first directly
+  try {
+    const res = await apiFetch<{ data?: any } | any>(`/content?type=article&slug=${encodeURIComponent(slug)}`, {
+      method: "GET",
+      useCache: false,
+    });
+    const item = (res as any)?.data?.[0] || (Array.isArray(res) ? res[0] : null) || res;
+    if (item && (item.slug === slug || item.id)) {
+      return dbToBlogPost(laravelToBlogPost(item));
+    }
+  } catch {}
+
+  // Fallback to full list
   const allRows = await fetchAllRowsAdmin();
   const found = allRows.find((p) => p.slug === slug);
   return found ? dbToBlogPost(found) : null;
@@ -178,7 +190,7 @@ export type NewPostInput = {
   image_url?: string;
   og_image_url?: string;
   status?: DbStatus;
-  scheduled_at?: string | null;
+  scheduled_at?: string;
   seo_score?: number;
 };
 
@@ -210,14 +222,14 @@ export const createPost = async (p: NewPostInput) => {
     updated_at: now,
   };
 
-  // 1. Save to local storage
+  // 1. Save to local storage immediately
   const current = getStoredCustomPosts();
   const filtered = current.filter((x) => x.slug !== p.slug);
   saveStoredCustomPosts([newRow, ...filtered]);
 
-  // 2. Post to Laravel /content (type: article) if online
+  // 2. Post to Laravel /content (type: article) — primary backend
   try {
-    await apiFetch("/content", {
+    const laravelRes = await apiFetch<{ data?: any }>("/content", {
       method: "POST",
       body: {
         type: "article",
@@ -229,14 +241,19 @@ export const createPost = async (p: NewPostInput) => {
         summary_en: p.excerpt_en,
         content_ar: Array.isArray(p.body_ar) ? p.body_ar.join("\n\n") : p.body_ar,
         content_en: Array.isArray(p.body_en) ? p.body_en.join("\n\n") : p.body_en,
+        focus_keyword: p.focus_keyword || p.slug,
+        cover_image: p.image_url || null,
         tags: p.tags_ar,
       },
     });
-  } catch {}
-
-  // 3. Post to Supabase if online
-  try {
-    await supabase.from("blog_posts" as never).insert(newRow as never);
+    // Update local store with real backend ID if available
+    if (laravelRes && (laravelRes as any)?.data?.id) {
+      const backendPost = laravelToBlogPost((laravelRes as any).data);
+      const updated = getStoredCustomPosts();
+      const idx = updated.findIndex((x) => x.slug === p.slug);
+      if (idx !== -1) updated[idx] = { ...updated[idx], id: backendPost.id };
+      saveStoredCustomPosts(updated);
+    }
   } catch {}
 };
 
@@ -255,7 +272,6 @@ export const updatePostStatus = async (
     target.updated_at = new Date().toISOString();
     saveStoredCustomPosts([...current]);
   } else {
-    // If not yet in custom store, check if it's a static post being updated
     const staticMatch = staticAsDb.find((x) => x.id === id || x.slug === id);
     if (staticMatch) {
       const cloned: DbBlogPost = {
@@ -269,13 +285,17 @@ export const updatePostStatus = async (
     }
   }
 
-  const payload: Record<string, unknown> = { status };
-  if (status === "published") payload.published_at = new Date().toISOString();
-  if (status === "scheduled") payload.scheduled_at = scheduled_at;
-  if (status === "draft") payload.scheduled_at = null;
-  try {
-    await supabase.from("blog_posts" as never).update(payload as never).eq("id", id);
-  } catch {}
+  // Sync to Laravel if ID has the laravel- prefix or is a number
+  const laravelId = id.startsWith("laravel-") ? id.replace("laravel-", "") : (isNaN(Number(id)) ? null : id);
+  if (laravelId) {
+    const payload: Record<string, unknown> = { status };
+    if (status === "published") payload.published_at = new Date().toISOString();
+    if (status === "scheduled") payload.scheduled_at = scheduled_at;
+    if (status === "draft") payload.scheduled_at = null;
+    try {
+      await apiFetch(`/content/${laravelId}`, { method: "PATCH", body: payload });
+    } catch {}
+  }
 };
 
 export const updatePostMedia = async (
@@ -302,9 +322,12 @@ export const updatePostMedia = async (
     }
   }
 
-  try {
-    await supabase.from("blog_posts" as never).update(patch as never).eq("id", id);
-  } catch {}
+  const laravelId = id.startsWith("laravel-") ? id.replace("laravel-", "") : (isNaN(Number(id)) ? null : id);
+  if (laravelId && patch.image_url !== undefined) {
+    try {
+      await apiFetch(`/content/${laravelId}`, { method: "PATCH", body: { cover_image: patch.image_url } });
+    } catch {}
+  }
 };
 
 /** Admin: update full content of a post (everything except status). */
@@ -313,7 +336,7 @@ export const updatePost = async (
   patch: Partial<Omit<DbBlogPost, "id" | "created_at" | "updated_at" | "status" | "published_at">>,
 ) => {
   const current = getStoredCustomPosts();
-  const target = current.find((x) => x.id === id || x.slug === id);
+  let target = current.find((x) => x.id === id || x.slug === id);
   if (target) {
     Object.assign(target, patch);
     target.updated_at = new Date().toISOString();
@@ -326,11 +349,84 @@ export const updatePost = async (
         ...patch,
         updated_at: new Date().toISOString(),
       };
+      target = cloned;
       saveStoredCustomPosts([cloned, ...current]);
     }
   }
 
-  try {
-    await supabase.from("blog_posts" as never).update(patch as never).eq("id", id);
-  } catch {}
+  const targetSlug = patch.slug || target?.slug || (id.startsWith("static-") ? id.replace("static-", "") : id);
+  let laravelId = id.startsWith("laravel-") ? id.replace("laravel-", "") : (isNaN(Number(id)) ? null : id);
+
+  // If no direct laravelId, query the backend by slug to find the real backend content record
+  if (!laravelId && targetSlug) {
+    try {
+      const checkRes = await apiFetch<{ data?: any } | any>(
+        `/content?type=article&slug=${encodeURIComponent(targetSlug)}`,
+        { method: "GET", useCache: false }
+      );
+      const foundItem = (checkRes as any)?.data?.[0] || (Array.isArray(checkRes) ? checkRes[0] : null) || checkRes?.data || (checkRes?.id ? checkRes : null);
+      if (foundItem?.id) {
+        laravelId = String(foundItem.id);
+        const posts = getStoredCustomPosts();
+        const idx = posts.findIndex((p) => p.slug === targetSlug || p.id === id);
+        if (idx !== -1) {
+          posts[idx].id = `laravel-${laravelId}`;
+          saveStoredCustomPosts(posts);
+        }
+      }
+    } catch {}
+  }
+
+  const laravelPayload: Record<string, unknown> = {};
+  if (patch.title_ar !== undefined) laravelPayload.title_ar = patch.title_ar;
+  if (patch.title_en !== undefined) laravelPayload.title_en = patch.title_en;
+  if (patch.excerpt_ar !== undefined) laravelPayload.summary_ar = patch.excerpt_ar;
+  if (patch.excerpt_en !== undefined) laravelPayload.summary_en = patch.excerpt_en;
+  if (patch.body_ar !== undefined) laravelPayload.content_ar = Array.isArray(patch.body_ar) ? patch.body_ar.join("\n\n") : patch.body_ar;
+  if (patch.body_en !== undefined) laravelPayload.content_en = Array.isArray(patch.body_en) ? patch.body_en.join("\n\n") : patch.body_en;
+  if (patch.slug !== undefined) laravelPayload.slug = patch.slug;
+  if (patch.focus_keyword !== undefined) laravelPayload.focus_keyword = patch.focus_keyword;
+  if (patch.image_url !== undefined) laravelPayload.cover_image = patch.image_url;
+  if (patch.tags_ar !== undefined) laravelPayload.tags = patch.tags_ar;
+
+  if (laravelId) {
+    // Article exists on Laravel backend -> PATCH update
+    try {
+      await apiFetch(`/content/${laravelId}`, { method: "PATCH", body: laravelPayload });
+    } catch (err) {
+      console.warn("Could not patch article on Laravel:", err);
+    }
+  } else if (targetSlug) {
+    // Article does not exist yet on Laravel backend -> POST create to persist permanently
+    try {
+      const createRes = await apiFetch<{ data?: any }>("/content", {
+        method: "POST",
+        body: {
+          type: "article",
+          status: target?.status || "published",
+          slug: targetSlug,
+          title_ar: patch.title_ar || target?.title_ar || targetSlug,
+          title_en: patch.title_en || target?.title_en || patch.title_ar || targetSlug,
+          summary_ar: patch.excerpt_ar || target?.excerpt_ar || "",
+          summary_en: patch.excerpt_en || target?.excerpt_en || "",
+          content_ar: Array.isArray(patch.body_ar) ? patch.body_ar.join("\n\n") : (patch.body_ar || (Array.isArray(target?.body_ar) ? target.body_ar.join("\n\n") : "")),
+          content_en: Array.isArray(patch.body_en) ? patch.body_en.join("\n\n") : (patch.body_en || (Array.isArray(target?.body_en) ? target.body_en.join("\n\n") : "")),
+          focus_keyword: patch.focus_keyword || target?.focus_keyword || targetSlug,
+          cover_image: patch.image_url || target?.image_url || null,
+          tags: patch.tags_ar || target?.tags_ar || [],
+        },
+      });
+      if (createRes && (createRes as any)?.data?.id) {
+        const newId = (createRes as any).data.id;
+        const posts = getStoredCustomPosts();
+        const idx = posts.findIndex((p) => p.slug === targetSlug || p.id === id);
+        if (idx !== -1) {
+          posts[idx].id = `laravel-${newId}`;
+          saveStoredCustomPosts(posts);
+        }
+      }
+    } catch (err) {
+      console.warn("Could not create article on Laravel:", err);
+    }
+  }
 };

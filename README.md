@@ -599,7 +599,7 @@ VITE_API_BASE_URL=http://localhost:8000
 ### 13.1 بيانات الدخول المعتمدة
 | الحساب | البريد الإلكتروني | كلمة المرور | الدور في Laravel |
 |---|---|---|---|
-| **المدير العام** | `admin@alyusr.com` | `12345678` | `Super Admin` |
+| **المدير العام** | `admin@alyusr.com` | (محفوظة في مدير كلمات المرور، لا تُكتب هنا) | `Super Admin` |
 
 > [!NOTE]
 > الحساب القديم `admin@elyusr.org / admin123` غير موجود على خادم Laravel ويعطي `401 Unauthorized`.

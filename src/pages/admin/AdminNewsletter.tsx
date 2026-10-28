@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
 import { Download, Search, X, RefreshCcw, Copy, BellOff, CheckCircle2, Mail, Plus, FileText, TrendingUp, Send } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -67,24 +66,9 @@ const AdminNewsletter = () => {
   const load = async () => {
     setLoading(true);
     try {
-      // Primary: Laravel API
       const laravelData = await newsletterApi.listAll({ per_page: 1000 });
       if (Array.isArray(laravelData) && laravelData.length > 0) {
         setRows(laravelData.map(mapLaravelSubscriber));
-        setSelected(new Set());
-        setLoading(false);
-        return;
-      }
-    } catch {}
-    // Fallback: Supabase
-    try {
-      const { data, error } = await supabase
-        .from("newsletter_subscribers")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(1000);
-      if (!error && Array.isArray(data)) {
-        setRows(data as Subscriber[]);
       } else {
         setRows([]);
       }
@@ -195,16 +179,10 @@ const AdminNewsletter = () => {
     try {
       await newsletterApi.update(r.id, { status: "confirmed", confirmed_at: new Date().toISOString() } as any);
       toast.success(isRTL ? "تم تأكيد الاشتراك" : "Confirmed");
-    } catch {
-      // Fallback to Supabase
-      const { error } = await supabase
-        .from("newsletter_subscribers")
-        .update({ status: "confirmed", confirmed_at: new Date().toISOString() })
-        .eq("id", r.id);
-      if (error) return toast.error(error.message);
-      toast.success(isRTL ? "تم تأكيد الاشتراك" : "Confirmed");
+      void load();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : (isRTL ? "فشل تأكيد الاشتراك" : "Confirmation failed"));
     }
-    void load();
   };
 
   const unsubscribe = async (r: Subscriber) => {
@@ -212,15 +190,10 @@ const AdminNewsletter = () => {
     try {
       await newsletterApi.update(r.id, { status: "unsubscribed", unsubscribed_at: new Date().toISOString() } as any);
       toast.success(isRTL ? "تم إلغاء الاشتراك" : "Unsubscribed");
-    } catch {
-      const { error } = await supabase
-        .from("newsletter_subscribers")
-        .update({ status: "unsubscribed", unsubscribed_at: new Date().toISOString() })
-        .eq("id", r.id);
-      if (error) return toast.error(error.message);
-      toast.success(isRTL ? "تم إلغاء الاشتراك" : "Unsubscribed");
+      void load();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : (isRTL ? "فشل إلغاء الاشتراك" : "Unsubscribe failed"));
     }
-    void load();
   };
 
   const remove = async (r: Subscriber) => {
@@ -228,12 +201,10 @@ const AdminNewsletter = () => {
     try {
       await newsletterApi.remove(r.id);
       toast.success(isRTL ? "تم الحذف" : "Deleted");
-    } catch {
-      const { error } = await supabase.from("newsletter_subscribers").delete().eq("id", r.id);
-      if (error) return toast.error(error.message);
-      toast.success(isRTL ? "تم الحذف" : "Deleted");
+      void load();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : (isRTL ? "فشل الحذف" : "Delete failed"));
     }
-    void load();
   };
 
   const bulkApply = async (action: "confirm" | "unsubscribe" | "delete") => {
@@ -255,18 +226,8 @@ const AdminNewsletter = () => {
         for (const id of ids) await newsletterApi.update(id, { status: "unsubscribed", unsubscribed_at: new Date().toISOString() } as any).catch(() => {});
       }
       toast.success(isRTL ? "تم التنفيذ" : "Done");
-    } catch (err: any) {
-      // Fallback to Supabase bulk ops
-      let error;
-      if (action === "delete") {
-        ({ error } = await supabase.from("newsletter_subscribers").delete().in("id", ids));
-      } else if (action === "confirm") {
-        ({ error } = await supabase.from("newsletter_subscribers").update({ status: "confirmed", confirmed_at: new Date().toISOString() }).in("id", ids));
-      } else {
-        ({ error } = await supabase.from("newsletter_subscribers").update({ status: "unsubscribed", unsubscribed_at: new Date().toISOString() }).in("id", ids));
-      }
-      if (error) { setBusy(false); return toast.error(error.message); }
-      toast.success(isRTL ? "تم التنفيذ" : "Done");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : (isRTL ? "حدث خطأ" : "Error"));
     } finally {
       setBusy(false);
     }
@@ -297,19 +258,7 @@ const AdminNewsletter = () => {
       setNewEmail("");
       void load();
     } catch (err: unknown) {
-      // Fallback to Supabase
-      try {
-        const { error } = await supabase.from("newsletter_subscribers").insert({
-          email, lang: newLang, source: newSource || "admin", status: "confirmed", confirmed_at: new Date().toISOString(),
-        });
-        if (error) throw error;
-        toast.success(isRTL ? "تمت الإضافة" : "Added");
-        setAddOpen(false);
-        setNewEmail("");
-        void load();
-      } catch (e2: unknown) {
-        toast.error((e2 instanceof Error ? e2.message : null) || (err instanceof Error ? err.message : "Error"));
-      }
+      toast.error(err instanceof Error ? err.message : (isRTL ? "فشل إضافة المشترك" : "Failed to add subscriber"));
     } finally {
       setBusy(false);
     }

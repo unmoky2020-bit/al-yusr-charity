@@ -379,7 +379,7 @@ const ProgramDetail = () => {
       </section>
 
       {/* Sticky in-page TOC */}
-      <div className="sticky top-16 z-30 border-y border-border bg-background/90 backdrop-blur md:top-20">
+      <div className="sticky top-20 z-30 border-y border-border bg-background/95 backdrop-blur shadow-sm">
         <div className="container mx-auto px-2">
           <TagsRail
             source={`program-${program.slug}-toc`}
@@ -392,8 +392,8 @@ const ProgramDetail = () => {
       {/* Program brief / intro — concise summary at top of detail page */}
       <section aria-labelledby={`program-${program.slug}-intro`} className="border-b border-border bg-card/40">
         <div className="container mx-auto max-w-3xl px-4 py-8 text-center md:py-10">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-            <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "نبذة عن البرنامج" : "About this program"}
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/25 border border-secondary/40 px-3.5 py-1 text-xs font-black text-black shadow-xs">
+            <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "نبذة عن البرنامج" : "About this program"}
           </span>
           <h2 id={`program-${program.slug}-intro`} className="mt-3 text-xl font-black text-primary md:text-2xl">
             {content.tagline}
@@ -408,12 +408,12 @@ const ProgramDetail = () => {
       <section
         id="benefits"
         data-source={`program-${program.slug}-benefits`}
-        className="scroll-mt-24 bg-background py-14 md:py-20"
+        className="scroll-mt-28 bg-background py-14 md:py-20"
       >
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-              <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "ليه البرنامج ده" : "Why this program"}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/25 border border-secondary/40 px-3.5 py-1 text-xs font-black text-black shadow-xs">
+              <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "ليه البرنامج ده" : "Why this program"}
             </span>
             <h2 className="mt-3 text-2xl font-black text-primary md:text-3xl">
               {isRTL ? "مزايا البرنامج" : "Program highlights"}
@@ -438,12 +438,12 @@ const ProgramDetail = () => {
         <section
           id="options"
           data-source={`program-${program.slug}-options`}
-          className="scroll-mt-24 bg-background py-14 md:py-20"
+          className="scroll-mt-28 bg-background py-14 md:py-20"
         >
           <div className="container mx-auto max-w-5xl px-4">
             <div className="mx-auto mb-8 max-w-2xl text-center">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-                <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "اختر الجزء اللي يلمس قلبك" : "Pick the part that moves your heart"}
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/25 border border-secondary/40 px-3.5 py-1 text-xs font-black text-black shadow-xs">
+                <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "اختر الجزء اللي يلمس قلبك" : "Pick the part that moves your heart"}
               </span>
               <h2 className="mt-3 text-xl font-black text-primary md:text-3xl">
                 {isRTL ? "ادعم البرنامج بالكامل" : "Support the whole program"}
@@ -581,8 +581,8 @@ const ProgramDetail = () => {
       >
         <div className="container mx-auto max-w-3xl px-4">
           <div className="text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-              <ListChecks className="h-3.5 w-3.5" /> {isRTL ? "تفاصيل البرنامج" : "About the program"}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/25 border border-secondary/40 px-3.5 py-1 text-xs font-black text-black shadow-xs">
+              <ListChecks className="h-3.5 w-3.5 text-primary" /> {isRTL ? "تفاصيل البرنامج" : "About the program"}
             </span>
             <h2 className="mt-3 text-2xl font-black text-primary md:text-3xl">
               {isRTL ? "كل ما تحتاج معرفته" : "Everything you need to know"}
@@ -633,13 +633,13 @@ const ProgramDetail = () => {
       <section
         id="impact"
         data-source={`program-${program.slug}-impact`}
-        className="scroll-mt-24 bg-background py-14 md:py-20"
+        className="scroll-mt-28 bg-background py-14 md:py-20"
       >
         {/* ── Program journey timeline — premium stages with motion ── */}
         <div className="container mx-auto mb-14 max-w-5xl px-4">
           <div className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-              <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "رحلة البرنامج" : "Program journey"}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/25 border border-secondary/40 px-3.5 py-1 text-xs font-black text-black shadow-xs">
+              <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "رحلة البرنامج" : "Program journey"}
             </span>
             <h2 className="mt-3 text-2xl font-black text-primary md:text-3xl">
               {isRTL ? "٤ مراحل من تبرعك لباب البيت" : "4 stages from your donation to the family's door"}

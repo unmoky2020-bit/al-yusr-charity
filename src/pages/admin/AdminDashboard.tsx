@@ -71,7 +71,7 @@ const AdminDashboard = () => {
     staleTime: 30000,
   });
 
-  const isInitialLoading = (loadingStats && !laravelStats) || (loadingDonations && !laravelDonations.length);
+  const isLoading = loadingStats && !laravelStats;
 
   const totals = useMemo(() => {
     const raw = (laravelStats as any) || {};
@@ -195,34 +195,34 @@ const AdminDashboard = () => {
   const successRate = totals.count > 0 ? (totals.completed / totals.count) * 100 : 100;
 
   return (
-    <AdminLayout loading={isInitialLoading}>
+    <AdminLayout>
       <div className="space-y-6" dir={isRTL ? "rtl" : "ltr"}>
         {/* ── KPI grid ─────────────────────────────────────────────── */}
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <StatCard
             label={isRTL ? "إجمالي التبرعات" : "Total donations"}
-            value={isInitialLoading ? "—" : fmtEGP(totals.total)}
-            sub={isRTL ? "منذ الانطلاق — توثيق مباشر" : "All time — live sync"}
+            value={isLoading ? "—" : fmtEGP(totals.total)}
+            sub={isRTL ? "جميع الحالات — توثيق مباشر" : "All statuses — live sync"}
             icon={Wallet}
             delta={trendDelta}
             accent
           />
           <StatCard
             label={isRTL ? "عمليات التبرع" : "Donation operations"}
-            value={isInitialLoading ? "—" : fmtNum(totals.completed)}
-            sub={`${isInitialLoading ? "—" : fmtNum(totals.donorsCount)} ${isRTL ? "متبرع مسجل بالمنصة" : "registered donors"}`}
+            value={isLoading ? "—" : fmtNum(totals.completed)}
+            sub={`${isLoading ? "—" : fmtNum(totals.donorsCount)} ${isRTL ? "متبرع مسجل بالمنصة" : "registered donors"}`}
             icon={CheckCircle2}
           />
           <StatCard
             label={isRTL ? "البرامج والمشاريع" : "Programs & Projects"}
-            value={isInitialLoading ? "—" : `${fmtNum(totals.activePrograms)} ${isRTL ? "برنامج" : "programs"}`}
-            sub={`${isInitialLoading ? "—" : fmtNum(totals.activeProjects)} ${isRTL ? "مشاريع جارية معتمدة" : "active projects"}`}
+            value={isLoading ? "—" : `${fmtNum(totals.activePrograms)} ${isRTL ? "برنامج" : "programs"}`}
+            sub={`${isLoading ? "—" : fmtNum(totals.activeProjects)} ${isRTL ? "مشاريع جارية معتمدة" : "active projects"}`}
             icon={FolderHeart}
           />
           <StatCard
             label={isRTL ? "المتطوعون والمستخدمون" : "Volunteers & Users"}
-            value={isInitialLoading ? "—" : `${fmtNum(totals.volunteers)} ${isRTL ? "متطوع" : "volunteers"}`}
-            sub={`${isInitialLoading ? "—" : totals.pendingVolunteers} ${isRTL ? `قيد المراجعة • ${totals.usersCount} مستخدم` : `pending • ${totals.usersCount} users`}`}
+            value={isLoading ? "—" : `${fmtNum(totals.volunteers)} ${isRTL ? "متطوع" : "volunteers"}`}
+            sub={`${isLoading ? "—" : totals.pendingVolunteers} ${isRTL ? `قيد المراجعة • ${totals.usersCount} مستخدم` : `pending • ${totals.usersCount} users`}`}
             icon={Users}
           />
         </div>
@@ -231,27 +231,27 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
           <div className="rounded-xl border border-border bg-card p-3 shadow-xs space-y-1">
             <span className="text-[11px] font-bold text-muted-foreground">{isRTL ? "المستخدمون النشطون" : "Active Users"}</span>
-            <div className="text-base sm:text-lg font-black text-foreground">{isInitialLoading ? "—" : totals.usersCount}</div>
+            <div className="text-base sm:text-lg font-black text-foreground">{isLoading ? "—" : totals.usersCount}</div>
           </div>
           <div className="rounded-xl border border-border bg-card p-3 shadow-xs space-y-1">
             <span className="text-[11px] font-bold text-muted-foreground">{isRTL ? "المتبرعون" : "Donors"}</span>
-            <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">{isInitialLoading ? "—" : totals.donorsCount}</div>
+            <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">{isLoading ? "—" : totals.donorsCount}</div>
           </div>
           <div className="rounded-xl border border-border bg-card p-3 shadow-xs space-y-1">
             <span className="text-[11px] font-bold text-muted-foreground">{isRTL ? "إجمالي البرامج" : "Total Programs"}</span>
-            <div className="text-base sm:text-lg font-black text-foreground">{isInitialLoading ? "—" : totals.totalPrograms}</div>
+            <div className="text-base sm:text-lg font-black text-foreground">{isLoading ? "—" : totals.totalPrograms}</div>
           </div>
           <div className="rounded-xl border border-border bg-card p-3 shadow-xs space-y-1">
             <span className="text-[11px] font-bold text-muted-foreground">{isRTL ? "المشاريع النشطة" : "Active Projects"}</span>
-            <div className="text-base sm:text-lg font-black text-foreground">{isInitialLoading ? "—" : totals.activeProjects}</div>
+            <div className="text-base sm:text-lg font-black text-foreground">{isLoading ? "—" : totals.activeProjects}</div>
           </div>
           <div className="rounded-xl border border-border bg-card p-3 shadow-xs space-y-1">
             <span className="text-[11px] font-bold text-muted-foreground">{isRTL ? "متطوعون قيد المراجعة" : "Pending Volunteers"}</span>
-            <div className="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400">{isInitialLoading ? "—" : totals.pendingVolunteers}</div>
+            <div className="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400">{isLoading ? "—" : totals.pendingVolunteers}</div>
           </div>
           <div className="rounded-xl border border-border bg-card p-3 shadow-xs space-y-1">
             <span className="text-[11px] font-bold text-muted-foreground">{isRTL ? "نسبة نجاح العمليات" : "Success Rate"}</span>
-            <div className="text-base sm:text-lg font-black text-primary">{isInitialLoading ? "—" : `${Math.round(successRate)}%`}</div>
+            <div className="text-base sm:text-lg font-black text-primary">{isLoading ? "—" : `${Math.round(successRate)}%`}</div>
           </div>
         </div>
 
@@ -330,7 +330,7 @@ const AdminDashboard = () => {
               subtitle={isRTL ? "نسبة % لكل برنامج" : "% per program"}
               icon={PieIcon}
             >
-              {pieData.length === 0 && !isInitialLoading ? (
+              {pieData.length === 0 && !loadingDonations ? (
                 <div className="flex h-[260px] items-center justify-center text-center text-xs text-muted-foreground">
                   {isRTL ? "لا توجد بيانات بعد" : "No data yet"}
                 </div>

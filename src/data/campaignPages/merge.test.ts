@@ -37,6 +37,30 @@ describe("mergeCampaignContent", () => {
     expect(mergeCampaignContent(base, { faq: [{ q: "bad" }] }).faq).toEqual(base.faq);
   });
 
+  it("dynamic sections take the saved list: order, additions and removals, dropping malformed items", () => {
+    const dyn: CampaignPageContent = {
+      ...base,
+      sections: { carton: { dynamic: true, extraLabel: l("كيلو", "kg"), title: l("كرتونة", "Carton"), items: [
+        { id: "rice", title: l("أرز", "Rice"), desc: l("٣", "3"), extra: l("3", "3") },
+        { id: "sugar", title: l("سكر", "Sugar"), desc: l("٢", "2"), extra: l("2", "2") },
+      ] } },
+    };
+    const m = mergeCampaignContent(dyn, { sections: { carton: { items: [
+      { id: "dates", title: l("تمر", "Dates"), desc: l("١", "1"), extra: l("1", "1") }, // new item
+      { id: "rice", extra: l("4", "4") }, // known id, blanks filled from the default
+      { id: "", title: l("x", "x") }, // malformed: dropped
+      { id: "ghost" }, // new id without a title: dropped
+    ] } } });
+    expect(m.sections.carton.dynamic).toBe(true);
+    expect(m.sections.carton.extraLabel).toEqual(l("كيلو", "kg"));
+    expect(m.sections.carton.items).toEqual([
+      { id: "dates", title: l("تمر", "Dates"), desc: l("١", "1"), extra: l("1", "1") },
+      { id: "rice", title: l("أرز", "Rice"), desc: l("٣", "3"), extra: l("4", "4") },
+    ]);
+    expect(mergeCampaignContent(dyn, { sections: { carton: { items: [] } } }).sections.carton.items).toEqual([]);
+    expect(mergeCampaignContent(dyn, { sections: { carton: { items: "nope" } } }).sections.carton.items).toEqual(dyn.sections.carton.items);
+  });
+
   it("merges section items by id and ignores unknown section keys", () => {
     const m = mergeCampaignContent(base, { sections: { steps: { items: [{ id: "a", desc: l("جديد", "new") }] }, nope: { title: l("x", "x"), items: [] } } });
     expect(m.sections.steps.items[0]).toEqual({ id: "a", title: l("١", "1"), desc: l("جديد", "new"), extra: undefined });

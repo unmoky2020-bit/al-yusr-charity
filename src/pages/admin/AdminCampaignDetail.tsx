@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Loader2, Save, Trash2, Users, MapPin, Calendar, CheckCircle2, XCircle, Search, Bell, Download, MessageSquare, UserCheck, Clock4, Send, FileText, X } from "lucide-react";
+import { ArrowLeft, ExternalLink, Loader2, Save, Trash2, Users, MapPin, Calendar, CheckCircle2, XCircle, Search, Bell, Download, MessageSquare, UserCheck, Clock4, Send, FileText, X, Upload, Image as ImageIcon } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import {
   upsertCampaign, setApplicationStatus, type Campaign, type Application, type CampaignStatus, type ApplicationStatus,
 } from "@/data/campaignsApi";
 import { logActivity } from "@/lib/activityLog";
+import { uploadImage } from "@/data/laravelApi";
 
 const CAMPAIGN_STATUSES: { v: CampaignStatus; ar: string; en: string; tone: string }[] = [
   { v: "draft",     ar: "مسودة",   en: "Draft",     tone: "bg-muted text-muted-foreground" },
@@ -48,6 +49,8 @@ export default function AdminCampaignDetail() {
   const [busy, setBusy] = useState(false);
   const [notifyOpen, setNotifyOpen] = useState<Application | null>(null);
   const [notifyText, setNotifyText] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const imgInputRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState({
     title_ar: "", title_en: "", description_ar: "", description_en: "",
@@ -56,8 +59,43 @@ export default function AdminCampaignDetail() {
     slots_needed: 0, cover_image_url: "", required_skills: "",
   });
 
+  const handleImageUpload = async (file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    setUploading(true);
+    const localUrl = URL.createObjectURL(file);
+    setForm((f) => ({ ...f, cover_image_url: localUrl }));
+    try {
+      const serverPath = await uploadImage(file, "campaigns");
+      setForm((f) => ({ ...f, cover_image_url: serverPath }));
+      toast({ title: isAr ? "تم رفع الصورة بنجاح" : "Image uploaded" });
+    } catch {
+      toast({ title: isAr ? "تعذر رفع الصورة" : "Upload failed", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const reload = async () => {
     if (!id) return;
+    if (id === "new") {
+      setRow({
+        id: "new",
+        status: "draft",
+        slots_filled: 0,
+        slots_needed: 10,
+        governorate: "الدقهلية",
+        created_at: new Date().toISOString(),
+      } as any);
+      setApps([]);
+      setForm({
+        title_ar: "", title_en: "", description_ar: "", description_en: "",
+        location: "", governorate: "الدقهلية", city: "",
+        event_date: new Date().toISOString().slice(0, 10), event_time: "09:00",
+        slots_needed: 10, cover_image_url: "", required_skills: "",
+      });
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const r = await getCampaignById(id);
@@ -88,21 +126,31 @@ export default function AdminCampaignDetail() {
   }), [safeApps]);
 
   const save = async () => {
-    if (!row) return;
+    if (!form.title_ar.trim()) {
+      toast({ title: isAr ? "يرجى كتابة عنوان الحملة" : "Please enter title", variant: "destructive" });
+      return;
+    }
     setSaving(true);
     try {
-      await upsertCampaign({
-        id: row.id,
-        title_ar: form.title_ar, title_en: form.title_en,
+      const payload: any = {
+        title_ar: form.title_ar, title_en: form.title_en || form.title_ar,
         description_ar: form.description_ar, description_en: form.description_en,
         location: form.location, governorate: form.governorate, city: form.city || null,
         event_date: form.event_date, event_time: form.event_time || null,
         slots_needed: Number(form.slots_needed) || 0,
         cover_image_url: form.cover_image_url || null,
         required_skills: form.required_skills.split(/[,،]/).map(s => s.trim()).filter(Boolean),
-      });
-      toast({ title: isAr ? " تم الحفظ" : " Saved" });
-      void reload();
+      };
+      if (id !== "new" && row?.id) {
+        payload.id = row.id;
+      }
+      const saved = await upsertCampaign(payload);
+      toast({ title: isAr ? "تم الحفظ" : "Saved" });
+      if (id === "new" && saved?.id) {
+        nav(`/admin/campaigns/${saved.id}`);
+      } else {
+        void reload();
+      }
     } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
     finally { setSaving(false); }
   };
@@ -317,7 +365,41 @@ export default function AdminCampaignDetail() {
                 <Field label={isAr ? "أماكن مطلوبة" : "Slots needed"}><Input type="number" value={form.slots_needed} onChange={(e) => setForm({...form, slots_needed: Number(e.target.value)})} /></Field>
                 <Field label={isAr ? "تاريخ" : "Date"}><Input type="date" value={form.event_date} onChange={(e) => setForm({...form, event_date: e.target.value})} /></Field>
                 <Field label={isAr ? "وقت" : "Time"}><Input value={form.event_time} onChange={(e) => setForm({...form, event_time: e.target.value})} placeholder="08:00 - 12:00" /></Field>
-                <Field label={isAr ? "صورة الغلاف" : "Cover image"}><Input value={form.cover_image_url} onChange={(e) => setForm({...form, cover_image_url: e.target.value})} dir="ltr" /></Field>
+                <Field label={isAr ? "صورة الغلاف" : "Cover image"}>
+                  <input ref={imgInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageUpload(f); e.target.value = ""; }} />
+                  <div
+                    className="relative group rounded-2xl border-2 border-dashed border-border hover:border-primary/60 bg-muted/30 transition-colors overflow-hidden"
+                    style={{ minHeight: 120 }}
+                    onDragOver={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = "var(--primary)"; }}
+                    onDragLeave={(e) => { e.currentTarget.style.borderColor = ""; }}
+                    onDrop={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = ""; const f = e.dataTransfer.files?.[0]; if (f) handleImageUpload(f); }}
+                  >
+                    {form.cover_image_url ? (
+                      <>
+                        <img src={form.cover_image_url} alt="" className="w-full object-cover rounded-2xl" style={{ maxHeight: 180 }} onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center gap-2">
+                          <Button type="button" size="sm" variant="secondary" className="gap-1 rounded-xl text-xs" onClick={() => imgInputRef.current?.click()} disabled={uploading}>
+                            {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />} {isAr ? "تغيير" : "Change"}
+                          </Button>
+                          <Button type="button" size="sm" variant="destructive" className="gap-1 rounded-xl text-xs" onClick={() => setForm((f) => ({ ...f, cover_image_url: "" }))}>
+                            <X className="h-3 w-3" /> {isAr ? "حذف" : "Remove"}
+                          </Button>
+                        </div>
+                      </>
+                    ) : (
+                      <button type="button" className="w-full h-full flex flex-col items-center justify-center gap-2 p-6 text-muted-foreground hover:text-primary transition-colors" onClick={() => imgInputRef.current?.click()} disabled={uploading}>
+                        {uploading ? <Loader2 className="h-6 w-6 animate-spin text-primary" /> : <ImageIcon className="h-6 w-6" />}
+                        <p className="text-xs font-bold">{uploading ? (isAr ? "جاري..." : "Uploading...") : (isAr ? "انقر لرفع صورة" : "Click to upload")}</p>
+                      </button>
+                    )}
+                  </div>
+                  <div className="mt-1.5 flex gap-1.5">
+                    <Input value={form.cover_image_url.startsWith("blob:") ? "" : form.cover_image_url} onChange={(e) => setForm({...form, cover_image_url: e.target.value})} dir="ltr" placeholder="https://..." className="h-8 text-xs rounded-xl font-mono" />
+                    <Button type="button" variant="outline" size="sm" className="shrink-0 rounded-xl gap-1 text-xs h-8" onClick={() => imgInputRef.current?.click()} disabled={uploading}>
+                      {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />} {isAr ? "رفع" : "Upload"}
+                    </Button>
+                  </div>
+                </Field>
                 <Field label={isAr ? "مهارات مطلوبة (افصل بفاصلة)" : "Required skills (comma)"}><Input value={form.required_skills} onChange={(e) => setForm({...form, required_skills: e.target.value})} /></Field>
               </div>
               <div className="mt-3 flex items-center gap-3 rounded-xl bg-muted/30 p-3 text-xs">

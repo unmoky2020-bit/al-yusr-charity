@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Globe2, Loader2, Save, Sparkles, Trash2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Globe2, Loader2, Save, Sparkles, Trash2, Upload, Image as ImageIcon, X } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useLang } from "@/i18n/LangContext";
-import { programsApi, projectsApi, LaravelProgram, LaravelProject } from "@/data/laravelApi";
+import { programsApi, projectsApi, LaravelProgram, LaravelProject, formatServerImageUrl, uploadImage } from "@/data/laravelApi";
 import { toast } from "@/hooks/use-toast";
 
 type SeoMeta = {
@@ -60,33 +60,75 @@ export default function AdminProjectDetail() {
   const [aiBusy, setAiBusy] = useState(false);
   const [children, setChildren] = useState<Node[]>([]);
   const [togglingKey, setTogglingKey] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const imgInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = (file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    const localUrl = URL.createObjectURL(file);
+    setCoverFile(file);
+    setNode((prev) => (prev ? { ...prev, image_url: localUrl } : prev));
+    toast({ title: t(lang, "تم اختيار الصورة (سيتم رفعها وحفظها عند الضغط على حفظ)", "Image selected (will be uploaded when saved)") });
+  };
 
   const load = async () => {
     if (!id) return;
+    if (id === "new") {
+      setNode({
+        id: "new",
+        type: "project",
+        parent_id: null,
+        slug: `project-${Date.now().toString(36)}`,
+        title_ar: "",
+        title_en: "",
+        description_ar: "",
+        description_en: "",
+        image_url: null,
+        target_amount: 100000,
+        collected_amount: 0,
+        amount: 100,
+        active: true,
+        direct_checkout: true,
+        sort_order: 1,
+        metadata: {
+          schema_type: "Service",
+          twitter_card: "summary_large_image",
+          geo_region: "EG-DK",
+          geo_placename: "Mansoura, Dakahlia, Egypt",
+          geo_position: "31.0409;31.3785",
+        },
+      });
+      setChildren([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     let item: any = null;
-    let kind: "program" | "project" = "program";
+    let kind: "program" | "project" = "project";
 
-    // 1. Try Laravel Programs API
+    // 1. Try Laravel Projects API first (this is the projects admin page)
     try {
-      item = await programsApi.get(id);
+      item = await projectsApi.get(id);
+      kind = "project";
     } catch {
       try {
-        const allProgs = await programsApi.listAll();
-        item = allProgs.find((p: any) => String(p.id) === id || p.slug === id);
+        const allProjects = await projectsApi.listAll();
+        item = allProjects.find((p: any) => String(p.id) === id || p.slug === id);
+        if (item) kind = "project";
       } catch {}
     }
 
-    // 2. Fallback to Laravel Projects API
+    // 2. Fallback to Laravel Programs API
     if (!item) {
       try {
-        item = await projectsApi.get(id);
-        kind = "project";
+        item = await programsApi.get(id);
+        kind = "program";
       } catch {
         try {
-          const allProjects = await projectsApi.listAll();
-          item = allProjects.find((p: any) => String(p.id) === id || p.slug === id);
-          if (item) kind = "project";
+          const allProgs = await programsApi.listAll();
+          item = allProgs.find((p: any) => String(p.id) === id || p.slug === id);
+          if (item) kind = "program";
         } catch {}
       }
     }
@@ -243,6 +285,7 @@ export default function AdminProjectDetail() {
     }
     setSaving(true);
     try {
+      const isNew = node.id === "new";
       if (node.type === "program") {
         const payload: any = {
           slug: node.slug,
@@ -256,7 +299,7 @@ export default function AdminProjectDetail() {
           content_en: (node.metadata?.long_content_en || []).join("\n"),
           benefits_ar: node.metadata?.benefits_ar || [],
           benefits_en: node.metadata?.benefits_en || [],
-          image: node.image_url,
+          ...(coverFile ? { image: coverFile } : {}),
           target_amount: node.target_amount,
           minimum_amount: node.amount,
           is_active: node.active,
@@ -281,16 +324,40 @@ export default function AdminProjectDetail() {
           ai_faq_ar: node.metadata?.faq_ar,
           ai_faq_en: node.metadata?.faq_en,
         };
-        await programsApi.update(node.id, payload);
+        if (isNew) {
+          const res = await programsApi.create(payload);
+          setCoverFile(null);
+          toast({ title: t(lang, "تم إنشاء البرنامج بنجاح", "Program created successfully") });
+          navigate(`/admin/programs/${res.id || res.slug}`);
+          return;
+        } else {
+          await programsApi.update(node.id, payload);
+        }
       } else {
         const payload: any = {
           name: node.title_ar,
+          name_ar: node.title_ar,
+          name_en: node.title_en || node.title_ar,
+          slug: node.slug,
           description: node.description_ar || node.title_ar,
+          description_ar: node.description_ar,
+          description_en: node.description_en,
           target_amount: node.target_amount || 0,
           is_active: node.active ? 1 : 0,
+          sort_order: node.sort_order,
+          ...(coverFile ? { cover_image: coverFile } : {}),
         };
-        await projectsApi.update(node.id, payload);
+        if (isNew) {
+          const res = await projectsApi.create(payload);
+          setCoverFile(null);
+          toast({ title: t(lang, "تم إنشاء المشروع بنجاح", "Project created successfully") });
+          navigate(`/admin/projects/${res.id}`);
+          return;
+        } else {
+          await projectsApi.update(node.id, payload);
+        }
       }
+      setCoverFile(null);
       toast({ title: t(lang, "تم الحفظ بنجاح", "Saved successfully") });
     } catch (err: any) {
       toast({ title: t(lang, "فشل الحفظ", "Save failed"), description: err.message, variant: "destructive" });
@@ -415,9 +482,47 @@ export default function AdminProjectDetail() {
                   <Input dir="ltr" type="number" value={node.amount ?? ""} onChange={(e) => update("amount", e.target.value ? Number(e.target.value) : null)} /></div>
                 <div><Label>{t(lang, "هدف الجمع (EGP)", "Target amount (EGP)")}</Label>
                   <Input dir="ltr" type="number" value={node.target_amount ?? ""} onChange={(e) => update("target_amount", e.target.value ? Number(e.target.value) : null)} /></div>
-                <div className="sm:col-span-2"><Label>{t(lang, "رابط صورة الغلاف", "Cover image URL")}</Label>
-                  <Input dir="ltr" value={node.image_url || ""} onChange={(e) => update("image_url", e.target.value)} placeholder="https://…" />
-                  {node.image_url && <img src={node.image_url} alt="" className="mt-2 h-40 w-full rounded-lg object-cover" />}
+                <div className="sm:col-span-2">
+                  <Label>{t(lang, "الصورة الرئيسية", "Cover Image")}</Label>
+                  <input
+                    ref={imgInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageUpload(f); e.target.value = ""; }}
+                  />
+                  <div
+                    className="mt-1 relative group rounded-2xl border-2 border-dashed border-border hover:border-primary/60 bg-muted/30 transition-colors overflow-hidden"
+                    style={{ minHeight: 140 }}
+                    onDragOver={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = "var(--primary)"; }}
+                    onDragLeave={(e) => { e.currentTarget.style.borderColor = ""; }}
+                    onDrop={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = ""; const f = e.dataTransfer.files?.[0]; if (f) handleImageUpload(f); }}
+                  >
+                    {node.image_url ? (
+                      <>
+                        <img src={formatServerImageUrl(node.image_url) || node.image_url} alt="" className="w-full object-cover rounded-2xl" style={{ maxHeight: 200 }} onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center gap-2">
+                          <Button type="button" size="sm" variant="secondary" className="gap-1 rounded-xl text-xs" onClick={() => imgInputRef.current?.click()} disabled={uploading}>
+                            {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />} {t(lang, "تغيير", "Change")}
+                          </Button>
+                          <Button type="button" size="sm" variant="destructive" className="gap-1 rounded-xl text-xs" onClick={() => { update("image_url", ""); setCoverFile(null); }}>
+                            <X className="h-3 w-3" /> {t(lang, "حذف", "Remove")}
+                          </Button>
+                        </div>
+                      </>
+                    ) : (
+                      <button type="button" className="w-full h-full flex flex-col items-center justify-center gap-2 p-6 text-muted-foreground hover:text-primary transition-colors" onClick={() => imgInputRef.current?.click()} disabled={uploading}>
+                        {uploading ? <Loader2 className="h-7 w-7 animate-spin text-primary" /> : <ImageIcon className="h-7 w-7" />}
+                        <p className="text-sm font-bold">{uploading ? t(lang, "جاري...", "Uploading...") : t(lang, "انقر لرفع صورة", "Click to upload")}</p>
+                      </button>
+                    )}
+                  </div>
+                  <div className="mt-1.5 flex gap-1.5">
+                    <Input dir="ltr" value={(node.image_url || "").startsWith("blob:") ? "" : (node.image_url || "")} onChange={(e) => update("image_url", e.target.value)} placeholder="https://…" className="h-8 text-xs rounded-xl font-mono" />
+                    <Button type="button" variant="outline" size="sm" className="shrink-0 rounded-xl gap-1 text-xs h-8" onClick={() => imgInputRef.current?.click()} disabled={uploading}>
+                      {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />} {t(lang, "رفع", "Upload")}
+                    </Button>
+                  </div>
                 </div>
               </div>
 

@@ -42,7 +42,7 @@ export const persistAttribution = (a: AdAttribution) => {
   try {
     sessionStorage.setItem(ATTR_KEY, JSON.stringify(a));
     localStorage.setItem(ATTR_KEY, JSON.stringify(a));
-  } catch {}
+  } catch { }
 };
 
 export const readAttribution = (): AdAttribution | null => {
@@ -74,21 +74,8 @@ export const trackAdEvent = async (
   const attr = readAttribution();
   const campaignId = opts.campaignId || attr?.campaignId;
   if (!campaignId) return;
-  const payload = {
-    campaign_id: campaignId,
-    event_type: eventType,
-    session_id: getSessionId(),
-    referrer: typeof document !== "undefined" ? document.referrer || null : null,
-    user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
-    donation_id: opts.donationId || null,
-    donation_amount: opts.donationAmount ?? null,
-    metadata: {
-      ...(attr || {}),
-      ...(opts.metadata || {}),
-      path: typeof location !== "undefined" ? location.pathname + location.search : "",
-    },
-  };
-  // Supabase removed - no-op
+  // Supabase removed - tracking is a no-op; payload kept for future use
+  void { campaignId, attr, opts };
 };
 
 /** Append the persisted UTM params to a URL so attribution flows to /donate. */

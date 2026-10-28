@@ -10,6 +10,7 @@ export const HADITH = {
   ramadan: { ar: "مَن فطَّر صائماً كان له مثلُ أجره، غيرَ أنه لا ينقصُ من أجر الصائم شيئاً", en: "Whoever gives iftar to a fasting person earns the same reward, without the fasting person's reward being reduced at all.", sourceAr: "رواه الترمذي وقال: حسن صحيح", sourceEn: "al-Tirmidhi, who graded it hasan sahih" },
   markoun: { ar: "اتقوا النارَ ولو بشِقِّ تمرة", en: "Protect yourselves from the Fire, even with half a date.", sourceAr: "متفق عليه", sourceEn: "Agreed upon (Bukhari & Muslim)" },
   arboun: { ar: "ما نقصت صدقةٌ من مال", en: "Charity never decreases wealth.", sourceAr: "رواه مسلم", sourceEn: "Sahih Muslim" },
+  food: { ar: "يا أيها الناس، أفشوا السلام، وأطعِموا الطعام، وصِلوا الأرحام، وصلّوا بالليل والناس نيام، تدخلوا الجنة بسلام", en: "O people, spread peace, feed the hungry, keep the ties of kinship, and pray at night while people sleep, and you will enter Paradise in peace.", sourceAr: "رواه الترمذي وقال: حسن صحيح، وابن ماجه", sourceEn: "al-Tirmidhi (who graded it hasan sahih) and Ibn Majah" },
 } satisfies Record<string, Hadith>;
 
 type Tone = "light" | "dark" | "night" | "winter" | "paper";

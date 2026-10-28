@@ -33,17 +33,15 @@ const SelectTrigger = React.forwardRef<
       ref={ref}
       dir={detectedDir}
       className={cn(
-        "flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-        isRtl ? "flex-row-reverse justify-between" : "justify-between",
+        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
         className,
       )}
       {...props}
     >
-      {/* In RTL: icon renders on LEFT (flex-row-reverse pushes it to start=right visually but order matters) */}
+      {children}
       <SelectPrimitive.Icon asChild>
         <ChevronDown className="h-4 w-4 opacity-50 shrink-0" />
       </SelectPrimitive.Icon>
-      {children}
     </SelectPrimitive.Trigger>
   );
 });
@@ -124,12 +122,12 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 ltr:pl-8 ltr:pr-2 rtl:pr-8 rtl:pl-2 text-sm text-start outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 focus:bg-accent focus:text-accent-foreground",
+      "relative flex w-full cursor-default select-none items-center rounded-lg py-2 ltr:pl-8 ltr:pr-2 rtl:pr-8 rtl:pl-2 text-sm text-start outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 transition-colors focus:bg-primary/10 focus:text-primary data-[state=checked]:bg-primary/15 data-[state=checked]:text-primary font-medium",
       className,
     )}
     {...props}
   >
-    <span className="absolute ltr:left-2 ltr:right-auto rtl:right-2 rtl:left-auto flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute ltr:left-2.5 ltr:right-auto rtl:right-2.5 rtl:left-auto flex h-3.5 w-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
         <Check className="h-4 w-4 text-primary" />
       </SelectPrimitive.ItemIndicator>

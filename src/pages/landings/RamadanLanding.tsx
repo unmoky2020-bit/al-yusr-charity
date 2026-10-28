@@ -314,7 +314,7 @@ const RamadanLanding = () => {
       finalCtaClassName="ramadan-night"
       finalCtaDecor={<><NightSky /><Crescent className="pointer-events-none absolute end-[10%] top-10 h-16 w-16 text-[hsl(var(--gold))]" /></>}
       relatedLinks={[
-        { href: "/food-box", ar: "كرتونة الغذاء الشهرية", en: "Monthly food box" },
+        { href: "/food-box", ar: "الغذاء الشهري (لحوم وكرتونة ووجبات)", en: "Monthly food (meat, carton & meals)" },
         { href: "/zakat", ar: "حساب ودفع الزكاة", en: "Calculate & pay Zakat" },
         { href: "/farm", ar: "المزرعة الوقفية", en: "Endowment farm" },
         { href: "/trust", ar: "الشفافية وتقارير التوزيع", en: "Trust & reports" },

@@ -17,6 +17,16 @@ export interface DonationRecord {
   createdAt: string;
   updatedAt: string;
   note?: string;
+  notes?: string;
+  items?: Array<{
+    title: string;
+    category?: string;
+    quantity?: number;
+    amount: number;
+    unit_price?: number;
+  }>;
+  targetType?: string;
+  targetDetails?: Record<string, any>;
   /** Data URL of the uploaded transfer receipt (manual methods) */
   receiptDataUrl?: string;
   /** Filename of the uploaded receipt (manual methods) */
@@ -39,11 +49,11 @@ export const donationsStore = {
   all: read,
   byRef: (ref: string) => read().find((d) => d.ref === ref),
   byDonor: (email: string) => read().filter((d) => d.donor.email.toLowerCase() === email.toLowerCase()),
-  create: (rec: Omit<DonationRecord, "ref" | "createdAt" | "updatedAt" | "status"> & { status?: DonationStatus }): DonationRecord => {
+  create: (rec: Omit<DonationRecord, "ref" | "createdAt" | "updatedAt" | "status"> & { ref?: string; status?: DonationStatus }): DonationRecord => {
     const now = new Date().toISOString();
-    const ref = "ALY-" + Date.now().toString(36).toUpperCase();
+    const ref = rec.ref || ("ALY-" + Date.now().toString(36).toUpperCase());
     const full: DonationRecord = { ref, status: rec.status ?? "pending", createdAt: now, updatedAt: now, ...rec } as DonationRecord;
-    write([full, ...read()]);
+    write([full, ...read().filter((x) => x.ref !== ref)]);
     return full;
   },
   add: (rec: any): DonationRecord => {

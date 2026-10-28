@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { LogIn, Mail, Lock, Eye, EyeOff, Phone, KeyRound, ChevronDown, Copy, Check, Code2, X as XIcon } from "lucide-react";
+import { LogIn, Mail, Lock, Eye, EyeOff, Phone, X as XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -13,6 +13,16 @@ import { lovable } from "@/integrations/lovable";
 
 const REMEMBER_KEY = "alyusr.login.remember.v1";
 
+/**
+ * Only accept an in-app path for `?next=`: a single leading slash, not protocol-relative
+ * (`//evil.com`) and no backslashes (browsers normalise `/\evil.com` to `//evil.com`).
+ * Anything else falls back to the role-based landing page.
+ */
+const safeNext = (raw: string | null | undefined, fallback: string): string => {
+  const v = (raw ?? "").trim();
+  return /^\/(?!\/)/.test(v) && !v.includes("\\") ? v : fallback;
+};
+
 const Login = () => {
   const { lang } = useLang();
   const { login, session, user } = useAuth();
@@ -20,29 +30,18 @@ const Login = () => {
   const [params] = useSearchParams();
   const [tab, setTab] = useState<"email" | "phone">("email");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
   const [remember, setRemember] = useState(true);
-  const [devOpen, setDevOpen] = useState(false);
-  const [copied, setCopied] = useState<string | null>(null);
-  const isDev = import.meta.env.DEV;
 
   // Hydrate remembered identifier on mount
   useEffect(() => {
     try {
       const raw = localStorage.getItem(REMEMBER_KEY);
       if (!raw) return;
-      const data = JSON.parse(raw) as { tab?: "email" | "phone"; email?: string; phone?: string };
-      if (data.tab === "phone") {
-        setTab("phone");
-        if (data.phone) setPhone(data.phone);
-      } else {
-        if (data.email) setEmail(data.email);
-      }
+      const data = JSON.parse(raw) as { email?: string };
+      if (data.email) setEmail(data.email);
       setRemember(true);
     } catch {}
   }, []);
@@ -50,30 +49,8 @@ const Login = () => {
   const clearRemembered = () => {
     try { localStorage.removeItem(REMEMBER_KEY); } catch {}
     setEmail("");
-    setPhone("");
     setPassword("");
-    setOtp("");
-    setOtpSent(false);
     toast({ title: lang === "ar" ? "تم مسح البيانات المحفوظة" : "Saved data cleared" });
-  };
-
-  const demoAccounts = [
-    { role: "Admin", email: "admin@alyusr.com", password: "12345678" },
-    { role: "Editor", email: "gomaa@test.com", password: "01102670841" },
-  ];
-
-  const copy = async (text: string, key: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(key);
-      setTimeout(() => setCopied(null), 1200);
-    } catch {}
-  };
-
-  const fill = (acc: { email: string; password: string }) => {
-    setTab("email");
-    setEmail(acc.email);
-    setPassword(acc.password);
   };
 
   // Resolve the right landing page based on the user's role.
@@ -88,8 +65,7 @@ const Login = () => {
   // After Supabase confirms the session AND profile/roles loaded, navigate.
   useEffect(() => {
     if (session && user) {
-      const next = params.get("next");
-      nav(next || roleLanding(), { replace: true });
+      nav(safeNext(params.get("next"), roleLanding()), { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, user, params, nav]);
@@ -97,28 +73,8 @@ const Login = () => {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (tab === "phone") {
-      // Mock OTP flow
-      if (!otpSent) {
-        if (!/^01\d{9}$/.test(phone.trim())) {
-          toast({ title: lang === "ar" ? "رقم الهاتف غير صحيح" : "Invalid phone number", description: lang === "ar" ? "أدخل 11 رقمًا يبدأ بـ 01" : "Enter 11 digits starting with 01", variant: "destructive", });
-          return;
-        }
-        setOtpSent(true);
-        toast({ title: lang === "ar" ? " تم إرسال كود (تجربة: 1234)" : " Code sent (demo: 1234)" });
-        return;
-      }
-      if (otp.trim() !== "1234") {
-        toast({ title: lang === "ar" ? "كود التحقق غير صحيح" : "Invalid verification code", description: lang === "ar" ? "تأكد من الكود الذي أُرسل إلى هاتفك." : "Check the code sent to your phone.", variant: "destructive", });
-        return;
-      }
-      if (remember) {
-        try { localStorage.setItem(REMEMBER_KEY, JSON.stringify({ tab: "phone", phone: phone.trim() })); } catch {}
-      } else {
-        try { localStorage.removeItem(REMEMBER_KEY); } catch {}
-      }
-      toast({ title: lang === "ar" ? `أهلاً بعودتك ` : `Welcome back `, description: lang === "ar" ? "تم تسجيل الدخول بنجاح." : "You are now signed in.", });
-      const next = params.get("next");
-      nav(next || roleLanding());
+      // The backend has no phone/OTP login endpoint yet — never pretend to sign in.
+      toast({ title: lang === "ar" ? "تسجيل الدخول بالهاتف غير متاح حاليًا" : "Phone sign-in is not available yet", description: lang === "ar" ? "يرجى الدخول باستخدام البريد الإلكتروني وكلمة المرور." : "Please sign in with your email and password.", variant: "destructive" });
       return;
     }
     setLoading(true);
@@ -192,7 +148,7 @@ const Login = () => {
 
             {/* Tabs */}
             <div className="mt-6 grid grid-cols-2 gap-1 rounded-full bg-muted p-1">
-              <button type="button" onClick={() => { setTab("email"); setOtpSent(false); }}
+              <button type="button" onClick={() => setTab("email")}
                 className={`rounded-full py-2 text-xs font-extrabold transition ${tab === "email" ? "bg-card text-primary shadow-soft" : "text-muted-foreground"}`}>
                 <Mail className="me-1 inline h-3.5 w-3.5" /> {lang === "ar" ? "البريد" : "Email"}
               </button>
@@ -218,26 +174,24 @@ const Login = () => {
                   </div>
                 </>
               ) : (
-                <>
-                  <div className="relative">
-                    <Phone className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input type="tel" required dir="ltr" placeholder="01XXXXXXXXX" className="h-12 ps-9" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={otpSent} />
-                  </div>
-                  {otpSent && (
-                    <div className="relative">
-                      <KeyRound className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input type="text" required maxLength={4} dir="ltr" placeholder="1234" className="h-12 ps-9 text-center font-mono text-lg tracking-[0.6em]" value={otp} onChange={(e) => setOtp(e.target.value)} />
-                    </div>
-                  )}
-                </>
+                <div role="status" className="rounded-2xl border border-dashed border-secondary/40 bg-muted/30 p-4 text-center">
+                  <Phone className="mx-auto h-5 w-5 text-primary" />
+                  <p className="mt-2 text-sm font-extrabold text-primary">
+                    {lang === "ar" ? "تسجيل الدخول بالهاتف غير متاح حاليًا" : "Phone sign-in is not available yet"}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {lang === "ar" ? "يمكنك الدخول باستخدام البريد الإلكتروني وكلمة المرور." : "You can sign in with your email and password."}
+                  </p>
+                  <button type="button" onClick={() => setTab("email")} className="mt-3 rounded-full bg-secondary/20 px-3.5 py-1.5 text-xs font-extrabold text-primary transition hover:bg-secondary/30">
+                    {lang === "ar" ? "الدخول بالبريد الإلكتروني" : "Sign in with email"}
+                  </button>
+                </div>
               )}
-              <Button type="submit" disabled={loading} className="h-12 w-full bg-orange-grad text-base font-extrabold text-accent-foreground shadow-cta hover:opacity-95">
-                {loading
-                  ? (lang === "ar" ? "جاري الدخول..." : "Signing in...")
-                  : tab === "phone"
-                  ? (otpSent ? (lang === "ar" ? "تأكيد الكود" : "Verify code") : (lang === "ar" ? "إرسال الكود" : "Send code"))
-                  : (lang === "ar" ? "دخول" : "Sign in")}
-              </Button>
+              {tab === "email" && (
+                <Button type="submit" disabled={loading} className="h-12 w-full bg-orange-grad text-base font-extrabold text-accent-foreground shadow-cta hover:opacity-95">
+                  {loading ? (lang === "ar" ? "جاري الدخول..." : "Signing in...") : (lang === "ar" ? "دخول" : "Sign in")}
+                </Button>
+              )}
             </form>
 
             {/* Remember + clear */}
@@ -302,59 +256,6 @@ const Login = () => {
                 </Link>
               </div>
             </div>
-
-            {isDev && (
-              <div className="mt-5 rounded-2xl border border-dashed border-secondary/40 bg-muted/30">
-                <button
-                  type="button"
-                  onClick={() => setDevOpen((v) => !v)}
-                  className="flex w-full items-center justify-between gap-2 px-4 py-2.5 text-xs font-extrabold text-primary"
-                  aria-expanded={devOpen}
-                >
-                  <span className="flex items-center gap-2">
-                    <Code2 className="h-3.5 w-3.5 text-accent" />
-                    {lang === "ar" ? "حسابات تجريبية (للمطورين فقط)" : "Demo accounts (developers only)"}
-                  </span>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${devOpen ? "rotate-180" : ""}`} />
-                </button>
-                {devOpen && (
-                  <div className="space-y-2 border-t border-secondary/30 p-3">
-                    <p className="text-[11px] text-muted-foreground">
-                      {lang === "ar" ? "مرئية فقط في وضع التطوير. اضغط تعبئة، أو انسخ القيم." : "Visible only in dev. Click Fill, or copy values."}
-                    </p>
-                    {demoAccounts.map((a) => (
-                      <div key={a.email} className="rounded-xl bg-card p-2 shadow-soft">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="rounded-full bg-secondary/20 px-2 py-0.5 text-[10px] font-extrabold text-primary">{a.role}</span>
-                          <button type="button" onClick={() => fill(a)} className="text-[10px] font-bold text-accent hover:underline">
-                            {lang === "ar" ? "تعبئة" : "Fill"}
-                          </button>
-                        </div>
-                        <div className="mt-1.5 space-y-1">
-                          {[
-                            { k: `${a.email}-e`, label: "email", val: a.email },
-                            { k: `${a.email}-p`, label: "password", val: a.password },
-                          ].map((row) => (
-                            <div key={row.k} className="flex items-center gap-1.5 rounded-md bg-muted/50 px-2 py-1">
-                              <span className="w-16 text-[10px] font-bold uppercase text-muted-foreground">{row.label}</span>
-                              <code className="flex-1 truncate text-[11px]" dir="ltr">{row.val}</code>
-                              <button
-                                type="button"
-                                onClick={() => copy(row.val, row.k)}
-                                className="grid h-6 w-6 place-items-center rounded text-muted-foreground hover:bg-secondary/30 hover:text-primary"
-                                aria-label="copy"
-                              >
-                                {copied === row.k ? <Check className="h-3 w-3 text-accent" /> : <Copy className="h-3 w-3" />}
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
 
           </div>
         </div>

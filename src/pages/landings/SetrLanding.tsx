@@ -486,7 +486,7 @@ const SetrLanding = () => {
       relatedLinks={[
         { href: "/dhill", ar: "حملة ظِلّ (سقيا الماء وبرودة الصيف)", en: "Dhill campaign" },
         { href: "/markoun", ar: "حملة مَرْكون (الأثاث والأجهزة)", en: "Markoun campaign" },
-        { href: "/food-box", ar: "كرتونة الغذاء الشهرية", en: "Monthly food box" },
+        { href: "/food-box", ar: "الغذاء الشهري (لحوم وكرتونة ووجبات)", en: "Monthly food (meat, carton & meals)" },
         { href: "/trust", ar: "الشفافية والتقارير الميدانية", en: "Trust & reports" },
       ]}
       faq={{

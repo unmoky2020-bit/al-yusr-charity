@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import {
   getCaseByRef, listCaseUpdates, listCaseMedia, listCaseJourney,
+  getCaseImageUrl,
   type Urgency, type CaseMediaRow, type JourneyStepRow,
 } from "@/data/casesApi";
 import { supabase } from "@/integrations/supabase/client";
@@ -339,11 +340,14 @@ const CaseDetail = () => {
       <section className="bg-background py-10 md:py-14">
         <div className="container mx-auto grid max-w-5xl gap-6 px-4 lg:grid-cols-[2fr_1fr]">
           <article className="space-y-4">
-            {c.cover_image_url && (
-              <div className="aspect-video overflow-hidden rounded-3xl bg-muted">
-                <img src={c.cover_image_url} alt={c.title} className="h-full w-full object-cover" />
-              </div>
-            )}
+            {(() => {
+              const coverImg = c.cover_image_url || getCaseImageUrl(c);
+              return coverImg ? (
+                <div className="aspect-video overflow-hidden rounded-3xl bg-muted shadow-soft">
+                  <img src={coverImg} alt={c.title} className="h-full w-full object-cover" />
+                </div>
+              ) : null;
+            })()}
             <div className="prose prose-sm max-w-none whitespace-pre-line text-foreground/90">{c.story || (isRTL ? "تفاصيل الحالة قيد التحديث." : "Story is being updated.")}</div>
 
             {media.length > 0 && (

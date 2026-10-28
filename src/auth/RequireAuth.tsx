@@ -8,7 +8,11 @@ export const RequireAuth = ({ children, roles }: { children: ReactNode; roles?: 
   const { user, loading, session } = useAuth();
   const loc = useLocation();
   if (loading || (session && !user)) {
-    return <div className="grid min-h-[40vh] place-items-center text-sm text-muted-foreground">…</div>;
+    return (
+      <div className="grid min-h-[60vh] place-items-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary" aria-label="loading" />
+      </div>
+    );
   }
   if (!session || !user) return <Navigate to={`/login?next=${encodeURIComponent(loc.pathname)}`} replace />;
   if (roles && roles.length) {

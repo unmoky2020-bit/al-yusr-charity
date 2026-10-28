@@ -315,13 +315,13 @@ const Inner = () => {
                 <div className="rounded-3xl bg-card p-6 shadow-soft">
                   <h3 className="text-lg font-extrabold text-primary">{lang === "ar" ? "آخر التحديثات" : "Latest updates"}</h3>
                   <ul className="mt-3 space-y-2 text-sm">
-                    {dbDonations.slice(0, 3).map((d) => {
+                    {dbDonations.slice(0, 3).map((d, idx) => {
                       // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       const row = d as any;
                       const label = row.cases?.title
                         || (row.case_categories ? (lang === "ar" ? row.case_categories.name_ar : row.case_categories.name_en) : (lang === "ar" ? "تبرع عام" : "General donation"));
                       return (
-                        <li key={row.ref_code} className="flex items-center gap-3 rounded-xl bg-muted/40 p-3">
+                        <li key={row.ref_code || row.id || idx} className="flex items-center gap-3 rounded-xl bg-muted/40 p-3">
                           <CheckCircle2 className="h-5 w-5 shrink-0 text-secondary" />
                           <div className="flex-1">
                             <p className="font-bold text-primary">{label} — {Number(row.amount).toLocaleString()} {row.currency || "EGP"}</p>
@@ -384,14 +384,14 @@ const Inner = () => {
                       if (kindFilter === "program") return !isCase;
                       return true;
                     })
-                    .map((d) => {
+                    .map((d, idx) => {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const row = d as any;
                     const ref = row.ref_code as string;
                     const isOpen = openRef === ref;
                     const isCase = !!row.case_id;
                     return (
-                      <article key={ref} className="rounded-2xl border border-border/60 bg-muted/20 p-4">
+                      <article key={ref || row.id || idx} className="rounded-2xl border border-border/60 bg-muted/20 p-4">
                         <header className="flex flex-wrap items-center justify-between gap-2">
                           <div className="min-w-0">
                             <div className="flex items-center gap-2">

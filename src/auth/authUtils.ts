@@ -1,8 +1,15 @@
-import type { Session } from "@supabase/supabase-js";
 import type { Role } from "./AuthContext";
 
+type MinimalSession = {
+  user: {
+    id: string;
+    email?: string;
+    created_at?: string;
+  } | null;
+};
+
 export const buildUserFromSession = (
-  sess: Session | null,
+  sess: MinimalSession | null,
   profile?: {
     full_name?: string | null;
     phone?: string | null;

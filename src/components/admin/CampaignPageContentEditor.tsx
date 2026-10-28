@@ -1,3 +1,5 @@
+import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { CampaignPageContent, L } from "@/data/campaignPages/types";
@@ -96,18 +98,60 @@ export const SectionsPanel = (p: PanelProps) => {
     <div className="space-y-4">
       {Object.keys(value.sections).map((key) => {
         const sec = value.sections[key];
+        const dynamic = !!sec.dynamic;
+        const extraLabel = sec.extraLabel ? (isAr ? sec.extraLabel.ar : sec.extraLabel.en) : (isAr ? "نص إضافي" : "Extra");
+        const move = (i: number, dir: -1 | 1) => patch((f) => {
+          const items = f.sections[key].items;
+          const j = i + dir;
+          if (j < 0 || j >= items.length) return;
+          [items[i], items[j]] = [items[j], items[i]];
+        });
         return (
           <Box key={key} title={`${isAr ? sec.title.ar || key : sec.title.en || key}  ·  ${key}`}>
             <LField label={isAr ? "عنوان القسم" : "Section title"} value={sec.title} onChange={(v) => patch((f) => { f.sections[key].title = v; })} />
             {sec.lead && <LField label={isAr ? "مقدمة القسم" : "Section lead"} value={sec.lead} onChange={(v) => patch((f) => { f.sections[key].lead = v; })} multiline />}
+            {dynamic && (
+              <p className="text-[11px] text-muted-foreground">
+                {isAr ? "قائمة حرة: أضف عناصر أو احذفها أو رتّبها، ثم اضغط حفظ." : "Free list: add, remove or reorder items, then save."}
+              </p>
+            )}
             {sec.items.map((it, i) => (
               <div key={it.id} className="rounded-xl border border-border p-3">
-                <span className="mb-3 block font-mono text-[11px] text-muted-foreground" dir="ltr">#{it.id}</span>
+                <div className="mb-3 flex items-center justify-between gap-2">
+                  <span className="font-mono text-[11px] text-muted-foreground" dir="ltr">#{it.id}</span>
+                  {dynamic && (
+                    <span className="flex items-center gap-1">
+                      <Button type="button" size="icon" variant="ghost" className="h-7 w-7" disabled={i === 0} onClick={() => move(i, -1)} title={isAr ? "أعلى" : "Up"}><ArrowUp className="h-3.5 w-3.5" /></Button>
+                      <Button type="button" size="icon" variant="ghost" className="h-7 w-7" disabled={i === sec.items.length - 1} onClick={() => move(i, 1)} title={isAr ? "أسفل" : "Down"}><ArrowDown className="h-3.5 w-3.5" /></Button>
+                      <Button type="button" size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => patch((f) => { f.sections[key].items.splice(i, 1); })} title={isAr ? "حذف" : "Remove"}><Trash2 className="h-3.5 w-3.5" /></Button>
+                    </span>
+                  )}
+                </div>
                 <LField label={isAr ? "العنوان" : "Title"} value={it.title} onChange={(v) => patch((f) => { f.sections[key].items[i].title = v; })} />
-                <div className="mt-3"><LField label={isAr ? "الوصف" : "Description"} value={it.desc} onChange={(v) => patch((f) => { f.sections[key].items[i].desc = v; })} multiline /></div>
-                {it.extra && <div className="mt-3"><LField label={isAr ? "نص إضافي" : "Extra"} value={it.extra} onChange={(v) => patch((f) => { f.sections[key].items[i].extra = v; })} /></div>}
+                <div className="mt-3"><LField label={isAr ? "الوصف" : "Description"} value={it.desc} onChange={(v) => patch((f) => { f.sections[key].items[i].desc = v; })} multiline={!dynamic} /></div>
+                {(it.extra || dynamic) && (
+                  <div className="mt-3">
+                    <LField label={extraLabel} value={it.extra ?? { ar: "", en: "" }} onChange={(v) => patch((f) => { f.sections[key].items[i].extra = v; })} />
+                  </div>
+                )}
               </div>
             ))}
+            {dynamic && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="gap-1.5 font-black"
+                onClick={() => patch((f) => {
+                  const items = f.sections[key].items;
+                  let n = items.length + 1;
+                  while (items.some((x) => x.id === `item_${n}`)) n += 1;
+                  items.push({ id: `item_${n}`, title: { ar: "", en: "" }, desc: { ar: "", en: "" }, extra: { ar: "", en: "" } });
+                })}
+              >
+                <Plus className="h-4 w-4" /> {isAr ? "إضافة عنصر" : "Add item"}
+              </Button>
+            )}
           </Box>
         );
       })}

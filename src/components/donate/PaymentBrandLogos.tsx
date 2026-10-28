@@ -2,11 +2,11 @@ import React from "react";
 import { Truck } from "lucide-react";
 
 /**
- * شعارات رسمية وحديثة لشركات الدفع باستخدام الصور الرسمية الدقيقة
+ * شعارات رسمية وموحدة لشركات وطرق الدفع بأيقونة واحدة واضحة لكل طريقة
  */
 
 export const VodafoneCashLogo = ({ className = "h-6 sm:h-7" }: { className?: string }) => (
-  <div className={`inline-flex items-center gap-1.5 shrink-0 ${className}`}>
+  <div className={`inline-flex items-center justify-center shrink-0 ${className}`}>
     <img
       src="/images/payments/vodafone.svg"
       alt="Vodafone Cash"
@@ -17,7 +17,7 @@ export const VodafoneCashLogo = ({ className = "h-6 sm:h-7" }: { className?: str
 );
 
 export const InstaPayLogo = ({ className = "h-6 sm:h-7" }: { className?: string }) => (
-  <div className={`inline-flex items-center shrink-0 ${className}`}>
+  <div className={`inline-flex items-center justify-center shrink-0 ${className}`}>
     <img
       src="/images/payments/instapay.png"
       alt="InstaPay"
@@ -28,7 +28,7 @@ export const InstaPayLogo = ({ className = "h-6 sm:h-7" }: { className?: string 
 );
 
 export const BankMisrLogo = ({ className = "h-6 sm:h-7" }: { className?: string }) => (
-  <div className={`inline-flex items-center shrink-0 ${className}`}>
+  <div className={`inline-flex items-center justify-center shrink-0 ${className}`}>
     <img
       src="/images/payments/banque-misr.svg"
       alt="Banque Misr"
@@ -38,11 +38,28 @@ export const BankMisrLogo = ({ className = "h-6 sm:h-7" }: { className?: string 
   </div>
 );
 
-export const CardBrandsLogo = ({ className = "h-4.5 sm:h-5" }: { className?: string }) => (
-  <div className={`inline-flex items-center justify-center gap-1 shrink-0 max-w-full ${className}`}>
-    <img src="/images/payments/visa.svg" alt="Visa" className="h-3.5 sm:h-4 w-auto object-contain shrink-0" />
-    <img src="/images/payments/mastercard.svg" alt="Mastercard" className="h-3.5 sm:h-4 w-auto object-contain shrink-0" />
-    <img src="/images/payments/meeza.svg" alt="Meeza" className="h-3.5 sm:h-4 w-auto object-contain shrink-0" />
+/**
+ * أيقونة موحدة فردية أنيقة للبطاقات البنكية بدلاً من تكديس 3 شعارات
+ */
+export const SingleCardLogo = ({ className = "h-5 sm:h-6" }: { className?: string }) => (
+  <div className={`inline-flex items-center justify-center shrink-0 ${className}`}>
+    <img
+      src="/images/payments/bank-card.svg"
+      alt="بطاقة بنكية"
+      className="h-full w-auto max-h-full object-contain drop-shadow-2xs"
+      loading="lazy"
+    />
+  </div>
+);
+
+export const KashierLogo = ({ className = "h-5 sm:h-6" }: { className?: string }) => (
+  <div className={`inline-flex items-center justify-center shrink-0 ${className}`}>
+    <img
+      src="/images/payments/kashier.svg"
+      alt="Kashier"
+      className="h-full w-auto max-h-full object-contain"
+      loading="lazy"
+    />
   </div>
 );
 
@@ -76,12 +93,12 @@ export const FawryLogo = ({ className = "h-6" }: { className?: string }) => (
 );
 
 /**
- * Resolver يعيد الشعار المناسب بناءً على مفتاح أو مزود طريقة الدفع
+ * Resolver يعيد الشعار المناسب بأيقونة واحدة نظيفة بناءً على طريقة الدفع
  */
 export const PaymentBrandIcon = ({
   methodKey = "",
   provider = "",
-  className = "h-6 sm:h-7",
+  className = "h-5 sm:h-6",
   showText = false,
 }: {
   methodKey?: string;
@@ -98,14 +115,11 @@ export const PaymentBrandIcon = ({
   if (k.includes("instapay") || p.includes("instapay")) {
     return <InstaPayLogo className={className} />;
   }
+  if (k.includes("kashier") || p.includes("kashier")) {
+    return <KashierLogo className={className} />;
+  }
   if (k.includes("fawry") || p.includes("fawry")) {
     return <FawryLogo className={className} />;
-  }
-  if (k.includes("card") || k.includes("credit") || k.includes("visa") || p === "paymob") {
-    return <CardBrandsLogo className={className} />;
-  }
-  if (k.includes("stripe") || p.includes("stripe")) {
-    return <StripeLogo className={className} />;
   }
   if (k.includes("bank") || k.includes("misr") || k.includes("cib") || k.includes("adib")) {
     return <BankMisrLogo className={className} />;
@@ -113,6 +127,13 @@ export const PaymentBrandIcon = ({
   if (k.includes("delegate") || k.includes("pickup") || k.includes("mandoub")) {
     return <DelegateLogo className={className} showText={showText} />;
   }
+  if (k.includes("stripe") || p.includes("stripe")) {
+    return <StripeLogo className={className} />;
+  }
 
-  return <CardBrandsLogo className={className} />;
+  // الافتراضي للبطاقات البنكية: أيقونة واحدة أنيقة وموحدة
+  return <SingleCardLogo className={className} />;
 };
+
+// Aliases for backwards compatibility
+export const CardBrandsLogo = SingleCardLogo;

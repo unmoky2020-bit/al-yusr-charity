@@ -1,4 +1,6 @@
 import { useState, useMemo, useCallback, memo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchFaqs, type FaqItem } from "@/data/faqsApi";
 import { useServicesList, type ServiceCard } from "@/hooks/useServices";
 import { Helmet } from "react-helmet-async";
 import { motion, useReducedMotion } from "motion/react";
@@ -144,6 +146,25 @@ const ServicesMap = () => {
 
   const { data: remoteServices } = useServicesList();
   const serviceList = remoteServices && remoteServices.length > 0 ? remoteServices : SERVICE_PAGE_LIST;
+
+  const { data: dynamicFaqs } = useQuery<FaqItem[]>({
+    queryKey: ["faqs-services"],
+    queryFn: () => fetchFaqs({ categorySlug: "services" }),
+    staleTime: 60_000,
+  });
+
+  const faqs = useMemo(() => {
+    if (dynamicFaqs && dynamicFaqs.length > 0) {
+      return dynamicFaqs.map((f, i) => ({
+        id: `faq-${f.id || i}`,
+        q_ar: f.question_ar,
+        q_en: f.question_en || f.question_ar,
+        a_ar: f.answer_ar,
+        a_en: f.answer_en || f.answer_ar,
+      }));
+    }
+    return FAQS;
+  }, [dynamicFaqs]);
 
   const totalPrograms = useMemo(
     () => DONATE_SECTORS.reduce((n, s) => n + s.programs.length, 0),
@@ -541,7 +562,7 @@ const ServicesMap = () => {
           </div>
           <div className="mt-8 rounded-3xl border border-border bg-card p-4 md:p-6 shadow-soft">
             <Accordion type="single" collapsible className="w-full space-y-2">
-              {FAQS.map((faq) => (
+              {faqs.map((faq) => (
                 <AccordionItem key={faq.id} value={faq.id} className="border-border/60">
                   <AccordionTrigger className="text-start text-base font-extrabold text-primary hover:text-secondary">
                     {isRTL ? faq.q_ar : faq.q_en}
@@ -552,6 +573,17 @@ const ServicesMap = () => {
                 </AccordionItem>
               ))}
             </Accordion>
+          </div>
+
+          {/* Center link to FAQ Hub */}
+          <div className="mt-8 flex justify-center">
+            <Link
+              to="/faqs"
+              className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-secondary/40 bg-card px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-bold text-primary shadow-sm hover:bg-secondary/10 transition"
+            >
+              <span>{isRTL ? "مركز الأسئلة الشائعة" : "FAQ Center"}</span>
+              <Arrow className="h-3.5 w-3.5 text-secondary" />
+            </Link>
           </div>
         </div>
       </section>

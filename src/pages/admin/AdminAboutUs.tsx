@@ -23,6 +23,12 @@ import {
   Loader2,
   RefreshCw,
   Percent,
+  Upload,
+  Image as ImageIcon,
+  ExternalLink,
+  CheckCircle2,
+  Copy,
+  RotateCcw,
 } from "lucide-react";
 import {
   aboutUsApi,
@@ -35,7 +41,12 @@ import {
   AboutUsValueItem,
   AboutUsVisionItem,
   invalidateApiCache,
+  galleryApi,
+  resolveStorageUrl,
+  formatServerImageUrl,
 } from "@/data/laravelApi";
+import { compressImage } from "@/lib/image-compress";
+import aboutHero from "@/assets/about-hero-classroom.jpg";
 
 // Cleaned of legacy local storage caching to ensure 100% synchronization with Laravel API
 
@@ -95,6 +106,41 @@ export default function AdminAboutUs() {
   const [loading, setLoading] = useState(true);
   const [savingSection, setSavingSection] = useState<string | null>(null);
   const [data, setData] = useState<AboutUsData>(ABOUT_US_DEFAULT_DATA);
+  const [uploadingHero, setUploadingHero] = useState(false);
+  const [uploadCompressionRatio, setUploadCompressionRatio] = useState<number | null>(null);
+
+  const handleUploadHeroImage = async (file: File) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error(isRTL ? "يرجى اختيار ملف صورة صالح (JPG, PNG, WebP)" : "Please select a valid image file");
+      return;
+    }
+
+    setUploadingHero(true);
+    setUploadCompressionRatio(null);
+    try {
+      // 1. Client-side compression (reduces multi-megabyte images by 70-80% while retaining high visual quality)
+      const compressed = await compressImage(file, { maxEdge: 1600, quality: 0.82 });
+      if (file.size > compressed.size) {
+        const ratio = Math.round(((file.size - compressed.size) / file.size) * 100);
+        setUploadCompressionRatio(ratio);
+      }
+
+      // 2. Upload to Laravel backend storage (/api/v1/gallery)
+      const url = await galleryApi.uploadImage(compressed, "صورة_هيرو_من_نحن");
+      if (url) {
+        updateHero("image", url);
+        toast.success(isRTL ? "تم ضغط ورفع الصورة بنجاح!" : "Image compressed and uploaded successfully!");
+      } else {
+        throw new Error("No URL returned from server");
+      }
+    } catch (err: any) {
+      console.error("Hero image upload error:", err);
+      toast.error(isRTL ? "تعذر رفع الصورة: " + (err?.message || "خطأ في الاتصال") : "Failed to upload image");
+    } finally {
+      setUploadingHero(false);
+    }
+  };
 
   // Load live data from Laravel API exclusively
   // silent=true: skip full-page spinner (used after saves to sync without flickering)
@@ -474,32 +520,169 @@ export default function AdminAboutUs() {
               </div>
             </div>
 
-            {/* Official Registration & Media Info */}
+            {/* Official Registration Number */}
             <div className="rounded-2xl border border-border bg-card p-5 space-y-4 shadow-xs">
               <div className="flex items-center justify-between border-b border-border pb-2.5">
                 <span className="font-extrabold text-sm text-primary flex items-center gap-2">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                  {isRTL ? "البيانات الرسمية وصورة الهيرو" : "Official Registration & Media"}
+                  {isRTL ? "البيانات الرسمية والإشهار" : "Official Registration"}
                 </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-foreground">{isRTL ? "رقم الإشهار الرسمي" : "Registration Number"}</label>
-                  <Input
-                    value={data.hero.registration_number || "2665/2019"}
-                    onChange={(e) => updateHero("registration_number", e.target.value)}
-                    placeholder="2665/2019"
-                    className="rounded-xl"
+              <div className="space-y-1.5 max-w-md">
+                <label className="text-xs font-bold text-foreground">{isRTL ? "رقم الإشهار الرسمي" : "Registration Number"}</label>
+                <Input
+                  value={data.hero.registration_number || "2665/2019"}
+                  onChange={(e) => updateHero("registration_number", e.target.value)}
+                  placeholder="2665/2019"
+                  className="rounded-xl"
+                />
+              </div>
+            </div>
+
+            {/* Dedicated Hero Image Uploader with Compression & Preview */}
+            <div className="rounded-2xl border border-border bg-card p-5 space-y-4 shadow-xs">
+              <div className="border-b border-border pb-3">
+                <span className="font-extrabold text-sm text-primary flex items-center gap-2">
+                  <ImageIcon className="h-4 w-4 text-emerald-600" />
+                  {isRTL ? "صورة الهيرو التعريفية (رفع، ضغط وحفظ)" : "Hero Media & Photo (Upload, Compress & Save)"}
+                </span>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {isRTL
+                    ? "الصورة الرئيسية التي تظهر بجانب النص التعريفي في أعلى صفحة من نحن"
+                    : "The main photo displayed beside the intro text at the top of About Us"}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {/* 1. Row 1: Image Preview Box — Full width, prominent and clear */}
+                <div className="relative h-64 sm:h-72 md:h-80 w-full overflow-hidden rounded-2xl border-2 border-emerald-500/30 bg-muted shadow-sm group">
+                  <img
+                    src={data.hero.image ? resolveStorageUrl(data.hero.image) : aboutHero}
+                    alt={isRTL ? "معاينة صورة الهيرو" : "Hero Preview"}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (target.src !== aboutHero) {
+                        target.src = aboutHero;
+                      }
+                    }}
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute bottom-3 start-4 end-4 flex items-center justify-between text-white text-xs font-bold">
+                    <span className="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
+                      {data.hero.image ? (isRTL ? "صورة مخصصة مرفوعة" : "Custom Uploaded") : (isRTL ? "صورة افتراضية جاهزة" : "Default Asset")}
+                    </span>
+                    {data.hero.image && (
+                      <a
+                        href={resolveStorageUrl(data.hero.image)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-md px-3 py-1.5 rounded-xl text-xs transition font-bold"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        {isRTL ? "عرض الصورة كاملة" : "Full view"}
+                      </a>
+                    )}
+                  </div>
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-foreground">{isRTL ? "رابط / مسار صورة الهيرو" : "Hero Image Path/URL"}</label>
-                  <Input
-                    value={data.hero.image || ""}
-                    onChange={(e) => updateHero("image", e.target.value)}
-                    placeholder="about-us/hero.jpg"
-                    className="rounded-xl"
-                  />
+
+                {/* 2. Row 2: Upload Controls, Reset, and Image Path Input */}
+                <div className="rounded-xl border border-emerald-500/25 bg-emerald-50/20 dark:bg-emerald-950/15 p-4 sm:p-5 space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <h4 className="text-sm font-extrabold text-primary">
+                        {isRTL ? "رفع صورة جديدة من جهازك" : "Upload new image from device"}
+                      </h4>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {isRTL ? "يتم ضغط الصورة تلقائياً في المتصفح ورفعها مباشرة للسيرفر" : "Auto-compressed in browser & saved to backend storage"}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <label className={`cursor-pointer inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black shadow-sm transition shrink-0 ${uploadingHero ? "opacity-75 pointer-events-none" : ""}`}>
+                        {uploadingHero ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span>{isRTL ? "جارٍ الضغط والرفع..." : "Compressing & uploading..."}</span>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="h-4 w-4" />
+                            <span>{isRTL ? "اختر صورة للرفع" : "Choose Image"}</span>
+                          </>
+                        )}
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp,image/jpg"
+                          className="hidden"
+                          disabled={uploadingHero}
+                          onChange={(e) => {
+                            const f = e.target.files?.[0];
+                            if (f) handleUploadHeroImage(f);
+                            e.target.value = "";
+                          }}
+                        />
+                      </label>
+
+                      {data.hero.image && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            updateHero("image", "");
+                            setUploadCompressionRatio(null);
+                            toast.info(isRTL ? "تم الرجوع للصورة الافتراضية" : "Reset to default image");
+                          }}
+                          className="text-xs rounded-xl h-10 px-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10 border-border"
+                        >
+                          <RotateCcw className="h-3.5 w-3.5 me-1" />
+                          {isRTL ? "افتراضي" : "Reset"}
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+
+                  {uploadCompressionRatio !== null && (
+                    <div className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-500/10 px-3.5 py-2 rounded-xl border border-emerald-500/20">
+                      <CheckCircle2 className="h-4 w-4 shrink-0" />
+                      <span>{isRTL ? `تم ضغط الصورة بنجاح وتقليص الحجم بنسبة ${uploadCompressionRatio}%` : `Auto-compressed with ${uploadCompressionRatio}% size reduction`}</span>
+                    </div>
+                  )}
+
+                  {/* Manual URL / Path Input with Copy */}
+                  <div className="space-y-1.5 pt-3 border-t border-emerald-500/20">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-foreground">
+                        {isRTL ? "رابط / مسار الصورة الفعلي" : "Current Image Path/URL"}
+                      </label>
+                      {data.hero.image && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigator.clipboard.writeText(resolveStorageUrl(data.hero.image || ""));
+                            toast.success(isRTL ? "تم نسخ الرابط" : "Copied URL");
+                          }}
+                          className="text-xs font-bold text-emerald-600 hover:underline inline-flex items-center gap-1 cursor-pointer"
+                        >
+                          <Copy className="h-3.5 w-3.5" />
+                          {isRTL ? "نسخ الرابط" : "Copy URL"}
+                        </button>
+                      )}
+                    </div>
+                    <Input
+                      value={data.hero.image || ""}
+                      onChange={(e) => updateHero("image", e.target.value)}
+                      placeholder="https://elyusr-api.pyramedx.com/storage/gallery/..."
+                      dir="ltr"
+                      className="rounded-xl font-mono text-xs text-left bg-background h-10"
+                    />
+                    <p className="text-[11px] text-muted-foreground">
+                      {isRTL
+                        ? "يمكنك لصق رابط مباشر للصورة، أو الضغط على زر الرفع بالأعلى ليتم أخذ المسار تلقائياً وحفظه."
+                        : "You can paste a direct URL or use the upload button above to automatically set the path."}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

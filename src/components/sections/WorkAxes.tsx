@@ -9,7 +9,7 @@ import imgFood from "@/assets/axis-food.jpg";
 import imgHealth from "@/assets/axis-health.jpg";
 import imgEdu from "@/assets/axis-education.jpg";
 import { useQuery } from "@tanstack/react-query";
-import { axesApi, contentApi } from "@/data/laravelApi";
+import { axesApi, contentApi, getApiToken, formatServerImageUrl } from "@/data/laravelApi";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
@@ -33,43 +33,37 @@ export const WorkAxes = () => {
     "top-[116px] md:top-[136px]",
   ];
 
-  const { data: liveAxes, isLoading, isError } = useQuery({
+  const isAdmin = !!getApiToken();
+  const { data: liveAxes, isLoading: axesLoading } = useQuery({
     queryKey: ["work-axes-live"],
     queryFn: () => axesApi.list(),
-    staleTime: 60_000,
+    staleTime: isAdmin ? 0 : 30_000,
+    retry: false,
   });
 
-  const [sectionCMS, setSectionCMS] = useState<{
-    badge_ar?: string;
-    badge_en?: string;
-    title_ar?: string;
-    title_en?: string;
-    subtitle_ar?: string;
-    subtitle_en?: string;
-  } | null>(null);
+  // Load axes section header from the shared homepage-content query (same cache as Hero)
+  const { data: homeContent, isLoading: headerLoading } = useQuery({
+    queryKey: ["homepage-content"],
+    queryFn: () => contentApi.homepage(),
+    staleTime: isAdmin ? 0 : 30_000,
+    retry: false,
+  });
+  const isLoading = axesLoading || headerLoading;
 
-  // Load axes section header from homepage/content API
-  // Backend fields: section_axes_title_ar, section_axes_subtitle_ar (to be added)
-  // Until backend adds these fields, this remains null and falls back to static text below.
-  useEffect(() => {
-    contentApi.homepage().then((data) => {
-      if (data && data.section_axes_title_ar) {
-        setSectionCMS({
-          badge_ar: data.section_axes_badge_ar || undefined,
-          badge_en: data.section_axes_badge_en || undefined,
-          title_ar: data.section_axes_title_ar || undefined,
-          title_en: data.section_axes_title_en || undefined,
-          subtitle_ar: data.section_axes_subtitle_ar || undefined,
-          subtitle_en: data.section_axes_subtitle_en || undefined,
-        });
-      }
-    }).catch(() => { /* keep null — static text used as fallback */ });
-  }, []);
+  const sectionCMS = homeContent?.section_axes_title_ar ? {
+    badge_ar: homeContent.section_axes_badge_ar || undefined,
+    badge_en: homeContent.section_axes_badge_en || undefined,
+    title_ar: homeContent.section_axes_title_ar || undefined,
+    title_en: homeContent.section_axes_title_en || undefined,
+    subtitle_ar: homeContent.section_axes_subtitle_ar || undefined,
+    subtitle_en: homeContent.section_axes_subtitle_en || undefined,
+  } : null;
 
   useEffect(() => {
-    if (typeof window === "undefined" || !headerRef.current) return;
+    if (typeof window === "undefined" || !headerRef.current || isLoading) return;
+    const items = headerRef.current.querySelectorAll("[data-wa]");
+    if (!items.length) return;
     const ctx = gsap.context(() => {
-      const items = headerRef.current!.querySelectorAll("[data-wa]");
       gsap.from(items, {
         y: 24,
         opacity: 0,
@@ -84,107 +78,65 @@ export const WorkAxes = () => {
       });
     });
     return () => ctx.revert();
-  }, []);
+  }, [isLoading]);
 
-  const defaultPillars = useMemo(() => [
-    {
-      img: imgFood,
-      number: "01",
-      slug: "food",
-      donateSlug: "box",
-      anchorId: "axis-food",
-      tag: isAR ? "محور الإطعام" : "Food pillar",
-      title: isAR ? "الغذاء" : "Food",
-      desc: isAR
-        ? "نوفر لأهالينا المستحقين الأمن الغذائي والدعم التمويني المستدام."
-        : "Ensuring food security and continuous nutrition support for families in need.",
-      bullets: isAR
-        ? [
-          "كرتونة الغذاء الشهرية ولحوم بلدي",
-          "الوجبات الساخنة من مطابخنا",
-          "أكثر من 5 طن لحوم سنويًا من مزارعنا",
-        ]
-        : ["Monthly food box + local meat", "Hot meals from our kitchens", "Over 5 tons of meat per year from our farms"],
-      href: "/axes/food",
-      accent: "bg-secondary text-secondary-foreground",
-      aspectClass: "aspect-[16/11] sm:aspect-[16/10] md:aspect-auto",
-    },
-    {
-      img: imgHealth,
-      number: "02",
-      slug: "health",
-      donateSlug: "treatment",
-      anchorId: "axis-health",
-      tag: isAR ? "محور الصحة" : "Health pillar",
-      title: isAR ? "الصحة" : "Health",
-      desc: isAR
-        ? "بناء إنسان معافى وقادر على العمل والحياة الكريمة من خلال الرعاية الطبية."
-        : "Building a healthy individual able to live with dignity through comprehensive medical care.",
-      bullets: isAR
-        ? [
-          "مجمعاتنا الطبية وعيادات الكشف",
-          "روشتات علاج شهرية وعمليات جراحية",
-          "قوافل علاجية في القرى النائية",
-          "أطراف صناعية وتحدي إعاقة",
-        ]
-        : ["Medical complexes and clinics", "Monthly prescriptions & surgeries", "Medical caravans in remote villages", "Prosthetics & disability support"],
-      href: "/axes/health",
-      accent: "bg-accent text-accent-foreground",
-      aspectClass: "aspect-[16/11] sm:aspect-[16/10] md:aspect-auto",
-    },
-    {
-      img: imgEdu,
-      number: "03",
-      slug: "education",
-      donateSlug: "education",
-      anchorId: "axis-education",
-      tag: isAR ? "محور التعليم" : "Education pillar",
-      title: isAR ? "التعليم" : "Education",
-      desc: isAR
-        ? "محاربة الفقر بالعلم والمعرفة وتأمين مستقبل الأجيال القادمة."
-        : "Fighting poverty with knowledge and securing future generations inside our educational complex.",
-      bullets: isAR
-        ? [
-          "حقائب وأدوات مدرسية",
-          "مصاريف مدرسية",
-          "زي مدرسي",
-          "دروس ومتابعة داخل المجمّع التعليمي",
-        ]
-        : ["School bags and supplies", "School fees sponsorship", "School uniforms", "Tutoring inside our educational complex"],
-      href: "/axes/education",
-      accent: "bg-primary text-primary-foreground",
-      aspectClass: "aspect-[16/11] sm:aspect-[16/10] md:aspect-auto",
-    },
-  ], [isAR]);
+  const fallbackImages: Record<string, string> = {
+    food: imgFood,
+    health: imgHealth,
+    education: imgEdu,
+  };
 
+  const getStickyOffset = (idx: number) => {
+    const offsets = [
+      "top-[84px] md:top-[96px]",
+      "top-[100px] md:top-[116px]",
+      "top-[116px] md:top-[136px]",
+      "top-[132px] md:top-[156px]",
+      "top-[148px] md:top-[176px]",
+      "top-[164px] md:top-[196px]",
+    ];
+    return offsets[idx] || `top-[${84 + (idx % 6) * 16}px] md:top-[${96 + (idx % 6) * 20}px]`;
+  };
+
+  // Pillars mapped dynamically from backend liveAxes — unified single source of truth
   const pillars = useMemo(() => {
-    return defaultPillars.map((defPillar) => {
-      const live = (liveAxes || []).find((a: any) => a.slug === defPillar.slug);
-      if (!live) return defPillar;
+    if (!liveAxes || liveAxes.length === 0) return [];
+    const sorted = [...liveAxes].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
 
+    return sorted.map((axis, idx) => {
+      const num = String(idx + 1).padStart(2, "0");
       const bullets = isAR
-        ? (live.features_ar && live.features_ar.length > 0 ? live.features_ar : defPillar.bullets)
-        : (live.features_en && live.features_en.length > 0 ? live.features_en : defPillar.bullets);
+        ? (axis.features_ar && axis.features_ar.length > 0 ? axis.features_ar : [])
+        : (axis.features_en && axis.features_en.length > 0 ? axis.features_en : axis.features_ar || []);
 
-      // Use server image if available and valid — run through formatServerImageUrl for proper URL resolution
-      const rawImg = live.image && typeof live.image === "string" && !live.image.includes("elyusr-local-mock.internal")
-        ? live.image
-        : null;
-      const serverImg = rawImg ? (import.meta.env.DEV && rawImg.startsWith("https://elyusr-api.pyramedx.com")
-        ? rawImg.replace("https://elyusr-api.pyramedx.com", "")
-        : rawImg)
-        : defPillar.img;
+      const serverImg = axis.image && typeof axis.image === "string" && axis.image.trim() !== ""
+        ? formatServerImageUrl(axis.image)
+        : (fallbackImages[axis.slug] || imgFood);
+
+      const accents = [
+        "bg-secondary text-secondary-foreground",
+        "bg-accent text-accent-foreground",
+        "bg-primary text-primary-foreground",
+      ];
 
       return {
-        ...defPillar,
-        img: serverImg,
-        tag: isAR ? (live.badge_ar || defPillar.tag) : (live.badge_en || defPillar.tag),
-        title: isAR ? (live.name_ar || defPillar.title) : (live.name_en || defPillar.title),
-        desc: isAR ? (live.description_ar || defPillar.desc) : (live.description_en || defPillar.desc),
+        id: axis.id,
+        number: num,
+        slug: axis.slug,
+        donateSlug: axis.slug,
+        anchorId: `axis-${axis.slug}`,
+        tag: isAR ? (axis.badge_ar || axis.name_ar) : (axis.badge_en || axis.name_en || axis.name_ar),
+        title: isAR ? axis.name_ar : (axis.name_en || axis.name_ar),
+        desc: isAR ? (axis.description_ar || "") : (axis.description_en || axis.description_ar || ""),
         bullets,
+        href: `/axes/${axis.slug}`,
+        img: serverImg,
+        fallbackImg: fallbackImages[axis.slug] || imgFood,
+        accent: accents[idx % accents.length],
+        aspectClass: "aspect-[16/11] sm:aspect-[16/10] md:aspect-auto",
       };
     });
-  }, [liveAxes, defaultPillars, isAR]);
+  }, [liveAxes, isAR]);
 
 
   // ── Motion preferences: respect prefers-reduced-motion on mobile.
@@ -248,27 +200,67 @@ export const WorkAxes = () => {
             simply sits at the top of the section. */}
         <div className="flex flex-col gap-8 md:gap-12 mt-4 sm:mt-6 md:mt-0">
           <div ref={headerRef} className="mx-auto max-w-2xl text-center">
-            {((isAR ? sectionCMS?.badge_ar : sectionCMS?.badge_en) || "محاور رسالتنا") && (
-              <span data-wa className="inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3.5 py-1 text-[11px] sm:text-xs font-black text-primary mb-3">
-                {isAR ? (sectionCMS?.badge_ar || "محاور رسالتنا") : (sectionCMS?.badge_en || "Our Work Axes")}
-              </span>
+            {headerLoading ? (
+              /* ── Skeleton for section header ── */
+              <div className="flex flex-col items-center gap-3 animate-pulse">
+                <div className="h-6 w-32 rounded-full bg-secondary/20" />
+                <div className="h-9 w-2/3 rounded-xl bg-muted" />
+                <div className="space-y-1.5">
+                  <div className="h-4 w-full max-w-xs rounded bg-muted" />
+                  <div className="h-4 w-4/5 max-w-xs rounded bg-muted mx-auto" />
+                </div>
+              </div>
+            ) : (
+              <>
+                {((isAR ? sectionCMS?.badge_ar : sectionCMS?.badge_en) || "محاور رسالتنا") && (
+                  <span data-wa className="inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3.5 py-1 text-[11px] sm:text-xs font-black text-primary mb-3">
+                    {isAR ? (sectionCMS?.badge_ar || "محاور رسالتنا") : (sectionCMS?.badge_en || "Our Work Axes")}
+                  </span>
+                )}
+                <h2 data-wa className="text-[28px] font-black leading-[1.3] text-primary sm:text-3xl md:text-5xl">
+                  <span className="hand-underline">
+                    {isAR ? (sectionCMS?.title_ar || "محاور رسالتنا") : (sectionCMS?.title_en || "Our Work Axes")}
+                  </span>
+                </h2>
+                <p data-wa className="mx-auto mt-4 max-w-xl text-sm font-medium leading-relaxed text-muted-foreground sm:text-base md:text-[16px]">
+                  {isAR
+                    ? (sectionCMS?.subtitle_ar || "بناء إنسان واعٍ جسدياً، ثقافياً، وصحياً. محاورنا الأساسية تخدم رسالتنا:")
+                    : (sectionCMS?.subtitle_en || "Building a person who is physically, culturally, and health-aware. Our core pillars serve our mission:")}
+                </p>
+              </>
             )}
-            <h2 data-wa className="text-[28px] font-black leading-[1.3] text-primary sm:text-3xl md:text-5xl">
-              <span className="hand-underline">
-                {isAR ? (sectionCMS?.title_ar || "محاور رسالتنا") : (sectionCMS?.title_en || "Our Work Axes")}
-              </span>
-            </h2>
-            <p data-wa className="mx-auto mt-4 max-w-xl text-sm font-medium leading-relaxed text-muted-foreground sm:text-base md:text-[16px]">
-              {isAR
-                ? (sectionCMS?.subtitle_ar || "بناء إنسان واعٍ جسدياً، ثقافياً، وصحياً. محاورنا الأساسية تخدم رسالتنا:")
-                : (sectionCMS?.subtitle_en || "Building a person who is physically, culturally, and health-aware. Our core pillars serve our mission:")}
-            </p>
           </div>
 
-          {/* 3 hero pillars — native on mobile, CSS sticky stack on large screens */}
-          <StickyStack className="mt-2 sm:mt-4">
-            {pillars.map((p, idx) => (
-              <StickyStackItem key={p.title} index={idx} top={stickyOffsets[idx]}>
+          {/* Pillars section: Skeleton while loading, sticky stack when loaded */}
+          {axesLoading ? (
+            <div className="mt-4 space-y-6">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="mx-auto flex w-full flex-col md:flex-row overflow-hidden rounded-[28px] border border-primary/10 bg-card p-4 shadow-sm animate-pulse gap-6 items-center"
+                >
+                  <div className="w-full md:w-[55%] h-56 sm:h-64 md:h-80 rounded-2xl bg-muted/70" />
+                  <div className="w-full md:w-[45%] space-y-4 p-4">
+                    <div className="h-6 w-28 rounded-full bg-secondary/20" />
+                    <div className="h-8 w-3/4 rounded-xl bg-muted" />
+                    <div className="h-4 w-full rounded bg-muted/60" />
+                    <div className="h-4 w-5/6 rounded bg-muted/60" />
+                    <div className="space-y-2 pt-2">
+                      <div className="h-3.5 w-4/5 rounded bg-muted/50" />
+                      <div className="h-3.5 w-3/4 rounded bg-muted/50" />
+                      <div className="h-3.5 w-2/3 rounded bg-muted/50" />
+                    </div>
+                    <div className="pt-4 flex justify-end">
+                      <div className="h-9 w-32 rounded-full bg-orange-grad/40" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <StickyStack className="mt-2 sm:mt-4">
+              {pillars.map((p, idx) => (
+                <StickyStackItem key={p.slug || p.title} index={idx} top={getStickyOffset(idx)}>
                 <Link
                   to={p.href}
                   id={p.anchorId}
@@ -288,6 +280,18 @@ export const WorkAxes = () => {
                       alt={p.title}
                       loading={idx === 0 ? "eager" : "lazy"}
                       decoding="async"
+                      onError={(e) => {
+                        // Fallback to local static assets when server image fails
+                        const fallbacks: Record<string, string> = {
+                          food: imgFood,
+                          health: imgHealth,
+                          education: imgEdu,
+                        };
+                        const fb = fallbacks[p.slug] || imgFood;
+                        if ((e.currentTarget as HTMLImageElement).src !== fb) {
+                          (e.currentTarget as HTMLImageElement).src = fb;
+                        }
+                      }}
                       className="absolute inset-0 h-full w-full object-cover md:transition-transform md:duration-500 md:group-hover:scale-105"
                     />
                     <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -371,6 +375,7 @@ export const WorkAxes = () => {
             ))}
             <div aria-hidden className="h-2" />
           </StickyStack>
+          )}
         </div>
         {/* Sentinel — marks end of the mobile journey for analytics. */}
         <div data-axis="journey-end" aria-hidden className="h-px w-full" />
@@ -378,113 +383,77 @@ export const WorkAxes = () => {
         {/* ── Modern High-Conversion Action CTA Banner ────── */}
         <section
           aria-label={isAR ? "دعوة للمساهمة والتبرع" : "Call to action"}
-          className="relative mt-8 overflow-hidden rounded-[32px] border border-secondary/25 bg-gradient-to-br from-[#0c492c] via-[#093e24] to-[#062c19] p-6 text-primary-foreground shadow-[0_20px_60px_-20px_rgba(10,72,43,0.4)] sm:p-8 md:p-10"
+          className="relative mt-8 overflow-hidden rounded-[28px] sm:rounded-[36px] border border-secondary/25 bg-gradient-to-br from-[#0c492c] via-[#093e24] to-[#062c19] p-6 text-white shadow-[0_20px_60px_-20px_rgba(10,72,43,0.45)] sm:p-8 md:p-10"
         >
-          {/* Subtle brand pattern & radiant glow */}
-          <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-screen" style={{ backgroundImage: "url('/patterns/yusr-quatrefoil.png')", backgroundSize: "160px 160px" }} />
-          <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-56 w-56 rounded-full bg-accent/20 blur-3xl" />
+          {/* ── Elegant & Calm Ambient Background Touches ── */}
+          {/* Top luminous hairline reflection */}
+          <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent" />
+          
+          {/* Gentle central dome aura */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 h-64 w-[540px] max-w-full rounded-full bg-gradient-to-b from-secondary/20 via-emerald-400/10 to-transparent blur-3xl"
+          />
+
+          {/* Calm concentric ripple rings (signifying the expanding ripple of good deeds) */}
+          <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[380px] w-[380px] sm:h-[480px] sm:w-[480px]">
+            <div className="absolute inset-0 rounded-full border border-white/[0.04]" />
+            <div className="absolute inset-10 rounded-full border border-secondary/[0.05]" />
+            <div className="absolute inset-20 rounded-full border border-white/[0.03]" />
+          </div>
+
+          {/* Soft ambient brand glows */}
+          <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-secondary/15 blur-3xl" />
+          <div aria-hidden className="pointer-events-none absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-accent/20 blur-3xl" />
+          
+          {/* Bottom hairline reflection */}
+          <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
           <div className="relative z-10 flex flex-col items-center text-center">
+            {/* Brand badge */}
             <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary/40 bg-secondary/15 px-4 py-1.5 text-xs font-black text-secondary shadow-sm backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" />
-              {isAR ? "مسارات الخير المباشرة" : "Direct Paths of Goodness"}
+              <span>{isAR ? "مسارات الخير المباشرة" : "Direct Paths of Goodness"}</span>
             </span>
 
+            {/* Inspiring headline */}
             <h2 className="mt-4 max-w-3xl text-2xl font-black leading-tight sm:text-3xl md:text-4xl text-white">
               {isAR ? "كل تبرع منك يصنع فارقاً حقيقياً في حياة أسرة مستحقة" : "Every donation makes a real difference in a deserving family's life"}
             </h2>
 
-            <p className="mx-auto mt-3 max-w-2xl text-xs font-medium leading-relaxed text-primary-foreground/90 sm:text-sm md:text-base">
+            {/* Clear reassuring subtitle */}
+            <p className="mx-auto mt-3 max-w-2xl text-xs sm:text-sm md:text-base font-normal leading-relaxed text-white/90">
               {isAR
                 ? "اختر البرنامج المناسب، تبرع بسهولة وأمان بأي مبلغ، واطلب توثيق تبرعك بالفيديو والصور ليصلك الأثر أينما كنت."
                 : "Choose the right program, donate easily and securely, and request photo and video documentation of your donation."}
             </p>
 
-            {/* Always one row — flex-row + flex-nowrap ensures both buttons stay side by side on all screen sizes */}
-            <div className="mt-7 flex flex-row flex-nowrap items-center justify-center gap-2 sm:gap-4 w-full max-w-xl mx-auto">
-              <Button asChild size="lg" className="h-11 flex-1 min-w-0 px-3 sm:h-12 sm:px-8 rounded-2xl bg-orange-grad text-xs sm:text-sm font-black text-accent-foreground no-underline shadow-cta hover:opacity-95">
+            {/* High-impact CTA Buttons: Brand Orange & Lemon-Lime side-by-side */}
+            <div className="mt-7 flex flex-row flex-nowrap items-center justify-center gap-2.5 sm:gap-4 w-full max-w-xl mx-auto">
+              <Button
+                asChild
+                size="lg"
+                className="group h-11 sm:h-12 flex-1 min-w-0 px-3 sm:px-6 rounded-2xl bg-orange-grad text-xs sm:text-sm font-black text-accent-foreground no-underline shadow-cta transition-all duration-300 hover:scale-[1.02] hover:opacity-95 active:scale-[0.98]"
+              >
                 <Link to="/donate" className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
-                  <Heart className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
+                  <Heart className="h-4 w-4 sm:h-4.5 sm:w-4.5 shrink-0 fill-current transition-transform duration-300 group-hover:scale-110" />
                   <span>{isAR ? "تبرع الآن" : "Donate now"}</span>
                 </Link>
               </Button>
-              <Button asChild size="lg" className="h-11 flex-1 min-w-0 px-3 sm:h-12 sm:px-8 rounded-2xl bg-secondary text-secondary-foreground text-xs sm:text-sm font-black no-underline shadow-cta hover:opacity-95">
-                <Link to="/services-map" className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
-                  <Compass className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
-                  <span>{isAR ? "خريطة الخدمات الكاملة" : "Full services map"}</span>
+
+              <Button
+                asChild
+                size="lg"
+                className="group h-11 sm:h-12 flex-1 min-w-0 px-3 sm:px-6 rounded-2xl !bg-[#a3e635] hover:!bg-[#bbf451] !text-[#062c19] text-xs sm:text-sm font-black no-underline shadow-[0_8px_20px_-4px_rgba(163,230,53,0.4)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <Link to="/projects" className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
+                  <FolderHeart className="h-4 w-4 sm:h-4.5 sm:w-4.5 shrink-0 !text-[#062c19] transition-transform duration-300 group-hover:scale-110" />
+                  <span className="!text-[#062c19] font-black">{isAR ? "تصفح مشاريع الخير" : "Explore Projects"}</span>
                 </Link>
               </Button>
             </div>
           </div>
         </section>
-
-        {/* ── 3 Enhanced Bottom Feature Cards (Sticky Stacked on Mobile, Grid on Desktop) ── */}
-        <div className="relative mt-8 flex flex-col gap-4 md:grid md:grid-cols-3 md:gap-5">
-          {[
-            {
-              title: isAR ? "برامجنا ومشاريعنا" : "Programs & Projects",
-              text: isAR ? "كل محور مرتبط مباشرة ببرنامج تفصيلي للتبرع والمتابعة المستمرة." : "Each axis links to a detailed donation and follow-up program.",
-              href: "/programs",
-              Icon: FolderHeart,
-              accent: "text-primary bg-primary/10 border-primary/20",
-              stickyTop: "top-[80px]",
-              zIndex: "z-10",
-              badge: isAR ? "مشاريع مستمرة" : "Ongoing Projects",
-            },
-            {
-              title: isAR ? "الحالات العاجلة" : "Urgent Cases",
-              text: isAR ? "شاهد الحالات الإنسانية الموثقة ميدانياً والتي تحتاج دعمًا عاجلًا الآن." : "Browse verified cases that need urgent support right now.",
-              href: "/cases",
-              Icon: HeartHandshake,
-              accent: "text-accent bg-accent/15 border-accent/25",
-              stickyTop: "top-[100px]",
-              zIndex: "z-20",
-              badge: isAR ? "نداء إنساني" : "Humanitarian Call",
-            },
-            {
-              title: isAR ? "قصص الأثر من الميدان" : "Impact Stories",
-              text: isAR ? "تابع كيف تحوّل التبرع إلى أثر حقيقي وحياة داخل بيوت أهالينا." : "See how donations turn into real life and lasting impact inside families' homes.",
-              href: "/stories",
-              Icon: Sparkles,
-              accent: "text-secondary bg-secondary/20 border-secondary/30",
-              stickyTop: "top-[120px]",
-              zIndex: "z-30",
-              badge: isAR ? "أثر موثّق" : "Verified Impact",
-            },
-          ].map((item, idx) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={`group relative isolate flex flex-col justify-between overflow-hidden rounded-[28px] border-2 border-border/80 bg-gradient-to-b from-card via-card/95 to-[#f8fcf2] p-6 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-secondary/60 hover:shadow-[0_16px_36px_-12px_hsl(var(--secondary)/0.35)] sm:p-7 sticky ${item.stickyTop} ${item.zIndex} md:static md:z-auto`}
-            >
-              {/* Subtle ambient luxury glow & brand pattern */}
-              <div aria-hidden className="brand-leaf-tile pointer-events-none absolute inset-0 opacity-[0.07]" />
-              <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-secondary/15 blur-2xl transition-all duration-500 group-hover:scale-125" />
-
-              <div className="relative">
-                <div className="flex items-center justify-between gap-3">
-                  <div className={`grid h-12 w-12 place-items-center rounded-2xl border ${item.accent} shadow-sm transition-transform duration-300 group-hover:scale-110`}>
-                    <item.Icon className="h-6 w-6" />
-                  </div>
-                  <span className="inline-flex items-center rounded-full bg-secondary/15 px-3 py-1 text-[10.5px] font-black text-primary">
-                    {item.badge}
-                  </span>
-                </div>
-
-                <h3 className="mt-5 text-lg font-black text-primary sm:text-xl">{item.title}</h3>
-                <p className="mt-2 text-xs font-semibold leading-relaxed text-muted-foreground sm:text-sm">{item.text}</p>
-              </div>
-
-              <div className="relative mt-6 flex items-center justify-between border-t border-primary/10 pt-3.5 text-xs font-black text-accent transition-colors group-hover:text-primary">
-                <span className="font-black tracking-wide">{isAR ? "افتح الصفحة" : "Open page"}</span>
-                <span className="grid h-7 w-7 place-items-center rounded-full bg-accent/10 text-accent transition-all group-hover:bg-orange-grad group-hover:text-accent-foreground shadow-sm">
-                  <Arrow className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-[-2px] rtl:group-hover:translate-x-[-2px]" />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
       </div>
     </div>
   );

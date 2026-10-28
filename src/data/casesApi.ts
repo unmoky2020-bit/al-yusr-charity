@@ -786,6 +786,7 @@ export const GENERAL_PROGRAM_ID = Number(import.meta.env.VITE_GENERAL_PROGRAM_ID
 export async function createDonation(input: {
   case_id?: string | null;
   category_id?: string | null;
+  donation_campaign_id?: string | number | null;
   amount: number;
   currency?: string;
   donor_name?: string;
@@ -819,18 +820,8 @@ export async function createDonation(input: {
     pmInfo = { id: 6, method: "bank", provider: "orange" };
   }
 
-  // Resolve donor_id (use logged in donor/user id, or default to 1)
-  let donorId = 1;
-  try {
-    const raw = typeof window !== "undefined"
-      ? (localStorage.getItem("elyusr_auth_user") || localStorage.getItem("elyusr_user"))
-      : null;
-    if (raw) {
-      const u = JSON.parse(raw);
-      const parsedId = Number(u?.id);
-      if (!isNaN(parsedId) && parsedId > 0) donorId = parsedId;
-    }
-  } catch { }
+  // donor_id is intentionally NOT sent: the backend derives the donor from the
+  // bearer token (if any). A client-chosen id could be forged.
 
   // Resolve donation target — backend requires ONE of: case_id | program_id | project_id | donation_campaign_id
   let targetField: { key: string; value: number };
@@ -851,16 +842,15 @@ export async function createDonation(input: {
 
   // 1. Send to Laravel Charity API v1 (/donations/submit)
   let laravelResponse: any = null;
-  // If Kashier redirects the top-level window instead of sending postMessage,
-  // landing on /donate?paymentStatus=SUCCESS triggers the in-page success screen.
-  const frontendUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/donate?paymentStatus=SUCCESS&merchantOrderId=${refCode}`
-      : `https://elyusr.org/donate?paymentStatus=SUCCESS&merchantOrderId=${refCode}`;
+  // Where Kashier sends the browser after checkout. No status is baked into the
+  // URL: Kashier appends its own result params, and the status page always asks
+  // the backend (GET /donations/track/{ref}) before showing "paid".
+  const frontendOrigin =
+    typeof window !== "undefined" ? window.location.origin : "https://elyusr.org";
+  const frontendUrl = `${frontendOrigin}/donate/status/${encodeURIComponent(refCode)}`;
 
   try {
     laravelResponse = await donationsApiV1.submit({
-      donor_id: donorId,
       donation_target: String(input.amount || 100),
       provider: pmInfo.provider,
       name: input.donor_name || "متبرع فاعل خير",
@@ -933,9 +923,35 @@ export async function createDonation(input: {
  * Backend endpoint: GET /api/v1/donations/track/{ref}
  * Returns: { payment_status: "pending" | "paid" | "failed" }
  */
+export type VerifiedPaymentStatus = "paid" | "failed" | "pending" | "unknown";
+
+/** Normalise whatever status string the backend returns into a strict outcome. */
+export function normalizePaymentStatus(raw: unknown): VerifiedPaymentStatus {
+  const s = String(raw ?? "").trim().toLowerCase();
+  if (!s) return "unknown";
+  if (["paid", "completed", "success", "succeeded", "approved", "captured"].includes(s)) return "paid";
+  if (["failed", "failure", "error", "declined", "cancelled", "canceled", "expired", "refunded"].includes(s)) return "failed";
+  return "pending";
+}
+
+/**
+ * Ask the backend whether a donation reference has actually been paid.
+ * This is the ONLY source of truth for showing a "paid" state in the UI;
+ * URL params and iframe messages are hints that trigger this check.
+ */
+export async function verifyDonationPayment(
+  ref: string
+): Promise<{ status: VerifiedPaymentStatus; data: Record<string, any> | null }> {
+  const clean = String(ref || "").trim();
+  if (!clean) return { status: "unknown", data: null };
+  const data = await getDonationByRef(clean);
+  if (!data) return { status: "unknown", data: null };
+  return { status: normalizePaymentStatus(data.payment_status), data };
+}
+
 export async function getDonationByRef(
   ref: string
-): Promise<{ payment_status: string } | null> {
+): Promise<({ payment_status: string } & Record<string, any>) | null> {
   if (!ref) return null;
   try {
     const { apiFetch } = await import("./laravelApi");

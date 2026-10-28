@@ -281,6 +281,7 @@ export const Footer = () => {
               <li><Link to="/about#achievements" {...prefetchHandlers("/about")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "إنجازاتنا" : "Achievements"}</Link></li>
               <li><Link to="/gallery" {...prefetchHandlers("/gallery")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "معرض الصور" : "Gallery"}</Link></li>
               <li><Link to="/blog" {...prefetchHandlers("/blog")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المدونة" : "Blog"}</Link></li>
+              <li><Link to="/faqs" {...prefetchHandlers("/faqs")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الأسئلة الشائعة" : "FAQs"}</Link></li>
               <li><Link to="/donate/track" {...prefetchHandlers("/donate/track")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "تتبع تبرعك" : "Track donation"}</Link></li>
               <li><Link to="/contact" {...prefetchHandlers("/contact")} className="block text-primary-foreground/85 hover:text-secondary">{t.nav.contact}</Link></li>
               <li><Link to="/volunteer-campaigns" {...prefetchHandlers("/volunteer-campaigns")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملات التطوع" : "Volunteer Opps"}</Link></li>
@@ -301,7 +302,7 @@ export const Footer = () => {
               <li><Link to="/arboun" {...prefetchHandlers("/arboun")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "مبادرة عربون خير" : "Arboun Khair"}</Link></li>
               <li><Link to="/athar" {...prefetchHandlers("/athar")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة أَثَر التعليمية" : "Athar Education"}</Link></li>
               <li><Link to="/ramadan" {...prefetchHandlers("/ramadan")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "موسم رمضان المبارك" : "Ramadan Season"}</Link></li>
-              <li><Link to="/food-box" {...prefetchHandlers("/food-box")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "كرتونة الغذاء الشهرية" : "Monthly Food"}</Link></li>
+              <li><Link to="/food-box" {...prefetchHandlers("/food-box")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الغذاء الشهري" : "Monthly Food"}</Link></li>
               <li><Link to="/qurbani" {...prefetchHandlers("/qurbani")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "صكوك الأضاحي" : "Qurbani Shares"}</Link></li>
               <li className="col-span-2 pt-1"><Link to="/campaigns" {...prefetchHandlers("/campaigns")} className="inline-flex items-center gap-1 text-accent hover:underline">{lang === "ar" ? "عرض كل الحملات والمبادرات ←" : "View all campaigns →"}</Link></li>
             </ul>

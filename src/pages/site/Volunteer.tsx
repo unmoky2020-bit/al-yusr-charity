@@ -1,5 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchFaqs, type FaqItem } from "@/data/faqsApi";
 import {
   HandHeart, Sparkles, Users, Truck, Stethoscope, Camera, Code2,
   Send, MapPin, BadgeCheck, ArrowLeft, ArrowRight, Clock, Heart,
@@ -75,7 +77,22 @@ const Volunteer = () => {
 
   const tracks = isRTL ? TRACKS_AR : TRACKS_EN;
   const why = isRTL ? WHY_AR : WHY_EN;
-  const faqs = isRTL ? FAQS_AR : FAQS_EN;
+
+  const { data: dynamicFaqs } = useQuery<FaqItem[]>({
+    queryKey: ["faqs-volunteer"],
+    queryFn: () => fetchFaqs({ categorySlug: "volunteer" }),
+    staleTime: 60_000,
+  });
+
+  const faqs = useMemo(() => {
+    if (dynamicFaqs && dynamicFaqs.length > 0) {
+      return dynamicFaqs.map((f) => ({
+        q: isRTL ? f.question_ar : (f.question_en || f.question_ar),
+        a: isRTL ? f.answer_ar : (f.answer_en || f.answer_ar),
+      }));
+    }
+    return isRTL ? FAQS_AR : FAQS_EN;
+  }, [dynamicFaqs, isRTL]);
 
   const [form, setForm] = useState({ name: "", phone: "", city: "", area: "field", skills: "", availability: "" });
   const [sending, setSending] = useState(false);
@@ -332,25 +349,38 @@ const Volunteer = () => {
       </section>
 
       {/* FAQ */}
-      <section className="bg-background py-12 md:py-16">
-        <div className="container mx-auto max-w-3xl px-4">
-          <h2 className="text-center text-xl font-black text-primary md:text-2xl">{isRTL ? "أسئلة شائعة عن التطوع" : "Frequently asked questions"}</h2>
+      <section className="bg-background py-12 md:py-16" dir={isRTL ? "rtl" : "ltr"}>
+        <div className="container mx-auto max-w-4xl px-4">
+          <h2 className="text-center text-xl font-black text-primary md:text-2xl">
+            {isRTL ? "أسئلة شائعة عن التطوع" : "Volunteer FAQs"}
+          </h2>
           <div className="mt-8 space-y-3">
             {faqs.map((f, i) => (
               <div key={i} className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
-                <button type="button" className="flex w-full items-center justify-between gap-4 p-4 text-start font-extrabold text-primary" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                  {f.q}
+                <button type="button" className="flex w-full items-center justify-between gap-4 p-4 sm:p-5 text-start font-extrabold text-primary cursor-pointer" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                  <span className="text-sm sm:text-base leading-snug">{f.q}</span>
                   <ChevronDown className={`h-4 w-4 shrink-0 text-secondary transition-transform ${openFaq === i ? "rotate-180" : ""}`} />
                 </button>
                 <AnimatePresence initial={false}>
                   {openFaq === i && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }} className="overflow-hidden">
-                      <p className="px-4 pb-4 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+                      <p className="px-4 pb-4 sm:px-5 sm:pb-5 text-sm leading-relaxed text-muted-foreground border-t border-border/40 pt-3">{f.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
             ))}
+          </div>
+
+          {/* Center link to FAQ Hub */}
+          <div className="mt-8 flex justify-center">
+            <Link
+              to="/faqs"
+              className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-card px-5 py-2.5 text-xs font-bold text-primary shadow-sm hover:bg-secondary/10 transition"
+            >
+              <span>{isRTL ? "مركز الأسئلة الشائعة" : "View all FAQs"}</span>
+              <Arrow className="h-3.5 w-3.5 text-secondary" />
+            </Link>
           </div>
         </div>
       </section>

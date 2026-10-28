@@ -23,6 +23,7 @@ import {
   Snowflake,
   BookOpen,
   Calendar,
+  ChevronDown,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
@@ -30,6 +31,8 @@ import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
+import { useQuery } from "@tanstack/react-query";
+import { fetchFaqs } from "@/data/faqsApi";
 import { programs } from "@/data/programs";
 import { BrideTrousseau } from "@/components/sections/BrideTrousseau";
 import { HomeSeasons } from "@/components/sections/HomeSeasons";
@@ -44,6 +47,7 @@ import { TagsRail } from "@/components/common/TagsRail";
 import imgFood from "@/assets/axis-food.jpg";
 import imgHealth from "@/assets/axis-health.jpg";
 import imgEdu from "@/assets/axis-education.jpg";
+// Accordion imports kept for other uses
 import {
   Accordion,
   AccordionContent,
@@ -60,6 +64,7 @@ const Projects = () => {
   const [activeGeo, setActiveGeo] = useState<string>(
     GEO_GOVERNORATES[0]?.slug ?? "",
   );
+  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null);
   const activeGov = useMemo(
     () => GEO_GOVERNORATES.find((g) => g.slug === activeGeo) ?? GEO_GOVERNORATES[0],
     [activeGeo],
@@ -219,28 +224,42 @@ const Projects = () => {
     },
   ];
 
-  // Visible FAQ — kept identical to the FAQPage JSON-LD below for parity.
-  const faqs = isRTL
-    ? [
-        { q: "ما هي أبواب التبرع المتاحة في مؤسسة اليسر؟", a: "بنوفّر مسارات تبرع لكل نية: صك أضحية، كرتونة عزومة شهرية، كيلو لحمة بلدي من مزارعنا الوقفية، زكاة المال، كفالة يتيم، تعليم (سبتمبر)، علاج وقوافل طبية، وصلات مياه، تجهيز عرائس، وحملة ستر للتسقيف والترميم." },
-        { q: "هل تبرعي يصل فعلًا للمستحقين؟", a: "نعم — كل تبرع يمر ببحث اجتماعي ميداني للأسر، يُسلَّم بكرامة لباب البيت، ويتم توثيقه بصور وفيديو يصلك عبر واتساب أو البريد بعد التنفيذ." },
-        { q: "هل أحصل على إيصال رسمي بالتبرع؟", a: "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري برقم مرجعي تقدر تتبع به الحالة من صفحة «تتبع التبرع»." },
-        { q: "إيه الفرق بين التبرع لبرنامج وبين التبرع لحالة موثّقة؟", a: "التبرع لبرنامج (مثل صك أضحية أو كرتونة عزومة) بيُوزَّع على أسر متعددة حسب الأكثر احتياجًا. التبرع لحالة موثّقة بيروح لحالة فردية بعينها مع متابعة نتيجتها." },
-        { q: "هل يمكنني تخصيص تبرعي لمحافظة معينة؟", a: "نعم. تركيزنا الأساسي محافظة الدقهلية بكل مدنها وقراها، وبنغطّي حالات أيضًا في كفر الشيخ والصعيد. اطلب التخصيص مع فريق واتساب 201097000137+." },
-        { q: "ما طرق الدفع المتاحة؟", a: "فيزا/ماستر كارد، Vodafone Cash، InstaPay، تحويل بنكي على CIB، أو دفع كاش عند ممثل المؤسسة في المنصورة." },
-        { q: "هل المؤسسة مرخّصة رسميًا؟", a: "مؤسسة اليسر الخيرية مرخّصة من وزارة التضامن الاجتماعي تحت رقم إشهار 2665/2019، ومقرها الرئيسي بالمنصورة - الدقهلية." },
-        { q: "إزاي أتطوع أو أنضم لفريق العمل؟", a: "ادخل على صفحة حملات التطوع واختر حملة وقدّم على المقعد المناسب لمهاراتك. بنوفّر تدريب ميداني ومتابعة لكل متطوع جديد." },
-      ]
-    : [
-        { q: "What donation programs does Al-Yusr offer?", a: "We provide a track for every intention: Qurbani vouchers, monthly food box, fresh farm meat, Zakat, orphan sponsorship, education (September), healthcare and medical convoys, water connections, bride preparation, and the Sitr roofing & repair campaign." },
-        { q: "Does my donation really reach the beneficiaries?", a: "Yes — every donation goes through field social assessment, dignified doorstep delivery, and is documented with photos and videos shared with you on WhatsApp or email after execution." },
-        { q: "Will I receive an official receipt?", a: "An electronic receipt with a reference code is emailed to you instantly so you can track the case from our donation tracking page." },
-        { q: "What is the difference between donating to a program and donating to a verified case?", a: "Program donations (e.g. a Qurbani voucher or food box) are distributed across multiple families by need. A verified case donation goes to one specific family with outcome follow-up." },
-        { q: "Can I designate my donation to a specific governorate?", a: "Yes. Our primary focus is Dakahlia (all cities and villages); we also serve cases in Kafr El-Sheikh and Upper Egypt. Request a designation via WhatsApp +201097000137." },
-        { q: "What payment methods are supported?", a: "Visa/Mastercard, Vodafone Cash, InstaPay, bank transfer to CIB, or in-person cash via our Mansoura representative." },
-        { q: "Is the foundation officially licensed?", a: "Al-Yusr Charity Foundation is licensed by the Ministry of Social Solidarity under license number 2665/2019, headquartered in Mansoura, Dakahlia." },
-        { q: "How can I volunteer or join the field team?", a: "Visit our volunteer campaigns page, pick a campaign, and apply for the slot that matches your skills. We provide field training and follow-up for every new volunteer." },
-      ];
+  // Dynamic FAQ from Backend with robust fallback
+  const { data: rawProgramsFaqs } = useQuery({
+    queryKey: ["faqs-programs"],
+    queryFn: () => fetchFaqs({ categorySlug: "programs" }),
+    staleTime: 60_000,
+  });
+
+  const faqs = useMemo(() => {
+    if (rawProgramsFaqs && rawProgramsFaqs.length > 0) {
+      return rawProgramsFaqs.map((f) => ({
+        q: isRTL ? f.question_ar : (f.question_en || f.question_ar),
+        a: isRTL ? f.answer_ar : (f.answer_en || f.answer_ar),
+      }));
+    }
+    return isRTL
+      ? [
+          { q: "ما هي أبواب التبرع المتاحة في مؤسسة اليسر؟", a: "بنوفّر مسارات تبرع لكل نية: صك أضحية، كرتونة عزومة شهرية، كيلو لحمة بلدي من مزارعنا الوقفية، زكاة المال، كفالة يتيم، تعليم (سبتمبر)، علاج وقوافل طبية، وصلات مياه، تجهيز عرائس، وحملة ستر للتسقيف والترميم." },
+          { q: "هل تبرعي يصل فعلًا للمستحقين؟", a: "نعم — كل تبرع يمر ببحث اجتماعي ميداني للأسر، يُسلَّم بكرامة لباب البيت، ويتم توثيقه بصور وفيديو يصلك عبر واتساب أو البريد بعد التنفيذ." },
+          { q: "هل أحصل على إيصال رسمي بالتبرع؟", a: "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري برقم مرجعي تقدر تتبع به الحالة من صفحة «تتبع التبرع»." },
+          { q: "إيه الفرق بين التبرع لبرنامج وبين التبرع لحالة موثّقة؟", a: "التبرع لبرنامج (مثل صك أضحية أو كرتونة عزومة) بيُوزَّع على أسر متعددة حسب الأكثر احتياجًا. التبرع لحالة موثّقة بيروح لحالة فردية بعينها مع متابعة نتيجتها." },
+          { q: "هل يمكنني تخصيص تبرعي لمحافظة معينة؟", a: "نعم. تركيزنا الأساسي محافظة الدقهلية بكل مدنها وقراها، وبنغطّي حالات أيضًا في كفر الشيخ والصعيد. اطلب التخصيص مع فريق واتساب 201097000137+." },
+          { q: "ما طرق الدفع المتاحة؟", a: "فيزا/ماستر كارد، Vodafone Cash، InstaPay، تحويل بنكي على CIB، أو دفع كاش عند ممثل المؤسسة في المنصورة." },
+          { q: "هل المؤسسة مرخّصة رسميًا؟", a: "مؤسسة اليسر الخيرية مرخّصة من وزارة التضامن الاجتماعي تحت رقم إشهار 2665/2019، ومقرها الرئيسي بالمنصورة - الدقهلية." },
+          { q: "إزاي أتطوع أو أنضم لفريق العمل؟", a: "ادخل على صفحة حملات التطوع واختر حملة وقدّم على المقعد المناسب لمهاراتك. بنوفّر تدريب ميداني ومتابعة لكل متطوع جديد." },
+        ]
+      : [
+          { q: "What donation programs does Al-Yusr offer?", a: "We provide a track for every intention: Qurbani vouchers, monthly food box, fresh farm meat, Zakat, orphan sponsorship, education (September), healthcare and medical convoys, water connections, bride preparation, and the Sitr roofing & repair campaign." },
+          { q: "Does my donation really reach the beneficiaries?", a: "Yes — every donation goes through field social assessment, dignified doorstep delivery, and is documented with photos and videos shared with you on WhatsApp or email after execution." },
+          { q: "Will I receive an official receipt?", a: "An electronic receipt with a reference code is emailed to you instantly so you can track the case from our donation tracking page." },
+          { q: "What is the difference between donating to a program and donating to a verified case?", a: "Program donations (e.g. a Qurbani voucher or food box) are distributed across multiple families by need. A verified case donation goes to one specific family with outcome follow-up." },
+          { q: "Can I designate my donation to a specific governorate?", a: "Yes. Our primary focus is Dakahlia (all cities and villages); we also serve cases in Kafr El-Sheikh and Upper Egypt. Request a designation via WhatsApp +201097000137." },
+          { q: "What payment methods are supported?", a: "Visa/Mastercard, Vodafone Cash, InstaPay, bank transfer to CIB, or in-person cash via our Mansoura representative." },
+          { q: "Is the foundation officially licensed?", a: "Al-Yusr Charity Foundation is licensed by the Ministry of Social Solidarity under license number 2665/2019, headquartered in Mansoura, Dakahlia." },
+          { q: "How can I volunteer or join the field team?", a: "Visit our volunteer campaigns page, pick a campaign, and apply for the slot that matches your skills. We provide field training and follow-up for every new volunteer." },
+        ];
+  }, [rawProgramsFaqs, isRTL]);
 
   return (
     <PageLayout>
@@ -627,19 +646,24 @@ const Projects = () => {
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="mx-auto mt-5 max-w-3xl rounded-2xl border border-border bg-card p-4 shadow-soft"
+              className="mx-auto mt-6 max-w-4xl rounded-3xl border border-border/80 bg-gradient-to-b from-card via-card to-card/95 p-5 sm:p-6 shadow-card"
             >
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 text-primary">
-                  <MapPin className="h-4 w-4 text-secondary" />
-                  <h3 className="text-sm font-black md:text-base">{isRTL ? activeGov.ar : activeGov.en}</h3>
-                  <span className="text-[11px] font-semibold text-muted-foreground">· {activeGov.region}</span>
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 pb-3.5">
+                <div className="flex items-center gap-2.5 text-primary">
+                  <div className="grid h-9 w-9 place-items-center rounded-xl bg-secondary/20 text-secondary">
+                    <MapPin className="h-4.5 w-4.5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-black text-primary md:text-lg">{isRTL ? activeGov.ar : activeGov.en}</h3>
+                    <span className="text-[11px] font-bold text-muted-foreground">{activeGov.region}</span>
+                  </div>
                 </div>
-                <span className="rounded-full bg-secondary/15 px-2.5 py-0.5 text-[10.5px] font-extrabold text-secondary">
-                  {Object.keys(activeGov.programs).length} {isRTL ? "برنامج" : "programs"}
+                <span className="rounded-full border border-secondary/30 bg-secondary/15 px-3 py-1 text-xs font-black text-secondary">
+                  {Object.keys(activeGov.programs).length} {isRTL ? "برنامج نشط" : "active programs"}
                 </span>
               </div>
-              <div className="mt-3 flex flex-wrap gap-1.5">
+
+              <div className="mt-4 flex flex-wrap gap-2">
                 {Object.keys(activeGov.programs).map((slug) => {
                   const prog = programs.find((p) => p.slug === slug);
                   if (!prog) return null;
@@ -649,8 +673,9 @@ const Projects = () => {
                       to={`/geo/${activeGov.slug}/${slug}`}
                       data-source="programs-geo"
                       data-label={`geo-${activeGov.slug}-${slug}`}
-                      className="rounded-full bg-secondary/10 px-3 py-1.5 text-[12px] font-extrabold text-primary transition hover:bg-secondary/25"
+                      className="group/pill inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/90 px-3.5 py-1.5 text-xs font-black text-foreground shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 hover:text-primary hover:shadow-soft"
                     >
+                      <span className="h-1.5 w-1.5 rounded-full bg-secondary group-hover/pill:bg-primary transition-colors" />
                       {prog[lang].name}
                     </Link>
                   );
@@ -658,18 +683,19 @@ const Projects = () => {
               </div>
 
               {activeGov.slug === "dakahlia" && (
-                <details className="mt-4 rounded-xl bg-secondary/5 p-3">
-                  <summary className="cursor-pointer text-[12.5px] font-extrabold text-primary">
-                    {isRTL ? "مدن وقرى الدقهلية (اضغط للعرض)" : "Dakahlia cities & villages (tap to expand)"}
+                <details className="mt-5 rounded-2xl border border-secondary/20 bg-secondary/5 p-3.5 transition-colors">
+                  <summary className="cursor-pointer text-xs sm:text-sm font-black text-primary flex items-center justify-between">
+                    <span>{isRTL ? "مدن وقرى الدقهلية المغطاة (اضغط للعرض)" : "Covered Dakahlia cities & villages (click to view)"}</span>
+                    <span className="text-[11px] text-muted-foreground font-semibold">({DAKAHLIA_CITIES.length} {isRTL ? "مركز ومدينة" : "cities"})</span>
                   </summary>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
+                  <div className="mt-3.5 flex flex-wrap gap-1.5 pt-2 border-t border-secondary/15">
                     {DAKAHLIA_CITIES.map((c) => (
                       <Link
                         key={c.slug}
                         to={`/dakahlia/${c.slug}/odhya`}
                         data-source="programs-geo-city"
                         data-label={`dakahlia-${c.slug}`}
-                        className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-extrabold text-primary transition hover:border-secondary/50 hover:-translate-y-0.5"
+                        className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-extrabold text-primary transition hover:border-secondary/60 hover:bg-secondary/10 hover:-translate-y-0.5"
                       >
                         <MapPin className="h-3 w-3 text-secondary" />{isRTL ? c.ar : c.en}
                       </Link>
@@ -731,57 +757,76 @@ const Projects = () => {
         id="faq"
         aria-labelledby="programs-faq-heading"
         className="scroll-mt-24 bg-muted/40 py-14 md:py-20"
+        dir={isRTL ? "rtl" : "ltr"}
       >
-        <div className="container mx-auto max-w-3xl px-4">
-          <div className="mx-auto max-w-2xl text-center">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="mx-auto max-w-xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
               <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "أسئلة شائعة" : "FAQ"}
             </span>
             <h2
               id="programs-faq-heading"
-              className="mt-3 text-2xl font-black text-primary md:text-4xl"
+              className="mt-3 text-2xl font-black text-primary md:text-3xl"
             >
-              {isRTL ? "أسئلة بتتسأل قبل التبرع لبرامج اليسر" : "Questions donors ask before supporting Al-Yusr programs"}
+              {isRTL ? "أسئلة شائعة عن برامج اليسر" : "Programs FAQs"}
             </h2>
-            <p className="mt-3 text-sm font-semibold leading-7 text-muted-foreground md:text-base">
+            <p className="mt-2 text-sm text-muted-foreground">
               {isRTL
-                ? "إجابات شفافة عن طرق التوزيع، التوثيق، الإيصالات، والترخيص — مع روابط للبرامج التفصيلية."
-                : "Transparent answers about distribution, documentation, receipts, and licensing — with deep links to each program."}
+                ? "إجابات شفافة عن التوزيع، التوثيق، والإيصالات."
+                : "Transparent answers about distribution, documentation, and receipts."}
             </p>
           </div>
 
-          <Accordion
-            type="single"
-            collapsible
-            className="mt-8 rounded-3xl border border-border bg-card p-2 shadow-soft md:p-4"
-          >
-            {faqs.map((f, i) => (
-              <motion.div
-                key={i}
-                initial={reduce ? false : { opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.45, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <AccordionItem
-                  value={`faq-${i}`}
-                  className="border-b border-border/60 last:border-b-0"
+          {/* Questions: one per row */}
+          <div className="mt-8 space-y-3">
+            {faqs.map((f, i) => {
+              const isOpen = openFaqIdx === i;
+              return (
+                <motion.div
+                  key={i}
+                  initial={reduce ? false : { opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.45, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                  className={`overflow-hidden rounded-2xl border-2 transition-all duration-200 ${
+                    isOpen ? "border-secondary bg-secondary/5" : "border-border bg-card hover:border-secondary/40"
+                  }`}
                 >
-                  <AccordionTrigger className="px-3 py-4 text-start text-sm font-extrabold text-primary hover:no-underline md:text-base">
-                    <span className="flex items-start gap-2.5">
-                      <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-secondary/20 text-secondary transition group-data-[state=open]:bg-secondary group-data-[state=open]:text-secondary-foreground">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between gap-3 p-4 sm:p-5 text-start font-extrabold text-primary cursor-pointer"
+                    onClick={() => setOpenFaqIdx(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                  >
+                    <span className="flex items-center gap-2.5 min-w-0">
+                      <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full transition ${isOpen ? "bg-secondary text-emerald-950 font-black" : "bg-secondary/20 text-secondary"}`}>
                         <HelpCircle className="h-3.5 w-3.5" />
                       </span>
-                      <span>{f.q}</span>
+                      <span className="text-sm sm:text-base leading-snug">{f.q}</span>
                     </span>
-                  </AccordionTrigger>
-                  <AccordionContent className="px-3 pb-4 text-sm leading-7 text-muted-foreground md:text-base">
-                    {f.a}
-                  </AccordionContent>
-                </AccordionItem>
-              </motion.div>
-            ))}
-          </Accordion>
+                    <ChevronDown
+                      className={`h-4 w-4 shrink-0 text-secondary transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  {isOpen && (
+                    <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-sm leading-relaxed text-muted-foreground border-t border-border/40 pt-3">
+                      {f.a}
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <div className="mt-8 flex items-center justify-center gap-3">
+            <Link
+              to="/faqs"
+              className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-card px-5 py-2.5 text-xs font-bold text-primary shadow-sm hover:bg-secondary/10 transition"
+            >
+              <span>{isRTL ? "مركز الأسئلة الشائعة" : "View all FAQs"}</span>
+              {isRTL ? <ArrowLeft className="h-4 w-4 text-secondary" /> : <ArrowRight className="h-4 w-4 text-secondary" />}
+            </Link>
+          </div>
 
           <p className="mt-6 text-center text-xs text-muted-foreground md:text-sm">
             {isRTL ? (

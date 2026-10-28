@@ -120,21 +120,27 @@ const Inner = () => {
     <AdminLayout title={{ ar: "المتبرعون", en: "Donors" }}>
       <div className="space-y-4 text-start [&_input]:text-start" dir={isAr ? "rtl" : "ltr"}>
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          <StatCard accent label={isAr ? "إجمالي المتبرعين" : "Total donors"} value={donors.length} />
-          <StatCard label={isAr ? "إجمالي التبرعات" : "Total donated"} value={`${total.toLocaleString()} EGP`} />
-          <StatCard label={isAr ? "عدد التبرعات" : "Donations count"} value={count} />
-          <StatCard label={isAr ? "متوسط التبرع" : "Avg per donor"} value={`${avg.toLocaleString()} EGP`} />
+          <StatCard accent label={isAr ? "إجمالي المتبرعين" : "Total donors"} value={loading && !donors.length ? "—" : donors.length} />
+          <StatCard label={isAr ? "إجمالي التبرعات" : "Total donated"} value={loading && !donors.length ? "—" : `${total.toLocaleString()} EGP`} />
+          <StatCard label={isAr ? "عدد التبرعات" : "Donations count"} value={loading && !donors.length ? "—" : count} />
+          <StatCard label={isAr ? "متوسط التبرع" : "Avg per donor"} value={loading && !donors.length ? "—" : `${avg.toLocaleString()} EGP`} />
         </div>
 
         <div className="flex flex-col gap-2 rounded-2xl bg-card p-3 shadow-soft sm:flex-row sm:items-center">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input className="ps-9" placeholder={isAr ? "بحث بالاسم أو الهاتف أو البريد…" : "Search name, phone, or email…"} value={q} onChange={(e) => setQ(e.target.value)} />
+            <Input className="ps-9 h-9" placeholder={isAr ? "بحث بالاسم أو الهاتف أو البريد…" : "Search name, phone, or email…"} value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
-          <Button onClick={() => setShowAddModal(true)} className="bg-orange-grad text-accent-foreground font-bold">
-            <Plus className="h-4 w-4 me-1.5" />
-            {isAr ? "متبرع جديد" : "New donor"}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button onClick={() => void reload()} variant="outline" size="sm" disabled={loading} className="h-9 gap-1 font-bold">
+              <Loader2 className={`h-3.5 w-3.5 ${loading ? "animate-spin" : "hidden"}`} />
+              <span>{isAr ? "تحديث" : "Refresh"}</span>
+            </Button>
+            <Button onClick={() => setShowAddModal(true)} size="sm" className="h-9 bg-orange-grad text-accent-foreground font-bold">
+              <Plus className="h-4 w-4 me-1.5" />
+              {isAr ? "متبرع جديد" : "New donor"}
+            </Button>
+          </div>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

@@ -225,7 +225,7 @@ const App = () => (
                   <Route path="/freelancers" element={<ArbounLanding />} />
                   <Route path="/donate/track/:ref" element={<DonationTracking />} />
                   <Route path="/donate/track" element={<DonationTracking />} />
-                  <Route path="/dashboard" element={<DonorDashboard />} />
+                  <Route path="/dashboard" element={<RequireAuth><DonorDashboard /></RequireAuth>} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/category/:slug" element={<BlogCategory />} />
                   <Route path="/blog/author/:slug" element={<BlogAuthor />} />
@@ -237,7 +237,7 @@ const App = () => (
                   <Route path="/register/donor" element={<RegisterDonor />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/register/editor" element={<Register />} />
-                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
 
                   <Route path="/admin" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminDashboard /></RequireAuth>} />
                   <Route path="/admin/analytics" element={<RequireAuth roles={["admin", "caseworker"]}><AdminAnalytics /></RequireAuth>} />

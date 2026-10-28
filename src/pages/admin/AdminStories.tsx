@@ -17,10 +17,11 @@ import {
   listAllStories,
   deleteStory,
   toggleStoryField,
+  upsertStory,
   STATIC_STORIES,
   type StoryCard,
 } from "@/data/storiesApi";
-import { supabase } from "@/integrations/supabase/client";
+import { casesApi, type LaravelCase } from "@/data/laravelApi";
 
 type CompletedCase = {
   id: string; ref_code: string; title: string;
@@ -62,54 +63,50 @@ export default function AdminStories() {
   const openCasePicker = async () => {
     setCasePickerOpen(true);
     setCasesLoading(true);
-    const [{ data: cs }, { data: linked }] = await Promise.all([
-      (supabase.from("cases" as any) as any)
-        .select("id,ref_code,title,beneficiary_name,city,governorate,status,cover_image_url")
-        .in("status", ["funded", "closed"])
-        .order("updated_at", { ascending: false })
-        .limit(50),
-      (supabase.from("stories" as any) as any).select("case_id").not("case_id", "is", null),
-    ]);
-    const used = new Set((linked || []).map((r: any) => r.case_id));
-    setCompletedCases(((cs || []) as CompletedCase[]).filter((c) => !used.has(c.id)));
-    setCasesLoading(false);
+    try {
+      const allCases = await casesApi.listAll();
+      const usedCases = new Set(items.map((s) => s.case_id).filter(Boolean));
+      const formatted: CompletedCase[] = (allCases || [])
+        .filter((c: LaravelCase) => !usedCases.has(String(c.id)))
+        .map((c: LaravelCase) => ({
+          id: String(c.id),
+          ref_code: c.code || `CASE-${c.id}`,
+          title: c.title,
+          beneficiary_name: c.beneficiary_name || "",
+          city: c.city || null,
+          governorate: c.governorate || "",
+          status: c.status || "approved",
+          cover_image_url: c.cover_image || null,
+        }));
+      setCompletedCases(formatted);
+    } catch {
+      setCompletedCases([]);
+    } finally {
+      setCasesLoading(false);
+    }
   };
 
   /* ── Sync defaults ───────────────────────────────────────────────────── */
   const syncFromSite = async () => {
     setSyncing(true);
     const existing = new Set(items.map((s) => s.slug));
-    const toInsert = STATIC_STORIES.filter((s) => !existing.has(s.slug)).map((s) => ({
-      slug: s.slug,
-      title_ar: s.title_ar,
-      title_en: s.title_en || s.title_ar,
-      role_ar: s.role_ar || "",
-      role_en: s.role_en || "",
-      quote_ar: s.quote_ar || "",
-      quote_en: s.quote_en || "",
-      body_ar: s.body_ar || s.quote_ar || s.title_ar,
-      body_en: s.body_en || s.quote_en || s.title_en || s.title_ar,
-      location_ar: s.location_ar || null,
-      location_en: s.location_en || null,
-      pillar_slug: s.pillar_slug || null,
-      image_url: typeof s.image_url === "string" && s.image_url.startsWith("http") ? s.image_url : null,
-      is_published: s.is_published ?? true,
-      is_featured: s.is_featured ?? false,
-      sort_order: s.sort_order ?? 0,
-    }));
+    const toInsert = STATIC_STORIES.filter((s) => !existing.has(s.slug));
     if (toInsert.length === 0) {
       setSyncing(false);
       toast({ title: tr(lang, "كل القصص الافتراضية موجودة بالفعل", "All default stories already exist") });
       return;
     }
-    const { error } = await (supabase.from("stories" as any) as any).insert(toInsert);
-    setSyncing(false);
-    if (error) {
-      toast({ title: tr(lang, "فشل المزامنة", "Sync failed"), description: error.message });
-      return;
+    try {
+      for (const s of toInsert) {
+        await upsertStory(s);
+      }
+      toast({ title: tr(lang, `تمت إضافة ${toInsert.length} قصة بنجاح`, `Added ${toInsert.length} stories successfully`) });
+      reload();
+    } catch (err: unknown) {
+      toast({ title: tr(lang, "فشل المزامنة", "Sync failed"), description: err instanceof Error ? err.message : String(err) });
+    } finally {
+      setSyncing(false);
     }
-    toast({ title: tr(lang, `تمت إضافة ${toInsert.length} قصة بنجاح`, `Added ${toInsert.length} stories successfully`) });
-    reload();
   };
 
   /* ── CRUD actions ─────────────────────────────────────────────────────── */

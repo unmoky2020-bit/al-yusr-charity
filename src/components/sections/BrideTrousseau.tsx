@@ -25,20 +25,25 @@ export const BrideTrousseau = () => {
     if (typeof window === "undefined" || !root.current) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
+    const el = root.current;
     const ctx = gsap.context(() => {
-      gsap.from("[data-bt='img']", {
+      const img = el.querySelector("[data-bt='img']");
+      if (img) gsap.from(img, {
         x: isAR ? 60 : -60, opacity: 0, scale: 0.96, duration: 0.9, ease: "power3.out",
-        scrollTrigger: { trigger: root.current!, start: "top 75%" },
+        scrollTrigger: { trigger: el, start: "top 75%" },
       });
-      gsap.from("[data-bt='copy'] > *", {
+      const copyItems = el.querySelectorAll("[data-bt='copy'] > *");
+      if (copyItems.length) gsap.from(copyItems, {
         y: 30, opacity: 0, duration: 0.6, stagger: 0.08, ease: "power2.out",
-        scrollTrigger: { trigger: root.current!, start: "top 70%" },
+        scrollTrigger: { trigger: el, start: "top 70%" },
       });
-      gsap.from("[data-bt='card']", {
+      const cards = el.querySelectorAll("[data-bt='card']");
+      const grid = el.querySelector("[data-bt='grid']");
+      if (cards.length) gsap.from(cards, {
         y: 24, opacity: 0, duration: 0.5, stagger: 0.08, ease: "back.out(1.4)",
-        scrollTrigger: { trigger: "[data-bt='grid']", start: "top 85%" },
+        scrollTrigger: { trigger: grid || el, start: "top 85%" },
       });
-    }, root);
+    }, el);
     return () => ctx.revert();
   }, [isAR]);
 

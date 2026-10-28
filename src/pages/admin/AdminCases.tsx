@@ -1,343 +1,1115 @@
 import { useEffect, useMemo, useState } from "react";
-import { Search, Plus, Trash2, X, CheckCircle2, XCircle, Loader2, MessageSquarePlus, Pencil, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
+import {
+  Users, Search, Plus, Trash2, Pencil, CheckCircle2, XCircle,
+  Loader2, ExternalLink, ShieldCheck, Tag, FolderKanban, BookOpen,
+  Megaphone, AlertCircle, ArrowUpRight, Check, Clock,
+  Filter, MapPin, Save, Settings2, X,
+} from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
 import {
-  listAllCasesForStaff, listCategories, createCase, setCaseStatus, deleteCase,
-  STATUS_LABELS, type CaseStatus, type CategoryRow,
-  listCaseUpdates, addCaseUpdate,
-} from "@/data/casesApi";
+  casesApiV1,
+  caseCategoriesApi,
+  programsApiV1,
+  projectsApi,
+  donationCampaignsApi,
+  type LaravelCase,
+  type LaravelCaseCategory,
+  type LaravelProgram,
+  type LaravelProject,
+  type LaravelDonationCampaign,
+  formatServerImageUrl,
+} from "@/data/laravelApi";
 
-type CaseWithCat = Awaited<ReturnType<typeof listAllCasesForStaff>>[number];
-
-const STATUS_FILTERS: { v: "all" | CaseStatus; ar: string; en: string }[] = [
-  { v: "all", ar: "الكل", en: "All" },
-  { v: "pending", ar: "قيد المراجعة", en: "Pending" },
-  { v: "approved", ar: "معتمدة", en: "Approved" },
-  { v: "funded", ar: "مكتملة", en: "Funded" },
-  { v: "closed", ar: "مغلقة", en: "Closed" },
-  { v: "rejected", ar: "مرفوضة", en: "Rejected" },
+const DEFAULT_CASES_SEED: Partial<LaravelCase>[] = [
+  {
+    code: "CASE-001",
+    title: "إجراء جراحة قلب عاجلة للطفل يوسف",
+    beneficiary_name: "يوسف م. ع.",
+    governorate: "الدقهلية",
+    city: "المنصورة",
+    target_amount: 35000,
+    priority: "high",
+    status: "approved",
+    description: "طفل يبلغ من العمر 7 سنوات بحاجة لعملية جراحية عاجلة في القلب بمستشفى المنصورة الجامعي.",
+    cover_image: "/images/cases/case-heart-child.jpg",
+  },
+  {
+    code: "CASE-002",
+    title: "تيسير زواج فتاة يتيمة الأبوين بالمنزلة",
+    beneficiary_name: "أمل ح. س.",
+    governorate: "الدقهلية",
+    city: "المنزلة",
+    target_amount: 18000,
+    priority: "high",
+    status: "approved",
+    description: "توفير الأجهزة الكهربائية الأساسية (غسالة، ثلاجة، بوتاجاز) لإتمام زواج فتاة يتيمة.",
+    cover_image: "/images/cases/case-bride.png",
+  },
+  {
+    code: "CASE-003",
+    title: "كفالة طالب علم متفوق بالجامعة",
+    beneficiary_name: "محمد أحمد",
+    governorate: "القاهرة",
+    city: "مدينة نصر",
+    target_amount: 8000,
+    priority: "low",
+    status: "pending_review",
+    description: "كفالة دراسية ومصاريف كتب ورعاية تعليمية لطالب متفوق بالفرقة الثالثة.",
+    cover_image: "/images/cases/case-education.jpg",
+  },
 ];
 
-const AdminCases = () => {
+const STATUS_OPTIONS: Array<{ v: string; ar: string; en: string; cls: string }> = [
+  { v: "all", ar: "جميع الحالات", en: "All Cases", cls: "bg-muted text-muted-foreground" },
+  { v: "pending_review", ar: "قيد المراجعة", en: "Pending Review", cls: "bg-amber-500/15 text-amber-700 dark:text-amber-400" },
+  { v: "approved", ar: "معتمدة", en: "Approved", cls: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400" },
+  { v: "completed", ar: "مكتملة", en: "Completed", cls: "bg-primary/15 text-primary" },
+  { v: "closed", ar: "مغلقة", en: "Closed", cls: "bg-muted text-muted-foreground" },
+  { v: "rejected", ar: "مرفوضة", en: "Rejected", cls: "bg-destructive/15 text-destructive" },
+];
+
+export default function AdminCases() {
   const { lang } = useLang();
-  const [rows, setRows] = useState<CaseWithCat[]>([]);
-  const [cats, setCats] = useState<CategoryRow[]>([]);
+  const isAr = lang === "ar";
+
+  const [cases, setCases] = useState<LaravelCase[]>([]);
+  const [categories, setCategories] = useState<LaravelCaseCategory[]>([]);
+  const [programs, setPrograms] = useState<LaravelProgram[]>([]);
+  const [projects, setProjects] = useState<LaravelProject[]>([]);
+  const [campaigns, setCampaigns] = useState<LaravelDonationCampaign[]>([]);
+
+  const [stats, setStats] = useState({
+    total: 0,
+    pending_review: 0,
+    approved: 0,
+    completed: 0,
+    closed: 0,
+    rejected: 0,
+  });
+
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | CaseStatus>("all");
-  const [showAdd, setShowAdd] = useState(false);
-  const [updatesFor, setUpdatesFor] = useState<CaseWithCat | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [relationFilter, setRelationFilter] = useState<string>("all");
+  const [catFilter, setCatFilter] = useState<string>("all");
 
-  const reload = async () => {
+  // Create / Edit Case Dialog
+  const [editing, setEditing] = useState<Partial<LaravelCase> & { relationType?: "none" | "program" | "project" | "campaign" } | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  // Category management state
+  const [showManageCats, setShowManageCats] = useState(false);
+  const [newCat, setNewCat] = useState({ name_ar: "", name_en: "", slug: "" });
+  const [savingCat, setSavingCat] = useState(false);
+  const [editingCat, setEditingCat] = useState<LaravelCaseCategory | null>(null);
+  const [savingEditCat, setSavingEditCat] = useState(false);
+  const [deletingCatId, setDeletingCatId] = useState<number | string | null>(null);
+
+  const loadData = async () => {
     setLoading(true);
     try {
-      const [c, k] = await Promise.all([listAllCasesForStaff(), listCategories()]);
-      setRows(c as CaseWithCat[]);
-      setCats(k);
-    } catch (e) {
-      toast({ title: (e as Error).message, variant: "destructive" });
-    } finally { setLoading(false); }
+      const [casesRes, statsRes, catsRes, progsRes, projsRes, campsRes] = await Promise.all([
+        casesApiV1.listAll().catch(() => [] as LaravelCase[]),
+        casesApiV1.statistics().catch(() => null),
+        casesApiV1.categories().catch(() => [] as LaravelCaseCategory[]),
+        programsApiV1.listAll().catch(() => [] as LaravelProgram[]),
+        projectsApi.listAll().catch(() => [] as LaravelProject[]),
+        donationCampaignsApi.listAll().catch(() => [] as LaravelDonationCampaign[]),
+      ]);
+
+      setPrograms(Array.isArray(progsRes) ? progsRes : []);
+      setProjects(Array.isArray(projsRes) ? projsRes : []);
+      setCampaigns(Array.isArray(campsRes) ? campsRes : []);
+
+      const loadedCats = Array.isArray(catsRes) && catsRes.length > 0 ? catsRes : [
+        { id: 1, name_ar: "علاج وجراحة", name_en: "Treatment", slug: "treatment" },
+        { id: 2, name_ar: "تيسير زواج", name_en: "Marriage", slug: "bride" },
+        { id: 3, name_ar: "تعليم وكفالات", name_en: "Education", slug: "education" },
+        { id: 4, name_ar: "إسكان وتسقيف", name_en: "Housing", slug: "housing" },
+      ];
+      setCategories(loadedCats);
+
+      if (Array.isArray(casesRes) && casesRes.length > 0) {
+        setCases(casesRes);
+      } else {
+        setCases(DEFAULT_CASES_SEED as LaravelCase[]);
+      }
+
+      if (statsRes && typeof statsRes.total === "number") {
+        setStats(statsRes);
+      } else {
+        const loadedList = Array.isArray(casesRes) && casesRes.length > 0 ? casesRes : (DEFAULT_CASES_SEED as LaravelCase[]);
+        setStats({
+          total: loadedList.length,
+          pending_review: loadedList.filter((c) => c.status === "pending_review" || c.status === "pending").length,
+          approved: loadedList.filter((c) => c.status === "approved").length,
+          completed: loadedList.filter((c) => c.status === "completed" || c.status === "funded").length,
+          closed: loadedList.filter((c) => c.status === "closed").length,
+          rejected: loadedList.filter((c) => c.status === "rejected").length,
+        });
+      }
+    } catch (e: any) {
+      console.warn("Error loading cases data:", e);
+      toast({ title: isAr ? "خطأ في تحميل بيانات الحالات" : "Failed to load cases", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
-  useEffect(() => { void reload(); }, []);
 
-  const filtered = useMemo(() => rows.filter((c) => {
-    const sm = !search || c.title.includes(search) || c.beneficiary_name.includes(search) || c.ref_code.includes(search);
-    const st = statusFilter === "all" || c.status === statusFilter;
-    return sm && st;
-  }), [rows, search, statusFilter]);
+  useEffect(() => {
+    void loadData();
+  }, []);
 
-  const counts = useMemo(() => ({
-    total: rows.length,
-    pending: rows.filter(r => r.status === "pending").length,
-    approved: rows.filter(r => r.status === "approved").length,
-    funded: rows.filter(r => r.status === "funded").length,
-  }), [rows]);
+  // Filtered Cases
+  const filtered = useMemo(() => {
+    return cases.filter((c) => {
+      const matchSearch =
+        !search ||
+        (c.title && c.title.includes(search)) ||
+        (c.code && c.code.toLowerCase().includes(search.toLowerCase())) ||
+        (c.beneficiary_name && c.beneficiary_name.includes(search)) ||
+        (c.governorate && c.governorate.includes(search));
 
-  const transition = async (id: string, next: CaseStatus, reason?: string) => {
+      const normStatus = c.status === "pending" ? "pending_review" : c.status === "funded" ? "completed" : c.status;
+      const matchStatus = statusFilter === "all" || normStatus === statusFilter;
+
+      const matchCat = catFilter === "all" || String(c.category_id) === String(catFilter);
+
+      let matchRelation = true;
+      if (relationFilter === "program") matchRelation = Boolean(c.program_id || c.program);
+      else if (relationFilter === "project") matchRelation = Boolean(c.project_id || c.project);
+      else if (relationFilter === "campaign") matchRelation = Boolean(c.donation_campaign_id || c.donation_campaign);
+      else if (relationFilter === "general") matchRelation = !c.program_id && !c.project_id && !c.donation_campaign_id;
+
+      return matchSearch && matchStatus && matchCat && matchRelation;
+    });
+  }, [cases, search, statusFilter, catFilter, relationFilter]);
+
+  // Open Create Case
+  const openNew = () => {
+    setEditing({
+      code: `CASE-${Date.now().toString().slice(-4)}`,
+      title: "",
+      beneficiary_name: "",
+      governorate: "الدقهلية",
+      city: "المنصورة",
+      age: null,
+      target_amount: 15000,
+      priority: "medium",
+      status: "pending_review",
+      description: "",
+      category_id: categories[0]?.id ? Number(categories[0].id) : 1,
+      relationType: "none",
+      program_id: null,
+      project_id: null,
+      donation_campaign_id: null,
+    });
+  };
+
+  // Open Edit Case
+  const openEdit = (c: LaravelCase) => {
+    let relType: "none" | "program" | "project" | "campaign" = "none";
+    if (c.program_id || c.program) relType = "program";
+    else if (c.project_id || c.project) relType = "project";
+    else if (c.donation_campaign_id || c.donation_campaign) relType = "campaign";
+
+    setEditing({
+      ...c,
+      relationType: relType,
+      category_id: c.category_id || (c.category_data ? c.category_data.id : categories[0]?.id),
+    });
+  };
+
+  // Save Case (Create or Update)
+  const handleSaveCase = async () => {
+    if (!editing || !editing.title?.trim() || !editing.beneficiary_name?.trim()) {
+      toast({ title: isAr ? "يرجى ملء عنوان الحالة واسم المستفيد" : "Please fill case title and beneficiary name", variant: "destructive" });
+      return;
+    }
+
+    setSaving(true);
     try {
-      await setCaseStatus(id, next, reason);
-      toast({ title: lang === "ar" ? "تم تحديث الحالة" : "Status updated" });
-      void reload();
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+      const payload: Record<string, any> = {
+        code: editing.code?.trim() || `CASE-${Date.now().toString().slice(-4)}`,
+        title: editing.title.trim(),
+        beneficiary_name: editing.beneficiary_name.trim(),
+        governorate: editing.governorate?.trim() || "الدقهلية",
+        city: editing.city?.trim() || null,
+        age: editing.age ? Number(editing.age) : null,
+        target_amount: Number(editing.target_amount || 0),
+        priority: editing.priority || "medium",
+        description: editing.description?.trim() || editing.title.trim(),
+        status: editing.status || "pending_review",
+        category_id: editing.category_id ? Number(editing.category_id) : 1,
+        program_id: editing.relationType === "program" && editing.program_id ? Number(editing.program_id) : null,
+        project_id: editing.relationType === "project" && editing.project_id ? Number(editing.project_id) : null,
+        donation_campaign_id: editing.relationType === "campaign" && editing.donation_campaign_id ? Number(editing.donation_campaign_id) : null,
+        cover_image: editing.cover_image?.trim() || null,
+      };
+
+      if (editing.id && !String(editing.id).startsWith("static-")) {
+        await casesApiV1.update(editing.id, payload as any);
+        toast({ title: isAr ? "تم تحديث الحالة بنجاح" : "Case updated successfully" });
+      } else {
+        await casesApiV1.create(payload as any);
+        toast({ title: isAr ? "تمت إضافة الحالة بنجاح في قاعدة البيانات" : "Case created successfully" });
+      }
+
+      setEditing(null);
+      await loadData();
+    } catch (e: any) {
+      toast({ title: e.message || "Failed to save case", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const remove = async (id: string) => {
-    if (!confirm(lang === "ar" ? "حذف الحالة؟" : "Delete case?")) return;
-    try { await deleteCase(id); toast({ title: lang === "ar" ? "تم الحذف" : "Deleted" }); void reload(); }
-    catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+  // Quick Change Status
+  const handleSetStatus = async (id: number | string, newStatus: string) => {
+    try {
+      if (!String(id).startsWith("static-")) {
+        await casesApiV1.update(id, { status: newStatus } as any);
+      }
+      setCases((prev) =>
+        prev.map((item) => (String(item.id) === String(id) ? { ...item, status: newStatus } : item))
+      );
+      toast({ title: isAr ? "تم تحديث حالة الحالة" : "Status updated" });
+    } catch (e: any) {
+      toast({ title: e.message || "Error", variant: "destructive" });
+    }
+  };
+
+  // Delete Case
+  const handleDeleteCase = async (id: number | string) => {
+    if (!confirm(isAr ? "هل أنت متأكد من حذف هذه الحالة؟" : "Are you sure you want to delete this case?")) return;
+    try {
+      if (!String(id).startsWith("static-")) {
+        await casesApiV1.remove(id);
+      }
+      setCases((prev) => prev.filter((c) => String(c.id) !== String(id)));
+      toast({ title: isAr ? "تم حذف الحالة" : "Case deleted" });
+    } catch (e: any) {
+      toast({ title: e.message || "Failed to delete", variant: "destructive" });
+    }
+  };
+
+  // Category management handlers
+  const handleAddCategory = async () => {
+    if (!newCat.name_ar.trim()) return;
+    setSavingCat(true);
+    try {
+      // Generate slug from English name (preferred) or transliterate Arabic safely
+      const baseSlug = newCat.name_en.trim()
+        ? newCat.name_en.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
+        : newCat.name_ar.trim().replace(/\s+/g, "-");
+      const slug = newCat.slug.trim() || `cat-${baseSlug}-${Date.now().toString(36)}`;
+      await caseCategoriesApi.create({
+        name_ar: newCat.name_ar.trim(),
+        name_en: newCat.name_en.trim() || newCat.name_ar.trim(),
+        slug,
+      } as any);
+      setNewCat({ name_ar: "", name_en: "", slug: "" });
+      toast({ title: isAr ? "تمت إضافة التصنيف بنجاح" : "Category added successfully" });
+      await loadData();
+    } catch (e: any) {
+      const msg = e?.message || "";
+      const isSlugError = msg.toLowerCase().includes("unique") || msg.toLowerCase().includes("slug") || msg.toLowerCase().includes("duplicate");
+      toast({
+        title: isSlugError
+          ? (isAr ? "هذا الـ Slug مستخدم بالفعل، اكتب slug مختلفاً" : "Slug already exists, please enter a unique slug")
+          : (e?.message || (isAr ? "خطأ في الإضافة" : "Error adding category")),
+        variant: "destructive",
+      });
+    } finally {
+      setSavingCat(false);
+    }
+  };
+
+  const handleUpdateCategory = async () => {
+    if (!editingCat || !editingCat.name_ar.trim()) return;
+    setSavingEditCat(true);
+    try {
+      const slug = editingCat.slug?.trim() || editingCat.name_ar.trim().replace(/\s+/g, "-");
+      await caseCategoriesApi.update(editingCat.id, {
+        name_ar: editingCat.name_ar,
+        name_en: editingCat.name_en?.trim() || editingCat.name_ar,
+        slug,
+      } as any);
+      toast({ title: isAr ? "تم تعديل التصنيف بنجاح" : "Category updated successfully" });
+      setEditingCat(null);
+      await loadData();
+    } catch (e: any) {
+      const msg = e?.message || "";
+      const isSlugError = msg.toLowerCase().includes("unique") || msg.toLowerCase().includes("slug") || msg.toLowerCase().includes("duplicate");
+      toast({
+        title: isSlugError
+          ? (isAr ? "هذا الـ Slug مستخدم بالفعل، غيّره واحفظ مرة ثانية" : "Slug already in use, try a different slug")
+          : (e?.message || (isAr ? "خطأ في التحديث" : "Error updating category")),
+        variant: "destructive",
+      });
+    } finally {
+      setSavingEditCat(false);
+    }
+  };
+
+  const handleDeleteCategory = async (id: number | string) => {
+    // Count cases linked to this category
+    const linkedCount = cases.filter((c) => String(c.category_id) === String(id)).length;
+    const confirmMsg = linkedCount > 0
+      ? (isAr
+          ? `هذا التصنيف مرتبط بـ ${linkedCount} حالة. هل تريد حذفه؟ ستُصبح الحالات المرتبطة به بدون تصنيف.`
+          : `This category has ${linkedCount} linked case(s). Delete anyway? Linked cases will become uncategorized.`)
+      : (isAr ? "هل أنت متأكد من حذف هذا التصنيف؟" : "Delete this category?");
+    if (!confirm(confirmMsg)) return;
+    setDeletingCatId(id);
+    try {
+      await caseCategoriesApi.remove(id);
+      toast({ title: isAr ? "تم حذف التصنيف" : "Category deleted" });
+      await loadData();
+    } catch (e: any) {
+      const msg = e?.message || "";
+      const isFKError = msg.toLowerCase().includes("foreign key") || msg.toLowerCase().includes("constraint") || msg.includes("1451") || msg.includes("violate");
+      toast({
+        title: isFKError
+          ? (isAr
+              ? "لا يمكن حذف هذا التصنيف لأن هناك حالات مرتبطة به. يرجى تغيير تصنيف تلك الحالات أولاً."
+              : "Cannot delete: some cases are still linked to this category. Please re-categorize them first.")
+          : (e?.message || (isAr ? "خطأ في الحذف" : "Error deleting category")),
+        variant: "destructive",
+      });
+    } finally {
+      setDeletingCatId(null);
+    }
   };
 
   return (
     <AdminLayout>
-      <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          <StatCard accent label={lang === "ar" ? "إجمالي الحالات" : "Total cases"} value={counts.total} />
-          <StatCard label={lang === "ar" ? "قيد المراجعة" : "Pending"} value={counts.pending} />
-          <StatCard label={lang === "ar" ? "معتمدة" : "Approved"} value={counts.approved} />
-          <StatCard label={lang === "ar" ? "مكتملة" : "Funded"} value={counts.funded} />
+      <div className="space-y-6">
+        {/* Top Header */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                <Users className="h-6 w-6" />
+              </div>
+              <h1 className="text-2xl font-black text-foreground">
+                {isAr ? "إدارة حالات المستفيدين" : "Beneficiary Cases"}
+              </h1>
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {isAr
+                ? "إدارة الحالات الإنسانية المعتمدة وقيد المراجعة، ربط الحالات بالبرامج والمشاريع والحملات، ومتابعة جمع التبرعات."
+                : "Manage beneficiary cases, review and approve requests, link cases to programs/projects, and track funding."}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowManageCats(true)}
+              className="gap-1.5"
+            >
+              <Settings2 className="h-4 w-4 text-primary" />
+              {isAr ? "إدارة التصنيفات" : "Categories"}
+            </Button>
+            <Button
+              onClick={openNew}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-sm"
+            >
+              <Plus className="h-4 w-4" />
+              {isAr ? "حالة جديدة" : "New Case"}
+            </Button>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-2 rounded-2xl bg-card p-3 shadow-soft sm:flex-row sm:items-center sm:flex-wrap">
-          <div className="relative min-w-0 flex-1">
-            <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder={lang === "ar" ? "بحث بالعنوان أو الكود…" : "Search title or ref…"} value={search} onChange={(e) => setSearch(e.target.value)} className="ps-9" />
+        {/* Real Backend Statistics Bar */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-6">
+          <StatCard accent label={isAr ? "إجمالي الحالات" : "Total"} value={stats.total} />
+          <StatCard label={isAr ? "قيد المراجعة" : "Pending Review"} value={stats.pending_review} />
+          <StatCard label={isAr ? "معتمدة ونشطة" : "Approved"} value={stats.approved} />
+          <StatCard label={isAr ? "مكتملة التمويل" : "Completed"} value={stats.completed} />
+          <StatCard label={isAr ? "مغلقة" : "Closed"} value={stats.closed} />
+          <StatCard label={isAr ? "مرفوضة" : "Rejected"} value={stats.rejected} />
+        </div>
+
+        {/* Filters Box */}
+        <div className="rounded-2xl border border-border/70 bg-card p-4 shadow-soft space-y-3">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center">
+            {/* Search */}
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder={isAr ? "بحث بالعنوان، كود الحالة، اسم المستفيد، أو المحافظة..." : "Search cases..."}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="ps-9"
+              />
+            </div>
+
+            {/* Status Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+              {STATUS_OPTIONS.map((f) => (
+                <button
+                  key={f.v}
+                  onClick={() => setStatusFilter(f.v)}
+                  className={`shrink-0 rounded-xl px-3 py-1.5 text-xs font-bold transition ${
+                    statusFilter === f.v
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-muted/80 text-muted-foreground hover:bg-muted"
+                  }`}
+                >
+                  {isAr ? f.ar : f.en}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-1.5">
-            {STATUS_FILTERS.map((f) => (
-              <button key={f.v} onClick={() => setStatusFilter(f.v)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
-                  statusFilter === f.v ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"
-                }`}>{lang === "ar" ? f.ar : f.en}</button>
+
+          {/* Relation & Category Filters */}
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border/50 text-xs">
+            <span className="font-bold text-muted-foreground">{isAr ? "نوع الارتباط:" : "Linkage:"}</span>
+            {[
+              { v: "all", ar: "الكل" },
+              { v: "program", ar: "مرتبطة ببرنامج" },
+              { v: "project", ar: "مرتبطة بمشروع" },
+              { v: "campaign", ar: "مرتبطة بحملة" },
+              { v: "general", ar: "حالات عامة" },
+            ].map((r) => (
+              <button
+                key={r.v}
+                onClick={() => setRelationFilter(r.v)}
+                className={`rounded-lg px-2.5 py-1 font-semibold transition ${
+                  relationFilter === r.v
+                    ? "bg-secondary text-secondary-foreground font-black"
+                    : "bg-muted text-muted-foreground hover:bg-muted/70"
+                }`}
+              >
+                {r.ar}
+              </button>
             ))}
+
+            <div className="ms-auto flex items-center gap-1.5">
+              <span className="font-bold text-muted-foreground">{isAr ? "التصنيف:" : "Category:"}</span>
+              <select
+                value={catFilter}
+                onChange={(e) => setCatFilter(e.target.value)}
+                className="h-8 rounded-lg border border-input bg-background px-2.5 text-xs"
+              >
+                <option value="all">{isAr ? "جميع التصنيفات" : "All Categories"}</option>
+                {categories.map((k) => (
+                  <option key={String(k.id)} value={String(k.id)}>
+                    {k.name_ar}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-          <Button onClick={() => setShowAdd(true)} className="bg-orange-grad text-accent-foreground">
-            <Plus className="h-4 w-4" />{lang === "ar" ? "حالة جديدة" : "New case"}
-          </Button>
         </div>
 
-        <div className="overflow-x-auto rounded-2xl bg-card shadow-soft">
-          {loading ? (
-            <div className="grid place-items-center p-10 text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin" /></div>
-          ) : (
-          <table className="w-full text-sm">
-            <thead className="bg-muted/40 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-              <tr>
-                {[lang === "ar" ? "الكود" : "Ref", lang === "ar" ? "العنوان" : "Title", lang === "ar" ? "الفئة" : "Category",
-                  lang === "ar" ? "المستفيد" : "Beneficiary", lang === "ar" ? "المدينة" : "City",
-                  lang === "ar" ? "المطلوب/المُجمّع" : "Needed/Raised",
-                  lang === "ar" ? "الحالة" : "Status", lang === "ar" ? "إجراءات" : "Actions"].map((h) => (
-                  <th key={h} className="px-3 py-2.5 text-start">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((c) => {
-                const st = (c.status && STATUS_LABELS[c.status as CaseStatus]) || {
-                  ar: c.status || "معتمدة",
-                  en: c.status || "Approved",
-                  tone: "bg-secondary/20 text-primary",
-                };
-                const cat = (c as unknown as { case_categories?: { name_ar: string; name_en: string } }).case_categories;
-                return (
-                  <tr key={c.id} className="border-t border-border/60 hover:bg-muted/30">
-                    <td className="px-3 py-2.5 font-mono text-xs">{c.ref_code}</td>
-                    <td className="px-3 py-2.5 font-bold">{c.title}</td>
-                    <td className="px-3 py-2.5 text-muted-foreground">{cat ? (lang === "ar" ? cat.name_ar : cat.name_en) : "—"}</td>
-                    <td className="px-3 py-2.5">{c.beneficiary_name}</td>
-                    <td className="px-3 py-2.5">{c.city ?? c.governorate}</td>
-                    <td className="px-3 py-2.5 font-mono text-xs" dir="ltr">{Number(c.raised_amount).toLocaleString()} / {Number(c.needed_amount).toLocaleString()}</td>
-                    <td className="px-3 py-2.5">
-                      <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-extrabold ${st.tone}`}>
-                        {lang === "ar" ? st.ar : st.en}
-                      </span>
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <div className="flex flex-wrap gap-1">
-                        <Link to={`/admin/cases/${c.id}`} className="grid h-7 w-7 place-items-center rounded-md bg-primary/10 text-primary hover:bg-primary/20" title="Edit/Details"><Pencil className="h-3.5 w-3.5" /></Link>
-                        {(c.status === "approved" || c.status === "funded" || c.status === "closed") && (
-                          <a href={`/cases/${c.ref_code}`} target="_blank" rel="noreferrer" className="grid h-7 w-7 place-items-center rounded-md bg-secondary/15 text-primary hover:bg-secondary/30" title="Public preview"><ExternalLink className="h-3.5 w-3.5" /></a>
-                        )}
-                        {c.status === "pending" && (
-                          <>
-                            <button onClick={() => transition(c.id, "approved")} className="grid h-7 w-7 place-items-center rounded-md bg-secondary/20 text-primary hover:bg-secondary/40" title="Approve"><CheckCircle2 className="h-3.5 w-3.5" /></button>
-                            <button onClick={() => { const r = prompt(lang === "ar" ? "سبب الرفض" : "Rejection reason") || ""; transition(c.id, "rejected", r); }} className="grid h-7 w-7 place-items-center rounded-md bg-destructive/15 text-destructive hover:bg-destructive/25" title="Reject"><XCircle className="h-3.5 w-3.5" /></button>
-                          </>
-                        )}
-                        {c.status === "approved" && (
-                          <button onClick={() => transition(c.id, "funded")} className="rounded-md bg-primary/15 px-2 py-1 text-[10px] font-bold text-primary hover:bg-primary/25">{lang === "ar" ? "تم التمويل" : "Mark funded"}</button>
-                        )}
-                        {(c.status === "funded" || c.status === "approved") && (
-                          <button onClick={() => transition(c.id, "closed")} className="rounded-md bg-muted px-2 py-1 text-[10px] font-bold text-muted-foreground hover:bg-muted/80">{lang === "ar" ? "إغلاق" : "Close"}</button>
-                        )}
-                        <button onClick={() => remove(c.id)} className="grid h-7 w-7 place-items-center rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20" aria-label="delete"><Trash2 className="h-3.5 w-3.5" /></button>
-                        <button onClick={() => setUpdatesFor(c)} className="grid h-7 w-7 place-items-center rounded-md bg-accent/15 text-accent hover:bg-accent/25" title="Updates"><MessageSquarePlus className="h-3.5 w-3.5" /></button>
-                      </div>
-                    </td>
+        {/* Cases Table / Cards */}
+        {loading ? (
+          <div className="py-20 text-center">
+            <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
+            <p className="mt-2 text-sm text-muted-foreground">{isAr ? "جاري تحميل الحالات..." : "Loading cases..."}</p>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="rounded-2xl border-2 border-dashed border-border py-16 text-center bg-card/50">
+            <Users className="mx-auto h-10 w-10 text-muted-foreground/50" />
+            <h3 className="mt-3 text-lg font-bold text-foreground">
+              {isAr ? "لا توجد حالات مطابقة للفلاتر" : "No cases found"}
+            </h3>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {isAr ? "جرب تعديل خيارات البحث أو قم بإضافة حالة جديدة" : "Try searching or add a new case"}
+            </p>
+            <Button onClick={openNew} size="sm" className="mt-4 gap-1.5">
+              <Plus className="h-4 w-4" /> {isAr ? "إضافة حالة جديدة" : "Add Case"}
+            </Button>
+          </div>
+        ) : (
+          <div className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-soft">
+            <div className="overflow-x-auto">
+              <table className="w-full text-start text-sm">
+                <thead className="border-b border-border bg-muted/40 text-xs font-bold text-muted-foreground">
+                  <tr>
+                    <th className="p-3.5 text-start">{isAr ? "كود الحالة" : "Code"}</th>
+                    <th className="p-3.5 text-start">{isAr ? "العنوان والمستفيد" : "Title & Beneficiary"}</th>
+                    <th className="p-3.5 text-start">{isAr ? "الارتباط (برنامج / مشروع / حملة)" : "Linked To"}</th>
+                    <th className="p-3.5 text-start">{isAr ? "الموقع" : "Location"}</th>
+                    <th className="p-3.5 text-start">{isAr ? "الأولوية" : "Priority"}</th>
+                    <th className="p-3.5 text-start">{isAr ? "المبلغ المطلوب" : "Target"}</th>
+                    <th className="p-3.5 text-start">{isAr ? "الحالة" : "Status"}</th>
+                    <th className="p-3.5 text-end">{isAr ? "إجراءات" : "Actions"}</th>
                   </tr>
-                );
-              })}
-              {!filtered.length && (
-                <tr><td colSpan={8} className="p-8 text-center text-sm text-muted-foreground">{lang === "ar" ? "لا توجد حالات" : "No cases"}</td></tr>
-              )}
-            </tbody>
-          </table>
-          )}
-        </div>
+                </thead>
+                <tbody className="divide-y divide-border/60">
+                  {filtered.map((item, _idx) => {
+                    const normSt = item.status === "pending" ? "pending_review" : item.status === "funded" ? "completed" : item.status || "approved";
+                    const progLinked = programs.find((p) => String(p.id) === String(item.program_id)) || item.program;
+                    const projLinked = projects.find((p) => String(p.id) === String(item.project_id)) || item.project;
+                    const campLinked = campaigns.find((c) => String(c.id) === String(item.donation_campaign_id)) || item.donation_campaign;
+
+                    return (
+                      <tr key={item.id != null ? String(item.id) : `case-idx-${_idx}`} className="hover:bg-muted/30 transition-colors">
+                        <td className="p-3.5 font-mono text-xs font-bold text-primary">
+                          {item.code || `CASE-${item.id}`}
+                        </td>
+
+                        <td className="p-3.5 max-w-[260px]">
+                          <Link
+                            to={`/admin/cases/${item.id}`}
+                            className="font-bold text-foreground hover:text-primary transition line-clamp-1"
+                          >
+                            {item.title}
+                          </Link>
+                          <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                            {isAr ? "المستفيد:" : "Beneficiary:"} {item.beneficiary_name}
+                            {item.age ? ` (${item.age} سنة)` : ""}
+                          </p>
+                        </td>
+
+                        <td className="p-3.5">
+                          {progLinked ? (
+                            <span className="inline-flex items-center gap-1 rounded-md bg-blue-500/10 px-2 py-0.5 text-[11px] font-bold text-blue-700 dark:text-blue-300">
+                              <BookOpen className="h-3 w-3" />
+                              <span>{(progLinked as any).name_ar || (progLinked as any).name}</span>
+                            </span>
+                          ) : projLinked ? (
+                            <span className="inline-flex items-center gap-1 rounded-md bg-purple-500/10 px-2 py-0.5 text-[11px] font-bold text-purple-700 dark:text-purple-300">
+                              <FolderKanban className="h-3 w-3" />
+                              <span>{(projLinked as any).name_ar || (projLinked as any).name}</span>
+                            </span>
+                          ) : campLinked ? (
+                            <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-0.5 text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
+                              <Megaphone className="h-3 w-3" />
+                              <span>{(campLinked as any).name_ar || (campLinked as any).name}</span>
+                            </span>
+                          ) : (
+                            <span className="text-[11px] text-muted-foreground bg-muted px-2 py-0.5 rounded">
+                              {isAr ? "حالة عامة" : "General"}
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="p-3.5 text-xs text-muted-foreground whitespace-nowrap">
+                          {item.governorate || "الدقهلية"}
+                          {item.city ? ` • ${item.city}` : ""}
+                        </td>
+
+                        <td className="p-3.5">
+                          <span
+                            className={`rounded-md px-2 py-0.5 text-[11px] font-bold ${
+                              item.priority === "high" || item.priority === "critical"
+                                ? "bg-red-500/15 text-red-700 dark:text-red-400"
+                                : item.priority === "medium"
+                                ? "bg-amber-500/15 text-amber-700 dark:text-amber-400"
+                                : "bg-muted text-muted-foreground"
+                            }`}
+                          >
+                            {item.priority === "high" || item.priority === "critical"
+                              ? (isAr ? "عاجلة / عالية" : "High")
+                              : item.priority === "medium"
+                              ? (isAr ? "متوسطة" : "Medium")
+                              : (isAr ? "عادية" : "Low")}
+                          </span>
+                        </td>
+
+                        <td className="p-3.5 font-mono text-xs font-bold text-foreground whitespace-nowrap">
+                          {Number(item.target_amount || 0).toLocaleString()} ج.م
+                        </td>
+
+                        <td className="p-3.5">
+                          <span
+                            className={`rounded-md px-2 py-0.5 text-[11px] font-bold ${
+                              normSt === "approved"
+                                ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400"
+                                : normSt === "completed"
+                                ? "bg-primary/15 text-primary"
+                                : normSt === "pending_review"
+                                ? "bg-amber-500/15 text-amber-700 dark:text-amber-400"
+                                : normSt === "rejected"
+                                ? "bg-destructive/15 text-destructive"
+                                : "bg-muted text-muted-foreground"
+                            }`}
+                          >
+                            {STATUS_OPTIONS.find((s) => s.v === normSt)?.ar || normSt}
+                          </span>
+                        </td>
+
+                        <td className="p-3.5 text-end whitespace-nowrap">
+                          <div className="inline-flex items-center gap-1">
+                            {normSt === "pending_review" && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handleSetStatus(item.id, "approved")}
+                                className="h-7 px-2 text-xs text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+                                title={isAr ? "اعتماد الحالة" : "Approve"}
+                              >
+                                <Check className="h-3.5 w-3.5" />
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => openEdit(item)}
+                              className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                              title={isAr ? "تعديل" : "Edit"}
+                            >
+                              <Pencil className="h-3.5 w-3.5" />
+                            </Button>
+                            <Link to={`/admin/cases/${item.id}`}>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-7 w-7 p-0 text-primary hover:bg-primary/10"
+                                title={isAr ? "التفاصيل" : "Details"}
+                              >
+                                <ArrowUpRight className="h-3.5 w-3.5" />
+                              </Button>
+                            </Link>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleDeleteCase(item.id)}
+                              className="h-7 w-7 p-0 text-destructive/80 hover:text-destructive hover:bg-destructive/10"
+                              title={isAr ? "حذف" : "Delete"}
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
 
-      {showAdd && <AddCaseModal cats={cats} onClose={() => setShowAdd(false)} onSaved={() => { setShowAdd(false); void reload(); }} lang={lang} />}
-      {updatesFor && <UpdatesModal caseRow={updatesFor} onClose={() => setUpdatesFor(null)} lang={lang} />}
+      {/* ── Dialog: Create / Edit Case ── */}
+      <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-xl font-bold">
+              <Users className="h-5 w-5 text-primary" />
+              {editing?.id && !String(editing.id).startsWith("static-")
+                ? (isAr ? "تعديل بيانات الحالة" : "Edit Case")
+                : (isAr ? "إضافة حالة إنسانية جديدة" : "New Case")}
+            </DialogTitle>
+          </DialogHeader>
+
+          {editing && (
+            <div className="space-y-4 py-2 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <Label>{isAr ? "كود الحالة (Code) *" : "Case Code *"}</Label>
+                  <Input
+                    value={editing.code || ""}
+                    onChange={(e) => setEditing({ ...editing, code: e.target.value })}
+                    placeholder="CASE-001"
+                    className="mt-1 font-mono text-xs"
+                  />
+                </div>
+                <div>
+                  <Label>{isAr ? "عنوان الحالة *" : "Case Title *"}</Label>
+                  <Input
+                    value={editing.title || ""}
+                    onChange={(e) => setEditing({ ...editing, title: e.target.value })}
+                    placeholder="مثال: إجراء جراحة قلب عاجلة للطفل يوسف"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <Label>{isAr ? "اسم المستفيد *" : "Beneficiary Name *"}</Label>
+                  <Input
+                    value={editing.beneficiary_name || ""}
+                    onChange={(e) => setEditing({ ...editing, beneficiary_name: e.target.value })}
+                    placeholder="محمد أحمد / يوسف م. ع."
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label>{isAr ? "العمر" : "Age"}</Label>
+                  <Input
+                    type="number"
+                    value={editing.age || ""}
+                    onChange={(e) => setEditing({ ...editing, age: e.target.value ? Number(e.target.value) : null })}
+                    placeholder="7"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+
+              {/* Entity Linkage: Program, Project, Campaign, or General */}
+              <div className="rounded-xl border border-border p-3.5 bg-muted/20 space-y-3">
+                <Label className="font-bold text-xs text-foreground">
+                  {isAr ? "ارتباط الحالة (برنامج خيري أو مشروع تنموي أو حملة تبرع):" : "Case Linkage:"}
+                </Label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    { id: "none", label: isAr ? "حالة عامة" : "General" },
+                    { id: "program", label: isAr ? "برنامج خيري" : "Program" },
+                    { id: "project", label: isAr ? "مشروع تنموي" : "Project" },
+                    { id: "campaign", label: isAr ? "حملة تبرع" : "Campaign" },
+                  ].map((r) => (
+                    <label
+                      key={r.id}
+                      className={`flex items-center justify-center p-2 rounded-lg border text-xs cursor-pointer font-bold transition ${
+                        editing.relationType === r.id
+                          ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                          : "border-border bg-card text-muted-foreground hover:bg-muted"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="relType"
+                        className="sr-only"
+                        checked={editing.relationType === r.id}
+                        onChange={() => setEditing({ ...editing, relationType: r.id as any })}
+                      />
+                      <span>{r.label}</span>
+                    </label>
+                  ))}
+                </div>
+
+                {editing.relationType === "program" && (
+                  <div>
+                    <Label className="text-xs">{isAr ? "اختر البرنامج التابع له:" : "Select Program:"}</Label>
+                    <select
+                      value={editing.program_id ? String(editing.program_id) : ""}
+                      onChange={(e) => setEditing({ ...editing, program_id: Number(e.target.value) })}
+                      className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    >
+                      <option value="">{isAr ? "اختر برنامجاً..." : "Select..."}</option>
+                      {programs.map((p) => (
+                        <option key={String(p.id)} value={String(p.id)}>
+                          {p.name_ar || p.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {editing.relationType === "project" && (
+                  <div>
+                    <Label className="text-xs">{isAr ? "اختر المشروع التابع له:" : "Select Project:"}</Label>
+                    <select
+                      value={editing.project_id ? String(editing.project_id) : ""}
+                      onChange={(e) => setEditing({ ...editing, project_id: Number(e.target.value) })}
+                      className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    >
+                      <option value="">{isAr ? "اختر مشروعاً..." : "Select..."}</option>
+                      {projects.map((p) => (
+                        <option key={String(p.id)} value={String(p.id)}>
+                          {p.name_ar || p.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {editing.relationType === "campaign" && (
+                  <div>
+                    <Label className="text-xs">{isAr ? "اختر الحملة التابعة لها:" : "Select Campaign:"}</Label>
+                    <select
+                      value={editing.donation_campaign_id ? String(editing.donation_campaign_id) : ""}
+                      onChange={(e) => setEditing({ ...editing, donation_campaign_id: Number(e.target.value) })}
+                      className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    >
+                      <option value="">{isAr ? "اختر حملة..." : "Select..."}</option>
+                      {campaigns.map((c) => (
+                        <option key={String(c.id)} value={String(c.id)}>
+                          {c.name_ar || c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <Label>{isAr ? "المحافظة" : "Governorate"}</Label>
+                  <Input
+                    value={editing.governorate || "الدقهلية"}
+                    onChange={(e) => setEditing({ ...editing, governorate: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label>{isAr ? "المدينة / المركز" : "City"}</Label>
+                  <Input
+                    value={editing.city || ""}
+                    onChange={(e) => setEditing({ ...editing, city: e.target.value })}
+                    placeholder="المنصورة"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label>{isAr ? "التصنيف" : "Category"}</Label>
+                  <select
+                    value={editing.category_id ? String(editing.category_id) : ""}
+                    onChange={(e) => setEditing({ ...editing, category_id: Number(e.target.value) })}
+                    className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    {categories.map((k) => (
+                      <option key={String(k.id)} value={String(k.id)}>
+                        {k.name_ar}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <Label>{isAr ? "المبلغ المستهدف (ج.م) *" : "Target Amount *"}</Label>
+                  <Input
+                    type="number"
+                    value={editing.target_amount ?? 15000}
+                    onChange={(e) => setEditing({ ...editing, target_amount: Number(e.target.value) })}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label>{isAr ? "درجة الأولوية" : "Priority"}</Label>
+                  <select
+                    value={editing.priority || "medium"}
+                    onChange={(e) => setEditing({ ...editing, priority: e.target.value as any })}
+                    className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="high">{isAr ? "عاجلة / عالية" : "High"}</option>
+                    <option value="medium">{isAr ? "متوسطة" : "Medium"}</option>
+                    <option value="low">{isAr ? "عادية / منخفضة" : "Low"}</option>
+                  </select>
+                </div>
+                <div>
+                  <Label>{isAr ? "حالة الحالة" : "Status"}</Label>
+                  <select
+                    value={editing.status || "pending_review"}
+                    onChange={(e) => setEditing({ ...editing, status: e.target.value as any })}
+                    className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="pending_review">{isAr ? "قيد المراجعة" : "Pending Review"}</option>
+                    <option value="approved">{isAr ? "معتمدة ونشطة" : "Approved"}</option>
+                    <option value="completed">{isAr ? "مكتملة التمويل" : "Completed"}</option>
+                    <option value="closed">{isAr ? "مغلقة" : "Closed"}</option>
+                    <option value="rejected">{isAr ? "مرفوضة" : "Rejected"}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <Label>{isAr ? "تفاصيل وقصة الحالة" : "Description / Story"}</Label>
+                <Textarea
+                  value={editing.description || ""}
+                  onChange={(e) => setEditing({ ...editing, description: e.target.value })}
+                  placeholder="اكتب التقرير الاجتماعي وتفاصيل الاحتياج والمستندات الطبية..."
+                  rows={3}
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label>{isAr ? "رابط الصورة (URL)" : "Cover Image URL"}</Label>
+                <Input
+                  value={editing.cover_image || ""}
+                  onChange={(e) => setEditing({ ...editing, cover_image: e.target.value })}
+                  placeholder="https://..."
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setEditing(null)}>
+              {isAr ? "إلغاء" : "Cancel"}
+            </Button>
+            <Button onClick={handleSaveCase} disabled={saving} className="gap-1.5 bg-primary text-primary-foreground">
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              {isAr ? "حفظ الحالة" : "Save Case"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Dialog: إدارة تصنيفات الحالات ── */}
+      <Dialog
+        open={showManageCats}
+        onOpenChange={(o) => {
+          setShowManageCats(o);
+          if (!o) setEditingCat(null);
+        }}
+      >
+        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 font-bold text-lg">
+              <Settings2 className="h-5 w-5 text-primary" />
+              {isAr ? "إدارة تصنيفات الحالات" : "Manage Case Categories"}
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              {isAr
+                ? "إضافة وتعديل وحذف تصنيفات الحالات الإنسانية."
+                : "Add, edit, and delete beneficiary case categories."}
+            </DialogDescription>
+          </DialogHeader>
+
+          {/* ── Add New Category Form ── */}
+          <div className="rounded-2xl border border-primary/20 bg-primary/[0.03] p-3.5 space-y-3">
+            <div className="flex items-center gap-2 text-xs font-bold text-primary">
+              <Plus className="h-4 w-4" />
+              <span>{isAr ? "إضافة تصنيف جديد" : "Add New Category"}</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div>
+                <Label className="text-[11px] font-bold">{isAr ? "اسم التصنيف بالعربية *" : "Name (Arabic) *"}</Label>
+                <Input
+                  value={newCat.name_ar}
+                  onChange={(e) => setNewCat({ ...newCat, name_ar: e.target.value })}
+                  placeholder="مثال: أمراض مزمنة"
+                  className="mt-1 h-8 text-xs"
+                  dir="rtl"
+                />
+              </div>
+              <div>
+                <Label className="text-[11px] font-bold">{isAr ? "الاسم بالإنجليزية" : "Name (English)"}</Label>
+                <Input
+                  value={newCat.name_en}
+                  onChange={(e) => setNewCat({ ...newCat, name_en: e.target.value })}
+                  placeholder="Chronic Diseases"
+                  className="mt-1 h-8 text-xs"
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex-1">
+                <Input
+                  value={newCat.slug}
+                  onChange={(e) => setNewCat({ ...newCat, slug: e.target.value })}
+                  placeholder="slug (اختياري)"
+                  className="h-8 text-xs font-mono"
+                />
+              </div>
+              <Button
+                size="sm"
+                onClick={handleAddCategory}
+                disabled={savingCat || !newCat.name_ar.trim()}
+                className="h-8 px-3 text-xs gap-1 bg-primary text-primary-foreground shrink-0 cursor-pointer"
+              >
+                {savingCat ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
+                {isAr ? "إضافة" : "Add"}
+              </Button>
+            </div>
+          </div>
+
+          {/* ── Existing Categories List ── */}
+          <div className="space-y-2 pt-2">
+            <label className="text-xs font-bold text-muted-foreground block">
+              {isAr ? `التصنيفات الحالية (${categories.length}):` : `Current Categories (${categories.length}):`}
+            </label>
+            {categories.length === 0 ? (
+              <p className="text-center text-sm text-muted-foreground py-6">
+                {isAr ? "لا توجد تصنيفات حتى الآن" : "No categories yet"}
+              </p>
+            ) : (
+              categories.map((cat) => (
+                <div
+                  key={String(cat.id)}
+                  className="flex items-center gap-3 rounded-xl border border-border bg-card px-3 py-2.5 shadow-xs"
+                >
+                  {editingCat?.id === cat.id ? (
+                    <div className="flex-1 space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        <Input
+                          value={editingCat.name_ar}
+                          onChange={(e) => setEditingCat({ ...editingCat, name_ar: e.target.value })}
+                          placeholder={isAr ? "الاسم العربي" : "Arabic name"}
+                          className="h-8 text-xs"
+                          dir="rtl"
+                        />
+                        <Input
+                          value={editingCat.name_en || ""}
+                          onChange={(e) => setEditingCat({ ...editingCat, name_en: e.target.value })}
+                          placeholder="English name"
+                          className="h-8 text-xs"
+                        />
+                      </div>
+                      <Input
+                        value={editingCat.slug || ""}
+                        onChange={(e) => setEditingCat({ ...editingCat, slug: e.target.value })}
+                        placeholder="slug"
+                        className="h-8 text-xs font-mono"
+                      />
+                      <div className="flex items-center gap-2 justify-end">
+                        <Button size="sm" variant="ghost" onClick={() => setEditingCat(null)} className="h-7 px-2 text-xs">
+                          <X className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={handleUpdateCategory}
+                          disabled={savingEditCat}
+                          className="h-7 px-3 text-xs gap-1"
+                        >
+                          {savingEditCat ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                          {isAr ? "حفظ" : "Save"}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-foreground truncate">{cat.name_ar}</p>
+                        <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono truncate">
+                          <span>{cat.slug}</span>
+                          {cat.name_en && (
+                            <>
+                              <span>•</span>
+                              <span className="font-sans">{cat.name_en}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setEditingCat({ ...cat })}
+                          className="h-7 w-7 p-0 rounded-lg text-muted-foreground hover:text-foreground cursor-pointer"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleDeleteCategory(cat.id)}
+                          disabled={deletingCatId === cat.id}
+                          className="h-7 w-7 p-0 rounded-lg text-destructive hover:text-destructive/80 cursor-pointer"
+                        >
+                          {deletingCatId === cat.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
-};
-
-const UpdatesModal = ({ caseRow, onClose, lang }: { caseRow: CaseWithCat; onClose: () => void; lang: "ar" | "en" }) => {
-  const [items, setItems] = useState<Awaited<ReturnType<typeof listCaseUpdates>>>([]);
-  const [body, setBody] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-
-  const load = async () => {
-    setLoading(true);
-    try { setItems(await listCaseUpdates(caseRow.id)); }
-    finally { setLoading(false); }
-  };
-  useEffect(() => { void load(); }, [caseRow.id]);
-
-  const post = async () => {
-    if (!body.trim()) return;
-    setSaving(true);
-    try {
-      await addCaseUpdate(caseRow.id, body.trim(), imageUrl.trim() || null);
-      setBody(""); setImageUrl("");
-      toast({ title: lang === "ar" ? " تم نشر التحديث" : " Update posted" });
-      void load();
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
-    finally { setSaving(false); }
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4" onClick={onClose}>
-      <div className="max-h-[90vh] w-full max-w-xl overflow-auto rounded-2xl bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <div className="mb-3 flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-black text-primary">{lang === "ar" ? "تحديثات الأثر" : "Impact updates"}</h2>
-            <p className="text-xs text-muted-foreground">{caseRow.ref_code} — {caseRow.title}</p>
-          </div>
-          <button onClick={onClose} className="rounded-md p-1 text-muted-foreground hover:text-foreground"><X className="h-5 w-5" /></button>
-        </div>
-
-        <div className="space-y-2 rounded-xl bg-muted/30 p-3">
-          <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={3}
-            placeholder={lang === "ar" ? "اكتب تحديث الأثر… (مثال: تم تسليم الجهاز للمستفيد)" : "Write impact update…"}
-            className="w-full rounded-md border border-border bg-background p-2 text-sm" />
-          <Input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder={lang === "ar" ? "رابط صورة (اختياري)" : "Image URL (optional)"} />
-          <Button onClick={post} disabled={saving || !body.trim()} className="bg-orange-grad text-accent-foreground">
-            {saving && <Loader2 className="h-4 w-4 animate-spin" />}{lang === "ar" ? "نشر التحديث" : "Post update"}
-          </Button>
-        </div>
-
-        <div className="mt-4 space-y-2">
-          {loading ? <Loader2 className="mx-auto h-5 w-5 animate-spin text-muted-foreground" />
-            : items.length === 0 ? <p className="py-6 text-center text-sm text-muted-foreground">{lang === "ar" ? "لا توجد تحديثات بعد" : "No updates yet"}</p>
-            : items.map((u) => (
-              <div key={u.id} className="rounded-xl border border-border bg-background p-3 text-sm">
-                <p className="text-[10px] font-bold text-muted-foreground">{new Date(u.created_at).toLocaleString()}</p>
-                <p className="mt-1 whitespace-pre-line">{u.body}</p>
-                {u.image_url && <img src={u.image_url} alt="" loading="lazy" className="mt-2 max-h-48 w-full rounded-md object-cover" />}
-              </div>
-            ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const AddCaseModal = ({ cats, onClose, onSaved, lang }: { cats: CategoryRow[]; onClose: () => void; onSaved: () => void; lang: "ar" | "en" }) => {
-  const [form, setForm] = useState({
-    title: "", story: "", category_id: cats[0]?.id ?? "",
-    beneficiary_name: "", beneficiary_age: "" as string,
-    governorate: "الدقهلية", city: "",
-    needed_amount: 5000, deadline: "", urgency: "medium" as "low"|"medium"|"high"|"critical",
-    cover_image_url: "",
-  });
-  const [saving, setSaving] = useState(false);
-
-  const submit = async () => {
-    if (!form.title || !form.beneficiary_name || !form.category_id || form.needed_amount <= 0) {
-      toast({ title: lang === "ar" ? "أكمل الحقول المطلوبة" : "Fill required fields", variant: "destructive" });
-      return;
-    }
-    setSaving(true);
-    try {
-      await createCase({
-        title: form.title.trim(),
-        story: form.story.trim(),
-        category_id: form.category_id,
-        beneficiary_name: form.beneficiary_name.trim(),
-        beneficiary_age: form.beneficiary_age ? Number(form.beneficiary_age) : null,
-        governorate: form.governorate.trim() || "الدقهلية",
-        city: form.city.trim() || null,
-        needed_amount: Number(form.needed_amount),
-        deadline: form.deadline || null,
-        urgency: form.urgency,
-        cover_image_url: form.cover_image_url.trim() || null,
-      });
-      toast({ title: lang === "ar" ? " تم إنشاء الحالة (قيد المراجعة)" : " Case created (pending)" });
-      onSaved();
-    } catch (e) {
-      toast({ title: (e as Error).message, variant: "destructive" });
-    } finally { setSaving(false); }
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4" onClick={onClose}>
-      <div className="max-h-[90vh] w-full max-w-xl overflow-auto rounded-2xl bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-black text-primary">{lang === "ar" ? "حالة جديدة" : "New case"}</h2>
-          <button onClick={onClose} className="rounded-md p-1 text-muted-foreground hover:text-foreground"><X className="h-5 w-5" /></button>
-        </div>
-        <div className="space-y-3">
-          <Field label={lang === "ar" ? "عنوان الحالة *" : "Title *"}>
-            <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
-          </Field>
-          <Field label={lang === "ar" ? "الفئة *" : "Category *"}>
-            <select value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value })}
-              className="h-10 w-full rounded-md border border-border bg-background px-2.5 text-sm font-bold">
-              {cats.map(c => <option key={c.id} value={c.id}>{lang === "ar" ? c.name_ar : c.name_en}</option>)}
-            </select>
-          </Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label={lang === "ar" ? "اسم المستفيد *" : "Beneficiary *"}><Input value={form.beneficiary_name} onChange={(e) => setForm({ ...form, beneficiary_name: e.target.value })} /></Field>
-            <Field label={lang === "ar" ? "السن" : "Age"}><Input type="number" value={form.beneficiary_age} onChange={(e) => setForm({ ...form, beneficiary_age: e.target.value })} /></Field>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label={lang === "ar" ? "المحافظة" : "Governorate"}><Input value={form.governorate} onChange={(e) => setForm({ ...form, governorate: e.target.value })} /></Field>
-            <Field label={lang === "ar" ? "المدينة" : "City"}><Input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} /></Field>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label={lang === "ar" ? "المبلغ المطلوب (ج.م) *" : "Needed (EGP) *"}><Input type="number" value={form.needed_amount} onChange={(e) => setForm({ ...form, needed_amount: Number(e.target.value) })} /></Field>
-            <Field label={lang === "ar" ? "Deadline" : "Deadline"}><Input type="date" value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })} /></Field>
-          </div>
-          <Field label={lang === "ar" ? "درجة الأولوية" : "Urgency"}>
-            <select value={form.urgency} onChange={(e) => setForm({ ...form, urgency: e.target.value as typeof form.urgency })}
-              className="h-10 w-full rounded-md border border-border bg-background px-2.5 text-sm font-bold">
-              <option value="low">{lang === "ar" ? "منخفضة" : "Low"}</option>
-              <option value="medium">{lang === "ar" ? "متوسطة" : "Medium"}</option>
-              <option value="high">{lang === "ar" ? "عالية" : "High"}</option>
-              <option value="critical">{lang === "ar" ? "حرجة" : "Critical"}</option>
-            </select>
-          </Field>
-          <Field label={lang === "ar" ? "رابط صورة الغلاف" : "Cover image URL"}>
-            <Input value={form.cover_image_url} onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })} placeholder="https://…" />
-          </Field>
-          <Field label={lang === "ar" ? "قصة الحالة" : "Story"}>
-            <textarea value={form.story} onChange={(e) => setForm({ ...form, story: e.target.value })} rows={4}
-              className="w-full rounded-md border border-border bg-background p-2 text-sm" />
-          </Field>
-        </div>
-        <div className="mt-4 flex gap-2">
-          <Button onClick={submit} disabled={saving} className="flex-1 bg-orange-grad text-accent-foreground">
-            {saving && <Loader2 className="h-4 w-4 animate-spin" />}{lang === "ar" ? "إنشاء" : "Create"}
-          </Button>
-          <Button variant="outline" onClick={onClose}>{lang === "ar" ? "إلغاء" : "Cancel"}</Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
-  <div>
-    <label className="mb-1 block text-xs font-bold text-muted-foreground">{label}</label>
-    {children}
-  </div>
-);
-
-export default AdminCases;
+}

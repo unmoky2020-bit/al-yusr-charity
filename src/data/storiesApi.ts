@@ -9,7 +9,6 @@
  * to static data. localStorage is used for local overrides & deletes so the
  * admin panel works 100% locally even without Supabase.
  */
-import { supabase } from "@/integrations/supabase/client";
 import { storiesApi as laravelStoriesApi, type LaravelStory } from "@/data/laravelApi";
 import family from "@/assets/family-hope.jpg";
 import hands from "@/assets/hands-sprout.jpg";
@@ -200,14 +199,6 @@ export const STATIC_STORIES: StoryCard[] = [
 // ─── localStorage keys ───────────────────────────────────────────────────────
 const OVERRIDES_KEY = "alyusr_stories_overrides";
 const DELETED_KEY   = "alyusr_stories_deleted";
-const SUPABASE_KEY  = "alyusr_stories_supabase_available";
-
-function isSupabaseAvailable(): boolean {
-  try { return localStorage.getItem(SUPABASE_KEY) !== "false"; } catch { return true; }
-}
-function markSupabaseUnavailable() {
-  try { localStorage.setItem(SUPABASE_KEY, "false"); } catch {}
-}
 function getOverrides(): Record<string, Partial<StoryCard>> {
   try { return JSON.parse(localStorage.getItem(OVERRIDES_KEY) || "{}"); } catch { return {}; }
 }
@@ -272,21 +263,8 @@ export async function listPublishedStories(): Promise<StoryCard[]> {
     }
   } catch {}
 
-  // 2. Try Supabase as fallback
-  try {
-    const { data, error } = await (supabase.from("stories" as any) as any)
-      .select("id,slug,title_ar,title_en,role_ar,role_en,quote_ar,quote_en,image_url,is_featured,location_ar,location_en,sort_order,pillar_slug")
-      .eq("is_published", true)
-      .order("is_featured", { ascending: false })
-      .order("sort_order", { ascending: true })
-      .order("created_at", { ascending: false });
 
-    if (!error && Array.isArray(data) && data.length > 0) {
-      return data as StoryCard[];
-    }
-  } catch {}
-
-  // 3. Static fallback
+  // 2. Static fallback
   return applyLocal(STATIC_STORIES).filter((s) => s.is_published);
 }
 
@@ -309,16 +287,8 @@ export async function getStoryBySlug(slug: string): Promise<StoryCard | null> {
     }
   } catch {}
 
-  // 2. Try Supabase
-  try {
-    const { data, error } = await (supabase.from("stories" as any) as any)
-      .select("*").eq("slug", slug).eq("is_published", true).maybeSingle();
-    if (!error && data) {
-      return data as StoryCard;
-    }
-  } catch {}
 
-  // 3. Static fallback
+  // 2. Static fallback
   return applyLocal(STATIC_STORIES).find((s) => s.slug === slug && s.is_published) || null;
 }
 
@@ -333,16 +303,6 @@ export async function listAllStories(): Promise<StoryCard[]> {
     console.warn("Could not fetch stories from Laravel API:", err);
   }
 
-  try {
-    const { data, error } = await (supabase.from("stories" as any) as any)
-      .select("*")
-      .order("sort_order", { ascending: true })
-      .order("created_at", { ascending: false });
-
-    if (!error && Array.isArray(data) && data.length > 0) {
-      return data as StoryCard[];
-    }
-  } catch {}
   return applyLocal(STATIC_STORIES);
 }
 
@@ -374,20 +334,7 @@ export async function upsertStory(story: Partial<StoryCard> & { slug: string }):
     console.warn("Could not upsert story on Laravel API:", err);
   }
 
-  if (isSupabaseAvailable()) {
-    const { error } = story.id && !story.id.startsWith("static-")
-      ? await (supabase.from("stories" as any) as any).update(story).eq("id", story.id)
-      : await (supabase.from("stories" as any) as any).insert(story);
-
-    if (error?.code === "42P01" || (error as any)?.status === 404) {
-      markSupabaseUnavailable();
-    } else if (error) {
-      return { error: error.message };
-    } else {
-      return {};
-    }
-  }
-  // local override
+  // local override fallback
   const overrides = getOverrides();
   const key = story.id || story.slug;
   overrides[key] = { ...(overrides[key] || {}), ...story };
@@ -405,16 +352,6 @@ export async function deleteStory(id: string, slug: string): Promise<{ error?: s
     console.warn("Could not delete story on Laravel API:", err);
   }
 
-  if (isSupabaseAvailable() && !id.startsWith("static-")) {
-    const { error } = await (supabase.from("stories" as any) as any).delete().eq("id", id);
-    if (error?.code === "42P01" || (error as any)?.status === 404) {
-      markSupabaseUnavailable();
-    } else if (error) {
-      return { error: error.message };
-    } else {
-      return {};
-    }
-  }
   // mark as deleted locally
   const deleted = getDeleted();
   deleted.add(id);
@@ -445,16 +382,7 @@ export async function toggleStoryField(
     console.warn("Could not toggle story field on Laravel API:", err);
   }
 
-  if (isSupabaseAvailable() && !id.startsWith("static-")) {
-    const { error } = await (supabase.from("stories" as any) as any).update({ [field]: value }).eq("id", id);
-    if (error?.code === "42P01" || (error as any)?.status === 404) {
-      markSupabaseUnavailable();
-    } else if (error) {
-      return { error: error.message };
-    } else {
-      return {};
-    }
-  }
+  // local override
   const overrides = getOverrides();
   const key = id || slug;
   overrides[key] = { ...(overrides[key] || {}), [field]: value };
@@ -467,6 +395,5 @@ export function resetLocalStories() {
   try {
     localStorage.removeItem(OVERRIDES_KEY);
     localStorage.removeItem(DELETED_KEY);
-    localStorage.removeItem(SUPABASE_KEY);
   } catch {}
 }

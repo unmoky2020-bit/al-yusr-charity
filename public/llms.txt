@@ -55,6 +55,7 @@
 - [موسم الخير — Ramadan Season](https://elyusr.org/ramadan): كرتونة الخير، مطبخ اليسر لإفطار الصائمين، زكاة الفطر، كسوة العيد (Ramadan food boxes, iftar meals, Zakat al-Fitr).
 - [مَرْكون — Markoun](https://elyusr.org/markoun): التبرع العيني — أثاث وأجهزة وملابس وأدوية وكتب مع استلام من المنزل (in-kind donations with free doorstep pickup).
 - [عربون خير — Arboun Kheir](https://elyusr.org/arboun): مبادرة للمستقلين والفريلانسرز لاستقطاع نسبة من أرباح كل مشروع صدقةً (freelancers give a share of each project's earnings).
+- [الغذاء الشهري — Monthly Food](https://elyusr.org/food-box): برنامج دائم — لحوم من ذبائح شهرية، كرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام تصلح كفارة صيام أو كفارة يمين (monthly slaughter meat, a 14 kg carton of local staples, and meals for feeding, fasting expiation or oath expiation).
 
 ## Common questions
 

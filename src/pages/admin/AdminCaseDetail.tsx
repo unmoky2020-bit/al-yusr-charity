@@ -13,14 +13,15 @@ import { toast } from "@/hooks/use-toast";
 import {
   getCaseById, updateCase, setCaseStatus, deleteCase,
   listCategories, listCaseUpdates, addCaseUpdate, listCaseDocuments,
-  listDonationsForCase, STATUS_LABELS, updateCaseUpdate, deleteCaseUpdate,
+  listDonationsForCase, STATUS_LABELS, getCaseStatusLabel, updateCaseUpdate, deleteCaseUpdate,
   uploadCaseMediaFile, type CaseStatus, type Urgency, type CategoryRow,
 } from "@/data/casesApi";
 import { CaseMediaManager } from "@/components/admin/CaseMediaManager";
 import { compressImage } from "@/lib/image-compress";
 import { supabase } from "@/integrations/supabase/client";
 import { DAKAHLIA_CITIES, DISTRICTS_BY_CITY, cityToSlug } from "@/data/dakahliaCities";
-import { MapPin, Loader2 as Spin } from "lucide-react";
+import { MapPin, Loader2 as Spin, BookOpen, FolderKanban, Megaphone } from "lucide-react";
+import { programsApiV1, projectsApi, donationCampaignsApi, type LaravelProgram, type LaravelProject, type LaravelDonationCampaign } from "@/data/laravelApi";
 
 type CaseRow = NonNullable<Awaited<ReturnType<typeof getCaseById>>>;
 
@@ -41,6 +42,10 @@ export default function AdminCaseDetail() {
 
   const [row, setRow] = useState<CaseRow | null>(null);
   const [cats, setCats] = useState<CategoryRow[]>([]);
+  const [programsList, setProgramsList] = useState<LaravelProgram[]>([]);
+  const [projectsList, setProjectsList] = useState<LaravelProject[]>([]);
+  const [campaignsList, setCampaignsList] = useState<LaravelDonationCampaign[]>([]);
+
   const [donations, setDonations] = useState<Awaited<ReturnType<typeof listDonationsForCase>>>([]);
   const [updates, setUpdates] = useState<Awaited<ReturnType<typeof listCaseUpdates>>>([]);
   const [docs, setDocs] = useState<Awaited<ReturnType<typeof listCaseDocuments>>>([]);
@@ -58,6 +63,10 @@ export default function AdminCaseDetail() {
     deadline: "", urgency: "medium" as Urgency,
     cover_image_url: "", status: "pending" as CaseStatus,
     rejection_reason: "",
+    relationType: "none" as "none" | "program" | "project" | "campaign",
+    program_id: "" as string | number,
+    project_id: "" as string | number,
+    donation_campaign_id: "" as string | number,
   });
 
   // updates form
@@ -73,9 +82,15 @@ export default function AdminCaseDetail() {
     if (!id) return;
     setLoading(true);
     try {
-      const [r, c, d, u, ds] = await Promise.all([
-        getCaseById(id), listCategories(),
-        listDonationsForCase(id), listCaseUpdates(id), listCaseDocuments(id),
+      const [r, c, d, u, ds, progs, projs, camps] = await Promise.all([
+        getCaseById(id),
+        listCategories(),
+        listDonationsForCase(id),
+        listCaseUpdates(id),
+        listCaseDocuments(id),
+        programsApiV1.listAll().catch(() => [] as LaravelProgram[]),
+        projectsApi.listAll().catch(() => [] as LaravelProject[]),
+        donationCampaignsApi.listAll().catch(() => [] as LaravelDonationCampaign[]),
       ]);
       if (!r) { toast({ title: isAr ? "الحالة غير موجودة" : "Case not found", variant: "destructive" }); nav("/admin/cases"); return; }
       setRow(r as CaseRow);
@@ -83,6 +98,16 @@ export default function AdminCaseDetail() {
       setDonations(d);
       setUpdates(u);
       setDocs(ds);
+      setProgramsList(Array.isArray(progs) ? progs : []);
+      setProjectsList(Array.isArray(projs) ? projs : []);
+      setCampaignsList(Array.isArray(camps) ? camps : []);
+
+      const lCase = r as any;
+      let relType: "none" | "program" | "project" | "campaign" = "none";
+      if (lCase.program_id) relType = "program";
+      else if (lCase.project_id) relType = "project";
+      else if (lCase.donation_campaign_id) relType = "campaign";
+
       setForm({
         title: r.title || "",
         story: r.story || "",
@@ -99,20 +124,26 @@ export default function AdminCaseDetail() {
         cover_image_url: r.cover_image_url || "",
         status: r.status as CaseStatus,
         rejection_reason: r.rejection_reason || "",
+        relationType: relType,
+        program_id: lCase.program_id || "",
+        project_id: lCase.project_id || "",
+        donation_campaign_id: lCase.donation_campaign_id || "",
       });
     } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
     finally { setLoading(false); }
   };
   useEffect(() => { void reload(); /* eslint-disable-next-line */ }, [id]);
 
-  // Realtime sync for case_updates
+  // Realtime sync for case_updates (safe try/catch)
   useEffect(() => {
     if (!id) return;
-    const ch = supabase.channel(`admin-case-updates-${id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "case_updates", filter: `case_id=eq.${id}` },
-        async () => { try { setUpdates(await listCaseUpdates(id)); } catch { /* noop */ } })
-      .subscribe();
-    return () => { try { supabase.removeChannel(ch); } catch { /* noop */ } };
+    try {
+      const ch = supabase.channel(`admin-case-updates-${id}`)
+        .on("postgres_changes", { event: "*", schema: "public", table: "case_updates", filter: `case_id=eq.${id}` },
+          async () => { try { setUpdates(await listCaseUpdates(id)); } catch { /* noop */ } })
+        .subscribe();
+      return () => { try { supabase.removeChannel(ch); } catch { /* noop */ } };
+    } catch { /* noop */ }
   }, [id]);
 
   const pct = useMemo(() => {
@@ -138,11 +169,15 @@ export default function AdminCaseDetail() {
         city: form.city.trim() || null,
         cover_image_url: form.cover_image_url.trim() || null,
         needed_amount: Number(form.needed_amount),
+        target_amount: Number(form.needed_amount),
         deadline: form.deadline || null,
         urgency: form.urgency,
+        program_id: form.relationType === "program" && form.program_id ? Number(form.program_id) : null,
+        project_id: form.relationType === "project" && form.project_id ? Number(form.project_id) : null,
+        donation_campaign_id: form.relationType === "campaign" && form.donation_campaign_id ? Number(form.donation_campaign_id) : null,
         ...( { area: form.area.trim() || null } as any ),
       });
-      toast({ title: isAr ? " تم الحفظ" : " Saved" });
+      toast({ title: isAr ? " تم الحفظ بنجاح" : " Saved successfully" });
       void reload();
     } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
     finally { setSaving(false); }
@@ -222,7 +257,7 @@ export default function AdminCaseDetail() {
     return <AdminLayout><div className="grid place-items-center py-24"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div></AdminLayout>;
   }
 
-  const st = STATUS_LABELS[form.status];
+  const st = getCaseStatusLabel(form.status);
   const totalRaised = donations.filter(d => d.payment_status === "paid").reduce((s, d) => s + Number(d.amount || 0), 0);
 
   return (
@@ -317,6 +352,93 @@ export default function AdminCaseDetail() {
                       {URGENCIES.map(u => <option key={u.v} value={u.v}>{isAr ? u.ar : u.en}</option>)}
                     </select>
                   </Field>
+                </div>
+
+                {/* Case Linkage: Program, Project, Campaign, or General */}
+                <div className="rounded-xl border border-border p-3.5 bg-muted/20 space-y-3">
+                  <Label className="font-bold text-xs text-foreground">
+                    {isAr ? "ارتباط الحالة بكيان خيري (برنامج / مشروع / حملة):" : "Case Linkage:"}
+                  </Label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {[
+                      { id: "none", label: isAr ? "حالة عامة" : "General" },
+                      { id: "program", label: isAr ? "برنامج خيري" : "Program" },
+                      { id: "project", label: isAr ? "مشروع تنموي" : "Project" },
+                      { id: "campaign", label: isAr ? "حملة تبرع" : "Campaign" },
+                    ].map((r) => (
+                      <label
+                        key={r.id}
+                        className={`flex items-center justify-center p-2 rounded-lg border text-xs cursor-pointer font-bold transition ${
+                          form.relationType === r.id
+                            ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                            : "border-border bg-card text-muted-foreground hover:bg-muted"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="relTypeDetail"
+                          className="sr-only"
+                          checked={form.relationType === r.id}
+                          onChange={() => setForm({ ...form, relationType: r.id as any })}
+                        />
+                        <span>{r.label}</span>
+                      </label>
+                    ))}
+                  </div>
+
+                  {form.relationType === "program" && (
+                    <div>
+                      <Label className="text-xs">{isAr ? "اختر البرنامج المرتبط:" : "Linked Program:"}</Label>
+                      <select
+                        value={form.program_id ? String(form.program_id) : ""}
+                        onChange={(e) => setForm({ ...form, program_id: Number(e.target.value) })}
+                        className="mt-1 h-10 w-full rounded-md border border-border bg-background px-2.5 text-sm font-bold"
+                      >
+                        <option value="">{isAr ? "— اختر برنامجاً —" : "Select program..."}</option>
+                        {programsList.map((p) => (
+                          <option key={String(p.id)} value={String(p.id)}>
+                            {p.name_ar || p.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {form.relationType === "project" && (
+                    <div>
+                      <Label className="text-xs">{isAr ? "اختر المشروع المرتبط:" : "Linked Project:"}</Label>
+                      <select
+                        value={form.project_id ? String(form.project_id) : ""}
+                        onChange={(e) => setForm({ ...form, project_id: Number(e.target.value) })}
+                        className="mt-1 h-10 w-full rounded-md border border-border bg-background px-2.5 text-sm font-bold"
+                      >
+                        <option value="">{isAr ? "— اختر مشروعاً —" : "Select project..."}</option>
+                        {projectsList.map((p) => (
+                          <option key={String(p.id)} value={String(p.id)}>
+                            {p.name_ar || p.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {form.relationType === "campaign" && (
+                    <div>
+                      <Label className="text-xs">{isAr ? "اختر الحملة المرتبطة:" : "Linked Campaign:"}</Label>
+                      <select
+                        value={form.donation_campaign_id ? String(form.donation_campaign_id) : ""}
+                        onChange={(e) => setForm({ ...form, donation_campaign_id: Number(e.target.value) })}
+                        className="mt-1 h-10 w-full rounded-md border border-border bg-background px-2.5 text-sm font-bold"
+                      >
+                        <option value="">{isAr ? "— اختر حملة —" : "Select campaign..."}</option>
+                        {campaignsList.map((c) => (
+                          <option key={String(c.id)} value={String(c.id)}>
+                            {c.name_ar || c.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
               </div>
             </section>

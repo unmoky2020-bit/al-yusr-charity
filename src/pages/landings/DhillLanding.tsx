@@ -313,7 +313,7 @@ const DhillLanding = () => {
         { href: "/setr", ar: "حملة سِتر (تسقيف الشتاء والكسوة)", en: "Setr Campaign (Winter aid)" },
         { href: "/markoun", ar: "حملة مَرْكون (الأثاث والأجهزة)", en: "Markoun campaign" },
         { href: "/khabia", ar: "الخبيئة — صدقة جارية", en: "Khabia — ongoing charity" },
-        { href: "/food-box", ar: "كرتونة الغذاء الشهرية", en: "Monthly food box" },
+        { href: "/food-box", ar: "الغذاء الشهري (لحوم وكرتونة ووجبات)", en: "Monthly food (meat, carton & meals)" },
         { href: "/trust", ar: "الشفافية والتقارير الميدانية", en: "Trust & reports" },
       ]}
       faq={{

@@ -14,7 +14,12 @@ export const l = (ar: string, en: string): L => ({ ar, en });
 export type PriceItem = { id: string; label: L; amount: number; note?: L };
 export type StatItem = { id: string; label: L; value: number | null; unit?: L; note?: L };
 export type SectionItem = { id: string; title: L; desc: L; extra?: L };
-export type Section = { title: L; lead?: L; items: SectionItem[] };
+/**
+ * A titled list. By default its items are fixed by the page code (the dashboard edits their words only).
+ * A `dynamic` section is a free list: the dashboard can add, remove and reorder items (e.g. the
+ * ingredients of a food carton); `extraLabel` names what the `extra` field of each item holds.
+ */
+export type Section = { title: L; lead?: L; items: SectionItem[]; dynamic?: boolean; extraLabel?: L };
 export type FaqItem = { q: L; a: L };
 
 export interface CampaignPageContent {
@@ -44,7 +49,29 @@ function mergeById<T extends { id: string }>(defaults: T[], saved: unknown, merg
   return defaults.map((d) => (byId.has(d.id) ? mergeItem(d, byId.get(d.id)!) : d));
 }
 
-/** Deep-merge a saved override onto the code defaults. Unknown ids/keys in the override are ignored. */
+/**
+ * Items of a dynamic section: the saved list IS the list (its order, additions and removals all count).
+ * A saved item with a known id fills blanks from the default; an item is dropped only when malformed.
+ * A saved list that is not an array leaves the defaults; an empty array means "no items".
+ */
+function mergeDynamicItems(defaults: SectionItem[], saved: unknown): SectionItem[] {
+  if (!Array.isArray(saved)) return defaults;
+  const byId = new Map(defaults.map((d) => [d.id, d]));
+  const out: SectionItem[] = [];
+  for (const raw of saved) {
+    if (!raw || typeof raw !== "object" || typeof (raw as SectionItem).id !== "string" || !(raw as SectionItem).id.trim()) continue;
+    const s = raw as Partial<SectionItem> & { id: string };
+    const d = byId.get(s.id);
+    const title = d ? mergeL(d.title, s.title) : (isL(s.title) ? s.title : null);
+    const desc = d ? mergeL(d.desc, s.desc) : (isL(s.desc) ? s.desc : { ar: "", en: "" });
+    if (!title) continue;
+    const extra = d?.extra ? mergeL(d.extra, s.extra) : (isL(s.extra) ? s.extra : undefined);
+    out.push({ id: s.id, title, desc, ...(extra ? { extra } : {}) });
+  }
+  return out;
+}
+
+/** Deep-merge a saved override onto the code defaults. Unknown ids/keys in the override are ignored (except in dynamic sections). */
 export function mergeCampaignContent(defaults: CampaignPageContent, saved: unknown): CampaignPageContent {
   if (!saved || typeof saved !== "object") return defaults;
   const s = saved as Partial<Record<keyof CampaignPageContent, unknown>>;
@@ -58,14 +85,18 @@ export function mergeCampaignContent(defaults: CampaignPageContent, saved: unkno
     const o = ss[key];
     sections[key] = o
       ? {
+          ...(d.dynamic ? { dynamic: true } : {}),
+          ...(d.extraLabel ? { extraLabel: d.extraLabel } : {}),
           title: mergeL(d.title, o.title),
           lead: d.lead ? mergeL(d.lead, o.lead) : (isL(o.lead) ? o.lead : undefined),
-          items: mergeById(d.items, o.items, (di, si) => ({
-            id: di.id,
-            title: mergeL(di.title, si.title),
-            desc: mergeL(di.desc, si.desc),
-            extra: di.extra ? mergeL(di.extra, si.extra) : (isL(si.extra) ? si.extra : undefined),
-          })),
+          items: d.dynamic
+            ? mergeDynamicItems(d.items, o.items)
+            : mergeById(d.items, o.items, (di, si) => ({
+                id: di.id,
+                title: mergeL(di.title, si.title),
+                desc: mergeL(di.desc, si.desc),
+                extra: di.extra ? mergeL(di.extra, si.extra) : (isL(si.extra) ? si.extra : undefined),
+              })),
         }
       : d;
   }

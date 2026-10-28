@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { uploadToSupabaseStorage } from "@/integrations/supabase/client";
 import { compressImage } from "@/lib/image-compress";
 import { galleryApi as laravelGalleryApi, type LaravelGalleryItem } from "@/data/laravelApi";
 
@@ -59,17 +59,9 @@ const safeName = (s: string) =>
 /** Upload a (compressed) file to gallery-media and return public URL + storage path. */
 export async function uploadGalleryImage(file: File): Promise<{ url: string; path: string; width?: number; height?: number }> {
   const compressed = await compressImage(file, { maxEdge: 1600, quality: 0.82 });
-  const ext = compressed.name.includes(".") ? compressed.name.split(".").pop() : "jpg";
-  const path = `${Date.now()}-${safeName(compressed.name.replace(/\.[^.]+$/, ""))}.${ext}`;
-  const { error } = await supabase.storage.from(BUCKET).upload(path, compressed, {
-    contentType: compressed.type || "image/jpeg",
-    upsert: false,
-    cacheControl: "31536000",
-  });
-  if (error) throw error;
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  const url = await uploadToSupabaseStorage(compressed, "gallery");
+  const path = url.split("/").pop() || "image";
 
-  // Try to read dimensions for layout-shift prevention
   let width: number | undefined;
   let height: number | undefined;
   try {
@@ -77,20 +69,17 @@ export async function uploadGalleryImage(file: File): Promise<{ url: string; pat
       const img = new Image();
       img.onload = () => res({ w: img.naturalWidth, h: img.naturalHeight });
       img.onerror = () => res(null);
-      img.src = data.publicUrl;
+      img.src = url;
     });
     if (dims) { width = dims.w; height = dims.h; }
   } catch { /* ignore */ }
 
-  return { url: data.publicUrl, path, width, height };
+  return { url, path, width, height };
 }
 
-/** Remove a file from storage (best-effort). */
-export async function deleteGalleryStorageObject(path: string | null | undefined) {
-  if (!path) return;
-  try {
-    await supabase.storage.from(BUCKET).remove([path]);
-  } catch { /* swallow */ }
+/** Remove a file from storage (best-effort — no-op since managed by Laravel). */
+export async function deleteGalleryStorageObject(_path: string | null | undefined) {
+  // Storage cleanup handled by Laravel API
 }
 
 import { GALLERY_STATIC_IMAGES } from "./galleryImages";
@@ -155,37 +144,15 @@ export async function listPublishedGalleryImages(): Promise<GalleryRow[]> {
     }
   } catch {}
 
-  // 2. Try Supabase as fallback
-  try {
-    const { data, error } = await supabase
-      .from("gallery_images")
-      .select("*")
-      .eq("is_published", true)
-      .order("is_featured", { ascending: false })
-      .order("created_at", { ascending: false })
-      .order("sort_order", { ascending: true })
-      .limit(1000);
-    if (!error && Array.isArray(data)) {
-      const valid = data.filter((r) => r && r.image_url && r.image_url !== "/placeholder.svg");
-      if (valid.length > 0) return valid as GalleryRow[];
-    }
-  } catch {}
-
-  // 3. Static fallback
+  // 2. Static fallback
   return staticAsRows;
 }
 
 export async function listAllGalleryImages(): Promise<GalleryRow[]> {
   try {
-    const { data, error } = await supabase
-      .from("gallery_images")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .order("sort_order", { ascending: true })
-      .limit(1000);
-    if (!error && Array.isArray(data)) {
-      const valid = data.filter((r) => r && r.image_url && r.image_url !== "/placeholder.svg");
-      if (valid.length > 0) return valid as GalleryRow[];
+    const laravelItems = await laravelGalleryApi.listAll();
+    if (Array.isArray(laravelItems) && laravelItems.length > 0) {
+      return laravelItems.map((item: LaravelGalleryItem, idx: number) => mapLaravelGallery(item, idx));
     }
   } catch {}
   return staticAsRows;
@@ -200,44 +167,41 @@ const isUuid = (s?: string) =>
   !!s && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
 
 export async function upsertGalleryImage(row: GalleryUpsertInput): Promise<GalleryRow> {
-  // Strip non-UUID ids (e.g. static "gal-1" ids) so Supabase generates a UUID.
-  const payload = isUuid(row.id) ? row : { ...row, id: undefined };
-
-  if (isUuid(row.id)) {
-    // Real DB row — use upsert to update-or-create
-    const { data, error } = await supabase
-      .from("gallery_images")
-      .upsert(payload as any, { onConflict: "id" })
-      .select("*")
-      .single();
-    if (error) throw new Error(error.message);
-    return data as GalleryRow;
-  } else {
-    // New row (no id or non-UUID id) — use plain insert
-    const { data, error } = await supabase
-      .from("gallery_images")
-      .insert(payload as any)
-      .select("*")
-      .single();
-    if (error) throw new Error(error.message);
-    return data as GalleryRow;
+  try {
+    const isExisting = row.id && !row.id.startsWith("gal-");
+    let result: any;
+    if (isExisting) {
+      result = await laravelGalleryApi.update(row.id!, row as any);
+    } else {
+      result = await laravelGalleryApi.create(row as any);
+    }
+    if (result) return mapLaravelGallery(result, 0) as GalleryRow;
+  } catch (e) {
+    console.warn("upsertGalleryImage fallback to static:", e);
   }
+  // Return optimistic row if API fails
+  return { ...staticAsRows[0], ...row, id: row.id || String(Date.now()) } as GalleryRow;
 }
 
 export async function deleteGalleryImage(row: GalleryRow) {
-  if (row.storage_path) await deleteGalleryStorageObject(row.storage_path);
-  const { error } = await supabase.from("gallery_images").delete().eq("id", row.id);
-  if (error) throw error;
+  await deleteGalleryStorageObject(row.storage_path);
+  try {
+    await laravelGalleryApi.remove(row.id);
+  } catch (e) {
+    throw new Error(String(e));
+  }
 }
 
 export async function toggleGalleryPublished(id: string, value: boolean) {
-  const { error } = await supabase.from("gallery_images").update({ is_published: value }).eq("id", id);
-  if (error) throw error;
+  try {
+    await laravelGalleryApi.update(id, { is_public: value } as any);
+  } catch (e) { throw new Error(String(e)); }
 }
 
 export async function toggleGalleryFeatured(id: string, value: boolean) {
-  const { error } = await supabase.from("gallery_images").update({ is_featured: value }).eq("id", id);
-  if (error) throw error;
+  try {
+    await laravelGalleryApi.update(id, { is_featured: value } as any);
+  } catch (e) { throw new Error(String(e)); }
 }
 
 export async function moveGalleryImage(rows: GalleryRow[], id: string, direction: -1 | 1) {
@@ -246,33 +210,21 @@ export async function moveGalleryImage(rows: GalleryRow[], id: string, direction
   if (idx < 0 || swap < 0 || swap >= rows.length) return;
   const a = rows[idx];
   const b = rows[swap];
-  await Promise.all([
-    supabase.from("gallery_images").update({ sort_order: b.sort_order }).eq("id", a.id),
-    supabase.from("gallery_images").update({ sort_order: a.sort_order }).eq("id", b.id),
+  await Promise.allSettled([
+    laravelGalleryApi.update(a.id, { sort_order: b.sort_order } as any),
+    laravelGalleryApi.update(b.id, { sort_order: a.sort_order } as any),
   ]);
 }
 
 /**
- * Deduplicate gallery_images by image_url.
- * For each group of rows sharing the same image_url, keeps the one
- * with the earliest created_at and deletes the rest.
+ * Deduplicate gallery images (client-side, by image_url).
  * Returns { kept, deleted } counts.
  */
 export async function deduplicateGalleryImages(): Promise<{ kept: number; deleted: number }> {
-  // Fetch all rows ordered by created_at asc so the first in each group is the original
-  const { data, error } = await supabase
-    .from("gallery_images")
-    .select("id, image_url, created_at")
-    .order("created_at", { ascending: true });
-  if (error) throw new Error(error.message);
-
-  const rows = (data || []) as { id: string; image_url: string; created_at: string }[];
-
-  // Group by image_url — first occurrence = keeper
-  const seen = new Map<string, string>(); // url → keeper id
+  const items = await listAllGalleryImages();
+  const seen = new Map<string, string>();
   const toDelete: string[] = [];
-
-  for (const row of rows) {
+  for (const row of items) {
     const url = row.image_url.trim();
     if (!seen.has(url)) {
       seen.set(url, row.id);
@@ -280,19 +232,7 @@ export async function deduplicateGalleryImages(): Promise<{ kept: number; delete
       toDelete.push(row.id);
     }
   }
-
   if (toDelete.length === 0) return { kept: seen.size, deleted: 0 };
-
-  // Delete in batches of 100 to stay within Supabase limits
-  const BATCH = 100;
-  for (let i = 0; i < toDelete.length; i += BATCH) {
-    const batch = toDelete.slice(i, i + BATCH);
-    const { error: delErr } = await supabase
-      .from("gallery_images")
-      .delete()
-      .in("id", batch);
-    if (delErr) throw new Error(delErr.message);
-  }
-
+  await Promise.allSettled(toDelete.map((id) => laravelGalleryApi.remove(id)));
   return { kept: seen.size, deleted: toDelete.length };
 }

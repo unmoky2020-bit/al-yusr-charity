@@ -786,7 +786,7 @@ const About = () => {
                   { I: Baby, ar: "باب الجنة (كفالة الأيتام)", en: "Bab Al-Jannah (Orphans)", href: "/programs/orphans" },
                   { I: Sparkles, ar: "مبادرة عربون خير (المستقلين)", en: "Arboun Khair (Freelancers)", href: "/arboun" },
                   { I: HandCoins, ar: "كفالات ومساعدات شهرية", en: "Monthly Family Stipends", href: "/programs" },
-                  { I: Utensils, ar: "غذاء شهري (كراتين وسلال)", en: "Monthly Food Boxes", href: "/food-box" },
+                  { I: Utensils, ar: "الغذاء الشهري (لحوم وكرتونة ووجبات)", en: "Monthly Food Programme", href: "/food-box" },
                   { I: Beef, ar: "صكوك الأضاحي ومزارع الوقف", en: "Qurbani & Farms", href: "/qurbani" },
                   { I: Heart, ar: "زكاة المال والصدقات", en: "Zakat & General Charity", href: "/zakat" },
                   { I: HeartPulse, ar: "مساعدات طبية طارئة وقوافل", en: "Urgent Medical Convoys", href: "/programs/health" },

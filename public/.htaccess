@@ -15,6 +15,14 @@
     
     # Referrer policy
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Browser features the site never needs
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(self \"https://payments.kashier.io\" \"https://checkout.kashier.io\")"
+
+    # Content Security Policy in REPORT-ONLY mode first: watch the browser console for a week,
+    # then change the header name to Content-Security-Policy. 'unsafe-inline' for scripts is needed
+    # only by the inline Google Analytics bootstrap in index.html; move it to a file to drop it.
+    Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://api.elyusr.org https://elyusr-api.pyramedx.com https://api.kashier.io https://test-api.kashier.io https://payments.kashier.io https://checkout.kashier.io https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://www.facebook.com https://api.gold-api.com https://open.er-api.com; frame-src 'self' https://payments.kashier.io https://checkout.kashier.io https://test-checkout.kashier.io https://accept.paymob.com https://www.google.com https://maps.google.com https://www.youtube.com https://www.facebook.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https://payments.kashier.io https://checkout.kashier.io https://accept.paymob.com; frame-ancestors 'self'; upgrade-insecure-requests"
 </IfModule>
 
 # 2. REWRITE RULES (HTTPS, Non-WWW 301 Redirect, & SPA Routing)

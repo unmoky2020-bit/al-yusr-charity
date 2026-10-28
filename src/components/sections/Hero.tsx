@@ -16,7 +16,28 @@ if (typeof window !== "undefined") {
 }
 
 import { useQuery } from "@tanstack/react-query";
-import { contentApi } from "@/data/laravelApi";
+import { contentApi, HOMEPAGE_DEFAULT_CONTENT, getApiToken } from "@/data/laravelApi";
+
+// ── Skeleton shimmer for the copy area while API loads ──────────────────────
+const HeroCopySkeleton = () => (
+  <div className="flex flex-col items-center gap-3 animate-pulse">
+    <div className="h-6 w-52 rounded-full bg-white/15" />
+    <div className="flex flex-col items-center gap-2 w-full">
+      <div className="h-9 w-[72%] rounded-xl bg-white/15" />
+      <div className="h-9 w-[52%] rounded-xl bg-secondary/25" />
+    </div>
+    <div className="flex flex-col items-center gap-1.5 w-full max-w-xs mt-1">
+      <div className="h-3.5 w-full rounded-lg bg-white/10" />
+      <div className="h-3.5 w-[85%] rounded-lg bg-white/10" />
+      <div className="h-3.5 w-[60%] rounded-lg bg-white/10" />
+    </div>
+    <div className="flex gap-3 mt-2">
+      <div className="h-9 w-32 rounded-2xl bg-orange-400/30" />
+      <div className="h-9 w-32 rounded-2xl bg-white/15" />
+    </div>
+    <div className="h-6 w-28 rounded-full bg-white/10 mt-1" />
+  </div>
+);
 
 const trackHeroCta = (target: string, fbEvent: string) => {
   if (typeof window === "undefined") return;
@@ -40,11 +61,18 @@ export const Hero = () => {
   const root = useRef<HTMLElement | null>(null);
   const pin = useRef<HTMLDivElement | null>(null);
 
-  const { data: homeContent, isLoading, isError } = useQuery({
+  // No initialData — show skeleton until real backend data arrives.
+  // staleTime=0 for admins so edits reflect immediately.
+  const isAdmin = !!getApiToken();
+  const { data: homeContent, isLoading } = useQuery({
     queryKey: ["homepage-content"],
     queryFn: () => contentApi.homepage(),
-    staleTime: 60_000,
+    staleTime: isAdmin ? 0 : 30_000,
+    retry: false,
   });
+
+  // Resolve content: backend first, static defaults only as absolute last resort
+  const content = homeContent ?? HOMEPAGE_DEFAULT_CONTENT;
 
   // ── Preload hero images immediately ──
   useEffect(() => {
@@ -172,132 +200,114 @@ export const Hero = () => {
         {/* Ambient glow */}
         <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[680px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary/12 blur-3xl" />
 
-        {/* Centered brand watermark — crisp native scale (<= 380px), centered behind hero copy */}
+        {/* Centered brand watermark — crisp native scale, centered behind hero copy */}
         <img
           src={logoCircle}
           alt=""
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[54%] z-0 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 select-none opacity-[0.14] mix-blend-screen sm:h-[320px] sm:w-[320px] md:h-[380px] md:w-[380px]"
+          className="pointer-events-none absolute left-1/2 top-[54%] lg:top-[48%] xl:top-[47%] z-0 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 select-none opacity-[0.14] mix-blend-screen sm:h-[320px] sm:w-[320px] md:h-[360px] md:w-[360px] lg:h-[320px] lg:w-[320px] xl:h-[340px] xl:w-[340px]"
           style={{ filter: "drop-shadow(0 0 20px rgba(16,185,129,0.15))" }}
           decoding="async"
         />
 
-        {/* ── Copy + CTAs (positioned with clear breathing space below the header) ── */}
-        <div className="relative z-20 container mx-auto px-4 pt-36 xs:pt-40 sm:pt-44 md:pt-48 lg:pt-52">
-          <div className="relative mx-auto flex max-w-[min(92vw,50rem)] flex-col items-center text-center">
+        {/* ── Copy + CTAs ── */}
+        <div className="relative z-20 container mx-auto px-4 pt-36 xs:pt-40 sm:pt-44 md:pt-42 lg:pt-32 xl:pt-36">
+          <div className="relative mx-auto flex max-w-[min(92vw,50rem)] lg:max-w-3xl xl:max-w-4xl flex-col items-center text-center">
 
-            {/* Shimmer badge */}
-            <div className="hc-copy mb-1.5 sm:mb-2.5 flex justify-center min-h-[26px]">
-              {isLoading && !homeContent ? (
-                <div className="h-6 w-36 rounded-full bg-white/20 animate-pulse" />
-              ) : (
-                <span className="inline-flex flex-row items-center justify-center gap-1.5 sm:gap-2 rounded-full border border-secondary/40 bg-secondary/15 px-3 py-0.5 sm:px-3.5 sm:py-1 text-[10.5px] sm:text-xs font-black text-secondary backdrop-blur-xs tracking-wide whitespace-nowrap shadow-xs">
-                  <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-secondary animate-pulse shrink-0 inline-block" />
-                  <span className="leading-none">
-                    {isRTL
-                      ? (homeContent?.hero_badge_ar || (isError ? "جمعية اليسر للبر والخدمات الاجتماعية" : ""))
-                      : (homeContent?.hero_badge_en || (isError ? "Al-Yusr Charity" : ""))}
+            {/* ── Skeleton while API loads, then real content ── */}
+            {isLoading ? (
+              <div className="hc-copy w-full"><HeroCopySkeleton /></div>
+            ) : (
+              <>
+                {/* Shimmer badge */}
+                <div className="hc-copy mb-1.5 sm:mb-2.5 lg:mb-2 flex justify-center">
+                  <span className="inline-flex flex-row items-center justify-center gap-1.5 sm:gap-2 rounded-full border border-secondary/40 bg-secondary/15 px-3 py-0.5 sm:px-3.5 sm:py-1 text-[10.5px] sm:text-xs font-black text-secondary backdrop-blur-xs tracking-wide whitespace-nowrap shadow-xs">
+                    <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-secondary animate-pulse shrink-0 inline-block" />
+                    <span className="leading-none">
+                      {isRTL ? content.hero_badge_ar : content.hero_badge_en}
+                    </span>
                   </span>
-                </span>
-              )}
-            </div>
-
-            <h1
-              className="hc-copy relative z-20 text-[1.45rem] xs:text-[1.65rem] font-black tracking-tight leading-none sm:text-[2.05rem] md:text-[2.4rem] lg:text-[2.8rem] xl:text-[3.1rem] min-h-[2.5rem]"
-              style={{ textShadow: "0 8px 24px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.35)" }}
-            >
-              {isLoading && !homeContent ? (
-                <div className="mx-auto h-9 sm:h-12 w-3/4 max-w-md rounded-xl bg-white/20 animate-pulse my-1" />
-              ) : (() => {
-                const accent = isRTL
-                  ? (homeContent?.hero_title_accent_ar || (isError ? t.hero.titleAccent : ""))
-                  : (homeContent?.hero_title_accent_en || (isError ? t.hero.titleAccent : ""));
-                const rawTitle = isRTL
-                  ? (homeContent?.hero_title_ar || (isError ? `${t.hero.title1} ${t.hero.title2}` : ""))
-                  : (homeContent?.hero_title_en || (isError ? `${t.hero.title1} ${t.hero.title2}` : ""));
-                const line1 = (accent && rawTitle.includes(accent))
-                  ? rawTitle.replace(accent, "").replace(/[—\-–&،,\s]+$/, "").trim()
-                  : rawTitle;
-                return (
-                  <>
-                    <span className="block leading-tight">{line1}</span>
-                    {accent && (
-                      <span className="-mt-0.5 sm:-mt-1.5 md:-mt-2 block text-gradient-lime [text-decoration:none] leading-tight">
-                        {accent}
-                      </span>
-                    )}
-                  </>
-                );
-              })()}
-            </h1>
-
-            <div className="hc-copy mx-auto mt-1.5 sm:mt-2.5 max-w-[32rem] min-h-[40px]">
-              {isLoading && !homeContent ? (
-                <div className="space-y-1.5 py-1">
-                  <div className="h-3.5 w-full rounded bg-white/20 animate-pulse mx-auto" />
-                  <div className="h-3.5 w-4/5 rounded bg-white/20 animate-pulse mx-auto" />
                 </div>
-              ) : (
-                <p className="text-balance text-[11.5px] xs:text-xs sm:text-[14px] md:text-[15.5px] font-medium leading-snug sm:leading-relaxed text-primary-foreground/90 line-clamp-3 sm:line-clamp-none">
-                  {isRTL
-                    ? (homeContent?.hero_description_ar || (isError ? "تبرّعك من اليوم يوصل لأسرة مستحقة بأيدي متطوعينا الموثوقين — سريع، شفاف، وبأعلى معايير الأمانة." : ""))
-                    : (homeContent?.hero_description_en || (isError ? "Your donation reaches a deserving family today through our trusted volunteers." : ""))}
-                </p>
-              )}
-            </div>
 
-            {(() => {
-              const HeroPrimaryIcon = getLucideIcon(homeContent?.hero_cta_primary_icon || "Heart");
-              const HeroSecondaryIcon = getLucideIcon(homeContent?.hero_cta_secondary_icon || "Info");
-              return (
-                <div className="hc-copy relative z-20 mx-auto mt-2.5 sm:mt-4 flex w-full max-w-sm flex-row items-center justify-center gap-2 sm:gap-3.5">
-                  <Button asChild size="default"
-                    className="h-9 min-w-[115px] px-3.5 sm:h-11 sm:min-w-[145px] sm:px-6 rounded-2xl bg-orange-grad text-xs sm:text-sm font-black text-accent-foreground no-underline shadow-cta animate-pulse-glow hover:opacity-95 shrink-0">
-                    <a
-                      href={homeContent?.hero_cta_primary_link || "/donate"}
-                      data-cta="hero-donate"
-                      style={{ textDecoration: "none" }}
-                      onClick={() => trackHeroCta(homeContent?.hero_cta_primary_link || "/donate", "HeroCTA")}
-                      className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
-                    >
-                      <HeroPrimaryIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
-                      <span>
-                        {isRTL
-                          ? (homeContent?.hero_cta_primary_ar || t.hero.ctaPrimary)
-                          : (homeContent?.hero_cta_primary_en || t.hero.ctaPrimary)}
-                      </span>
-                    </a>
-                  </Button>
-                  <Button asChild size="default"
-                    className="h-9 min-w-[115px] px-3.5 sm:h-11 sm:min-w-[145px] sm:px-6 rounded-2xl border-2 border-secondary/60 bg-primary-foreground/95 text-xs sm:text-sm font-black text-primary no-underline shadow-cta ring-1 ring-secondary/40 backdrop-blur-sm hover:bg-secondary hover:text-secondary-foreground shrink-0">
-                    <a
-                      href={homeContent?.hero_cta_secondary_link || "/about"}
-                      style={{ textDecoration: "none" }}
-                      onClick={() => trackHeroCta(homeContent?.hero_cta_secondary_link || "/about", "HeroAbout")}
-                      className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
-                    >
-                      <HeroSecondaryIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
-                      <span>
-                        {isRTL
-                          ? (homeContent?.hero_cta_secondary_ar || "تعرّف علينا")
-                          : (homeContent?.hero_cta_secondary_en || "About us")}
-                      </span>
-                    </a>
-                  </Button>
+                {/* Main headline */}
+                <h1
+                  className="hc-copy relative z-20 text-[1.45rem] xs:text-[1.65rem] font-black tracking-tight leading-none sm:text-[2.05rem] md:text-[2.25rem] lg:text-[2.4rem] xl:text-[2.65rem]"
+                  style={{ textShadow: "0 8px 24px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.35)" }}
+                >
+                  {(() => {
+                    const accent = isRTL ? content.hero_title_accent_ar : content.hero_title_accent_en;
+                    const rawTitle = isRTL ? content.hero_title_ar : content.hero_title_en;
+                    const line1 =
+                      accent && rawTitle && rawTitle.includes(accent)
+                        ? rawTitle.replace(accent, "").replace(/[—\-–&،,\s]+$/, "").trim()
+                        : rawTitle;
+                    return (
+                      <>
+                        <span className="block leading-tight">{line1}</span>
+                        {accent && (
+                          <span className="-mt-0.5 sm:-mt-1.5 md:-mt-2 block text-gradient-lime leading-tight">
+                            {accent}
+                          </span>
+                        )}
+                      </>
+                    );
+                  })()}
+                </h1>
+
+                {/* Description */}
+                <div className="hc-copy mx-auto mt-1.5 sm:mt-2.5 lg:mt-2 max-w-[32rem] lg:max-w-[28rem]">
+                  <p className="text-balance text-[11.5px] xs:text-xs sm:text-[14px] md:text-[14.5px] lg:text-[13.5px] xl:text-[14px] font-medium leading-snug sm:leading-relaxed text-primary-foreground/90 line-clamp-3 sm:line-clamp-none">
+                    {isRTL ? content.hero_description_ar : content.hero_description_en}
+                  </p>
                 </div>
-              );
-            })()}
 
-            <div className="hc-copy mt-2 sm:mt-3 flex flex-wrap items-center justify-center gap-2 text-[10.5px] font-bold text-primary-foreground/85 sm:text-xs">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary/40 bg-primary-foreground/10 px-2.5 py-0.5 sm:px-3 shadow-cta backdrop-blur-xs">
-                <ShieldCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-secondary" />
-                {isRTL
-                  ? (homeContent?.hero_transparency_text_ar || "%99 شفافية")
-                  : (homeContent?.hero_transparency_text_en || "99% Transparency")}
-              </span>
-            </div>
+                {/* CTA buttons */}
+                {(() => {
+                  const HeroPrimaryIcon = getLucideIcon(content.hero_cta_primary_icon || "Heart");
+                  const HeroSecondaryIcon = getLucideIcon(content.hero_cta_secondary_icon || "Info");
+                  return (
+                    <div className="hc-copy relative z-20 mx-auto mt-2.5 sm:mt-4 lg:mt-3 flex w-full max-w-sm flex-row items-center justify-center gap-2 sm:gap-3.5 lg:gap-3">
+                      <Button asChild size="default"
+                        className="h-9 min-w-[115px] px-3.5 sm:h-11 sm:min-w-[145px] sm:px-6 lg:h-10 lg:min-w-[135px] lg:px-5 rounded-2xl bg-orange-grad text-xs sm:text-sm font-black text-accent-foreground no-underline shadow-cta animate-pulse-glow hover:opacity-95 shrink-0">
+                        <a
+                          href={content.hero_cta_primary_link || "/donate"}
+                          data-cta="hero-donate"
+                          style={{ textDecoration: "none" }}
+                          onClick={() => trackHeroCta(content.hero_cta_primary_link || "/donate", "HeroCTA")}
+                          className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
+                        >
+                          <HeroPrimaryIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
+                          <span>{isRTL ? content.hero_cta_primary_ar : content.hero_cta_primary_en}</span>
+                        </a>
+                      </Button>
+                      <Button asChild size="default"
+                        className="h-9 min-w-[115px] px-3.5 sm:h-11 sm:min-w-[145px] sm:px-6 lg:h-10 lg:min-w-[135px] lg:px-5 rounded-2xl border-2 border-secondary/60 bg-primary-foreground/95 text-xs sm:text-sm font-black text-primary no-underline shadow-cta ring-1 ring-secondary/40 backdrop-blur-sm hover:bg-secondary hover:text-secondary-foreground shrink-0">
+                        <a
+                          href={content.hero_cta_secondary_link || "/about"}
+                          style={{ textDecoration: "none" }}
+                          onClick={() => trackHeroCta(content.hero_cta_secondary_link || "/about", "HeroAbout")}
+                          className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
+                        >
+                          <HeroSecondaryIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
+                          <span>{isRTL ? content.hero_cta_secondary_ar : content.hero_cta_secondary_en}</span>
+                        </a>
+                      </Button>
+                    </div>
+                  );
+                })()}
+
+                {/* Transparency badge */}
+                <div className="hc-copy mt-2 sm:mt-3 lg:mt-2.5 flex flex-wrap items-center justify-center gap-2 text-[10.5px] font-bold text-primary-foreground/85 sm:text-xs">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary/40 bg-primary-foreground/10 px-2.5 py-0.5 sm:px-3 shadow-cta backdrop-blur-xs">
+                    <ShieldCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-secondary" />
+                    {isRTL ? content.hero_transparency_text_ar : content.hero_transparency_text_en}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
+
 
         {/* ── Cinematic stage — anchored directly to the bottom floor ──────────────────────
             Fixed to absolute bottom of the pinned hero. Zero gaps, zero cutoffs under images. */}
@@ -313,7 +323,7 @@ export const Hero = () => {
             <img
               src={heroSad}
               alt={isRTL ? "أسرة محتاجة قبل وصول الخير" : "A family before help arrives"}
-              className="hc-sad pointer-events-none select-none object-contain object-bottom block w-auto max-w-[min(76vw,380px)] max-h-[410px] xs:max-h-[440px] sm:max-h-[470px]"
+              className="hc-sad pointer-events-none select-none object-contain object-bottom block w-auto max-w-[min(76vw,380px)] max-h-[410px] xs:max-h-[440px] sm:max-h-[470px] lg:max-h-[380px] xl:max-h-[400px] lg:max-w-[310px] xl:max-w-[330px]"
               style={{
                 marginBottom: 0,
               }}
@@ -329,7 +339,7 @@ export const Hero = () => {
             style={{ transformOrigin: "50% 100%" }}
           >
             {/* Left Van */}
-            <div className="hc-van2 pointer-events-none absolute -left-[5%] xs:-left-[3%] sm:left-[1%] md:left-[7%] lg:left-[10%] xl:left-[13%] bottom-0 z-[1] w-[58%] xs:w-[54%] sm:w-[46%] md:w-[40%] lg:w-[36%] xl:w-[33%] max-w-[580px] lg:max-w-[680px]">
+            <div className="hc-van2 pointer-events-none absolute -left-[5%] xs:-left-[3%] sm:left-[1%] md:left-[7%] lg:left-[11%] xl:left-[14%] bottom-0 z-[1] w-[58%] xs:w-[54%] sm:w-[46%] md:w-[40%] lg:w-[30%] xl:w-[27%] max-w-[580px] lg:max-w-[480px] xl:max-w-[520px]">
               <img
                 src={decoVan}
                 alt=""
@@ -345,7 +355,7 @@ export const Hero = () => {
             <img
               src={heroHappy}
               alt={isRTL ? "متطوعو اليسر مع أسرة مستفيدة وسلال الخير" : "Al-Yusr volunteers with a family and aid baskets"}
-              className="hc-happy pointer-events-none relative z-[3] w-[126%] xs:w-[120%] sm:w-[108%] md:w-[68%] lg:w-[56%] xl:w-[48%] max-w-none md:max-w-[680px] lg:max-w-[740px] xl:max-w-[780px] select-none object-contain object-bottom block max-h-[460px] xs:max-h-[500px] sm:max-h-[580px] md:max-h-[660px]"
+              className="hc-happy pointer-events-none relative z-[3] w-[126%] xs:w-[120%] sm:w-[108%] md:w-[68%] lg:w-[50%] xl:w-[44%] max-w-none md:max-w-[670px] lg:max-w-[560px] xl:max-w-[600px] select-none object-contain object-bottom block max-h-[460px] xs:max-h-[500px] sm:max-h-[560px] md:max-h-[630px] lg:max-h-[490px] xl:max-h-[510px]"
               style={{
                 filter: "saturate(1.05) contrast(1.03) drop-shadow(0 10px 24px rgba(0,0,0,0.36))",
                 marginBottom: 0,
@@ -356,7 +366,7 @@ export const Hero = () => {
             />
 
             {/* Right Truck */}
-            <div className="hc-van pointer-events-none absolute -right-[5%] xs:-right-[3%] sm:right-[1%] md:right-[7%] lg:right-[10%] xl:right-[13%] bottom-0 z-[1] w-[60%] xs:w-[56%] sm:w-[48%] md:w-[42%] lg:w-[38%] xl:w-[35%] max-w-[620px] lg:max-w-[720px]">
+            <div className="hc-van pointer-events-none absolute -right-[5%] xs:-right-[3%] sm:right-[1%] md:right-[7%] lg:right-[11%] xl:right-[14%] bottom-0 z-[1] w-[60%] xs:w-[56%] sm:w-[48%] md:w-[42%] lg:w-[32%] xl:w-[29%] max-w-[620px] lg:max-w-[500px] xl:max-w-[540px]">
               <img
                 src={decoVan2}
                 alt=""

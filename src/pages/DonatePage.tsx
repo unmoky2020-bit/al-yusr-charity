@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
-import { useSearchParams, Link, useNavigate } from "react-router-dom";
+import { useSearchParams, Link, useNavigate, useLocation } from "react-router-dom";
 import confetti from "canvas-confetti";
 import {
   Heart, ShieldCheck, Lock,
@@ -154,25 +154,18 @@ const DonatePage = () => {
   const [params] = useSearchParams();
   const navigate = useNavigate();
 
-  const [kashierSuccessOrderId, setKashierSuccessOrderId] = useState<string>("");
-
   useEffect(() => {
-    const ref = params.get("ref") || params.get("paymob_ref");
-    if (ref) { navigate(`/donate/status/${ref}`, { replace: true }); return; }
-
-    // Kashier redirect: when iframe navigates top window to the redirect_url on success
-    const paymentStatus = params.get("paymentStatus");
-    const merchantOrderId = params.get("merchantOrderId");
-    const orderReference = params.get("orderReference");
-    if (
-      paymentStatus === "SUCCESS" &&
-      (merchantOrderId || orderReference)
-    ) {
-      const orderId = merchantOrderId || orderReference || "";
-      setKashierSuccessOrderId(orderId);
-      // Remove the query params from URL without reloading
-      const cleanUrl = window.location.pathname;
-      window.history.replaceState({}, "", cleanUrl);
+    // Gateway return (top-window redirect). The query params are only a hint of
+    // WHICH transaction to look at — never of its outcome. The status page asks
+    // the backend and shows "paid" only when the backend confirms it.
+    const ref =
+      params.get("ref") ||
+      params.get("paymob_ref") ||
+      params.get("merchantOrderId") ||
+      params.get("orderReference") ||
+      params.get("orderId");
+    if (ref) {
+      navigate(`/donate/status/${encodeURIComponent(ref.trim())}`, { replace: true });
     }
   }, [params, navigate]);
 
@@ -189,6 +182,8 @@ const DonatePage = () => {
     health: "medical",
     education: "athar",
     box: "monthly-meat",
+    food: "monthly-meat",
+    "food-box": "monthly-meat",
     kitchen: "general",
     zakat: "general",
     bride: "shelter",
@@ -308,10 +303,12 @@ const DonatePage = () => {
     return m && STATIC_METHODS.some((s) => s.id === m) ? m : "vodafone_cash";
   });
 
+  // Donor details arrive via router state (never the URL, so they stay out of history and analytics).
+  const prefill = (useLocation().state as { donor?: { name?: string; phone?: string; email?: string } } | null)?.donor;
   const [donor, setDonor] = useState({
-    name:  params.get("name")  || "",
-    email: params.get("email") || "",
-    phone: params.get("phone") || "",
+    name:  prefill?.name  || "",
+    email: prefill?.email || "",
+    phone: prefill?.phone || "",
   });
 
   useEffect(() => {
@@ -363,39 +360,6 @@ const DonatePage = () => {
       return () => clearTimeout(t0);
     }
   }, [step]);
-
-  // When Kashier redirects the entire top window with ?paymentStatus=SUCCESS
-  // (happens on 3DS flows that can't postMessage cross-origin), auto-trigger success.
-  useEffect(() => {
-    if (!kashierSuccessOrderId) return;
-    const orderId = kashierSuccessOrderId;
-    setKashierSuccessOrderId("");
-    setIsKashierModalOpen(false);
-    const finalRef = kashierOrderId || orderId;
-    const created: DonationRecord = {
-      ref: finalRef,
-      donor,
-      amount: totalAmount || 50,
-      program: items.length === 1 ? items[0].entityId : "multiple",
-      programLabel: items.length === 1
-        ? (() => { const e = DONATION_ENTITIES.find((x) => x.id === items[0].entityId); return e ? (lang === "ar" ? e.titleAr : e.titleEn) : "تبرع عام"; })()
-        : (lang === "ar" ? "برامج متعددة" : "Multiple Programs"),
-      method: "kashier",
-      status: "completed",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      items: items.map((it) => {
-        const ent = DONATION_ENTITIES.find((e) => e.id === it.entityId);
-        const title = ent ? (lang === "ar" ? ent.titleAr : ent.titleEn) : "تبرع";
-        return { title, category: lang === "ar" ? "برنامج" : "Program", quantity: 1, amount: it.amount || 0 };
-      }),
-    };
-    donationsStore.create(created);
-    setRecord(created);
-    setStep(3);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kashierSuccessOrderId]);
 
   const [processing, setProcessing]           = useState(false);
   const [record, setRecord]                   = useState<DonationRecord | null>(null);
@@ -595,7 +559,7 @@ const DonatePage = () => {
             const receiptItems = items.map((it) => {
               const ent = DONATION_ENTITIES.find((e) => e.id === it.entityId);
               const sharesCount = Object.values(it.selectedShares || {}).reduce((a, b) => a + b, 0);
-              const title = ent ? (lang === "ar" ? ent.titleAr : ent.titleEn) : (programLabel || "تبرع عام");
+              const title = ent ? (lang === "ar" ? ent.ar : ent.en) : (programLabel || "تبرع عام");
               const category = ent
                 ? (ent.entityType === "project" ? (lang === "ar" ? "مشروع تنموي" : "Project") : ent.entityType === "campaign" ? (lang === "ar" ? "حملة إغاثية" : "Campaign") : (lang === "ar" ? "برنامج خيري" : "Program"))
                 : (lang === "ar" ? "برنامج خيري" : "Program");
@@ -618,7 +582,8 @@ const DonatePage = () => {
               program: items.length === 1 ? items[0].entityId : "multiple",
               programLabel,
               method,
-              status: "completed",
+              // Bank / wallet / manual methods: money has not been confirmed yet. Staff confirm it in the backend.
+              status: "pending",
               createdAt: saved?.created_at || new Date().toISOString(),
               updatedAt: saved?.created_at || new Date().toISOString(),
               items: receiptItems,
@@ -1687,16 +1652,22 @@ const DonatePage = () => {
         donorName={donor.name}
         donorEmail={donor.email}
         donorPhone={donor.phone}
+        caseId={caseId}
+        message={[
+          caseTitle ? `Case: ${caseTitle}` : "",
+          `Entities: ${itemsBreakdownText}`,
+        ].filter(Boolean).join(" | ")}
         onClose={() => {
           setIsKashierModalOpen(false);
         }}
-        onSuccess={() => {
+        onSuccess={(verifiedRef) => {
+          // Reached only after the backend confirmed the payment as paid.
           setIsKashierModalOpen(false);
-          const finalRef = kashierOrderId || `YSR-${Date.now().toString(36).toUpperCase()}`;
+          const finalRef = verifiedRef || kashierOrderId;
           const receiptItems = items.map((it) => {
             const ent = DONATION_ENTITIES.find((e) => e.id === it.entityId);
             const sharesCount = Object.values(it.selectedShares || {}).reduce((a, b) => a + b, 0);
-            const title = ent ? (lang === "ar" ? ent.titleAr : ent.titleEn) : (programLabel || "تبرع عام");
+            const title = ent ? (lang === "ar" ? ent.ar : ent.en) : (programLabel || "تبرع عام");
             const category = ent
               ? (ent.entityType === "project" ? (lang === "ar" ? "مشروع تنموي" : "Project") : ent.entityType === "campaign" ? (lang === "ar" ? "حملة إغاثية" : "Campaign") : (lang === "ar" ? "برنامج خيري" : "Program"))
               : (lang === "ar" ? "برنامج خيري" : "Program");

@@ -276,7 +276,7 @@ const AdminApiIntegration = () => {
                 <strong>اللغة والترويسات:</strong> كل الطلبات ترسل <code>Accept-Language</code> طبقاً للغة الواجهة (ar/en) و<code>Accept: application/json</code>.
               </li>
               <li>
-                <strong>حساب المدير المعتمد:</strong> <code>admin@alyusr.com / 12345678</code> مع ميزة التعبئة التلقائية المباشرة في صفحة الدخول.
+                <strong>حساب المدير:</strong> بيانات الدخول لا تُكتب في الكود ولا في الواجهة؛ تُحفظ في مدير كلمات المرور الخاص بالفريق.
               </li>
               <li>
                 <strong>التعامل مع الأخطاء:</strong> عند رجوع كود <code>401</code> يتم تنظيف التوكن تلقائياً وتحويل المستخدم للدخول.

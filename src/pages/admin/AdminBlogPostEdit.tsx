@@ -4,7 +4,7 @@ import {
   ArrowLeft, Calendar, Clock, ExternalLink, Eye, FileDown, FileJson,
   Image as ImageIcon, Loader2, Upload, Wand2, Save, CheckCircle2, AlertTriangle,
   Sparkles, Link2, Search, RotateCcw, History, Globe, Twitter, Facebook, ShieldCheck,
-  Instagram, Music2, Undo2, Redo2,
+  Instagram, Music2, Undo2, Redo2, X,
 } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
@@ -341,16 +341,8 @@ const Inner = () => {
 
   const load = async () => {
     setLoading(true);
-    let r: DbBlogPost | null = null;
-    try {
-      const { data, error } = await supabase.from("blog_posts" as never).select("*").eq("slug", slug).maybeSingle();
-      if (!error && data) r = data as unknown as DbBlogPost;
-    } catch {}
-
-    if (!r) {
-      const all = await fetchAllRowsAdmin();
-      r = all.find((item) => item.slug === slug || item.id === slug) || null;
-    }
+    const all = await fetchAllRowsAdmin();
+    const r = all.find((item) => item.slug === slug || item.id === slug) || null;
 
     if (!r) { setLoading(false); return; }
     setRow(r);
@@ -564,7 +556,17 @@ const Inner = () => {
         : `\n\nRead also: [${title}](/blog/${slug})`;
       return { ...d, body_ar: d.body_ar.trimEnd() + link };
     });
-    toast({ title: isRTL ? "تمت إضافة الرابط" : "Link added" });
+    toast({ title: isRTL ? "تمت إضافة الرابط الداخلي بنجاح" : "Internal link added" });
+  };
+
+  const removeRelatedLink = (slug: string) => {
+    pushHistory();
+    setDraft((d) => {
+      if (!d) return d;
+      const lines = d.body_ar.split(/\r?\n/).filter((l) => !l.includes(`/blog/${slug}`));
+      return { ...d, body_ar: lines.join("\n").trim() };
+    });
+    toast({ title: isRTL ? "تمت إزالة الارتباط الداخلي بنجاح" : "Internal link removed" });
   };
 
   const discardLocal = () => {
@@ -876,7 +878,20 @@ const Inner = () => {
                         <div className="truncate text-[10px] text-muted-foreground">{r.reason}</div>
                       </div>
                       {r.alreadyLinked ? (
-                        <span className="rounded bg-secondary/15 px-1.5 py-0.5 text-[9px] font-bold text-secondary">{isRTL ? "مرتبط" : "linked"}</span>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <span className="rounded bg-secondary/15 px-1.5 py-0.5 text-[9px] font-bold text-secondary inline-flex items-center gap-0.5">
+                            <CheckCircle2 className="h-3 w-3" />
+                            {isRTL ? "مرتبط" : "linked"}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeRelatedLink(r.slug)}
+                            title={isRTL ? "إزالة هذا الرابط من المقال" : "Remove link from post"}
+                            className="rounded p-0.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition cursor-pointer"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
                       ) : (
                         <Button size="sm" variant="outline" className="h-6 shrink-0 px-2 text-[10px]" onClick={() => insertRelatedLink(r.slug, r.title)}>+ {isRTL ? "أضف" : "Add"}</Button>
                       )}

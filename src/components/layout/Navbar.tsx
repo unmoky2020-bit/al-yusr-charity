@@ -97,6 +97,7 @@ export const Navbar = () => {
   const moreLinks: { to: string; ar: string; en: string }[] = [
     // NOTE: Pre-Eid soft launch — only the pages explicitly approved by
     // the owner are exposed in the nav. The rest of the routes still
+    { to: "/faqs",               ar: "الأسئلة الشائعة",  en: "FAQs" },
     { to: "/markoun",            ar: "حملة مَرْكون (الأثاث والأجهزة)", en: "Markoun in-kind" },
     { to: "/arboun",             ar: "مبادرة عربون خير (المستقلين)",   en: "Arboun Freelancers" },
     { to: "/farm",               ar: "المزارع الوقفية",  en: "Endowment Farm" },

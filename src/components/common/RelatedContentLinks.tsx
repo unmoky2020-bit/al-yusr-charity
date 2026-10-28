@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BookOpen, MapPin, Layers, ArrowLeft, ArrowRight } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/i18n/LangContext";
 import { GEO_GOVERNORATES } from "@/data/geoPages";
 import { programs } from "@/data/programs";
+import { fetchPublishedPosts } from "@/data/blogApi";
 
 /**
  * Breadcrumb-aware internal-linking hub. Given a program (and optional
@@ -38,24 +38,24 @@ export const RelatedContentLinks = ({
     let alive = true;
     (async () => {
       try {
-        const { data } = await supabase
-          .from("blog_posts")
-          .select("slug, title_ar, title_en, image_url, tags_ar, tags_en, focus_keyword")
-          .eq("status", "published")
-          .or(
-            [
-              `tags_ar.cs.{${programSlug}}`,
-              `tags_en.cs.{${programSlug}}`,
-              `focus_keyword.ilike.%${programSlug}%`,
-              `slug.ilike.%${programSlug}%`,
-            ].join(","),
-          )
-          .limit(4);
-        if (alive) {
-          if (Array.isArray(data) && data.length > 0) {
-            setArticles(data as any);
-            return;
-          }
+        const posts = await fetchPublishedPosts();
+        if (alive && Array.isArray(posts) && posts.length > 0) {
+          const matched = posts.filter(
+            (p) =>
+              p.slug.includes(programSlug) ||
+              p.tags.some((t) => t.includes(programSlug)) ||
+              (p.focus_keyword && p.focus_keyword.includes(programSlug))
+          ).slice(0, 4);
+
+          const list = (matched.length > 0 ? matched : posts.slice(0, 3)).map((p) => ({
+            slug: p.slug,
+            title_ar: p.ar.title,
+            title_en: p.en.title,
+            image_url: p.image,
+          }));
+
+          setArticles(list);
+          return;
         }
       } catch {}
 

@@ -1187,3 +1187,23 @@ img, video, svg, canvas {
 [dir="ltr"] .setr-temp-bar { transform-origin: left; }
 .setr-house rect, .setr-house path, .setr-house g, .setr-house ellipse, .setr-house polyline { transition: opacity 420ms var(--ease-out-soft); }
 @media (prefers-reduced-motion: reduce) { .setr-rainfall { display: none; } .setr-temp-bar, .setr-house * { transition: none; } }
+
+/* ─── Food (monthly food programme) ─────────────────────────────────── */
+/* Deep brand green warmed at the edge, the colour of a set table at dusk. */
+.food-hero { background: linear-gradient(165deg, hsl(152 65% 9%) 0%, hsl(152 60% 13%) 55%, hsl(140 45% 15%) 100%); }
+.food-plate { background: radial-gradient(circle at 50% 45%, hsl(42 90% 66%) 0%, hsl(var(--secondary)) 45%, hsl(28 80% 48%) 100%); opacity: 0.9; }
+/* A faint checked tablecloth under the carton section. */
+.food-cloth {
+  background-color: hsl(48 40% 97%);
+  background-image:
+    repeating-linear-gradient(0deg, hsl(var(--primary) / 0.045) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, hsl(var(--primary) / 0.045) 0 1px, transparent 1px 28px);
+}
+.food-tag { animation: food-tag-in 420ms var(--ease-out-soft) both; }
+@keyframes food-tag-in { from { opacity: 0; transform: translateY(8px) scale(0.92); } to { opacity: 1; transform: none; } }
+.food-card { animation: food-card-in 360ms var(--ease-out-soft) both; }
+@keyframes food-card-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.food-seg { animation: food-seg-in 520ms var(--ease-out-soft) both; transform-origin: right; }
+[dir="ltr"] .food-seg { transform-origin: left; }
+@keyframes food-seg-in { from { transform: scaleX(0); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .food-tag, .food-card, .food-seg { animation: none; } }

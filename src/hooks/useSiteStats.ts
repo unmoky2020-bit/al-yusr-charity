@@ -22,7 +22,7 @@ export type SiteStat = {
   link_url: string | null;
 };
 
-const DEFAULT_STATS: Record<string, SiteStat[]> = {
+export const DEFAULT_STATS: Record<string, SiteStat[]> = {
   home_stats: [
     {
       id: "default-1",

@@ -4,6 +4,7 @@
  * which is required for Vite Fast Refresh to work correctly.
  */
 import { LaravelUser } from "@/data/laravelApi";
+import type { Permission } from "./permissions";
 
 export type Role = "admin" | "editor" | "caseworker" | "case_manager" | "volunteer" | "delegate" | "donor";
 
@@ -21,20 +22,31 @@ export interface User {
   city?: string;
   bio?: string;
   assignedProgram?: string;
-  permissions?: string[];
+  permissions?: Permission[];
   totalDonated?: number;
   donationsCount?: number;
   preferredProgram?: string;
 }
 
-const normalizeRole = (r: string): Role => {
-  const lower = String(r).toLowerCase().trim().replace(/[\s-]+/g, "_");
-  if (lower.includes("admin") || lower === "super_admin") return "admin";
-  if (lower.includes("editor") || lower === "content_editor") return "editor";
-  if (lower.includes("case") || lower === "case_manager") return "case_manager";
-  if (lower.includes("volunteer")) return "volunteer";
-  if (lower.includes("delegate")) return "delegate";
-  return "donor";
+const KNOWN_ROLES: readonly Role[] = ["admin", "editor", "caseworker", "case_manager", "volunteer", "delegate", "donor"];
+
+/**
+ * Accept only a role the backend explicitly returned, matched exactly (case-insensitive;
+ * spaces/hyphens are treated as underscores, e.g. "Case Manager" → "case_manager").
+ * Anything else is ignored — roles are never inferred from substrings or e-mail addresses.
+ */
+/**
+ * Backend role names that differ from the app's role ids, mapped explicitly (exact keys only).
+ * The backend's /roles list (2026-10): "Super Admin" (super-admin), "Editor", "Volunteer", "Donor".
+ */
+const ROLE_ALIASES: Readonly<Record<string, Role>> = {
+  super_admin: "admin",
+};
+
+const normalizeRole = (r: string): Role | null => {
+  const key = String(r).toLowerCase().trim().replace(/[\s-]+/g, "_");
+  if (key in ROLE_ALIASES) return ROLE_ALIASES[key];
+  return (KNOWN_ROLES as readonly string[]).includes(key) ? (key as Role) : null;
 };
 
 export function buildUserFromLaravel(lUser: LaravelUser): User {
@@ -51,13 +63,11 @@ export function buildUserFromLaravel(lUser: LaravelUser): User {
   if (lUser.role) {
     rawRoles.push(lUser.role);
   }
-  if (rawRoles.length === 0) {
-    if (lUser.email?.toLowerCase().includes("admin")) rawRoles.push("admin");
-    else if (lUser.email?.toLowerCase().includes("editor")) rawRoles.push("editor");
-    else rawRoles.push("donor");
-  }
 
-  const mappedRoles = Array.from(new Set(rawRoles.map(normalizeRole)));
+  // Unknown/missing roles are dropped; an empty result falls back to "donor" below.
+  const mappedRoles = Array.from(
+    new Set(rawRoles.map(normalizeRole).filter((r): r is Role => r !== null)),
+  );
 
   return {
     id: String(lUser.id),

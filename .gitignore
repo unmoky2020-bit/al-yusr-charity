@@ -40,3 +40,11 @@ contact-*.png
 *.njsproj
 *.sln
 *.sw?
+
+# Local env (contains dev secrets)
+.env.local
+.env.*.local
+
+# Local notes and server scripts that hold real credentials: never commit
+AGENT.md
+scripts/check-server.mjs

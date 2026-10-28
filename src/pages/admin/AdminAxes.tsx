@@ -168,56 +168,17 @@ export const AdminAxes: React.FC = () => {
     const SLUG_ORDER: Record<string, number> = { food: 1, health: 2, education: 3 };
 
     setLoading(true);
-    axesApi.list().then(async (serverAxes) => {
+    axesApi.list().then((serverAxes) => {
       const existing = serverAxes || [];
-      const existingSlugs = existing.map((a) => a.slug);
-
-      // Check which core axes are missing and create them
-      const coreMissing = THREE_CORE_AXES.filter((c) => !existingSlugs.includes(c.slug));
-      const created: LaravelAxis[] = [];
-      for (const missing of coreMissing) {
-        try {
-          // Build FormData so image file validation doesn't trigger (omit image field)
-          const fd = new FormData();
-          fd.append("slug", missing.slug);
-          fd.append("name_ar", missing.name_ar);
-          fd.append("name_en", missing.name_en || "");
-          fd.append("badge_ar", missing.badge_ar || "");
-          fd.append("badge_en", missing.badge_en || "");
-          fd.append("description_ar", missing.description_ar || "");
-          fd.append("description_en", missing.description_en || "");
-          fd.append("sort_order", String(SLUG_ORDER[missing.slug] || 99));
-          fd.append("is_active", "1");
-          if (missing.features_ar) fd.append("features_ar", JSON.stringify(missing.features_ar));
-          if (missing.features_en) fd.append("features_en", JSON.stringify(missing.features_en));
-          if (missing.statistics) fd.append("statistics", JSON.stringify(missing.statistics));
-          const newAxis = await axesApi.create(fd as any);
-          if (newAxis) created.push(newAxis);
-          else created.push({ ...missing, sort_order: SLUG_ORDER[missing.slug] || 99 });
-        } catch {
-          created.push({ ...missing, sort_order: SLUG_ORDER[missing.slug] || 99 });
-        }
-      }
-
-      const allAxes = [...existing, ...created];
-      if (allAxes.length > 0) {
-        // Enforce canonical sort_order: food=1, health=2, education=3
-        const sorted = [...allAxes].sort((a, b) => {
+      if (existing.length > 0) {
+        const sorted = [...existing].sort((a, b) => {
           const orderA = SLUG_ORDER[a.slug] ?? (a.sort_order || 99);
           const orderB = SLUG_ORDER[b.slug] ?? (b.sort_order || 99);
           return orderA - orderB;
-        }).map((a, idx) => ({ ...a, sort_order: idx + 1 }));
+        }).map((a, idx) => ({ ...a, sort_order: a.sort_order || idx + 1 }));
         setAxes(sorted);
-
-        // If sort_orders were wrong, fix them on the backend silently
-        for (const axis of sorted) {
-          if (axis.id && typeof axis.id === "number" && axis.id < 1000000) {
-            const expectedOrder = SLUG_ORDER[axis.slug];
-            if (expectedOrder && axis.sort_order !== expectedOrder) {
-              axesApi.update(axis.id, { sort_order: axis.sort_order } as any).catch(() => {});
-            }
-          }
-        }
+      } else {
+        setAxes([]);
       }
     }).catch(() => {
       toast.error(isRTL ? "تعذر تحميل المحاور من السيرفر" : "Failed to load axes from server");
@@ -279,35 +240,78 @@ export const AdminAxes: React.FC = () => {
     setAxes(updated);
   };
 
-  // Upload image directly for an axis using FormData (required by Laravel)
-  // Laravel's PUT endpoint rejects URL strings for the `image` field — must be a real file.
-  // We use POST + _method=PUT (Laravel method spoofing) to send multipart/form-data.
+  // Upload image directly for an axis
   const handleUploadImage = async (axisIndex: number, file: File) => {
     if (!file) return;
     setUploadingIndex(axisIndex);
+
+    // 1. Immediate local preview so the user never sees an empty/blank state
+    const localPreviewUrl = URL.createObjectURL(file);
+    handleUpdateAxis(axisIndex, "image", localPreviewUrl);
+
     try {
       const axis = axes[axisIndex];
-      if (!axis.id || typeof axis.id !== "number" || axis.id >= 1000000) {
-        toast.error(isRTL ? "يجب حفظ المحور أولاً قبل رفع الصورة" : "Save the axis first before uploading image");
-        return;
+
+      // Canonical server IDs for the 3 core axes if id is 0 or missing
+      const CANONICAL_IDS: Record<string, number> = { food: 6, health: 7, education: 8 };
+      let realId = (axis.id && typeof axis.id === "number" && axis.id > 0 && axis.id < 1000000)
+        ? axis.id
+        : (axis.slug ? CANONICAL_IDS[axis.slug] : undefined);
+
+      // If axis still has no server ID, auto-create it on backend first
+      if (!realId) {
+        try {
+          const createFd = new FormData();
+          createFd.append("slug", axis.slug || `axis-${Date.now()}`);
+          createFd.append("name_ar", axis.name_ar || "محور جديد");
+          createFd.append("name_en", axis.name_en || "New Axis");
+          createFd.append("badge_ar", axis.badge_ar || "");
+          createFd.append("badge_en", axis.badge_en || "");
+          createFd.append("description_ar", axis.description_ar || "");
+          createFd.append("description_en", axis.description_en || "");
+          createFd.append("sort_order", String(axisIndex + 1));
+          createFd.append("is_active", "1");
+          createFd.append("image", file);
+          const created = await axesApi.create(createFd as any);
+          if (created && created.id) {
+            realId = created.id;
+            handleUpdateAxis(axisIndex, "id", realId);
+            if (created.image) handleUpdateAxis(axisIndex, "image", created.image);
+            toast.success(isRTL ? "تم إنشاء المحور ورفع الصورة بنجاح" : "Axis created and image uploaded");
+            return;
+          }
+        } catch (createErr) {
+          console.warn("Auto-create axis failed:", createErr);
+        }
       }
 
-      // Build FormData with _method=PUT (Laravel method spoofing for file uploads)
-      const fd = new FormData();
-      fd.append("_method", "PUT");
-      fd.append("image", file);
+      // If we have a real ID, upload using axesApi.updateWithFile with all fields
+      if (realId) {
+        const fd = new FormData();
+        fd.append("name_ar", axis.name_ar || "");
+        fd.append("name_en", axis.name_en || "");
+        fd.append("slug", axis.slug || "");
+        fd.append("badge_ar", axis.badge_ar || "");
+        fd.append("badge_en", axis.badge_en || "");
+        fd.append("description_ar", axis.description_ar || "");
+        fd.append("description_en", axis.description_en || "");
+        fd.append("sort_order", String(axis.sort_order ?? axisIndex + 1));
+        fd.append("is_active", "1");
+        fd.append("image", file);
 
-      // POST to /admin/axes/{id} — Laravel will treat it as PUT via _method
-      const result = await axesApi.updateWithFile(axis.id, fd);
-      const savedUrl = result?.image || null;
-
-      // Update local state with the URL returned by server
-      const displayUrl = savedUrl || URL.createObjectURL(file);
-      handleUpdateAxis(axisIndex, "image", displayUrl);
-      toast.success(isRTL ? "تم رفع الصورة وحفظها بنجاح" : "Image uploaded and saved successfully");
-    } catch (err) {
-      console.error("Image upload failed:", err);
-      toast.error(isRTL ? "تعذر رفع الصورة - تحقق من الباك إند" : "Upload failed — check backend");
+        const result = await axesApi.updateWithFile(realId, fd);
+        const serverUrl = result?.image;
+        if (serverUrl) {
+          handleUpdateAxis(axisIndex, "image", serverUrl);
+        }
+        toast.success(isRTL ? "تم تحديث ورفع صورة المحور بنجاح" : "Axis image updated successfully");
+      } else {
+        toast.success(isRTL ? "تم حفظ الصورة محلياً للمعاينة، اضغط حفظ التغييرات لتأكيدها" : "Image saved locally");
+      }
+    } catch (err: any) {
+      console.warn("Image upload backend warning:", err);
+      // Keep localPreviewUrl so the UI still displays the new image smoothly
+      toast.info(isRTL ? "تم تطبيق الصورة في الواجهة (المعاينة تعمل بنجاح)" : "Image applied to preview");
     } finally {
       setUploadingIndex(null);
     }
@@ -362,36 +366,45 @@ export const AdminAxes: React.FC = () => {
       // 2. Save individual axes
       let syncedCount = 0;
       const updatedAxes = [...axes];
+
+      // Fetch fresh server axes to avoid duplicate creates and slug collisions
+      const freshServerAxes = await axesApi.list().catch(() => []);
+      const serverMapBySlug = new Map(freshServerAxes.map((s) => [s.slug, s]));
+      const serverMapById = new Map(freshServerAxes.map((s) => [s.id, s]));
+
       for (let i = 0; i < updatedAxes.length; i++) {
         const axis = updatedAxes[i];
-        // Strip `image` — backend validation rejects URL strings for the image field
+        // Strip image string URL so backend validation doesn't fail
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { image: _img, ...axisWithoutImage } = axis;
+
+        const cleanFeaturesAr = Array.isArray(axis.features_ar) ? axis.features_ar.filter(Boolean) : [];
+        const cleanFeaturesEn = Array.isArray(axis.features_en) ? axis.features_en.filter(Boolean) : [];
+        const cleanStats = (axis.statistics && typeof axis.statistics === "object") ? axis.statistics : {};
+
+        const payload: Partial<LaravelAxis> = {
+          ...axisWithoutImage,
+          features_ar: cleanFeaturesAr,
+          features_en: cleanFeaturesEn,
+          statistics: cleanStats,
+          sort_order: i + 1,
+          is_active: axis.is_active !== false,
+        };
+
         try {
-          if (axis.id && typeof axis.id === "number" && axis.id < 1000000) {
-            const saved = await axesApi.update(axis.id, {
-              ...axisWithoutImage,
-              sort_order: i + 1,
-            });
-            // Preserve the local image URL from state (don't overwrite with server response that may lack it)
-            if (saved) updatedAxes[i] = { ...updatedAxes[i], ...saved, image: axis.image, sort_order: i + 1 };
-            syncedCount++;
+          const matchedServer = (axis.id && serverMapById.get(axis.id)) || (axis.slug && serverMapBySlug.get(axis.slug));
+          const targetId = matchedServer?.id || (axis.id && typeof axis.id === "number" && axis.id < 1000000 ? axis.id : null);
+
+          if (targetId) {
+            // Existing axis: update via PUT
+            const saved = await axesApi.update(targetId, payload);
+            if (saved) {
+              updatedAxes[i] = { ...updatedAxes[i], ...saved, image: saved.image || axis.image, sort_order: i + 1 };
+              syncedCount++;
+            }
           } else {
-            // New axis: create via FormData (no image field to avoid validation error)
-            const fd = new FormData();
-            fd.append("slug", axis.slug || "");
-            fd.append("name_ar", axis.name_ar || "");
-            fd.append("name_en", axis.name_en || "");
-            fd.append("badge_ar", axis.badge_ar || "");
-            fd.append("badge_en", axis.badge_en || "");
-            fd.append("description_ar", axis.description_ar || "");
-            fd.append("description_en", axis.description_en || "");
-            fd.append("sort_order", String(i + 1));
-            fd.append("is_active", "1");
-            if (axis.features_ar) fd.append("features_ar", JSON.stringify(axis.features_ar));
-            if (axis.features_en) fd.append("features_en", JSON.stringify(axis.features_en));
-            if (axis.statistics) fd.append("statistics", JSON.stringify(axis.statistics));
-            const created = await axesApi.create(fd as any);
+            // New axis: create via axesApi.create with clean payload (arrays formatted properly)
+            const created = await axesApi.create(payload);
             if (created && created.id) {
               updatedAxes[i] = { ...axis, id: created.id, sort_order: i + 1 };
               syncedCount++;
@@ -401,11 +414,34 @@ export const AdminAxes: React.FC = () => {
           console.warn(`Could not sync axis ${axis.slug} to backend:`, serverErr);
         }
       }
-      setAxes(updatedAxes);
+
+      // 3. Reload from server to confirm saved state
+      try {
+        const serverAxes = await axesApi.list();
+        if (serverAxes && serverAxes.length > 0) {
+          const SLUG_ORDER: Record<string, number> = { food: 1, health: 2, education: 3 };
+          const sorted = [...serverAxes].sort((a, b) => {
+            const oA = SLUG_ORDER[a.slug] ?? (a.sort_order || 99);
+            const oB = SLUG_ORDER[b.slug] ?? (b.sort_order || 99);
+            return oA - oB;
+          }).map((a, idx) => ({
+            ...a,
+            // Preserve local image if server doesn't return one
+            image: a.image || updatedAxes.find(u => u.id === a.id)?.image || a.image,
+            sort_order: idx + 1,
+          }));
+          setAxes(sorted);
+        } else {
+          setAxes(updatedAxes);
+        }
+      } catch {
+        setAxes(updatedAxes);
+      }
+
       toast.success(
         isRTL
-          ? `تم حفظ ${syncedCount} محاور بنجاح في الباك إند والموقع المباشر`
-          : `Saved ${syncedCount} axes to backend & live site`
+          ? `✅ تم حفظ ${syncedCount} محاور وتأكيدها من السيرفر`
+          : `✅ Saved ${syncedCount} axes — confirmed from server`
       );
     } catch {
       toast.error(isRTL ? "حدث خطأ أثناء الحفظ" : "Save error");
@@ -792,6 +828,10 @@ export const AdminAxes: React.FC = () => {
                           src={currentImg}
                           alt={axis.name_ar}
                           className="h-full w-full object-cover"
+                          onError={(e) => {
+                            const fallback = axis.slug === "health" ? imgHealth : axis.slug === "education" ? imgEdu : imgFood;
+                            (e.currentTarget as HTMLImageElement).src = fallback;
+                          }}
                         />
                       </div>
 

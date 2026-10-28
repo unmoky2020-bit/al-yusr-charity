@@ -1,13 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Heart, Sparkles, HeartHandshake } from "lucide-react";
-import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
+import { ArrowLeft, ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Heart, Sparkles, HeartHandshake } from "lucide-react";
+import { useReducedMotion } from "motion/react";
 import { useLang } from "@/i18n/LangContext";
 import { programs } from "@/data/programs";
 import { Button } from "@/components/ui/button";
 import ctaHourglass from "@/assets/cta-hourglass-banner.jpg";
 import { useCampaignsSettings, getVisibleCampaignPrograms } from "@/data/campaignsSettings";
+import { formatServerImageUrl } from "@/data/laravelApi";
 import { recordCampaignClick, recordSectionView } from "@/lib/campaignsMetrics";
+import { DONATION_ENTITIES } from "@/data/donationEntities";
 
 export const clampSlide = (index: number, total: number) => {
   if (total <= 0) return 0;
@@ -42,12 +44,50 @@ export const swipeTargetSlide = (
 };
 
 /**
- * Al-Yusr campaigns — scroll-driven horizontal strip.
- * Uses framer-motion `useScroll` to translate the row as the user scrolls
- * through a tall pinned section. Fully RTL/LTR aware: in Arabic the row
- * starts from the right (x: 0%) and slides toward negative x (right→left
- * relative to RTL flow). Reduced motion = static grid fallback.
+ * Dynamically computes optimal 3D Coverflow card spacing so the carousel
+ * expands horizontally to match the site's max-w-7xl header bounds without dead margins.
  */
+const useResponsiveSpacing = () => {
+  const [spacing, setSpacing] = useState(() => {
+    if (typeof window === "undefined") return 218;
+    const w = window.innerWidth;
+    if (w < 480) return 108;
+    if (w < 640) return 135;
+    if (w < 768) return 165;
+    if (w < 1024) return 185;
+    if (w < 1280) return 202;
+    return 218;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let raf = 0;
+    const update = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const w = window.innerWidth;
+        let s = 218;
+        if (w < 480) s = 108;
+        else if (w < 640) s = 135;
+        else if (w < 768) s = 165;
+        else if (w < 1024) s = 185;
+        else if (w < 1280) s = 202;
+        else s = 218;
+        setSpacing(s);
+      });
+    };
+    window.addEventListener("resize", update, { passive: true });
+    window.addEventListener("orientationchange", update);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+    };
+  }, []);
+
+  return spacing;
+};
+
 export const CampaignsScroll = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
@@ -79,15 +119,12 @@ export const CampaignsScroll = () => {
       window.removeEventListener("orientationchange", syncNarrow);
     };
   }, []);
-  // Shorter dwell on mobile → less pinned scroll distance → snappier feel
-  // and fewer scroll-driven recomputes per second.
-  // Even shorter dwell on mobile → less scroll distance, fewer scroll
-  // callbacks per second. Desktop kept comfortable.
-  // Shorter dwell on mobile = less pinned distance = snappier scroll and
-  // fewer scroll-driven recomputes per second.
-  const baseDwell = isNarrow ? 36 : 70;
-  const dwellVh = Math.round(baseDwell * Math.max(0.6, Math.min(1.6, settings.scrollSpeed || 1)));
-  const heightVh = Math.max(120, totalSlides * dwellVh);
+  // Calibrated dwell: responsive per-slide scroll distance so pinned scroll
+  // tracks smoothly without excessive white space or dragging on forever.
+  const stepVh = isNarrow ? 36 : 48;
+  const speedMultiplier = Math.max(0.7, Math.min(1.4, settings.scrollSpeed || 1));
+  const heightVh = Math.round(100 + Math.max(1, totalSlides - 1) * stepVh * speedMultiplier);
+  const spacing = useResponsiveSpacing();
 
   const headerTitle = settings.title?.[lang] || (isRTL
     ? "خيرك… بيوصل لحد الباب"
@@ -100,38 +137,68 @@ export const CampaignsScroll = () => {
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
   const swipeRef = useRef<{ x: number; y: number; slide: number; pointerId: number } | null>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
-
-  // Track the active slide for the dots indicator. Throttled by the motion
-  // value subscription, so it only updates when scroll progress actually
-  // changes — cheap on mobile.
+  // ── Native scroll listener for reliable cross-browser scroll tracking ──
+  // Framer Motion's useScroll + useMotionValueEvent can miss updates in
+  // Firefox's async scroll model. Using a passive native listener gives us
+  // direct access to window.scrollY at the right time.
   const [activeIndex, setActiveIndex] = useState(0);
   const activeIndexRef = useRef(0);
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const next = progressToSlide(v, totalSlides);
-    if (activeIndexRef.current === next) return;
-    activeIndexRef.current = next;
-    setActiveIndex(next);
-  });
-  const renderRadius = 2;
-  // Build the list of slides to render. We render each real slide at its
-  // natural offset (i - activeIndex) AND add virtual wrap-around copies of
-  // the last few slides on the "before" side when the user is near the
-  // start, and the first few slides on the "after" side when near the end.
-  // This avoids the empty visual gap on either side of the coverflow.
+
+  const enableScrollTrigger = settings.enableScrollTrigger !== false;
+
+  const isProgrammaticScrollRef = useRef(false);
+  const programmaticTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!enableScrollTrigger || reduce || typeof window === "undefined") return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        if (isProgrammaticScrollRef.current) return;
+        const s = sectionRef.current;
+        if (!s) return;
+        const rect = s.getBoundingClientRect();
+        const scrollRange = Math.max(1, s.offsetHeight - window.innerHeight);
+        const scrolled = -rect.top;
+        if (scrolled <= 0) {
+          if (activeIndexRef.current !== 0) {
+            activeIndexRef.current = 0;
+            setActiveIndex(0);
+          }
+          return;
+        }
+        const progress = Math.max(0, Math.min(1, scrolled / scrollRange));
+        // Evenly distributed slide zones so every card gets equal scroll time
+        const next = Math.min(totalSlides - 1, Math.floor(progress * totalSlides));
+        if (activeIndexRef.current !== next) {
+          activeIndexRef.current = next;
+          setActiveIndex(next);
+        }
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [enableScrollTrigger, reduce, totalSlides]);
+
+  // On desktop show 5 cards (radius 2), on mobile 3 (radius 1)
+  const renderRadius = isNarrow ? 1 : 2;
   type SlideEntry = { key: string; offset: number; kind: "item" | "cta"; realIndex: number };
   const renderEntries: SlideEntry[] = [];
   const ctaIndex = items.length; // virtual position of the final CTA card
   const total = totalSlides;
   // Helper to know whether a virtual position maps to the final-CTA slot.
   const isCtaPos = (pos: number) => showFinalCta && pos === ctaIndex;
-  for (let virtual = -2; virtual < total + 2; virtual++) {
+  // Continuous loop: wraps around so both sides are always populated symmetrically without blank spaces
+  for (let virtual = activeIndex - renderRadius - 1; virtual <= activeIndex + renderRadius + 1; virtual++) {
     const offset = virtual - activeIndex;
     if (Math.abs(offset) > renderRadius) continue;
-    // Wrap virtual index into the real range so we know which slide to render.
     const realIndex = ((virtual % total) + total) % total;
     const kind: SlideEntry["kind"] = isCtaPos(realIndex) ? "cta" : "item";
     renderEntries.push({ key: `slide-${virtual}`, offset, kind, realIndex });
@@ -147,17 +214,34 @@ export const CampaignsScroll = () => {
     const s = sectionRef.current;
     if (!s || typeof window === "undefined") return;
     const clamped = clampSlide(index, totalSlides);
-    const sectionTop = s.getBoundingClientRect().top + window.scrollY;
-    const top = scrollTopForSlide(sectionTop, getScrollRange(), clamped, totalSlides);
-    window.scrollTo({ top, behavior });
+
+    // Lock onScroll listener during programmatic navigation
+    isProgrammaticScrollRef.current = true;
+    if (programmaticTimerRef.current) window.clearTimeout(programmaticTimerRef.current);
+    programmaticTimerRef.current = window.setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, 800);
+
+    setActiveIndex(clamped);
+    activeIndexRef.current = clamped;
+
+    const scrollRange = Math.max(1, s.offsetHeight - window.innerHeight);
+    const docTop = s.getBoundingClientRect().top + window.scrollY;
+    // Scroll directly to the midpoint of the slide's active zone
+    const targetProgress = (clamped + 0.5) / totalSlides;
+    const top = docTop + scrollRange * Math.min(1, targetProgress);
+    try {
+      window.scrollTo({ top, behavior });
+    } catch { }
+
     if (focus) requestAnimationFrame(() => cardRefs.current[clamped]?.focus({ preventScroll: true }));
-  }, [getScrollRange, totalSlides]);
+  }, [totalSlides]);
 
   const getCurrentSlide = useCallback(() => {
     const s = sectionRef.current;
     if (!s || typeof window === "undefined") return 0;
     const progress = Math.max(0, Math.min(1, (window.scrollY - s.offsetTop) / getScrollRange()));
-    return Math.round(progress * (totalSlides - 1));
+    return Math.min(totalSlides - 1, Math.floor(progress * totalSlides));
   }, [getScrollRange, totalSlides]);
 
   // ── Section-level view tracking only. We don't track per-card views
@@ -222,104 +306,190 @@ export const CampaignsScroll = () => {
     swipeRef.current = null;
   }, []);
 
+  /** Smoothly scrolls past the pinned section — used by the Skip button. */
+  const handleSkip = useCallback(() => {
+    const s = sectionRef.current;
+    if (!s || typeof window === "undefined") return;
+    const bottom = s.getBoundingClientRect().bottom + window.scrollY;
+    window.scrollTo({ top: bottom + 8, behavior: "smooth" });
+  }, []);
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const showSkipButton = enableScrollTrigger && settings.showSkipButton !== false;
+
+  if (!mounted) {
+    return (
+      <section id="campaigns" className="relative z-0 isolate bg-background py-16 px-4" dir={isRTL ? "rtl" : "ltr"}>
+        <div className="container mx-auto flex flex-col items-center text-center">
+          <div className="h-6 w-32 rounded-full bg-primary/10 animate-pulse mb-3" />
+          <div className="h-9 w-64 sm:w-96 rounded-xl bg-primary/15 animate-pulse mb-2" />
+          <div className="h-4 w-48 sm:w-72 rounded bg-muted animate-pulse mb-10" />
+
+          {/* 3 stacked skeleton cards matching coverflow 3D perspective */}
+          <div className="relative flex h-[480px] w-full max-w-4xl items-center justify-center">
+            {/* Left Card */}
+            <div className="hidden sm:block absolute start-12 h-[420px] w-[260px] rounded-3xl bg-slate-800/40 border border-white/5 animate-pulse scale-90 -rotate-6 opacity-40" />
+            {/* Center Card */}
+            <div className="relative z-10 h-[480px] w-[300px] sm:w-[350px] rounded-3xl bg-slate-800/80 border border-white/10 animate-pulse p-5 flex flex-col justify-end shadow-2xl">
+              <div className="absolute top-4 start-4 h-6 w-16 rounded-full bg-white/15" />
+              <div className="absolute top-4 end-4 h-6 w-20 rounded-full bg-orange-500/30" />
+              <div className="space-y-2.5">
+                <div className="h-6 w-3/4 rounded-lg bg-white/20" />
+                <div className="h-4 w-full rounded-md bg-white/10" />
+                <div className="h-4 w-2/3 rounded-md bg-white/10" />
+                <div className="pt-2 flex items-center justify-between border-t border-white/10">
+                  <div className="h-4 w-20 rounded bg-white/20" />
+                  <div className="h-9 w-24 rounded-xl bg-orange-500/40" />
+                </div>
+              </div>
+            </div>
+            {/* Right Card */}
+            <div className="hidden sm:block absolute end-12 h-[420px] w-[260px] rounded-3xl bg-slate-800/40 border border-white/5 animate-pulse scale-90 rotate-6 opacity-40" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   if (!settings.enabled || items.length === 0) return null;
 
   return (
     <section
       id="campaigns"
-      className="relative z-0 isolate bg-background"
+      className="relative z-0 isolate bg-background [overflow-x:clip]"
       dir={isRTL ? "rtl" : "ltr"}
-      style={{ overflowX: "clip" }}
     >
       {/* Background is a flat surface — the heavy SVG pattern was the main
           cause of jank on mobile while the coverflow scrolled. */}
-      {reduce ? (
-        // Reduced-motion fallback: static grid / native horizontal browsing.
-        <div className="container mx-auto px-4 py-14 md:py-20">
-          <Header isRTL={isRTL} title={headerTitle} subtitle={headerSubtitle} />
-          <div className="no-scrollbar mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-3 [touch-action:pan-x_pinch-zoom] md:grid md:grid-cols-2 md:overflow-visible lg:grid-cols-3 xl:grid-cols-4">
-            {items.map((p, i) => (
-              <div key={p.slug} className="w-[86vw] max-w-[390px] shrink-0 snap-center md:w-auto md:max-w-none">
-                <CampaignCard p={p} i={i} total={items.length}
-                  lang={lang} isRTL={isRTL} Arrow={Arrow}
-                  className="min-h-[440px]"
-                  ariaPos={i + 1} ariaSize={totalSlides} />
-              </div>
-            ))}
-            {showFinalCta && (
-              <div className="w-[86vw] max-w-[390px] shrink-0 snap-center md:w-auto md:max-w-none">
-                <FinalCTACard isRTL={isRTL} className="min-h-[440px]"
-                  ariaPos={totalSlides} ariaSize={totalSlides} />
-              </div>
-            )}
-          </div>
-        </div>
+      {reduce || !enableScrollTrigger ? (
+        // ── Autoplay carousel (reduce-motion OR ScrollTrigger disabled) ──
+        <AutoplayCampaigns
+          items={items}
+          showFinalCta={showFinalCta}
+          totalSlides={totalSlides}
+          isRTL={isRTL}
+          lang={lang}
+          Arrow={Arrow}
+          headerTitle={headerTitle}
+          headerSubtitle={headerSubtitle}
+          isNarrow={isNarrow}
+          spacing={spacing}
+          scrollSpeed={settings.scrollSpeed}
+        />
       ) : (
         <div ref={sectionRef} className="relative" style={{ height: `${heightVh}vh` }}>
-          <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden pt-20 pb-6 sm:pt-24 sm:pb-8">
-            <div className="container mx-auto shrink-0 px-4">
+          <div className="sticky top-0 flex h-[100svh] max-h-[100svh] flex-col items-center justify-center overflow-visible pt-20 pb-0 sm:pt-20 sm:pb-2 md:pt-24 md:pb-4 px-2 sm:px-4 lg:px-8">
+            {/* Unified vertical group — balanced spacing between Header, Cards, and Indicator */}
+            <div className="flex flex-col items-center justify-center gap-1.5 sm:gap-2.5 w-full max-w-7xl px-2 sm:px-4 lg:px-8 shrink-0 my-auto">
               <Header isRTL={isRTL} title={headerTitle} subtitle={headerSubtitle} />
-            </div>
-            <div
-              className="relative mt-4 flex flex-1 min-h-0 items-center justify-center px-4 sm:mt-6"
-              role="region"
-              aria-roledescription={isRTL ? "بطاقات حملات متراكمة" : "stacked campaign cards"}
-              aria-label={isRTL ? "بطاقات اليسر — مرّر عموديًا أو استخدم الأسهم للتنقل" : "Al-Yusr cards — scroll vertically or use arrows to navigate"}
-              tabIndex={0}
-              onKeyDown={handleKeyDown}
-              onPointerDown={handlePointerDown}
-              onPointerUp={handlePointerUp}
-              onPointerCancel={handlePointerCancel}
-              onLostPointerCapture={handlePointerCancel}
-              style={{ touchAction: "pan-y pinch-zoom", overscrollBehaviorX: "none" }}
-            >
-              {renderEntries.map((entry) => {
-                // Only the "real" copy (offset matches its in-range position)
-                // owns the focus ref so keyboard nav stays predictable.
-                const isRealCopy = entry.offset === entry.realIndex - activeIndex;
-                const refCallback = (node: HTMLElement | null) => {
-                  if (isRealCopy) cardRefs.current[entry.realIndex] = node;
-                };
-                if (entry.kind === "cta") {
+
+              <div
+                className="relative flex h-[clamp(395px,57svh,500px)] sm:h-[clamp(450px,61svh,560px)] md:h-[clamp(480px,64svh,620px)] w-full items-center justify-center shrink-0 overflow-visible"
+                role="region"
+                aria-roledescription={isRTL ? "بطاقات حملات متراكمة" : "stacked campaign cards"}
+                aria-label={isRTL ? "بطاقات اليسر — مرّر عموديًا أو استخدم الأسهم للتنقل" : "Al-Yusr cards — scroll vertically or use arrows to navigate"}
+                tabIndex={0}
+                onKeyDown={handleKeyDown}
+                onPointerDown={handlePointerDown}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerCancel}
+                onLostPointerCapture={handlePointerCancel}
+                style={{ touchAction: "pan-y pinch-zoom", overscrollBehaviorX: "none" }}
+              >
+                {renderEntries.map((entry) => {
+                  // Only the "real" copy (offset matches its in-range position)
+                  // owns the focus ref so keyboard nav stays predictable.
+                  const isRealCopy = entry.offset === entry.realIndex - activeIndex;
+                  const refCallback = (node: HTMLElement | null) => {
+                    if (isRealCopy) cardRefs.current[entry.realIndex] = node;
+                  };
+                  if (entry.kind === "cta") {
+                    return (
+                      <CoverflowSlide
+                        key={entry.key}
+                        offset={entry.offset}
+                        isRTL={isRTL}
+                        isNarrow={isNarrow}
+                        spacing={spacing}
+                        refCallback={refCallback}
+                      >
+                      <FinalCTACard isRTL={isRTL} className="h-full w-full"
+                          ariaPos={totalSlides} ariaSize={totalSlides} />
+                      </CoverflowSlide>
+                    );
+                  }
+                  const p = items[entry.realIndex];
+                  if (!p) return null;
                   return (
                     <CoverflowSlide
                       key={entry.key}
                       offset={entry.offset}
                       isRTL={isRTL}
                       isNarrow={isNarrow}
+                      spacing={spacing}
                       refCallback={refCallback}
                     >
-                      <FinalCTACard isRTL={isRTL} className="h-[clamp(380px,66svh,520px)] sm:h-full sm:max-h-[500px]"
-                        ariaPos={totalSlides} ariaSize={totalSlides} />
+                      <CampaignCard p={p} i={entry.realIndex} total={items.length}
+                        lang={lang} isRTL={isRTL} Arrow={Arrow}
+                        className="h-full w-full"
+                        ariaPos={entry.realIndex + 1} ariaSize={totalSlides} />
                     </CoverflowSlide>
                   );
-                }
-                const p = items[entry.realIndex];
-                if (!p) return null;
-                return (
-                  <CoverflowSlide
-                    key={entry.key}
-                    offset={entry.offset}
-                    isRTL={isRTL}
-                    isNarrow={isNarrow}
-                    refCallback={refCallback}
-                  >
-                    <CampaignCard p={p} i={entry.realIndex} total={items.length}
-                      lang={lang} isRTL={isRTL} Arrow={Arrow}
-                      className="h-[clamp(380px,66svh,520px)] sm:h-full sm:max-h-[500px]"
-                      ariaPos={entry.realIndex + 1} ariaSize={totalSlides} />
-                  </CoverflowSlide>
-                );
-              })}
+                })}
+
+                {/* Prev / Next navigation arrow buttons — positioned to frame the 7xl container edges */}
+                <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 z-[120] mx-auto w-full max-w-7xl px-2 sm:px-4 lg:px-6">
+                  <div className="relative flex w-full items-center justify-between" dir="ltr">
+                    {/* Physical Left Button: in RTL goes to Next slide, in LTR goes to Prev slide */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const target = isRTL ? (activeIndex + 1) % totalSlides : (activeIndex - 1 + totalSlides) % totalSlides;
+                        scrollToSlide(target);
+                      }}
+                      aria-label={isRTL ? "البطاقة التالية" : "Previous slide"}
+                      className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-2xl backdrop-blur-md transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
+                    >
+                      <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
+
+                    {/* Physical Right Button: in RTL goes to Prev slide, in LTR goes to Next slide */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const target = isRTL ? (activeIndex - 1 + totalSlides) % totalSlides : (activeIndex + 1) % totalSlides;
+                        scrollToSlide(target);
+                      }}
+                      aria-label={isRTL ? "البطاقة السابقة" : "Next slide"}
+                      className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-2xl backdrop-blur-md transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
+                    >
+                      <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Slide indicator + optional skip button — balanced spacing below card */}
+              <div className="mt-1.5 sm:mt-2.5 flex flex-col items-center">
+                <SlideIndicator
+                  totalSlides={totalSlides}
+                  activeIndex={activeIndex}
+                  isRTL={isRTL}
+                  isNarrow={isNarrow}
+                  onSelect={scrollToSlide}
+                  showSkipButton={showSkipButton}
+                  onSkip={handleSkip}
+                />
+              </div>
             </div>
-            {/* Slide indicator + subtle scroll hint */}
-            <SlideIndicator
-              totalSlides={totalSlides}
-              activeIndex={activeIndex}
-              isRTL={isRTL}
-              isNarrow={isNarrow}
-              onSelect={scrollToSlide}
-            />
           </div>
         </div>
       )}
@@ -328,66 +498,70 @@ export const CampaignsScroll = () => {
 };
 
 /* ── Coverflow slide ──────────────────────────────────────────────────
- * Cards only re-compute when the active slide changes, not on every scroll
- * tick. This keeps mobile scrolling light while preserving the coverflow feel.
+ * Plain div with CSS transitions (no motion.div subscription needed —
+ * offset is discrete, computed from scroll progress in increments).
+ * GPU composited transform only: translate3d + rotateY + scale.
+ * No flickering: backface-visibility:hidden + isolation + contain.
  */
 const CoverflowSlide = ({
   offset,
   isRTL,
   isNarrow,
+  spacing,
   refCallback,
   children,
 }: {
   offset: number;
   isRTL: boolean;
   isNarrow: boolean;
+  spacing: number;
   refCallback: (node: HTMLDivElement | null) => void;
   children: React.ReactNode;
 }) => {
   const reduce = useReducedMotion();
-  const dir = isRTL ? -1 : 1; // visual flow direction
-  // Lighter on mobile: no rotateY (avoids GPU layer + paint cost on phones),
-  // tighter spacing, gentler falloff. Desktop keeps the full coverflow.
-  const spacing = isNarrow ? 112 : 280;
-  const tiltDeg = isNarrow ? 0 : 32;
-  const scaleStep = isNarrow ? 0.04 : 0.08;
-  const minScale = isNarrow ? 0.9 : 0.82;
+  const dir = isRTL ? -1 : 1;
+  const scaleStep = isNarrow ? 0.08 : 0.10;
+  const minScale = isNarrow ? 0.86 : 0.82;
 
-  const sign = Math.sign(offset);
   const abs = Math.abs(offset);
-  const compressed = abs <= 1 ? abs : 1 + (abs - 1) * (isNarrow ? 0.42 : 0.72);
-  const x = sign * compressed * spacing * dir;
-  const scale = Math.max(minScale, 1 - Math.min(abs, 3) * scaleStep);
-  const clamped = Math.max(-2.2, Math.min(2.2, offset));
-  const eased = Math.sign(clamped) * Math.pow(Math.abs(clamped) / 2.2, 0.85) * 2.2;
-  const rotateY = -eased * tiltDeg * dir;
-  const opacity = abs >= 2.5 ? 0 : abs >= 1 ? 1 - (abs - 1) * 0.22 : 1;
-  const zIndex = 100 - Math.round(abs * 10);
+  const sign = Math.sign(offset);
+  const x = sign * abs * spacing * dir;
+  const scale = Math.max(minScale, 1 - abs * scaleStep);
+  const zIndex = abs === 0 ? 100 : Math.max(1, 80 - Math.round(abs) * 20);
 
-  // Smooth, frame-stable easing (cubic-bezier approximating ease-out-quint).
-  // Reduced-motion users get an instant snap with no transition.
+  // Pure 2D translateX + scale ONLY.
+  // rotateY was the root cause of white-corner artifacts: when border-radius
+  // rounded corners meet a 3D-rotated dark card, the GPU compositor exposes
+  // the light section background through the curved clipping path.
+  // Without rotateY, there is zero sub-pixel bleed at card corners.
+  //
+  // Opacity at comfortable levels — side cards stay readable, just slightly dimmer.
+  const dimOpacity = abs === 0 ? 1 : abs === 1 ? 0.88 : 0.74;
+
   const transitionStyle = reduce
     ? "none"
-    : `transform 400ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms ease-out`;
+    : `transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 280ms ease`;
 
   return (
-    <motion.div
+    <div
       ref={refCallback as never}
       tabIndex={-1}
       style={{
-        transform: `perspective(1200px) translate3d(${x.toFixed(2)}px,0,0) rotateY(${rotateY.toFixed(2)}deg) scale(${scale.toFixed(4)})`,
-        opacity,
         zIndex,
         pointerEvents: abs <= 1 ? "auto" : "none",
+        transform: `translateX(${x.toFixed(1)}px) scale(${scale.toFixed(3)})`,
+        opacity: dimOpacity,
         transition: transitionStyle,
+        // will-change:transform promotes to its own GPU layer.
+        // No perspective, no rotateY, no filter = zero white-seam artifacts.
       }}
-      className="absolute inset-y-0 left-0 right-0 mx-auto flex w-[84vw] max-w-[350px] items-center justify-center outline-none will-change-transform [contain:layout_paint_style] [transform-style:preserve-3d] [backface-visibility:hidden] sm:w-[440px] sm:max-w-[440px]"
-      aria-hidden={false}
+      className="absolute inset-y-0 left-0 right-0 mx-auto flex w-[84vw] max-w-[305px] items-center justify-center outline-none will-change-transform sm:w-[345px] sm:max-w-[345px] md:w-[372px] md:max-w-[372px] lg:w-[395px] lg:max-w-[395px] xl:w-[415px] xl:max-w-[415px] 2xl:w-[425px] 2xl:max-w-[425px]"
     >
       {children}
-    </motion.div>
+    </div>
   );
 };
+
 
 /* ── Compact slide indicator ───────────────────────────────────────────
  * On narrow screens with many slides (e.g. 14), rendering every dot is
@@ -400,12 +574,16 @@ const SlideIndicator = ({
   isRTL,
   isNarrow,
   onSelect,
+  showSkipButton = false,
+  onSkip,
 }: {
   totalSlides: number;
   activeIndex: number;
   isRTL: boolean;
   isNarrow: boolean;
   onSelect: (index: number) => void;
+  showSkipButton?: boolean;
+  onSkip?: () => void;
 }) => {
   const maxDots = isNarrow ? 7 : Math.min(totalSlides, 14);
   const useWindow = totalSlides > maxDots;
@@ -420,18 +598,18 @@ const SlideIndicator = ({
   for (let i = start; i < end; i++) visible.push(i);
 
   return (
-    <div className="container mx-auto mt-2 flex shrink-0 flex-col items-center gap-1 px-4 sm:mt-3 sm:gap-1.5">
+    <div className="flex shrink-0 flex-col items-center justify-center gap-1.5">
+      {/* Dots indicator — ABOVE the skip button */}
       <div
         role="tablist"
         aria-label={isRTL ? "مؤشر البطاقات" : "Slide indicator"}
-        className="flex items-center gap-1"
+        className="flex items-center gap-1.5"
         dir={isRTL ? "rtl" : "ltr"}
       >
         {visible.map((i) => {
           const isActive = i === activeIndex;
-          // Edge dots in the window shrink a bit so the strip feels softer
-          const isEdge = useWindow && (i === start || i === end - 1) && !isActive
-            && ((start > 0 && i === start) || (end < totalSlides && i === end - 1));
+          const isEdge = (useWindow && (i === start || i === end - 1) && !isActive
+            && ((start > 0 && i === start) || (end < totalSlides && i === end - 1)));
           return (
             <button
               key={i}
@@ -441,41 +619,385 @@ const SlideIndicator = ({
               aria-label={isRTL ? `الانتقال للبطاقة ${i + 1}` : `Go to slide ${i + 1}`}
               onClick={() => onSelect(i)}
               className={`rounded-full transition-all duration-300 ${isActive
-                ? "h-1.5 w-4 bg-primary sm:w-5"
+                ? "h-1.5 w-5 bg-primary sm:w-6"
                 : isEdge
                   ? "h-1 w-1 bg-primary/20 hover:bg-primary/40"
-                  : "h-1.5 w-1.5 bg-primary/25 hover:bg-primary/45"
+                  : "h-1.5 w-1.5 bg-primary/30 hover:bg-primary/50"
                 }`}
             />
           );
         })}
       </div>
-      <p className="text-[10px] font-semibold text-muted-foreground/70 sm:text-[11.5px]">
-        <bdi>{activeIndex + 1}</bdi>
-        <span className="mx-0.5 opacity-60">/</span>
-        <bdi>{totalSlides}</bdi>
 
-      </p>
+      {/* Skip button — compact directly below navigation dots */}
+      {showSkipButton && onSkip && (
+        <button
+          type="button"
+          onClick={onSkip}
+          aria-label={isRTL ? "تخطي قسم الحملات" : "Skip campaigns section"}
+          className="group flex items-center gap-1.5 rounded-full !bg-[#a3e635] hover:!bg-[#bbf451] px-4 py-1 text-[11px] sm:text-xs font-black !text-[#062c19] shadow-cta ring-1 ring-black/10 transition-all duration-200 active:scale-95 cursor-pointer"
+        >
+          <span>{isRTL ? "تخطي" : "Skip"}</span>
+          <ChevronDown className="h-3.5 w-3.5 !text-[#062c19] transition-transform duration-300 group-hover:translate-y-0.5" />
+        </button>
+      )}
     </div>
   );
 };
 
 const Header = ({ isRTL, title, subtitle }: { isRTL: boolean; title?: string; subtitle?: string }) => (
-  <header className="mx-auto max-w-3xl px-1 text-center">
-    <h2 className="text-[26px] font-black leading-[1.15] text-primary sm:text-3xl md:text-4xl lg:text-5xl">
+  <header className="mx-auto w-full px-2 text-center shrink-0">
+    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black leading-tight text-primary">
       <span className="hand-underline">
         {title ?? (isRTL ? "حملات تصنع الأثر" : "Campaigns that make impact")}
       </span>
     </h2>
-    <p className="mx-auto mt-2.5 max-w-[40ch] text-[13px] font-medium leading-relaxed text-muted-foreground/90 sm:mt-3.5 sm:max-w-[54ch] sm:text-[15px] sm:leading-7">
+    <p className="mx-auto mt-0.5 sm:mt-1 max-w-[50ch] text-[11px] sm:text-xs md:text-sm font-semibold leading-relaxed text-muted-foreground">
       {subtitle ?? (isRTL
-        ? "اختار حملة قريبة من قلبك… وخلي خيرك يوصل بهدوء."
-        : "Pick a cause close to your heart — let your kindness arrive quietly.")}
+        ? "مرّر بهدوء، كل بطاقة قصة أثر حقيقية."
+        : "Scroll gently, every card is a story of real impact.")}
     </p>
   </header>
 );
 
 export default CampaignsScroll;
+
+/* ── Autoplay Coverflow Carousel ───────────────────────────────────────
+ * Renders when ScrollTrigger is disabled or reduced-motion is active.
+ * Uses the exact same 3D Coverflow perspective fan layout (CoverflowSlide)
+ * as the pinned mode, but without any scroll-jacking / pinned trigger.
+ * Features auto-advance timer, pause-on-hover, prev/next arrows,
+ * touch swipe, keyboard navigation, and the compact slide indicator.
+ */
+const AutoplayCampaigns = ({
+  items,
+  showFinalCta,
+  totalSlides,
+  isRTL,
+  lang,
+  Arrow,
+  headerTitle,
+  headerSubtitle,
+  isNarrow,
+  spacing,
+  scrollSpeed,
+}: {
+  items: ReturnType<typeof getVisibleCampaignPrograms>;
+  showFinalCta: boolean;
+  totalSlides: number;
+  isRTL: boolean;
+  lang: "ar" | "en";
+  Arrow: typeof ArrowLeft;
+  headerTitle: string;
+  headerSubtitle: string;
+  isNarrow: boolean;
+  spacing: number;
+  scrollSpeed: number;
+}) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const pausedRef = useRef(false);
+  const cardRefs = useRef<(HTMLElement | null)[]>([]);
+  const swipeRef = useRef<{ x: number; y: number; pointerId: number } | null>(null);
+
+  // Interval in ms: baseline 3800ms
+  const intervalMs = Math.round(3800 + (scrollSpeed - 2) * 200);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (!pausedRef.current) {
+        setActiveIndex((prev) => (prev + 1) % totalSlides);
+      }
+    }, intervalMs);
+    return () => clearInterval(timer);
+  }, [totalSlides, intervalMs]);
+
+  const go = useCallback((next: number) => {
+    setActiveIndex(((next % totalSlides) + totalSlides) % totalSlides);
+  }, [totalSlides]);
+
+  const prev = () => go(activeIndex - 1);
+  const next = () => go(activeIndex + 1);
+
+  // Build the list of slides to render using the same coverflow wrap-around technique
+  // On desktop show 5 cards (radius 2), on mobile 3 (radius 1)
+  const renderRadius = isNarrow ? 1 : 2;
+  type SlideEntry = { key: string; offset: number; kind: "item" | "cta"; realIndex: number };
+  const renderEntries: SlideEntry[] = [];
+  const ctaIndex = items.length;
+  const isCtaPos = (pos: number) => showFinalCta && pos === ctaIndex;
+
+  for (let virtual = activeIndex - renderRadius - 1; virtual <= activeIndex + renderRadius + 1; virtual++) {
+    const offset = virtual - activeIndex;
+    if (Math.abs(offset) > renderRadius) continue;
+    const realIndex = ((virtual % totalSlides) + totalSlides) % totalSlides;
+    const kind: SlideEntry["kind"] = isCtaPos(realIndex) ? "cta" : "item";
+    renderEntries.push({ key: `auto-${virtual}`, offset, kind, realIndex });
+  }
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    const target = event.target as HTMLElement;
+    if (target.closest("a,button,input,textarea,select")) return;
+    swipeRef.current = {
+      x: event.clientX,
+      y: event.clientY,
+      pointerId: event.pointerId,
+    };
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!swipeRef.current || swipeRef.current.pointerId !== event.pointerId) return;
+    const dx = event.clientX - swipeRef.current.x;
+    const dy = event.clientY - swipeRef.current.y;
+    swipeRef.current = null;
+    if (Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) {
+        // Drag left: in RTL (reading right to left) or LTR, drag left pulls in the next cards
+        go(isRTL ? activeIndex + 1 : activeIndex + 1);
+      } else {
+        // Drag right: pulls in previous cards
+        go(isRTL ? activeIndex - 1 : activeIndex - 1);
+      }
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      go(isRTL ? activeIndex - 1 : activeIndex + 1);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      go(isRTL ? activeIndex + 1 : activeIndex - 1);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      go(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      go(totalSlides - 1);
+    }
+  };
+
+  return (
+    <div
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-visible pt-20 pb-0 sm:pt-20 sm:pb-2 md:pt-24 md:pb-4 px-2 sm:px-4 lg:px-8"
+      dir={isRTL ? "rtl" : "ltr"}
+      onMouseEnter={() => { pausedRef.current = true; }}
+      onMouseLeave={() => { pausedRef.current = false; }}
+      onFocus={() => { pausedRef.current = true; }}
+      onBlur={() => { pausedRef.current = false; }}
+    >
+      <div className="flex flex-col items-center justify-center gap-1.5 sm:gap-2.5 w-full max-w-7xl px-2 sm:px-4 lg:px-8 shrink-0 my-auto">
+        <Header isRTL={isRTL} title={headerTitle} subtitle={headerSubtitle} />
+
+        <div
+          className="relative flex h-[clamp(395px,57svh,500px)] sm:h-[clamp(450px,61svh,560px)] md:h-[clamp(480px,64svh,620px)] w-full items-center justify-center shrink-0 overflow-visible"
+          role="region"
+          aria-roledescription={isRTL ? "بطاقات حملات متراكمة" : "stacked campaign cards"}
+          aria-label={isRTL ? "بطاقات اليسر — استخدم الأسهم للتنقل" : "Al-Yusr cards — use arrows to navigate"}
+          tabIndex={0}
+          onKeyDown={handleKeyDown}
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={() => { swipeRef.current = null; }}
+          style={{ touchAction: "pan-y pinch-zoom", overscrollBehaviorX: "none" }}
+        >
+          {/* Navigation buttons — positioned to frame the 7xl container edges */}
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 z-[120] mx-auto w-full max-w-7xl px-2 sm:px-4 lg:px-6">
+            <div className="relative flex w-full items-center justify-between" dir="ltr">
+              {/* Physical Left Navigation Button */}
+              <button
+                type="button"
+                onClick={isRTL ? next : prev}
+                aria-label={isRTL ? "البطاقة التالية" : "Previous slide"}
+                className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-2xl backdrop-blur-md transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
+              >
+                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+
+              {/* Physical Right Navigation Button */}
+              <button
+                type="button"
+                onClick={isRTL ? prev : next}
+                aria-label={isRTL ? "البطاقة السابقة" : "Next slide"}
+                className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-2xl backdrop-blur-md transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
+              >
+                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* Coverflow Slides */}
+          {renderEntries.map((entry) => {
+            const isRealCopy = entry.offset === entry.realIndex - activeIndex;
+            const refCallback = (node: HTMLElement | null) => {
+              if (isRealCopy) cardRefs.current[entry.realIndex] = node;
+            };
+            if (entry.kind === "cta") {
+              return (
+                <CoverflowSlide
+                  key={entry.key}
+                  offset={entry.offset}
+                  isRTL={isRTL}
+                  isNarrow={isNarrow}
+                  spacing={spacing}
+                  refCallback={refCallback}
+                >
+                  <FinalCTACard
+                    isRTL={isRTL}
+                    className="h-full w-full"
+                    ariaPos={totalSlides}
+                    ariaSize={totalSlides}
+                  />
+                </CoverflowSlide>
+              );
+            }
+            const p = items[entry.realIndex];
+            if (!p) return null;
+            return (
+              <CoverflowSlide
+                key={entry.key}
+                offset={entry.offset}
+                isRTL={isRTL}
+                isNarrow={isNarrow}
+                spacing={spacing}
+                refCallback={refCallback}
+              >
+                <CampaignCard
+                  p={p}
+                  i={entry.realIndex}
+                  total={items.length}
+                  lang={lang}
+                  isRTL={isRTL}
+                  Arrow={Arrow}
+                  className="h-full w-full"
+                  ariaPos={entry.realIndex + 1}
+                  ariaSize={totalSlides}
+                />
+              </CoverflowSlide>
+            );
+          })}
+        </div>
+
+
+        {/* Slide indicator dots with balanced spacing */}
+        <div className="mt-2.5 sm:mt-3 flex flex-col items-center">
+          <SlideIndicator
+            totalSlides={totalSlides}
+            activeIndex={activeIndex}
+            isRTL={isRTL}
+            isNarrow={isNarrow}
+            onSelect={go}
+            showSkipButton={false}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ── Card URL resolution helpers ─────────────────────────────────────────── */
+
+/** Slug→entity mapping for DONATION_ENTITIES that don't share the same id as the program slug */
+const SLUG_TO_ENTITY_ID: Record<string, string> = {
+  // programs.ts slug → donationEntities.ts id
+  odhya: "odhya",
+  zakat: "general",
+  meat: "monthly-meat",
+  box: "monthly-meat",
+  water: "water",
+  education: "athar",
+  bride: "ramadan",
+  shelter: "shelter",
+  orphans: "orphans",
+  health: "medical",
+  treatment: "medical",
+  prosthetics: "medical",
+  kitchen: "general",
+  markoun: "markoun",
+  ramadan: "ramadan",
+  // campaign slugs that come from backend
+  dhill: "dhill",
+  athar: "athar",
+  quran: "quran",
+  takrim: "takrim",
+  mosques: "mosques",
+  inqadh: "inqadh",
+  waqf: "waqf",
+  medical: "medical",
+  "monthly-sponsorship": "monthly-sponsorship",
+  "monthly-meat": "monthly-meat",
+};
+
+const detectSlugFromCard = (p: any): { slug: string; type: "program" | "campaign" | "project" } => {
+  const rawSlug = (p?.slug || p?.sourceId || "").replace(/^carousel-\d+$/, "").trim();
+  if (rawSlug && SLUG_TO_ENTITY_ID[rawSlug]) {
+    const ent = DONATION_ENTITIES.find(e => e.id === SLUG_TO_ENTITY_ID[rawSlug]);
+    return { slug: SLUG_TO_ENTITY_ID[rawSlug], type: (ent?.entityType as any) || (p?.sourceType || "program") };
+  }
+
+  // 1. Try extracting slug from detailsUrl (e.g. /programs/shelter or /campaigns/dhill)
+  const details = typeof p?.detailsUrl === "string" ? p.detailsUrl : "";
+  const pathMatch = details.match(/\/(programs|campaigns|projects)\/([a-zA-Z0-9_-]+)/);
+  if (pathMatch) {
+    const pathType = pathMatch[1] === "campaigns" ? "campaign" : pathMatch[1] === "projects" ? "project" : "program";
+    const pathSlug = pathMatch[2];
+    const mapped = SLUG_TO_ENTITY_ID[pathSlug] || pathSlug;
+    return { slug: mapped, type: (pathType as any) };
+  }
+
+  // 2. Keyword detection from Arabic title / tagline
+  const text = `${p?.name_ar || p?.title_ar || ""} ${p?.tagline_ar || p?.description_ar || ""}`.toLowerCase();
+  if (text.includes("ستر") || text.includes("تسقيف") || text.includes("إيواء")) return { slug: "shelter", type: "campaign" };
+  if (text.includes("مياه") || text.includes("سقيا") || text.includes("ماء")) return { slug: "water", type: "program" };
+  if (text.includes("أيتام") || text.includes("يتيم")) return { slug: "orphans", type: "program" };
+  if (text.includes("مركون")) return { slug: "markoun", type: "campaign" };
+  if (text.includes("ظل")) return { slug: "dhill", type: "campaign" };
+  if (text.includes("أثر") || text.includes("طالب علم") || text.includes("حقيبة")) return { slug: "athar", type: "campaign" };
+  if (text.includes("مسجد") || text.includes("مساجد") || text.includes("إعمار")) return { slug: "mosques", type: "program" };
+  if (text.includes("مزرعة") || text.includes("وقف")) return { slug: "waqf", type: "project" };
+  if (text.includes("طبي") || text.includes("مجمع") || text.includes("أطراف")) return { slug: "medical", type: "project" };
+  if (text.includes("أضحية") || text.includes("أضاحي") || text.includes("صك")) return { slug: "odhya", type: "campaign" };
+  if (text.includes("رمضان") || text.includes("صائم") || text.includes("إفطار")) return { slug: "ramadan", type: "campaign" };
+  if (text.includes("قرآن") || text.includes("تحفيظ")) return { slug: "quran", type: "program" };
+  if (text.includes("تكريم") || text.includes("موتى") || text.includes("جثمان")) return { slug: "takrim", type: "program" };
+  if (text.includes("إنقاذ") || text.includes("طوارئ") || text.includes("عاجلة")) return { slug: "inqadh", type: "program" };
+  if (text.includes("لحوم") || text.includes("ذبائح")) return { slug: "monthly-meat", type: "program" };
+  if (text.includes("كرتونة") || text.includes("غذاء شهري")) return { slug: "monthly-meat", type: "program" };
+  if (text.includes("كفالة شهرية") || text.includes("رعاية أسرية")) return { slug: "monthly-sponsorship", type: "program" };
+  if (text.includes("زكاة")) return { slug: "general", type: "program" };
+
+  return { slug: rawSlug || "general", type: "program" };
+};
+
+const getCardDonateUrl = (p: any): string => {
+  const custom = typeof p?.donateUrl === "string" ? p.donateUrl.trim() : "";
+  // If admin set a custom URL with query params or external link, preserve it
+  if (custom && custom !== "/donate" && custom !== "/donate/" && (custom.includes("?") || custom.startsWith("http"))) {
+    return custom;
+  }
+
+  const { slug, type } = detectSlugFromCard(p);
+  const paramKey = type === "campaign" ? "campaign" : type === "project" ? "project" : "program";
+  const base = `/donate?${paramKey}=${encodeURIComponent(slug)}`;
+  if (p?.priceFrom && Number(p.priceFrom) > 0) {
+    return `${base}&amount=${Number(p.priceFrom)}`;
+  }
+  return base;
+};
+
+const getCardDetailsUrl = (p: any): string => {
+  if (p.detailsUrl && typeof p.detailsUrl === "string" && p.detailsUrl.trim() && p.detailsUrl !== "/programs" && p.detailsUrl !== "/programs/") {
+    return p.detailsUrl;
+  }
+  const { slug, type } = detectSlugFromCard(p);
+  if (type === "campaign") {
+    return `/campaigns/${encodeURIComponent(slug)}`;
+  }
+  if (type === "project") {
+    return `/projects/${encodeURIComponent(slug)}`;
+  }
+  return `/programs/${encodeURIComponent(slug)}`;
+};
 
 /* ── Card component ───────────────────────────────────────────────────── */
 type CardProps = {
@@ -491,87 +1013,111 @@ type CardProps = {
   ariaSize?: number;
 };
 
-const CampaignCard = ({ p, i, total, lang, isRTL, Arrow, className = "", style, ariaPos, ariaSize }: CardProps) => (
-  <article
-    data-stack-card
-    data-campaign-card
-    dir={isRTL ? "rtl" : "ltr"}
-    style={style}
-    role={ariaPos ? "group" : undefined}
-    aria-roledescription={ariaPos ? (isRTL ? "شريحة" : "slide") : undefined}
-    aria-label={ariaPos && ariaSize ? `${ariaPos} / ${ariaSize}` : undefined}
-    className={`group relative flex flex-col overflow-hidden rounded-[1.5rem] border border-primary/10 bg-card shadow-[0_14px_36px_-22px_hsl(var(--primary)/0.35)] ring-1 ring-border/50 sm:rounded-[1.75rem] ${className}`}
-  >
-    {/* Image area */}
-    <div className="relative min-h-0 flex-1 overflow-hidden">
+const CampaignCard = ({ p, i, total, lang, isRTL, Arrow, className = "", style, ariaPos, ariaSize }: CardProps) => {
+  const resolvedPropImg = useMemo(() => {
+    if (!p.image || p.image.includes("example.com")) return p.image || "/og-ar.jpg";
+    return formatServerImageUrl(p.image) || p.image;
+  }, [p.image]);
+
+  const [imgSrc, setImgSrc] = useState(resolvedPropImg);
+  const [imgFailed, setImgFailed] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(resolvedPropImg);
+    setImgFailed(false);
+  }, [resolvedPropImg]);
+
+  // Fallback to verified local charity asset if external image fails
+  const handleImageError = () => {
+    if (!imgFailed) {
+      setImgFailed(true);
+      setImgSrc("/og-ar.jpg");
+    }
+  };
+
+  const name = p[lang]?.name || (p as any).name_ar || "";
+  const tagline = p[lang]?.tagline || (p as any).tagline_ar || "";
+
+  return (
+    <article
+      data-stack-card
+      data-campaign-card
+      dir={isRTL ? "rtl" : "ltr"}
+      style={style}
+      role={ariaPos ? "group" : undefined}
+      aria-roledescription={ariaPos ? (isRTL ? "شريحة" : "slide") : undefined}
+      aria-label={ariaPos && ariaSize ? `${ariaPos} / ${ariaSize}` : undefined}
+      className={`relative flex h-full w-full flex-col justify-end overflow-hidden rounded-[1.75rem] bg-slate-950 shadow-[0_0_0_1px_rgba(255,255,255,0.08)] ${className}`}
+    >
+      {/* Full-bleed background image — NO hover scale inside 3D context.
+          Scale transforms on children of rotateY parents cause subpixel
+          rendering artifacts (shimmering edges) on all GPU-composited layers. */}
       <img
         data-campaign-image
-        src={p.image}
-        alt={p[lang].name}
+        src={imgSrc || "/og-ar.jpg"}
+        alt={name}
         loading="lazy"
         decoding="async"
-        width={920}
-        height={1150}
-        className="h-full w-full object-cover"
+        onError={handleImageError}
+        className="absolute inset-0 h-full w-full object-cover object-center"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-transparent" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent" />
 
-      {/* Index chip — bdi keeps the digits/slash visually ordered in RTL */}
-      <span className="absolute start-3 top-3 inline-flex items-center gap-1 rounded-full bg-background/95 px-2.5 py-1 text-[10px] font-black text-primary ring-1 ring-primary/10">
-        <bdi>{String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</bdi>
-      </span>
+      {/* Cinematic dark gradient overlay from bottom to top for maximum text contrast */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/50 to-transparent" />
 
-      {/* Price chip */}
+      {/* Top price chip */}
       {p.priceFrom > 0 && (
-        <span className="absolute end-3 top-3 rounded-full bg-orange-grad px-3 py-1 text-[10.5px] font-black text-accent-foreground shadow-cta ring-1 ring-accent-foreground/15 sm:text-[11px]">
+        <span className="absolute end-3.5 top-3.5 z-10 rounded-full bg-orange-grad px-3.5 py-1 text-[11.5px] font-black text-white shadow-cta ring-1 ring-white/20">
           {isRTL ? `من ${p.priceFrom.toLocaleString("ar-EG")} ج` : `From ${p.priceFrom} EGP`}
         </span>
       )}
 
-      {/* Title block over image — consistent margins + line-height across breakpoints */}
-      <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1.5 p-4 text-primary-foreground sm:gap-2 sm:p-5">
+      {/* Content & Actions Block overlaid on the lower portion of the image */}
+      <div className="relative z-10 flex flex-col gap-1.5 p-3.5 sm:p-4.5 pb-3 sm:pb-4">
         <h3
-          className="text-[16px] font-black leading-[1.3] tracking-tight [text-wrap:balance] line-clamp-2 sm:text-[22px] sm:leading-[1.25]"
-          style={{ textShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
+          className="text-[13.5px] sm:text-[15.5px] md:text-[16.5px] font-black leading-[1.35] tracking-tight text-white [text-wrap:balance] line-clamp-2 pb-0.5"
+          style={{ textShadow: "0 2px 14px rgba(0,0,0,0.8)" }}
         >
-          {p[lang].name}
+          {name}
         </h3>
-        <p className="text-[11.5px] font-semibold leading-[1.55] text-primary-foreground/90 line-clamp-2 sm:text-[13px] sm:leading-[1.55]">
-          {p[lang].tagline}
-        </p>
-      </div>
-    </div>
 
-    {/* Footer / CTAs */}
-    <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border/60 bg-card px-4 py-3 sm:p-4">
-      <Link
-        to={`/programs/${p.slug}`}
-        onClick={() => recordCampaignClick(p.slug, "details_click")}
-        className="inline-flex items-center gap-1 text-[11.5px] font-extrabold text-primary transition-colors hover:text-accent sm:text-sm"
-      >
-        {isRTL ? "تفاصيل البرنامج" : "Program details"}
-        <Arrow className="h-3.5 w-3.5" />
-      </Link>
-      {p.priceFrom > 0 ? (
-        <Button
-          asChild
-          size="sm"
-          className="h-9 bg-orange-grad px-3.5 text-[11.5px] font-extrabold text-accent-foreground shadow-cta hover:opacity-95 sm:h-10 sm:px-4 sm:text-sm"
-        >
-          <Link to={`/donate?program=${p.slug}`} onClick={() => recordCampaignClick(p.slug, "donate_click")}>
-            <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            {isRTL ? "تبرع الآن" : "Donate"}
+        <p className="text-[10.5px] sm:text-[11.5px] md:text-[12px] font-medium leading-[1.6] text-white/95 line-clamp-2 pb-1">
+          {tagline}
+        </p>
+
+        {/* Action buttons directly on the dark gradient */}
+        <div className="mt-1 flex items-center justify-between gap-2 border-t border-white/20 pt-2.5">
+          <Link
+            to={getCardDetailsUrl(p)}
+            onClick={() => recordCampaignClick(p.slug, "details_click")}
+            className="inline-flex items-center gap-1 py-1 text-[11px] font-extrabold text-white/95 transition-all hover:text-white hover:underline sm:text-[12px]"
+          >
+            {isRTL ? "تفاصيل البرنامج" : "Program details"}
+            <Arrow className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>
-        </Button>
-      ) : (
-        <Button asChild size="sm" variant="outline" className="h-9 px-3.5 text-[11.5px] sm:h-10 sm:px-4 sm:text-sm">
-          <Link to="/register/volunteer" onClick={() => recordCampaignClick(p.slug, "details_click")}>{isRTL ? "تطوع معنا" : "Volunteer"}</Link>
-        </Button>
-      )}
-    </div>
-  </article>
-);
+
+          {p.priceFrom > 0 ? (
+            <Button
+              asChild
+              size="sm"
+              className="h-8 sm:h-8.5 rounded-xl bg-orange-grad px-3.5 sm:px-4 py-1 text-[11px] sm:text-[12px] font-black text-white shadow-cta hover:opacity-95 transition-all"
+            >
+              <Link to={getCardDonateUrl(p)} onClick={() => recordCampaignClick(p.slug, "donate_click")}>
+                <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                {isRTL ? "تبرع الآن" : "Donate"}
+              </Link>
+            </Button>
+          ) : (
+            <Button asChild size="sm" variant="outline" className="h-8 sm:h-8.5 rounded-xl border-white/25 bg-white/10 px-3.5 sm:px-4 py-1 text-[11px] sm:text-[12px] font-bold text-white hover:bg-white/20 transition-all">
+              <Link to="/register/volunteer" onClick={() => recordCampaignClick(p.slug, "details_click")}>{isRTL ? "تطوع معنا" : "Volunteer"}</Link>
+            </Button>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+};
 
 /* ── Final CTA card ───────────────────────────────────────────────────── */
 const FinalCTACard = ({
@@ -595,9 +1141,12 @@ const FinalCTACard = ({
     role={ariaPos ? "group" : undefined}
     aria-roledescription={ariaPos ? (isRTL ? "شريحة" : "slide") : undefined}
     aria-label={ariaPos && ariaSize ? `${ariaPos} / ${ariaSize}` : undefined}
-    className={`relative flex flex-col overflow-hidden rounded-[1.75rem] bg-primary text-primary-foreground shadow-card ring-1 ring-secondary/40 will-change-transform [transform-style:preserve-3d] ${className}`}
+    className={`relative flex h-full w-full flex-col overflow-hidden rounded-[1.75rem] bg-primary text-primary-foreground ring-1 ring-secondary/40 ${className}`}
   >
-    {/* Decorative hourglass background */}
+    {/* Decorative hourglass background.
+        mix-blend-screen removed — blend modes on composited GPU layers cause
+        the browser to fall back to software compositing which produces
+        white rectangular flashes when the parent rotateY changes. */}
     <img
       src={ctaHourglass}
       alt=""
@@ -606,7 +1155,7 @@ const FinalCTACard = ({
       decoding="async"
       width={1280}
       height={800}
-      className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50 mix-blend-screen"
+      className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-35"
     />
     <div
       aria-hidden
@@ -622,26 +1171,26 @@ const FinalCTACard = ({
     />
 
     {/* Content */}
-    <div className="relative flex flex-1 flex-col items-center justify-center p-7 text-center sm:p-8">
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary/40 bg-primary-foreground/5 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-secondary">
-        <Sparkles className="h-3 w-3" />
+    <div className="relative flex flex-1 flex-col items-center justify-center p-4 sm:p-5 text-center">
+      <span className="inline-flex items-center gap-1 rounded-full border border-secondary/40 bg-primary-foreground/5 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-secondary">
+        <Sparkles className="h-2.5 w-2.5" />
         {isRTL ? "ابدأ رحلتك" : "Start your journey"}
       </span>
 
-      <h3 className="mt-4 text-2xl font-black leading-[1.2] sm:text-[1.75rem]">
+      <h3 className="mt-2.5 text-xl font-black leading-[1.2] sm:text-2xl">
         {isRTL ? "تبرعك النهارده يصنع الفرق" : "Your gift today makes a difference"}
       </h3>
-      <p className="mt-2.5 max-w-[28ch] text-sm font-semibold text-primary-foreground/85 sm:text-base">
+      <p className="mt-1.5 max-w-[28ch] text-xs font-semibold text-primary-foreground/85 sm:text-sm">
         {isRTL
           ? "اختر حملتك وابدأ أثرك مع اليسر — سريع، آمن، وموثّق."
           : "Pick your campaign and start your impact — fast, secure, documented."}
       </p>
 
-      <div className="mt-5 flex w-full max-w-sm flex-row flex-nowrap items-stretch justify-center gap-2">
+      <div className="mt-3 flex w-full max-w-xs flex-row flex-nowrap items-stretch justify-center gap-2">
         <Button
           asChild
           size="sm"
-          className="h-11 flex-1 min-w-0 bg-orange-grad px-3 text-[12px] font-extrabold text-accent-foreground shadow-cta hover:opacity-95 sm:text-sm"
+          className="h-9 sm:h-10 flex-1 min-w-0 bg-orange-grad px-3 text-[11px] sm:text-xs font-extrabold text-accent-foreground shadow-cta hover:opacity-95"
         >
           <Link to="/donate" onClick={() => recordCampaignClick("__cta__", "donate_click")}>
             <Heart className="h-4 w-4" />
@@ -652,7 +1201,7 @@ const FinalCTACard = ({
           asChild
           variant="outline"
           size="sm"
-          className="h-11 flex-1 min-w-0 border-secondary/50 bg-primary-foreground/5 px-3 text-[12px] font-extrabold text-primary-foreground hover:bg-secondary/15 sm:text-sm"
+          className="h-9 sm:h-10 flex-1 min-w-0 border-secondary/50 bg-primary-foreground/5 px-3 text-[11px] sm:text-xs font-extrabold text-primary-foreground hover:bg-secondary/15"
         >
           <Link to="/projects" onClick={() => recordCampaignClick("__cta__", "details_click")}>
             <HeartHandshake className="h-4 w-4" />
@@ -661,7 +1210,7 @@ const FinalCTACard = ({
         </Button>
       </div>
 
-      <p className="mt-4 text-[11px] font-bold text-primary-foreground/65">
+      <p className="mt-2.5 text-[10px] font-bold text-primary-foreground/65">
         {isRTL ? "دفع آمن • تأكيد فوري • إيصال رسمي" : "Secure payment • Instant confirmation • Official receipt"}
       </p>
     </div>

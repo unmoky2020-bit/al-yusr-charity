@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, Navigate, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { Calendar, Tag, Heart, ArrowLeft, ArrowRight, Eye, Share2, Twitter, Facebook, Link as LinkIcon, BookOpen, Check } from "lucide-react";
+import { Calendar, Tag, Heart, ArrowLeft, ArrowRight, Eye, Share2, Twitter, Facebook, Link as LinkIcon, BookOpen, Check, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
@@ -12,7 +12,7 @@ import { getPost } from "@/data/blog";
 import { useAllBlogPosts } from "@/data/useBlogPosts";
 import { fetchPostBySlug } from "@/data/blogApi";
 import type { BlogPost as BlogPostType } from "@/data/blog";
-import { linkifyBody } from "@/data/internalLinks";
+import { linkifyParagraph } from "@/data/internalLinks";
 import { TagsRail } from "@/components/common/TagsRail";
 
 const BlogPost = () => {
@@ -45,15 +45,66 @@ const BlogPost = () => {
   const heroJustify = lang === "ar" ? "justify-center md:justify-end" : "justify-center md:justify-start";
   const baseUrl = "https://elyusr.org";
   const url = `${baseUrl}/blog/${post.slug}`;
-  // Ensure any stray markdown link syntax like [text](url) is cleaned to text so raw brackets never render
-  const cleanedBody = c.body.map((p) =>
-    p.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, "$1")
-  );
-  // Inject up to 4 contextual internal links into the Arabic body for SEO.
-  const renderedBody = lang === "ar" ? linkifyBody(cleanedBody, 4) : cleanedBody.map((p) => [{ type: "text" as const, value: p }]);
+
+  // Parse structured body blocks: Headings, Related Links (grouped or single), Paragraphs with inline markdown
+  type RelatedLink = { title: string; href: string };
+  type BodyBlock =
+    | { type: "h2"; text: string }
+    | { type: "h3"; text: string }
+    | { type: "related_group"; items: RelatedLink[] }
+    | { type: "related_single"; item: RelatedLink }
+    | { type: "paragraph"; raw: string };
+
+  const parseRelatedLink = (text: string): RelatedLink | null => {
+    const trimmed = text.trim().replace(/^[-*•]\s*/, "");
+    const m = trimmed.match(
+      /^(?:(?:اقرأ|راجع|انظر)\s*(?:أيضًا|أيضا|أيضاً|كذلك|المزيد)?\s*[:—\-]?\s*|Read\s*also\s*[:—\-]?\s*|\(?المصدر\s*:\s*|\(?للمزيد\s*:\s*)?\[([^\]]+)\]\(([^)]+)\)\.?\)?$/i
+    );
+    if (m) {
+      return { title: m[1].trim(), href: m[2].trim() };
+    }
+    return null;
+  };
+
+  const blocks: BodyBlock[] = [];
+  let pendingRelated: RelatedLink[] = [];
+
+  const flushRelated = () => {
+    if (pendingRelated.length === 1) {
+      blocks.push({ type: "related_single", item: pendingRelated[0] });
+    } else if (pendingRelated.length > 1) {
+      blocks.push({ type: "related_group", items: [...pendingRelated] });
+    }
+    pendingRelated = [];
+  };
+
+  // Flatten and split by newlines so every line/paragraph is a discrete block
+  const lines = c.body
+    .flatMap((p) => (typeof p === "string" ? p.split(/\r?\n+/) : []))
+    .map((l) => l.trim())
+    .filter(Boolean);
+
+  for (const line of lines) {
+    const rel = parseRelatedLink(line);
+    if (rel) {
+      pendingRelated.push(rel);
+      continue;
+    }
+
+    flushRelated();
+
+    if (line.startsWith("## ")) {
+      blocks.push({ type: "h2", text: line.replace(/^##\s+/, "") });
+    } else if (line.startsWith("### ")) {
+      blocks.push({ type: "h3", text: line.replace(/^###\s+/, "") });
+    } else {
+      blocks.push({ type: "paragraph", raw: line });
+    }
+  }
+  flushRelated();
 
   // Word count is still useful for Article schema metadata and reading-time cues.
-  const wordCount = cleanedBody.reduce((acc, p) => acc + p.trim().split(/\s+/).filter(Boolean).length, 0);
+  const wordCount = c.body.reduce((acc, p) => acc + p.trim().split(/\s+/).filter(Boolean).length, 0);
   const readingMinutes = Math.max(1, Math.round(wordCount / 180));
 
   // Related posts: same category first, then any other posts, exclude current, max 3
@@ -162,8 +213,14 @@ const BlogPost = () => {
           <figure className="w-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border-4 border-background bg-card shadow-2xl ring-1 ring-black/5">
             <img
               decoding="async"
-              src={post.image}
+              src={post.image || "/placeholder.svg"}
               alt={c.title}
+              onError={(e) => {
+                const el = e.currentTarget as HTMLImageElement;
+                if (el.src !== "/placeholder.svg") {
+                  el.src = "/placeholder.svg";
+                }
+              }}
               className="aspect-[16/9] sm:aspect-[21/10] md:aspect-[16/8] lg:aspect-[21/9] w-full object-cover transition duration-500 hover:scale-[1.01]"
               loading="eager"
             />
@@ -220,19 +277,181 @@ const BlogPost = () => {
             </div>
           </div>
 
-          <div className="article-body space-y-6 text-[16.5px] leading-8 text-slate-900 sm:text-[18px] sm:leading-9 md:text-[19px] md:leading-[2.2] [&_a]:break-words">
-            {renderedBody.map((tokens, i) => (
-              <p key={i} className="font-normal text-slate-900">
-                {tokens.map((tok, j) =>
-                  tok.type === "link" ? (
-                    <Link key={j} to={tok.href} className="font-bold text-accent underline underline-offset-4 hover:text-primary">{tok.text}</Link>
-                  ) : (
-                    <span key={j}>{tok.value}</span>
-                  ),
-                )}
-              </p>
-            ))}
-          </div>
+          {(() => {
+            const usedAnchors = new Set<string>();
+            const renderInline = (text: string) => {
+              const regex = /(\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)]+)\))/g;
+              const elements: React.ReactNode[] = [];
+              let lastIndex = 0;
+              let match: RegExpExecArray | null;
+
+              while ((match = regex.exec(text)) !== null) {
+                if (match.index > lastIndex) {
+                  const before = text.slice(lastIndex, match.index);
+                  if (lang === "ar" && usedAnchors.size < 4) {
+                    const tokens = linkifyParagraph(before, usedAnchors, 1);
+                    tokens.forEach((t, idx) => {
+                      if (t.type === "link") {
+                        elements.push(
+                          <Link key={`kw-${match?.index}-${idx}`} to={t.href} className="font-bold text-accent underline underline-offset-4 hover:text-primary transition">
+                            {t.text}
+                          </Link>
+                        );
+                      } else {
+                        elements.push(<span key={`txt-${match?.index}-${idx}`}>{t.value}</span>);
+                      }
+                    });
+                  } else {
+                    elements.push(<span key={`txt-${match.index}`}>{before}</span>);
+                  }
+                }
+
+                if (match[2] !== undefined) {
+                  elements.push(
+                    <strong key={`b-${match.index}`} className="font-extrabold text-slate-900">
+                      {match[2]}
+                    </strong>
+                  );
+                } else if (match[3] !== undefined && match[4] !== undefined) {
+                  const linkText = match[3];
+                  const linkUrl = match[4];
+                  const isExternal = linkUrl.startsWith("http://") || linkUrl.startsWith("https://");
+                  if (isExternal) {
+                    elements.push(
+                      <a
+                        key={`a-${match.index}`}
+                        href={linkUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-bold text-accent underline underline-offset-4 hover:text-primary transition"
+                      >
+                        {linkText}
+                      </a>
+                    );
+                  } else {
+                    elements.push(
+                      <Link
+                        key={`link-${match.index}`}
+                        to={linkUrl}
+                        className="font-bold text-accent underline underline-offset-4 hover:text-primary transition"
+                      >
+                        {linkText}
+                      </Link>
+                    );
+                  }
+                }
+
+                lastIndex = regex.lastIndex;
+              }
+
+              if (lastIndex < text.length) {
+                const remaining = text.slice(lastIndex);
+                if (lang === "ar" && usedAnchors.size < 4) {
+                  const tokens = linkifyParagraph(remaining, usedAnchors, 1);
+                  tokens.forEach((t, idx) => {
+                    if (t.type === "link") {
+                      elements.push(
+                        <Link key={`kw-tail-${idx}`} to={t.href} className="font-bold text-accent underline underline-offset-4 hover:text-primary transition">
+                          {t.text}
+                        </Link>
+                      );
+                    } else {
+                      elements.push(<span key={`txt-tail-${idx}`}>{t.value}</span>);
+                    }
+                  });
+                } else {
+                  elements.push(<span key="txt-tail">{remaining}</span>);
+                }
+              }
+
+              return elements;
+            };
+
+            return (
+              <div className="article-body space-y-6 text-[16.5px] leading-8 text-slate-900 sm:text-[18px] sm:leading-9 md:text-[19px] md:leading-[2.2] [&_a]:break-words">
+                {blocks.map((block, i) => {
+                  if (block.type === "h2") {
+                    return (
+                      <h2 key={i} className="text-xl sm:text-2xl md:text-3xl font-black text-primary mt-9 mb-4 border-b border-border/60 pb-3 flex items-center gap-2.5">
+                        <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shrink-0" />
+                        <span>{block.text}</span>
+                      </h2>
+                    );
+                  }
+                  if (block.type === "h3") {
+                    return (
+                      <h3 key={i} className="text-lg sm:text-xl font-extrabold text-foreground mt-7 mb-3">
+                        {block.text}
+                      </h3>
+                    );
+                  }
+                  if (block.type === "related_group") {
+                    return (
+                      <div key={i} className="my-8 rounded-3xl border border-secondary/30 bg-gradient-to-br from-card via-card to-secondary/10 p-5 sm:p-7 shadow-soft">
+                        <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-border/60">
+                          <span className="grid h-9 w-9 place-items-center rounded-xl bg-secondary/20 text-primary">
+                            <BookOpen className="h-4.5 w-4.5" />
+                          </span>
+                          <div>
+                            <h4 className="font-black text-base sm:text-lg text-primary">
+                              {lang === "ar" ? "مقالات وروابط ذات صلة" : "Related Articles & Guides"}
+                            </h4>
+                            <p className="text-xs text-muted-foreground">
+                              {lang === "ar" ? "موضوعات وتقارير تكميلية ننصح بالاطلاع عليها" : "Recommended related reads and guides"}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {block.items.map((item, idx) => (
+                            <Link
+                              key={idx}
+                              to={item.href}
+                              className="flex items-center justify-between gap-3 p-3.5 rounded-xl border border-border/70 bg-background hover:bg-secondary/15 hover:border-secondary/40 transition group shadow-xs"
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <span className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
+                                <span className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-primary line-clamp-2 transition">
+                                  {item.title}
+                                </span>
+                              </div>
+                              <Arrow className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary shrink-0 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" />
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+                  if (block.type === "related_single") {
+                    return (
+                      <div key={i} className="my-6 rounded-2xl border border-secondary/30 bg-secondary/5 hover:bg-secondary/15 p-4 sm:p-5 transition-all shadow-xs group">
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-secondary/20 text-primary">
+                              <BookOpen className="h-4 w-4" />
+                            </span>
+                            <div className="min-w-0">
+                              <span className="text-[11px] font-bold text-accent uppercase tracking-wider block">
+                                {lang === "ar" ? "اقرأ أيضاً" : "Read also"}
+                              </span>
+                              <Link to={block.item.href} className="font-extrabold text-slate-900 group-hover:text-primary transition line-clamp-2 text-sm sm:text-base">
+                                {block.item.title}
+                              </Link>
+                            </div>
+                          </div>
+                          <Arrow className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" />
+                        </div>
+                      </div>
+                    );
+                  }
+                  return (
+                    <p key={i} className="font-normal text-slate-900 leading-8 sm:leading-9">
+                      {renderInline(block.raw)}
+                    </p>
+                  );
+                })}
+              </div>
+            );
+          })()}
 
           <TagsRail
             className="mt-8"

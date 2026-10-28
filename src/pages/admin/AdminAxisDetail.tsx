@@ -155,48 +155,38 @@ export const AdminAxisDetail: React.FC = () => {
     setAxis({ ...axis, statistics: stats });
   };
 
-  // Image Upload — upload file directly via updateWithFile (or fallback to galleryApi)
+  // Image Upload — upload file directly via axesApi.update with all axis fields
   const handleUploadImage = async (file: File) => {
     if (!file || !axis) return;
     setUploading(true);
     try {
-      if (axis.id && typeof axis.id === "number" && axis.id < 1000000) {
-        const updated = await axesApi.updateWithFile(axis.id, file);
-        if (updated && updated.image) {
-          setAxis((prev) => (prev ? { ...prev, image: updated.image } : prev));
-          toast.success(isRTL ? "تم حفظ الصورة في السيرفر بنجاح" : "Image saved to backend successfully");
-          return;
-        }
+      const updated = await axesApi.update(axis.id, axis, file);
+      if (updated) {
+        setAxis(updated);
+        toast.success(isRTL ? "تم حفظ ورفع صورة المحور في السيرفر بنجاح" : "Axis image saved to backend successfully");
+        return;
       }
-      const url = await galleryApi.uploadImage(file, `محور_${axis.slug}`);
-      if (url) {
-        setAxis((prev) => (prev ? { ...prev, image: url } : prev));
-        toast.success(isRTL ? "تم رفع الصورة بنجاح" : "Image uploaded successfully");
-      }
-    } catch {
-      toast.error(isRTL ? "تعذر رفع الصورة" : "Failed to upload image");
+    } catch (err: any) {
+      console.error("Axis image upload error:", err);
+      toast.error(err?.message || (isRTL ? "تعذر رفع صورة المحور على السيرفر" : "Failed to upload image"));
     } finally {
       setUploading(false);
     }
   };
 
-  // Save changes — API only, exclude `image` from JSON PUT body to avoid Laravel 422
+  // Save changes — save all axis fields to API
   const handleSave = async () => {
     if (!axis) return;
     setSaving(true);
     try {
-      if (axis.id && typeof axis.id === "number" && axis.id < 1000000) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { image: _img, ...axisWithoutImage } = axis;
-        const saved = await axesApi.update(axis.id, axisWithoutImage);
-        if (saved) {
-          setAxis((prev) => (prev ? { ...prev, ...saved, image: axis.image } : prev));
-        }
+      const saved = await axesApi.update(axis.id, axis);
+      if (saved) {
+        setAxis((prev) => (prev ? { ...prev, ...saved, image: saved.image || prev.image } : prev));
       }
-
       toast.success(isRTL ? `تم حفظ وتحديث بيانات محور "${axis.name_ar}" بنجاح في السيرفر` : "Axis updated successfully on server");
-    } catch {
-      toast.error(isRTL ? "حدث خطأ أثناء الحفظ على السيرفر" : "Save error");
+    } catch (err: any) {
+      console.error("Axis save error:", err);
+      toast.error(err?.message || (isRTL ? "حدث خطأ أثناء الحفظ على السيرفر" : "Save error"));
     } finally {
       setSaving(false);
     }

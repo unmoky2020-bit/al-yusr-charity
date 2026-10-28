@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { Phone, Mail, MapPin, Send, Building2, Clock, ShieldCheck, Heart, User, MessageSquare, ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Phone, Mail, MapPin, Send, Building2, Clock, ShieldCheck, Heart, User, MessageSquare, ChevronDown, ArrowLeft, ArrowRight, Copy, Check, Sparkles } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
@@ -12,7 +13,10 @@ import { toast } from "@/hooks/use-toast";
 import { track } from "@/lib/track";
 import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
-import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
+
+import { useQuery } from "@tanstack/react-query";
+import { fetchFaqs } from "@/data/faqsApi";
+import { LocalFAQ } from "@/components/common/LocalFAQ";
 
 /* ─── Inquiry options ─────────────────────────────────────────── */
 const INQUIRY_OPTIONS = [
@@ -111,6 +115,39 @@ const Contact = () => {
   const focused = useRef(false);
   const [hp, setHp] = useState("");
   const [refCode, setRefCode] = useState<string | null>(null);
+  const [copiedBank, setCopiedBank] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
+
+  const handleCopyBank = () => {
+    try {
+      navigator.clipboard.writeText("100043605733");
+      setCopiedBank(true);
+      toast({ title: isRTL ? "تم نسخ رقم الحساب البنكي (CIB)" : "CIB account number copied" });
+      setTimeout(() => setCopiedBank(false), 2000);
+    } catch {}
+  };
+
+  const handleCopyPhone = () => {
+    try {
+      navigator.clipboard.writeText("+201097000137");
+      setCopiedPhone(true);
+      toast({ title: isRTL ? "تم نسخ رقم الهاتف" : "Phone number copied" });
+      setTimeout(() => setCopiedPhone(false), 2000);
+    } catch {}
+  };
+
+  const { data: rawContactFaqs } = useQuery({
+    queryKey: ["faqs-contact"],
+    queryFn: () => fetchFaqs({ categorySlug: "contact" }),
+    staleTime: 60_000,
+  });
+
+  const contactFaqItems = (rawContactFaqs && rawContactFaqs.length > 0)
+    ? rawContactFaqs.map((f) => ({
+        q: isRTL ? f.question_ar : (f.question_en || f.question_ar),
+        a: isRTL ? f.answer_ar : (f.answer_en || f.answer_ar),
+      }))
+    : [];
 
   const schema = z.object({
     name: z.string().trim().min(2).max(100),
@@ -210,24 +247,21 @@ const Contact = () => {
               : "Whether you want to donate, suggest a case, volunteer, or confirm a delivery — our team is here daily 9am–6pm."}
           </p>
 
-          {/* Row 1: The two CTA buttons */}
+          {/* CTA buttons */}
           <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href="https://wa.me/201097000137"
-              target="_blank"
-              rel="noopener"
-              className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] px-6 py-2.5 text-xs font-black text-white shadow-lg transition hover:brightness-105"
-            >
-              <WhatsAppIcon className="h-4 w-4" />
-              {isRTL ? "واتساب مباشر" : "WhatsApp now"}
-            </a>
-
             <a
               href="tel:+201097000137"
               className="inline-flex items-center gap-1.5 rounded-full bg-orange-grad px-6 py-2.5 text-xs font-black text-accent-foreground shadow-cta transition hover:opacity-90"
             >
               <Phone className="h-4 w-4" />
               {isRTL ? "اتصل الآن" : "Call now"}
+            </a>
+            <a
+              href="mailto:info@elyosrcharity.com"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-6 py-2.5 text-xs font-black text-primary-foreground backdrop-blur transition hover:bg-white/20"
+            >
+              <Mail className="h-4 w-4" />
+              {isRTL ? "راسلنا بالإيميل" : "Email us"}
             </a>
           </div>
 
@@ -246,89 +280,215 @@ const Contact = () => {
         <div className="container relative mx-auto grid min-w-0 max-w-6xl gap-6 px-4 lg:grid-cols-2 lg:items-start">
 
           {/* ── Info column (Right in RTL) ───────────────────────── */}
-          <div className="flex min-w-0 flex-col gap-3.5">
+          <div className="flex min-w-0 flex-col gap-4">
             {/* Header card */}
-            <div className="rounded-3xl border border-border bg-card/95 p-5 shadow-soft">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div className="relative overflow-hidden rounded-3xl border border-border/70 bg-card p-6 shadow-card transition-all">
+              <div aria-hidden className="pointer-events-none absolute -start-10 -top-10 h-32 w-32 rounded-full bg-secondary/15 blur-2xl" />
+              <div className="relative flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <div className="text-[10px] font-black uppercase tracking-[0.26em] text-primary/60">{isRTL ? "معلومات سريعة" : "Quick info"}</div>
-                  <h2 className="mt-1 text-lg font-black text-foreground sm:text-xl">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-secondary animate-pulse" />
+                    <span className="text-[11px] font-black uppercase tracking-[0.22em] text-primary">
+                      {isRTL ? "معلومات سريعة ومباشرة" : "Quick contact info"}
+                    </span>
+                  </div>
+                  <h2 className="mt-1 text-xl font-black text-foreground sm:text-2xl">
                     {isRTL ? "كل تفاصيل الاتصال تحت إيدك" : "All contact details within reach"}
                   </h2>
                 </div>
-                <span className="inline-flex items-center self-start sm:self-auto rounded-full bg-secondary/10 px-3.5 py-1 text-[10.5px] font-black uppercase tracking-wider text-secondary ring-1 ring-secondary/25">
-                  {isRTL ? "خدمة مستمرة" : "Always available"}
+                <span className="inline-flex items-center self-start sm:self-auto rounded-full bg-secondary/15 px-3.5 py-1.5 text-[11px] font-black uppercase tracking-wider text-primary ring-1 ring-secondary/30 shadow-xs">
+                  {isRTL ? "متاحون 7 أيام" : "Available 7 Days"}
                 </span>
               </div>
-              <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-muted-foreground">
+              <p className="relative mt-2.5 text-xs sm:text-sm leading-relaxed text-muted-foreground">
                 {isRTL
-                  ? "من الإيميل والواتساب للمكالمات والزيارات الميدانية — فريقنا مستعد يتابع طلبك ويضمن وصول التبرعات بأسرع وأوضح شكل."
+                  ? "من الإيميل والواتساب للمكالمات والزيارات الميدانية — فريقنا مستعد يتابع طلبك ويضمن وصول التبرعات بأسرع وأوضح شكل وبكل أمانة."
                   : "From email and WhatsApp to calls and field visits — our team is ready to follow up your request and ensure donations arrive fastest and most transparently."}
               </p>
             </div>
 
-            {/* Contact cards grid */}
-            <div className="grid gap-3 sm:grid-cols-2">
+            {/* Contact cards grid (Solid bg-card, no transparency) */}
+            <div className="grid gap-3.5 sm:grid-cols-2">
               {/* Phone / WA / email */}
-              <div className="rounded-2xl border border-border bg-gradient-to-br from-emerald-500/10 to-sky-400/5 p-4 shadow-soft">
-                <div className="mb-3 flex items-center justify-between gap-2 text-sm font-black text-primary">
-                  <span className="font-black text-primary">{isRTL ? "تواصل سريع" : "Quick contact"}</span>
-                  <span className="grid h-8 w-8 place-items-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-                    <Phone className="h-4 w-4" />
-                  </span>
-                </div>
-                <div className="divide-y divide-border/70 text-sm font-extrabold text-foreground">
-                  <a href="tel:+201097000137" className="flex items-center justify-between gap-3 py-2.5 first:pt-0 transition hover:text-primary">
-                    <span dir="ltr" className="font-bold">+20 109 700 0137</span>
-                    <Phone className="h-4 w-4 shrink-0 text-primary" />
-                  </a>
-                  <a href="https://wa.me/201097000137" target="_blank" rel="noopener" className="flex items-center justify-between gap-3 py-2.5 transition hover:text-primary">
-                    <span>{isRTL ? "رد فوري خلال دقائق" : "Instant WhatsApp reply"}</span>
-                    <WhatsAppIcon className="h-4 w-4 shrink-0 text-primary" />
-                  </a>
-                  <a href="mailto:info@elyosrcharity.com" className="flex items-center justify-between gap-3 break-all py-2.5 last:pb-0 transition hover:text-primary">
-                    <span className="text-xs sm:text-sm font-bold">info@elyosrcharity.com</span>
-                    <Mail className="h-4 w-4 shrink-0 text-primary" />
-                  </a>
+              <div className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border/80 bg-card p-5 shadow-card transition-all duration-300 hover:border-secondary/60 hover:shadow-glow">
+                <div aria-hidden className="pointer-events-none absolute -top-12 -end-12 h-28 w-28 rounded-full bg-secondary/10 blur-2xl transition group-hover:bg-secondary/20" />
+                
+                <div>
+                  <div className="mb-4 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary/20 text-primary ring-1 ring-secondary/30 shadow-xs">
+                        <Phone className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <span className="text-[10px] font-black uppercase tracking-wider text-secondary">
+                          {isRTL ? "قنوات التواصل" : "Channels"}
+                        </span>
+                        <h3 className="text-base font-black text-foreground">
+                          {isRTL ? "تواصل سريع" : "Quick contact"}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {/* Phone */}
+                    <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5 transition hover:border-secondary/40 hover:bg-card">
+                      <a href="tel:+201097000137" className="flex items-center gap-2.5 min-w-0 flex-1">
+                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                          <Phone className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0">
+                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "اتصال هاتفي" : "Direct Call"}</div>
+                          <span dir="ltr" className="text-xs sm:text-sm font-extrabold text-foreground hover:text-primary transition-colors">
+                            +20 109 700 0137
+                          </span>
+                        </div>
+                      </a>
+                      <button
+                        type="button"
+                        onClick={handleCopyPhone}
+                        title={isRTL ? "نسخ الرقم" : "Copy number"}
+                        className="rounded-xl border border-border/80 bg-card p-2 text-muted-foreground hover:text-primary hover:border-secondary/40 transition shrink-0"
+                      >
+                        {copiedPhone ? <Check className="h-3.5 w-3.5 text-secondary" /> : <Copy className="h-3.5 w-3.5" />}
+                      </button>
+                    </div>
+
+                    {/* Email */}
+                    <a
+                      href="mailto:info@elyosrcharity.com"
+                      className="group/mail flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5 transition hover:border-secondary/40 hover:bg-card"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary group-hover/mail:bg-primary group-hover/mail:text-primary-foreground transition-colors">
+                          <Mail className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "البريد الإلكتروني" : "Email"}</div>
+                          <div className="text-xs sm:text-sm font-extrabold text-foreground truncate group-hover/mail:text-primary transition-colors">
+                            info@elyosrcharity.com
+                          </div>
+                        </div>
+                      </div>
+                      <ArrowLeft className={`h-4 w-4 shrink-0 text-muted-foreground group-hover/mail:text-primary transition-transform ${isRTL ? "group-hover/mail:-translate-x-1" : "rotate-180 group-hover/mail:translate-x-1"}`} />
+                    </a>
+                  </div>
                 </div>
               </div>
 
               {/* Address / bank / hours */}
-              <div className="rounded-2xl border border-border bg-gradient-to-br from-amber-500/10 to-violet-400/5 p-4 shadow-soft">
-                <div className="mb-3 flex items-center justify-between gap-2 text-sm font-black text-primary">
-                  <span className="font-black text-primary">{isRTL ? "التفاصيل المهمة" : "Useful details"}</span>
-                  <span className="grid h-8 w-8 place-items-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-                    <MapPin className="h-4 w-4" />
-                  </span>
-                </div>
-                <div className="divide-y divide-border/70 text-sm font-extrabold leading-5 text-foreground">
-                  <p className="flex items-start justify-between gap-3 py-2.5 first:pt-0">
-                    <span className="text-xs sm:text-sm">{isRTL ? "المنصورة، تقسيم خطاب، بجوار وكالة المنصورة" : "Mansoura, Khattab District, next to Mansoura Agency"}</span>
-                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  </p>
-                  <p className="flex items-center justify-between gap-3 py-2.5">
-                    <span dir="ltr" className="font-bold">100043605733</span>
-                    <Building2 className="h-4 w-4 shrink-0 text-primary" />
-                  </p>
-                  <p className="flex items-center justify-between gap-3 py-2.5 last:pb-0">
-                    <span className="text-xs sm:text-sm">{isRTL ? "السبت – الخميس: 9 ص — 6 م" : "Sat–Thu: 9am — 6pm"}</span>
-                    <Clock className="h-4 w-4 shrink-0 text-primary" />
-                  </p>
+              <div className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border/80 bg-card p-5 shadow-card transition-all duration-300 hover:border-secondary/60 hover:shadow-glow">
+                <div aria-hidden className="pointer-events-none absolute -top-12 -start-12 h-28 w-28 rounded-full bg-secondary/15 blur-2xl transition group-hover:bg-secondary/25" />
+                
+                <div>
+                  <div className="mb-4 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary/20 text-primary ring-1 ring-secondary/30 shadow-xs">
+                        <Building2 className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <span className="text-[10px] font-black uppercase tracking-wider text-secondary">
+                          {isRTL ? "المقر والمواعيد" : "HQ & Times"}
+                        </span>
+                        <h3 className="text-base font-black text-foreground">
+                          {isRTL ? "التفاصيل المهمة" : "Useful details"}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {/* Address */}
+                    <a
+                      href="#contact-map"
+                      className="group/addr flex items-start justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5 transition hover:border-secondary/40 hover:bg-card"
+                    >
+                      <div className="flex items-start gap-2.5 min-w-0">
+                        <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                          <MapPin className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0">
+                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "المقر الرئيسي" : "Headquarters"}</div>
+                          <div className="text-xs font-bold leading-relaxed text-foreground group-hover/addr:text-primary transition-colors">
+                            {isRTL ? "المنصورة، تقسيم خطاب، بجوار وكالة المنصورة" : "Mansoura, Khattab District, next to Mansoura Agency"}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-black text-secondary hover:underline shrink-0 pt-1">
+                        {isRTL ? "الخريطة" : "Map"}
+                      </span>
+                    </a>
+
+                    {/* Bank CIB */}
+                    <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5 transition hover:border-secondary/40 hover:bg-card">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                          <Building2 className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0">
+                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "حساب CIB الرسمي" : "Official CIB Account"}</div>
+                          <span dir="ltr" className="text-xs sm:text-sm font-black font-mono tracking-wider text-foreground">
+                            100043605733
+                          </span>
+                        </div>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={handleCopyBank}
+                        className="h-7 px-2.5 gap-1 rounded-xl text-[11px] font-bold border-secondary/40 text-primary hover:bg-secondary/15 shrink-0"
+                      >
+                        {copiedBank ? <Check className="h-3 w-3 text-secondary" /> : <Copy className="h-3 w-3" />}
+                        <span>{copiedBank ? (isRTL ? "تم" : "Done") : (isRTL ? "نسخ" : "Copy")}</span>
+                      </Button>
+                    </div>
+
+                    {/* Hours */}
+                    <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                          <Clock className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0">
+                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "مواعيد الاستقبال" : "Working Hours"}</div>
+                          <span className="text-xs font-extrabold text-foreground">
+                            {isRTL ? "السبت – الخميس: 9 ص — 6 م" : "Sat–Thu: 9am — 6pm"}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="inline-flex shrink-0 items-center rounded-full bg-secondary/15 px-2 py-0.5 text-[10px] font-black text-primary">
+                        {isRTL ? "مفتوح" : "Open"}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Trust strip */}
-            <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-secondary/10 p-3.5 shadow-sm">
-              <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-wider text-primary">
-                <ShieldCheck className="h-4 w-4 text-secondary" />
-                {isRTL ? "موثوقون منذ 2019" : "Trusted since 2019"}
+            {/* Trust strip (Solid bg-card, no transparency) */}
+            <div className="relative overflow-hidden rounded-3xl border border-border/80 border-s-4 border-s-secondary bg-card p-4 sm:p-5 shadow-card">
+              <div aria-hidden className="pointer-events-none absolute -bottom-10 -end-10 h-28 w-28 rounded-full bg-secondary/10 blur-2xl" />
+              <div className="flex items-start gap-3.5">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-secondary/20 text-primary ring-1 ring-secondary/30 shadow-xs">
+                  <ShieldCheck className="h-5 w-5 text-secondary" />
+                </span>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-sm font-black text-foreground">
+                      {isRTL ? "مؤسسة موثّقة ومرخّصة رسمياً" : "Officially Licensed & Verified"}
+                    </span>
+                    <span className="rounded-full bg-secondary/15 px-2.5 py-0.5 text-[10px] font-black text-primary">
+                      {isRTL ? "منذ 2019" : "Since 2019"}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                    {isRTL
+                      ? "إشهار رقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي. كل تبرع موثق بالصور والفيديو وكل رسالة بترد عليها بأمانة تامة."
+                      : "Registered NGO #2665 (2019) under the Ministry of Social Solidarity. Every donation is verified and documented."}
+                  </p>
+                </div>
               </div>
-              <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">
-                {isRTL
-                  ? "مؤسسة مرخّصة برقم 2655/2019 — كل تبرّع موثّق وكل رسالة بترد بأمانة."
-                  : "Licensed NGO 2655/2019 — every donation documented, every message answered."}
-              </p>
             </div>
           </div>
 
@@ -336,7 +496,7 @@ const Contact = () => {
           <form
             onSubmit={submit}
             onFocus={onFocusOnce}
-            className="relative flex min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 shadow-card sm:p-6 md:p-7"
+            className="relative flex min-w-0 flex-col overflow-hidden rounded-3xl border border-border/80 bg-card p-6 shadow-card sm:p-7 md:p-8"
           >
             {/* Decorative glows */}
             <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-secondary/15 blur-3xl" />
@@ -344,14 +504,14 @@ const Contact = () => {
 
             {/* Form header */}
             <div className="relative">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-primary">
-                <Heart className="h-3 w-3" /> {isRTL ? "نحن نسمعك" : "We're listening"}
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-primary ring-1 ring-secondary/30">
+                <Heart className="h-3 w-3 text-secondary fill-secondary" /> {isRTL ? "نحن نسمعك دائماً" : "We're listening"}
               </span>
-              <h2 className="mt-2.5 text-2xl font-black text-foreground sm:text-3xl">
+              <h2 className="mt-3 text-2xl font-black text-foreground sm:text-3xl">
                 {isRTL ? "ابعتلنا رسالتك" : "Send us your message"}
               </h2>
-              <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
-                {isRTL ? "هنرد عليك خلال 24 ساعة عمل — وعد." : "We'll reply within 24 working hours — promise."}
+              <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground">
+                {isRTL ? "هنرد عليك خلال 24 ساعة عمل — وعد صادق بأمانة." : "We'll reply within 24 working hours — promise."}
               </p>
             </div>
 
@@ -359,16 +519,16 @@ const Contact = () => {
             <input type="text" name="website" value={hp} onChange={(e) => setHp(e.target.value)} autoComplete="off" tabIndex={-1} aria-hidden className="absolute left-[-9999px] h-0 w-0 opacity-0" />
 
             {/* Fields */}
-            <div className="relative mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="relative mt-6 grid gap-4 sm:grid-cols-2">
               {/* Name */}
               <FieldGroup label={isRTL ? "الاسم *" : "Name *"}>
                 <div className="relative">
-                  <User className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <User className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     required
                     maxLength={100}
                     placeholder={isRTL ? "محمد أحمد" : "John Smith"}
-                    className="h-11 ps-10 rounded-xl"
+                    className="h-12 ps-10 rounded-2xl border-border/80 bg-background/50 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:border-secondary transition-all"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                   />
@@ -378,13 +538,13 @@ const Contact = () => {
               {/* Email */}
               <FieldGroup label={isRTL ? "البريد الإلكتروني *" : "Email *"}>
                 <div className="relative">
-                  <Mail className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Mail className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     required
                     type="email"
                     maxLength={255}
                     placeholder="example@email.com"
-                    className="h-11 ps-10 rounded-xl"
+                    className="h-12 ps-10 rounded-2xl border-border/80 bg-background/50 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:border-secondary transition-all"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                   />
@@ -394,12 +554,12 @@ const Contact = () => {
               {/* Phone */}
               <FieldGroup label={isRTL ? "رقم الهاتف" : "Phone (optional)"}>
                 <div className="relative">
-                  <Phone className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Phone className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="tel"
                     maxLength={20}
                     placeholder="01XXXXXXXXX"
-                    className="h-11 ps-10 rounded-xl"
+                    className="h-12 ps-10 rounded-2xl border-border/80 bg-background/50 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:border-secondary transition-all"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                   />
@@ -421,13 +581,13 @@ const Contact = () => {
                   {isRTL ? "رسالتك *" : "Your message *"}
                 </label>
                 <div className="relative">
-                  <MessageSquare className="pointer-events-none absolute start-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <MessageSquare className="pointer-events-none absolute start-3.5 top-3.5 h-4 w-4 text-muted-foreground" />
                   <Textarea
                     required
                     maxLength={1000}
                     rows={4}
-                    placeholder={isRTL ? "اكتب رسالتك هنا..." : "Write your message here..."}
-                    className="rounded-xl ps-10 resize-none"
+                    placeholder={isRTL ? "اكتب رسالتك أو استفسارك هنا بكل تفصيل..." : "Write your message here..."}
+                    className="rounded-2xl ps-10 resize-none border-border/80 bg-background/50 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:border-secondary transition-all"
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                   />
@@ -439,23 +599,28 @@ const Contact = () => {
             <Button
               type="submit"
               disabled={sending}
-              className="mx-auto mt-5 flex h-11 w-full max-w-[300px] items-center justify-center gap-2 rounded-full bg-orange-grad text-sm font-extrabold text-accent-foreground shadow-cta transition hover:opacity-95 disabled:opacity-60"
+              className="mx-auto mt-6 flex h-12 w-full max-w-[320px] items-center justify-center gap-2 rounded-full bg-orange-grad text-sm font-extrabold text-accent-foreground shadow-cta transition-all hover:opacity-95 hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60"
             >
               <Send className="h-4 w-4" />
-              {sending ? (isRTL ? "جاري الإرسال..." : "Sending...") : (isRTL ? "إرسال الرسالة" : "Send message")}
+              {sending ? (isRTL ? "جاري الإرسال..." : "Sending...") : (isRTL ? "إرسال الرسالة الآن" : "Send message now")}
             </Button>
 
+            <div className="mt-3.5 flex items-center justify-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+              <ShieldCheck className="h-3.5 w-3.5 text-secondary shrink-0" />
+              <span>{isRTL ? "بياناتك مشفرة ومحمية ولا تتم مشاركتها نهائياً" : "Your data is strictly confidential and protected"}</span>
+            </div>
+
             {refCode && (
-              <p className="mt-2.5 text-center text-xs font-extrabold text-primary">
-                {isRTL ? "رقم رسالتك: " : "Your reference: "}
-                <span className="rounded-md bg-secondary/20 px-2 py-0.5 font-mono">{refCode}</span>
+              <p className="mt-3 text-center text-xs font-extrabold text-primary">
+                {isRTL ? "رقم مرجع رسالتك: " : "Your reference: "}
+                <span className="rounded-md bg-secondary/20 px-2.5 py-1 font-mono text-foreground font-black">{refCode}</span>
               </p>
             )}
           </form>
         </div>
 
         {/* ── Map section ──────────────────────────────────────────── */}
-        <div className="container mx-auto mt-12 max-w-6xl px-4 mb-4">
+        <div id="contact-map" className="container mx-auto mt-12 max-w-6xl px-4 mb-4 scroll-mt-24">
           <div className="overflow-hidden rounded-3xl border border-primary/20 shadow-[0_24px_80px_-20px_hsl(150_55%_8%/0.5)]">
             {/* Header */}
             <div className="pattern-hero-luxe relative overflow-hidden px-6 pb-4 pt-5 text-primary-foreground">
@@ -500,7 +665,18 @@ const Contact = () => {
             </div>
           </div>
         </div>
+
       </section>
+
+      {/* ── Contact Page FAQs — outside main section for full-width bg ── */}
+      {contactFaqItems.length > 0 && (
+        <LocalFAQ
+          items={contactFaqItems}
+          title={isRTL ? "أسئلة شائعة حول التواصل والزيارة" : "Contact & Visit FAQs"}
+          intro={isRTL ? "إجابات على أهم الاستفسارات عن مواعيد العمل، مكاتب المؤسسة، ومندوبي التحصيل." : "Frequently asked questions regarding working hours, headquarters, and delegates."}
+          id="contact-faqs"
+        />
+      )}
     </PageLayout>
   );
 };

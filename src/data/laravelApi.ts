@@ -1,16 +1,22 @@
 /**
  * Laravel Charity API Client (v1) — High Performance & Cached
  *
- * Base URL: https://elyusr-api.pyramedx.com/api/v1
+ * Base URL: controlled by VITE_BACKEND_URL in .env (default: https://api.elyusr.org)
  * Authentication: Laravel Sanctum Bearer Token stored in localStorage (`alyusr_api_token`).
  * Performance: In-memory cache + Request deduplication + Fast SWR (Stale-While-Revalidate).
  */
 
+// Single source of truth for the backend domain — never hardcode elsewhere
+const BACKEND_BASE: string =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_BACKEND_URL) ||
+  "https://api.elyusr.org";
+
+// In development, use Vite's dev server proxy (/api/v1) to avoid browser CORS errors
+// when the remote backend returns 500 errors without Access-Control headers.
+// In production or when VITE_API_BASE_URL is set, use the full URL.
 export const API_BASE_URL =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_BASE_URL) ||
-  (typeof window !== "undefined" && window.location.hostname === "localhost"
-    ? "/api/v1"
-    : "https://elyusr-api.pyramedx.com/api/v1");
+  (typeof import.meta !== "undefined" && import.meta.env?.DEV ? "/api/v1" : `${BACKEND_BASE}/api/v1`);
 
 export const TOKEN_STORAGE_KEY = "alyusr_api_token";
 
@@ -47,18 +53,56 @@ export function invalidateApiCache(prefix?: string): void {
     return;
   }
   for (const key of memoryCache.keys()) {
-    if (key.includes(prefix)) {
+    // Match by any part of the key including full URL segments
+    if (key.includes(prefix) || key.includes(`/${prefix}`)) {
       memoryCache.delete(key);
     }
   }
 }
 
-/** @internal Used only as anonymous read-only fallback for public API calls. NEVER use for auth checks. */
-const DEFAULT_API_TOKEN = import.meta.env.VITE_LARAVEL_READONLY_API_TOKEN ?? "";
+/**
+ * Clears the sessionStorage 401-blacklist for a given endpoint path
+ * so it can be retried after a successful admin save.
+ */
+export function clearPublic401Blacklist(endpoint: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    const bl = sessionStorage.getItem("alyusr_public_401") ?? "";
+    const blSet = new Set(bl ? bl.split(",") : []);
+    const bKey = endpoint.split("?")[0];
+    blSet.delete(bKey);
+    sessionStorage.setItem("alyusr_public_401", [...blSet].join(","));
+  } catch {}
+}
+
+/**
+ * Public GET endpoints that never need authentication.
+ * Any request whose path starts with one of these strings will have the
+ * Authorization header omitted entirely — eliminating spurious 401 noise
+ * in the console for anonymous visitors.
+ */
+const PUBLIC_ENDPOINT_PREFIXES: readonly string[] = [
+  "/homepage/hero",
+  "/homepage/content",
+  "/homepage/campaigns-section",
+  "/home-numbers",
+  "/stories",
+  // NOTE: /programs requires auth — do NOT add it here
+  "/home-statistics",
+  "/donation-campaigns",
+];
+
+/** Returns true if the given API path is a known public (no-auth) endpoint. */
+function isPublicEndpoint(endpoint: string): boolean {
+  const path = endpoint.startsWith("http")
+    ? new URL(endpoint).pathname.replace(/^\/api\/v1/, "")
+    : endpoint;
+  return PUBLIC_ENDPOINT_PREFIXES.some((prefix) => path.startsWith(prefix));
+}
 
 /**
  * Returns the authenticated user's saved token, or null if the user is not logged in.
- * Anonymous visitors get null — they are never auto-assigned the default admin token.
+ * Anonymous visitors get null — their requests carry no Authorization header at all.
  */
 export function getApiToken(): string | null {
   if (typeof window === "undefined") return null;
@@ -66,11 +110,6 @@ export function getApiToken(): string | null {
     const saved = localStorage.getItem(TOKEN_STORAGE_KEY);
     // Reject old/invalid tokens that were persisted from previous sessions
     if (saved && saved.trim() && saved.startsWith("Bearer ")) return null;
-    // Reject and purge default fallback token if it was ever saved to storage
-    if (saved && saved.trim() === DEFAULT_API_TOKEN) {
-      localStorage.removeItem(TOKEN_STORAGE_KEY);
-      return null;
-    }
     if (saved && saved.trim()) return saved.trim();
     return null;
   } catch {
@@ -103,23 +142,90 @@ export function getCurrentLang(): "ar" | "en" {
   return "ar";
 }
 
-/** Formats image URL to a clean server URL, stripping any mock internal domains */
+
+
+/** Formats image URL to a clean server URL, resolving storage paths */
 export function formatServerImageUrl(url?: string | null): string {
   if (!url || typeof url !== "string") return "";
-  const trimmed = url.trim();
+  let trimmed = url.trim();
   if (!trimmed) return "";
   if (trimmed.includes("elyusr-local-mock.internal")) return "";
 
-  // In development mode, proxy through Vite to prevent CORS, OpaqueResponseBlocking (ORB), and cross-site cookie warnings
-  if (import.meta.env.DEV && trimmed.startsWith("https://elyusr-api.pyramedx.com/")) {
-    return trimmed.replace("https://elyusr-api.pyramedx.com", "");
+  // Strip accidental trailing slashes (e.g. "image.jpg/")
+  trimmed = trimmed.replace(/\/+$/, "");
+  // Strip accidental leading colons or protocol junk (e.g. ":4CYZs...")
+  trimmed = trimmed.replace(/^:+/, "").trim();
+
+  // Migrate old domain to current backend domain
+  if (trimmed.includes("elyusr-api.pyramedx.com")) {
+    trimmed = trimmed.replace("https://elyusr-api.pyramedx.com", BACKEND_BASE);
   }
 
-  if (trimmed.startsWith("http://") || trimmed.startsWith("https://") || trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
+  // Filter out dummy/sample image paths from Postman tests that do not exist on the server
+  if (
+    trimmed === "contents/example.jpg" ||
+    trimmed.endsWith("/example.jpg") ||
+    trimmed === "uploads/blog/zakat.jpg" ||
+    trimmed.endsWith("/zakat.jpg") ||
+    trimmed.includes("contents/example.jpg") ||
+    trimmed.includes("uploads/blog/zakat.jpg")
+  ) {
+    return "/placeholder.svg";
+  }
+
+  // 1. Data URLs and Blobs
+  if (trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
     return trimmed;
   }
+
+  // 2. Local Vite frontend assets, static public assets, and root paths
+  if (
+    trimmed === "placeholder.svg" ||
+    trimmed === "/placeholder.svg" ||
+    trimmed === "og-ar.jpg" ||
+    trimmed === "/og-ar.jpg" ||
+    trimmed === "og-en.jpg" ||
+    trimmed === "/og-en.jpg" ||
+    trimmed === "og-cover.jpg" ||
+    trimmed === "/og-cover.jpg" ||
+    trimmed === "og-image.jpg" ||
+    trimmed === "/og-image.jpg" ||
+    trimmed === "favicon.png" ||
+    trimmed === "/favicon.png" ||
+    trimmed === "apple-touch-icon.png" ||
+    trimmed === "/apple-touch-icon.png" ||
+    trimmed.startsWith("/og-") ||
+    trimmed.startsWith("og-") ||
+    trimmed.startsWith("/src/") ||
+    trimmed.startsWith("src/") ||
+    trimmed.startsWith("@/") ||
+    trimmed.startsWith("/assets/") ||
+    trimmed.startsWith("assets/") ||
+    trimmed.startsWith("/icons/") ||
+    trimmed.startsWith("icons/") ||
+    trimmed.startsWith("/images/") ||
+    trimmed.startsWith("images/") ||
+    trimmed.startsWith("/patterns/") ||
+    trimmed.startsWith("patterns/") ||
+    trimmed.startsWith("/fonts/") ||
+    trimmed.startsWith("fonts/") ||
+    (trimmed.endsWith(".svg") && !trimmed.startsWith("http") && !trimmed.includes("storage/"))
+  ) {
+    return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  }
+
+  // 3. In development, proxy storage URLs through Vite to avoid CORS / cookie warnings
+  if (import.meta.env.DEV && trimmed.startsWith(BACKEND_BASE + "/")) {
+    return trimmed.replace(BACKEND_BASE, "");
+  }
+
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    return trimmed;
+  }
+
+  // 4. Backend storage paths (e.g. "uploads/...", "contents/...", "storage/...")
   const clean = trimmed.replace(/^\/+/, "");
-  const base = import.meta.env.DEV ? "" : "https://elyusr-api.pyramedx.com";
+  const base = import.meta.env.DEV ? "" : BACKEND_BASE;
   return clean.startsWith("storage/")
     ? `${base}/${clean}`
     : `${base}/storage/${clean}`;
@@ -165,8 +271,13 @@ export async function apiFetch<T = unknown>(endpoint: string, options: RequestOp
     }
   }
 
-  // Use user's explicit token, or the anonymous read-only fallback for public API calls
-  const token = explicitToken !== undefined ? explicitToken : (getApiToken() ?? DEFAULT_API_TOKEN);
+  // For public endpoints: only omit token on GET requests for anonymous visitors.
+  // Mutating methods (PUT/POST/DELETE/PATCH) and admin endpoints MUST ALWAYS send the authorization token!
+  const isPublicGet = method === "GET" && isPublicEndpoint(endpoint);
+  // Anonymous visitors send no Authorization header — there is no shared fallback token.
+  const token = isPublicGet
+    ? null
+    : (explicitToken !== undefined ? explicitToken : getApiToken());
   const lang = getCurrentLang();
   const cacheKey = `${method}:${url}:${token || "anon"}:${lang}`;
 
@@ -190,6 +301,21 @@ export async function apiFetch<T = unknown>(endpoint: string, options: RequestOp
   }
 
   const fetchPromise = (async () => {
+    // Session blacklist: if this public endpoint already returned 401 once,
+    // skip the network call entirely — avoids repeated 401 console noise.
+    // IMPORTANT: Only apply blacklist for truly anonymous requests (no token)
+    const isPublic = isPublicEndpoint(endpoint);
+    const hasUserToken = !!(getApiToken());
+    if (isPublic && method === "GET" && !hasUserToken) {
+      const bl = sessionStorage.getItem("alyusr_public_401") ?? "";
+      const blSet = new Set(bl ? bl.split(",") : []);
+      const bKey = endpoint.split("?")[0]; // path without query
+      if (blSet.has(bKey)) {
+        // Return null silently — callers already handle null/empty gracefully
+        return null as T;
+      }
+    }
+
     const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
     const headers = new Headers(customHeaders || {});
     headers.set("Accept", "application/json");
@@ -221,6 +347,7 @@ export async function apiFetch<T = unknown>(endpoint: string, options: RequestOp
         method,
         headers,
         body: finalBody,
+        credentials: "omit", // Prevents third-party cookie warnings in the browser
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Network error";
@@ -228,14 +355,27 @@ export async function apiFetch<T = unknown>(endpoint: string, options: RequestOp
     }
 
 
-    if (res.status === 401 && !skipAuthClear) {
+    // A 401 on a request that carried the signed-in user's token means that token is no longer
+    // valid: clear it and let AuthContext reset the session. The login endpoint itself is exempt
+    // (a wrong password must not wipe anything), as are callers that opt out via skipAuthClear.
+    if (res.status === 401 && !skipAuthClear && typeof window !== "undefined") {
+      const path = endpoint.startsWith("http") ? new URL(endpoint).pathname : endpoint.split("?")[0];
+      const isLoginEndpoint = /\/login\/?$/.test(path);
+      const storedUserToken = getApiToken();
+      if (!isLoginEndpoint && token && storedUserToken && token === storedUserToken) {
+        clearApiToken();
+        window.dispatchEvent(new CustomEvent("auth:unauthorized"));
+      }
+    }
+
+    if (res.status === 401 && isPublicEndpoint(endpoint)) {
       if (typeof window !== "undefined") {
-        const storedExplicit = localStorage.getItem(TOKEN_STORAGE_KEY);
-        // Only dispatch unauthorized + clear if there was a real user token (not empty)
-        if (storedExplicit && storedExplicit.trim()) {
-          clearApiToken();
-          window.dispatchEvent(new CustomEvent("auth:unauthorized"));
-        }
+        try {
+          const bl = sessionStorage.getItem("alyusr_public_401") ?? "";
+          const blSet = new Set(bl ? bl.split(",") : []);
+          blSet.add(endpoint.split("?")[0]);
+          sessionStorage.setItem("alyusr_public_401", [...blSet].join(","));
+        } catch { /* storage quota */ }
       }
     }
 
@@ -298,6 +438,77 @@ export interface PaginatedResponse<T> {
   per_page?: number;
 }
 
+const FILE_FIELD_KEYS = new Set(["image", "cover_image", "avatar", "photo", "icon", "file", "attachment"]);
+
+function serializeToPayload(data: unknown, isUpdate: boolean): FormData | Record<string, unknown> {
+  if (typeof FormData !== "undefined" && data instanceof FormData) {
+    if (isUpdate && !data.has("_method")) {
+      data.append("_method", "PUT");
+    }
+    return data;
+  }
+
+  if (!data || typeof data !== "object") {
+    return (data || {}) as Record<string, unknown>;
+  }
+
+  const record = data as Record<string, unknown>;
+
+  // Check if any property is a File or Blob
+  const hasFile = Object.values(record).some(
+    (v) => (typeof File !== "undefined" && v instanceof File) || (typeof Blob !== "undefined" && v instanceof Blob)
+  );
+
+  if (hasFile) {
+    const fd = new FormData();
+    if (isUpdate) {
+      fd.append("_method", "PUT");
+    }
+
+    for (const [key, val] of Object.entries(record)) {
+      if (val === undefined || val === null) continue;
+
+      if ((typeof File !== "undefined" && val instanceof File) || (typeof Blob !== "undefined" && val instanceof Blob)) {
+        fd.append(key, val as Blob);
+      } else if (FILE_FIELD_KEYS.has(key) && typeof val === "string") {
+        // String URLs cannot be validated as files by Laravel; omit them so existing file remains intact
+        continue;
+      } else if (typeof val === "boolean") {
+        fd.append(key, val ? "1" : "0");
+      } else if (typeof val === "number") {
+        fd.append(key, String(val));
+      } else if (Array.isArray(val)) {
+        val.forEach((item, idx) => {
+          if (typeof item === "object" && item !== null) {
+            fd.append(`${key}[${idx}]`, JSON.stringify(item));
+          } else {
+            fd.append(`${key}[]`, String(item));
+          }
+        });
+      } else if (typeof val === "object") {
+        fd.append(key, JSON.stringify(val));
+      } else {
+        fd.append(key, String(val));
+      }
+    }
+    return fd;
+  }
+
+  // Pure JSON payload:
+  // Never send string values for file fields in JSON payloads because Laravel's file validation
+  // ('image' => 'nullable|image|mimes:...') expects an UploadedFile instance and rejects strings with 422.
+  // Files must be sent as FormData with actual File/Blob objects.
+  const jsonPayload: Record<string, unknown> = {};
+  for (const [key, val] of Object.entries(record)) {
+    if (val === undefined) continue;
+    if (FILE_FIELD_KEYS.has(key) && typeof val === "string") {
+      continue; // omit string paths/URLs from JSON to prevent Laravel 422
+    }
+    jsonPayload[key] = val;
+  }
+  return jsonPayload;
+}
+
 export function resource<T = Record<string, unknown>>(basePath: string) {
   const cleanPath = basePath.startsWith("/") ? basePath : `/${basePath}`;
 
@@ -325,20 +536,26 @@ export function resource<T = Record<string, unknown>>(basePath: string) {
     },
 
     async listAll(params?: Record<string, unknown>, opts?: { useCache?: boolean; ttlMs?: number }): Promise<T[]> {
-      const first = await this.list({ ...params, per_page: 100, page: 1 }, opts);
-      let all = [...first.data];
-      const last = first.last_page || 1;
-      if (last > 1) {
-        const promises: Promise<PaginatedResponse<T>>[] = [];
-        for (let p = 2; p <= Math.min(last, 10); p++) {
-          promises.push(this.list({ ...params, per_page: 100, page: p }, opts));
+      try {
+        const first = await this.list({ ...params, per_page: 100, page: 1 }, opts);
+        let all = [...first.data];
+        const last = first.last_page || 1;
+        if (last > 1) {
+          const promises: Promise<PaginatedResponse<T>>[] = [];
+          for (let p = 2; p <= Math.min(last, 10); p++) {
+            promises.push(this.list({ ...params, per_page: 100, page: p }, opts));
+          }
+          const pages = await Promise.all(promises);
+          pages.forEach((pageRes) => {
+            all = all.concat(pageRes.data);
+          });
         }
-        const pages = await Promise.all(promises);
-        pages.forEach((pageRes) => {
-          all = all.concat(pageRes.data);
-        });
+        return all;
+      } catch (err: any) {
+        // Gracefully handle backend 500 errors — return empty list so admin tables show empty state
+        console.warn(`listAll ${cleanPath} failed with status ${err?.status ?? "unknown"} — returning empty array`);
+        return [];
       }
-      return all;
     },
 
     async get(id: string | number, opts?: { useCache?: boolean }): Promise<T> {
@@ -350,9 +567,11 @@ export function resource<T = Record<string, unknown>>(basePath: string) {
     },
 
     async create(data: Partial<T> | FormData): Promise<T> {
+      const payload = serializeToPayload(data, false);
+      const isFormData = typeof FormData !== "undefined" && payload instanceof FormData;
       const res = await apiFetch<{ data?: T } | T>(cleanPath, {
         method: "POST",
-        body: data,
+        body: payload,
       });
       invalidateApiCache(cleanPath);
       if (res && typeof res === "object" && "data" in res && (res as { data?: T }).data) {
@@ -362,23 +581,11 @@ export function resource<T = Record<string, unknown>>(basePath: string) {
     },
 
     async update(id: string | number, data: Partial<T> | FormData): Promise<T> {
-      const isFormData = typeof FormData !== "undefined" && data instanceof FormData;
-      if (isFormData) {
-        (data as FormData).append("_method", "PUT");
-        const res = await apiFetch<{ data?: T } | T>(`${cleanPath}/${id}`, {
-          method: "POST",
-          body: data,
-        });
-        invalidateApiCache(cleanPath);
-        if (res && typeof res === "object" && "data" in res && (res as { data?: T }).data) {
-          return (res as { data: T }).data;
-        }
-        return res as T;
-      }
-
+      const payload = serializeToPayload(data, true);
+      const isFormData = typeof FormData !== "undefined" && payload instanceof FormData;
       const res = await apiFetch<{ data?: T } | T>(`${cleanPath}/${id}`, {
-        method: "PUT",
-        body: data,
+        method: isFormData ? "POST" : "PUT",
+        body: payload,
       });
       invalidateApiCache(cleanPath);
       if (res && typeof res === "object" && "data" in res && (res as { data?: T }).data) {
@@ -390,6 +597,10 @@ export function resource<T = Record<string, unknown>>(basePath: string) {
     async remove(id: string | number): Promise<void> {
       await apiFetch(`${cleanPath}/${id}`, { method: "DELETE" });
       invalidateApiCache(cleanPath);
+    },
+
+    async delete(id: string | number): Promise<void> {
+      return this.remove(id);
     },
   };
 }
@@ -476,25 +687,138 @@ export interface LaravelDonation {
   created_at?: string;
 }
 
+export interface LaravelDonationPackage {
+  id?: number | string;
+  program_id?: number | string | null;
+  project_id?: number | string | null;
+  donation_campaign_id?: number | string | null;
+  name_ar: string;
+  name_en?: string | null;
+  amount: number | string;
+  sort_order?: number;
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface LaravelProgram {
   id: number | string;
-  name: string;
+  axis_id?: number | string | null;
+  axis?: { id: number | string; slug: string; name_ar: string; name_en?: string };
+  season_ids?: number[];
+  seasons?: Array<{
+    id: number;
+    name_ar: string;
+    name_en?: string;
+    period_ar?: string;
+    period_en?: string;
+    tagline_ar?: string;
+    tagline_en?: string;
+    is_active?: boolean;
+    donation_available?: boolean;
+  }>;
+  slug: string;
+  name?: string;
+  name_ar?: string;
+  name_en?: string | null;
+  title_ar?: string;
+  title_en?: string | null;
   description?: string;
+  description_ar?: string | null;
+  description_en?: string | null;
+  content_ar?: string | null;
+  content_en?: string | null;
+  benefits_ar?: string[];
+  benefits_en?: string[];
+  period_ar?: string | null;
+  period_en?: string | null;
+  tagline_ar?: string | null;
+  tagline_en?: string | null;
+  donation_available?: boolean;
+  target_amount?: number | string | null;
+  minimum_amount?: number | string | null;
+  collected_amount?: number | string | null;
+  status?: "published" | "draft" | string;
+  sort_order?: number | null;
+  image?: string | null;
   is_active?: boolean;
-  target_amount?: number | string;
-  collected_amount?: number | string;
+  hide_from_audience?: boolean | null;
+  donation_packages?: LaravelDonationPackage[];
+  cases?: LaravelCase[];
   created_at?: string;
+  updated_at?: string;
 }
 
 export interface LaravelProject {
   id: number | string;
   name: string;
+  name_ar?: string;
+  name_en?: string;
+  title_ar?: string;
+  title_en?: string;
+  slug?: string;
   description?: string;
+  description_ar?: string;
+  description_en?: string;
   target_amount: number | string;
   collected_amount?: number | string;
   is_active?: boolean;
   program_id?: number | string;
+  image?: string | null;
+  cover_image?: string | null;
+  cover_image_url?: string | null;
+  image_url?: string | null;
+  donation_packages?: LaravelDonationPackage[];
+  cases?: LaravelCase[];
   created_at?: string;
+  updated_at?: string;
+}
+
+export interface LaravelDonationCampaignCategory {
+  id: number | string;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  is_active?: boolean;
+  sort_order?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface LaravelDonationCampaign {
+  id: number | string;
+  category_id?: number | null;
+  category?: LaravelDonationCampaignCategory | null;
+  name_ar?: string;
+  name_en?: string | null;
+  name?: string;
+  title_ar?: string;
+  title_en?: string;
+  slug?: string;
+  subtitle_ar?: string | null;
+  subtitle_en?: string | null;
+  description_ar?: string;
+  description_en?: string | null;
+  description?: string;
+  image?: string | null;
+  target_amount?: string | number | null;
+  collected_amount?: string | number | null;
+  minimum_amount?: string | number | null;
+  donation_available?: boolean;
+  is_active?: boolean;
+  sort_order?: number;
+  benefits?: string[];
+  donation_packages?: LaravelDonationPackage[];
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface LaravelCaseCategory {
+  id: number | string;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  is_active?: boolean;
 }
 
 export interface LaravelCase {
@@ -502,17 +826,32 @@ export interface LaravelCase {
   code?: string;
   title: string;
   category?: string;
+  category_id?: number | string | null;
+  category_data?: LaravelCaseCategory | null;
+  program_id?: number | string | null;
+  program?: { id: number; name?: string; name_ar?: string; name_en?: string } | null;
+  project_id?: number | string | null;
+  project?: { id: number; name?: string } | null;
+  donation_campaign_id?: number | string | null;
+  donation_campaign?: { id: number; name_ar?: string; name_en?: string } | null;
   beneficiary_name?: string;
+  age?: number | null;
   governorate?: string;
+  city?: string | null;
   target_amount: number | string;
   collected_amount?: number | string;
-  priority?: string;
-  status?: string;
+  deadline?: string | null;
+  priority?: "low" | "medium" | "high" | string;
+  cover_image?: string | null;
+  description?: string;
+  status?: "pending_review" | "approved" | "completed" | "closed" | "rejected" | string;
   created_at?: string;
+  updated_at?: string;
 }
 
 export interface LaravelArticle {
   id: number | string;
+  type?: string;
   title_ar: string;
   title_en?: string;
   slug?: string;
@@ -528,6 +867,7 @@ export interface LaravelArticle {
 
 export interface LaravelFaq {
   id: number | string;
+  type?: string;
   question_ar: string;
   question_en?: string;
   answer_ar: string;
@@ -539,6 +879,7 @@ export interface LaravelFaq {
 
 export interface LaravelPage {
   id: number | string;
+  type?: string;
   title_ar: string;
   title_en?: string;
   slug: string;
@@ -931,10 +1272,27 @@ export const authApi = {
 
 export const dashboardApi = {
   async getStats() {
-    return await apiFetch<Record<string, unknown>>("/dashboard", { method: "GET", ttlMs: 30000 });
+    try {
+      return await apiFetch<Record<string, unknown>>("/dashboard", { method: "GET", ttlMs: 30000 });
+    } catch (err: any) {
+      // /dashboard returns 500 on this backend — return empty object so admin pages don't crash
+      if (err?.status >= 500) {
+        console.warn("dashboardApi.getStats: backend returned", err.status, "— returning empty data");
+        return {} as Record<string, unknown>;
+      }
+      throw err;
+    }
   },
   async reports() {
-    return await apiFetch<Record<string, unknown>>("/reports", { method: "GET", ttlMs: 30000 });
+    try {
+      return await apiFetch<Record<string, unknown>>("/reports", { method: "GET", ttlMs: 30000 });
+    } catch (err: any) {
+      if (err?.status >= 500) {
+        console.warn("dashboardApi.reports: backend returned", err.status, "— returning empty data");
+        return {} as Record<string, unknown>;
+      }
+      throw err;
+    }
   },
 };
 
@@ -982,14 +1340,139 @@ export const rolesApi = {
 
 export const seasonsApi = resource<LaravelSeason>("/seasons");
 export const donorsApi = resource<LaravelDonor>("/donors");
-export const donationsApiV1 = resource<LaravelDonation>("/donations");
+const baseDonationsResource = resource<LaravelDonation>("/donations");
+export const donationsApiV1 = {
+  ...baseDonationsResource,
+  async track(reference: string): Promise<any> {
+    const cleanRef = reference.trim();
+    if (!cleanRef) return null;
+    return await apiFetch<any>(`/donations/track/${encodeURIComponent(cleanRef)}`, {
+      method: "GET",
+      useCache: false,
+    });
+  },
+  async submit(data: any): Promise<any> {
+    return await apiFetch<any>("/donations/submit", {
+      method: "POST",
+      body: data,
+    });
+  },
+};
 export const donationsApi = donationsApiV1;
-export const programsApiV1 = resource<LaravelProgram>("/programs");
+
+const baseProgramsResource = resource<LaravelProgram>("/programs");
+export const programsApiV1 = {
+  ...baseProgramsResource,
+  async getPackages(programId: number | string) {
+    return await apiFetch<any>(`/programs/${programId}/donation-packages`);
+  },
+  async addPackage(programId: number | string, data: any) {
+    return await apiFetch<any>(`/programs/${programId}/donation-packages`, {
+      method: "POST",
+      body: data,
+    });
+  },
+};
 export const programsApi = programsApiV1;
+
+/**
+ * Upload an image file to the Laravel backend.
+ * Uses POST /gallery which is the verified working upload endpoint.
+ * Falls back to /media/upload and /upload for backward-compatibility.
+ */
+export async function uploadImage(
+  file: File,
+  folder = "programs"
+): Promise<string> {
+  // First try the gallery endpoint which is confirmed working
+  try {
+    const fd = new FormData();
+    fd.append("image", file);
+    fd.append("title_ar", folder);
+    fd.append("title_en", folder);
+    const res = await apiFetch<{ data?: { image?: string; url?: string }; image?: string; url?: string }>("/gallery", {
+      method: "POST",
+      body: fd,
+      useCache: false,
+    });
+    const path = res?.data?.image || res?.data?.url || res?.image || res?.url || "";
+    if (path) {
+      return path;
+    }
+  } catch (galleryErr) {
+    console.warn("uploadImage /gallery failed, trying legacy endpoints:", galleryErr);
+  }
+
+  // Fallback to legacy endpoints
+  const fd2 = new FormData();
+  fd2.append("file", file);
+  fd2.append("folder", folder);
+  const endpoints = [`/media/upload`, `/upload`];
+  let lastErr: unknown;
+  for (const ep of endpoints) {
+    try {
+      const res = await apiFetch<{ path?: string; url?: string; data?: { path?: string; url?: string } }>(ep, {
+        method: "POST",
+        body: fd2,
+        useCache: false,
+      });
+      const path = res?.path || res?.url || res?.data?.path || res?.data?.url || "";
+      if (path) {
+        return path;
+      }
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr ?? new Error("Upload failed — backend has no working upload endpoint");
+}
+
 export const projectsApiV1 = resource<LaravelProject>("/projects");
-export const projectsApi = projectsApiV1;
-export const casesApiV1 = resource<LaravelCase>("/cases");
+export const projectsApi = {
+  ...projectsApiV1,
+  async createPackage(projectId: number | string, data: {
+    name_ar?: string;
+    name_en?: string;
+    amount?: number | string;
+    name?: string;
+    description?: string;
+    target_amount?: number | string;
+  }) {
+    const res = await apiFetch<{ data: any }>(`/projects/${projectId}/donation-packages`, {
+      method: "POST",
+      body: data,
+    });
+    invalidateApiCache("/projects");
+    return res;
+  },
+};
+
+// donationCampaignsApi and donationCampaignCategoriesApi are declared below with extended methods
+
+const baseCasesResource = resource<LaravelCase>("/cases");
+export const casesApiV1 = {
+  ...baseCasesResource,
+  async statistics() {
+    return await apiFetch<{
+      total: number;
+      pending_review: number;
+      approved: number;
+      completed: number;
+      closed: number;
+      rejected: number;
+    }>("/cases/statistics", { method: "GET", ttlMs: 30000 });
+  },
+  async categories() {
+    try {
+      const res = await apiFetch<any>("/case-categories", { method: "GET", ttlMs: 60000 });
+      return Array.isArray(res) ? res : res?.data || [];
+    } catch {
+      return [];
+    }
+  },
+};
 export const casesApi = casesApiV1;
+export const caseCategoriesApi = resource<LaravelCaseCategory>("/case-categories");
 
 // ── Content-backed resources (/content?type=...) ──
 const contentArticlesResource = resource<LaravelArticle>("/content");
@@ -1191,36 +1674,24 @@ export const galleryApi = {
       const dataObj = (res && typeof res === "object" && "data" in res ? res.data : res) as Record<string, unknown>;
       const rawUrl = (dataObj?.image || dataObj?.image_url || dataObj?.url || dataObj?.external_url) as string | undefined;
       if (rawUrl && typeof rawUrl === "string") {
-        if (rawUrl.startsWith("http://") || rawUrl.startsWith("https://")) {
-          return rawUrl;
+        let finalUrl = rawUrl;
+        if (!rawUrl.startsWith("http://") && !rawUrl.startsWith("https://")) {
+          const clean = rawUrl.replace(/^\/+/, "");
+          finalUrl = clean.startsWith("storage/")
+            ? `${BACKEND_BASE}/${clean}`
+            : `${BACKEND_BASE}/storage/${clean}`;
         }
-        const clean = rawUrl.replace(/^\/+/, "");
-        return clean.startsWith("storage/")
-          ? `https://elyusr-api.pyramedx.com/${clean}`
-          : `https://elyusr-api.pyramedx.com/storage/${clean}`;
-      }
-    } catch (laravelErr) {
-      console.warn("Laravel gallery upload failed, trying Supabase Storage:", laravelErr);
-    }
 
-    // 2. Try Supabase Storage (real bucket, returns permanent public URL)
-    try {
-      const { uploadToSupabaseStorage } = await import("@/integrations/supabase/client");
-      const publicUrl = await uploadToSupabaseStorage(file, "homepage");
-      if (publicUrl && publicUrl.startsWith("http") && !publicUrl.includes("elyusr-local-mock.internal")) {
-        return publicUrl;
+        return finalUrl;
       }
-    } catch (supabaseErr) {
-      console.warn("Supabase storage upload failed, falling back to data URL:", supabaseErr);
+    } catch (laravelErr: any) {
+      // Do NOT fall back to base64 — base64 data URLs exceed the backend's 2048-char
+      // field limit on fallback_image / image fields and will cause 422 validation errors.
+      throw new Error(
+        laravelErr?.message ||
+          (typeof laravelErr === "string" ? laravelErr : "فشل رفع الصورة للسيرفر — تحقق من الاتصال وأعد المحاولة")
+      );
     }
-
-    // 3. Last resort: base64 data URL
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
   },
 };
 
@@ -1229,7 +1700,190 @@ const basePaymentMethods = resource<LaravelPaymentMethod>("/payment-methods");
 export const paymentMethodsApi = {
   ...basePaymentMethods,
   async listActive() {
+    try {
+      const res = await apiFetch<any>("/payment-methods/active");
+      const list = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : null;
+      if (list && list.length > 0) return list as LaravelPaymentMethod[];
+    } catch {}
     return basePaymentMethods.listAll({ is_active: 1 });
+  },
+};
+
+// ── FAQ Categories (/faq-categories) ──
+export const faqCategoriesApi = resource<any>("/faq-categories");
+
+
+// ── Payment Gateways (/payment-gateways) ──
+export interface LaravelPaymentGateway {
+  id: number;
+  gateway: "paymob" | "kashier" | string;
+  is_active: boolean;
+  credentials: Record<string, any>;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export const paymentGatewaysApi = {
+  async list(): Promise<LaravelPaymentGateway[]> {
+    const res = await apiFetch<{ data: LaravelPaymentGateway[] }>("/payment-gateways", {
+      method: "GET",
+      useCache: false,
+    });
+    return res?.data || [];
+  },
+  async update(gateway: string, data: { is_active?: boolean; credentials: Record<string, any> }) {
+    const res = await apiFetch<{ message: string; data: LaravelPaymentGateway }>(`/payment-gateways/${gateway}`, {
+      method: "PUT",
+      body: data,
+    });
+    invalidateApiCache("/payment-gateways");
+    return res;
+  },
+  async toggle(gateway: string) {
+    const res = await apiFetch<{ message?: string; data?: LaravelPaymentGateway }>(`/payment-gateways/${gateway}/toggle`, {
+      method: "PATCH",
+    });
+    invalidateApiCache("/payment-gateways");
+    return res;
+  },
+  async test(gateway: string) {
+    return await apiFetch<{ message?: string; success?: boolean; status?: string }>(`/payment-gateways/${gateway}/test`, {
+      method: "POST",
+    });
+  },
+};
+
+// ── Donation Campaigns & Categories (/donation-campaigns, /donation-campaign-categories) ──
+
+export const donationCampaignCategoriesApi = {
+  ...resource<LaravelDonationCampaignCategory>("/donation-campaign-categories"),
+};
+
+const baseDonationCampaigns = resource<LaravelDonationCampaign>("/donation-campaigns");
+export const donationCampaignsApi = {
+  ...baseDonationCampaigns,
+  async addPackage(campaignId: number | string, data: {
+    name_ar: string;
+    name_en?: string;
+    amount: number | string;
+    sort_order?: number;
+    is_active?: boolean;
+  }) {
+    const res = await apiFetch<{ success: boolean; message?: string; data: any }>(
+      `/donation-campaigns/${campaignId}/donation-packages`,
+      { method: "POST", body: data }
+    );
+    invalidateApiCache("/donation-campaigns");
+    return res;
+  },
+};
+
+// ── Homepage Carousel (/homepage/carousel & /admin/homepage/carousel) ──
+export interface LaravelCarouselSettings {
+  id?: number;
+  is_active: boolean;
+  autoplay: boolean;
+  autoplay_speed: number;
+  show_dots: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface LaravelCarouselItem {
+  id: number;
+  title_ar: string;
+  title_en?: string | null;
+  description_ar: string;
+  description_en?: string | null;
+  image: string;
+  /** General page / details link */
+  link_url?: string | null;
+  /** Direct donation URL (e.g. /donate?program=shelter) */
+  donate_url?: string | null;
+  /** Details page URL (e.g. /programs/shelter) */
+  details_url?: string | null;
+  /** Source entity type: program | campaign | project | custom */
+  source_type?: "program" | "campaign" | "project" | "custom" | null;
+  /** Source entity slug used to build donation URL when donate_url is missing */
+  source_slug?: string | null;
+  sort_order: number;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface LaravelCarouselResponse {
+  settings: LaravelCarouselSettings;
+  items: LaravelCarouselItem[];
+}
+
+export const carouselApi = {
+  async getPublic(): Promise<LaravelCarouselResponse> {
+    const res = await apiFetch<{ data: LaravelCarouselResponse }>("/homepage/carousel", {
+      method: "GET",
+      ttlMs: 30000,
+      skipAuthClear: true,
+    });
+    return res?.data || {
+      settings: { is_active: true, autoplay: true, autoplay_speed: 2600, show_dots: true },
+      items: [],
+    };
+  },
+  async getAdmin(): Promise<LaravelCarouselResponse> {
+    const res = await apiFetch<{ data: LaravelCarouselResponse }>("/admin/homepage/carousel", {
+      method: "GET",
+      useCache: false,
+    });
+    return res?.data || {
+      settings: { is_active: true, autoplay: true, autoplay_speed: 2600, show_dots: true },
+      items: [],
+    };
+  },
+  async updateSettings(settings: Partial<LaravelCarouselSettings>) {
+    const res = await apiFetch<{ data: LaravelCarouselSettings }>("/admin/homepage/carousel/settings", {
+      method: "PUT",
+      body: settings,
+    });
+    invalidateApiCache("/homepage/carousel");
+    return res?.data;
+  },
+  async addItem(item: Omit<LaravelCarouselItem, "id" | "created_at" | "updated_at">) {
+    const res = await apiFetch<{ data: LaravelCarouselItem }>("/admin/homepage/carousel/items", {
+      method: "POST",
+      body: item,
+    });
+    invalidateApiCache("/homepage/carousel");
+    return res?.data;
+  },
+  async updateItem(id: number | string, item: Partial<Omit<LaravelCarouselItem, "id" | "created_at" | "updated_at">>) {
+    const res = await apiFetch<{ data: LaravelCarouselItem }>(`/admin/homepage/carousel/items/${id}`, {
+      method: "PUT",
+      body: item,
+    });
+    invalidateApiCache("/homepage/carousel");
+    return res?.data;
+  },
+  async toggleItem(id: number | string) {
+    const res = await apiFetch<{ data: LaravelCarouselItem }>(`/admin/homepage/carousel/items/${id}/toggle`, {
+      method: "PATCH",
+    });
+    invalidateApiCache("/homepage/carousel");
+    return res?.data;
+  },
+  async deleteItem(id: number | string) {
+    const res = await apiFetch<{ message?: string }>(`/admin/homepage/carousel/items/${id}`, {
+      method: "DELETE",
+    });
+    invalidateApiCache("/homepage/carousel");
+    return res;
+  },
+  async reorder(items: Array<{ id: number | string; sort_order: number }>) {
+    const res = await apiFetch<{ message?: string }>("/admin/homepage/carousel/reorder", {
+      method: "POST",
+      body: { items },
+    });
+    invalidateApiCache("/homepage/carousel");
+    return res;
   },
 };
 
@@ -1340,48 +1994,196 @@ export interface LaravelAxis {
 
 export const axesApi = {
   async list(): Promise<LaravelAxis[]> {
-    const res = await apiFetch<{ data: LaravelAxis[] }>("/axes", { ttlMs: 30000 });
-    return res?.data || [];
+    try {
+      const res = await apiFetch<{ data: LaravelAxis[] }>("/axes", { ttlMs: 30000, skipAuthClear: true });
+      if (res?.data && res.data.length > 0) return res.data;
+    } catch (err) {
+      console.warn("Public /axes failed or returned 500, falling back to /admin/axes:", err);
+    }
+    try {
+      const adminRes = await apiFetch<{ data: LaravelAxis[] }>("/admin/axes", { ttlMs: 15000, skipAuthClear: true });
+      if (adminRes?.data && adminRes.data.length > 0) return adminRes.data;
+    } catch {}
+    return [];
   },
-  async getBySlug(slug: string): Promise<LaravelAxis> {
-    const res = await apiFetch<{ data: LaravelAxis }>(`/axes/${slug}`, { ttlMs: 30000 });
-    return res?.data;
+  async listAll(params?: Record<string, unknown>, opts?: { useCache?: boolean; ttlMs?: number }): Promise<LaravelAxis[]> {
+    return this.list();
   },
-  async getById(id: number | string): Promise<LaravelAxis> {
+  async getBySlug(slug: string): Promise<LaravelAxis | null> {
+    if (!slug) return null;
+    const cleanSlug = decodeURIComponent(slug).trim();
+    try {
+      const res = await apiFetch<{ data: LaravelAxis }>(`/axes/${encodeURIComponent(cleanSlug)}`, { ttlMs: 30000 });
+      if (res?.data) return res.data;
+    } catch {}
+    try {
+      const res = await apiFetch<{ data: LaravelAxis }>(`/axes/${cleanSlug}`, { ttlMs: 30000 });
+      if (res?.data) return res.data;
+    } catch {}
+    // Fallback: search in full list
+    try {
+      const all = await this.list();
+      const found = all.find((a) => a.slug === cleanSlug || a.slug === slug || String(a.id) === cleanSlug);
+      if (found) return found;
+    } catch {}
+    return null;
+  },
+  async getById(id: number | string): Promise<LaravelAxis | null> {
+    if (!id) return null;
     try {
       const res = await apiFetch<{ data: LaravelAxis }>(`/axes/${id}`);
       if (res?.data) return res.data;
     } catch {}
-    const res = await apiFetch<{ data: LaravelAxis }>(`/admin/axes/${id}`);
-    return res?.data;
+    try {
+      const res = await apiFetch<{ data: LaravelAxis }>(`/admin/axes/${id}`);
+      if (res?.data) return res.data;
+    } catch {}
+    try {
+      const all = await this.list();
+      const found = all.find((a) => String(a.id) === String(id) || a.slug === String(id));
+      if (found) return found;
+    } catch {}
+    return null;
   },
   async adminList(): Promise<LaravelAxis[]> {
-    const res = await apiFetch<{ data: LaravelAxis[] }>("/admin/axes", { ttlMs: 15000 });
-    return res?.data || [];
+    try {
+      const res = await apiFetch<{ data: LaravelAxis[] }>("/admin/axes", { ttlMs: 15000 });
+      if (res?.data && res.data.length > 0) return res.data;
+    } catch {}
+    return this.list();
   },
-  async create(body: FormData | Partial<LaravelAxis>): Promise<LaravelAxis> {
-    const res = await apiFetch<{ data: LaravelAxis }>("/admin/axes", { method: "POST", body });
-    invalidateApiCache("/axes");
-    return res?.data;
-  },
-  async update(id: number | string, body: FormData | Partial<LaravelAxis>): Promise<LaravelAxis> {
-    const res = await apiFetch<{ data: LaravelAxis }>(`/admin/axes/${id}`, { method: "PUT", body });
-    invalidateApiCache("/axes");
-    return res?.data;
-  },
-  // updateWithFile: accepts either a FormData or a File directly, and sends POST with _method=PUT
-  async updateWithFile(id: number | string, fileOrFormData: FormData | File): Promise<LaravelAxis> {
-    let formData: FormData;
-    if (fileOrFormData instanceof FormData) {
-      formData = fileOrFormData;
-    } else {
-      formData = new FormData();
-      formData.append("image", fileOrFormData);
+  async create(body: FormData | Partial<LaravelAxis>, imageFile?: File | null): Promise<LaravelAxis> {
+    if (imageFile || body instanceof FormData) {
+      let fd: FormData;
+      if (body instanceof FormData) {
+        fd = body;
+      } else {
+        fd = new FormData();
+        if (body.slug) fd.append("slug", body.slug);
+        if (body.name_ar) fd.append("name_ar", body.name_ar);
+        if (body.name_en) fd.append("name_en", body.name_en);
+        if (body.badge_ar) fd.append("badge_ar", body.badge_ar);
+        if (body.badge_en) fd.append("badge_en", body.badge_en);
+        if (body.description_ar) fd.append("description_ar", body.description_ar);
+        if (body.description_en) fd.append("description_en", body.description_en);
+        fd.append("sort_order", String(body.sort_order ?? 1));
+        fd.append("is_active", body.is_active ? "1" : "0");
+
+        if (body.statistics) {
+          Object.entries(body.statistics).forEach(([k, v]) => {
+            if (v !== undefined && v !== null) fd.append(`statistics[${k}]`, String(v));
+          });
+        }
+        (body.features_ar || []).forEach((f, i) => {
+          if (f) fd.append(`features_ar[${i}]`, f);
+        });
+        (body.features_en || []).forEach((f, i) => {
+          if (f) fd.append(`features_en[${i}]`, f);
+        });
+        if (imageFile) {
+          fd.append("image", imageFile);
+        }
+      }
+
+      const res = await apiFetch<{ data: LaravelAxis }>("/admin/axes", { method: "POST", body: fd });
+      invalidateApiCache("/axes");
+      return res?.data;
     }
-    if (!formData.has("_method")) formData.append("_method", "PUT");
-    const res = await apiFetch<{ data: LaravelAxis }>(`/admin/axes/${id}`, { method: "POST", body: formData });
+
+    // Pure JSON creation (strip read-only/relations)
+    const {
+      image: _img,
+      programs: _prg,
+      cases: _cases,
+      volunteer_campaigns: _vc,
+      created_at: _ca,
+      updated_at: _ua,
+      id: _id,
+      ...rest
+    } = body as any;
+
+    const res = await apiFetch<{ data: LaravelAxis }>("/admin/axes", {
+      method: "POST",
+      body: {
+        ...rest,
+        is_active: body.is_active ? 1 : 0,
+      },
+    });
     invalidateApiCache("/axes");
     return res?.data;
+  },
+  async update(id: number | string, body: FormData | Partial<LaravelAxis>, imageFile?: File | null): Promise<LaravelAxis> {
+    if (imageFile || body instanceof FormData) {
+      let fd: FormData;
+      if (body instanceof FormData) {
+        fd = body;
+        if (!fd.has("_method")) {
+          fd.append("_method", "PUT");
+        }
+      } else {
+        fd = new FormData();
+        fd.append("_method", "PUT");
+        if (body.slug) fd.append("slug", body.slug);
+        if (body.name_ar) fd.append("name_ar", body.name_ar);
+        if (body.name_en) fd.append("name_en", body.name_en);
+        if (body.badge_ar) fd.append("badge_ar", body.badge_ar);
+        if (body.badge_en) fd.append("badge_en", body.badge_en);
+        if (body.description_ar) fd.append("description_ar", body.description_ar);
+        if (body.description_en) fd.append("description_en", body.description_en);
+        fd.append("sort_order", String(body.sort_order ?? 1));
+        fd.append("is_active", body.is_active ? "1" : "0");
+
+        if (body.statistics) {
+          Object.entries(body.statistics).forEach(([k, v]) => {
+            if (v !== undefined && v !== null) fd.append(`statistics[${k}]`, String(v));
+          });
+        }
+        (body.features_ar || []).forEach((f, i) => {
+          if (f) fd.append(`features_ar[${i}]`, f);
+        });
+        (body.features_en || []).forEach((f, i) => {
+          if (f) fd.append(`features_en[${i}]`, f);
+        });
+        if (imageFile) {
+          fd.append("image", imageFile);
+        }
+      }
+
+      const res = await apiFetch<{ data: LaravelAxis }>(`/admin/axes/${id}`, {
+        method: "POST",
+        body: fd,
+      });
+      invalidateApiCache("/axes");
+      return res?.data;
+    }
+
+    // Pure JSON update (strip read-only & image if string URL)
+    const {
+      image: _img,
+      programs: _prg,
+      cases: _cases,
+      volunteer_campaigns: _vc,
+      created_at: _ca,
+      updated_at: _ua,
+      ...rest
+    } = body as any;
+
+    const res = await apiFetch<{ data: LaravelAxis }>(`/admin/axes/${id}`, {
+      method: "PUT",
+      body: {
+        ...rest,
+        is_active: body.is_active ? 1 : 0,
+      },
+    });
+    invalidateApiCache("/axes");
+    return res?.data;
+  },
+  async updateWithFile(id: number | string, fileOrFormData: FormData | File, axisData?: Partial<LaravelAxis>): Promise<LaravelAxis> {
+    if (fileOrFormData instanceof File) {
+      return this.update(id, axisData || {}, fileOrFormData);
+    } else {
+      return this.update(id, fileOrFormData);
+    }
   },
   async remove(id: number | string): Promise<void> {
     await apiFetch(`/admin/axes/${id}`, { method: "DELETE" });
@@ -1456,6 +2258,7 @@ export interface AboutUsStory {
   title_ar: string;
   title_en?: string | null;
   description_ar: string;
+  description_en?: string | null;
   registration_ar?: string | null;
   registration_number?: string | null;
   account_ar?: string | null;
@@ -1484,6 +2287,7 @@ export interface AboutUsVision2030 {
   title_ar: string;
   title_en?: string | null;
   description_ar?: string | null;
+  description_en?: string | null;
   progress: number;
   progress_label_ar?: string | null;
   items: AboutUsVisionItem[];
@@ -1831,38 +2635,9 @@ export const aboutUsApi = {
   },
 };
 
-// Collage images key (kept for cleanup only — not written to anymore)
-export const COLLAGE_IMAGES_STORAGE_KEY = "elyusr_collage_images";
 
-export interface CollageImages {
-  section2_main_image?: string | null;
-  section2_left_top_image?: string | null;
-  section2_left_bottom_image?: string | null;
-}
 
-export function getCollageImages(): CollageImages {
-  if (typeof window === "undefined") return {};
-  try {
-    const stored = localStorage.getItem(COLLAGE_IMAGES_STORAGE_KEY);
-    if (stored) return JSON.parse(stored) as CollageImages;
-  } catch {}
-  return {};
-}
-
-export function saveCollageImages(images: CollageImages): void {
-  if (typeof window === "undefined") return;
-  try {
-    const existing = getCollageImages();
-    const merged = { ...existing, ...images };
-    // Remove falsy/empty values
-    (Object.keys(merged) as (keyof CollageImages)[]).forEach((k) => {
-      if (!merged[k]) delete merged[k];
-    });
-    localStorage.setItem(COLLAGE_IMAGES_STORAGE_KEY, JSON.stringify(merged));
-  } catch {}
-}
-
-const HOMEPAGE_DEFAULT_CONTENT: LaravelHomepageContent = {
+export const HOMEPAGE_DEFAULT_CONTENT: LaravelHomepageContent = {
   hero_badge_ar: "جمعية اليسر للبر والخدمات الاجتماعية",
   hero_badge_en: "Al-Yusr Charity & Social Services",
   hero_title_ar: "معًا نصل بصدقتك",
@@ -1922,10 +2697,22 @@ export const contentApi = {
     // Live Fetch: Fetch hero and content in parallel (2 requests max).
     // /homepage-content is the unified endpoint but adds a 3rd redundant request
     // since hero + content already cover all fields — skip it on every call.
+    // Pass user token explicitly so admin requests bypass the anonymous blacklist.
+    const userToken = getApiToken();
     try {
       const [heroSettled, sec2Settled] = await Promise.allSettled([
-        apiFetch<{ success?: boolean; data?: Record<string, unknown> }>("/homepage/hero", { ttlMs: 30000, skipAuthClear: true }),
-        apiFetch<{ success?: boolean; data?: Record<string, unknown> }>("/homepage/content", { ttlMs: 30000, skipAuthClear: true }),
+        apiFetch<{ success?: boolean; data?: Record<string, unknown> }>("/homepage/hero", {
+          ttlMs: userToken ? 0 : 30000, // No cache for admin users — always get fresh data
+          skipAuthClear: true,
+          useCache: !userToken, // Admins always fetch fresh from server
+          ...(userToken ? { token: userToken } : {}),
+        }),
+        apiFetch<{ success?: boolean; data?: Record<string, unknown> }>("/homepage/content", {
+          ttlMs: userToken ? 0 : 30000,
+          skipAuthClear: true,
+          useCache: !userToken,
+          ...(userToken ? { token: userToken } : {}),
+        }),
       ]);
 
       const heroData = (heroSettled.status === "fulfilled" && heroSettled.value?.data) ? heroSettled.value.data : {};
@@ -2158,9 +2945,6 @@ export const contentApi = {
     });
 
     const returnedUrl = res?.data?.[field] || "";
-    if (returnedUrl) {
-      saveCollageImages({ [field]: returnedUrl });
-    }
     return { url: returnedUrl, data: res?.data };
   },
 
@@ -2193,6 +2977,13 @@ export const contentApi = {
           hero_image: data.hero_image || null,
         },
       });
+      // Aggressively clear ALL homepage-related in-memory cache keys after a successful save
+      invalidateApiCache("/homepage/hero");
+      invalidateApiCache("/homepage/content");
+      invalidateApiCache("homepage");
+      // Also clear the 401 session blacklist so public visitors can refetch fresh data
+      clearPublic401Blacklist("/homepage/hero");
+      clearPublic401Blacklist("/homepage/content");
     } catch (err) {
       console.warn("Failed to update /homepage/hero on Laravel:", err);
     }
@@ -2266,6 +3057,19 @@ export const contentApi = {
     invalidateApiCache("/homepage/hero");
     invalidateApiCache("/homepage/content");
     invalidateApiCache("/homepage-content");
+    // Also clear the session blacklist for these endpoints so admin can re-read after save
+    try {
+      const bl = sessionStorage.getItem("alyusr_public_401") ?? "";
+      if (bl) {
+        const blSet = new Set(bl.split(","));
+        blSet.delete("/homepage/hero");
+        blSet.delete("/homepage/content");
+        blSet.delete("/homepage/campaigns-section");
+        blSet.delete("/home-statistics");
+        blSet.delete("/home-numbers");
+        sessionStorage.setItem("alyusr_public_401", [...blSet].join(","));
+      }
+    } catch { /* storage unavailable */ }
 
     // Return optimistic merge of what was saved — avoids 3 extra GET requests after every save.
     // The cache is already invalidated above so the next real homepage() call will refetch.
@@ -2286,7 +3090,81 @@ export const contentApi = {
   },
 
   async settings(data?: Record<string, unknown>) {
-    return apiFetch<Record<string, unknown>>("/settings", { method: "POST", body: data || {} });
+    // Read with GET; only POST when there is actually something to save.
+    return data
+      ? apiFetch<Record<string, unknown>>("/settings", { method: "POST", body: data })
+      : apiFetch<Record<string, unknown>>("/settings", { method: "GET", useCache: false });
+  },
+};
+
+// ── Activity Logs (/activity-logs) ──────────────────────────────────────────
+export interface LaravelActivityLog {
+  id: number | string;
+  user_id?: number | string | null;
+  module?: string;
+  action: string;
+  entity_type?: string | null;
+  entity_id?: number | string | null;
+  role?: string | null;
+  summary?: string | null;
+  description?: string | null;
+  metadata?: Record<string, unknown> | null;
+  ip?: string | null;
+  user_agent?: string | null;
+  old_values?: Record<string, unknown> | null;
+  new_values?: Record<string, unknown> | null;
+  created_at?: string;
+  updated_at?: string;
+  user?: {
+    id: number | string;
+    name: string;
+    email: string;
+    phone?: string | null;
+    avatar?: string | null;
+    status?: string;
+    roles?: Array<{ id: number; name: string; slug: string }>;
+  } | null;
+}
+
+export const activityLogsApi = {
+  ...resource<LaravelActivityLog>("/activity-logs"),
+};
+
+// ── Notifications (/notifications) ──────────────────────────────────────────
+export interface LaravelNotification {
+  id: string;
+  type?: string;
+  notifiable_type?: string;
+  notifiable_id?: number | string;
+  data: {
+    type?: string;
+    title?: string;
+    message?: string;
+    user_id?: number;
+    [key: string]: unknown;
+  };
+  read_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export const notificationsApi = {
+  ...resource<LaravelNotification>("/notifications"),
+  async unreadCount() {
+    return apiFetch<{ count?: number; unread_count?: number } | number>("/notifications/unread-count", {
+      method: "GET",
+      useCache: false,
+    });
+  },
+  async markAsRead(id: string) {
+    return apiFetch<{ success: boolean; message?: string }>(`/notifications/${id}/read`, {
+      method: "PATCH",
+    });
+  },
+  async markAllAsRead() {
+    return apiFetch<{ success: boolean; message?: string }>("/notifications/read-all", {
+      method: "PATCH",
+    });
   },
 };
 
@@ -2330,9 +3208,17 @@ export async function checkAllEndpoints(): Promise<EndpointCheck[]> {
     { path: "/stories", name: "القصص", method: "GET" as const, category: "المحتوى والإعلام" },
     { path: "/gallery", name: "معرض الصور", method: "GET" as const, category: "المحتوى والإعلام" },
     { path: "/newsletter", name: "النشرة البريدية", method: "GET" as const, category: "التسويق والإعلام" },
+    { path: "/activity-logs", name: "سجل النشاط", method: "GET" as const, category: "النظام والأمان" },
+    { path: "/notifications", name: "الإشعارات", method: "GET" as const, category: "النظام والأمان" },
     { path: "/service-categories", name: "تصنيفات الخدمات", method: "GET" as const, category: "الخدمات والبرامج" },
     { path: "/services", name: "الخدمات", method: "GET" as const, category: "الخدمات والبرامج" },
-    { path: "/settings", name: "الإعدادات", method: "POST" as const, category: "الإعدادات" },
+    { path: "/homepage/carousel", name: "كاروسيل الرئيسية", method: "GET" as const, category: "المحتوى والإعلام" },
+    { path: "/payment-gateways", name: "بوابات الدفع", method: "GET" as const, category: "التبرعات والبرامج" },
+    { path: "/donation-campaigns", name: "حملات التبرع", method: "GET" as const, category: "التبرعات والبرامج" },
+    { path: "/donation-campaign-categories", name: "تصنيفات حملات التبرع", method: "GET" as const, category: "التبرعات والبرامج" },
+    { path: "/axes", name: "المحاور", method: "GET" as const, category: "التبرعات والبرامج" },
+    { path: "/seasons", name: "المواسم", method: "GET" as const, category: "التبرعات والبرامج" },
+    { path: "/settings", name: "الإعدادات", method: "GET" as const, category: "الإعدادات" },
   ];
 
   const checks = await Promise.all(
@@ -2343,7 +3229,6 @@ export async function checkAllEndpoints(): Promise<EndpointCheck[]> {
           method: ep.method,
           skipAuthClear: true,
           useCache: false, // live check bypasses cache
-          body: ep.method === "POST" ? {} : undefined,
         });
         const latencyMs = Math.round(performance.now() - start);
         return {

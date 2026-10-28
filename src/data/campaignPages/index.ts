@@ -21,6 +21,7 @@ export const CAMPAIGN_PAGES: CampaignPageMeta[] = [
   { slug: "ramadan", path: "/ramadan", name: l("موسم الخير (رمضان)", "Ramadan season"), load: () => import("./ramadan").then((m) => m.default), apiSlugs: ["ramadan", "ramadan-season"], apiIds: [20], nameKey: "رمضان" },
   { slug: "markoun", path: "/markoun", name: l("حملة مَرْكون", "Markoun campaign"), load: () => import("./markoun").then((m) => m.default), apiSlugs: ["markoon", "markoun", "markon"], apiIds: [19], nameKey: "مركون" },
   { slug: "arboun", path: "/arboun", name: l("مبادرة عربون خير", "Arboun Khair"), load: () => import("./arboun").then((m) => m.default), apiSlugs: ["arboun-kheir", "arboun", "arboon"], apiIds: [22], nameKey: "عربون" },
+  { slug: "food", path: "/food-box", name: l("الغذاء الشهري", "Monthly food"), load: () => import("./food").then((m) => m.default), apiSlugs: ["food", "monthly-food", "food-box"], apiIds: [23], nameKey: "غذاء" },
 ];
 
 export const getCampaignPageMeta = (slug: string) => CAMPAIGN_PAGES.find((c) => c.slug === slug);

@@ -23,27 +23,27 @@ export interface CampaignsMetricsState {
   updatedAt?: string;
 }
 
-const KEY = "alyusr_campaigns_metrics_v1";
+// Wipe legacy localStorage metrics
+if (typeof window !== "undefined") {
+  try {
+    localStorage.removeItem("alyusr_campaigns_metrics_v1");
+  } catch {
+    /* ignore */
+  }
+}
+
 const EMPTY_ROW: CampaignMetricsRow = { details_click: 0, donate_click: 0 };
 
 const blank = (): CampaignsMetricsState => ({ bySlug: {}, sectionViews: 0 });
 
-const load = (): CampaignsMetricsState => {
-  if (typeof window === "undefined") return blank();
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) return blank();
-    const parsed = JSON.parse(raw) as CampaignsMetricsState;
-    return { ...blank(), ...parsed, bySlug: parsed.bySlug || {} };
-  } catch {
-    return blank();
-  }
-};
+let inMemoryMetrics: CampaignsMetricsState = blank();
+
+const load = (): CampaignsMetricsState => inMemoryMetrics;
 
 const save = (s: CampaignsMetricsState) => {
-  try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* ignore */ }
+  inMemoryMetrics = s;
   try {
-    // Notify same-tab listeners (storage event only fires cross-tab).
+    // Notify same-tab listeners
     window.dispatchEvent(new CustomEvent("alyusr:campaigns-metrics"));
   } catch { /* ignore */ }
 };

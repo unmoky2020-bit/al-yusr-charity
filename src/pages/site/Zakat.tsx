@@ -422,8 +422,7 @@ const Zakat = () => {
                 accent: "bg-primary text-primary-foreground" },
             ].map((p, idx) => (
               <StickyStackItem key={p.title} index={idx}>
-                <Link
-                  to={p.href}
+                <div
                   style={{ isolation: "isolate" }}
                   className={`group relative isolate mx-auto flex w-full max-w-5xl scroll-mt-24 flex-col overflow-hidden rounded-[28px] border border-primary/10 bg-gradient-to-b from-card to-card/95 shadow-card ring-1 ring-primary/5 transition-colors duration-300 hover:border-secondary/50 md:items-stretch ${idx % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"}`}
                 >
@@ -445,21 +444,25 @@ const Zakat = () => {
                       ))}
                     </ul>
                     <div className="mt-5 flex flex-wrap items-center gap-2.5">
+                      {/* z-10 keeps this button above the stretched "Learn more" overlay so it stays independently clickable */}
                       <Link
                         to={`/donate?program=${p.donateSlug}`}
-                        onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-orange-grad px-4 py-2 text-[12.5px] font-extrabold text-accent-foreground shadow-cta transition hover:-translate-y-0.5 hover:opacity-95"
+                        className="relative z-10 inline-flex items-center gap-1.5 rounded-full bg-orange-grad px-4 py-2 text-[12.5px] font-extrabold text-accent-foreground shadow-cta transition hover:-translate-y-0.5 hover:opacity-95"
                       >
                         <Heart className="h-3.5 w-3.5" />
                         {isRTL ? "تبرع بزكاتك" : "Donate Zakat"}
                       </Link>
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1.5 text-[12.5px] font-extrabold text-accent ring-1 ring-accent/20 transition-all duration-300 group-hover:gap-3 group-hover:bg-accent group-hover:text-accent-foreground">
+                      {/* Stretched link: the ::after overlay makes the whole card navigate to the axis page without nesting <a> inside <a> */}
+                      <Link
+                        to={p.href}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1.5 text-[12.5px] font-extrabold text-accent ring-1 ring-accent/20 transition-all duration-300 after:absolute after:inset-0 after:content-[''] group-hover:gap-3 group-hover:bg-accent group-hover:text-accent-foreground"
+                      >
                         {isRTL ? "اعرف أكثر" : "Learn more"}
                         <Arrow className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
-                      </span>
+                      </Link>
                     </div>
                   </div>
-                </Link>
+                </div>
               </StickyStackItem>
             ))}
             <div aria-hidden className="h-2" />

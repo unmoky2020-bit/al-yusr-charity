@@ -72,7 +72,7 @@ export default function AdminPaymentTransactions() {
     }
     await (supabase.from("payment_transactions" as any) as any)
       .update({ retry_count: (tx.retry_count || 0) + 1 }).eq("id", tx.id);
-    window.open(data.redirect_url, "_blank");
+    window.open(data.redirect_url, "_blank", "noopener,noreferrer");
     reload();
   };
 

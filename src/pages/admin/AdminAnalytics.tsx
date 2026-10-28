@@ -80,7 +80,7 @@ const AdminAnalytics = () => {
     staleTime: 30000,
   });
 
-  const isInitialLoading = (loadingStats && !laravelStats) || (loadingDonations && !donations.length);
+  const isLoading = loadingStats && !laravelStats;
 
   const ls = useMemo(() => {
     const raw = (laravelStats as any) || {};
@@ -229,14 +229,14 @@ const AdminAnalytics = () => {
   }, [programs, donations]);
 
   return (
-    <AdminLayout loading={isInitialLoading}>
+    <AdminLayout>
       <div className="space-y-5">
         {/* KPIs — 2 per row on mobile (grid-cols-2) */}
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          <StatCard accent icon={Wallet} label={isRTL ? "إجمالي التبرعات" : "Total"} value={isInitialLoading ? "—" : fmtCompact(total)} sub={isRTL ? "ج.م — منذ البداية" : "EGP — all time"} />
-          <StatCard icon={Target} label={isRTL ? "متوسط التبرع" : "Avg donation"} value={isInitialLoading ? "—" : fmtEGP(avg)} sub={isRTL ? "لكل عملية" : "per op"} />
-          <StatCard icon={Users} label={isRTL ? "إجمالي المتبرعين" : "Donors"} value={isInitialLoading ? "—" : fmtNum(donorsCount)} sub={isRTL ? "متبرع فريد" : "unique"} />
-          <StatCard icon={BarChart3} label={isRTL ? "عمليات مدفوعة" : "Paid ops"} value={isInitialLoading ? "—" : fmtNum(countPaid)} sub={isInitialLoading ? "—" : `${fmtNum(countPaid)} ${isRTL ? "إجمالي" : "total"}`} />
+          <StatCard accent icon={Wallet} label={isRTL ? "إجمالي التبرعات" : "Total"} value={isLoading ? "—" : fmtCompact(total)} sub={isRTL ? "ج.م — جميع الحالات" : "EGP — all statuses"} />
+          <StatCard icon={Target} label={isRTL ? "متوسط التبرع" : "Avg donation"} value={isLoading ? "—" : fmtEGP(avg)} sub={isRTL ? "لكل عملية" : "per op"} />
+          <StatCard icon={Users} label={isRTL ? "إجمالي المتبرعين" : "Donors"} value={isLoading ? "—" : fmtNum(donorsCount)} sub={isRTL ? "متبرع فريد" : "unique"} />
+          <StatCard icon={BarChart3} label={isRTL ? "عمليات مدفوعة" : "Paid ops"} value={isLoading ? "—" : fmtNum(countPaid)} sub={`${fmtNum(countPaid)} ${isRTL ? "إجمالي" : "total"}`} />
         </div>
 
         {/* Row 1 */}
@@ -296,8 +296,8 @@ const AdminAnalytics = () => {
               </ResponsiveContainer>
             </div>
             <ul dir={isRTL ? "rtl" : "ltr"} className="mt-2 grid grid-cols-1 gap-1.5">
-              {pie.map((p) => (
-                <li key={p.name} className="flex items-center justify-between gap-2 rounded-lg bg-muted/40 px-2 py-1.5 text-xs">
+              {pie.map((p, i) => (
+                <li key={`${p.name}-${i}`} className="flex items-center justify-between gap-2 rounded-lg bg-muted/40 px-2 py-1.5 text-xs">
                   <span className="flex min-w-0 items-center gap-2">
                     <span className="h-2.5 w-2.5 shrink-0 rounded-full ring-1 ring-border" style={{ background: p.color }} />
                     <span className="truncate font-semibold text-foreground">{p.name}</span>

@@ -199,20 +199,24 @@ Route::post('newsletter-campaigns/{id}/send-test', [NewsletterCampaignController
 ## 5. 🟡 موديول سجل المعاملات المالية (Payment Transactions)
 
 ### 📖 الشرح ببساطة:
-صفحة `/admin/transactions` بتعرض كل العمليات اللي تمت أونلاين عبر بوابات الدفع (فودافون كاش، فوري، فيزا/ماستركارد، InstaPay) علشان المحاسب يراجع رقم العملية المرجعي ويطابق الحساب البنكي.
+صفحة `/admin/transactions` بتعرض كل العمليات اللي تمت أونلاين عبر بوابات الدفع (كاشير Kashier، باي موب Paymob، فودافون كاش، فوري، InstaPay) علشان المحاسب يراجع رقم العملية المرجعي ويطابق الحساب البنكي.
+
+> [!TIP]
+> **توثيق كاشير المنفصل الكامل:** يوجد دليل تفصيلي كامل وجاهز بكود الكنترولر والمسارات والـ Webhooks في:
+> [LARAVEL_KASHIER_INTEGRATION_GUIDE.md](file:///d:/desk/Al-Yusr_%20Compassionate%20Journeys%20%281%29/LARAVEL_KASHIER_INTEGRATION_GUIDE.md)
 
 ### 🛠️ المايجريشن المقترح:
 
 ```php
 Schema::create('payment_transactions', function (Blueprint $table) {
     $table->id();
-    $table->string('transaction_number')->unique(); // رقم العملية مثلاً TXN-2026-001
+    $table->string('order_id')->unique(); // مثل YSR-MURJ27ZK
     $table->foreignId('donation_id')->nullable()->constrained('donations');
     $table->foreignId('donor_id')->nullable()->constrained('donors');
     $table->decimal('amount', 12, 2);
     $table->string('currency', 3)->default('EGP');
-    $table->string('gateway'); // paymob, fawry, vodafone_cash, instapay, bank_transfer
-    $table->string('gateway_reference')->nullable(); // الرقم المرجعي من فوري أو باي موب
+    $table->string('gateway'); // kashier, paymob, fawry, vodafone_cash, instapay, bank_transfer
+    $table->string('gateway_reference')->nullable(); // الرقم المرجعي من كاشير أو فوري أو باي موب
     $table->string('status')->default('pending'); // pending, completed, failed, refunded
     $table->json('gateway_response')->nullable(); // الـ Webhook payload للتسجيل
     $table->text('notes')->nullable();
@@ -223,9 +227,17 @@ Schema::create('payment_transactions', function (Blueprint $table) {
 ### 🌐 الـ Endpoints المطلوبة:
 
 ```php
+// مسارات سجل المعاملات المالية للإدارة
 Route::get('payment-transactions', [PaymentTransactionController::class, 'index']); // يدعم query params: ?status=completed&search=...
 Route::get('payment-transactions/{id}', [PaymentTransactionController::class, 'show']);
 Route::put('payment-transactions/{id}', [PaymentTransactionController::class, 'update']); // لتحديث الحالة والملاحظات يدوياً
+
+// مسارات بوابة كاشير المباشرة
+Route::prefix('payment/kashier')->group(function () {
+    Route::post('session', [KashierPaymentController::class, 'createSession']);
+    Route::post('webhook', [KashierPaymentController::class, 'webhook']);
+    Route::get('callback', [KashierPaymentController::class, 'callback']);
+});
 ```
 
 ---

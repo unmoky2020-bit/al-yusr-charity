@@ -32,7 +32,7 @@ const BlogCard = memo(function BlogCard({ slug, image, title, excerpt, category,
               src={image}
               alt={title}
               loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
+              className="h-full w-full object-cover transition-transform [transition-duration:1200ms] ease-out group-hover:scale-[1.06]"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/10 to-transparent opacity-60 transition-opacity group-hover:opacity-80" />
             <span className="absolute start-3.5 top-3.5 inline-flex items-center gap-1.5 rounded-full bg-background/95 px-3 py-1 text-xs font-extrabold text-primary shadow-soft backdrop-blur">
@@ -71,10 +71,16 @@ const BlogCard = memo(function BlogCard({ slug, image, title, excerpt, category,
         <div className="relative aspect-[16/10] overflow-hidden">
           <img
             decoding="async"
-            src={image}
+            src={image || "/placeholder.svg"}
             alt={title}
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.08]"
+            onError={(e) => {
+              const el = e.currentTarget as HTMLImageElement;
+              if (el.src !== "/placeholder.svg") {
+                el.src = "/placeholder.svg";
+              }
+            }}
+            className="h-full w-full object-cover transition-transform [transition-duration:1200ms] ease-out group-hover:scale-[1.08]"
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/55 via-primary/0 to-transparent opacity-70 transition-opacity group-hover:opacity-90" />
           <span className="absolute start-3 top-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-extrabold text-primary shadow-soft backdrop-blur">
