@@ -100,9 +100,13 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
               "جمعية اليسر الخيرية",
               "مؤسسة اليسر الخيرية",
               "اليسر الخيرية",
+              "مؤسسة اليسر المنصورة",
+              "مؤسسة اليسر بالمنصورة",
+              "اليسر المنصورة",
               "Al-Yusr",
+              "Al-Yusr Charity",
               "Al-Yusr Charity Foundation",
-              "مؤسسة اليسر بالمنصورة"
+              "Al-Yusr Foundation Mansoura"
             ],
             url: "https://elyusr.org/",
             logo: brandIcon,
@@ -133,8 +137,9 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
               { "@type": "Country", name: "مصر" }
             ],
             sameAs: [
-              "https://facebook.com/elyusrcharity",
-              "https://instagram.com/elyusrcharity"
+              "https://facebook.com/Elyosr.Charity",
+              "https://instagram.com/elyosr.charity",
+              "https://wa.me/201097000137"
             ]
           },
           {

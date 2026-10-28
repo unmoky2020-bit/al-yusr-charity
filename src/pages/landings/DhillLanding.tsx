@@ -1,118 +1,333 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Droplets, Home, Wind, ShieldCheck, FileCheck2, MapPin, ArrowLeft, ArrowRight, type LucideIcon } from "lucide-react";
 import { CampaignLandingShell } from "@/components/sections/CampaignLandingShell";
-import markounFurniture from "@/assets/markoun-poster-furniture.png";
+import { amountHref, waHref, fmtNum, CampaignCrumbs, HeroActions, BentoGallery } from "@/components/campaigns/shared";
+import { HadithBlock } from "@/components/campaigns/HadithBlock";
+import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
+import { useCampaignPage } from "@/hooks/useCampaignPage";
+import DHILL_DEFAULTS from "@/data/campaignPages/dhill";
 import yusrWater from "@/assets/yusr-water.png";
 import yusrDistribution from "@/assets/yusr-distribution-1.jpg";
 import yusrMeals from "@/assets/yusr-meals.jpg";
 import posterWater from "@/assets/poster-water.png";
 
-const DhillLanding = () => (
-  <CampaignLandingShell
-    slug="dhill"
-    path="/dhill"
-    badgeAr="حملة ظِلّ — صدقة جارية وسقيا ماء"
-    badgeEn="Dhill Campaign — Ongoing Charity & Water"
-    titleAr="حملة ظِلّ — «نُظِلّهم اليوم عسى أن يُظِلّنا الله يوم القيامة»"
-    titleEn="Dhill Campaign — 'Provide shade today, that Allah may shade us on the Day of Resurrection'"
-    taglineAr="كيف ننجو من حرّ يوم القيامة؟ إذا كنا لا نتحمل حرارة الصيف في الدنيا، فكيف ننجو في الآخرة؟ جاءت حملة ظِلّ لتكون ظلاً وبرداً لأهالينا المستحقين من الفقراء والمساكين، وصدقة جارية وظلاً لك يوم القيامة."
-    taglineEn="How do we find shade on the Day of Judgment? The Dhill campaign provides roofing, clean water taps, fans and cold drinks for needy families in Egypt — an ongoing charity and shade for your hereafter."
-    metaDescAr="شارك في حملة ظِل مع مؤسسة اليسر: أسقف منازل خشبية معزولة، وصلات مياه نقية للمنازل (سهم 500 ج)، خطوط مياه للقرى، أبواب وشبابيك، ومراوح تبريد بالدقهلية وكفر الشيخ والشرقية وكل مصر."
-    metaDescEn="Join Al-Yusr's Dhill Campaign: insulated wooden roofs, clean water connections (EGP 500 share), village water lines, doors & windows, and cooling fans across Dakahlia, Kafr El Sheikh and Egypt."
-    heroImage={yusrWater}
-    heroAlt="حملة ظل — وصلات مياه وأسقف خشبية ومراوح للأسر المستحقة"
-    pricing={[
-      { labelAr: "سهم سقف خشب معزول", labelEn: "Roofing Share", amount: 500, tagAr: "سهم الخير", tagEn: "Share" },
-      { labelAr: "سهم وصلة مياه نقية", labelEn: "Water Tap Share", amount: 500, tagAr: "صدقة جارية", tagEn: "Ongoing" },
-      { labelAr: "مروحة سقف / حائط للتهوية", labelEn: "Cooling Fan", amount: 950, tagAr: "تبريد بيت", tagEn: "Cooling" },
-      { labelAr: "وصلة مياه منزلية كاملة", labelEn: "Full Water Connection", amount: 7500, tagAr: "شامل الموتور والخزان", tagEn: "Complete" },
-      { labelAr: "سقف منزل متكامل ومعزول", labelEn: "Complete Insulated Roof", amount: 16000, tagAr: "حماية 10 سنوات", tagEn: "10-year roof" },
-      { labelAr: "أيّ مبلغ تجود به", labelEn: "Any custom amount", amount: 100 },
-    ]}
-    pillars={[
-      {
-        titleAr: "1. أسقف المنازل الخشبية المعزولة",
-        titleEn: "1. Insulated Wooden Roofs",
-        descAr: "حماية العائلات من حرارة الصيف الشديدة والأمطار: عروق خشبية وألواح متينة معزولة بمشمع بلاستيكي وطبقة خرسانية قوية. عمر افتراضي 8–10 أعوام، بتكلفة 15,000 إلى 20,000 ج (أو سهم بـ 500 ج).",
-        descEn: "Protecting families from scorching heat and rain: solid timber, plastic insulation, and reinforced concrete. 8–10 year lifespan, EGP 15,000–20,000 total or EGP 500 share.",
-      },
-      {
-        titleAr: "2. وصلات المياه النقية للمنازل",
-        titleEn: "2. Pure Home Water Connections",
-        descAr: "شريان الحياة داخل المنزل: مواسير مياه، موتور رفع، خزان مياه، حوض مطبخ، حنفيات، دش، مع التركيب بالكامل (تكلفة 7,000–8,000 ج أو سهم 500 ج). تجوز كصدقة جارية عن المتوفين أو الأحياء.",
-        descEn: "Direct life connection: pipes, booster pump, water tank, kitchen sink, faucets, and shower with full installation (EGP 7,000–8,000 or EGP 500 share). Valid as ongoing charity for the living or deceased.",
-      },
-      {
-        titleAr: "3. خطوط المياه لقرى كاملة",
-        titleEn: "3. Village Water Supply Lines",
-        descAr: "مد شبكات مياه نقية لقرى بأكملها تعاني من انعدام المياه الصالحة للشرب بالتنسيق الكامل مع شركة مياه الشرب والصرف الصحي. عمر افتراضي 10 سنوات فأكثر.",
-        descEn: "Extending pure water main lines to entire underserved villages in coordination with official water authorities. 10+ year lifespan.",
-      },
-      {
-        titleAr: "4. دعم البيوت (أبواب وشبابيك)",
-        titleEn: "4. Home Support (Doors & Windows)",
-        descAr: "توفير وتركيب الأبواب والنوافذ المتينة لحماية الأسر المستورة وسترهم، وتأمينهم من حرارة الصيف القاتلة ورياح الشتاء الباردة.",
-        descEn: "Fabrication and installation of sturdy wooden doors and windows to preserve privacy and block outdoor heat and winter winds.",
-      },
-      {
-        titleAr: "5. وسائل التهوية والتبريد (مراوح)",
-        titleEn: "5. Ventilation & Cooling Fans",
-        descAr: "توفير وتركيب مراوح السقف والحوائط للأسر الأشد احتياجاً لتخفيف وطأة درجات الحرارة المرتفعة وإعانتهم على تحمل لهيب الصيف.",
-        descEn: "Providing and installing ceiling and wall fans for underprivileged homes to ease harsh summer heatwaves.",
-      },
-    ]}
-    steps={[
-      {
-        titleAr: "أين نترك أثراً؟ (مناطق التنفيذ)",
-        titleEn: "Where We Leave an Impact",
-        descAr: "معيارنا الأول هو أولوية المستحقين وليس المكان. تم التنفيذ هذا العام في الدقهلية، كفر الشيخ، والشرقية. وعلى مدار مسيرتنا نفذنا في: الدقهلية، الفيوم، الإسماعيلية، الشرقية، كفر الشيخ، الوادي الجديد، سوهاج، وقنا.",
-        descEn: "Our criterion is need priority: this year we focused on Dakahlia, Kafr El Sheikh, and Sharqia. Across our history: Dakahlia, Fayoum, Ismailia, Sharqia, New Valley, Sohag, and Qena.",
-      },
-      {
-        titleAr: "كيف يتم التنفيذ ميدانياً؟",
-        titleEn: "How We Execute in the Field",
-        descAr: "لضمان وصول كل جنيه إلى مكانه الصحيح وبأعلى جودة، يعتمد التنفيذ ميدانياً على فريق متطوعي اليسر يداً بيد مع فنيين محترفين من نجارين وسباكين وبنائين لضمان الدقة والسرعة.",
-        descEn: "Executed by Al-Yusr volunteers working alongside certified carpenters, plumbers and masons for maximum quality and speed.",
-      },
-      {
-        titleAr: "التوثيق ورقم التتبع",
-        titleEn: "Proof & Tracking",
-        descAr: "يتم توثيق كل سقف وكل وصلة مياه ومروحة بالصور والفيديو مع رقم تتبع فوري لتقرير التبرع يُرسل لك مباشرة.",
-        descEn: "Every roof, water tap and fan is documented with photo/video proof and an instant tracking number sent to you.",
-      },
-    ]}
-    gallery={[
-      { src: yusrWater, altAr: "وصلة مياه نقية مع موتور وخزان لأسرة مستحقة", altEn: "Pure water connection with pump and tank" },
-      { src: posterWater, altAr: "تسقيف خشبي معزول لبيت يحميه من حرارة الصيف", altEn: "Insulated wooden roof installation" },
-      { src: yusrDistribution, altAr: "توزيع مراوح ووسائل تبريد لبيوت القرى", altEn: "Distribution of cooling fans" },
-      { src: yusrMeals, altAr: "قوافل السقيا والمساعدات الميدانية في قرى مصر", altEn: "Field water and aid convoys" },
-    ]}
-    relatedLinks={[
-      { href: "/setr", ar: "حملة سِتر (تسقيف الشتاء والكسوة)", en: "Setr Campaign (Winter aid)" },
-      { href: "/markoun", ar: "حملة مَرْكون (الأثاث والأجهزة)", en: "Markoun campaign" },
-      { href: "/khabia", ar: "الخبيئة — صدقة جارية", en: "Khabia — ongoing charity" },
-      { href: "/food-box", ar: "كرتونة الغذاء الشهرية", en: "Monthly food box" },
-      { href: "/trust", ar: "الشفافية والتقارير الميدانية", en: "Trust & reports" },
-    ]}
-    faq={{
-      ar: [
-        { q: "هل يمكن تنفيذ وصلة المياه كصدقة جارية عن المتوفين أو الأحياء؟", a: "نعم، بالتأكيد! يمكنك نية الوصلة أو السهم كصدقة جارية عن أحد المتوفين من أسرتك أو عن الأحياء (مثل والديك معاً)؛ فسُقيا الماء من أحب الأعمال إلى الله ومن أفضل الصدقات الجارية." },
-        { q: "ما هي مواصفات سقف المنزل في حملة ظل؟", a: "يتضمن عروقاً خشبية وألواحاً متينة، يتم عزلها بمشمع بلاستيكي قوي ثم تغطى بطبقة خرسانية محكمة لحماية الأسرة من الشمس والأمطار بعمر افتراضي 8–10 أعوام." },
-        { q: "ما هي مشتملات وصلة المياه المنزلية؟", a: "تشمل مواسير المياه، موتور رفع، خزان مياه، حوض مطبخ، حنفيات، دش، بالإضافة إلى مصاريف وتكاليف التركيب بالكامل، ويتم اختيار أفضل المواصفات لضمان أطول عمر تشغيلي." },
-        { q: "هل يمكنني المساهمة بسهم فقط وليس التكلفة كاملة؟", a: "نعم، يمكنك شراء سهم في السقف بقيمة 500 جنيه، أو سهم في وصلة المياه بقيمة 500 جنيه، ويشترك عدة متبرعين لإتمام الحالة وتسليمها." },
-        { q: "ما هي المحافظات التي تنفذ فيها حملة ظل؟", a: "نركز في الدقهلية، كفر الشيخ، والشرقية، بالإضافة للقرى الأشد احتياجاً في محافظات الصعيد (الفيوم، قنا، سوهاج، الوادي الجديد)." },
-      ],
-      en: [
-        { q: "Can water taps be dedicated as Sadaqah Jariyah for living or deceased?", a: "Yes, absolutely. You can dedicate water connections on behalf of deceased relatives or living parents as lasting continuous charity." },
-        { q: "What are the wooden roof specifications?", a: "Treated wooden beams and sturdy boards, insulated with heavy plastic sheeting and topped with a reinforced concrete layer, lasting 8–10 years." },
-        { q: "What is included in a home water connection?", a: "Complete piping, water pump, water tank, kitchen sink, faucets, shower fixtures, and full installation labor." },
-        { q: "Can I contribute with a share rather than the full cost?", a: "Yes, you can buy a roof share for EGP 500 or a water connection share for EGP 500." },
-      ],
-    }}
-    donateHref="/donate?program=water"
-    donateLabelAr="تبرّع لحملة ظِلّ"
-    donateLabelEn="Donate to Dhill"
-    bottomCtaAr="اكسب ظِلاً يوم القيامة — تبرع لسقف أو وصلة مياه الآن"
-    bottomCtaEn="Earn shade on the Day of Judgment — support a roof or water tap"
-  />
-);
+const DONATE = "/donate?program=dhill";
+
+/**
+ * The three kinds of shade the campaign builds. Content (labels, descriptions, amounts) comes from
+ * `DHILL_DEFAULTS.sections.tracks` + `prices`; only the icons and the price-id wiring live here.
+ * `share` is the price id of one share, `full` the price id of the complete unit.
+ */
+const TRACK_META = {
+  roof: { icon: Home, share: "roof_share", full: "roof_full", options: ["roof_share", "roof_full"] },
+  water: { icon: Droplets, share: "water_share", full: "water_full", options: ["water_share", "water_full"] },
+  air: { icon: Wind, share: null, full: "fan", options: ["fan"] },
+} as const satisfies Record<string, { icon: LucideIcon; share: string | null; full: string; options: readonly string[] }>;
+
+type TrackId = keyof typeof TRACK_META;
+const isTrackId = (id: string): id is TrackId => id in TRACK_META;
+
+const TRUST_ICONS: Record<string, LucideIcon> = { ngo: ShieldCheck, docs: FileCheck2, areas: MapPin };
+
+const GALLERY = [
+  { src: yusrWater, altAr: "وصلة مياه نقية مع موتور وخزان لأسرة مستحقة", altEn: "Water connection with pump and tank" },
+  { src: posterWater, altAr: "تسقيف خشبي معزول يحمي البيت من حر الصيف", altEn: "Insulated wooden roof" },
+  { src: yusrDistribution, altAr: "توزيع مراوح ووسائل تبريد لبيوت القرى", altEn: "Fans for village homes" },
+  { src: yusrMeals, altAr: "قوافل السقيا الميدانية في قرى مصر", altEn: "Field water convoys" },
+];
+
+const DhillHero = () => {
+  const { c, t, isAr, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const trust = section("trust")?.items ?? [];
+  return (
+    <section className="dhill-hero relative overflow-hidden bg-[hsl(152_65%_9%)] text-primary-foreground">
+      {/* Sun + canopy: the shade the campaign casts */}
+      <div aria-hidden className="pointer-events-none absolute -top-16 end-[-7rem] h-56 w-56 opacity-80 md:end-[4%] md:top-[-5rem] md:h-[34rem] md:w-[34rem] md:opacity-100">
+        <div className="dhill-sun absolute inset-0 rounded-full" />
+        <div className="absolute inset-[-14%] rounded-full border border-accent/15" />
+        <div className="absolute inset-[-30%] rounded-full border border-accent/10" />
+      </div>
+      <svg aria-hidden viewBox="0 0 1440 220" preserveAspectRatio="none" className="pointer-events-none absolute inset-x-0 top-[16rem] hidden h-[14rem] w-full md:block">
+        <path d="M0,220 L0,120 Q720,-40 1440,120 L1440,220 Z" fill="hsl(152 60% 14%)" />
+        <path d="M0,120 Q720,-40 1440,120" fill="none" stroke="hsl(var(--secondary))" strokeOpacity="0.5" strokeWidth="2" />
+      </svg>
+      <div aria-hidden className="absolute inset-x-0 bottom-0 top-[26rem] hidden bg-[hsl(152_60%_14%)] md:block" />
+
+      <div className="container relative mx-auto max-w-6xl px-4 pb-16 pt-10 md:pb-20 md:pt-14">
+        <CampaignCrumbs isAr={isAr} name={isAr ? "حملة ظِلّ" : "Dhill"} className="text-primary-foreground/80" />
+        <div className="mt-10 grid items-end gap-10 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+          <div className="text-center md:text-start">
+            <p className="text-sm font-black text-secondary">{t(c.hero.eyebrow)}</p>
+            <h1 className="mt-3 text-4xl font-black leading-[1.25] sm:text-5xl lg:text-6xl">
+              {t(c.hero.title)}{" "}
+              <span className="mt-1 block text-secondary">{t(c.hero.title2)}</span>
+            </h1>
+            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-primary-foreground/85 md:mx-0 md:text-lg">
+              {t(c.hero.lead)}
+            </p>
+            <HeroActions isAr={isAr} donateHref={DONATE} donateLabel={t(c.hero.donateLabel)} wa={waHref(isAr, "حملة ظل", "the Dhill campaign")} className="mt-8 justify-center md:justify-start" />
+          </div>
+          <div className="relative mx-auto w-full max-w-sm">
+            <img src={yusrWater} alt={isAr ? "حملة ظل — وصلات مياه وأسقف للأسر المستحقة" : "Dhill — water and roofs for families"} loading="eager" className="relative w-full rounded-2xl object-cover shadow-card ring-1 ring-primary-foreground/15" />
+          </div>
+        </div>
+
+        <ul className="mt-12 grid grid-cols-1 gap-3 text-sm font-bold text-primary-foreground/85 sm:grid-cols-3">
+          {trust.map((it) => {
+            const I = TRUST_ICONS[it.id] ?? ShieldCheck;
+            return (
+              <li key={it.id} className="flex items-center justify-center gap-2 md:justify-start">
+                <I className="h-4 w-4 shrink-0 text-secondary" /> {t(it.title)}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+  );
+};
+
+const DhillMain = () => {
+  const { c, t, isAr, price, amount, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const Arrow = isAr ? ArrowLeft : ArrowRight;
+
+  const tracksSection = section("tracks");
+  const tracks = (tracksSection?.items ?? []).filter((it) => isTrackId(it.id));
+  const [trackId, setTrackId] = useState<TrackId>("roof");
+  const track = tracks.find((it) => it.id === trackId) ?? tracks[0];
+  const meta = TRACK_META[(track?.id as TrackId) ?? "roof"];
+  const fullPrice = price(meta.full);
+  const full = fullPrice?.amount ?? 0;
+  const share = meta.share ? amount(meta.share) : 0;
+  const shares = meta.share && share > 0 ? Math.max(1, Math.round(full / share)) : 1;
+  const fullLabel = t(fullPrice?.note ?? fullPrice?.label);
+  const options = meta.options.map((id) => price(id)).filter((p): p is NonNullable<typeof p> => !!p);
+
+  const hadith2 = section("hadith2")?.items[0];
+  const dedicate = section("dedicate");
+  const steps = section("steps");
+  const areas = section("areas");
+  const areasNow = section("areas_now");
+  const areasBefore = section("areas_before");
+
+  return (
+    <>
+      {/* Hadith band */}
+      <section className="bg-[hsl(152_60%_14%)] pb-16 text-primary-foreground md:pb-20">
+        <div className="container mx-auto max-w-4xl px-4 text-center">
+          <blockquote className="text-2xl font-black leading-[1.7] text-secondary md:text-3xl">
+            {t(hadith2?.title)}
+          </blockquote>
+          <p className="mt-4 text-sm font-bold text-primary-foreground/70">{t(hadith2?.desc)}</p>
+        </div>
+      </section>
+
+      {/* Choose your shade */}
+      <section className="bg-background py-16 md:py-24">
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="max-w-2xl">
+            <p className="text-sm font-black text-accent">{t(tracksSection?.lead)}</p>
+            <h2 className="mt-2 text-3xl font-black text-primary md:text-4xl">{t(tracksSection?.title)}</h2>
+          </div>
+
+          <div role="tablist" aria-label={isAr ? "مجالات الحملة" : "Campaign tracks"} className="mt-8 grid grid-cols-3 gap-2 rounded-2xl bg-muted p-1.5 sm:inline-grid sm:w-auto">
+            {tracks.map((it) => {
+              const on = it.id === track?.id;
+              const I = TRACK_META[it.id as TrackId].icon;
+              return (
+                <button
+                  key={it.id}
+                  role="tab"
+                  aria-selected={on}
+                  aria-controls={`dhill-panel-${it.id}`}
+                  id={`dhill-tab-${it.id}`}
+                  onClick={() => setTrackId(it.id as TrackId)}
+                  className={`inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl px-5 text-sm font-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-base ${
+                    on ? "bg-primary text-primary-foreground" : "text-primary hover:bg-background"
+                  }`}
+                >
+                  <I className="h-5 w-5" /> {t(it.title)}
+                </button>
+              );
+            })}
+          </div>
+
+          {track && (
+          <div role="tabpanel" id={`dhill-panel-${track.id}`} aria-labelledby={`dhill-tab-${track.id}`} key={track.id} className="dhill-panel mt-8 grid gap-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-14">
+            <div>
+              <h3 className="text-2xl font-black text-primary">{t(track.extra)}</h3>
+              <p className="mt-3 max-w-[60ch] text-base leading-[1.85] text-foreground/80">{t(track.desc)}</p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {options.map((o) => (
+                  <Link
+                    key={o.id}
+                    to={amountHref(DONATE, o.amount)}
+                    className="group flex items-center justify-between gap-3 rounded-xl border-2 border-border bg-card p-4 transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <span>
+                      <span className="block text-sm font-bold text-muted-foreground">{t(o.label)}</span>
+                      <span className="mt-0.5 block text-2xl font-black tabular-nums text-primary">{fmtNum(o.amount, isAr)} <span className="text-sm font-bold">{isAr ? "جنيه" : "EGP"}</span></span>
+                    </span>
+                    <Arrow className="h-5 w-5 text-accent transition-transform group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5" />
+                  </Link>
+                ))}
+              </div>
+              <Link to={DONATE} className="mt-4 inline-flex min-h-[44px] items-center text-sm font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-accent">
+                {isAr ? "أو تبرّع بأي مبلغ تجود به" : "Or give any amount"}
+              </Link>
+            </div>
+
+            {/* Share grid: how individual shares add up to one complete unit */}
+            <div className="rounded-2xl bg-[hsl(152_60%_14%)] p-6 text-primary-foreground sm:p-8">
+              <p className="text-sm font-bold text-primary-foreground/75">
+                {shares > 1
+                  ? (isAr ? `كل مربع سهم بـ ${fmtNum(share, true)} جنيه` : `Each square is a ${share} EGP share`)
+                  : (isAr ? "تبرع واحد يكفي" : "One gift is enough")}
+              </p>
+              <p className="mt-1 text-xl font-black">
+                {shares > 1
+                  ? (isAr ? `${fmtNum(shares, true)} سهماً = ${fullLabel}` : `${shares} shares = ${fullLabel.toLowerCase()}`)
+                  : fullLabel}
+              </p>
+              <div className="mt-6 grid grid-cols-8 gap-1.5" aria-hidden>
+                {Array.from({ length: Math.max(shares, 1) }).map((_, i) => (
+                  <span
+                    key={i}
+                    className={`dhill-cell aspect-square rounded-[4px] ${i === 0 ? "bg-accent" : "bg-secondary"}`}
+                    style={{ animationDelay: `${i * 22}ms` }}
+                  />
+                ))}
+              </div>
+              <p className="mt-5 flex items-center gap-2 text-sm text-primary-foreground/80">
+                <span className="h-3 w-3 shrink-0 rounded-[3px] bg-accent" aria-hidden />
+                {shares > 1
+                  ? (isAr ? "سهمك يكتمل مع أسهم غيرك من المتبرعين، ونسلّم الحالة فور اكتمالها." : "Your share joins other donors' shares; we deliver as soon as the unit is complete.")
+                  : (isAr ? "تتسلمها الأسرة مركّبة وجاهزة." : "Delivered to the family installed and ready.")}
+              </p>
+            </div>
+          </div>
+          )}
+        </div>
+      </section>
+
+      <HadithBlock hadith={{ ar: c.hadith.text.ar, en: c.hadith.text.en, sourceAr: c.hadith.source.ar, sourceEn: c.hadith.source.en }} tone="light" />
+
+      {/* Ongoing charity on behalf of a loved one */}
+      <section className="bg-primary py-16 text-primary-foreground md:py-20">
+        <div className="container mx-auto grid max-w-6xl items-center gap-10 px-4 lg:grid-cols-2">
+          <div>
+            <p className="text-sm font-black text-secondary">{isAr ? "صدقة جارية باسم من تحب" : "Ongoing charity for a loved one"}</p>
+            <h2 className="mt-2 text-3xl font-black md:text-4xl">{t(dedicate?.title)}</h2>
+            <p className="mt-4 max-w-[55ch] text-base leading-[1.9] text-primary-foreground/85">
+              {t(dedicate?.lead)}
+            </p>
+          </div>
+          <ol className="space-y-3">
+            {(dedicate?.items ?? []).map((st, i) => (
+              <li key={st.id} className="flex items-center gap-4 rounded-xl bg-primary-foreground/[0.07] p-4">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-secondary font-mono font-black text-secondary-foreground">{fmtNum(i + 1, isAr)}</span>
+                <span className="font-bold">{t(st.title)}</span>
+              </li>
+            ))}
+            <li>
+              <a href={waHref(isAr, "صدقة جارية في حملة ظل", "an ongoing-charity water tap")} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-[44px] items-center gap-2 text-sm font-black text-secondary underline underline-offset-4 hover:text-primary-foreground">
+                <WhatsAppIcon className="h-4 w-4" /> {isAr ? "أرسل الاسم على واتساب" : "Send the name on WhatsApp"}
+              </a>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      {/* From heat to shade */}
+      <section className="bg-muted/50 py-16 md:py-20">
+        <div className="container mx-auto max-w-6xl px-4">
+          <h2 className="text-3xl font-black text-primary md:text-4xl">{t(steps?.title)}</h2>
+          <ol className="relative mt-10 grid gap-8 md:grid-cols-3 md:gap-6">
+            <span aria-hidden className="absolute start-[22px] top-0 h-full w-[3px] rounded-full bg-gradient-to-b from-accent to-secondary md:start-0 md:top-[22px] md:h-[3px] md:w-full md:bg-gradient-to-l" />
+            {(steps?.items ?? []).map((s, i) => (
+              <li key={s.id} className="relative ps-16 md:ps-0 md:pt-16">
+                <span className="absolute start-0 top-0 grid h-12 w-12 place-items-center rounded-full border-4 border-muted bg-primary font-mono text-lg font-black text-secondary">
+                  {fmtNum(i + 1, isAr)}
+                </span>
+                <h3 className="text-lg font-black text-primary">{t(s.title)}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-foreground/75 sm:text-base">{t(s.desc)}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* Where we work */}
+      <section className="bg-background py-16 md:py-20">
+        <div className="container mx-auto max-w-6xl px-4">
+          <h2 className="text-3xl font-black text-primary md:text-4xl">{t(areas?.title)}</h2>
+          <p className="mt-3 max-w-2xl text-base text-foreground/75">{t(areas?.lead)}</p>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            <div className="rounded-2xl border-2 border-primary p-6">
+              <p className="text-sm font-black text-accent">{t(areasNow?.title)}</p>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {(areasNow?.items ?? []).map((a) => <li key={a.id} className="rounded-lg bg-primary px-4 py-2 font-black text-primary-foreground">{t(a.title)}</li>)}
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-border p-6">
+              <p className="text-sm font-black text-muted-foreground">{t(areasBefore?.title)}</p>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {(areasBefore?.items ?? []).map((a) => <li key={a.id} className="rounded-lg bg-muted px-4 py-2 font-bold text-primary">{t(a.title)}</li>)}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Field documentation */}
+      <section className="bg-background py-16 md:py-20">
+        <div className="container mx-auto max-w-6xl px-4">
+          <h2 className="text-3xl font-black text-primary md:text-4xl">{t(section("gallery")?.title)}</h2>
+          <div className="mt-8"><BentoGallery items={GALLERY} isAr={isAr} /></div>
+        </div>
+      </section>
+    </>
+  );
+};
+
+const DhillLanding = () => {
+  const { c, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const seo = section("seo");
+  return (
+    <CampaignLandingShell
+      slug="dhill"
+      path="/dhill"
+      titleAr={seo?.title.ar ?? ""}
+      titleEn={seo?.title.en ?? ""}
+      taglineAr={seo?.lead?.ar ?? ""}
+      taglineEn={seo?.lead?.en ?? ""}
+      metaDescAr="شارك في حملة ظِل مع مؤسسة اليسر: أسقف منازل خشبية معزولة، وصلات مياه نقية للمنازل (سهم 500 ج)، خطوط مياه للقرى، أبواب وشبابيك، ومراوح تبريد بالدقهلية وكفر الشيخ والشرقية وكل مصر."
+      metaDescEn="Join Al-Yusr's Dhill Campaign: insulated wooden roofs, clean water connections (EGP 500 share), village water lines, doors & windows, and cooling fans across Dakahlia, Kafr El Sheikh and Egypt."
+      heroImage={yusrWater}
+      heroAlt="حملة ظل — وصلات مياه وأسقف خشبية ومراوح للأسر المستحقة"
+      hero={<DhillHero />}
+      main={<DhillMain />}
+      relatedLinks={[
+        { href: "/setr", ar: "حملة سِتر (تسقيف الشتاء والكسوة)", en: "Setr Campaign (Winter aid)" },
+        { href: "/markoun", ar: "حملة مَرْكون (الأثاث والأجهزة)", en: "Markoun campaign" },
+        { href: "/khabia", ar: "الخبيئة — صدقة جارية", en: "Khabia — ongoing charity" },
+        { href: "/food-box", ar: "كرتونة الغذاء الشهرية", en: "Monthly food box" },
+        { href: "/trust", ar: "الشفافية والتقارير الميدانية", en: "Trust & reports" },
+      ]}
+      faq={{
+        ar: c.faq.map((f) => ({ q: f.q.ar, a: f.a.ar })),
+        en: c.faq.map((f) => ({ q: f.q.en, a: f.a.en })),
+      }}
+      donateHref={DONATE}
+      donateLabelAr={c.hero.donateLabel.ar}
+      donateLabelEn={c.hero.donateLabel.en}
+      bottomCtaAr={c.cta.title.ar}
+      bottomCtaEn={c.cta.title.en}
+      bottomSubAr={c.cta.sub.ar}
+      bottomSubEn={c.cta.sub.en}
+    />
+  );
+};
 
 export default DhillLanding;

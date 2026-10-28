@@ -42,139 +42,37 @@ import posterDelivery from "@/assets/markoun-poster-delivery.png";
 import posterMedBottle from "@/assets/markoun-poster-medbottle.png";
 import markounFurniture from "@/assets/markoun-furniture.jpg";
 import asasMarqun from "@/assets/asas-marqun.jpg";
+import { HadithBlock } from "@/components/campaigns/HadithBlock";
+import { useCampaignPage } from "@/hooks/useCampaignPage";
+import MARKOUN_DEFAULTS from "@/data/campaignPages/markoun";
+import type { LucideIcon } from "lucide-react";
+import { FAQSchema } from "@/components/common/Schemas";
 
-const PILLARS_DATA = [
-  {
-    id: "furniture",
-    titleAr: "الأثاث المنزلي",
-    titleEn: "Home Furniture",
-    subtitleAr: "أثاثك القديم عاش معاك قصة وهيبدأ قصة جديدة في حياة أسرة تانية",
-    subtitleEn: "Your old furniture had a story with you, and will start a new life for another family",
-    descAr: "نجمع القطع الفائضة عن حاجتكم (غرف نوم، سرير، خزائن، كنب، طاولات ومطابخ) لنساهم في تجهيز البيوت الفقيرة ومساندة مشروعات الزواج وتأسيس منازل مستقرة، لترفع أهالينا المستحقين من النوم على الأرض إلى الستر والراحة التامة.",
-    descEn: "We collect surplus furniture (bedroom sets, beds, wardrobes, tables) to furnish needy homes, support marriage aid, and restore dignity.",
-    icon: Sofa,
-    tagAr: "تأسيس منازل مستقرة",
-    tagEn: "Home Furnishing",
-  },
-  {
-    id: "appliances",
-    titleAr: "الأجهزة الكهربائية",
-    titleEn: "Home Appliances",
-    subtitleAr: "كل جهاز كهربائي مركون في بيتك لو تبرعت بيه هيكون صدقة جارية",
-    subtitleEn: "Every idle appliance in your home becomes an ongoing charity",
-    descAr: "نستقبل (الثلاجات، الغسالات، البوتاجازات، المراوح، الشاشات، السخانات والمكاوى) لإدخال الطمأنينة والتسهيلات الحياتية لبيوت أسر بسيطة بحاجة ماسة لها بعد فحصها وصيانتها بورش المؤسسة.",
-    descEn: "We receive washers, fridges, stoves, and fans, restoring them in specialized workshops before delivery.",
-    icon: Tv,
-    tagAr: "صدقة جارية تنبض بالحياة",
-    tagEn: "Ongoing Charity",
-  },
-  {
-    id: "clothes",
-    titleAr: "الملابس والكساء",
-    titleEn: "Clothing & Garments",
-    subtitleAr: "المركون في دولابك ستر لغيرك وقصة جديدة من الدفء",
-    subtitleEn: "What is idle in your wardrobe is dignity for another",
-    descAr: "نجمع الملابس المستعملة بحالة جيدة، لنقوم بفرزها، تنظيفها، وكيها وإعادة تقديمها بكرامة تامة للأسر والأطفال كـ «قصة جديدة» من الدفء والستر تليق بأهالينا المتعففين.",
-    descEn: "Surplus quality garments are carefully sorted, cleaned, and presented with utmost dignity to underprivileged children and parents.",
-    icon: Shirt,
-    tagAr: "ستر وفرحة حقيقية",
-    tagEn: "Warmth & Dignity",
-  },
-  {
-    id: "meds",
-    titleAr: "الصيدلية المستدامة (الأدوية)",
-    titleEn: "Sustainable Medicine Bank",
-    subtitleAr: "علاجك الفائض طوق نجاة لمريض غير قادر على ثمن الدواء",
-    subtitleEn: "Your surplus medicine is a lifeline for struggling patients",
-    descAr: "نجمع الأدوية الفائضة والصالحة للاستخدام من الصيدليات المنزلية، ليتم فحصها وتصنيفها تحت إشراف طبي وصيدلي دقيق وتوزيعها مجاناً بالكامل على المرضى غير القادرين على توفير تكلفة العلاج الشهري.",
-    descEn: "We collect valid, unexpired household medications, medically inspecting and distributing them completely free to impoverished patients.",
-    icon: Pill,
-    tagAr: "رعاية صحية مجانية",
-    tagEn: "Medical Aid",
-  },
-  {
-    id: "books",
-    titleAr: "المعرفة والتعليم (الكتب)",
-    titleEn: "Educational Knowledge (Books)",
-    subtitleAr: "كتاب ابنك فرصة لمستقبل ابن غيرك وطوق نجاة من الفقر",
-    subtitleEn: "Your child's book is an opportunity for another student's bright future",
-    descAr: "نستقبل الكتب المدرسية، الثقافية، والتعليمية لإعادة تدوير المعرفة وتوزيعها على الطلاب غير القادرين وتأسيس مكتبات بالقرى لإنقاذ الطلاب من خطر التسرب الدراسي.",
-    descEn: "We collect textbooks and references to reuse knowledge and equip students from low-income households with essential study tools.",
-    icon: BookOpen,
-    tagAr: "دعم تعليم وتدوير معرفة",
-    tagEn: "Education Lifeline",
-  },
-];
+/** Presentation-only metadata (icons, tags) keyed by the editable item ids in `campaignPages/markoun.ts`. */
+const PILLAR_META: Record<string, { icon: LucideIcon; tagAr: string; tagEn: string }> = {
+  furniture: { icon: Sofa, tagAr: "تأسيس منازل مستقرة", tagEn: "Home Furnishing" },
+  appliances: { icon: Tv, tagAr: "صدقة جارية تنبض بالحياة", tagEn: "Ongoing Charity" },
+  clothes: { icon: Shirt, tagAr: "ستر وفرحة حقيقية", tagEn: "Warmth & Dignity" },
+  meds: { icon: Pill, tagAr: "رعاية صحية مجانية", tagEn: "Medical Aid" },
+  books: { icon: BookOpen, tagAr: "دعم تعليم وتدوير معرفة", tagEn: "Education Lifeline" },
+};
 
-const ADVANTAGES_DATA = [
-  {
-    id: "data",
-    icon: Database,
-    titleAr: "القضاء على العشوائية",
-    titleEn: "Zero Waste & Precision",
-    descAr: "نعتمد على نظام رقمي وقواعد بيانات دقيقة ومحدثة تضمن ذهاب كل قطعة تبرع عيني إلى مكانها الصحيح والأنسب لاحتياج الأسرة الفعلي.",
-    descEn: "Digital field databases guarantee every in-kind item matches the exact, validated needs of verified households.",
-  },
-  {
-    id: "dignity",
-    icon: HeartHandshake,
-    titleAr: "حفظ كرامة المتلقي",
-    titleEn: "Preserving Dignity",
-    descAr: "نحن نؤمن أن جودة العطاء من جودة التعامل؛ لذا تمر كل التبرعات بمراحل فحص وتأهيل وصيانة وتنظيف دقيقة لتصل للمستفيدين وكأنها جديدة تماماً.",
-    descEn: "All items undergo thorough repair, refurbishing, and cleaning so they reach recipient homes in pristine, dignified condition.",
-  },
-  {
-    id: "doorstep",
-    icon: Truck,
-    titleAr: "راحة المتبرع (مندوب لحد الباب)",
-    titleEn: "Doorstep Pickup Convenience",
-    descAr: "وفرنا منظومة لوجستية متكاملة؛ لست بحاجة للتحرك من منزلك، بمجرد تواصلك معنا يتوجه مندوبنا الرسمي بسيارات المؤسسة لاستلام وتوثيق التبرع.",
-    descEn: "Our official logistics vans collect items directly from your home with zero hassle, scheduled at your convenience.",
-  },
-];
-
-const FAQS_DATA = [
-  {
-    q_ar: "إيه يعني حملة مَرْكون وليه أشارك فيها؟",
-    q_en: "What is the Markoun campaign and why participate?",
-    a_ar: "بعد دراسة ميدانية وجدنا أن من كل 10 بيوت في 4 بيوت فيهم كنوز مركونة لو تم استغلالها بشكل صحيح هتبني حياة لأسرة كاملة. حملة مركون هي أول حملة مصرية منظمة لإعادة استخدام واستغلال كل المركون في منزلك (أثاث، أجهزة، ملابس، أدوية، كتب) لتغيير حياة أسر مستحقة من الفقر للراحة والأمان.",
-    a_en: "Studies show 4 out of 10 homes contain idle treasures. Markoun is Egypt's first organized campaign to repurpose surplus items and rebuild lives.",
-  },
-  {
-    q_ar: "إزاي أتبرع بالمركون عندي ومين بيستلمه؟",
-    q_en: "How do I donate my items and who collects them?",
-    a_ar: "كل اللي عليك تعمله: ابعت كلمة «تبرع» في رسالة واتساب على 01097000137 أو اتصل بنا، وهيوصلك مندوبنا بسيارة المؤسسة المجهزة لحد باب منزلك ليستلم منك كل المركون بكل رقي وسهولة وبدون أي مجهود منك.",
-    a_en: "Simply text 'Donate' via WhatsApp to 01097000137, and our representative will collect the items directly from your doorstep.",
-  },
-  {
-    q_ar: "هل الاستلام من باب البيت بيكلفني أي رسوم أو مصاريف؟",
-    q_en: "Are there any pickup fees?",
-    a_ar: "الاستلام من باب منزلك والتوصيل لبيوت الأسر مجاني تماماً 100% وبدون أي مقابل على المتبرع أو الأسرة المستفيدة.",
-    a_en: "Pickup and delivery are 100% free with zero fees.",
-  },
-  {
-    q_ar: "هل تقبلون الأجهزة أو الأثاث اللي محتاج صيانة أو تنظيف؟",
-    q_en: "Do you accept items needing repair?",
-    a_ar: "نعم! مؤسسة اليسر تمتلك ورش صيانة وترميم متخصصة؛ سياراتنا تنقل المساهمات مباشرة للترميم والتصليح والتنظيف قبل تسليمها وفرشها داخل منازل أهالينا المستحقين.",
-    a_en: "Yes! Al-Yusr has dedicated workshops that repair, clean, and restore items before delivering them.",
-  },
-  {
-    q_ar: "ما هي شروط التبرع بالأدوية الفائضة؟",
-    q_en: "What are the rules for medicine donations?",
-    a_ar: "نستقبل كافة الأدوية الفائضة بشرط أن تكون داخل عبواتها الأصلية وسارية الصلاحية؛ حيث تخضع للمعاينة والفرز من صيادلة المؤسسة قبل صرفها مجاناً للمرضى.",
-    a_en: "Medications must be in original blister/packaging with valid expiry dates, inspected by pharmacists before dispensing.",
-  },
-  {
-    q_ar: "هل ممكن أتبرع بمبلغ مالي لو معنديش حاجة مركونة؟",
-    q_en: "Can I donate money if I don't have surplus items?",
-    a_ar: "نعم بالتأكيد! لمن ليس لديه مركون ويرغب في المساهمة في نفقات صيانة وترميم ونقل الأجهزة والأثاث وشراء النواقص، متاح التبرع عبر حساب CIB رقم 100043605733 أو عبر نموذج التبرع الإلكتروني بالموقع.",
-    a_en: "Yes, financial donations supporting repair and transport costs are welcomed via CIB account 100043605733 or our online donation portal.",
-  },
-];
+const ADVANTAGE_ICONS: Record<string, LucideIcon> = {
+  data: Database,
+  dignity: HeartHandshake,
+  doorstep: Truck,
+};
 
 const MarkounLanding = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
+  const { c, t, section } = useCampaignPage("markoun", MARKOUN_DEFAULTS);
+  const pillars = section("pillars")?.items ?? [];
+  const advantages = section("advantages")?.items ?? [];
+  const steps = section("steps")?.items ?? [];
+  const sloganText = t(section("slogan")?.items?.[0]?.title) || t(section("slogan")?.title);
+  const contactItem = (id: string) => section("contact")?.items.find((i) => i.id === id);
+  const bankNumber = t(contactItem("bank")?.desc) || "100043605733";
   const base = "https://elyusr.org";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   const [copiedBank, setCopiedBank] = useState(false);
@@ -209,7 +107,7 @@ const MarkounLanding = () => {
   }, []);
 
   const copyBankNumber = () => {
-    navigator.clipboard.writeText("100043605733");
+    navigator.clipboard.writeText(bankNumber);
     setCopiedBank(true);
     toast.success(isRTL ? "تم نسخ رقم الحساب البنكي (CIB)" : "CIB account copied");
     setTimeout(() => setCopiedBank(false), 2500);
@@ -224,6 +122,7 @@ const MarkounLanding = () => {
 
   return (
     <PageLayout>
+      <FAQSchema items={c.faq.map((f) => ({ q: t(f.q), a: t(f.a) }))} />
       <SEOHelmet
         title={
           isRTL
@@ -303,27 +202,16 @@ const MarkounLanding = () => {
             <div className="text-center lg:col-span-7 lg:text-start">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-primary-foreground backdrop-blur shadow-sm">
                 <Sparkles className="h-3.5 w-3.5 text-accent" />
-                {isRTL ? "أول حملة مصرية.. تُحيي أُسرة بالمركون في بيتك" : "First Egyptian campaign for surplus items"}
+                {t(c.hero.eyebrow)}
               </span>
 
               <h1 className="mt-4 text-3xl font-black leading-tight sm:text-4xl md:text-5xl lg:leading-[1.2]">
-                {isRTL ? (
-                  <>
-                    كنزك المركون.. <br className="hidden sm:block" />
-                    <span className="text-gradient-lime">يبني حياة لغيرك!</span>
-                  </>
-                ) : (
-                  <>
-                    What's idle in your home.. <br className="hidden sm:block" />
-                    <span className="text-gradient-lime">builds a new life for another!</span>
-                  </>
-                )}
+                {t(c.hero.title)} <br className="hidden sm:block" />
+                <span className="text-gradient-lime">{t(c.hero.title2)}</span>
               </h1>
 
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-primary-foreground/90 sm:text-base md:text-lg">
-                {isRTL
-                  ? "في زوايا بيوتنا الكثير من الأشياء التي لم نَعد نستخدمها، ولكنها بالنسبة لأسر أخرى تُمثّل حلماً طال انتظاره. نحن لا نجمع مجرد أغراض فائضة، بل نعيد صياغة الأمل وننقل الدفء والاستقرار من بيوتكم إلى بيوت أهالينا المستحقين."
-                  : "In every home there are idle belongings that represent a lifelong dream for struggling families. We don't just collect surplus items; we restore hope and transfer comfort directly into deserving households."}
+                {t(c.hero.lead)}
               </p>
 
               {/* Action Buttons */}
@@ -335,7 +223,7 @@ const MarkounLanding = () => {
                   className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] px-5 sm:px-6 py-3 text-xs sm:text-sm font-black text-white shadow-lg transition hover:brightness-105 text-center leading-normal"
                 >
                   <WhatsAppIcon className="h-4 w-4 shrink-0" />
-                  <span>{isRTL ? "طلب مندوب استلام" : "Request Courier"}</span>
+                  <span>{t(c.hero.donateLabel)}</span>
                 </a>
 
                 <Button
@@ -386,7 +274,7 @@ const MarkounLanding = () => {
       <section className="bg-primary/95 py-6 text-primary-foreground border-y border-secondary/30">
         <div className="container mx-auto max-w-5xl px-4 text-center">
           <p className="text-base sm:text-xl md:text-2xl font-black text-secondary tracking-wide">
-            {isRTL ? "«اجعل من كركبة بيتك.. خطوة لـ عمار بيت غيرك»" : "'Transform household clutter into comfort for another home'"}
+            {sloganText}
           </p>
         </div>
       </section>
@@ -400,20 +288,17 @@ const MarkounLanding = () => {
               {isRTL ? "محاور ومستهدفات الحملة (ماذا نجمع؟)" : "What You Can Donate"}
             </span>
             <h2 className="mt-3 text-2xl font-black text-primary sm:text-3xl md:text-4xl">
-              {isRTL
-                ? "خمسة مسارات شاملة لتغطية كافة الاحتياجات الأساسية للحياة الكريمة"
-                : "Five Core Tracks Covering All Essential Needs"}
+              {t(section("pillars")?.title)}
             </h2>
             <p className="mx-auto mt-2 max-w-2xl text-xs leading-relaxed text-muted-foreground sm:text-sm md:text-base">
-              {isRTL
-                ? "تتحرك حملة مركون بشكل شامل لتغطية كافة الاحتياجات الأساسية لعيش حياة كريمة عبر خمسة محاور رئيسية:"
-                : "Markoun operates across five key tracks to fulfill every aspect of dignified living:"}
+              {t(section("pillars")?.lead)}
             </p>
           </div>
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {PILLARS_DATA.map((p) => {
-              const Icon = p.icon;
+            {pillars.map((p) => {
+              const meta = PILLAR_META[p.id] ?? PILLAR_META.furniture;
+              const Icon = meta.icon;
               return (
                 <div
                   key={p.id}
@@ -425,20 +310,20 @@ const MarkounLanding = () => {
                         <Icon className="h-6 w-6" />
                       </span>
                       <span className="rounded-full bg-secondary/10 px-3 py-1 text-[11px] font-black text-secondary">
-                        {isRTL ? p.tagAr : p.tagEn}
+                        {isRTL ? meta.tagAr : meta.tagEn}
                       </span>
                     </div>
 
                     <h3 className="mt-4 text-xl font-black text-primary md:text-2xl">
-                      {isRTL ? p.titleAr : p.titleEn}
+                      {t(p.title)}
                     </h3>
 
                     <div className="mt-1 text-xs font-black text-accent md:text-sm">
-                      {isRTL ? p.subtitleAr : p.subtitleEn}
+                      {t(p.extra)}
                     </div>
 
                     <p className="mt-3 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                      {isRTL ? p.descAr : p.descEn}
+                      {t(p.desc)}
                     </p>
                   </div>
 
@@ -450,7 +335,7 @@ const MarkounLanding = () => {
                       className="inline-flex items-center gap-1.5 text-xs font-black text-primary hover:text-secondary transition"
                     >
                       <WhatsAppIcon className="h-4 w-4" />
-                      {isRTL ? `طلب مندوب لـ ${p.titleAr}` : `Donate ${p.titleEn}`}
+                      {isRTL ? `طلب مندوب لـ ${t(p.title)}` : `Donate ${t(p.title)}`}
                       <Arrow className="h-3.5 w-3.5" />
                     </a>
                   </div>
@@ -461,6 +346,11 @@ const MarkounLanding = () => {
         </div>
       </section>
 
+      <HadithBlock
+        hadith={{ ar: c.hadith.text.ar, en: c.hadith.text.en, sourceAr: c.hadith.source.ar, sourceEn: c.hadith.source.en }}
+        tone="dark"
+      />
+
       {/* Why Donate to Markoun */}
       <section className="bg-muted/40 py-12 md:py-20 border-y border-border/60">
         <div className="container mx-auto max-w-6xl px-4">
@@ -470,18 +360,16 @@ const MarkounLanding = () => {
               {isRTL ? "ضمان الأثر والأمانة" : "Why Choose Markoun"}
             </span>
             <h2 className="mt-3 text-2xl font-black text-primary sm:text-3xl md:text-4xl">
-              {isRTL ? "لماذا تتبرع لـ «مركون»؟" : "Why Donate to Markoun?"}
+              {t(section("advantages")?.title)}
             </h2>
             <p className="mx-auto mt-2 max-w-xl text-xs leading-relaxed text-muted-foreground sm:text-sm">
-              {isRTL
-                ? "عندما تختار التبرع لحملة مركون، فإنك تضمن أعلى مستويات الاحترافية والأمان:"
-                : "Your donation is handled with absolute institutional diligence and care:"}
+              {t(section("advantages")?.lead)}
             </p>
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {ADVANTAGES_DATA.map((adv) => {
-              const Icon = adv.icon;
+            {advantages.map((adv) => {
+              const Icon = ADVANTAGE_ICONS[adv.id] ?? CheckCircle2;
               return (
                 <div
                   key={adv.id}
@@ -491,10 +379,10 @@ const MarkounLanding = () => {
                     <Icon className="h-6 w-6 text-secondary" />
                   </span>
                   <h3 className="mt-5 text-lg sm:text-xl font-black text-primary">
-                    {isRTL ? adv.titleAr : adv.titleEn}
+                    {t(adv.title)}
                   </h3>
                   <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-muted-foreground">
-                    {isRTL ? adv.descAr : adv.descEn}
+                    {t(adv.desc)}
                   </p>
                 </div>
               );
@@ -512,58 +400,27 @@ const MarkounLanding = () => {
               {isRTL ? "آلية المشاركة وسهولة الإجراءات" : "How It Works"}
             </span>
             <h2 className="mt-3 text-2xl font-black text-primary sm:text-3xl md:text-4xl">
-              {isRTL ? "خطوات بسيطة ليصلك مندوبنا" : "Simple Steps to Participate"}
+              {t(section("steps")?.title)}
             </h2>
             <p className="mx-auto mt-2 max-w-xl text-xs leading-relaxed text-muted-foreground sm:text-sm">
-              {isRTL
-                ? "منظومة مريحة تضمن استلام المركون من باب بيتك وتوصيله بكامل الكرامة لأهالينا."
-                : "Effortless process ensuring safe doorstep pickup and dignified family delivery."}
+              {t(section("steps")?.lead)}
             </p>
           </div>
 
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                step: "1",
-                titleAr: "أرسل كلمة «تبرع»",
-                titleEn: "Send 'Donate'",
-                descAr: "أرسل رسالة بكلمة «تبرع» على واتساب أو اتصل برقم 01097000137 وحدد نوع المركون عندك.",
-                descEn: "Send 'Donate' via WhatsApp or phone call."
-              },
-              {
-                step: "2",
-                titleAr: "مندوبنا عند باب بيتك",
-                titleEn: "Doorstep Pickup",
-                descAr: "سيارات المؤسسة المجهزة تصل أمام باب منزلك لاستلام الأغراض مجاناً وبكل احترام ورقي.",
-                descEn: "Our courier collects your items directly from your home for free."
-              },
-              {
-                step: "3",
-                titleAr: "ورش الصيانة والترميم",
-                titleEn: "Refurbish & Restore",
-                descAr: "تدخل القطع ورش المؤسسة للتنظيف، الصيانة، وتغيير التالف لترجع بحالة ممتازة تليق بأهالينا.",
-                descEn: "Workshops inspect, repair, and clean all items thoroughly."
-              },
-              {
-                step: "4",
-                titleAr: "التسليم والتوثيق الميداني",
-                titleEn: "Documented Delivery",
-                descAr: "تُسلّم وتُفرش داخل منازل الأسر الأكثر استحقاقاً مع توثيق مصور يوضح فرحتهم والأثر المحقق.",
-                descEn: "Furnished directly inside beneficiary homes with full reporting."
-              },
-            ].map((s) => (
+            {steps.map((s, idx) => (
               <div
-                key={s.step}
+                key={s.id}
                 className="relative rounded-3xl border border-border bg-card p-6 shadow-soft text-center sm:text-start"
               >
                 <span className="grid h-10 w-10 place-items-center rounded-2xl bg-orange-grad font-mono text-base font-black text-accent-foreground shadow-cta mx-auto sm:mx-0">
-                  {s.step}
+                  {idx + 1}
                 </span>
                 <h3 className="mt-4 text-base font-black text-primary">
-                  {isRTL ? s.titleAr : s.titleEn}
+                  {t(s.title)}
                 </h3>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-[13px]">
-                  {isRTL ? s.descAr : s.descEn}
+                  {t(s.desc)}
                 </p>
               </div>
             ))}
@@ -580,19 +437,15 @@ const MarkounLanding = () => {
               <div className="md:col-span-7 space-y-4 text-center md:text-start">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-secondary ring-1 ring-secondary/40">
                   <ShieldCheck className="h-3.5 w-3.5" />
-                  {isRTL ? "مؤسسة اليسر الخيرية — المنصورة" : "Al-Yusr Charity — Mansoura"}
+                  {t(contactItem("badge")?.title)}
                 </span>
 
                 <h2 className="text-2xl font-black md:text-3xl leading-tight">
-                  {isRTL
-                    ? "ثقتكم هي المحرك الأساسي لكل خطوة خير"
-                    : "Your trust drives every step of impact"}
+                  {t(section("contact")?.title)}
                 </h2>
 
                 <p className="text-xs sm:text-sm leading-relaxed text-primary-foreground/90 max-w-xl">
-                  {isRTL
-                    ? "سيارات مؤسسة اليسر تتحرك من قلب الميدان محملة بمساهماتكم، لتأخذ طريقها مباشرة للترميم قبل أن تذهب لأهالينا المتعففين المستحقين."
-                    : "Official Al-Yusr transport vehicles collect contributions daily, heading straight to our restoration workshops before delivery."}
+                  {t(section("contact")?.lead)}
                 </p>
 
                 <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
@@ -620,11 +473,11 @@ const MarkounLanding = () => {
                   <Building2 className="mt-1 h-5 w-5 shrink-0 text-secondary" />
                   <div className="flex-1">
                     <div className="font-black text-secondary">
-                      {isRTL ? "للتبرع المادي ودعم نفقات النقل والصيانة (CIB):" : "Financial Support (CIB Bank):"}
+                      {t(contactItem("bank")?.title)}
                     </div>
                     <div className="mt-1 flex items-center justify-between gap-2">
                       <span dir="ltr" className="font-mono text-base font-black text-white tracking-wider">
-                        100043605733
+                        {bankNumber}
                       </span>
                       <button
                         type="button"
@@ -636,7 +489,7 @@ const MarkounLanding = () => {
                       </button>
                     </div>
                     <div className="mt-1 text-[11px] opacity-80 text-primary-foreground/75">
-                      {isRTL ? "باسم: مؤسسة اليسر للتنمية" : "Account Name: Al-Yusr Foundation"}
+                      {t(contactItem("bank")?.extra)}
                     </div>
                   </div>
                 </div>
@@ -644,9 +497,9 @@ const MarkounLanding = () => {
                 <div className="flex items-start gap-3 pt-1">
                   <MapPin className="mt-1 h-5 w-5 shrink-0 text-secondary" />
                   <div>
-                    <div className="font-black text-secondary">{isRTL ? "المقر الرئيسي:" : "Headquarters:"}</div>
+                    <div className="font-black text-secondary">{t(contactItem("hq")?.title)}</div>
                     <div className="mt-1 leading-relaxed text-white text-xs sm:text-sm">
-                      {isRTL ? "المنصورة، تقسيم خطاب، بجوار وكالة المنصورة." : "Mansoura, Khattab District, next to Mansoura Agency."}
+                      {t(contactItem("hq")?.desc)}
                     </div>
                   </div>
                 </div>
@@ -714,13 +567,13 @@ const MarkounLanding = () => {
           </div>
 
           <Accordion type="single" collapsible className="mt-8 space-y-3 rounded-3xl border border-border bg-card p-4 sm:p-6 shadow-soft">
-            {FAQS_DATA.map((faq, idx) => (
+            {c.faq.map((faq, idx) => (
               <AccordionItem key={idx} value={`item-${idx}`} className="border-border/60">
                 <AccordionTrigger className="text-start text-sm font-black text-primary hover:text-secondary sm:text-base">
-                  {isRTL ? faq.q_ar : faq.q_en}
+                  {t(faq.q)}
                 </AccordionTrigger>
                 <AccordionContent className="text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                  {isRTL ? faq.a_ar : faq.a_en}
+                  {t(faq.a)}
                 </AccordionContent>
               </AccordionItem>
             ))}
@@ -737,10 +590,10 @@ const MarkounLanding = () => {
             </span>
             <div>
               <div className="text-xs sm:text-sm font-black text-primary-foreground">
-                {isRTL ? "عندك مركون في بيتك؟ (أثاث · أجهزة · ملابس · أدوية · كتب)" : "Have surplus items at home?"}
+                {t(c.cta.title)}
               </div>
               <div className="text-[10px] font-bold text-secondary hidden sm:block">
-                {isRTL ? "استلام مجاني من باب بيتك بكتابة كلمة «تبرع»" : "Free doorstep pickup by texting 'Donate'"}
+                {t(c.cta.sub)}
               </div>
             </div>
           </div>

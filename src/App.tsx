@@ -8,7 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LangProvider } from "@/i18n/LangContext";
 import { AuthProvider } from "@/auth/AuthContext";
 import { bindAnchorClickTracker, track } from "@/lib/track";
-import Index from "./pages/Index.tsx";
+const Index = lazy(() => import("./pages/Index.tsx"));
 import { SmoothScroll } from "@/components/common/SmoothScroll";
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const ProgramDetail = lazy(() => import("./pages/ProgramDetail.tsx"));
@@ -36,18 +36,18 @@ const Volunteer = lazy(() => import("./pages/site/Volunteer.tsx"));
 const Farm = lazy(() => import("./pages/site/Farm.tsx"));
 const Trust = lazy(() => import("./pages/site/Trust.tsx"));
 const DonationTracking = lazy(() => import("./pages/DonationTracking.tsx"));
-import DonorDashboard from "./pages/DonorDashboard.tsx";
+const DonorDashboard = lazy(() => import("./pages/DonorDashboard.tsx"));
 const Blog = lazy(() => import("./pages/Blog.tsx"));
 const BlogPost = lazy(() => import("./pages/BlogPost.tsx"));
 const BlogCategory = lazy(() => import("./pages/BlogCategory.tsx"));
 const BlogAuthor = lazy(() => import("./pages/BlogAuthor.tsx"));
 const AdminBlogSeo = lazy(() => import("./pages/admin/AdminBlogSeo.tsx"));
 const AdminBlogPostEdit = lazy(() => import("./pages/admin/AdminBlogPostEdit.tsx"));
- const Login = lazy(() => import("./pages/auth/Login.tsx"));
- const RegisterVolunteer = lazy(() => import("./pages/auth/RegisterVolunteer.tsx"));
- const RegisterDonor = lazy(() => import("./pages/auth/RegisterDonor.tsx"));
- const Register = lazy(() => import("./pages/auth/Register.tsx"));
- const Profile = lazy(() => import("./pages/auth/Profile.tsx"));
+const Login = lazy(() => import("./pages/auth/Login.tsx"));
+const RegisterVolunteer = lazy(() => import("./pages/auth/RegisterVolunteer.tsx"));
+const RegisterDonor = lazy(() => import("./pages/auth/RegisterDonor.tsx"));
+const Register = lazy(() => import("./pages/auth/Register.tsx"));
+const Profile = lazy(() => import("./pages/auth/Profile.tsx"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.tsx"));
 const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics.tsx"));
 const AdminDonations = lazy(() => import("./pages/admin/AdminDonations.tsx"));
@@ -57,8 +57,10 @@ const AdminCaseDetail = lazy(() => import("./pages/admin/AdminCaseDetail.tsx"));
 const AdminProjects = lazy(() => import("./pages/admin/AdminProjects.tsx"));
 const AdminProjectDetail = lazy(() => import("./pages/admin/AdminProjectDetail.tsx"));
 const AdminPrograms = lazy(() => import("./pages/admin/AdminPrograms.tsx"));
+const AdminProgramDetail = lazy(() => import("./pages/admin/AdminProgramDetail.tsx"));
 const AdminHomepageContent = lazy(() => import("./pages/admin/AdminHomepageContent.tsx"));
 const AdminAboutUs = lazy(() => import("./pages/admin/AdminAboutUs.tsx"));
+const AdminCampaignPages = lazy(() => import("./pages/admin/AdminCampaignPages.tsx"));
 const AdminAxes = lazy(() => import("./pages/admin/AdminAxes.tsx"));
 const AdminAxisDetail = lazy(() => import("./pages/admin/AdminAxisDetail.tsx"));
 const AdminContent = lazy(() => import("./pages/admin/AdminContent.tsx"));
@@ -83,6 +85,7 @@ const AdminCampaignResults = lazy(() => import("./pages/admin/AdminCampaignResul
 const AdminSiteStats = lazy(() => import("./pages/admin/AdminSiteStats.tsx"));
 const AdminReports = lazy(() => import("./pages/admin/AdminReports.tsx"));
 const AdminGallery = lazy(() => import("./pages/admin/AdminGallery.tsx"));
+const AdminMediaLibrary = lazy(() => import("./pages/admin/AdminMediaLibrary.tsx"));
 const AdminActivityLog = lazy(() => import("./pages/admin/AdminActivityLog.tsx"));
 const AdminPermissions = lazy(() => import("./pages/admin/AdminPermissions.tsx"));
 const AdminContentEditor = lazy(() => import("./pages/admin/AdminContentEditor.tsx"));
@@ -104,6 +107,8 @@ const StoryDetail = lazy(() => import("./pages/site/StoryDetail.tsx"));
 const AdminStories = lazy(() => import("./pages/admin/AdminStories.tsx"));
 const AdminStoryEdit = lazy(() => import("./pages/admin/AdminStoryEdit.tsx"));
 const AdminServices = lazy(() => import("./pages/admin/AdminServices.tsx"));
+const AdminDonationCampaigns = lazy(() => import("./pages/admin/AdminDonationCampaigns.tsx"));
+const AdminDonationCampaignDetail = lazy(() => import("./pages/admin/AdminDonationCampaignDetail.tsx"));
 const MarkounLanding = lazy(() => import("./pages/landings/MarkounLanding.tsx"));
 const CharityMansouraLanding = lazy(() => import("./pages/landings/CharityMansouraLanding.tsx"));
 const FoodBoxLanding = lazy(() => import("./pages/landings/FoodBoxLanding.tsx"));
@@ -115,6 +120,8 @@ const AtharLanding = lazy(() => import("./pages/landings/AtharLanding.tsx"));
 const RamadanLanding = lazy(() => import("./pages/landings/RamadanLanding.tsx"));
 const ArbounLanding = lazy(() => import("./pages/landings/ArbounLanding.tsx"));
 const CampaignsPage = lazy(() => import("./pages/site/CampaignsPage.tsx"));
+const FaqCenter = lazy(() => import("./pages/site/FaqCenter.tsx"));
+const AdminFaqs = lazy(() => import("./pages/admin/AdminFaqs.tsx"));
 import { RequireAuth } from "./auth/RequireAuth";
 
 const queryClient = new QueryClient();
@@ -159,135 +166,153 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <LangProvider>
         <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <SmoothScroll />
-            <RouteTracker />
-            <Suspense fallback={<div className="grid min-h-[60vh] place-items-center text-primary"><div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary" aria-label="loading" /></div>}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/programs" element={<Projects />} />
-              <Route path="/programs/volunteer" element={<Navigate to="/volunteer" replace />} />
-              <Route path="/programs/:slug" element={<ProgramDetail />} />
-              <Route path="/programs/:slug/:option" element={<ProgramOptionDetail />} />
-              <Route path="/geo/:governorate/:program" element={<GeoProgram />} />
-              <Route path="/dakahlia/:city/:program" element={<CityProgram />} />
-              <Route path="/qurbani" element={<QurbaniLanding />} />
-              <Route path="/qurbani/confirm" element={<QurbaniConfirm />} />
-              <Route path="/qurbani/:city" element={<QurbaniCity />} />
-              <Route path="/donate" element={<DonatePage />} />
-              <Route path="/donate/:city" element={<DonateCity />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/stories" element={<Stories />} />
-              <Route path="/stories/:slug" element={<StoryDetail />} />
-              <Route path="/projects" element={<ProjectsPage />} />
-              <Route path="/cases" element={<Cases />} />
-              <Route path="/cases/:ref" element={<CaseDetail />} />
-              <Route path="/zakat" element={<Zakat />} />
-              <Route path="/services-map" element={<ServicesMap />} />
-              {/* 301-style redirect for retired daily-feeding page → services map */}
-              <Route path="/services/daily-feeding" element={<Navigate to="/services-map" replace />} />
-              <Route path="/services/:slug" element={<ServiceRouter />} />
-              <Route path="/axes/:slug" element={<AxisDetail />} />
-              <Route path="/gallery" element={<Gallery />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/volunteer" element={<Volunteer />} />
-              <Route path="/campaigns" element={<CampaignsPage />} />
-              <Route path="/campaign" element={<CampaignsPage />} />
-              <Route path="/volunteer-campaigns" element={<Campaigns />} />
-              <Route path="/volunteer/campaigns" element={<Campaigns />} />
-              <Route path="/campaigns/:slug" element={<CampaignDetail />} />
-              <Route path="/seasons/:slug" element={<SeasonDetail />} />
-              <Route path="/c/:slug" element={<AdLanding />} />
-              <Route path="/dev/hero-breakpoints" element={<HeroBreakpointTest />} />
-              <Route path="/farm" element={<Farm />} />
-              <Route path="/trust" element={<Trust />} />
-              <Route path="/markoun" element={<MarkounLanding />} />
-              <Route path="/food-box" element={<FoodBoxLanding />} />
-              <Route path="/qurbani-guarantee" element={<QurbaniGuaranteeLanding />} />
-              <Route path="/khabia" element={<KhabiaLanding />} />
-              <Route path="/dhill" element={<DhillLanding />} />
-              <Route path="/setr" element={<SetrLanding />} />
-              <Route path="/athar" element={<AtharLanding />} />
-              <Route path="/education-campaign" element={<AtharLanding />} />
-              <Route path="/ramadan" element={<RamadanLanding />} />
-              <Route path="/arboun" element={<ArbounLanding />} />
-              <Route path="/freelancers" element={<ArbounLanding />} />
-              <Route path="/donate/track/:ref" element={<DonationTracking />} />
-              <Route path="/donate/track" element={<DonationTracking />} />
-              <Route path="/dashboard" element={<DonorDashboard />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/category/:slug" element={<BlogCategory />} />
-              <Route path="/blog/author/:slug" element={<BlogAuthor />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register/volunteer" element={<RegisterVolunteer />} />
-              <Route path="/register/donor" element={<RegisterDonor />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/register/editor" element={<Register />} />
-              <Route path="/profile" element={<Profile />} />
-            
-              <Route path="/admin" element={<RequireAuth roles={["admin","editor","caseworker","volunteer"]}><AdminDashboard /></RequireAuth>} />
-              <Route path="/admin/analytics" element={<RequireAuth roles={["admin","caseworker"]}><AdminAnalytics /></RequireAuth>} />
-              <Route path="/admin/donations" element={<RequireAuth roles={["admin","caseworker"]}><AdminDonations /></RequireAuth>} />
-              <Route path="/admin/donations/audit" element={<RequireAuth roles={["admin"]}><AdminDonationsAudit /></RequireAuth>} />
-              <Route path="/admin/cases" element={<RequireAuth roles={["admin","caseworker","volunteer"]}><AdminCases /></RequireAuth>} />
-              <Route path="/admin/cases/:id" element={<RequireAuth roles={["admin","caseworker","volunteer"]}><AdminCaseDetail /></RequireAuth>} />
-              <Route path="/admin/projects" element={<RequireAuth roles={["admin","caseworker"]}><AdminProjects /></RequireAuth>} />
-              <Route path="/admin/projects/:id" element={<RequireAuth roles={["admin","caseworker"]}><AdminProjectDetail /></RequireAuth>} />
-              <Route path="/admin/programs" element={<RequireAuth roles={["admin","editor","caseworker"]}><AdminPrograms /></RequireAuth>} />
-              <Route path="/admin/homepage-content" element={<RequireAuth roles={["admin","editor"]}><AdminHomepageContent /></RequireAuth>} />
-              <Route path="/admin/about-us" element={<RequireAuth roles={["admin","editor"]}><AdminAboutUs /></RequireAuth>} />
-              <Route path="/admin/axes" element={<RequireAuth roles={["admin","editor"]}><AdminAxes /></RequireAuth>} />
-              <Route path="/admin/axes/:id" element={<RequireAuth roles={["admin","editor"]}><AdminAxisDetail /></RequireAuth>} />
-              <Route path="/admin/content" element={<RequireAuth roles={["admin","editor"]}><AdminContent /></RequireAuth>} />
-              <Route path="/admin/content-editor" element={<RequireAuth roles={["admin","editor"]}><AdminContentEditor /></RequireAuth>} />
-              <Route path="/admin/campaigns-section" element={<RequireAuth roles={["admin","editor"]}><AdminCampaignsSection /></RequireAuth>} />
-              <Route path="/admin/review" element={<RequireAuth roles={["admin","editor"]}><AdminContentReview /></RequireAuth>} />
-              <Route path="/admin/my-tasks" element={<RequireAuth roles={["admin","volunteer","editor","caseworker"]}><AdminMyTasks /></RequireAuth>} />
-              <Route path="/admin/my-cases" element={<RequireAuth roles={["admin","caseworker","volunteer"]}><AdminMyCases /></RequireAuth>} />
-              <Route path="/admin/delegates" element={<RequireAuth roles={["admin","caseworker"]}><AdminDelegates /></RequireAuth>} />
-              <Route path="/admin/volunteers" element={<RequireAuth roles={["admin","caseworker"]}><AdminVolunteers /></RequireAuth>} />
-              <Route path="/admin/campaigns" element={<RequireAuth roles={["admin","editor","caseworker","volunteer"]}><AdminCampaigns /></RequireAuth>} />
-              <Route path="/admin/campaigns/:id" element={<RequireAuth roles={["admin","editor","caseworker","volunteer"]}><AdminCampaignDetail /></RequireAuth>} />
-              <Route path="/admin/donors" element={<RequireAuth roles={["admin","caseworker"]}><AdminDonors /></RequireAuth>} />
-              <Route path="/admin/donors/:id" element={<RequireAuth roles={["admin"]}><AdminDonorDetail /></RequireAuth>} />
-              <Route path="/admin/donations/:id" element={<RequireAuth roles={["admin","caseworker"]}><AdminDonationDetail /></RequireAuth>} />
-              <Route path="/admin/users" element={<RequireAuth roles={["admin"]}><AdminUsers /></RequireAuth>} />
-              <Route path="/admin/payment-methods" element={<RequireAuth roles={["admin"]}><AdminPaymentMethods /></RequireAuth>} />
-              <Route path="/admin/payment-methods/:id" element={<RequireAuth roles={["admin"]}><AdminPaymentMethodDetail /></RequireAuth>} />
-              <Route path="/admin/permissions" element={<RequireAuth roles={["admin"]}><AdminPermissions /></RequireAuth>} />
-              <Route path="/admin/activity" element={<RequireAuth roles={["admin"]}><AdminActivityLog /></RequireAuth>} />
-              <Route path="/admin/blog-seo" element={<RequireAuth roles={["admin","editor"]}><AdminBlogSeo /></RequireAuth>} />
-              <Route path="/admin/blog-seo/:slug" element={<RequireAuth roles={["admin","editor"]}><AdminBlogPostEdit /></RequireAuth>} />
-              <Route path="/admin/stories" element={<RequireAuth roles={["admin","editor"]}><AdminStories /></RequireAuth>} />
-              <Route path="/admin/stories/new" element={<RequireAuth roles={["admin","editor"]}><AdminStoryEdit /></RequireAuth>} />
-              <Route path="/admin/stories/:id" element={<RequireAuth roles={["admin","editor"]}><AdminStoryEdit /></RequireAuth>} />
-              <Route path="/admin/services" element={<RequireAuth roles={["admin","editor"]}><AdminServices /></RequireAuth>} />
-              <Route path="/admin/services/:slug" element={<RequireAuth roles={["admin","editor"]}><AdminServices /></RequireAuth>} />
-              <Route path="/admin/profile" element={<RequireAuth roles={["admin","editor","caseworker","volunteer"]}><AdminProfile /></RequireAuth>} />
-              <Route path="/admin/newsletter" element={<RequireAuth roles={["admin"]}><AdminNewsletter /></RequireAuth>} />
-              <Route path="/admin/newsletter/campaigns" element={<RequireAuth roles={["admin"]}><AdminNewsletterCampaigns /></RequireAuth>} />
-              <Route path="/admin/donation-nodes" element={<RequireAuth roles={["admin"]}><AdminDonationNodes /></RequireAuth>} />
-              <Route path="/admin/transactions" element={<RequireAuth roles={["admin","caseworker"]}><AdminPaymentTransactions /></RequireAuth>} />
-              <Route path="/admin/ad-campaigns" element={<RequireAuth roles={["admin","editor"]}><AdminAdCampaigns /></RequireAuth>} />
-              <Route path="/admin/campaign-results" element={<RequireAuth roles={["admin","editor"]}><AdminCampaignResults /></RequireAuth>} />
-              <Route path="/admin/site-stats" element={<RequireAuth roles={["admin","editor"]}><AdminSiteStats /></RequireAuth>} />
-              <Route path="/admin/gallery" element={<RequireAuth roles={["admin"]}><AdminGallery /></RequireAuth>} />
-              <Route path="/admin/reports" element={<RequireAuth roles={["admin","caseworker"]}><AdminReports /></RequireAuth>} />
-              <Route path="/admin/seasons" element={<RequireAuth roles={["admin","editor"]}><AdminSeasons /></RequireAuth>} />
-              <Route path="/donate/status/:ref" element={<DonationStatus />} />
-              <Route path="/newsletter/confirm" element={<NewsletterAction action="confirm" />} />
-              <Route path="/newsletter/unsubscribe" element={<NewsletterAction action="unsubscribe" />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            </Suspense>
-          </BrowserRouter>
-        </TooltipProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <SmoothScroll />
+              <RouteTracker />
+              <Suspense fallback={<div className="grid min-h-[60vh] place-items-center text-primary"><div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary" aria-label="loading" /></div>}>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/programs" element={<Projects />} />
+                  <Route path="/programs/volunteer" element={<Navigate to="/volunteer" replace />} />
+                  <Route path="/programs/:slug" element={<ProgramDetail />} />
+                  <Route path="/programs/:slug/:option" element={<ProgramOptionDetail />} />
+                  <Route path="/geo/:governorate/:program" element={<GeoProgram />} />
+                  <Route path="/dakahlia/:city/:program" element={<CityProgram />} />
+                  <Route path="/qurbani" element={<QurbaniLanding />} />
+                  <Route path="/qurbani/confirm" element={<QurbaniConfirm />} />
+                  <Route path="/qurbani/:city" element={<QurbaniCity />} />
+                  <Route path="/donate" element={<DonatePage />} />
+                  <Route path="/donate/:city" element={<DonateCity />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/stories" element={<Stories />} />
+                  <Route path="/stories/:slug" element={<StoryDetail />} />
+                  <Route path="/projects" element={<ProjectsPage />} />
+                  <Route path="/cases" element={<Cases />} />
+                  <Route path="/cases/:ref" element={<CaseDetail />} />
+                  <Route path="/zakat" element={<Zakat />} />
+                  <Route path="/services-map" element={<ServicesMap />} />
+                  {/* 301-style redirect for retired daily-feeding page → services map */}
+                  <Route path="/services/daily-feeding" element={<Navigate to="/services-map" replace />} />
+                  <Route path="/services/:slug" element={<ServiceRouter />} />
+                  <Route path="/axes/:slug" element={<AxisDetail />} />
+                  <Route path="/gallery" element={<Gallery />} />
+                  <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/volunteer" element={<Volunteer />} />
+                  <Route path="/campaigns" element={<CampaignsPage />} />
+                  <Route path="/campaign" element={<CampaignsPage />} />
+                  <Route path="/volunteer-campaigns" element={<Campaigns />} />
+                  <Route path="/volunteer/campaigns" element={<Campaigns />} />
+                  <Route path="/campaigns/:slug" element={<CampaignDetail />} />
+                  <Route path="/seasons/:slug" element={<SeasonDetail />} />
+                  <Route path="/c/:slug" element={<AdLanding />} />
+                  <Route path="/dev/hero-breakpoints" element={<HeroBreakpointTest />} />
+                  <Route path="/farm" element={<Farm />} />
+                  <Route path="/trust" element={<Trust />} />
+                  <Route path="/markoun" element={<MarkounLanding />} />
+                  <Route path="/food-box" element={<FoodBoxLanding />} />
+                  <Route path="/qurbani-guarantee" element={<QurbaniGuaranteeLanding />} />
+                  <Route path="/khabia" element={<KhabiaLanding />} />
+                  <Route path="/dhill" element={<DhillLanding />} />
+                  <Route path="/setr" element={<SetrLanding />} />
+                  <Route path="/athar" element={<AtharLanding />} />
+                  <Route path="/education-campaign" element={<AtharLanding />} />
+                  <Route path="/ramadan" element={<RamadanLanding />} />
+                  <Route path="/arboun" element={<ArbounLanding />} />
+                  <Route path="/freelancers" element={<ArbounLanding />} />
+                  <Route path="/donate/track/:ref" element={<DonationTracking />} />
+                  <Route path="/donate/track" element={<DonationTracking />} />
+                  <Route path="/dashboard" element={<DonorDashboard />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/category/:slug" element={<BlogCategory />} />
+                  <Route path="/blog/author/:slug" element={<BlogAuthor />} />
+                  <Route path="/blog/:slug" element={<BlogPost />} />
+                  <Route path="/faqs" element={<FaqCenter />} />
+                  <Route path="/faq" element={<Navigate to="/faqs" replace />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register/volunteer" element={<RegisterVolunteer />} />
+                  <Route path="/register/donor" element={<RegisterDonor />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/register/editor" element={<Register />} />
+                  <Route path="/profile" element={<Profile />} />
+
+                  <Route path="/admin" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminDashboard /></RequireAuth>} />
+                  <Route path="/admin/analytics" element={<RequireAuth roles={["admin", "caseworker"]}><AdminAnalytics /></RequireAuth>} />
+                  <Route path="/admin/faqs" element={<RequireAuth roles={["admin", "editor"]}><AdminFaqs /></RequireAuth>} />
+                  <Route path="/admin/donations" element={<RequireAuth roles={["admin", "caseworker"]}><AdminDonations /></RequireAuth>} />
+                  <Route path="/admin/donations/audit" element={<RequireAuth roles={["admin"]}><AdminDonationsAudit /></RequireAuth>} />
+                  <Route path="/admin/cases" element={<RequireAuth roles={["admin", "caseworker", "volunteer"]}><AdminCases /></RequireAuth>} />
+                  <Route path="/admin/cases/:id" element={<RequireAuth roles={["admin", "caseworker", "volunteer"]}><AdminCaseDetail /></RequireAuth>} />
+                  <Route path="/admin/projects" element={<RequireAuth roles={["admin", "caseworker"]}><AdminProjects /></RequireAuth>} />
+                  <Route path="/admin/projects/new" element={<RequireAuth roles={["admin", "caseworker"]}><AdminProjectDetail /></RequireAuth>} />
+                  <Route path="/admin/projects/:id" element={<RequireAuth roles={["admin", "caseworker"]}><AdminProjectDetail /></RequireAuth>} />
+                  <Route path="/admin/programs" element={<RequireAuth roles={["admin", "editor", "caseworker"]}><AdminPrograms /></RequireAuth>} />
+                  <Route path="/admin/programs/new" element={<RequireAuth roles={["admin", "editor"]}><AdminProgramDetail /></RequireAuth>} />
+                  <Route path="/admin/programs/:id" element={<RequireAuth roles={["admin", "editor", "caseworker"]}><AdminProgramDetail /></RequireAuth>} />
+                  <Route path="/admin/programs-carousel" element={<Navigate to="/admin/campaigns-section" replace />} />
+                  <Route path="/admin/homepage-content" element={<RequireAuth roles={["admin", "editor"]}><AdminHomepageContent /></RequireAuth>} />
+                  <Route path="/admin/about-us" element={<RequireAuth roles={["admin", "editor"]}><AdminAboutUs /></RequireAuth>} />
+                  <Route path="/admin/campaign-pages" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignPages /></RequireAuth>} />
+                  <Route path="/admin/campaign-pages/:slug" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignPages /></RequireAuth>} />
+                  <Route path="/admin/axes" element={<RequireAuth roles={["admin", "editor"]}><AdminAxes /></RequireAuth>} />
+                  <Route path="/admin/axes/:id" element={<RequireAuth roles={["admin", "editor"]}><AdminAxisDetail /></RequireAuth>} />
+                  <Route path="/admin/content" element={<RequireAuth roles={["admin", "editor"]}><AdminContent /></RequireAuth>} />
+                  <Route path="/admin/content-editor" element={<RequireAuth roles={["admin", "editor"]}><AdminContentEditor /></RequireAuth>} />
+                  <Route path="/admin/campaigns-section" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignsSection /></RequireAuth>} />
+                  <Route path="/admin/review" element={<RequireAuth roles={["admin", "editor"]}><AdminContentReview /></RequireAuth>} />
+                  <Route path="/admin/my-tasks" element={<RequireAuth roles={["admin", "volunteer", "editor", "caseworker"]}><AdminMyTasks /></RequireAuth>} />
+                  <Route path="/admin/my-cases" element={<RequireAuth roles={["admin", "caseworker", "volunteer"]}><AdminMyCases /></RequireAuth>} />
+                  <Route path="/admin/delegates" element={<RequireAuth roles={["admin", "caseworker"]}><AdminDelegates /></RequireAuth>} />
+                  <Route path="/admin/volunteers" element={<RequireAuth roles={["admin", "caseworker"]}><AdminVolunteers /></RequireAuth>} />
+                  <Route path="/admin/campaigns" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminCampaigns /></RequireAuth>} />
+                  <Route path="/admin/campaigns/new" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminCampaignDetail /></RequireAuth>} />
+                  <Route path="/admin/campaigns/:id" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminCampaignDetail /></RequireAuth>} />
+                  <Route path="/admin/donors" element={<RequireAuth roles={["admin", "caseworker"]}><AdminDonors /></RequireAuth>} />
+                  <Route path="/admin/donors/:id" element={<RequireAuth roles={["admin"]}><AdminDonorDetail /></RequireAuth>} />
+                  <Route path="/admin/donations/:id" element={<RequireAuth roles={["admin", "caseworker"]}><AdminDonationDetail /></RequireAuth>} />
+                  <Route path="/admin/users" element={<RequireAuth roles={["admin"]}><AdminUsers /></RequireAuth>} />
+                  <Route path="/admin/payment-methods" element={<RequireAuth roles={["admin"]}><AdminPaymentMethods /></RequireAuth>} />
+                  <Route path="/admin/payment-methods/:id" element={<RequireAuth roles={["admin"]}><AdminPaymentMethodDetail /></RequireAuth>} />
+                  <Route path="/admin/permissions" element={<RequireAuth roles={["admin"]}><AdminPermissions /></RequireAuth>} />
+                  <Route path="/admin/activity" element={<RequireAuth roles={["admin"]}><AdminActivityLog /></RequireAuth>} />
+                  <Route path="/admin/blog-seo" element={<RequireAuth roles={["admin", "editor"]}><AdminBlogSeo /></RequireAuth>} />
+                  <Route path="/admin/blog-seo/:slug" element={<RequireAuth roles={["admin", "editor"]}><AdminBlogPostEdit /></RequireAuth>} />
+                  <Route path="/admin/stories" element={<RequireAuth roles={["admin", "editor"]}><AdminStories /></RequireAuth>} />
+                  <Route path="/admin/stories/new" element={<RequireAuth roles={["admin", "editor"]}><AdminStoryEdit /></RequireAuth>} />
+                  <Route path="/admin/stories/:id" element={<RequireAuth roles={["admin", "editor"]}><AdminStoryEdit /></RequireAuth>} />
+                  <Route path="/admin/donation-campaigns" element={<RequireAuth roles={["admin", "editor", "caseworker"]}><AdminDonationCampaigns /></RequireAuth>} />
+                  <Route path="/admin/donation-campaigns/new" element={<RequireAuth roles={["admin", "editor", "caseworker"]}><AdminDonationCampaignDetail /></RequireAuth>} />
+                  <Route path="/admin/donation-campaigns/:id" element={<RequireAuth roles={["admin", "editor", "caseworker"]}><AdminDonationCampaignDetail /></RequireAuth>} />
+                  <Route path="/admin/services" element={<RequireAuth roles={["admin", "editor", "caseworker"]}><AdminDonationCampaigns /></RequireAuth>} />
+                  <Route path="/admin/services/:slug" element={<RequireAuth roles={["admin", "editor", "caseworker"]}><AdminDonationCampaigns /></RequireAuth>} />
+                  <Route path="/admin/profile" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminProfile /></RequireAuth>} />
+                  <Route path="/admin/newsletter" element={<RequireAuth roles={["admin"]}><AdminNewsletter /></RequireAuth>} />
+                  <Route path="/admin/newsletter/campaigns" element={<RequireAuth roles={["admin"]}><AdminNewsletterCampaigns /></RequireAuth>} />
+                  <Route path="/admin/donation-nodes" element={<RequireAuth roles={["admin"]}><AdminDonationNodes /></RequireAuth>} />
+                  <Route path="/admin/transactions" element={<RequireAuth roles={["admin", "caseworker"]}><AdminPaymentTransactions /></RequireAuth>} />
+                  <Route path="/admin/ad-campaigns" element={<RequireAuth roles={["admin", "editor"]}><AdminAdCampaigns /></RequireAuth>} />
+                  <Route path="/admin/campaign-results" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignResults /></RequireAuth>} />
+                  <Route path="/admin/site-stats" element={<RequireAuth roles={["admin", "editor"]}><AdminSiteStats /></RequireAuth>} />
+                  <Route path="/admin/gallery" element={<RequireAuth roles={["admin"]}><AdminGallery /></RequireAuth>} />
+                  <Route path="/admin/media" element={<RequireAuth roles={["admin", "editor"]}><AdminMediaLibrary /></RequireAuth>} />
+                  <Route path="/admin/reports" element={<RequireAuth roles={["admin", "caseworker"]}><AdminReports /></RequireAuth>} />
+                  <Route path="/admin/seasons" element={<RequireAuth roles={["admin", "editor"]}><AdminSeasons /></RequireAuth>} />
+                  <Route path="/donate/status" element={<DonationStatus />} />
+                  <Route path="/donate/status/:ref" element={<DonationStatus />} />
+                  <Route path="/payment/success" element={<DonationStatus />} />
+                  <Route path="/payment/failed" element={<DonationStatus />} />
+                  <Route path="/payment/callback" element={<DonationStatus />} />
+                  <Route path="/newsletter/confirm" element={<NewsletterAction action="confirm" />} />
+                  <Route path="/newsletter/unsubscribe" element={<NewsletterAction action="unsubscribe" />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
+          </TooltipProvider>
         </AuthProvider>
       </LangProvider>
     </QueryClientProvider>

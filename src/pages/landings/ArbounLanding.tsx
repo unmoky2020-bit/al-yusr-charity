@@ -42,6 +42,9 @@ import posterEducation from "@/assets/poster-education.png";
 import yusrDistribution from "@/assets/yusr-distribution-1.jpg";
 import yusrMeals from "@/assets/yusr-meals.jpg";
 import markounFurniture from "@/assets/markoun-furniture.jpg";
+import { HadithBlock } from "@/components/campaigns/HadithBlock";
+import { useCampaignPage } from "@/hooks/useCampaignPage";
+import ARBOUN_DEFAULTS from "@/data/campaignPages/arboun";
 
 /**
  * مبادرة عربون خير — للفريلانسرز والمستقلين
@@ -51,6 +54,11 @@ const ArbounLanding = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
+
+  // Editable content (code defaults merged with the dashboard override).
+  const { c, t, section } = useCampaignPage("arboun", ARBOUN_DEFAULTS);
+  const items = (key: string) => section(key)?.items ?? [];
+  const label = (id: string) => items("labels").find((i) => i.id === id);
 
   const [copiedLink, setCopiedLink] = useState(false);
   const [stickyOpen, setStickyOpen] = useState(true);
@@ -65,7 +73,7 @@ const ArbounLanding = () => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(pageUrl).then(() => {
         setCopiedLink(true);
-        toast.success(isRTL ? "تم نسخ رابط المبادرة للمشاركة " : "Initiative link copied ");
+        toast.success(t(label("share_link")?.desc));
         setTimeout(() => setCopiedLink(false), 2000);
       });
     }
@@ -118,56 +126,15 @@ const ArbounLanding = () => {
     };
   }, []);
 
-  const PRICING_SHARES = [
-    {
-      labelAr: "عربون خير سهم بسيط (مشروع صغير)",
-      labelEn: "Starter Project Share",
-      amount: 150,
-      tagAr: "بركة الشغل",
-      tagEn: "Blessing",
-      descAr: "سهم سريع يفتح أبواب البركة لوجبة ساخنة أو مساهمة دواء لأسرة متعففة",
-    },
-    {
-      labelAr: "عربون خير (مشروع متوسط 1%)",
-      labelEn: "Standard Share (1%)",
-      amount: 450,
-      tagAr: "شائع بين المستقلين",
-      tagEn: "Popular",
-      descAr: "اقتطاع رمزي 1% من قيمة المشروع يكفل شنطة مدرسية وزي متكامل لطفل",
-    },
-    {
-      labelAr: "سهم كفالة يتيم ودعم تعليم",
-      labelEn: "Orphan Education Share",
-      amount: 750,
-      tagAr: "أثر مستمر",
-      tagEn: "Education",
-      descAr: "كفالة تعليمية ومصروفات مدرسية لمنع تسرب طفل يتيم من التعليم",
-    },
-    {
-      labelAr: "سهم تيسير زواج عروسة يتيمة",
-      labelEn: "Bride Support Share",
-      amount: 1500,
-      tagAr: "أجهزة معمرة",
-      tagEn: "Appliances",
-      descAr: "مساهمة في جهاز منزلي أساسي (بوتاجاز أو غسالة) لحفظ كرامة عروسة",
-    },
-    {
-      labelAr: "سهم صدقة جارية (سقف / مياه)",
-      labelEn: "Sadaqah Jariyah Share",
-      amount: 2500,
-      tagAr: "أصل ثابت",
-      tagEn: "Asset",
-      descAr: "سهم في بناء سقف خشبي معزول أو وصلة مياه نقية تدوم 10 سنوات",
-    },
-    {
-      labelAr: "أي نسبة أو قيمة تختارها",
-      labelEn: "Custom Amount",
-      amount: 100,
-      tagAr: "مفتوح بالكامل",
-      tagEn: "Custom",
-      descAr: "حدد أي مبلغ يناسب أرباح مشروعك الحالي عبر بوابة الدفع الآمنة",
-    },
-  ];
+  // Suggested shares: amounts/labels/notes from `prices`; the small tag above each name from `sections.shares`.
+  const shareTags = items("shares");
+  const PRICING_SHARES = c.prices.map((p) => ({
+    id: p.id,
+    label: t(p.label),
+    amount: p.amount,
+    tag: t(shareTags.find((i) => i.id === p.id)?.title),
+    desc: t(p.note),
+  }));
 
   const pillarStickyOffsets = [
     "top-[80px] md:top-[90px]",
@@ -191,122 +158,37 @@ const ArbounLanding = () => {
     "top-[150px] md:top-[170px]",
   ];
 
-  const PILLARS = [
-    {
-      num: "01",
-      icon: <Zap className="h-7 w-7 text-orange-400" />,
-      tagAr: "السكينة والبركة",
-      tagEn: "Peace & Barakah",
-      titleAr: "علاج القلق وضغط الشغل",
-      titleEn: "Relieving Stress & Work Anxiety",
-      quoteAr: "«داووا مرضاكم بالصدقة.. واستنزلوا الرزق بالعطاء والتيسير»",
-      quoteEn: "«Bring down provision by giving with a clean, open heart»",
-      descAr:
-        "الكلاينت مابيردش؟ التعديلات مابتخلصش؟ وخايف من فترات ركود السوق؟ الصدقة بتطمن القلب، بتشيل ضغط التفكير، وبتيسر المشاريع المعقدة وتفتح أبواب رزق غير متوقعة من حيث لا تحتسب.",
-      descEn:
-        "Client delays? Endless revisions? Market slowdown fears? Charity brings peace of mind, removes mental fatigue, and unlocks unexpected doors of provision.",
-      bulletsAr: [
-        "طرد وساوس الركود وتوقف طلبات العملاء المفاجئ",
-        "الاطمئنان القلبي والسكينة أثناء انتظار المستحقات والتحويلات",
-        "تيسير العقود المعقدة وتقليل طلبات التعديل المرهقة",
-      ],
-      bulletsEn: [
-        "Eliminating fears of dry spells and sudden client drops",
-        "Inner peace and calmness while awaiting international payouts",
-        "Smoother client negotiations and fewer endless revision loops",
-      ],
-      actionLabelAr: "احسب عربون مشروعك",
-      actionLabelEn: "Calculate Your Share",
-      actionHref: "#arboun-calculator",
-      isOrange: true,
-    },
-    {
-      num: "02",
-      icon: <Laptop className="h-7 w-7 text-lime-400" />,
-      tagAr: "تطهير المال والمهارة",
-      tagEn: "Skill Zakat & Growth",
-      titleAr: "زكاة مهنتك وشكر النعمة",
-      titleEn: "Zakat on Professional Skill",
-      quoteAr: "«لئن شكرتم لأزيدنكم» — شكر نعمة المهارة والتقنية يزيدك تفوقاً",
-      quoteEn: "«If you are grateful, I will surely increase you in favor»",
-      descAr:
-        "مهارتك وسرعتك على اللابتوب وفهمك للأدوات الحديثة رزق ونعمة عظيمة. شكر النعمة دي إنك تطلع منها جزء لله، عشان ربنا يحفظ صحتك ووقتك وتركيزك ويديم عليك الشغف والتفوق.",
-      descEn:
-        "Your tech craft, speed, and digital intellect are divine gifts. Giving back expresses genuine gratitude, preserving your mental clarity, eyesight, and health.",
-      bulletsAr: [
-        "تطهير أرباحك وتأمين مالك من أي عوائق أو نقص مفاجئ",
-        "حفظ العافية والتركيز وسلامة الظهر والعينين من إرهاق الشاشات",
-        "استمرار الشغف والتوفيق في اقتناص مشاريع أعلى قيمة ودخلاً",
-      ],
-      bulletsEn: [
-        "Purifying earnings and safeguarding income from sudden setbacks",
-        "Protecting health, physical ergonomics, and vision from screen burnout",
-        "Sustaining drive and landing higher-tier global clients",
-      ],
-      actionLabelAr: "اختر سهم التبرع",
-      actionLabelEn: "Choose Share",
-      actionHref: "#pricing-shares",
-      isOrange: false,
-    },
-    {
-      num: "03",
-      icon: <Heart className="h-7 w-7 text-orange-400" />,
-      tagAr: "عائد استثماري أبدي (Eternal ROI)",
-      tagEn: "Guaranteed Eternal ROI",
-      titleAr: "استثمار مضمون لا ينقطع",
-      titleEn: "Guaranteed Eternal ROI",
-      quoteAr: "«ما نقص مال من صدقة» — أرباح حقيقية تدخرها ليوم لا ينفع فيه إلا العمل الصالح",
-      quoteEn: "«Charity never diminishes wealth» — An eternal portfolio of good deeds",
-      descAr:
-        "العميل بيستثمر في الدنيا بالبروجكت اللي معاك، استثمر أنت في الآخرة بجزء من أرباح نفس البروجكت لضمان رصيد حسنات دائم وأثر ينفعك ويستر أسر متعففة.",
-      descEn:
-        "Clients invest in transient milestones; you invest a fraction in eternity, securing ongoing deeds that shelter vulnerable families and build sustainable legacy.",
-      bulletsAr: [
-        "تحويل كل تسليم ميلستون إلى رصيد دائم من الحسنات الجارية",
-        "كفالة أيتام وتوفير مياه نظيفة وبناء أسقف تستمر سنين طويلة",
-        "ربط نجاحك التقني بقضايا مجتمعية نبيلة تترك أثراً لا يزول",
-      ],
-      bulletsEn: [
-        "Turning every client milestone into perpetual ongoing charity",
-        "Sponsoring orphan schooling, clean water, and secure house roofs",
-        "Connecting your technical career with real-life humanitarian impact",
-      ],
-      actionLabelAr: "تبرع الآن للمبادرة",
-      actionLabelEn: "Donate Now",
+  // Pillar visuals/links stay in code (keyed by content id); texts come from `sections.pillars` + `sections.pillar_details`.
+  const PILLAR_CONFIG: Record<string, { num: string; icon: JSX.Element; actionHref: string; isOrange: boolean }> = {
+    pillar_peace: { num: "01", icon: <Zap className="h-7 w-7 text-orange-400" />, actionHref: "#arboun-calculator", isOrange: true },
+    pillar_skill_zakat: { num: "02", icon: <Laptop className="h-7 w-7 text-lime-400" />, actionHref: "#pricing-shares", isOrange: false },
+    pillar_eternal_roi: { num: "03", icon: <Heart className="h-7 w-7 text-orange-400" />, actionHref: "/donate?program=freelancers", isOrange: true },
+  };
+  const pillarDetails = items("pillar_details");
+  const PILLARS = items("pillars").map((p, idx) => {
+    const cfg = PILLAR_CONFIG[p.id] ?? {
+      num: String(idx + 1).padStart(2, "0"),
+      icon: <Sparkles className="h-7 w-7 text-lime-400" />,
       actionHref: "/donate?program=freelancers",
-      isOrange: true,
-    },
-  ];
+      isOrange: idx % 2 === 0,
+    };
+    const d = pillarDetails.find((i) => i.id === p.id);
+    return {
+      id: p.id,
+      ...cfg,
+      tag: t(d?.title),
+      title: t(p.title),
+      quote: t(p.extra),
+      desc: t(p.desc),
+      bullets: t(d?.desc)
+        .split(" · ")
+        .map((b) => b.trim())
+        .filter(Boolean),
+      actionLabel: t(d?.extra),
+    };
+  });
 
-  const STEPS = [
-    {
-      step: "01",
-      titleAr: "الخطوة الأولى: قفّل البروجكت واستلم أرباحك",
-      titleEn: "Step 1: Withdraw Your Earnings",
-      descAr:
-        "زرار الـ Withdraw أو استلام الحوالة البنكية هو البداية. أول ما فلوس مشروعك تنزل في حسابك البنكي أو فودافون كاش أو InstaPay، افتح صفحة عربون خير.",
-      descEn:
-        "Once your client milestone or withdrawal clears into your bank or wallet, open the Arboun Khair page.",
-    },
-    {
-      step: "02",
-      titleAr: "الخطوة الثانية: حدد عربون الخير",
-      titleEn: "Step 2: Set Your Contribution",
-      descAr:
-        "اختار النسبة اللي تريحك من أرباح المشروع (حتى لو 1% أو 5%).. مفيش حد أدنى، الأهم هو النية والاستمرارية وربط نجاحك بالعطاء وشكر النعمة.",
-      descEn:
-        "Select a comfortable portion (1%, 5%, or any fixed sum). No minimum required — consistency and pure intent are what matter.",
-    },
-    {
-      step: "03",
-      titleAr: "الخطوة الثالثة: سيب أثرك وتابع تقريرك",
-      titleEn: "Step 3: Track Real Ground Impact",
-      descAr:
-        "بضغطة زرار، تبرعك بيتحول فوراً لمشاريع تنموية حقيقية على الأرض (تيسير زواج، كفالة أيتام، أسقف ومياه)، وهيوصلك إيصال رسمي وتقارير موثقة بصور وفيديو.",
-      descEn:
-        "With one click, your donation is directed to verified grassroots aid (orphan education, brides, clean water) with official receipts and donor reports.",
-    },
-  ];
+  const STEPS = items("steps").map((st) => ({ id: st.id, title: t(st.title), desc: t(st.desc) }));
 
   const GALLERY = [
     {
@@ -343,38 +225,14 @@ const ArbounLanding = () => {
     { href: "/trust", ar: "الشفافية والتقارير الميدانية والمحاسبية", en: "Transparency & Field Reports" },
   ];
 
-  const FAQS = [
-    {
-      qAr: "إيه هي مبادرة عربون خير للفريلانسرز؟",
-      qEn: "What is the Arboun Khair Freelancers Initiative?",
-      aAr: "مبادرة مبتكرة تشجع الشباب المشتغلين في العمل الحر (الفريلانس) والعمل عن بُعد على استقطاع نسبة مرنة من أرباح كل مشروع يتم تسليمه (مثل 1% أو 5%)، وتوجيهها كصدقة لدعم الأسر المحتاجة، بهدف جلب البركة وعلاج قلق وضغط الشغل مع شارة رقمية للبورتفوليو.",
-      aEn: "An innovative initiative encouraging freelancers and remote professionals to dedicate a flexible portion of their project earnings (1% or 5%) to verified charity, inviting barakah and peace of mind.",
-    },
-    {
-      qAr: "هل في حد أدنى للتبرع من أرباح المشاريع؟",
-      qEn: "Is there a minimum donation amount?",
-      aAr: "لا يوجد أي حد أدنى. يمكنك التبرع بأي مبلغ أو نسبة تراها مناسبة من أرباح مشروعك (مثل 1% أو 5% أو 50 جنيهاً). الهدف هو الاستمرارية وجعل الصدقة عادة تطمئن قلبك وترتبط بنجاحك المهني.",
-      aEn: "No minimum required. You can contribute whatever fits your project budget (e.g. 1%, 5%, or 50 EGP). Consistency and pure intent are what count.",
-    },
-    {
-      qAr: "كيف يؤثر التبرع على عملي كفريلانسر؟",
-      qEn: "How does donating benefit my career as a freelancer?",
-      aAr: "إخراج الصدقات يُعد 'زكاة للمهنة' وسبباً مباشراً في استنزال البركة، تخفيف ضغوط العمل، تبديد الخوف من ركود السوق، وتيسير التعامل مع العملاء، تصديقاً لقول النبي ﷺ: «ما نقص مال من صدقة».",
-      aEn: "Charity cleanses earnings, alleviates burnout and work anxiety, and invites continuous professional opportunities.",
-    },
-    {
-      qAr: "أين تذهب تبرعات مبادرة عربون خير؟",
-      qEn: "Where do Arboun Khair donations go?",
-      aAr: "يتم توجيه التبرعات لتنفيذ مشاريع حقيقية على الأرض تحت إشراف مؤسسة اليسر الخيرية (مشهرة برقم 2665 لسنة 2019)، وتشمل: تيسير زواج الفتيات اليتيمات بأجهزة معمرة، كفالة الأيتام والتعليم، الصدقات الجارية (أسقف ومياه)، والإغاثة الغذائية مع توثيق فوري.",
-      aEn: "Directly into verified grassroots projects by Al-Yusr Charity (License No. 2665 of 2019): orphan education, bride trousseau, insulated roofs, clean water connections, and food aid.",
-    },
-    {
-      qAr: "هل يمكنني التبرع بعملات أجنبية إذا كنت أعمل مع عملاء من الخارج؟",
-      qEn: "Can I donate in foreign currencies if I work with international clients?",
-      aAr: "نعم بالتأكيد. إذا كنت تتلقى أرباحك بالدولار، اليورو، الريال السعودي، أو أي عملة أخرى، يمكنك تحويل تبرعك بكل سهولة عبر بوابات الدفع الإلكترونية الآمنة المتاحة على موقعنا بواسطة بطاقات Visa و Mastercard.",
-      aEn: "Yes. Our secure gateway supports international currencies and major cards effortlessly.",
-    },
-  ];
+  const FAQS = c.faq.map((f) => ({ q: t(f.q), a: t(f.a) }));
+
+  const hadith = {
+    ar: c.hadith.text.ar,
+    en: c.hadith.text.en,
+    sourceAr: c.hadith.source.ar,
+    sourceEn: c.hadith.source.en,
+  };
 
   return (
     <PageLayout>
@@ -441,10 +299,10 @@ const ArbounLanding = () => {
                 "@type": "FAQPage",
                 mainEntity: FAQS.map((f) => ({
                   "@type": "Question",
-                  name: isRTL ? f.qAr : f.qEn,
+                  name: f.q,
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: isRTL ? f.aAr : f.aEn,
+                    text: f.a,
                   },
                 })),
               },
@@ -476,7 +334,7 @@ const ArbounLanding = () => {
           {/* Main Title (Two Distinct Rows) */}
           <h1 className="mt-6 text-3xl font-black leading-tight sm:text-4xl md:text-5xl lg:text-[3.35rem]">
             <span className="relative inline-block text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)] pb-1.5 sm:pb-2">
-              {isRTL ? "اتصدق النهاردة.." : "Donate Today.."}
+              {t(c.hero.title)}
               {/* Dynamic Hand-drawn Curved Underline */}
               <svg
                 className="absolute -bottom-1 sm:-bottom-2 right-0 w-full h-3 sm:h-4 text-lime-400 pointer-events-none drop-shadow-[0_0_12px_rgba(163,230,53,0.9)]"
@@ -495,15 +353,13 @@ const ArbounLanding = () => {
               </svg>
             </span>
             <span className="block mt-2 sm:mt-3 text-lime-400 drop-shadow-[0_2px_22px_rgba(163,230,53,0.75)]">
-              {isRTL ? "وخليه عربون لرزق بكرة!" : "A Pledge for Tomorrow's Barakah!"}
+              {t(c.hero.title2)}
             </span>
           </h1>
 
           {/* Tagline */}
           <p className="mx-auto mt-4 max-w-2xl text-xs leading-relaxed text-primary-foreground/90 sm:text-sm md:text-base">
-            {isRTL
-              ? "مبادرة «عربون خير» بتجمع مجتمع الفريلانسرز والمستقلين عشان يستثمروا جزء بسيط من أرباح مشاريعهم في الآخرة. طهّر رزقك، تخلص من ضغط وقلق الشغل، وسيب أثر حقيقي يكفل يتيم، أو ييسر زواج، أو يبني صدقة جارية."
-              : "Arboun Khair unites freelancers and remote professionals to invest a flexible fraction of their project earnings in lasting charity. Cleanse your income, alleviate work anxiety, and leave a verified footprint that supports orphans, brides, and clean water."}
+            {t(c.hero.lead)}
           </p>
 
           <div className="mt-7 flex flex-col items-center gap-3 w-full">
@@ -514,7 +370,7 @@ const ArbounLanding = () => {
                 className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-lime-400 text-black px-6 py-3 text-xs sm:text-sm font-black shadow-[0_0_25px_rgba(163,230,53,0.6)] transition hover:bg-lime-300 hover:scale-105 active:scale-95"
               >
                 <Heart className="h-4 w-4 fill-black shrink-0" />
-                <span className="truncate">{isRTL ? "طلّع عربون خيرك الآن" : "Pledge Share"}</span>
+                <span className="truncate">{t(c.hero.donateLabel)}</span>
               </Link>
 
               <a
@@ -524,7 +380,7 @@ const ArbounLanding = () => {
                 className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] px-6 py-3 text-xs sm:text-sm font-black text-white shadow-lg transition hover:brightness-105 hover:scale-105 active:scale-95"
               >
                 <WhatsAppIcon className="h-4 w-4 shrink-0" />
-                <span className="truncate">{isRTL ? "واتساب مباشر" : "WhatsApp Inquiries"}</span>
+                <span className="truncate">{t(label("whatsapp")?.title)}</span>
               </a>
             </div>
 
@@ -536,7 +392,7 @@ const ArbounLanding = () => {
                 className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-5 py-2 text-xs font-bold text-white backdrop-blur transition hover:bg-white/20 hover:scale-105 active:scale-95"
               >
                 {copiedLink ? <Check className="h-4 w-4 text-lime-400" /> : <Share2 className="h-4 w-4" />}
-                <span>{isRTL ? "مشاركة الحملة" : "Share"}</span>
+                <span>{t(label("share_link")?.title)}</span>
               </button>
             </div>
           </div>
@@ -555,16 +411,14 @@ const ArbounLanding = () => {
           <div className="mx-auto mb-8 md:mb-12 max-w-2xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-lime-400/40 bg-lime-400/10 px-4 py-1.5 text-xs font-black text-lime-600 dark:text-lime-400 mb-3 shadow-sm">
               <Sparkles className="h-3.5 w-3.5 text-lime-500" />
-              <span>{isRTL ? "محاور المبادرة الثلاثة" : "Three Core Pillars"}</span>
+              <span>{t(label("pillars_badge")?.title)}</span>
             </div>
 
             <h2 className="text-2xl font-black leading-tight sm:text-3xl md:text-5xl text-foreground">
-              {isRTL ? "ليه تشارك في «عربون خير»؟" : "Why Join Arboun Khair?"}
+              {t(section("pillars")?.title)}
             </h2>
             <p className="mt-3 text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed">
-              {isRTL
-                ? "أثر الصدقة المباشر على راحة بالك، استقرار عملك الحر، وبركة رزقك اليوم وغداً."
-                : "The direct impact of charity on your peace of mind, career stability, and barakah."}
+              {t(section("pillars")?.lead)}
             </p>
           </div>
 
@@ -582,7 +436,7 @@ const ArbounLanding = () => {
                 : (isRight ? "justify-center md:justify-end" : "justify-center md:justify-start");
 
               return (
-                <StickyStackItem key={p.num} index={idx} top={pillarStickyOffsets[idx]}>
+                <StickyStackItem key={p.id} index={idx} top={pillarStickyOffsets[idx]}>
                   <div className={`relative w-full flex ${alignClass}`}>
                     <div
                       data-pillar="card"
@@ -624,7 +478,7 @@ const ArbounLanding = () => {
                                 : "bg-lime-400/12 text-lime-400 border border-lime-400/25"
                             }`}
                           >
-                            {isRTL ? p.tagAr : p.tagEn}
+                            {p.tag}
                           </span>
                           <span
                             className={`font-mono text-xs sm:text-sm font-black px-3 py-0.5 sm:px-3.5 sm:py-1 rounded-full border ${
@@ -649,7 +503,7 @@ const ArbounLanding = () => {
                             {p.icon}
                           </div>
                           <h3 className="text-lg sm:text-2xl md:text-[26px] lg:text-3xl font-black text-white leading-snug">
-                            {isRTL ? p.titleAr : p.titleEn}
+                            {p.title}
                           </h3>
                           <span
                             aria-hidden
@@ -671,7 +525,7 @@ const ArbounLanding = () => {
                                 : "bg-gradient-to-r from-lime-400 to-emerald-400 text-black hover:from-lime-300 hover:to-emerald-300 shadow-lime-400/20"
                             }`}
                           >
-                            <span>{isRTL ? p.actionLabelAr : p.actionLabelEn}</span>
+                            <span>{p.actionLabel}</span>
                             <Arrow className="h-4 w-4" />
                           </a>
                         </div>
@@ -704,18 +558,18 @@ const ArbounLanding = () => {
                             }`}
                           >
                             <Sparkles className="h-3.5 w-3.5 shrink-0 opacity-80" />
-                            <span>{isRTL ? p.quoteAr : p.quoteEn}</span>
+                            <span>{p.quote}</span>
                           </div>
                         </div>
 
                         {/* Description */}
                         <p className="relative text-xs sm:text-sm md:text-[15px] leading-relaxed text-white/70 font-medium">
-                          {isRTL ? p.descAr : p.descEn}
+                          {p.desc}
                         </p>
 
                         {/* 3 Creative Feature Bullets */}
                         <div className="relative mt-3.5 sm:mt-6 pt-3 sm:pt-5 border-t border-white/8 flex flex-col gap-2.5 sm:gap-3">
-                          {(isRTL ? p.bulletsAr : p.bulletsEn).map((bullet, bIdx) => (
+                          {p.bullets.map((bullet, bIdx) => (
                             <div key={bIdx} className="flex items-center gap-2.5 sm:gap-3">
                               <span
                                 className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-xs font-black ${
@@ -746,8 +600,8 @@ const ArbounLanding = () => {
       <ScrollExpandMedia
         mediaSrc="/vid/2222222.mp4"
         posterSrc={posterEducation}
-        title="اتصدق النهاردة.. وخليه عربون لبركة بكرة"
-        badge="عربون خير"
+        title={t(section("video")?.title) || undefined}
+        badge={t(section("video")?.lead) || undefined}
         isRTL={isRTL}
       />
 
@@ -769,7 +623,7 @@ const ArbounLanding = () => {
           <div className="mx-auto mb-8 max-w-2xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-lime-400/40 bg-lime-400/10 px-4 py-1.5 text-xs font-black text-lime-600 dark:text-lime-400 mb-2 shadow-sm">
               <span className="text-xs">✦</span>
-              <span>{isRTL ? "أسهم تبرع مقترحة" : "Suggested Contribution Shares"}</span>
+              <span>{t(label("shares_badge")?.title)}</span>
               <span className="text-xs">✦</span>
             </div>
 
@@ -781,19 +635,17 @@ const ArbounLanding = () => {
             </div>
 
             <h2 className="text-2xl font-black leading-tight sm:text-3xl md:text-4xl text-foreground">
-              {isRTL ? "اختر سهمك من أرباح مشروعك الأخير" : "Choose Your Project Share"}
+              {t(section("shares")?.title)}
             </h2>
 
             <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
-              {isRTL
-                ? "مفيش حد أدنى.. كل سهم مخصص لمصرف خيري حقيقي وموثق بالصور والفيديو."
-                : "No minimum required. Each share directly funds verified field aid with reports."}
+              {t(section("shares")?.lead)}
             </p>
           </div>
 
           <StickyStack className="mt-4 sm:mt-6">
             {PRICING_SHARES.map((pkg, i) => (
-              <StickyStackItem key={i} index={i} top={shareStickyOffsets[i]}>
+              <StickyStackItem key={pkg.id} index={i} top={shareStickyOffsets[i]}>
                 <div
                   data-share="card"
                   style={{ isolation: "isolate" }}
@@ -807,10 +659,10 @@ const ArbounLanding = () => {
                       </span>
                       <div>
                         <span className="inline-block text-[10px] font-black uppercase tracking-widest text-lime-400/80 mb-0.5">
-                          {isRTL ? pkg.tagAr : pkg.tagEn}
+                          {pkg.tag}
                         </span>
                         <h3 className="text-base sm:text-lg font-black text-white leading-tight">
-                          {isRTL ? pkg.labelAr : pkg.labelEn}
+                          {pkg.label}
                         </h3>
                       </div>
                     </div>
@@ -826,7 +678,7 @@ const ArbounLanding = () => {
 
                   {/* Description */}
                   <p className="text-xs sm:text-sm text-white/65 leading-relaxed font-medium mb-5">
-                    {pkg.descAr}
+                    {pkg.desc}
                   </p>
 
                   {/* Donate button — start-aligned (right in RTL, left in LTR) */}
@@ -835,7 +687,7 @@ const ArbounLanding = () => {
                     className="inline-flex items-center gap-2 rounded-full bg-lime-400 hover:bg-lime-300 text-black px-6 py-2.5 text-xs sm:text-sm font-black shadow-[0_0_22px_rgba(163,230,53,0.4)] transition-all hover:-translate-y-0.5 active:scale-95"
                   >
                     <Heart className="h-3.5 w-3.5 fill-black" />
-                    <span>{isRTL ? "تبرع بهذا السهم" : "Donate this share"}</span>
+                    <span>{t(label("shares_badge")?.desc)}</span>
                   </Link>
                 </div>
               </StickyStackItem>
@@ -844,6 +696,8 @@ const ArbounLanding = () => {
           </StickyStack>
         </div>
       </section>
+
+      <HadithBlock hadith={hadith} tone="light" />
 
       {/* ── 6. Freelancer Barakah Calculator ── */}
       <ArbounCalculator />
@@ -859,16 +713,14 @@ const ArbounLanding = () => {
           <div className="mx-auto mb-12 max-w-2xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-lime-400/30 bg-lime-400/8 px-4 py-1.5 text-xs font-black text-lime-600 dark:text-lime-400 mb-3 shadow-sm">
               <Zap className="h-3.5 w-3.5" />
-              <span>{isRTL ? "3 خطوات بسيطة" : "3 Simple Steps"}</span>
+              <span>{t(label("steps_badge")?.title)}</span>
             </div>
 
             <h2 className="text-2xl font-black leading-tight sm:text-3xl md:text-4xl text-foreground">
-              {isRTL ? "كيف تنضم للمبادرة؟" : "How to Join?"}
+              {t(section("steps")?.title)}
             </h2>
             <p className="mt-2 text-xs sm:text-sm text-muted-foreground max-w-lg mx-auto">
-              {isRTL
-                ? "من أول ضغطة زرار لاستلام أرباحك وحتى وصول تقرير التوثيق الميداني."
-                : "From withdrawing your client milestone to receiving your verified field report."}
+              {t(section("steps")?.lead)}
             </p>
           </div>
 
@@ -920,7 +772,7 @@ const ArbounLanding = () => {
                 : (isRight ? "justify-center md:justify-end" : "justify-center md:justify-start");
 
               return (
-                <StickyStackItem key={idx} index={idx} top={stickyOffsets[idx]}>
+                <StickyStackItem key={s.id} index={idx} top={stickyOffsets[idx]}>
                   {/* Outer container: centered on mobile, zigzag on desktop */}
                   <div className={`relative w-full flex ${stepAlignClass}`}>
                     {/* Card wrapper: centered & spacious on mobile, asymmetric on desktop */}
@@ -937,7 +789,7 @@ const ArbounLanding = () => {
                           className={`flex h-20 w-20 xl:h-24 xl:w-24 flex-col items-center justify-center rounded-2xl xl:rounded-3xl ${colors.bg} ${colors.textBadge} font-black ${colors.glow} border-4 border-background shadow-2xl`}
                         >
                           <span className="text-[10px] font-black opacity-75 leading-none tracking-wider">
-                            {isRTL ? "خطوة" : "Step"}
+                            {t(label("steps_badge")?.desc)}
                           </span>
                           <span className="text-4xl xl:text-5xl font-black leading-none mt-0.5">
                             {idx + 1}
@@ -974,10 +826,10 @@ const ArbounLanding = () => {
                         <div className="md:hidden h-10 sm:h-12" />
 
                         <h3 className={`text-base sm:text-xl md:text-2xl font-black mb-2 leading-snug ${colors.titleColor}`}>
-                          {isRTL ? s.titleAr : s.titleEn}
+                          {s.title}
                         </h3>
                         <p className={`text-xs sm:text-sm md:text-[15px] leading-relaxed font-medium ${colors.descColor}`}>
-                          {isRTL ? s.descAr : s.descEn}
+                          {s.desc}
                         </p>
                       </div>
                     </div>
@@ -998,7 +850,7 @@ const ArbounLanding = () => {
         <div className="container mx-auto max-w-5xl px-4 sm:px-6">
           <div className="text-center mb-6">
             <h3 className="text-sm font-black uppercase tracking-wider text-muted-foreground">
-              {isRTL ? "مبادرات وحملات اليسر ذات الصلة" : "Related Al-Yusr Campaigns"}
+              {t(label("related_title")?.title)}
             </h3>
           </div>
 
@@ -1032,7 +884,7 @@ const ArbounLanding = () => {
             <div className="relative z-10 flex flex-col items-center">
               <div className="inline-flex items-center gap-2 rounded-full bg-lime-400/15 border border-lime-400/40 text-lime-400 font-black text-xs sm:text-sm px-4 py-1.5 mb-2 shadow-sm">
                 <span className="text-xs">✦</span>
-                <span>{isRTL ? "رسالة المبادرة" : "Core Mission"}</span>
+                <span>{t(label("mission_badge")?.title)}</span>
                 <span className="text-xs">✦</span>
               </div>
 
@@ -1045,13 +897,11 @@ const ArbounLanding = () => {
 
 
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight drop-shadow-md">
-                {isRTL ? "«قفل بروجكتك الجاي.. استثمر في الآخرة»" : "«Close your next deal.. Invest in the Hereafter»"}
+                {t(c.cta.title)}
               </h2>
 
               <p className="mt-4 text-sm sm:text-base md:text-lg text-lime-300 font-bold max-w-2xl leading-relaxed">
-                {isRTL
-                  ? "عربون خير يبارك في رزقك ويفتح أبواب التوفيق لكل صفقة جديدة"
-                  : "A pledge of goodness that sanctifies your income and blesses your work"}
+                {t(c.cta.sub)}
               </p>
             </div>
           </div>
@@ -1066,12 +916,10 @@ const ArbounLanding = () => {
               <HelpCircle className="h-5 w-5" />
             </div>
             <h2 className="text-2xl font-black text-foreground sm:text-3xl">
-              {isRTL ? "أسئلة شائعة حول مبادرة عربون خير" : "Frequently Asked Questions"}
+              {t(section("faq_intro")?.title)}
             </h2>
             <p className="mt-1.5 text-xs text-muted-foreground">
-              {isRTL
-                ? "إجابات دقيقة ومباشرة عن زكاة العمل الحر، العملات، والتبرع والشارة."
-                : "Precise answers about freelance zakt, currencies, and portfolio badges."}
+              {t(section("faq_intro")?.lead)}
             </p>
           </div>
 
@@ -1092,12 +940,12 @@ const ArbounLanding = () => {
                     onClick={() => setOpenFaq(isOpen ? null : idx)}
                     className="flex w-full items-center justify-between gap-3 p-4 text-start font-extrabold text-foreground text-sm"
                   >
-                    <span>{isRTL ? faq.qAr : faq.qEn}</span>
+                    <span>{faq.q}</span>
                     <span className="text-lime-500 font-black text-lg">{isOpen ? "−" : "+"}</span>
                   </button>
                   {isOpen && (
                     <div className="px-4 pb-4 text-xs text-muted-foreground leading-relaxed border-t border-border/40 pt-3">
-                      {isRTL ? faq.aAr : faq.aEn}
+                      {faq.a}
                     </div>
                   )}
                 </div>
@@ -1114,7 +962,7 @@ const ArbounLanding = () => {
             <div className="hidden sm:flex items-center gap-2.5">
               <span className="flex h-3 w-3 rounded-full bg-lime-400 animate-ping" />
               <p className="text-xs font-black text-foreground">
-                {isRTL ? "خلي البروجكت الجاي بدايته بركة.. طـلّع عربون خيرك الآن" : "Start your next client project with barakah — donate your pledge"}
+                {t(label("sticky_bar")?.title)}
               </p>
             </div>
 
@@ -1124,7 +972,7 @@ const ArbounLanding = () => {
                 className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 rounded-full bg-lime-400 text-black px-6 py-2.5 text-xs font-black shadow-[0_0_20px_rgba(163,230,53,0.6)] transition hover:bg-lime-300"
               >
                 <Heart className="h-3.5 w-3.5 fill-black" />
-                <span>{isRTL ? "تبرع بعربون مشروعك" : "Pledge Now"}</span>
+                <span>{t(label("sticky_bar")?.desc)}</span>
               </Link>
 
               <a
@@ -1132,7 +980,7 @@ const ArbounLanding = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center p-2.5 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] text-white shadow-sm transition hover:brightness-105"
-                title={isRTL ? "تواصل عبر واتساب" : "WhatsApp"}
+                title={t(label("whatsapp")?.desc)}
               >
                 <WhatsAppIcon className="h-4 w-4" />
               </a>

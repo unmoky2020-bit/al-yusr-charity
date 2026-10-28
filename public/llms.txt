@@ -8,8 +8,12 @@
 
 - Name (Arabic): مؤسسة اليسر الخيرية
 - Name (English): Al-Yusr Charity Foundation
-- Headquarters: المنصورة، محافظة الدقهلية، جمهورية مصر العربية / Mansoura, Dakahlia, Egypt
-- License: مشهرة برقم 2665 لسنة 2019 (NGO No. 2665/2019, Egypt)
+- Also known as: اليسر، مؤسسة اليسر، جمعية اليسر، اليسر الخيرية، مؤسسة اليسر المنصورة، اليسر المنصورة، Al-Yusr, Al-Yusr Charity, Al-Yusr Foundation Mansoura (older social handles spell it Elyosr). All refer to this one foundation; it is not related to any electronics store or company named "اليسر".
+- Legal form: مؤسسة أهلية (non-governmental foundation), not a cooperative "جمعية" — people search for both terms.
+- Headquarters: المنصورة، تقسيم خطاب، بجوار وكالة المنصورة، محافظة الدقهلية، جمهورية مصر العربية / Mansoura (Khattab district), Dakahlia, Egypt
+- License: مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي (NGO No. 2665/2019, Egyptian Ministry of Social Solidarity)
+- Founded: 2019
+- Social: https://facebook.com/Elyosr.Charity · https://instagram.com/elyosr.charity
 - Official website: https://elyusr.org/
 - Phone / WhatsApp: +20 109 700 0137
 - Bank (CIB): 100043605733 — international SWIFT transfer available on request
@@ -36,8 +40,29 @@
 - [Contact](https://elyusr.org/contact): المقر الرئيسي بالمنصورة — الدقهلية. هاتف وواتساب +20 109 700 0137، CIB 100043605733، تحويل بنكي دولي.
 - [Zakat](https://elyusr.org/zakat): حاسبة الزكاة وقنوات صرفها محليًا ودوليًا.
 - [Volunteer](https://elyusr.org/volunteer): انضم لفريق اليسر الميداني بالمنصورة وقرى الدقهلية.
+- [Trust](https://elyusr.org/trust): الترخيص، التوثيق بالصور والفيديو، التقارير، وكيفية التحقق من المندوبين.
+- [FAQ Center](https://elyusr.org/faqs): مركز الأسئلة الشائعة عن المؤسسة والتبرع والحملات.
+- [Track a donation](https://elyusr.org/donate/track): تتبع التبرع برقم المرجع بدون حساب.
 - [Blog](https://elyusr.org/blog): أدلة الأضحية، حصاد رمضان، الزكاة، الحالات.
 - [Gallery](https://elyusr.org/gallery): صور وفيديوهات ميدانية من المنصورة والدقهلية.
+
+## Campaigns
+
+- [All campaigns](https://elyusr.org/campaigns): hub page for every Al-Yusr campaign.
+- [ظِلّ — Dhill](https://elyusr.org/dhill): صدقة جارية — وصلات مياه نظيفة وأسقف للأسر المستحقة (water connections and roofs).
+- [سِتر — Setr](https://elyusr.org/setr): حملة الشتاء — أسرّة ومراتب وأغطية وكسوة ودفء للبيوت (winter warmth, beds, blankets, clothing; October–February).
+- [أَثَر — Athar](https://elyusr.org/athar): دعم التعليم — حقائب وزي مدرسي ومصروفات وكتب للطلاب غير القادرين (education: school bags, uniforms, fees).
+- [موسم الخير — Ramadan Season](https://elyusr.org/ramadan): كرتونة الخير، مطبخ اليسر لإفطار الصائمين، زكاة الفطر، كسوة العيد (Ramadan food boxes, iftar meals, Zakat al-Fitr).
+- [مَرْكون — Markoun](https://elyusr.org/markoun): التبرع العيني — أثاث وأجهزة وملابس وأدوية وكتب مع استلام من المنزل (in-kind donations with free doorstep pickup).
+- [عربون خير — Arboun Kheir](https://elyusr.org/arboun): مبادرة للمستقلين والفريلانسرز لاستقطاع نسبة من أرباح كل مشروع صدقةً (freelancers give a share of each project's earnings).
+
+## Common questions
+
+- ما هي مؤسسة اليسر الخيرية؟ — مؤسسة أهلية مصرية بالمنصورة، الدقهلية، تعمل منذ 2019 في رعاية الأيتام والأسر المتعففة والعلاج والتعليم وسقيا الماء والزكاة وصكوك الأضاحي، مع توثيق كل تبرع.
+- هل اليسر جمعية أم مؤسسة؟ — الاسم القانوني «مؤسسة اليسر الخيرية»، مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي؛ «جمعية اليسر» اسم شائع لنفس الجهة.
+- أين المقر؟ — المنصورة، تقسيم خطاب، بجوار وكالة المنصورة، محافظة الدقهلية. واتساب +20 109 700 0137.
+- كيف أتأكد أن تبرعي وصل؟ — يصلك رقم تتبع بعد الدفع؛ أدخله في https://elyusr.org/donate/track لمشاهدة مرحلة التنفيذ وصور/فيديو التسليم.
+- ما طرق الدفع؟ — بطاقات ومحافظ عبر Kashier، إنستاباي InstaPay، فودافون كاش، تحويل بنكي CIB 100043605733 (SWIFT متاح للخارج)، أو مندوب تحصيل في المنصورة.
 
 ## Last Eid (2025) recap — trust signals
 

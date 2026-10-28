@@ -5,8 +5,9 @@ import {
   LayoutDashboard, TrendingUp, HandCoins, Users, FolderKanban, Layers,
   FileEdit, FileBarChart2, ArrowUpRight, Menu, X, Globe, LogOut, Search,
   HandHeart, HeartHandshake, ShieldCheck, UserCog, Megaphone, ClipboardCheck,
-  ListChecks, Mail, BarChart3, Activity, Wallet, Image as ImageIcon, Loader2,
+  ListChecks, Mail, BarChart3, Activity, Wallet, Image as ImageIcon, FolderArchive, Loader2,
   Server, Sparkles, Building2, Compass, Calendar, ChevronDown, Heart, BookOpen, Target,
+  HelpCircle, SlidersHorizontal,
 } from "lucide-react";
 import { Logo } from "@/components/common/Logo";
 import logoAsset from "@/assets/logo-circle.png";
@@ -32,8 +33,11 @@ const ALL_NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/admin/donations", ar: "التبرعات", en: "Donations", icon: HandCoins },
       { href: "/admin/payment-methods", ar: "طرق الدفع", en: "Payment Methods", icon: Wallet },
-      { href: "/admin/cases", ar: "الحالات الإنسانية", en: "Cases", icon: Users },
-      { href: "/admin/projects", ar: "المشاريع والبرامج", en: "Projects & Programs", icon: FolderKanban },
+      { href: "/admin/cases", ar: "الحالات", en: "Cases", icon: Users },
+      { href: "/admin/projects", ar: "إدارة المشاريع", en: "Projects Management", icon: FolderKanban },
+      { href: "/admin/programs", ar: "إدارة البرامج", en: "Programs Management", icon: BookOpen },
+      { href: "/admin/donation-campaigns", ar: "إدارة الحملات والمبادرات", en: "Donation Campaigns", icon: Megaphone },
+      { href: "/admin/campaigns", ar: "حملات التطوع الميدانية", en: "Volunteer Campaigns", icon: Users },
       { href: "/admin/seasons", ar: "إدارة المواسم", en: "Seasons CMS", icon: Calendar },
       { href: "/admin/reports", ar: "التقارير والتصدير", en: "Reports & Exports", icon: FileBarChart2 },
     ],
@@ -43,13 +47,16 @@ const ALL_NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/admin/homepage-content", ar: "الهيرو والبراند بروميس", en: "Hero & Brand Promise", icon: Sparkles },
       { href: "/admin/about-us", ar: "محتوى من نحن", en: "About Us CMS", icon: Building2 },
+      { href: "/admin/campaign-pages", ar: "صفحات الحملات", en: "Campaign Pages", icon: Megaphone },
       { href: "/admin/axes", ar: "محاور رسالتنا", en: "Work Axes", icon: Compass },
       { href: "/admin/site-stats", ar: "الأرقام والإنجازات", en: "Stats & Numbers", icon: BarChart3 },
-      { href: "/admin/services", ar: "إدارة الخدمات", en: "Services CMS", icon: Layers },
+      { href: "/admin/campaigns-section", ar: "كاروسيل الرئيسية", en: "Homepage Carousel", icon: SlidersHorizontal },
       { href: "/admin/stories", ar: "قصص الأثر", en: "Stories CMS", icon: HeartHandshake },
+      { href: "/admin/media", ar: "مكتبة الوسائط", en: "Media Library", icon: FolderArchive },
       { href: "/admin/gallery", ar: "معرض الصور", en: "Photo Gallery", icon: ImageIcon },
       { href: "/admin/content", ar: "المقالات والمدونة", en: "Articles & Blog", icon: FileEdit },
       { href: "/admin/blog-seo", ar: "سيو المدونة", en: "Blog SEO", icon: Search },
+      { href: "/admin/faqs", ar: "الأسئلة الشائعة", en: "FAQs CMS", icon: HelpCircle },
       { href: "/admin/newsletter", ar: "النشرة البريدية", en: "Newsletter", icon: Mail },
       { href: "/admin/review",  ar: "مراجعة واعتماد التعديلات", en: "Change Approvals", icon: ClipboardCheck },
     ],
@@ -58,7 +65,6 @@ const ALL_NAV_GROUPS: NavGroup[] = [
     ar: "فريق العمل والأشخاص", en: "People & Team",
     items: [
       { href: "/admin/volunteers", ar: "المتطوعون", en: "Volunteers", icon: HandHeart },
-      { href: "/admin/campaigns", ar: "حملات التطوع", en: "Volunteer Campaigns", icon: Megaphone },
       { href: "/admin/my-tasks", ar: "مهامي الميدانية", en: "My Tasks", icon: ListChecks },
       { href: "/admin/delegates", ar: "متابعة المندوبين", en: "Delegate Tracking", icon: ShieldCheck },
       { href: "/admin/donors", ar: "سجل المتبرعين", en: "Donors", icon: HeartHandshake },
@@ -85,7 +91,7 @@ const ROLE_ALLOWED: Record<string, string[]> = {
   admin: ["*"],
   case_manager: [
     "/admin", "/admin/analytics",
-    "/admin/donations", "/admin/cases", "/admin/my-cases", "/admin/delegates", "/admin/projects", "/admin/programs", "/admin/axes", "/admin/services",
+    "/admin/donations", "/admin/cases", "/admin/my-cases", "/admin/delegates", "/admin/projects", "/admin/programs", "/admin/axes", "/admin/services", "/admin/donation-campaigns",
     "/admin/campaigns", "/admin/my-tasks", "/admin/reports", "/admin/volunteers",
     "/admin/donors", "/admin/transactions",
     "/admin/profile",
@@ -93,10 +99,10 @@ const ROLE_ALLOWED: Record<string, string[]> = {
   editor: [
     "/admin", "/admin/analytics",
     "/admin/homepage-content", "/admin/about-us", "/admin/axes",
-    "/admin/programs", "/admin/services", "/admin/campaigns", "/admin/seasons", "/admin/reports",
-    "/admin/content", "/admin/stories", "/admin/site-stats", "/admin/gallery",
-    "/admin/review", "/admin/blog-seo", "/admin/newsletter",
-    "/admin/my-tasks", "/admin/profile",
+    "/admin/projects", "/admin/programs", "/admin/services", "/admin/donation-campaigns", "/admin/campaigns", "/admin/seasons", "/admin/reports",
+    "/admin/content", "/admin/stories", "/admin/site-stats", "/admin/gallery", "/admin/media",
+    "/admin/review", "/admin/blog-seo", "/admin/faqs", "/admin/newsletter",
+    "/admin/my-tasks", "/admin/profile", "/admin/campaigns-section",
   ],
   volunteer: [
     "/admin", "/admin/campaigns", "/admin/my-tasks", "/admin/profile",
@@ -211,11 +217,6 @@ export const AdminLayout = ({
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <h1 className="truncate text-base font-black text-primary-foreground md:text-xl">{pageTitle}</h1>
-                  {roleBadge && (
-                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold ${roleBadge.cls}`}>
-                      {roleBadge[lang]}
-                    </span>
-                  )}
                 </div>
                 <p className="hidden text-[11px] text-primary-foreground/70 md:block">
                   {lang === "ar" ? "مؤسسة اليسر الخيرية — لوحة الإدارة" : "Al-Yusr Foundation — Admin"}

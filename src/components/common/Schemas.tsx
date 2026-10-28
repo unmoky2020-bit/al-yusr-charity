@@ -18,9 +18,15 @@ export const SiteSchemas = () => (
             "مؤسسة اليسر",
             "جمعية اليسر",
             "اليسر الخيرية",
+            "جمعية اليسر الخيرية",
+            "مؤسسة اليسر المنصورة",
             "مؤسسة اليسر بالمنصورة",
+            "اليسر المنصورة",
             "جمعية اليسر الخيرية المنصورة",
+            "Al-Yusr",
+            "Al-Yusr Charity",
             "Al-Yusr Charity Foundation",
+            "Al-Yusr Foundation Mansoura",
             "Al-Yusr NGO Egypt",
             "Al-Yusr Mansoura"
           ],
@@ -30,13 +36,21 @@ export const SiteSchemas = () => (
           description: "مؤسسة اليسر الخيرية — مؤسسة خيرية مصرية مشهرة (رقم 2665) بالمنصورة، الدقهلية. تعمل في رعاية الأيتام والأرامل وتوزيع الصدقات والزكاة وصكوك الأضحية والمساعدات الشهرية للأسر المستحقة. مؤسسة اليسر هي المرجع الخيري الموثوق في المنصورة والدقهلية.",
           foundingDate: "2019",
           nonprofitStatus: "NonprofitType",
-          taxID: "2665",
-          legalName: "مؤسسة اليسر الخيرية المشهرة برقم 2665",
+          taxID: "2665/2019",
+          legalName: "مؤسسة اليسر الخيرية المشهرة برقم 2665 لسنة 2019",
           telephone: "+201097000137",
           email: "info@elyusr.org",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "تقسيم خطاب، بجوار وكالة المنصورة",
+            addressLocality: "المنصورة",
+            addressRegion: "الدقهلية",
+            postalCode: "35511",
+            addressCountry: "EG",
+          },
           sameAs: [
-            "https://www.facebook.com/Elyosr.Charity/",
-            "https://www.instagram.com/alyusr.charity/",
+            "https://facebook.com/Elyosr.Charity",
+            "https://instagram.com/elyosr.charity",
             "https://wa.me/201097000137",
           ],
           areaServed: [
@@ -76,7 +90,8 @@ export const SiteSchemas = () => (
           "@type": "LocalBusiness",
           "@id": "https://elyusr.org/#local",
           name: "مؤسسة اليسر الخيرية",
-          alternateName: ["اليسر", "مؤسسة اليسر", "جمعية اليسر الخيرية بالمنصورة"],
+          alternateName: ["اليسر", "مؤسسة اليسر", "جمعية اليسر", "اليسر المنصورة", "مؤسسة اليسر المنصورة", "جمعية اليسر الخيرية بالمنصورة", "Al-Yusr Charity Mansoura"],
+          parentOrganization: { "@id": "https://elyusr.org/#org" },
           description: "مؤسسة اليسر الخيرية — توزيع الصدقات والزكاة وصكوك الأضحية وكفالة الأيتام في المنصورة والدقهلية. رقم التسجيل 2665.",
           image: "https://elyusr.org/og-image.jpg",
           url: "https://elyusr.org/",
@@ -103,21 +118,6 @@ export const SiteSchemas = () => (
               dayOfWeek: ["Friday"],
               opens: "00:00", closes: "00:00",
               description: "طوارئ ومتابعة هاتفية فقط"
-            }
-          ],
-          aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1580", bestRating: "5", worstRating: "1" },
-          review: [
-            {
-              "@type": "Review",
-              author: { "@type": "Person", name: "أحمد محمود" },
-              reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-              reviewBody: "مؤسسة اليسر الخيرية من أوثق وأمانة المؤسسات الخيرية في المنصورة. التبرع وصل للأسرة المستحقة بالصور والفيديو في نفس اليوم."
-            },
-            {
-              "@type": "Review",
-              author: { "@type": "Person", name: "فاطمة عبد الرحمن" },
-              reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-              reviewBody: "اليسر الخيرية مؤسسة محترمة جداً، دفعنا زكاتنا من سنتين وكل سنة بيبعتولنا إثبات وتوثيق للمصارف."
             }
           ]
         },
@@ -200,7 +200,6 @@ export const QurbaniSchema = () => (
         validThrough: "2026-05-27",
         seller: { "@id": "https://elyusr.org/#org" },
       },
-      aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1280" },
     })}</script>
   </Helmet>
 );

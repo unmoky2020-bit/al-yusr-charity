@@ -20,6 +20,8 @@ import { BreadcrumbSchema } from "@/components/common/Schemas";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
+import { useQuery } from "@tanstack/react-query";
+import { fetchFaqs, type FaqItem } from "@/data/faqsApi";
 
 /** Motion wrapper for cards matching ServicesMap exact motion */
 const AlternatingCard = memo(({
@@ -73,136 +75,24 @@ import posterOdhy from "@/assets/poster-odhya.png";
 import foodBoxImg from "@/assets/program-food-new.jpg";
 
 
-/* ── Campaigns FAQ Data — 12 high-intent questions for AI Overview & PAA ── */
-const CAMPAIGNS_FAQ = [
-  {
-    ar: {
-      q: "إيه أفضل طريقة أتبرع لمؤسسة اليسر الخيرية في مصر؟",
-      a: "تقدر تتبرع أونلاين مباشرة عبر بوابة الدفع الآمنة بالموقع بكارت فيزا أو ماستر، فودافون كاش، InstaPay، أو بالتحويل البنكي على CIB حساب 100043605733. المؤسسة مشهرة برقم 2665/2019 وكل تبرع موثق بصور وفيديو.",
-    },
-    en: {
-      q: "What is the best way to donate to Al-Yusr Charity Foundation in Egypt?",
-      a: "You can donate online via our secure payment gateway using Visa/Mastercard, Vodafone Cash, InstaPay, or CIB bank transfer to account 100043605733. Al-Yusr is registered under No. 2655/2019 and every donation is documented with photos and video.",
-    },
-  },
-  {
-    ar: {
-      q: "إزاي أتأكد إن تبرعي وصل فعليًا للأسر المستحقة؟",
-      a: "فرقنا الميدانية بتوثق كل تسليم بالصور والفيديو وكود تتبع خاص، وبنبعت لك رسالة نصية وتقرير كامل على واتساب أو إيميلك في خلال أسبوع من تاريخ التبرع.",
-    },
-    en: {
-      q: "How can I verify my donation reached the deserving families?",
-      a: "Our field teams document every delivery with photos, video, and a unique tracking code, sending you a full report via WhatsApp or email within one week of your donation date.",
-    },
-  },
-  {
-    ar: {
-      q: "هل مؤسسة اليسر مرخصة رسميًا وتحت إشراف الحكومة المصرية؟",
-      a: "نعم. اليسر مسجلة رسميًا بقرار وزارة التضامن الاجتماعي برقم 2665 لسنة 2019، وتخضع للإشراف الكامل لوزارة التضامن، وتُصدر تقارير مالية وميدانية دورية.",
-    },
-    en: {
-      q: "Is Al-Yusr Charity Foundation officially licensed in Egypt?",
-      a: "Yes. Al-Yusr is officially registered by the Ministry of Social Solidarity under No. 2655/2019, fully supervised by the ministry, and publishes regular financial and field reports.",
-    },
-  },
-  {
-    ar: {
-      q: "إيه الحملات الخيرية اللي بتشتغل عليها مؤسسة اليسر دلوقتي؟",
-      a: "دلوقتي بنشتغل على حملة ظِلّ (أسقف ومياه)، حملة مَركون (أثاث وأجهزة)، صندوق الغذاء الشهري، الأضاحي، حملة عروون خير (فريلانسرز)، وحملة أثر التعليمية. كل الحملات بتغطي مصر كلها.",
-    },
-    en: {
-      q: "What charity campaigns is Al-Yusr Foundation currently running?",
-      a: "Currently active: Dhill Campaign (roofing & water), Markoun Campaign (furniture & appliances), Monthly Food Box, Qurbani/Adha, Arboun Kheir (freelancers), and Athar Education Campaign — all covering all of Egypt.",
-    },
-  },
-  {
-    ar: {
-      q: "هل تقدروا تستلموا التبرعات العينية (أثاث وملابس وأجهزة) من البيت؟",
-      a: "أيوه. فريق مركون بسيارات المؤسسة بييجي لباب البيت في الدقهلية والمنصورة ومحافظات الدلتا بالتنسيق عبر 01097000137. التبرعات العينية بتتجدد وبتوصل للأسر المستحقة بكرامة.",
-    },
-    en: {
-      q: "Do you collect in-kind donations (furniture, clothes, appliances) from home?",
-      a: "Yes. Our Markoun team visits homes in Dakahlia, Mansoura, and Delta governorates using foundation vehicles. Schedule via 01097000137. Items are refurbished and delivered to deserving families with dignity.",
-    },
-  },
-  {
-    ar: {
-      q: "إيه أقل مبلغ تبرع ممكن أقدمه لمؤسسة اليسر؟",
-      a: "ما فيش حد أدنى — حتى 10 جنيه تصنع فرقاً في حياة أسرة مستحقة. إحنا بنجمع التبرعات الصغيرة مع بعض عشان ننفّذ مشاريع متكاملة بأعلى تأثير.",
-    },
-    en: {
-      q: "What is the minimum donation amount for Al-Yusr Foundation?",
-      a: "There is no minimum — even 10 EGP makes a difference. We pool small donations together to execute complete high-impact projects.",
-    },
-  },
-  {
-    ar: {
-      q: "هل ينفع أتبرع لحملة معينة بالاسم مثلاً للمياه أو التعليم؟",
-      a: "أكيد. من صفحة التبرع ممكن تختار برنامج معين زي سقيا الماء، التعليم، الغذاء، أو الأسر. تبرعك هيروح مباشرة للحملة اللي اخترتها، وهتتبعه خطوة بخطوة.",
-    },
-    en: {
-      q: "Can I donate to a specific campaign like water or education?",
-      a: "Absolutely. From the donation page you can choose a specific program like clean water, education, food, or families. Your donation goes directly to your chosen campaign with full step-by-step tracking.",
-    },
-  },
-  {
-    ar: {
-      q: "إيه الفرق بين مؤسسة اليسر والجمعيات الخيرية التانية في مصر؟",
-      a: "اليسر بتميّز نفسها بالتوثيق الميداني الكامل (صور وفيديو لكل تبرع)، الشفافية المالية، الاستهداف الدقيق للأسر الأكثر احتياجاً، وخدمة الاستلام من الباب لباب للتبرعات العينية.",
-    },
-    en: {
-      q: "What makes Al-Yusr different from other Egyptian charities?",
-      a: "Al-Yusr stands out through complete field documentation (photos and video for every donation), financial transparency, precise targeting of the most deserving families, and doorstep in-kind donation collection.",
-    },
-  },
-  {
-    ar: {
-      q: "هل ينفع أتبرع بالدولار أو الريال السعودي لمؤسسة اليسر؟",
-      a: "نعم. نستقبل تبرعات بالدولار الأمريكي، الريال السعودي، واليورو عبر التحويل البنكي الدولي. للتفاصيل تواصل معنا عبر info@elyasrcharity.com أو واتساب 01097000137.",
-    },
-    en: {
-      q: "Can I donate in USD, SAR, or foreign currencies to Al-Yusr?",
-      a: "Yes. We accept USD, SAR, and EUR via international bank transfer. Contact us at info@elyasrcharity.com or WhatsApp 01097000137 for details.",
-    },
-  },
-  {
-    ar: {
-      q: "إيه الأثر الفعلي لتبرع 500 جنيه في مؤسسة اليسر؟",
-      a: "500 جنيه ممكن تغطي: صندوق غذاء شهري كامل لأسرة (4 أشخاص)، أو تساهم في تركيب مروحة أو مصدر مياه نقية، أو جزء من كسوة شتاء. كل حملة بتوضح التأثير الحقيقي لكل مبلغ.",
-    },
-    en: {
-      q: "What is the real impact of a 500 EGP donation to Al-Yusr?",
-      a: "500 EGP can cover: a complete monthly food box for a family of four, contribute to a fan installation or clean water source, or part of a winter clothing package. Each campaign clearly shows the real impact per amount.",
-    },
-  },
-  {
-    ar: {
-      q: "هل بتشتغلوا في مناطق خارج المنصورة والدقهلية؟",
-      a: "أيوه. إحنا بنشتغل في أكتر من 34 محافظة في مصر كلها، مع تركيز خاص على الدقهلية والدلتا والصعيد. حملاتنا وصلت للقرى والمناطق الأكثر احتياجاً في مصر من الإسكندرية للأسوان.",
-    },
-    en: {
-      q: "Do you operate outside Mansoura and Dakahlia?",
-      a: "Yes. We operate across more than 34 governorates throughout Egypt, with special focus on Dakahlia, the Delta, and Upper Egypt. Our campaigns have reached the most underserved villages from Alexandria to Aswan.",
-    },
-  },
-  {
-    ar: {
-      q: "كيف أتواصل مع مؤسسة اليسر للشراكات والتبرعات الكبيرة؟",
-      a: "تواصل معنا على info@elyasrcharity.com، أو اتصل على 01097000137 (واتساب متاح). مقرنا في المنصورة بجوار وكالة خطاب، الدقهلية. الفريق هيرد عليك في خلال 24 ساعة.",
-    },
-    en: {
-      q: "How can I contact Al-Yusr Foundation for partnerships or major donations?",
-      a: "Reach us at info@elyasrcharity.com or call/WhatsApp 01097000137. Our office is in Mansoura, Dakahlia. Our team responds within 24 hours.",
-    },
-  },
-];
-
-/* ── CampaignsFAQ Component — identical design to homepage FAQ.tsx ── */
+/* ── CampaignsFAQ — dynamic from backend (categorySlug: "campaigns") ── */
 const CampaignsFAQ = ({ isRTL }: { isRTL: boolean }) => {
   const lang = isRTL ? "ar" : "en";
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<string | null>("0");
   const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? CAMPAIGNS_FAQ : CAMPAIGNS_FAQ.slice(0, 5);
+
+  const { data: faqData = [] } = useQuery<FaqItem[]>({
+    queryKey: ["faqs-campaigns"],
+    queryFn: () => fetchFaqs({ categorySlug: "campaigns" }),
+    staleTime: 60_000,
+  });
+
+  const allFaqs = faqData.map((f) => ({
+    ar: { q: f.question_ar, a: f.answer_ar },
+    en: { q: f.question_en || f.question_ar, a: f.answer_en || f.answer_ar },
+  }));
+
+  const visible = showAll ? allFaqs : allFaqs.slice(0, 6);
 
   return (
     <section
@@ -211,31 +101,31 @@ const CampaignsFAQ = ({ isRTL }: { isRTL: boolean }) => {
       aria-labelledby="campaigns-faq-heading"
       itemScope
       itemType="https://schema.org/FAQPage"
+      dir={isRTL ? "rtl" : "ltr"}
     >
       {/* Section Header */}
-      <div className="mx-auto mb-8 max-w-2xl text-center">
-        <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-secondary/20 text-primary shadow-sm">
-          <HelpCircle className="h-6 w-6 text-secondary" />
+      <div className="mx-auto mb-8 max-w-xl text-center">
+        <div className="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-secondary/20 shadow-sm">
+          <HelpCircle className="h-5 w-5 text-secondary" />
         </div>
         <h2
           id="campaigns-faq-heading"
-          className="mt-3 text-2xl font-black text-primary sm:text-3xl md:text-4xl"
+          className="mt-3 text-2xl font-black text-primary sm:text-3xl"
         >
-          {isRTL
-            ? "أسئلة شائعة حول حملات وتبرعات اليسر"
-            : "Campaign & Donation FAQs"}
+          {isRTL ? "أسئلة شائعة عن الحملات" : "Campaign FAQs"}
         </h2>
-        <p className="mt-3 text-sm text-muted-foreground sm:text-base">
+        <p className="mt-2 text-sm text-muted-foreground">
           {isRTL
-            ? "إجابات دقيقة على أكثر الأسئلة اللي بتوصلنا عن التبرع والحملات والتوثيق. محتاج أكثر؟ تواصل معانا."
-            : "Precise answers to the most common questions about donating, campaigns, and documentation."}
+            ? "إجابات واضحة عن التبرع، الحملات، والتوثيق."
+            : "Clear answers about donating, campaigns, and documentation."}
         </p>
       </div>
 
-      {/* Accordion Items */}
+      {/* Questions: one per row */}
       <div className="space-y-3">
         {visible.map((f, i) => {
-          const isOpen = open === i;
+          const key = String(i);
+          const isOpen = open === key;
           return (
             <div
               key={i}
@@ -249,19 +139,16 @@ const CampaignsFAQ = ({ isRTL }: { isRTL: boolean }) => {
               itemType="https://schema.org/Question"
             >
               <button
-                onClick={() => setOpen(isOpen ? null : i)}
-                className="flex w-full items-center justify-between gap-3 p-4 text-start font-extrabold text-primary md:p-5"
+                onClick={() => setOpen(isOpen ? null : key)}
+                className="flex w-full items-center justify-between gap-3 p-4 sm:p-5 text-start font-extrabold text-primary cursor-pointer"
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${i}`}
               >
-                <span
-                  className="text-sm md:text-base leading-snug"
-                  itemProp="name"
-                >
+                <span className="text-sm sm:text-base leading-snug" itemProp="name">
                   {f[lang].q}
                 </span>
                 <ChevronDown
-                  className={`h-5 w-5 shrink-0 text-secondary transition-transform duration-200 ${
+                  className={`h-4 w-4 shrink-0 text-secondary transition-transform duration-200 ${
                     isOpen ? "rotate-180" : ""
                   }`}
                 />
@@ -269,7 +156,7 @@ const CampaignsFAQ = ({ isRTL }: { isRTL: boolean }) => {
               {isOpen && (
                 <div
                   id={`faq-answer-${i}`}
-                  className="px-4 pb-5 text-sm leading-relaxed text-muted-foreground md:px-5 md:text-base"
+                  className="px-4 pb-4 sm:px-5 sm:pb-5 text-sm leading-relaxed text-muted-foreground border-t border-border/40 pt-3"
                   itemScope
                   itemProp="acceptedAnswer"
                   itemType="https://schema.org/Answer"
@@ -282,29 +169,38 @@ const CampaignsFAQ = ({ isRTL }: { isRTL: boolean }) => {
         })}
       </div>
 
-      {/* Show More / Show Less */}
-      {!showAll && CAMPAIGNS_FAQ.length > 5 && (
-        <div className="mt-6 flex justify-center">
-          <button
-            onClick={() => setShowAll(true)}
-            className="inline-flex items-center gap-2 rounded-full bg-secondary px-6 py-2.5 text-sm font-black text-white shadow-cta transition hover:bg-secondary/90 hover:-translate-y-0.5"
-          >
-            <ChevronDown className="h-4 w-4" />
-            {isRTL ? "عرض المزيد من الأسئلة" : "Show more questions"}
-          </button>
-        </div>
-      )}
-      {showAll && CAMPAIGNS_FAQ.length > 5 && (
-        <div className="mt-6 flex justify-center">
-          <button
-            onClick={() => { setShowAll(false); setOpen(null); }}
-            className="inline-flex items-center gap-2 rounded-full border-2 border-secondary bg-transparent px-6 py-2.5 text-sm font-black text-secondary transition hover:bg-secondary/5"
-          >
-            <ChevronDown className="h-4 w-4 rotate-180" />
-            {isRTL ? "عرض أقل" : "Show less"}
-          </button>
-        </div>
-      )}
+      {/* Actions: 2 buttons side-by-side in one row on all screens */}
+      <div className="mt-8 mx-auto max-w-md grid grid-cols-2 gap-2.5 sm:gap-3">
+        {allFaqs.length > 6 ? (
+          !showAll ? (
+            <button
+              onClick={() => setShowAll(true)}
+              className="inline-flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-full bg-secondary px-3 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-black text-emerald-950 shadow-cta transition hover:opacity-90 hover:-translate-y-0.5 cursor-pointer"
+            >
+              <ChevronDown className="h-4 w-4" />
+              <span>{isRTL ? "عرض المزيد" : "Show more"}</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => { setShowAll(false); setOpen(null); }}
+              className="inline-flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-full border-2 border-secondary bg-transparent px-3 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-black text-secondary transition hover:bg-secondary/5 cursor-pointer"
+            >
+              <ChevronDown className="h-4 w-4 rotate-180" />
+              <span>{isRTL ? "عرض أقل" : "Show less"}</span>
+            </button>
+          )
+        ) : <div />}
+
+        <Link
+          to="/faqs"
+          className={`inline-flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-full border border-border bg-card px-3 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-primary shadow-sm hover:border-primary/40 hover:bg-primary/5 transition ${
+            allFaqs.length <= 6 ? "col-span-2 max-w-xs mx-auto" : ""
+          }`}
+        >
+          <span>{isRTL ? "مركز الأسئلة" : "FAQ Center"}</span>
+          {isRTL ? <ArrowLeft className="h-4 w-4 text-secondary" /> : <ArrowRight className="h-4 w-4 text-secondary" />}
+        </Link>
+      </div>
     </section>
   );
 };
@@ -355,6 +251,29 @@ export const CAMPAIGNS_DATA = [
       { ar: "حقيبة مدرسية وأدوات وزي متكامل", en: "Complete school bags and uniforms" },
       { ar: "سداد المصروفات الدراسية لمنع التسرب", en: "Tuition sponsorships for orphans" },
       { ar: "مبادرة تدوير الكتب المدرسية برسائل تشجيع", en: "Textbook reuse with encouragement notes" },
+    ],
+  },
+  {
+    id: "setr",
+    slug: "setr",
+    path: "/setr",
+    titleAr: "حملة سِتْر",
+    titleEn: "Setr Winter Campaign",
+    subtitleAr: "«مَن سَتَرَ مسلماً سَتَرَه الله في الدنيا والآخرة»",
+    subtitleEn: "'Whoever covers a Muslim, Allah will cover them in both worlds'",
+    descAr: "دفء الشتاء لأهالينا المستحقين: أسقف بيتومين وخشب، أبواب وشبابيك، أسِرّة ومراتب، ألحفة فايبر، وكسوة شتوية للأطفال وكبار السن في الدقهلية وكل محافظات مصر، بالتكامل مع حملة مَرْكون.",
+    descEn: "Winter warmth for families in need: bitumen and wooden roofs, doors and windows, beds and mattresses, fibre blankets and winter clothing across Dakahlia and Egypt, in step with the Markoun campaign.",
+    badgeAr: "موسم الشتاء ❄️",
+    badgeEn: "Winter season ❄️",
+    image: posterWater,
+    category: "seasonal",
+    featured: true,
+    priceFromAr: "سهم يبدأ من 500 ج",
+    priceFromEn: "From 500 EGP",
+    pillars: [
+      { ar: "أسقف وأبواب وشبابيك تغلق منافذ البرد", en: "Roofs, doors and windows that keep the cold out" },
+      { ar: "أسِرّة ومراتب ترفع الأطفال وكبار السن عن الأرض", en: "Beds and mattresses off the cold floor" },
+      { ar: "ألحفة فايبر وكسوة شتوية كاملة", en: "Fibre blankets and full winter clothing" },
     ],
   },
   {

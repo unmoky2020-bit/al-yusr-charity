@@ -24,8 +24,8 @@ export type LandingProps = {
   heroAlt: string;
   badgeAr?: string;
   badgeEn?: string;
-  pillars: { iconImg?: string; titleAr: string; titleEn: string; descAr: string; descEn: string }[];
-  steps: { titleAr: string; titleEn: string; descAr: string; descEn: string }[];
+  pillars?: { iconImg?: string; titleAr: string; titleEn: string; descAr: string; descEn: string }[];
+  steps?: { titleAr: string; titleEn: string; descAr: string; descEn: string }[];
   gallery?: { src: string; altAr: string; altEn: string }[];
   pricing?: { labelAr: string; labelEn: string; amount: number; tagAr?: string; tagEn?: string }[];
   faq: { ar: FAQItem[]; en: FAQItem[] };
@@ -35,7 +35,17 @@ export type LandingProps = {
   relatedLinks?: { href: string; ar: string; en: string }[];
   bottomCtaAr?: string;
   bottomCtaEn?: string;
+  bottomSubAr?: string;
+  bottomSubEn?: string;
   body?: ReactNode;
+  /** Bespoke hero for campaigns with their own visual identity (replaces the default hero). */
+  hero?: ReactNode;
+  /** Bespoke main content (replaces trust strip, pricing, pillars, steps, body and gallery). */
+  main?: ReactNode;
+  /** Extra classes for the closing CTA section (e.g. a seasonal theme). */
+  finalCtaClassName?: string;
+  /** Optional decoration rendered at the top of the closing CTA. */
+  finalCtaDecor?: ReactNode;
 };
 
 export const CampaignLandingShell = (p: LandingProps) => {
@@ -153,7 +163,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
         </p>
       </div>
 
-      {/* Hero with site pattern */}
+      {p.hero ?? (
       <section className="relative overflow-x-clip pattern-hero-luxe hero-pattern-fade text-primary-foreground w-full">
         <div className="pointer-events-none absolute inset-0 leaf-bg opacity-30" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(150_55%_28%/0.4),transparent_60%)]" />
@@ -223,7 +233,9 @@ export const CampaignLandingShell = (p: LandingProps) => {
           </div>
         </div>
       </section>
+      )}
 
+      {p.main ?? (<>
       {/* Trust strip (CRO + AEO) */}
       <section aria-label={isAr ? "ضمانات وتوثيق" : "Guarantees & proof"} className="border-y border-border bg-card">
         <div className="container mx-auto max-w-6xl px-4 py-4">
@@ -265,6 +277,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
       )}
 
       {/* Pillars */}
+      {p.pillars && p.pillars.length > 0 && (
       <section className="py-12 md:py-16">
         <div className="container mx-auto max-w-6xl px-4">
           <h2 className="text-center text-2xl font-black text-primary md:text-3xl">
@@ -281,8 +294,10 @@ export const CampaignLandingShell = (p: LandingProps) => {
           </div>
         </div>
       </section>
+      )}
 
       {/* How it works */}
+      {p.steps && p.steps.length > 0 && (
       <section className="bg-muted/30 py-12 md:py-16">
         <div className="container mx-auto max-w-5xl px-4">
           <h2 className="text-center text-2xl font-black text-primary md:text-3xl">
@@ -299,6 +314,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
           </ol>
         </div>
       </section>
+      )}
 
       {/* Body */}
       {p.body && (
@@ -325,6 +341,8 @@ export const CampaignLandingShell = (p: LandingProps) => {
         </section>
       )}
 
+      </>)}
+
       {/* Related links */}
       {p.relatedLinks && p.relatedLinks.length > 0 && (
         <section className="py-10">
@@ -344,11 +362,11 @@ export const CampaignLandingShell = (p: LandingProps) => {
       <LocalFAQ items={isAr ? p.faq.ar : p.faq.en} donateHref={p.donateHref} id={`${p.slug}-faq`} />
 
       {/* Final CTA — 2 buttons side by side in one single row on mobile & desktop */}
-      <section className="relative overflow-hidden pattern-hero-luxe pt-14 pb-28 sm:pb-36 md:pt-16 md:pb-44 text-primary-foreground">
-        <div className="pointer-events-none absolute inset-0 leaf-bg opacity-25" />
+      <section className={`relative overflow-hidden pt-14 pb-28 sm:pb-36 md:pt-16 md:pb-44 text-primary-foreground ${p.finalCtaClassName ?? "pattern-hero-luxe"}`}>
+        {p.finalCtaDecor ?? <div className="pointer-events-none absolute inset-0 leaf-bg opacity-25" />}
         <div className="container relative mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl font-black md:text-3xl">{isAr ? (p.bottomCtaAr || "ابدأ تبرعك الآن") : (p.bottomCtaEn || "Start your donation now")}</h2>
-          <p className="mt-3 text-primary-foreground/80">{isAr ? "كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية." : "Every EGP reaches the right hands — verified with photos, video and field follow-up."}</p>
+          <p className="mt-3 text-primary-foreground/80">{isAr ? (p.bottomSubAr || "كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.") : (p.bottomSubEn || "Every EGP reaches the right hands — verified with photos, video and field follow-up.")}</p>
           <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 max-w-md mx-auto w-full px-2">
             <Button asChild size="lg" className="w-full sm:w-auto flex-1 min-h-[46px] h-auto py-3 px-4 sm:px-6 text-sm sm:text-base font-black bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
               <Link to={p.donateHref} className="inline-flex items-center justify-center gap-2 text-center leading-normal">

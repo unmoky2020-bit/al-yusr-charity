@@ -1097,3 +1097,93 @@ img, video, svg, canvas {
 @media (prefers-reduced-motion: reduce) {
   .whyus .whyus-tick-bg, .whyus .whyus-tick-path, .whyus .whyus-track-fill, .whyus .whyus-stage { transition: none; }
 }
+
+/* ── Campaign: Dhill (shade) ─────────────────────────────────────────── */
+.dhill-sun { background: radial-gradient(circle at 50% 45%, hsl(32 95% 62%) 0%, hsl(var(--accent)) 55%, hsl(18 85% 50%) 100%); opacity: 0.92; }
+.dhill-panel { animation: dhill-panel-in 280ms var(--ease-out-soft); }
+@keyframes dhill-panel-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.dhill-cell { animation: dhill-cell-in 260ms var(--ease-out-soft) both; }
+@keyframes dhill-cell-in { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .dhill-panel, .dhill-cell { animation: none; } }
+
+/* ── Campaign: Athar (notebook) ──────────────────────────────────────── */
+.athar-paper {
+  background-color: hsl(48 55% 97%);
+  background-image: repeating-linear-gradient(to bottom, transparent 0 35px, hsl(152 35% 70% / 0.28) 35px 36px);
+}
+.athar-paper::before { /* notebook margin line on the start side */
+  content: ""; position: absolute; top: 0; bottom: 0; inset-inline-start: max(0.4rem, calc((100% - 72rem) / 2 - 1.5rem));
+  width: 2px; background: hsl(var(--accent) / 0.45);
+}
+.athar-sheet {
+  background-color: hsl(var(--card));
+  background-image: repeating-linear-gradient(to bottom, transparent 0 31px, hsl(152 35% 70% / 0.22) 31px 32px);
+}
+.athar-margin { position: relative; }
+.athar-margin::before { content: ""; position: absolute; top: 0; bottom: 0; inset-inline-start: 4.25rem; width: 2px; background: hsl(var(--accent) / 0.35); }
+.athar-mark {
+  background-image: linear-gradient(transparent 58%, hsl(var(--secondary) / 0.85) 58%, hsl(var(--secondary) / 0.85) 92%, transparent 92%);
+  background-repeat: no-repeat; background-size: 0% 100%;
+  animation: athar-mark-in 900ms var(--ease-out-soft) 250ms forwards;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone; padding-inline: 0.15em;
+}
+[dir="rtl"] .athar-mark { background-position: right; }
+@keyframes athar-mark-in { to { background-size: 100% 100%; } }
+.athar-photo { transform: rotate(-2deg); }
+.athar-tape { background: hsl(var(--secondary) / 0.55); }
+.athar-book { border-inline-start-width: 6px; border-inline-start-color: hsl(var(--primary)); }
+.athar-hand { font-family: 'Droid Arabic Kufi', 'DIN Next Arabic', sans-serif; }
+@media (prefers-reduced-motion: reduce) { .athar-mark { animation: none; background-size: 100% 100%; } }
+
+/* ── Campaign: Ramadan (Season of Giving) ────────────────────────────── */
+:root { --gold: 43 85% 62%; }
+.ramadan-night { background: linear-gradient(180deg, hsl(155 70% 5%) 0%, hsl(152 65% 9%) 60%, hsl(152 60% 12%) 100%); }
+.ramadan-cream { background-color: hsl(48 45% 96%); }
+.ramadan-stars {
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%, hsl(var(--gold) / 0.9), transparent 60%),
+    radial-gradient(1px 1px at 28% 62%, hsl(0 0% 100% / 0.7), transparent 60%),
+    radial-gradient(1.5px 1.5px at 44% 30%, hsl(0 0% 100% / 0.6), transparent 60%),
+    radial-gradient(1px 1px at 58% 74%, hsl(var(--gold) / 0.8), transparent 60%),
+    radial-gradient(1.5px 1.5px at 71% 44%, hsl(0 0% 100% / 0.7), transparent 60%),
+    radial-gradient(1px 1px at 86% 82%, hsl(0 0% 100% / 0.5), transparent 60%),
+    radial-gradient(1px 1px at 93% 12%, hsl(var(--gold) / 0.7), transparent 60%),
+    radial-gradient(1px 1px at 6% 88%, hsl(0 0% 100% / 0.5), transparent 60%);
+  background-size: 420px 320px;
+}
+.ramadan-arch { border-radius: 999px 999px 16px 16px; }
+.ramadan-band {
+  background-color: hsl(152 65% 9%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cg fill='none' stroke='%23EFC04B' stroke-width='1.2' stroke-opacity='0.75'%3E%3Crect x='9' y='9' width='14' height='14'/%3E%3Crect x='9' y='9' width='14' height='14' transform='rotate(45 16 16)'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 32px 32px; background-position: center;
+  border-block: 1px solid hsl(var(--gold) / 0.5);
+}
+.ramadan-lantern { transform-origin: top center; }
+.ramadan-lantern.is-live { animation: ramadan-settle 8s ease-in-out 1 forwards; }
+@keyframes ramadan-settle { 0% { transform: rotate(-3deg); } 20% { transform: rotate(3deg); } 40% { transform: rotate(-2deg); } 60% { transform: rotate(1.4deg); } 80% { transform: rotate(-0.6deg); } 100% { transform: rotate(0); } }
+@media (prefers-reduced-motion: reduce) { .ramadan-lantern { animation: none; } }
+.ramadan-frame { border: 2px solid hsl(var(--gold) / 0.75); border-radius: 18px; outline: 1px solid hsl(var(--gold) / 0.35); outline-offset: 6px; background: hsl(152 55% 12%); }
+.ramadan-leader { background-image: radial-gradient(circle, hsl(var(--gold) / 0.8) 1px, transparent 1.5px); background-size: 7px 2px; background-repeat: repeat-x; height: 2px; }
+
+/* ── Campaign: Setr (winter) ─────────────────────────────────────────── */
+.setr-night { background: linear-gradient(180deg, hsl(205 40% 11%) 0%, hsl(180 40% 11%) 50%, hsl(152 55% 12%) 100%); }
+/* Static rain streaks (no animation): used on the closing CTA and in-kind bands. */
+.setr-rain {
+  background-image: linear-gradient(105deg, transparent 0 48%, hsl(195 70% 85% / 0.09) 49%, transparent 50%);
+  background-size: 40px 120px;
+}
+/* Hero rainfall: ~26 tiny drops (each its own small layer) that fall for a few seconds, then the sky clears. */
+.setr-rainfall { animation: setr-rainfade 6s linear forwards; }
+@keyframes setr-rainfade { 0%, 65% { opacity: 1; } 100% { opacity: 0; } }
+.setr-drop {
+  position: absolute; top: -80px; width: 2px; border-radius: 1px;
+  background: linear-gradient(to bottom, transparent, hsl(195 70% 85%));
+  animation-name: setr-drop; animation-timing-function: linear; animation-iteration-count: 2; animation-fill-mode: forwards;
+}
+@keyframes setr-drop { to { transform: translate3d(0, 1100px, 0); } }
+.setr-frost { background: linear-gradient(180deg, transparent, hsl(195 30% 97%)); }
+.setr-temp-bar { background: linear-gradient(90deg, hsl(200 70% 72%), hsl(var(--accent))); transition: transform 420ms var(--ease-out-soft); }
+[dir="rtl"] .setr-temp-bar { background: linear-gradient(270deg, hsl(200 70% 72%), hsl(var(--accent))); transform-origin: right; }
+[dir="ltr"] .setr-temp-bar { transform-origin: left; }
+.setr-house rect, .setr-house path, .setr-house g, .setr-house ellipse, .setr-house polyline { transition: opacity 420ms var(--ease-out-soft); }
+@media (prefers-reduced-motion: reduce) { .setr-rainfall { display: none; } .setr-temp-bar, .setr-house * { transition: none; } }

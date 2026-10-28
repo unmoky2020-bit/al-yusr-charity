@@ -36,9 +36,41 @@ const staticEntries: Entry[] = [
   { path: "/cases", changefreq: "daily", priority: "0.9" },
   { path: "/gallery", changefreq: "weekly", priority: "0.6" },
   { path: "/services-map", changefreq: "weekly", priority: "0.7" },
+  // Campaign hub + the six named campaign landings (canonical slugs only —
+  // /education-campaign → /athar, /freelancers → /arboun, /campaign → /campaigns).
+  { path: "/campaigns", changefreq: "weekly", priority: "0.85" },
+  { path: "/dhill", changefreq: "weekly", priority: "0.8" },
+  { path: "/setr", changefreq: "weekly", priority: "0.8" },
+  { path: "/athar", changefreq: "weekly", priority: "0.8" },
+  { path: "/ramadan", changefreq: "weekly", priority: "0.8" },
+  { path: "/markoun", changefreq: "weekly", priority: "0.8" },
+  { path: "/arboun", changefreq: "weekly", priority: "0.8" },
+  // Product-style landings
+  { path: "/food-box", changefreq: "weekly", priority: "0.8" },
+  { path: "/khabia", changefreq: "weekly", priority: "0.8" },
+  { path: "/qurbani-guarantee", changefreq: "weekly", priority: "0.8" },
+  { path: "/farm", changefreq: "monthly", priority: "0.7" },
+  // Trust / help / participation
+  { path: "/trust", changefreq: "monthly", priority: "0.7" },
+  { path: "/faqs", changefreq: "monthly", priority: "0.7" },
+  { path: "/volunteer", changefreq: "monthly", priority: "0.6" },
+  { path: "/donate/track", changefreq: "monthly", priority: "0.5" },
   { path: "/privacy", changefreq: "yearly", priority: "0.3" },
   { path: "/terms", changefreq: "yearly", priority: "0.3" },
 ];
+
+// Static service pages rendered by /services/:slug (src/data/servicePagesConfig.ts).
+// Each self-canonicalizes to /services/<slug> via ServicePage → SEOHelmet.
+// /services/daily-feeding is a redirect to /services-map and is intentionally omitted.
+const SERVICE_SLUGS = [
+  "mosques", "wells", "farm", "housing", "ster", "markoun",
+  "treatment", "orphans", "marriage", "food-box",
+];
+const serviceEntries: Entry[] = SERVICE_SLUGS.map((slug) => ({
+  path: `/services/${slug}`,
+  changefreq: "weekly",
+  priority: "0.75",
+}));
 
 function escapeXml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -156,11 +188,12 @@ async function fetchBlogPosts(): Promise<Entry[]> {
     console.warn("[sitemap] could not fetch blog_posts from Supabase:", (e as Error).message);
   }
 
-  // 3. Fetch from Laravel /content?type=article if available
+  // 3. Fetch from Laravel /content?type=article
   try {
-    const res = await fetch("https://elyusr-api.pyramedx.com/api/v1/content?type=article", {
+    const BACKEND = process.env.VITE_BACKEND_URL || "https://api.elyusr.org";
+    const res = await fetch(`${BACKEND}/api/v1/content?type=article`, {
       headers: {
-        Authorization: "Bearer 129|thYAm59JeAVBOGJRaC7eMJQ7Vv1v3pdHygBTdSGM495cd1d8",
+        Authorization: `Bearer ${process.env.VITE_LARAVEL_READONLY_API_TOKEN || ""}`,
         Accept: "application/json",
       },
     });
@@ -211,9 +244,10 @@ async function fetchStories(): Promise<Entry[]> {
 
   // 2. Fetch from Laravel /stories
   try {
-    const res = await fetch("https://elyusr-api.pyramedx.com/api/v1/stories", {
+    const BACKEND = process.env.VITE_BACKEND_URL || "https://api.elyusr.org";
+    const res = await fetch(`${BACKEND}/api/v1/stories`, {
       headers: {
-        Authorization: "Bearer 129|thYAm59JeAVBOGJRaC7eMJQ7Vv1v3pdHygBTdSGM495cd1d8",
+        Authorization: `Bearer ${process.env.VITE_LARAVEL_READONLY_API_TOKEN || ""}`,
         Accept: "application/json",
       },
     });
@@ -300,7 +334,7 @@ const STATIC_BLOG_SLUGS: { slug: string; date: string }[] = [
     })),
   );
   const dyn = [...nodes, ...blog, ...staticBlog, ...stories, ...cases, ...geo, ...cities, ...donateCities, ...cityPrograms];
-  const all = [...staticEntries, ...dyn];
+  const all = [...staticEntries, ...serviceEntries, ...dyn];
   const xml = [
     `<?xml version="1.0" encoding="UTF-8"?>`,
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">`,

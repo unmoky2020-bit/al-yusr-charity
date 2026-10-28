@@ -21,7 +21,7 @@ const Campaigns = () => {
       <SEOHelmet
         title={lang === "ar" ? "حملات التطوع | مؤسسة اليسر" : "Volunteer Campaigns | Al-Yusr"}
         description={lang === "ar" ? "انضم لحملاتنا الموسمية للتطوع في المناسبات والمشاريع الميدانية." : "Join our seasonal volunteer drives."}
-        path="/campaigns"
+        path="/volunteer-campaigns"
       />
       <section className="pattern-hero-luxe hero-pattern-fade text-primary-foreground">
         <div className="container mx-auto max-w-6xl px-4 py-10 md:py-14">
