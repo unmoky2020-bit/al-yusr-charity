@@ -43,7 +43,6 @@ protected $casts = [/* الموجود */ 'page_content' => 'array', 'seo' => 'ar
 {
   "hero":   { "eyebrow": {"ar":"","en":""}, "title": {"ar":"","en":""}, "title2": {"ar":"","en":""}, "lead": {"ar":"","en":""}, "donateLabel": {"ar":"","en":""} },
   "hadith": { "text": {"ar":"","en":""}, "source": {"ar":"","en":""} },
-  "prices": [ { "id": "blanket", "label": {"ar":"لحاف فايبر","en":"Fibre blanket"}, "amount": 450, "note": {"ar":"","en":""} } ],
   "stats":  [ { "id": "boxes", "label": {"ar":"كرتونة رمضان","en":"Ramadan boxes"}, "value": 1400, "unit": {"ar":"كرتونة","en":"boxes"}, "note": {"ar":"","en":""} } ],
   "sections": {
     "layers": { "title": {"ar":"","en":""}, "lead": {"ar":"","en":""},
@@ -56,6 +55,12 @@ protected $casts = [/* الموجود */ 'page_content' => 'array', 'seo' => 'ar
 - `stats[].value` قد يكون `null` (يُعرض كعلامة ✓ بدل الرقم).
 - `prices[].amount` عدد صحيح ≥ 0 بالجنيه.
 - المرجع الكامل للأنواع: `src/data/campaignPages/types.ts`. القيم الافتراضية لكل حملة: `src/data/campaignPages/{setr,dhill,athar,ramadan,markoun,arboun}.ts`.
+
+### الأسعار = باقات التبرع (لا تُخزَّن في `page_content`)
+صفحة الهبوط تقرأ أسعار بنودها (الحاسبات والكروت) من `donation_packages` الخاصة بالحملة، بالمطابقة على **اسم الباقة**. المطلوب لتثبيت الربط:
+- إضافة عمود `key` (string, nullable, unique per campaign) على `donation_packages` بقيم ثابتة مثل `blanket`, `clothes`, `window`, `door`, `bed`, `roof_bitumen`, `roof_wood`, `full`, `share` (المعرّفات في `src/data/campaignPages/<slug>.ts` → `prices[].id`).
+- إظهاره في الـ Resource وقبوله في إنشاء/تعديل الباقة. بعدها يتحول الفرونت للمطابقة بالـ `key` بدل الاسم (سطر واحد في `src/hooks/useCampaignPage.ts`).
+- أي بند بلا باقة مطابقة يعرض السعر الافتراضي من الكود.
 
 ## 3. شكل `seo` و `faqs`
 

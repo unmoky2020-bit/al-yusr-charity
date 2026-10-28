@@ -52,7 +52,7 @@ import {
 } from "@/data/campaignSeoStore";
 import { getCampaignDefaultFaqs } from "@/data/faqsApi";
 import { useQueryClient } from "@tanstack/react-query";
-import { CampaignPageContentEditor } from "@/components/admin/CampaignPageContentEditor";
+import { HeroPanel, HadithPanel, StatsPanel, SectionsPanel, CtaPanel } from "@/components/admin/CampaignPageContentEditor";
 import { campaignPagesApi, getCampaignPageMetaForCampaign, mergeCampaignContent, type CampaignPageContent } from "@/data/campaignPages";
 
 const DEFAULT_CATEGORIES: Array<{ id: number; name_ar: string; name_en: string; slug: string }> = [
@@ -701,16 +701,27 @@ export default function AdminDonationCampaignDetail() {
         {/* Main Tabs Container */}
         <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-soft">
           <Tabs defaultValue="basics" dir={isAr ? "rtl" : "ltr"}>
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-1 mb-4 h-auto p-1.5 bg-muted/60">
+            <TabsList className="flex w-full flex-wrap justify-start gap-1 mb-4 h-auto p-1.5 bg-muted/60">
               <TabsTrigger value="basics" className="text-xs font-bold py-2">{isAr ? "البيانات الأساسية" : "Basics"}</TabsTrigger>
               <TabsTrigger value="financials" className="text-xs font-bold py-2">{isAr ? "التبرع والأهداف" : "Financials"}</TabsTrigger>
               <TabsTrigger value="benefits" className="text-xs font-bold py-2">{isAr ? "المحاور والمزايا" : "Pillars"}</TabsTrigger>
               <TabsTrigger value="packages" className="text-xs font-bold py-2">{isAr ? "باقات التبرع" : "Packages"}</TabsTrigger>
               {pageMeta && (
-                <TabsTrigger value="page" className="text-xs font-bold py-2 gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5 text-emerald-500" />
-                  <span>{isAr ? "محتوى الصفحة" : "Page content"}</span>
-                </TabsTrigger>
+                <>
+                  <TabsTrigger value="hero" className="text-xs font-bold py-2">{isAr ? "الهيرو" : "Hero"}</TabsTrigger>
+                  <TabsTrigger value="hadith" className="text-xs font-bold py-2">{isAr ? "الحديث" : "Hadith"}</TabsTrigger>
+                  {!!pageContent?.stats.length && (
+                    <TabsTrigger value="stats" className="text-xs font-bold py-2 gap-1.5">
+                      <span>{isAr ? "الأرقام" : "Figures"}</span>
+                      <span className="rounded-full bg-muted-foreground/15 text-[10px] px-1.5 font-mono font-black">{pageContent.stats.length}</span>
+                    </TabsTrigger>
+                  )}
+                  <TabsTrigger value="sections" className="text-xs font-bold py-2 gap-1.5">
+                    <span>{isAr ? "الأقسام" : "Sections"}</span>
+                    {!!pageContent && <span className="rounded-full bg-muted-foreground/15 text-[10px] px-1.5 font-mono font-black">{Object.keys(pageContent.sections).length}</span>}
+                  </TabsTrigger>
+                  <TabsTrigger value="cta" className="text-xs font-bold py-2">{isAr ? "الختام" : "Closing"}</TabsTrigger>
+                </>
               )}
               <TabsTrigger value="seo" className="text-xs font-bold py-2 gap-1.5">
                 <Globe className="h-3.5 w-3.5 text-blue-500" />
@@ -1112,43 +1123,34 @@ export default function AdminDonationCampaignDetail() {
               </div>
             </TabsContent>
 
-            {/* TAB: Landing page content (hero / hadith / prices / sections / CTA) */}
-            {pageMeta && (
-              <TabsContent value="page" className="space-y-4 pt-2">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl bg-emerald-500/10 p-4 border border-emerald-500/20">
-                  <div className="flex items-center gap-3">
-                    <div className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">
-                      <Sparkles className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-black text-foreground">
-                        {isAr ? `محتوى صفحة الهبوط elyusr.org${pageMeta.path}` : `Landing page content elyusr.org${pageMeta.path}`}
-                      </h3>
-                      <p className="text-xs text-muted-foreground">
-                        {isAr
-                          ? "التصميم ثابت في الكود. النصوص والأسعار والأقسام تتعدل من هنا، والأسئلة الشائعة والسيو من تبويباتهما، وكل ذلك يُحفظ بزر «حفظ» أعلى الصفحة."
-                          : "Layout is fixed in code. Texts, prices and sections are edited here; FAQs and SEO in their own tabs. Everything is saved with the main Save button."}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button asChild type="button" variant="outline" size="sm" className="text-xs font-bold">
-                      <a href={pageMeta.path} target="_blank" rel="noopener noreferrer">{isAr ? "فتح الصفحة" : "Open page"}</a>
+            {/* Landing page content tabs (hero / hadith / figures / sections / closing). Prices come from donation packages. */}
+            {pageMeta && (() => {
+              const bar = (
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl bg-emerald-500/10 p-3 border border-emerald-500/20">
+                  <p className="text-xs text-muted-foreground">
+                    {isAr
+                      ? `صفحة الهبوط elyusr.org${pageMeta.path} — التصميم ثابت، والنصوص تتعدل من هنا وتُحفظ بزر «حفظ التغييرات» أعلى الصفحة. الأسعار تُقرأ من «باقات التبرع».`
+                      : `Landing page elyusr.org${pageMeta.path}: layout is fixed; texts are edited here and saved with the main Save button. Prices come from "Donation packages".`}
+                  </p>
+                  {pageHasOverride && (
+                    <Button type="button" variant="outline" size="sm" onClick={resetPageContent} className="shrink-0 text-xs font-bold text-destructive hover:text-destructive">
+                      {isAr ? "إعادة نصوص الصفحة للافتراضي" : "Reset page texts to defaults"}
                     </Button>
-                    {pageHasOverride && (
-                      <Button type="button" variant="outline" size="sm" onClick={resetPageContent} className="text-xs font-bold text-destructive hover:text-destructive">
-                        {isAr ? "إعادة للافتراضي" : "Reset to defaults"}
-                      </Button>
-                    )}
-                  </div>
+                  )}
                 </div>
-                {pageContent ? (
-                  <CampaignPageContentEditor value={pageContent} onChange={setPageContent} isAr={isAr} />
-                ) : (
-                  <div className="h-40 animate-pulse rounded-2xl bg-muted" />
-                )}
-              </TabsContent>
-            )}
+              );
+              const skeleton = <div className="h-40 animate-pulse rounded-2xl bg-muted" />;
+              const panel = (P: typeof HeroPanel) => (pageContent ? <P value={pageContent} onChange={setPageContent} isAr={isAr} /> : skeleton);
+              return (
+                <>
+                  <TabsContent value="hero" className="space-y-4 pt-2">{bar}{panel(HeroPanel)}</TabsContent>
+                  <TabsContent value="hadith" className="space-y-4 pt-2">{bar}{panel(HadithPanel)}</TabsContent>
+                  <TabsContent value="stats" className="space-y-4 pt-2">{bar}{panel(StatsPanel)}</TabsContent>
+                  <TabsContent value="sections" className="space-y-4 pt-2">{bar}{panel(SectionsPanel)}</TabsContent>
+                  <TabsContent value="cta" className="space-y-4 pt-2">{bar}{panel(CtaPanel)}</TabsContent>
+                </>
+              );
+            })()}
 
             {/* TAB 5: SEO & Meta Settings with Google Preview */}
             <TabsContent value="seo" className="space-y-6 pt-2">
