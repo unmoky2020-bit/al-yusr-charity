@@ -180,6 +180,8 @@ const About = () => {
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
   const { data: liveAchievements } = useSiteStats("achievements");
+  // Year of the hero numbers and the achievements heading — «السنة» in the dashboard (الأرقام والإحصائيات).
+  const statsYear = aboutData.achievements?.year ? String(aboutData.achievements.year) : "";
 
   // Display stats mapped from About Us API stats, falling back to live achievements
   const displayStats = useMemo(() => {
@@ -447,7 +449,7 @@ const About = () => {
               data-reveal
               className="reveal-up relative mx-auto mt-12 max-w-5xl rounded-[2rem] border border-secondary/25 bg-[hsl(150_45%_8%/0.85)] p-4 shadow-[0_30px_80px_-40px_hsl(150_60%_5%/0.9)] backdrop-blur-md sm:p-5 md:mt-14 md:p-6"
             >
-              <h2 className="sr-only">{isRTL ? "إحصائيات عام 2025" : "2025 Impact numbers"}</h2>
+              <h2 className="sr-only">{isRTL ? `إحصائيات ${statsYear ? `عام ${statsYear}` : "الأثر"}` : `${statsYear || "Our"} impact numbers`}</h2>
               <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-4">
                 {displayStats.map((s, idx) => {
                   const Icon = getLucideIcon(s.icon_name);
@@ -482,7 +484,7 @@ const About = () => {
                 })}
               </div>
               <div className="mt-3 text-center text-[11px] font-bold text-primary-foreground/75 sm:text-xs">
-                {isRTL ? "إحصائيات عام 2025 — موثّقة بالميدان في المنصورة والدقهلية ومصر" : "2025 impact — verified across Egypt"}
+                {isRTL ? `${statsYear ? `إحصائيات عام ${statsYear}` : "إحصائيات"} — موثّقة بالميدان في المنصورة والدقهلية ومصر` : `${statsYear ? `${statsYear} impact` : "Impact"} — verified across Egypt`}
               </div>
             </div>
 
