@@ -11,6 +11,14 @@ import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
 import { axes } from "@/data/blogTaxonomy";
 import { TagsRail } from "@/components/common/TagsRail";
 
+/** "2026-10-29" → «29 أكتوبر 2026»; unparsable values are shown as they are. */
+const formatDate = (d: string, locale: string) => {
+  const parsed = new Date(d);
+  return Number.isNaN(parsed.getTime()) ? d : parsed.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric", numberingSystem: "latn" });
+};
+
+const PAGE_SIZE = 12;
+
 type BlogCardProps = {
   slug: string;
   image: string;
@@ -37,26 +45,26 @@ const BlogCard = memo(function BlogCard({ slug, image, title, excerpt, category,
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/10 to-transparent opacity-60 transition-opacity group-hover:opacity-80" />
             <span className="absolute start-3.5 top-3.5 inline-flex items-center gap-1.5 rounded-full bg-background/95 px-3 py-1 text-xs font-extrabold text-primary shadow-soft backdrop-blur">
-              <Tag className="h-3.5 w-3.5 text-accent" />
+              <Tag className="h-3.5 w-3.5 text-primary/70" />
               {category}
             </span>
-            <span className="absolute end-3.5 top-3.5 inline-flex items-center gap-1.5 rounded-full bg-orange-grad px-3 py-1 text-xs font-black text-accent-foreground shadow-cta">
+            <span className="absolute end-3.5 top-3.5 inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-black text-primary shadow-soft">
               <Sparkles className="h-3.5 w-3.5" />
               {readLabel.startsWith("اقرأ") ? "مقال مميز" : "Featured"}
             </span>
           </div>
           <div className="flex flex-1 flex-col justify-center p-6 sm:p-8 md:w-[52%] md:p-8 lg:p-10">
-            <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
-              <Calendar className="h-3.5 w-3.5 text-accent" />
-              <time>{date}</time>
+            <div className="flex items-center gap-2 text-xs font-bold text-foreground/70">
+              <Calendar className="h-3.5 w-3.5" />
+              <time dateTime={date}>{formatDate(date, readLabel.startsWith("اقرأ") ? "ar-EG" : "en-GB")}</time>
             </div>
-            <h2 className="mt-3 text-lg font-black leading-snug text-primary transition-colors group-hover:text-accent sm:text-xl md:text-2xl line-clamp-2">
+            <h2 className="mt-3 text-lg font-black leading-snug text-primary transition-colors group-hover:underline decoration-secondary decoration-2 underline-offset-4 sm:text-xl md:text-2xl line-clamp-2">
               {title}
             </h2>
             <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-muted-foreground line-clamp-3">
               {excerpt}
             </p>
-            <div className="mt-5 inline-flex items-center gap-2 text-xs sm:text-sm font-black text-accent transition-all group-hover:gap-3">
+            <div className="mt-5 inline-flex items-center gap-2 text-xs sm:text-sm font-black text-primary transition-all group-hover:gap-3">
               <span>{readLabel}</span>
               <Arrow className="h-4 w-4" />
             </div>
@@ -85,22 +93,22 @@ const BlogCard = memo(function BlogCard({ slug, image, title, excerpt, category,
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/55 via-primary/0 to-transparent opacity-70 transition-opacity group-hover:opacity-90" />
           <span className="absolute start-3 top-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-extrabold text-primary shadow-soft backdrop-blur">
-            <Tag className="h-3 w-3 text-accent" />
+            <Tag className="h-3 w-3 text-primary/70" />
             {category}
           </span>
         </div>
         <div className="flex flex-1 flex-col p-5 md:p-6 justify-between">
           <div>
-            <div className="flex items-center gap-2 text-[11px] font-bold text-muted-foreground">
-              <Calendar className="h-3 w-3 text-accent" />
-              <time>{date}</time>
+            <div className="flex items-center gap-2 text-[11px] font-bold text-foreground/70">
+              <Calendar className="h-3 w-3" />
+              <time dateTime={date}>{formatDate(date, readLabel.startsWith("اقرأ") ? "ar-EG" : "en-GB")}</time>
             </div>
-            <h2 className="mt-2 font-black leading-[1.45] text-primary transition-colors group-hover:text-accent py-0.5 text-base md:text-lg line-clamp-2">
+            <h2 className="mt-2 font-black leading-[1.45] text-primary transition-colors group-hover:underline decoration-secondary decoration-2 underline-offset-4 py-0.5 text-base md:text-lg line-clamp-2">
               {title}
             </h2>
             <p className="mt-1.5 text-xs md:text-sm leading-[1.6] text-muted-foreground line-clamp-2">{excerpt}</p>
           </div>
-          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-black text-accent transition group-hover:gap-2.5">
+          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-black text-primary transition group-hover:gap-2.5">
             {readLabel} <Arrow className="h-4 w-4" />
           </span>
         </div>
@@ -116,6 +124,7 @@ const Blog = () => {
   const readLabel = lang === "ar" ? "اقرأ المقال" : "Read article";
   const { posts, loading } = useBlogPosts();
   const [query, setQuery] = useState("");
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const cards = useMemo(
     () => posts.map((p) => ({ slug: p.slug, image: p.image, date: p.date, category: p.category[lang], title: p[lang].title, excerpt: p[lang].excerpt })),
     [posts, lang]
@@ -130,11 +139,12 @@ const Blog = () => {
     );
   }, [cards, query]);
   const [featured, ...rest] = filteredCards;
+  const shown = rest.slice(0, visible);
   return (
     <PageLayout>
       <SEOHelmet
-        title={lang === "ar" ? "المدونة — قصص الأثر | مؤسسة اليسر الخيرية المنصورة" : "Blog — Impact Stories | Al-Yusr Charity Mansoura"}
-        description={lang === "ar" ? "مدونة اليسر: قصص الأثر، أدلة الزكاة، تجارب المتطوعين، وتحديثات مشاريعنا في الدقهلية ومصر." : "Al-Yusr Blog: impact stories, Zakat guides, volunteer experiences, and project updates in Dakahlia and Egypt."}
+        title={lang === "ar" ? "مدونة اليسر — أدلة الزكاة والصدقة والتبرع في مصر" : "Al-Yusr Blog — Zakat, Sadaqa & Giving Guides in Egypt"}
+        description={lang === "ar" ? "أدلة عملية للمتبرع: حساب الزكاة، الصدقة الجارية، الكفارات والفدية، كفالة اليتيم، وإزاي تتأكد إن تبرعك وصل — مع قصص أثر حقيقية من مؤسسة اليسر." : "Practical guides for donors: zakat, ongoing charity, kaffara and fidya, orphan sponsorship, how to verify your donation arrived — plus real impact stories."}
         path="/blog"
       />
       <SiteSchemas />
@@ -149,10 +159,10 @@ const Blog = () => {
             <Breadcrumbs items={[{ name: t.nav.home, href: "/" }, { name: lang === "ar" ? "المدونة" : "Blog" }]} />
           </div>
           <h1 className="mt-4 text-center text-xl font-black md:text-3xl">
-            {lang === "ar" ? "قصص الأثر — مدونة اليسر" : "Impact Stories — Al-Yusr Blog"}
+            {lang === "ar" ? "مدونة اليسر: أدلة المتبرع وقصص الأثر" : "Al-Yusr Blog: donor guides & impact stories"}
           </h1>
           <p className="mx-auto mt-2.5 max-w-2xl text-center text-[13px] text-primary-foreground/85 md:text-sm">
-            {lang === "ar" ? "تحديثات حقيقية من الميدان، أدلة شرعية، وقصص نجاح من المنصورة والدقهلية." : "Real field updates, Shariah guides, and success stories from Mansoura and Dakahlia."}
+            {lang === "ar" ? "إجابات واضحة عن الزكاة والصدقة والكفارات، وتحديثات حقيقية من الميدان في المنصورة والدقهلية." : "Clear answers on zakat, sadaqa and kaffara, plus real field updates from Mansoura and Dakahlia."}
           </p>
         </div>
       </section>
@@ -174,7 +184,7 @@ const Blog = () => {
             <input
               type="search"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => { setQuery(e.target.value); setVisible(PAGE_SIZE); }}
               placeholder={lang === "ar" ? "ابحث في المقالات…" : "Search articles…"}
               aria-label={lang === "ar" ? "ابحث في المقالات" : "Search articles"}
               className="w-full rounded-full border border-border bg-card ps-9 pe-4 py-2 text-[13px] font-bold text-foreground shadow-soft outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/30"
@@ -202,10 +212,24 @@ const Blog = () => {
                 </div>
               )}
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {rest.map((c) => (
+                {shown.map((c) => (
                   <BlogCard key={c.slug} slug={c.slug} image={c.image} title={c.title} excerpt={c.excerpt} category={c.category} date={c.date} readLabel={readLabel} Arrow={Arrow} />
                 ))}
               </div>
+              {rest.length > shown.length && (
+                <div className="mt-10 flex flex-col items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setVisible((v) => v + PAGE_SIZE)}
+                    className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-primary px-6 text-sm font-black text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    {lang === "ar" ? "عرض مقالات أكتر" : "Show more articles"}
+                  </button>
+                  <span className="text-xs font-bold text-foreground/60">
+                    {lang === "ar" ? `معروض ${shown.length + 1} من ${rest.length + 1} مقال` : `Showing ${shown.length + 1} of ${rest.length + 1}`}
+                  </span>
+                </div>
+              )}
             </>
           )}
         </div>

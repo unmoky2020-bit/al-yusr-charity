@@ -5,7 +5,7 @@ import { Calendar, Tag, Heart, ArrowLeft, ArrowRight, Eye, Share2, Twitter, Face
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
-import { SiteSchemas, BreadcrumbSchema, ArticleSchema } from "@/components/common/Schemas";
+import { SiteSchemas, BreadcrumbSchema, ArticleSchema, FAQSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
 import { findBlogPost, useBlogPosts } from "@/data/sources/blog";
@@ -103,6 +103,21 @@ const BlogPost = () => {
   }
   flushRelated();
 
+  // «## أسئلة شائعة» / «## FAQ» section: each «### question» with the paragraph after it → FAQPage schema.
+  const faqItems: { q: string; a: string }[] = [];
+  {
+    const at = blocks.findIndex((b) => b.type === "h2" && /أسئلة شائعة|الأسئلة الشائعة|FAQ|Frequently asked/i.test(b.text));
+    if (at >= 0) {
+      for (let i = at + 1; i < blocks.length && blocks[i].type !== "h2"; i++) {
+        const b = blocks[i];
+        const next = blocks[i + 1];
+        if (b.type === "h3" && next?.type === "paragraph") {
+          faqItems.push({ q: b.text, a: next.raw.replace(/\*\*([^*]+)\*\*/g, "$1").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") });
+        }
+      }
+    }
+  }
+
   // Word count is still useful for Article schema metadata and reading-time cues.
   const wordCount = c.body.reduce((acc, p) => acc + p.trim().split(/\s+/).filter(Boolean).length, 0);
   const readingMinutes = Math.max(1, Math.round(wordCount / 180));
@@ -112,9 +127,6 @@ const BlogPost = () => {
   const others  = posts.filter((p) => p.slug !== post.slug && p.category?.[lang] !== post.category?.[lang]);
   const related = [...sameCat, ...others].slice(0, 3);
   const seoKeywords = c.tags.join(", ");
-  const hiddenSeoText = lang === "ar"
-    ? `مقالات مؤسسة اليسر عن ${c.tags.join("، ")}. تبرع، زكاة، صدقة، كفالة يتيم، صك أضحية، كرتونة عزومة، قافلة طبية، توزيع مساعدات، توثيق ميداني.`
-    : `Al-Yusr articles about ${c.tags.join(", ")}. Donate, zakat, sadaqah, orphan sponsorship, Udhiyah, food box, medical convoy, relief distribution, field documentation.`;
 
   const shareTitle = encodeURIComponent(c.title);
   const shareUrl = encodeURIComponent(url);
@@ -168,6 +180,7 @@ const BlogPost = () => {
         timeRequiredMinutes={readingMinutes}
         inLanguage={lang === "ar" ? "ar" : "en"}
       />
+      {faqItems.length >= 2 && <FAQSchema items={faqItems} />}
 
       <article className="bg-background">
         {/* Hero */}
@@ -486,7 +499,6 @@ const BlogPost = () => {
               {lang === "ar" ? "نحن نوفر متابعة دائمة للمستفيدين وتقارير شفافة لكل تبرع." : "We provide continuous follow-up and transparent reports for every donation."}
             </div>
           </div>
-          <div className="sr-only">{hiddenSeoText}</div>
         </div>
 
         {/* Related with generous bottom padding for footer newsletter */}
