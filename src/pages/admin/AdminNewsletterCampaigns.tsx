@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { supabase } from "@/integrations/supabase/client";
+import { newsletterCampaignsApi, type NewsletterCampaign } from "@/data/api/newsletterCampaignsApi";
+import { apiErrorMessage, isEndpointMissing, FEATURE_PENDING_MSG } from "@/data/api/adminApiHelpers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,25 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/components/ui/use-toast";
 import { Mail, Send, Eye, MousePointerClick, Plus, Trash2, RefreshCw, ArrowLeft } from "lucide-react";
 
-type Campaign = {
-  id: string;
-  subject: string;
-  preheader: string | null;
-  html: string;
-  text_body: string | null;
-  from_name: string;
-  from_email: string | null;
-  reply_to: string | null;
-  status: string;
-  scheduled_at: string | null;
-  sent_at: string | null;
-  recipients_count: number;
-  sent_count: number;
-  failed_count: number;
-  opened_count: number;
-  clicked_count: number;
-  created_at: string;
-};
+type Campaign = NewsletterCampaign;
 
 const TEMPLATES: { name: string; subject: string; html: string }[] = [
   {
@@ -60,15 +43,21 @@ const AdminNewsletterCampaigns = () => {
   const [active, setActive] = useState<Partial<Campaign> | null>(null);
   const [confirmedCount, setConfirmedCount] = useState(0);
   const [sending, setSending] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const fetchAll = async () => {
     setLoading(true);
-    const { data } = await supabase.from("newsletter_campaigns").select("*")
-      .order("created_at", { ascending: false });
-    setList((data ?? []) as Campaign[]);
-    const { count } = await supabase.from("newsletter_subscribers")
-      .select("*", { count: "exact", head: true }).eq("status", "confirmed");
-    setConfirmedCount(count ?? 0);
+    setLoadError(null);
+    const [listRes, countRes] = await Promise.allSettled([
+      newsletterCampaignsApi.list(),
+      newsletterCampaignsApi.confirmedCount(),
+    ]);
+    if (listRes.status === "fulfilled") setList(listRes.value);
+    else {
+      setList([]);
+      setLoadError(isEndpointMissing(listRes.reason) ? FEATURE_PENDING_MSG : apiErrorMessage(listRes.reason, "تعذر تحميل الحملات"));
+    }
+    setConfirmedCount(countRes.status === "fulfilled" ? countRes.value : 0);
     setLoading(false);
   };
 
@@ -85,15 +74,17 @@ const AdminNewsletterCampaigns = () => {
       status: active.status || "draft",
       scheduled_at: active.scheduled_at || null,
     };
-    if (active.id) {
-      const { error } = await supabase.from("newsletter_campaigns").update(payload).eq("id", active.id);
-      if (error) { toast({ title: "خطأ", description: error.message, variant: "destructive" }); return; }
-      toast({ title: "تم الحفظ" });
-    } else {
-      const { data, error } = await supabase.from("newsletter_campaigns").insert(payload).select().single();
-      if (error) { toast({ title: "خطأ", description: error.message, variant: "destructive" }); return; }
-      setActive(data as Campaign);
-      toast({ title: "تم الإنشاء" });
+    try {
+      if (active.id) {
+        setActive(await newsletterCampaignsApi.update(active.id, payload));
+        toast({ title: "تم الحفظ" });
+      } else {
+        setActive(await newsletterCampaignsApi.create(payload));
+        toast({ title: "تم الإنشاء" });
+      }
+    } catch (e) {
+      toast({ title: "فشل حفظ الحملة", description: apiErrorMessage(e), variant: "destructive" });
+      return;
     }
     fetchAll();
   };
@@ -103,25 +94,29 @@ const AdminNewsletterCampaigns = () => {
     if (!testEmail && !confirm(`إرسال الحملة لـ ${confirmedCount} مشترك مؤكد؟`)) return;
     setSending(true);
     try {
-      const { data, error } = await supabase.functions.invoke("newsletter-send", {
-        body: { campaign_id: active.id, test_email: testEmail },
-      });
-      if (error) throw error;
-      toast({ title: testEmail ? "تم إرسال نسخة تجريبية" : "تم الإرسال", description: `أُرسلت ${(data as any)?.sent ?? 0} — فشل ${(data as any)?.failed ?? 0}`,
+      const result = testEmail
+        ? await newsletterCampaignsApi.sendTest(active.id, testEmail)
+        : await newsletterCampaignsApi.send(active.id);
+      toast({ title: testEmail ? "تم إرسال نسخة تجريبية" : "تم الإرسال", description: result.message || `أُرسلت ${result.sent} — فشل ${result.failed}`,
       });
       fetchAll();
-      if (active.id) {
-        const { data: refreshed } = await supabase.from("newsletter_campaigns").select("*").eq("id", active.id).single();
-        if (refreshed) setActive(refreshed as Campaign);
-      }
+      try {
+        setActive(await newsletterCampaignsApi.get(active.id));
+      } catch { /* keep the current editor state if the refresh fails */ }
     } catch (e) {
-      toast({ title: "تعذّر الإرسال", description: String((e as Error).message), variant: "destructive" });
+      toast({ title: "تعذّر الإرسال", description: apiErrorMessage(e), variant: "destructive" });
     } finally { setSending(false); }
   };
 
   const remove = async (id: string) => {
     if (!confirm("حذف الحملة وسجلها؟")) return;
-    await supabase.from("newsletter_campaigns").delete().eq("id", id);
+    try {
+      await newsletterCampaignsApi.remove(id);
+    } catch (e) {
+      toast({ title: "فشل حذف الحملة", description: apiErrorMessage(e), variant: "destructive" });
+      return;
+    }
+    toast({ title: "تم الحذف" });
     if (active?.id === id) setActive(null);
     fetchAll();
   };
@@ -253,7 +248,9 @@ const AdminNewsletterCampaigns = () => {
               );
             })}
             {list.length === 0 && (
-              <tr><td colSpan={7} className="p-6 text-center text-muted-foreground">لا توجد حملات بعد. ابدأ بإنشاء حملة جديدة.</td></tr>
+              <tr><td colSpan={7} className={`p-6 text-center ${loadError ? "font-bold text-destructive" : "text-muted-foreground"}`}>
+                {loadError ?? "لا توجد حملات بعد. ابدأ بإنشاء حملة جديدة."}
+              </td></tr>
             )}
           </tbody>
         </table>

@@ -1,0 +1,28 @@
+{
+  "generated_by": "scripts/export-seed-data.ts",
+  "counts": {
+    "programs": 20,
+    "program_page_sections": 104,
+    "program_donation_packages": 38,
+    "projects": 2,
+    "project_donation_packages": 8,
+    "donation_campaigns": 7,
+    "donation_campaign_packages": 44,
+    "donation_entities_map": 17,
+    "seasons": 6,
+    "services": 10,
+    "service_categories": 8,
+    "services_map_axes": 5,
+    "blog_posts": 50,
+    "blog_categories": 13,
+    "blog_authors": 2,
+    "faq_categories": 18,
+    "faqs": 112,
+    "gallery": 44,
+    "stories": 8,
+    "homepage_campaigns_section": 1,
+    "geo_pages": 72,
+    "dakahlia_cities": 14,
+    "_images_to_upload": 58
+  }
+}

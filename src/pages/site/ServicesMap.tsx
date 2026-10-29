@@ -34,8 +34,8 @@ import { BreadcrumbSchema, SiteSchemas } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
-import { DONATE_SECTORS } from "@/data/servicesMap";
-import { SERVICE_PAGE_LIST } from "@/data/servicePagesConfig";
+import { useDonateSectors } from "@/data/sources/servicesMap";
+import { useServicePages } from "@/data/sources/services";
 import { TagsRail } from "@/components/common/TagsRail";
 import {
   Accordion,
@@ -145,7 +145,9 @@ const ServicesMap = () => {
   const base = "https://elyusr.org";
 
   const { data: remoteServices } = useServicesList();
-  const serviceList = remoteServices && remoteServices.length > 0 ? remoteServices : SERVICE_PAGE_LIST;
+  const { servicePages } = useServicePages();
+  const { sectors } = useDonateSectors();
+  const serviceList = remoteServices && remoteServices.length > 0 ? remoteServices : servicePages;
 
   const { data: dynamicFaqs } = useQuery<FaqItem[]>({
     queryKey: ["faqs-services"],
@@ -167,8 +169,8 @@ const ServicesMap = () => {
   }, [dynamicFaqs]);
 
   const totalPrograms = useMemo(
-    () => DONATE_SECTORS.reduce((n, s) => n + s.programs.length, 0),
-    [],
+    () => sectors.reduce((n, s) => n + s.programs.length, 0),
+    [sectors],
   );
 
   const filteredServices = useMemo(() => {
@@ -204,7 +206,7 @@ const ServicesMap = () => {
           name: isRTL ? "خريطة خدمات اليسر" : "Al-Yusr services map",
           isPartOf: { "@id": `${base}/#website` },
           about: { "@id": `${base}/#org` },
-          hasPart: DONATE_SECTORS.flatMap((s) =>
+          hasPart: sectors.flatMap((s) =>
             s.programs.map((p) => ({
               "@type": "Service",
               name: isRTL ? p.title_ar : p.title_en,
@@ -219,8 +221,8 @@ const ServicesMap = () => {
           "@context": "https://schema.org",
           "@type": "ItemList",
           name: isRTL ? "قطاعات التبرع في اليسر" : "Al-Yusr donation sectors",
-          numberOfItems: DONATE_SECTORS.length,
-          itemListElement: DONATE_SECTORS.map((s, i) => ({
+          numberOfItems: sectors.length,
+          itemListElement: sectors.map((s, i) => ({
             "@type": "ListItem",
             position: i + 1,
             name: isRTL ? s.title_ar : s.title_en,
@@ -263,7 +265,7 @@ const ServicesMap = () => {
             </p>
             <div className="mx-auto mt-6 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-4">
               {[
-                { k: DONATE_SECTORS.length, v: isRTL ? "قطاعات" : "Sectors" },
+                { k: sectors.length, v: isRTL ? "قطاعات" : "Sectors" },
                 { k: totalPrograms, v: isRTL ? "برنامجًا" : "Programs" },
                 { k: "100%", v: isRTL ? "توثيق" : "Documented" },
                 { k: "24/7", v: isRTL ? "دعم واتساب" : "WhatsApp" },

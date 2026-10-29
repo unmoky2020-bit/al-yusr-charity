@@ -1,6 +1,8 @@
-import { uploadToSupabaseStorage } from "@/integrations/supabase/client";
 import { compressImage } from "@/lib/image-compress";
-import { galleryApi as laravelGalleryApi, type LaravelGalleryItem } from "@/data/laravelApi";
+import {
+  apiFetch, formatServerImageUrl, invalidateApiCache,
+  galleryApi as laravelGalleryApi, type LaravelGalleryItem,
+} from "@/data/laravelApi";
 
 export type GalleryRow = {
   id: string;
@@ -51,16 +53,34 @@ export const programLabel = (slug: string, lang: "ar" | "en") => {
   return p ? (lang === "ar" ? p.label_ar : p.label_en) : slug;
 };
 
-const BUCKET = "gallery-media";
+/**
+ * Image URL → id of the draft gallery row created when that image was uploaded.
+ * The admin form uploads first (uploadGalleryImage) and saves later (upsertGalleryImage);
+ * the save then UPDATES that draft row instead of creating a duplicate.
+ */
+const uploadedDraftIds = new Map<string, string>();
 
-const safeName = (s: string) =>
-  s.toLowerCase().replace(/[^\w.-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "image";
-
-/** Upload a (compressed) file to gallery-media and return public URL + storage path. */
+/**
+ * Upload a (compressed) image to Laravel (EXISTING endpoint POST /gallery, multipart `image`).
+ * The row is created unpublished (is_public = 0) and becomes the record that the admin form
+ * saves into. Throws on failure — never returns a local/blob URL.
+ */
 export async function uploadGalleryImage(file: File): Promise<{ url: string; path: string; width?: number; height?: number }> {
   const compressed = await compressImage(file, { maxEdge: 1600, quality: 0.82 });
-  const url = await uploadToSupabaseStorage(compressed, "gallery");
-  const path = url.split("/").pop() || "image";
+  const title = file.name.replace(/\.[^.]+$/, "").slice(0, 120) || "صورة";
+  const fd = new FormData();
+  fd.append("image", compressed);
+  fd.append("title_ar", title);
+  fd.append("title_en", title);
+  fd.append("is_public", "0");
+  const res = await apiFetch<{ data?: LaravelGalleryItem } | LaravelGalleryItem>("/gallery", { method: "POST", body: fd });
+  invalidateApiCache("/gallery");
+  const item = ((res as { data?: LaravelGalleryItem })?.data ?? res) as LaravelGalleryItem | null;
+  const raw = item?.image || item?.external_url || "";
+  if (!item?.id || !raw) throw new Error("لم يرجع الخادم بيانات الصورة المرفوعة");
+  const url = formatServerImageUrl(raw) || raw;
+  uploadedDraftIds.set(url, String(item.id));
+  const path = raw.split("/").pop() || "image";
 
   let width: number | undefined;
   let height: number | undefined;
@@ -77,9 +97,9 @@ export async function uploadGalleryImage(file: File): Promise<{ url: string; pat
   return { url, path, width, height };
 }
 
-/** Remove a file from storage (best-effort — no-op since managed by Laravel). */
+/** Stored files are deleted by Laravel together with the gallery row (DELETE /gallery/{id}). */
 export async function deleteGalleryStorageObject(_path: string | null | undefined) {
-  // Storage cleanup handled by Laravel API
+  // Nothing to do on the client.
 }
 
 import { GALLERY_STATIC_IMAGES } from "./galleryImages";
@@ -162,25 +182,40 @@ export type GalleryUpsertInput = Partial<Omit<GalleryRow, "id" | "created_at" | 
   id?: string;
 };
 
-/** UUID v4 pattern — static gallery ids like "gal-1" are NOT uuids. */
-const isUuid = (s?: string) =>
-  !!s && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
+/** Map the admin form row to the Laravel /gallery field names (see _live_api_field_shapes.md). */
+function toLaravelGalleryPayload(row: GalleryUpsertInput, keepImage: boolean): Record<string, unknown> {
+  const payload: Record<string, unknown> = {
+    title_ar: row.title_ar,
+    title_en: row.title_en,
+    alt_ar: row.alt_ar,
+    alt_en: row.alt_en,
+    description_ar: row.caption_ar,
+    description_en: row.caption_en,
+    city: row.city,
+    program: row.program_slug,
+    donation_program: row.donate_program,
+    sort_order: row.sort_order,
+    is_featured: row.is_featured,
+    is_public: row.is_published,
+  };
+  // A pasted link is stored as external_url; an image already stored on the backend is left untouched.
+  const url = row.image_url?.trim();
+  if (url && !keepImage && !/\/storage\//.test(url)) payload.external_url = url;
+  Object.keys(payload).forEach((k) => payload[k] === undefined && delete payload[k]);
+  return payload;
+}
 
+/** Create or update a gallery row on Laravel. Throws on failure (no optimistic/fake row). */
 export async function upsertGalleryImage(row: GalleryUpsertInput): Promise<GalleryRow> {
-  try {
-    const isExisting = row.id && !row.id.startsWith("gal-");
-    let result: any;
-    if (isExisting) {
-      result = await laravelGalleryApi.update(row.id!, row as any);
-    } else {
-      result = await laravelGalleryApi.create(row as any);
-    }
-    if (result) return mapLaravelGallery(result, 0) as GalleryRow;
-  } catch (e) {
-    console.warn("upsertGalleryImage fallback to static:", e);
-  }
-  // Return optimistic row if API fails
-  return { ...staticAsRows[0], ...row, id: row.id || String(Date.now()) } as GalleryRow;
+  const draftId = row.image_url ? uploadedDraftIds.get(row.image_url) : undefined;
+  const existingId = row.id && !row.id.startsWith("gal-") ? row.id : undefined;
+  const targetId = existingId ?? draftId;
+  const payload = toLaravelGalleryPayload(row, Boolean(draftId));
+  const result = targetId
+    ? await laravelGalleryApi.update(targetId, payload as Partial<LaravelGalleryItem>)
+    : await laravelGalleryApi.create(payload as Partial<LaravelGalleryItem>);
+  if (draftId && row.image_url) uploadedDraftIds.delete(row.image_url);
+  return mapLaravelGallery(result, 0);
 }
 
 export async function deleteGalleryImage(row: GalleryRow) {
@@ -210,10 +245,12 @@ export async function moveGalleryImage(rows: GalleryRow[], id: string, direction
   if (idx < 0 || swap < 0 || swap >= rows.length) return;
   const a = rows[idx];
   const b = rows[swap];
-  await Promise.allSettled([
-    laravelGalleryApi.update(a.id, { sort_order: b.sort_order } as any),
-    laravelGalleryApi.update(b.id, { sort_order: a.sort_order } as any),
+  const results = await Promise.allSettled([
+    laravelGalleryApi.update(a.id, { sort_order: b.sort_order } as Partial<LaravelGalleryItem>),
+    laravelGalleryApi.update(b.id, { sort_order: a.sort_order } as Partial<LaravelGalleryItem>),
   ]);
+  const failed = results.find((r): r is PromiseRejectedResult => r.status === "rejected");
+  if (failed) throw failed.reason instanceof Error ? failed.reason : new Error(String(failed.reason));
 }
 
 /**
@@ -233,6 +270,8 @@ export async function deduplicateGalleryImages(): Promise<{ kept: number; delete
     }
   }
   if (toDelete.length === 0) return { kept: seen.size, deleted: 0 };
-  await Promise.allSettled(toDelete.map((id) => laravelGalleryApi.remove(id)));
-  return { kept: seen.size, deleted: toDelete.length };
+  const results = await Promise.allSettled(toDelete.map((id) => laravelGalleryApi.remove(id)));
+  const deleted = results.filter((r) => r.status === "fulfilled").length;
+  if (deleted === 0) throw new Error("تعذّر حذف الصور المكررة من الخادم");
+  return { kept: seen.size + (toDelete.length - deleted), deleted };
 }

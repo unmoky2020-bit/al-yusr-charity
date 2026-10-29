@@ -26,6 +26,12 @@ export const CAMPAIGN_PAGES: CampaignPageMeta[] = [
 
 export const getCampaignPageMeta = (slug: string) => CAMPAIGN_PAGES.find((c) => c.slug === slug);
 
+/** Donate-form link of a campaign landing page: the backend campaign slug, so the form opens on that campaign. */
+export const campaignDonateHref = (pageSlug: string): string => {
+  const meta = getCampaignPageMeta(pageSlug);
+  return `/donate?campaign=${encodeURIComponent(meta?.apiSlugs[0] ?? pageSlug)}`;
+};
+
 /** Resolve the landing page that belongs to a backend donation-campaign record (by slug, then by id, then by name). */
 export const getCampaignPageMetaForCampaign = (c?: { slug?: string | null; id?: number | string | null; name_ar?: string | null } | null) => {
   if (!c) return undefined;

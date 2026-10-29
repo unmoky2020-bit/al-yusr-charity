@@ -1,0 +1,90 @@
+{
+  "/donate": {
+    "ar": { "title": "تبرع الآن | مؤسسة اليسر الخيرية", "description": "تبرع أونلاين بالبطاقة أو المحفظة أو إنستاباي أو تحويل بنكي، واحصل على رقم تتبع وتوثيق بالصور لوصول تبرعك." },
+    "en": { "title": "Donate now | Al-Yusr Charity Foundation", "description": "Give online by card, wallet, InstaPay or bank transfer, and get a tracking number and photo proof of delivery." }
+  },
+  "/cases": {
+    "ar": { "title": "حالات إنسانية عاجلة | مؤسسة اليسر الخيرية", "description": "حالات موثقة ميدانيًا محتاجة دعم عاجل: علاج، سكن، غذاء، تعليم. اختار حالة وتابع تحديثاتها لحد ما تكتمل." },
+    "en": { "title": "Urgent verified cases | Al-Yusr Charity Foundation", "description": "Field-verified cases that need urgent support: medical care, housing, food, education. Pick a case and follow its updates." }
+  },
+  "/programs": {
+    "ar": { "title": "برامج الخير | مؤسسة اليسر الخيرية", "description": "كفالة الأيتام، الزكاة، صكوك الأضاحي، الغذاء الشهري، سقيا الماء والتعليم — برامج دائمة بتوثيق كامل لكل تبرع." },
+    "en": { "title": "Charity programs | Al-Yusr Charity Foundation", "description": "Orphan sponsorship, zakat, qurbani, monthly food, clean water and education — ongoing programs with full proof for every gift." }
+  },
+  "/projects": {
+    "ar": { "title": "مشاريع اليسر التنموية | صدقة جارية", "description": "بناء المساجد، المزرعة الوقفية، سقيا الماء، تسقيف البيوت، جهاز العرائس وسيارات تكريم الإنسان — صدقة جارية أجرها مستمر." },
+    "en": { "title": "Al-Yusr development projects | Ongoing charity", "description": "Mosques, a waqf farm, clean water, home roofing, orphan brides and mortuary vans — sadaqah jariyah with lasting reward." }
+  },
+  "/campaigns": {
+    "ar": { "title": "حملات ومبادرات اليسر | مؤسسة اليسر الخيرية", "description": "حملات موسمية ودائمة: ظل، ستر، أثر، موسم الخير، مركون، عربون خير والغذاء الشهري." },
+    "en": { "title": "Al-Yusr campaigns | Al-Yusr Charity Foundation", "description": "Seasonal and ongoing campaigns: Dhill, Setr, Athar, Ramadan, Markoun, Arboun Kheir and monthly food." }
+  },
+  "/trust": {
+    "ar": { "title": "الشفافية في مؤسسة اليسر الخيرية", "description": "مؤسسة أهلية مشهرة برقم 2665 لسنة 2019: رقم تتبع لكل تبرع، توثيق بالصور والفيديو، ودفع آمن لا نحتفظ فيه ببيانات بطاقتك." },
+    "en": { "title": "Transparency at Al-Yusr Charity Foundation", "description": "Licensed NGO No. 2665/2019: a tracking number for every donation, photo and video proof, and secure payment that never stores your card." }
+  },
+  "/privacy": {
+    "ar": { "title": "سياسة الخصوصية | مؤسسة اليسر الخيرية", "description": "إزاي بنجمع بيانات المتبرعين ونحميها ونستخدمها، وحقوقك في الاطلاع والتصحيح والحذف، والتبرع كفاعل خير." },
+    "en": { "title": "Privacy policy | Al-Yusr Charity Foundation", "description": "How we collect, protect and use donor data, your rights to access, correct and delete it, and giving anonymously." }
+  },
+  "/about": {
+    "ar": { "title": "من نحن | مؤسسة اليسر الخيرية", "description": "مؤسسة أهلية مصرية منذ 2019 تعمل في كل محافظات مصر: كفالة الأيتام، الغذاء، العلاج، التعليم، السكن والمياه." },
+    "en": { "title": "About us | Al-Yusr Charity Foundation", "description": "An Egyptian NGO since 2019 working across Egypt: orphans, food, medical care, education, housing and water." }
+  },
+  "/contact": {
+    "ar": { "title": "تواصل معنا | مؤسسة اليسر الخيرية", "description": "واتساب وهاتف +20 109 700 0137، التحويل البنكي CIB، وزيارة المقر — فريقنا بيرد عليك بسرعة." },
+    "en": { "title": "Contact us | Al-Yusr Charity Foundation", "description": "WhatsApp and phone +20 109 700 0137, CIB bank transfer, and our head office — our team replies fast." }
+  },
+  "/faqs": {
+    "ar": { "title": "الأسئلة الشائعة | مؤسسة اليسر الخيرية", "description": "إجابات عن التبرع والزكاة والأضاحي وتتبع التبرع وطرق الدفع والتوثيق." },
+    "en": { "title": "FAQs | Al-Yusr Charity Foundation", "description": "Answers about donating, zakat, qurbani, tracking your donation, payment methods and proof." }
+  },
+  "/blog": {
+    "ar": { "title": "مدونة اليسر | أدلة الزكاة والأضحية وقصص الأثر", "description": "مقالات عن الزكاة والأضحية ورمضان والصدقة الجارية، وأخبار الحملات وتقارير الأثر." },
+    "en": { "title": "Al-Yusr blog | Zakat, qurbani and impact stories", "description": "Guides on zakat, qurbani, Ramadan and ongoing charity, plus campaign news and impact reports." }
+  },
+  "/stories": {
+    "ar": { "title": "قصص الأثر | مؤسسة اليسر الخيرية", "description": "قصص حقيقية لأسر وأطفال اتغيرت حياتهم بتبرعاتكم." },
+    "en": { "title": "Impact stories | Al-Yusr Charity Foundation", "description": "Real stories of families and children whose lives your donations changed." }
+  },
+  "/donate/track": {
+    "ar": { "title": "تتبع تبرعك | مؤسسة اليسر الخيرية", "description": "اكتب رقم التتبع وشوف مرحلة تنفيذ تبرعك وصور التسليم بدون تسجيل دخول." },
+    "en": { "title": "Track your donation | Al-Yusr Charity Foundation", "description": "Enter your tracking number to see your donation's progress and delivery photos — no login needed." }
+  },
+  "/zakat": {
+    "ar": { "title": "حاسبة الزكاة وإخراجها | مؤسسة اليسر الخيرية", "description": "احسب زكاة مالك وذهبك وأخرجها لأسر مستحقة موثقة." },
+    "en": { "title": "Zakat calculator | Al-Yusr Charity Foundation", "description": "Calculate the zakat on your money and gold and give it to verified families." }
+  },
+  "/setr": {
+    "ar": { "title": "حملة سِتر — دفء الشتاء | مؤسسة اليسر الخيرية", "description": "تسقيف بيوت، أبواب وشبابيك، أسرة ومراتب، ألحفة وكسوة شتاء للأسر المستحقة." },
+    "en": { "title": "Setr winter campaign | Al-Yusr Charity Foundation", "description": "Roofs, doors and windows, beds, blankets and winter clothing for families in need." }
+  },
+  "/dhill": {
+    "ar": { "title": "حملة ظِلّ — سقيا الماء | مؤسسة اليسر الخيرية", "description": "وصلات مياه نظيفة وأسقف للأسر المستحقة — صدقة جارية." },
+    "en": { "title": "Dhill campaign — clean water | Al-Yusr Charity Foundation", "description": "Clean water connections and roofs for families in need — ongoing charity." }
+  },
+  "/athar": {
+    "ar": { "title": "حملة أَثَر — دعم التعليم | مؤسسة اليسر الخيرية", "description": "حقائب وزي مدرسي ومصروفات وكتب للطلاب غير القادرين." },
+    "en": { "title": "Athar campaign — education | Al-Yusr Charity Foundation", "description": "School bags, uniforms, fees and books for students in need." }
+  },
+  "/ramadan": {
+    "ar": { "title": "موسم الخير — رمضان | مؤسسة اليسر الخيرية", "description": "كرتونة الخير، إفطار صائم، زكاة الفطر وكسوة العيد." },
+    "en": { "title": "Ramadan season | Al-Yusr Charity Foundation", "description": "Food boxes, iftar meals, zakat al-fitr and Eid clothing." }
+  },
+  "/markoun": {
+    "ar": { "title": "حملة مَرْكون — التبرع العيني | مؤسسة اليسر الخيرية", "description": "تبرع بالأثاث والأجهزة والملابس والكتب مع استلام مجاني من البيت." },
+    "en": { "title": "Markoun — in-kind donations | Al-Yusr Charity Foundation", "description": "Donate furniture, appliances, clothes and books with free doorstep pickup." }
+  },
+  "/arboun": {
+    "ar": { "title": "مبادرة عربون خير للمستقلين | مؤسسة اليسر الخيرية", "description": "خصص نسبة من أرباح كل مشروع صدقةً — مبادرة للفريلانسرز والمستقلين." },
+    "en": { "title": "Arboun Kheir for freelancers | Al-Yusr Charity Foundation", "description": "Give a share of every project's earnings as charity — an initiative for freelancers." }
+  },
+  "/food-box": {
+    "ar": { "title": "الغذاء الشهري — لحوم وكرتونة ووجبات | مؤسسة اليسر الخيرية", "description": "لحوم من ذبائح شهرية، كرتونة 14 كيلو، ووجبات إطعام تصلح كفارة صيام أو يمين." },
+    "en": { "title": "Monthly food — meat, boxes and meals | Al-Yusr Charity Foundation", "description": "Monthly meat, a 14 kg staples box, and meals valid for fasting or oath expiation." }
+  },
+  "/farm": {
+    "ar": { "title": "المزرعة الوقفية | مؤسسة اليسر الخيرية", "description": "وقف إنتاجي تتوزع ثماره على الأسر والأيتام كل سنة — صدقة جارية لا تنقطع." },
+    "en": { "title": "The waqf farm | Al-Yusr Charity Foundation", "description": "A productive endowment whose harvest goes to families and orphans every year." }
+  }
+}

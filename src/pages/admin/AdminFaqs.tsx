@@ -21,10 +21,11 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { useLang } from "@/i18n/LangContext";
 import {
-  fetchFaqs, fetchFaqCategories, createFaq, updateFaq, deleteFaq,
+  fetchFaqsAdmin, fetchFaqCategoriesAdmin, createFaq, updateFaq, deleteFaq,
   FAQ_PAGE_CATEGORIES,
   type FaqItem, type FaqCategory
 } from "@/data/faqsApi";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 
 export const AdminFaqs = () => {
   const { lang } = useLang();
@@ -48,14 +49,16 @@ export const AdminFaqs = () => {
 
 
   // Queries
-  const { data: faqs = [], isLoading: isFaqsLoading } = useQuery({
+  // Admin reads come only from Laravel (GET /faqs) — no static fallback rows.
+  const { data: faqs = [], isLoading: isFaqsLoading, error: faqsError } = useQuery({
     queryKey: ["admin-faqs"],
-    queryFn: () => fetchFaqs(),
+    queryFn: () => fetchFaqsAdmin(),
+    retry: false,
   });
 
-  const { data: categories = [] } = useQuery({
+  const { data: categories = [] } = useQuery<FaqCategory[]>({
     queryKey: ["admin-faq-categories"],
-    queryFn: () => fetchFaqCategories(),
+    queryFn: () => fetchFaqCategoriesAdmin().catch(() => [] as FaqCategory[]),
   });
 
   // Open Dialog for Create
@@ -125,11 +128,11 @@ export const AdminFaqs = () => {
       queryClient.invalidateQueries({ queryKey: ["all-faqs"] });
       queryClient.invalidateQueries({ queryKey: ["faqs-home"] });
     },
-    onError: (err: any) => {
+    onError: (err: unknown) => {
       toast({
         variant: "destructive",
         title: isAr ? "خطأ أثناء الحفظ" : "Save error",
-        description: err.message || (isAr ? "يرجى التحقق من الاتصال بالباك إند" : "Check backend connection"),
+        description: apiErrorMessage(err, isAr ? "يرجى التحقق من الاتصال بالباك إند" : "Check backend connection"),
       });
     },
   });
@@ -148,11 +151,11 @@ export const AdminFaqs = () => {
       queryClient.invalidateQueries({ queryKey: ["all-faqs"] });
       queryClient.invalidateQueries({ queryKey: ["faqs-home"] });
     },
-    onError: (err: any) => {
+    onError: (err: unknown) => {
       toast({
         variant: "destructive",
         title: isAr ? "فشل الحذف" : "Delete failed",
-        description: err.message,
+        description: apiErrorMessage(err),
       });
     },
   });
@@ -165,6 +168,13 @@ export const AdminFaqs = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-faqs"] });
       queryClient.invalidateQueries({ queryKey: ["all-faqs"] });
+    },
+    onError: (err: unknown) => {
+      toast({
+        variant: "destructive",
+        title: isAr ? "فشل تغيير الحالة" : "Status change failed",
+        description: apiErrorMessage(err),
+      });
     },
   });
 
@@ -291,6 +301,11 @@ export const AdminFaqs = () => {
           {isFaqsLoading ? (
             <div className="py-16 text-center text-muted-foreground font-bold">
               {isAr ? "جاري تحميل الأسئلة..." : "Loading FAQs..."}
+            </div>
+          ) : faqsError ? (
+            <div className="py-16 text-center text-destructive">
+              <AlertCircle className="mx-auto h-8 w-8 text-destructive/60" />
+              <p className="mt-2 text-sm font-bold">{apiErrorMessage(faqsError, isAr ? "تعذر تحميل الأسئلة من الخادم" : "Could not load FAQs")}</p>
             </div>
           ) : filteredFaqs.length === 0 ? (
             <div className="py-16 text-center text-muted-foreground">

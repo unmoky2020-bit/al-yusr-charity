@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { track } from "@/lib/track";
-import { supabase } from "@/integrations/supabase/client";
+import { submitKhabiaRequest, buildWhatsAppUrl } from "@/data/api/contactApi";
+import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { z } from "zod";
 import {
   Sparkles,
@@ -35,6 +36,8 @@ export const KhabiaProgram = () => {
   const [hp, setHp] = useState(""); // honeypot
   const [sending, setSending] = useState(false);
   const [refCode, setRefCode] = useState<string | null>(null);
+  // Set when the API call fails: a wa.me link pre-filled with the request so nothing is lost.
+  const [whatsAppFallback, setWhatsAppFallback] = useState<string | null>(null);
 
   const schema = z.object({
     full_name: z.string().trim().min(2).max(80),
@@ -66,21 +69,17 @@ export const KhabiaProgram = () => {
       }
     } catch {}
     setSending(true);
+    setWhatsAppFallback(null);
     try {
-      const { data, error } = await supabase
-        .from("khabia_requests")
-        .insert({
-          full_name: parsed.data.full_name,
-          phone: parsed.data.phone,
-          city: parsed.data.city,
-          address: parsed.data.address || null,
-          user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 200) : null,
-        })
-        .select("ref_code")
-        .single();
-      if (error) throw error;
-      const ref = (data as any)?.ref_code as string;
-      setRefCode(ref);
+      // Laravel POST /khabia-requests — throws on any non-2xx, so success below is real.
+      const { ref_code } = await submitKhabiaRequest({
+        full_name: parsed.data.full_name,
+        phone: parsed.data.phone,
+        city: parsed.data.city,
+        address: parsed.data.address || null,
+      });
+      const ref = ref_code ?? "";
+      setRefCode(ref || null);
       try {
         localStorage.setItem(
           "alyusr.khabia.last",
@@ -88,8 +87,10 @@ export const KhabiaProgram = () => {
         );
       } catch {}
       track("khabia_request", { fbEvent: "Lead", payload: { source: "khabia-section", ref, city: form.city } });
-      toast({ title: isRTL ? ` تم تسجيل طلبك (${ref}) — هنتواصل خلال ٤٨ ساعة`
-          : `✅ Request received (${ref}) — we'll reach you within 48h`,
+      toast({
+        title: ref
+          ? (isRTL ? ` تم تسجيل طلبك (${ref}) — هنتواصل خلال ٤٨ ساعة` : `✅ Request received (${ref}) — we'll reach you within 48h`)
+          : (isRTL ? " تم تسجيل طلبك — هنتواصل خلال ٤٨ ساعة" : "✅ Request received — we'll reach you within 48h"),
       });
       setForm({ name: "", phone: "", city: "" });
       setAddress("");
@@ -97,7 +98,21 @@ export const KhabiaProgram = () => {
       if (import.meta.env.DEV) {
         console.error(err);
       }
-      toast({ title: isRTL ? "تعذّر إرسال الطلب — حاول مجدداً" : "Couldn't submit — please try again", variant: "destructive", });
+      const waText = [
+        "طلب خبيئة اليسر",
+        `الاسم: ${parsed.data.full_name}`,
+        `الهاتف: ${parsed.data.phone}`,
+        `المدينة: ${parsed.data.city}`,
+        parsed.data.address ? `العنوان: ${parsed.data.address}` : "",
+      ].filter(Boolean).join("\n");
+      setWhatsAppFallback(buildWhatsAppUrl(waText));
+      toast({
+        title: isRTL ? "تعذّر إرسال الطلب" : "Couldn't submit your request",
+        description: isRTL
+          ? "حصلت مشكلة في الاتصال بالخادم. تقدر تبعت نفس الطلب على واتساب من الزر اللي تحت."
+          : "We couldn't reach the server. You can send the same request on WhatsApp using the button below.",
+        variant: "destructive",
+      });
     } finally {
       setSending(false);
     }
@@ -256,6 +271,22 @@ export const KhabiaProgram = () => {
                   : (isRTL ? "سجّلني — وصّلولي الخبيئة" : "Register — bring me a Khabia")}
                 <Arrow className="h-4 w-4" />
               </Button>
+              {whatsAppFallback && (
+                <div role="alert" className="mt-3 rounded-2xl border border-destructive/30 bg-destructive/5 p-3 text-center">
+                  <p className="text-xs font-bold text-destructive">
+                    {isRTL ? "لم يصل طلبك للخادم. ابعته لنا على واتساب بضغطة واحدة:" : "Your request didn't reach our server. Send it on WhatsApp in one tap:"}
+                  </p>
+                  <a
+                    href={whatsAppFallback}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2 text-xs font-black text-white shadow transition hover:opacity-90"
+                  >
+                    <WhatsAppIcon className="h-4 w-4" />
+                    {isRTL ? "إرسال الطلب عبر واتساب" : "Send via WhatsApp"}
+                  </a>
+                </div>
+              )}
               {refCode && (
                 <p className="mt-3 text-center text-xs font-extrabold text-primary">
                   {isRTL ? "رقم طلبك: " : "Your reference: "}

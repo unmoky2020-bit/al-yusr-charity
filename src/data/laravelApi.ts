@@ -275,9 +275,10 @@ export async function apiFetch<T = unknown>(endpoint: string, options: RequestOp
   // Mutating methods (PUT/POST/DELETE/PATCH) and admin endpoints MUST ALWAYS send the authorization token!
   const isPublicGet = method === "GET" && isPublicEndpoint(endpoint);
   // Anonymous visitors send no Authorization header — there is no shared fallback token.
-  const token = isPublicGet
-    ? null
-    : (explicitToken !== undefined ? explicitToken : getApiToken());
+  // An explicit token always wins (admin screens pass it to see drafts on public routes like /stories).
+  const token = explicitToken !== undefined
+    ? explicitToken
+    : (isPublicGet ? null : getApiToken());
   const lang = getCurrentLang();
   const cacheKey = `${method}:${url}:${token || "anon"}:${lang}`;
 
@@ -440,7 +441,12 @@ export interface PaginatedResponse<T> {
 
 const FILE_FIELD_KEYS = new Set(["image", "cover_image", "avatar", "photo", "icon", "file", "attachment"]);
 
-function serializeToPayload(data: unknown, isUpdate: boolean): FormData | Record<string, unknown> {
+/**
+ * `imageLinks`: the backend accepts an image field as an uploaded file OR a URL / storage path
+ * (programs, projects, cases, donation campaigns since 2026-10-29). Without it a string value for an
+ * image field is dropped, because file-only backends reject strings with 422.
+ */
+function serializeToPayload(data: unknown, isUpdate: boolean, imageLinks = false): FormData | Record<string, unknown> {
   if (typeof FormData !== "undefined" && data instanceof FormData) {
     if (isUpdate && !data.has("_method")) {
       data.append("_method", "PUT");
@@ -470,8 +476,8 @@ function serializeToPayload(data: unknown, isUpdate: boolean): FormData | Record
 
       if ((typeof File !== "undefined" && val instanceof File) || (typeof Blob !== "undefined" && val instanceof Blob)) {
         fd.append(key, val as Blob);
-      } else if (FILE_FIELD_KEYS.has(key) && typeof val === "string") {
-        // String URLs cannot be validated as files by Laravel; omit them so existing file remains intact
+      } else if (FILE_FIELD_KEYS.has(key) && typeof val === "string" && !imageLinks) {
+        // File-only backend: a string can't be validated as a file; omit it so the existing file stays.
         continue;
       } else if (typeof val === "boolean") {
         fd.append(key, val ? "1" : "0");
@@ -501,15 +507,15 @@ function serializeToPayload(data: unknown, isUpdate: boolean): FormData | Record
   const jsonPayload: Record<string, unknown> = {};
   for (const [key, val] of Object.entries(record)) {
     if (val === undefined) continue;
-    if (FILE_FIELD_KEYS.has(key) && typeof val === "string") {
-      continue; // omit string paths/URLs from JSON to prevent Laravel 422
+    if (FILE_FIELD_KEYS.has(key) && typeof val === "string" && !imageLinks) {
+      continue; // file-only backend: a string path / URL would be rejected with 422
     }
     jsonPayload[key] = val;
   }
   return jsonPayload;
 }
 
-export function resource<T = Record<string, unknown>>(basePath: string) {
+export function resource<T = Record<string, unknown>>(basePath: string, opts: { imageLinks?: boolean } = {}) {
   const cleanPath = basePath.startsWith("/") ? basePath : `/${basePath}`;
 
   return {
@@ -567,7 +573,7 @@ export function resource<T = Record<string, unknown>>(basePath: string) {
     },
 
     async create(data: Partial<T> | FormData): Promise<T> {
-      const payload = serializeToPayload(data, false);
+      const payload = serializeToPayload(data, false, opts.imageLinks);
       const isFormData = typeof FormData !== "undefined" && payload instanceof FormData;
       const res = await apiFetch<{ data?: T } | T>(cleanPath, {
         method: "POST",
@@ -581,7 +587,7 @@ export function resource<T = Record<string, unknown>>(basePath: string) {
     },
 
     async update(id: string | number, data: Partial<T> | FormData): Promise<T> {
-      const payload = serializeToPayload(data, true);
+      const payload = serializeToPayload(data, true, opts.imageLinks);
       const isFormData = typeof FormData !== "undefined" && payload instanceof FormData;
       const res = await apiFetch<{ data?: T } | T>(`${cleanPath}/${id}`, {
         method: isFormData ? "POST" : "PUT",
@@ -1360,7 +1366,7 @@ export const donationsApiV1 = {
 };
 export const donationsApi = donationsApiV1;
 
-const baseProgramsResource = resource<LaravelProgram>("/programs");
+const baseProgramsResource = resource<LaravelProgram>("/programs", { imageLinks: true });
 export const programsApiV1 = {
   ...baseProgramsResource,
   async getPackages(programId: number | string) {
@@ -1427,7 +1433,7 @@ export async function uploadImage(
   throw lastErr ?? new Error("Upload failed — backend has no working upload endpoint");
 }
 
-export const projectsApiV1 = resource<LaravelProject>("/projects");
+export const projectsApiV1 = resource<LaravelProject>("/projects", { imageLinks: true });
 export const projectsApi = {
   ...projectsApiV1,
   async createPackage(projectId: number | string, data: {
@@ -1449,7 +1455,7 @@ export const projectsApi = {
 
 // donationCampaignsApi and donationCampaignCategoriesApi are declared below with extended methods
 
-const baseCasesResource = resource<LaravelCase>("/cases");
+const baseCasesResource = resource<LaravelCase>("/cases", { imageLinks: true });
 export const casesApiV1 = {
   ...baseCasesResource,
   async statistics() {
@@ -1759,7 +1765,7 @@ export const donationCampaignCategoriesApi = {
   ...resource<LaravelDonationCampaignCategory>("/donation-campaign-categories"),
 };
 
-const baseDonationCampaigns = resource<LaravelDonationCampaign>("/donation-campaigns");
+const baseDonationCampaigns = resource<LaravelDonationCampaign>("/donation-campaigns", { imageLinks: true });
 export const donationCampaignsApi = {
   ...baseDonationCampaigns,
   async addPackage(campaignId: number | string, data: {
@@ -1985,6 +1991,9 @@ export interface LaravelAxis {
   features_en?: string[] | null;
   sort_order?: number | null;
   is_active?: boolean;
+  /** FAQ category whose questions the axis page shows. */
+  faq_category_id?: number | null;
+  faq_category?: { id: number; slug: string; name_ar?: string } | null;
   programs?: any[];
   cases?: any[];
   volunteer_campaigns?: any[];

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { BookOpen, MapPin, Layers, ArrowLeft, ArrowRight } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { GEO_GOVERNORATES } from "@/data/geoPages";
-import { programs } from "@/data/programs";
+import { usePrograms } from "@/data/sources/programs";
 import { fetchPublishedPosts } from "@/data/blogApi";
 
 /**
@@ -79,6 +79,7 @@ export const RelatedContentLinks = ({
     (g) => g.programs[programSlug] && g.slug !== governorateSlug,
   ).slice(0, 6);
 
+  const { programs } = usePrograms();
   const siblings = programs.filter((p) => p.slug !== programSlug).slice(0, 4);
 
   return (

@@ -1,16 +1,20 @@
 /**
  * Al-Yusr Seasons — central data for the six annual campaigns.
  *
- * Each season has a slug used for routing `/seasons/:slug`, bilingual copy,
- * detailed pillars/items, donate target, and an `enabled` flag that controls
- * whether the campaign accepts new donations. The flag has a default value
- * (`defaultEnabled`) but admins can override it at runtime via localStorage
- * using `setSeasonEnabled(slug, value)` — read with `isSeasonEnabled(slug)`.
- * No backend migration needed; the override syncs across tabs via the
- * `storage` event.
+ * Each season has a slug used for routing `/seasons/:slug`, bilingual copy, detailed pillars/items,
+ * donate target, and `defaultEnabled` (whether it accepts donations).
+ *
+ * Source of the data (one flag, `CONTENT_SOURCE` in src/lib/contentSource.ts):
+ *   - "static" (default): exactly the `SEASONS` array below.
+ *   - "api" / "auto": the backend `/seasons` records (managed from /admin/seasons) on top of the static entry
+ *     of the same slug; a season the backend does not have keeps its static data.
+ * There is no localStorage override any more: enabling/disabling a season is a backend write (PATCH /seasons/{id}).
  */
 
+import { useEffect, useState } from "react";
 import { Snowflake, Sun, Moon, Sparkles, Beef, GraduationCap, type LucideIcon } from "lucide-react";
+import { useApiContent } from "@/lib/contentSource";
+import { seasonsApi, type SeasonRecord } from "@/data/api/seasonsApi";
 
 export type SeasonSlug = "ster" | "thill" | "ramadan" | "ashr" | "qurbani" | "school";
 
@@ -282,52 +286,162 @@ export const SEASONS: Season[] = [
   },
 ];
 
-export const getSeason = (slug: string): Season | undefined =>
-  SEASONS.find((s) => s.slug === slug);
+/* ---------------- Backend link (/seasons) ---------------- */
 
-/* ---------------- Enable/disable mechanism (localStorage-backed) ---------------- */
+/** Backend spellings tolerated for each static slug (the `seasons` table has no `slug` column yet: PROPOSED). */
+export const SEASON_SLUG_ALIASES: Record<SeasonSlug, string[]> = {
+  ster: ["ster", "sitr", "setr", "winter"],
+  thill: ["thill", "dhill", "zell", "zel", "summer"],
+  ramadan: ["ramadan", "ramadan-season"],
+  ashr: ["ashr", "dhul-hijjah", "first-ten"],
+  qurbani: ["qurbani", "odhya", "adahi"],
+  school: ["school", "back-to-school"],
+};
 
-const STORAGE_KEY = (slug: SeasonSlug) => `alyusr:season:${slug}:enabled`;
+const normAr = (v?: string | null) =>
+  (v || "")
+    .replace(/[ً-ْـ]/g, "")
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ة/g, "ه")
+    .replace(/ى/g, "ي")
+    .replace(/[^\p{L}\p{N} ]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
 
+/** The backend record of a static season: by `slug` (or an alias), else by Arabic name (badge or title). */
+export function matchSeasonRecord(s: Season, records: SeasonRecord[]): SeasonRecord | undefined {
+  const aliases = SEASON_SLUG_ALIASES[s.slug] || [s.slug];
+  const bySlug = records.find((r) => r.slug && aliases.includes(String(r.slug).toLowerCase().trim()));
+  if (bySlug) return bySlug;
+  const tag = normAr(s.tagAr);
+  const title = normAr(s.titleAr);
+  return records.find((r) => {
+    if (r.slug) return false; // a record with another slug belongs to another season
+    const n = normAr(r.name_ar);
+    return !!n && (n === tag || n === title || title.startsWith(n));
+  });
+}
+
+const str = (v: string | null | undefined, fallback: string) => (typeof v === "string" && v.trim() ? v : fallback);
+
+/** Static season with the backend record's values on top (blank backend values keep the static text). */
+export function mergeSeasonRecord(s: Season, r: SeasonRecord): Season {
+  const pricing = Array.isArray(r.pricing) && r.pricing.length
+    ? r.pricing
+        .filter((p) => p && p.label_ar && Number.isFinite(Number(p.amount)))
+        .map((p) => ({ labelAr: p.label_ar, labelEn: p.label_en || p.label_ar, amount: Number(p.amount), tagAr: p.tag_ar || undefined, tagEn: p.tag_en || undefined }))
+    : s.pricing;
+  const items = Array.isArray(r.items) && r.items.length
+    ? r.items.filter((i) => i && i.ar).map((i) => ({ ar: i.ar, en: i.en || i.ar, arD: i.desc_ar || undefined, enD: i.desc_en || undefined }))
+    : s.items;
+  return {
+    ...s,
+    defaultEnabled: r.is_active !== false && r.donation_available !== false,
+    titleAr: str(r.name_ar, s.titleAr),
+    titleEn: str(r.name_en, s.titleEn),
+    monthsAr: str(r.period_ar, s.monthsAr),
+    monthsEn: str(r.period_en, s.monthsEn),
+    taglineAr: str(r.tagline_ar, s.taglineAr),
+    taglineEn: str(r.tagline_en, s.taglineEn),
+    descriptionAr: str(r.description_ar, s.descriptionAr),
+    descriptionEn: str(r.description_en, s.descriptionEn),
+    tagAr: str(r.badge_ar, s.tagAr),
+    tagEn: str(r.badge_en, s.tagEn),
+    donateHref: str(r.donate_url, s.donateHref),
+    metaTitleAr: str(r.meta_title_ar, s.metaTitleAr),
+    metaTitleEn: str(r.meta_title_en, s.metaTitleEn),
+    metaDescAr: str(r.meta_description_ar, s.metaDescAr),
+    metaDescEn: str(r.meta_description_en, s.metaDescEn),
+    pricing,
+    items,
+  };
+}
+
+const SEASONS_EVENT = "alyusr:seasons-changed";
+let apiSeasons: SeasonRecord[] | null = null;
+let apiSeasonsPromise: Promise<SeasonRecord[] | null> | null = null;
+
+/**
+ * Load `/seasons` once (only when CONTENT_SOURCE is not "static"). Resolves to null on failure, in which case
+ * every helper keeps using the static data.
+ */
+export function loadSeasonsFromApi(): Promise<SeasonRecord[] | null> {
+  if (!useApiContent) return Promise.resolve(null);
+  if (apiSeasons) return Promise.resolve(apiSeasons);
+  if (!apiSeasonsPromise) {
+    apiSeasonsPromise = seasonsApi
+      .listPublic()
+      .then((list) => {
+        apiSeasons = list;
+        if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent(SEASONS_EVENT));
+        return list;
+      })
+      .catch(() => {
+        apiSeasonsPromise = null;
+        return null;
+      });
+  }
+  return apiSeasonsPromise;
+}
+
+/** Forget the cached `/seasons` response (the dashboard calls this after a save) and notify subscribers. */
+export function invalidateSeasonsCache(): void {
+  apiSeasons = null;
+  apiSeasonsPromise = null;
+  if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent(SEASONS_EVENT));
+}
+
+// API mode: start loading as soon as the module is imported, so sync helpers usually see the data on first render.
+if (useApiContent && typeof window !== "undefined") void loadSeasonsFromApi();
+
+const recordFor = (s: Season): SeasonRecord | undefined => (useApiContent && apiSeasons ? matchSeasonRecord(s, apiSeasons) : undefined);
+
+/** Season by slug. Static mode: exactly the static entry. API mode: the static entry with the backend values on top. */
+export const getSeason = (slug: string): Season | undefined => {
+  const s = SEASONS.find((x) => x.slug === slug);
+  if (!s) return undefined;
+  const r = recordFor(s);
+  return r ? mergeSeasonRecord(s, r) : s;
+};
+
+/**
+ * Whether a season accepts donations. Static mode: `defaultEnabled` (no local overrides any more).
+ * API mode: `is_active && donation_available` of the backend record, else `defaultEnabled`.
+ */
 export const isSeasonEnabled = (slug: SeasonSlug): boolean => {
-  if (typeof window === "undefined") return SEASONS.find((s) => s.slug === slug)?.defaultEnabled ?? false;
-  try {
-    const v = window.localStorage.getItem(STORAGE_KEY(slug));
-    if (v === "1") return true;
-    if (v === "0") return false;
-  } catch {}
-  return SEASONS.find((s) => s.slug === slug)?.defaultEnabled ?? false;
+  const s = SEASONS.find((x) => x.slug === slug);
+  if (!s) return false;
+  const r = recordFor(s);
+  return r ? r.is_active !== false && r.donation_available !== false : s.defaultEnabled;
 };
 
-export const setSeasonEnabled = (slug: SeasonSlug, enabled: boolean) => {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY(slug), enabled ? "1" : "0");
-    // Notify same-tab listeners (storage event only fires cross-tab).
-    window.dispatchEvent(new CustomEvent("alyusr:season-toggle", { detail: { slug, enabled } }));
-  } catch {}
-};
+/** Subscribe to `/seasons` updates (API mode only); returns the unsubscribe function. */
+function subscribeSeasons(cb: () => void): () => void {
+  if (!useApiContent || typeof window === "undefined") return () => {};
+  const handler = () => {
+    void loadSeasonsFromApi().then(() => cb());
+  };
+  window.addEventListener(SEASONS_EVENT, handler);
+  void loadSeasonsFromApi().then(() => cb());
+  return () => window.removeEventListener(SEASONS_EVENT, handler);
+}
 
-/** React hook — subscribes to enable/disable changes. */
-import { useEffect, useState } from "react";
+/** React hook: whether a season accepts donations (re-renders when `/seasons` arrives in API mode). */
 export const useSeasonEnabled = (slug: SeasonSlug): boolean => {
   const [enabled, setEnabled] = useState<boolean>(() => isSeasonEnabled(slug));
   useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY(slug)) setEnabled(isSeasonEnabled(slug));
-    };
-    const onCustom = (e: Event) => {
-      const d = (e as CustomEvent).detail as { slug?: string };
-      if (d?.slug === slug) setEnabled(isSeasonEnabled(slug));
-    };
-    window.addEventListener("storage", onStorage);
-    window.addEventListener("alyusr:season-toggle", onCustom as EventListener);
-    return () => {
-      window.removeEventListener("storage", onStorage);
-      window.removeEventListener("alyusr:season-toggle", onCustom as EventListener);
-    };
+    setEnabled(isSeasonEnabled(slug));
+    return subscribeSeasons(() => setEnabled(isSeasonEnabled(slug)));
   }, [slug]);
   return enabled;
+};
+
+/** React hook: all seasons (static list; with backend values on top in API mode). */
+export const useSeasons = (): Season[] => {
+  const [, setTick] = useState(0);
+  useEffect(() => subscribeSeasons(() => setTick((t) => t + 1)), []);
+  return SEASONS.map((s) => getSeason(s.slug) || s);
 };
 
 /** Detect the current season based on Gregorian month (approximation). */

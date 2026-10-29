@@ -1,0 +1,1346 @@
+[
+  {
+    "faq_category_slug": "home",
+    "question_ar": "إزاي أتأكد إن تبرعي وصل فعليًا للمستحقين؟",
+    "question_en": "How do I know my donation reached the right people?",
+    "answer_ar": "كل تبرع نوثقه بتقارير ميدانية وصور، ونرسل للمتبرعين متابعة دورية مع احترام خصوصية الأسر وكرامتها.",
+    "answer_en": "We document every gift with field reports and photos, sending donors regular updates while preserving family privacy.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "home",
+    "question_ar": "هل مؤسسة اليسر مرخصة وشفافة؟",
+    "question_en": "Is Al-Yusr officially licensed and transparent?",
+    "answer_ar": "نعم. اليسر مسجلة رسميًا بوزارة التضامن الاجتماعي برقم 2665/2019 وتصدر تقارير مالية وميدانية دورية لكل حملة.",
+    "answer_en": "Yes — registered under No. 2665/2019, we publish regular financial and field reports for every campaign.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "home",
+    "question_ar": "إزاي بتختاروا الأسر والمشاريع؟",
+    "question_en": "How do you choose families and projects?",
+    "answer_ar": "نتبع زيارات ميدانية وبحثاً اجتماعياً دقيقاً وفق معايير استحقاق حقيقية لاختيار الأسر والمشاريع الأكثر حاجة والأثر المستدام.",
+    "answer_en": "We use field visits and real eligibility criteria to select the most deserving families and sustainable projects.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "home",
+    "question_ar": "إيه البرامج اللي بتدعمها المؤسسة الآن؟",
+    "question_en": "Which programs does the foundation support now?",
+    "answer_ar": "نركز على الغذاء المستمر، الرعاية الصحية، التعليم، سقيا الماء، ترميم السكن، وكفالة الأيتام مع متابعة مستمرة حتى استقرار حالة الأسرة.",
+    "answer_en": "We focus on food, health, education, water, shelter, and orphan sponsorship with follow-up until families improve.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "home",
+    "question_ar": "إيه طرق الدفع المتاحة للتبرع السريع؟",
+    "question_en": "What payment methods are available?",
+    "answer_ar": "فيزا/ماستركارد عبر Kashier، إنستاباي InstaPay، فودافون كاش، تحويل بنكي CIB، ومندوب تحصيل يصلك لأي مكان.",
+    "answer_en": "Visa/Mastercard via Kashier, InstaPay, Vodafone Cash, CIB bank transfer, and home pickup delegates.",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "home",
+    "question_ar": "هل أقدر أتبرع بعملات مختلفة من خارج مصر؟",
+    "question_en": "Can I donate in different currencies?",
+    "answer_ar": "نعم، نستقبل تبرعات بالجنيه المصري، الدولار الأمريكي، والريال السعودي عبر الحسابات البنكية الدولية المعتمدة والبطاقات الائتمانية.",
+    "answer_en": "Yes — we accept EGP, USD, and SAR via official bank transfers and credit cards.",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "home",
+    "question_ar": "هل يمكنني التطوع أو الشراكة معكم؟",
+    "question_en": "Can I volunteer or partner with you?",
+    "answer_ar": "أكيد. نرحب بجميع المتطوعين والشركات والمبادرات المجتمعية، وفريقنا يتواصل معك خلال 48 ساعة من تقديم الطلب.",
+    "answer_en": "Absolutely. Register as a volunteer or contact us for community partnerships, and our team will respond within 48 hours.",
+    "sort_order": 7,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "home",
+    "question_ar": "هل دعمكم للأسر مرة واحدة ولا مستمر؟",
+    "question_en": "Is your support one-off or ongoing?",
+    "answer_ar": "نؤمن بالأثر المستدام؛ برامجنا تشمل إغاثة عاجلة فورية تليها متابعة دورية، تمكين اقتصادي، وتعليم للأبناء لضمان انتقال الأسرة للاكتفاء.",
+    "answer_en": "We believe in sustainable impact; our programs include emergency relief followed by long-term empowerment and education.",
+    "sort_order": 8,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "home",
+    "question_ar": "فين بتنفّذ مؤسسة اليسر مشاريعها حاليًا؟",
+    "question_en": "Where do you operate currently?",
+    "answer_ar": "تركيزنا الأساسي في المنصورة وقرى محافظة الدقهلية الأكثر احتياجاً، مع قوافل موسمية وإغاثية تمتد لمحافظات الشرقية وكفر الشيخ والفيوم.",
+    "answer_en": "Our main focus is Mansoura and needy villages in Dakahlia, with seasonal caravans reaching neighboring governorates.",
+    "sort_order": 9,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "home",
+    "question_ar": "هل بتحافظوا على كرامة وخصوصية الأسر أثناء التوزيع؟",
+    "question_en": "Do you protect beneficiary dignity?",
+    "answer_ar": "هذا مبدأ لا تهاون فيه. كل توزيع يتم بكرامة تامة، مع عدم إظهار وجوه الأسر أو الأطفال إلا بموافقتهم أو تمويهها احتراماً لهم.",
+    "answer_en": "This is non-negotiable. Every distribution is conducted with utmost dignity and privacy.",
+    "sort_order": 10,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "about",
+    "question_ar": "ما هي مؤسسة اليسر الخيرية؟",
+    "question_en": "What is Al-Yusr Charity Foundation?",
+    "answer_ar": "مؤسسة اليسر الخيرية مؤسسة أهلية مصرية مقرها مدينة المنصورة بمحافظة الدقهلية، تعمل منذ 2019 في رعاية الأيتام والأسر المتعففة، والعلاج، والتعليم، وسقيا الماء، وترميم المساكن، وتوزيع الزكاة والصدقات وصكوك الأضاحي، مع توثيق كل تبرع بالصور والفيديو.",
+    "answer_en": "Al-Yusr Charity Foundation is an Egyptian non-governmental foundation based in Mansoura, Dakahlia. Since 2019 it has supported orphans and low-income families through healthcare, education, clean water, home repair, Zakat and sadaqah distribution and Qurbani shares, documenting every donation with photos and video.",
+    "sort_order": 0,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "about",
+    "question_ar": "هل اليسر جمعية أم مؤسسة؟ وما رقم إشهارها؟",
+    "question_en": "Is Al-Yusr an association or a foundation, and what is its registration number?",
+    "answer_ar": "الاسم القانوني هو «مؤسسة اليسر الخيرية»، وهي مؤسسة أهلية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. كثيرون يبحثون عنها باسم «جمعية اليسر» أو «اليسر الخيرية» أو «اليسر المنصورة»، وكلها تشير إلى نفس الجهة.",
+    "answer_en": "The legal name is Al-Yusr Charity Foundation, a non-governmental foundation registered under No. 2665 of 2019 with the Egyptian Ministry of Social Solidarity. People also search for it as 'Al-Yusr association', 'Al-Yusr Charity' or 'Al-Yusr Mansoura'; all refer to the same organisation.",
+    "sort_order": 0,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "about",
+    "question_ar": "ما الاسم الرسمي للمؤسسة بالإنجليزية؟",
+    "question_en": "What is the foundation's official English name?",
+    "answer_ar": "الاسم المعتمد بالإنجليزية هو Al-Yusr Charity Foundation، ونطاقنا الرسمي الوحيد هو elyusr.org. قد تجد الاسم مكتوباً أحياناً Elyosr أو Al-Yosr على صفحاتنا القديمة في فيسبوك وإنستجرام، وهي نفس المؤسسة.",
+    "answer_en": "The official English name is Al-Yusr Charity Foundation, and our only official website is elyusr.org. You may also see the spellings Elyosr or Al-Yosr on our older Facebook and Instagram pages; they refer to the same foundation.",
+    "sort_order": 0,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "about",
+    "question_ar": "هل مؤسسة اليسر لها علاقة بمتجر أجهزة أو شركة تحمل اسم «اليسر»؟",
+    "question_en": "Is the foundation related to an electronics store or company called Al-Yusr?",
+    "answer_ar": "لا. مؤسسة اليسر الخيرية جهة خيرية غير هادفة للربح فقط، ولا تربطها أي علاقة بمتاجر الأجهزة أو الشركات التجارية التي تحمل الاسم نفسه. تحقق دائماً من النطاق الرسمي elyusr.org ورقم الواتساب 01097000137 قبل التبرع.",
+    "answer_en": "No. Al-Yusr Charity Foundation is a non-profit charity only and has no connection to any electronics store or commercial company with the same name. Always verify the official domain elyusr.org and WhatsApp number +201097000137 before donating.",
+    "sort_order": 0,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "about",
+    "question_ar": "هل تعمل مؤسسة اليسر خارج المنصورة والدقهلية؟",
+    "question_en": "Does Al-Yusr operate outside Mansoura and Dakahlia?",
+    "answer_ar": "نعم. مقرنا وأكبر شبكة ميدانية لنا في المنصورة ومراكز وقرى الدقهلية، لكن حملاتنا تصل حسب الحاجة إلى محافظات أخرى مثل كفر الشيخ والشرقية والفيوم وصعيد مصر، ونستقبل تبرعات من داخل مصر وخارجها.",
+    "answer_en": "Yes. Our headquarters and largest field network are in Mansoura and the towns and villages of Dakahlia, but campaigns also reach other governorates such as Kafr El-Sheikh, Sharqia, Fayoum and Upper Egypt as needed, and we accept donations from inside and outside Egypt.",
+    "sort_order": 0,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "about",
+    "question_ar": "كيف أتبرع لعمل خيري في المنصورة بشكل موثّق؟",
+    "question_en": "How can I make a documented charitable donation in Mansoura?",
+    "answer_ar": "اختر برنامجاً أو حالة من صفحة التبرع elyusr.org/donate، ثم ادفع بالبطاقة أو المحفظة عبر كاشير، أو بإنستاباي، أو فودافون كاش، أو تحويل على حساب CIB، أو عن طريق مندوب يصلك في المنصورة. بعد التنفيذ يصلك رقم تتبع وصور أو فيديو للتسليم.",
+    "answer_en": "Pick a program or a verified case on elyusr.org/donate, then pay by card or wallet through Kashier, InstaPay, Vodafone Cash, a CIB bank transfer, or a collection delegate in Mansoura. After delivery you receive a tracking reference plus photos or video of the handover.",
+    "sort_order": 0,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "about",
+    "question_ar": "أين مقر مؤسسة اليسر الخيرية؟",
+    "question_en": "Where is Al-Yusr Charity headquartered?",
+    "answer_ar": "المقر الرئيسي في المنصورة — تقسيم خطاب، بجوار وكالة المنصورة، محافظة الدقهلية، وتغطي قوافلنا ومشاريعنا كل محافظات مصر.",
+    "answer_en": "Headquarters in Mansoura — Khattab District, next to Mansoura Agency, Dakahlia, with active convoys and aid operations serving families all across Egypt.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "about",
+    "question_ar": "هل تبرعاتي مُعفاة ضريبياً؟",
+    "question_en": "Are donations tax-exempt?",
+    "answer_ar": "نعم، مؤسسة اليسر مرخصة رسمياً برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي وتبرعاتك تخضع للإعفاء الضريبي وفق القانون المصري.",
+    "answer_en": "Yes — Al-Yusr is a registered NGO under license #2665/2019, fully compliant with Egyptian tax-deduction regulations.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "about",
+    "question_ar": "كيف أتأكد من وصول تبرعي بنفسي؟",
+    "question_en": "How can I verify my donation?",
+    "answer_ar": "نوفر ميزة 'الحضور بنفسك'؛ يمكنك مرافقة مندوبينا للميدان لتسليم تبرعك أو معاينة وصلة المياه والسقف، بالإضافة إلى توثيق فوري بالصور والفيديو مع كود تتبع.",
+    "answer_en": "We offer 'In-Person Delivery' where donors can join our field teams, along with real-time video/photo reporting and tracking codes.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "about",
+    "question_ar": "هل أستطيع التطوع معكم؟",
+    "question_en": "Can my family and I volunteer?",
+    "answer_ar": "نعم، نرحب بالمتطوعين والشباب والعائلات ليكونوا جزءاً من فريقنا الميداني عبر صفحة التطوع بالموقع.",
+    "answer_en": "Yes — we welcome volunteers of all ages to join our distribution drives through our volunteer portal.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "programs",
+    "question_ar": "ما هي أبواب التبرع المتاحة في مؤسسة اليسر؟",
+    "question_en": "What donation programs does Al-Yusr offer?",
+    "answer_ar": "بنوفّر مسارات تبرع لكل نية: صك أضحية، كرتونة عزومة شهرية، كيلو لحمة بلدي من مزارعنا الوقفية، زكاة المال، كفالة يتيم، تعليم (سبتمبر)، علاج وقوافل طبية، وصلات مياه، تجهيز عرائس، وحملة ستر للتسقيف والترميم.",
+    "answer_en": "We provide a track for every intention: Qurbani vouchers, monthly food box, fresh farm meat, Zakat, orphan sponsorship, education (September), healthcare and medical convoys, water connections, bride preparation, and the Sitr roofing & repair campaign.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "programs",
+    "question_ar": "هل تبرعي يصل فعلًا للمستحقين؟",
+    "question_en": "Does my donation really reach the beneficiaries?",
+    "answer_ar": "نعم — كل تبرع يمر ببحث اجتماعي ميداني للأسر، يُسلَّم بكرامة لباب البيت، ويتم توثيقه بصور وفيديو يصلك عبر واتساب أو البريد بعد التنفيذ.",
+    "answer_en": "Yes — every donation goes through field social assessment, dignified doorstep delivery, and is documented with photos and videos shared with you on WhatsApp or email after execution.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "programs",
+    "question_ar": "هل أحصل على إيصال رسمي بالتبرع؟",
+    "question_en": "Will I receive an official receipt?",
+    "answer_ar": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري برقم مرجعي تقدر تتبع به الحالة من صفحة «تتبع التبرع».",
+    "answer_en": "An electronic receipt with a reference code is emailed to you instantly so you can track the case from our donation tracking page.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "programs",
+    "question_ar": "إيه الفرق بين التبرع لبرنامج وبين التبرع لحالة موثّقة؟",
+    "question_en": "What is the difference between donating to a program and donating to a verified case?",
+    "answer_ar": "التبرع لبرنامج (مثل صك أضحية أو كرتونة عزومة) بيُوزَّع على أسر متعددة حسب الأكثر احتياجًا. التبرع لحالة موثّقة بيروح لحالة فردية بعينها مع متابعة نتيجتها.",
+    "answer_en": "Program donations (e.g. a Qurbani voucher or food box) are distributed across multiple families by need. A verified case donation goes to one specific family with outcome follow-up.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "programs",
+    "question_ar": "هل يمكنني تخصيص تبرعي لمحافظة معينة؟",
+    "question_en": "Can I designate my donation to a specific governorate?",
+    "answer_ar": "نعم. تركيزنا الأساسي محافظة الدقهلية بكل مدنها وقراها، وبنغطّي حالات أيضًا في كفر الشيخ والصعيد. اطلب التخصيص مع فريق واتساب 201097000137+.",
+    "answer_en": "Yes. Our primary focus is Dakahlia (all cities and villages); we also serve cases in Kafr El-Sheikh and Upper Egypt. Request a designation via WhatsApp +201097000137.",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "programs",
+    "question_ar": "ما طرق الدفع المتاحة؟",
+    "question_en": "What payment methods are supported?",
+    "answer_ar": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، تحويل بنكي على CIB، أو دفع كاش عند ممثل المؤسسة في المنصورة.",
+    "answer_en": "Visa/Mastercard, Vodafone Cash, InstaPay, bank transfer to CIB, or in-person cash via our Mansoura representative.",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "programs",
+    "question_ar": "هل المؤسسة مرخّصة رسميًا؟",
+    "question_en": "Is the foundation officially licensed?",
+    "answer_ar": "مؤسسة اليسر الخيرية مرخّصة من وزارة التضامن الاجتماعي تحت رقم إشهار 2665/2019، ومقرها الرئيسي بالمنصورة - الدقهلية.",
+    "answer_en": "Al-Yusr Charity Foundation is licensed by the Ministry of Social Solidarity under license number 2665/2019, headquartered in Mansoura, Dakahlia.",
+    "sort_order": 7,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "programs",
+    "question_ar": "إزاي أتطوع أو أنضم لفريق العمل؟",
+    "question_en": "How can I volunteer or join the field team?",
+    "answer_ar": "ادخل على صفحة حملات التطوع واختر حملة وقدّم على المقعد المناسب لمهاراتك. بنوفّر تدريب ميداني ومتابعة لكل متطوع جديد.",
+    "answer_en": "Visit our volunteer campaigns page, pick a campaign, and apply for the slot that matches your skills. We provide field training and follow-up for every new volunteer.",
+    "sort_order": 8,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "contact",
+    "question_ar": "ما هي مواعيد العمل الرسمية واستقبال المتبرعين بالمقر؟",
+    "question_en": "What are the official working hours?",
+    "answer_ar": "نستقبلكم يومياً من السبت إلى الخميس من الساعة 9:00 صباحاً وحتى 5:00 مساءً، وفريق خدمة العملاء متاح هاتفياً وعبر واتساب 24/7.",
+    "answer_en": "We welcome visitors Saturday to Thursday, 9:00 AM to 5:00 PM. Our WhatsApp team is available 24/7.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "contact",
+    "question_ar": "أين تقع المقرات والمكاتب الرئيسية لمؤسسة اليسر الخيرية؟",
+    "question_en": "Where are the official offices located?",
+    "answer_ar": "المقر الرئيسي في مدينة المنصورة، محافظة الدقهلية (حي الجامعة)، ولدينا نقاط توزيع ومندوبون ميدانيون لتغطية باقي المراكز والقرى.",
+    "answer_en": "Headquarters is located in Mansoura, Dakahlia. We have field coordination points across surrounding towns.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "contact",
+    "question_ar": "كيف أتأكد من هوية مندوب التحصيل الميداني عند زيارته لي؟",
+    "question_en": "How do I verify a field collection delegate?",
+    "answer_ar": "يحمل مندوبنا كارنيه رسمي معتمد برقم قومي وصورة، ويسلمك إيصال تحصيل رسمي مختوم من المؤسسة يحتوي على رقم التبرع ورقم الترخيص.",
+    "answer_en": "Our representative carries an official ID card and provides an official stamped receipt with license and donation numbers.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "contact",
+    "question_ar": "كيف أتواصل معكم إذا كنت مقيماً خارج جمهورية مصر العربية؟",
+    "question_en": "How can international donors contact you?",
+    "answer_ar": "يمكنكم التواصل المباشر عبر خط الواتساب الدولي (+201097000137) أو عبر البريد الإلكتروني المخصص للعلاقات الدولية donor@alyusr.org.",
+    "answer_en": "You can reach us directly via international WhatsApp (+201097000137) or email at donor@alyusr.org.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "contact",
+    "question_ar": "ما هو أسرع وقت للرد على نموذج الاستفسارات والشكاوى؟",
+    "question_en": "How quickly do you reply to web inquiries?",
+    "answer_ar": "يقوم فريق متابعة المتبرعين بالتواصل معك خلال ساعتين في أوقات العمل الرسمية، وبحد أقصى 24 ساعة لجميع الاستفسارات.",
+    "answer_en": "Our donor care team reaches out within 2 hours during official hours and within 24 hours maximum.",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaigns",
+    "question_ar": "ما الحملات التي تنفذها مؤسسة اليسر؟",
+    "question_en": "Which campaigns does Al-Yusr run?",
+    "answer_ar": "ست حملات رئيسية: ظِلّ لوصلات المياه والأسقف (elyusr.org/dhill)، سِتر لدفء الشتاء والأسرّة والأغطية (elyusr.org/setr)، أَثَر لدعم التعليم والطلاب (elyusr.org/athar)، موسم الخير في رمضان (elyusr.org/ramadan)، مَرْكون للتبرع العيني بالأثاث والأجهزة (elyusr.org/markoun)، وعربون خير للمستقلين والفريلانسرز (elyusr.org/arboun). تجدها كلها في صفحة الحملات elyusr.org/campaigns.",
+    "answer_en": "Six main campaigns: Dhill for water connections and roofs (elyusr.org/dhill), Setr for winter warmth, beds and blankets (elyusr.org/setr), Athar for education and students (elyusr.org/athar), the Ramadan Season of Goodness (elyusr.org/ramadan), Markoun for in-kind furniture and appliance donations (elyusr.org/markoun), and Arboun Kheir for freelancers (elyusr.org/arboun). All are listed at elyusr.org/campaigns.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaigns",
+    "question_ar": "كيف أختار الحملة المناسبة لنيتي؟",
+    "question_en": "How do I choose the right campaign for my intention?",
+    "answer_ar": "إن كانت نيتك صدقة جارية فاختر وصلة مياه أو سقفاً من حملة ظِلّ؛ وللزكاة اختر الحالات أو صفحة الزكاة؛ وللتبرع العيني بأغراض من بيتك اختر مَرْكون؛ ولتجهيز الطلاب اختر أَثَر؛ وللشتاء اختر سِتر. وإن احترت فراسلنا على واتساب 01097000137 ونرشّح لك الأنسب.",
+    "answer_en": "For ongoing charity choose a water connection or roof from Dhill; for Zakat use the cases or Zakat page; for in-kind items from your home choose Markoun; for students choose Athar; for winter choose Setr. If unsure, message us on WhatsApp +201097000137 and we will suggest the best fit.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "markoun",
+    "question_ar": "إيه يعني حملة مَرْكون وليه أشارك فيها؟",
+    "question_en": "What is Markoun campaign?",
+    "answer_ar": "مَرْكون هي مبادرة لإعادة إحياء وتدوير الأثاث، الأجهزة الكهربائية، والملابس المركونة في بيتك وتوجيهها لتجهيز منازل الأسر الأكثر احتياجاً.",
+    "answer_en": "Markoun turns unused furniture, appliances, and clothes into dignified support for low-income families.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "markoun",
+    "question_ar": "إزاي أتبرع بالمركون عندي ومين بيستلمه؟",
+    "question_en": "How do I donate stored items?",
+    "answer_ar": "بمجرد تسجيل بياناتك وصور الأغراض عبر صفحة الحملة أو واتساب، بيتحرك فريق لوجستي متخصص بسيارة المؤسسة لاستلامها من باب بيتك.",
+    "answer_en": "Submit photos and details on the campaign page or WhatsApp, and our logistics team will collect them from your door.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "markoun",
+    "question_ar": "هل الاستلام من باب البيت بيكلفني أي رسوم أو مصاريف شحن؟",
+    "question_en": "Is doorstep collection free?",
+    "answer_ar": "الاستلام والنقل بالكامل مجاني 100% وتتحمله المؤسسة داخل نطاق محافظة الدقهلية والمدن المجاورة.",
+    "answer_en": "Doorstep pickup is 100% free; transportation costs are fully covered by Al-Yusr.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "markoun",
+    "question_ar": "هل تقبلون الأجهزة أو الأثاث اللي محتاج صيانة أو تنظيف بسيط؟",
+    "question_en": "Do you accept items needing minor repairs?",
+    "answer_ar": "نعم، لدينا ورش صيانة وتجهيز متخصصة تقوم بفحص الأجهزة وإصلاحها وتنظيف الأثاث قبل تسليمه للأسر المستحقة بكرامة تامة.",
+    "answer_en": "Yes, our dedicated maintenance workshop inspects, repairs, and sanitizes items before delivering them.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "markoun",
+    "question_ar": "ما هي شروط التبرع بالأدوية الفائضة عن الحاجة؟",
+    "question_en": "What are the rules for surplus medication donation?",
+    "answer_ar": "يجب أن تكون الأدوية سليمة التخزين وواضحة تاريخ الصلاحية وسارية لمدة لا تقل عن شهرين، ويقوم صيدلي متخصص بفحصها وتصنيفها فور استلامها.",
+    "answer_en": "Medications must be properly stored with valid expiration for at least 2 months, reviewed by our licensed pharmacist.",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "ما هي أنواع الصكوك المتاحة للتبرع وأسعارها؟",
+    "question_en": "What Qurbani shares are available?",
+    "answer_ar": "نوفر صك عجل بلدي بقري وجاموسي (سهم سُبع)، وصك خروف كامل، وصك مستورد وفق الأسعار المعتمدة لموسم 2026 مع ضمان الذبح في المواعيد الشرعية.",
+    "answer_en": "We offer local beef share (1/7th), full sheep, and certified shares in compliance with Islamic timings.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "متى وأين يتم الذبح الشرعي للأضاحي؟",
+    "question_en": "When and where is the slaughter conducted?",
+    "answer_ar": "يتم الذبح في مجازر وزارة الزراعة المعتمدة وتحت إشراف بيطري كامل، ويبدأ عقب صلاة عيد الأضحى مباشرة وحتى عصر رابع أيام التشريق.",
+    "answer_en": "Slaughtering takes place in official veterinary-inspected facilities from Eid prayer until fourth Tashreeq afternoon.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل يمكن للمضحي استلام نصيبه الشرعي من اللحوم؟",
+    "question_en": "Can the donor receive their share of meat?",
+    "answer_ar": "نعم، يمكنك اختيار استلام ثلثك الشرعي مغلفاً ومبرداً حتى باب منزلك، أو التبرع بكامل الصك للأسر الأكثر احتياجاً في قرى الدلتا.",
+    "answer_en": "Yes, you can request delivery of your 1/3 share chilled to your home, or donate the full share to needy families.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "كيف أضمن سلامة وتوثيق ذبح صكي بالأسم؟",
+    "question_en": "How do I verify the slaughter with my name?",
+    "answer_ar": "نرسل للمضحي رسالة نصية وفيديو توثيقي لذبح أضحيته باسمه المسجل في الصك مع إشعار فور بدء التوزيع في القرى المستهدفة.",
+    "answer_en": "Donors receive SMS and video documentation showing their name called during slaughter and distribution alerts.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "zakat",
+    "question_ar": "كيف يتم حساب نصاب زكاة المال لعام 2026؟",
+    "question_en": "How is Zakat Nisab calculated in 2026?",
+    "answer_ar": "نصاب زكاة المال يعادل قيمة 85 جراماً من الذهب عيار 21 بسعر السوق الحالي، فإذا حال عليه الحول الهجري تخرج عنه نسبة 2.5%.",
+    "answer_en": "Zakat Nisab equals the market value of 85 grams of 21k gold held for one lunar year, with a 2.5% rate.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "zakat",
+    "question_ar": "هل تخصص المؤسسة حساباً مستقلاً للزكاة الشرعية؟",
+    "question_en": "Does Al-Yusr maintain a dedicated Zakat account?",
+    "answer_ar": "نعم تماماً، لدينا حساب بنكي شرعي منفصل يُوجّه بنسبة 100% لمصارف الزكاة الثمانية المحددة في القرآن الكريم دون خصم أي مصاريف إدارية منه.",
+    "answer_en": "Yes, a 100% dedicated bank account is strictly disbursed to the 8 Quranic categories without administrative deductions.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "zakat",
+    "question_ar": "ما هي أهم مصارف الزكاة التي تركز عليها مؤسسة اليسر؟",
+    "question_en": "What are the primary Zakat distribution channels?",
+    "answer_ar": "سداد ديون الغارمين والغارمات لمنع تفكك الأسر، العمليات الجراحية العاجلة والعلاج الشهري، ودعم الأسر الفقيرة التي لا عائل لها.",
+    "answer_en": "Relieving indebted families (Gharimeen), urgent surgeries, chronic medical aid, and supporting widowed households.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "zakat",
+    "question_ar": "هل يجوز إخراج زكاة الفطر نقدياً عبر المؤسسة؟",
+    "question_en": "Can Zakat al-Fitr be paid in cash?",
+    "answer_ar": "نعم، وفقاً لفتوى دار الإفتاء المصرية، وتقوم المؤسسة بشراء مواد غذائية وحبوب وتوزيعها على المستحقين قبل صلاة العيد.",
+    "answer_en": "Yes, following Egypt Dar Al-Ifta fatwa, which is converted to staple food cartons and distributed before Eid prayer.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "trust",
+    "question_ar": "كيف يمكنني تتبع تبرعي ومعرفة أثره الميداني؟",
+    "question_en": "How can I track my donation and see its impact?",
+    "answer_ar": "عند التبرع تحصل على رقم مرجعي (Ref Code) يمكنك إدخاله في صفحة 'تتبع التبرع' بالموقع لمعرفة مرحلة التنفيذ وصور التوثيق.",
+    "answer_en": "Every gift receives a unique Ref Code to enter into the 'Track Donation' page to inspect status and photo proofs.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "trust",
+    "question_ar": "كيف أتأكد أن تبرعي وصل فعلاً؟",
+    "question_en": "How do I confirm my donation actually arrived?",
+    "answer_ar": "بعد الدفع يصلك رقم تتبع على واتساب أو البريد. أدخله في صفحة تتبع التبرع elyusr.org/donate/track بدون الحاجة لإنشاء حساب، لتشاهد مرحلة التنفيذ ثم صور أو فيديو التسليم للأسرة المستحقة.",
+    "answer_en": "After payment you receive a tracking reference by WhatsApp or email. Enter it at elyusr.org/donate/track, with no account needed, to see the execution stage and then the delivery photos or video for the family.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "trust",
+    "question_ar": "هل يمكن التبرع لمؤسسة اليسر من خارج مصر؟",
+    "question_en": "Can I donate to Al-Yusr from outside Egypt?",
+    "answer_ar": "نعم. يمكنك الدفع بالبطاقة الدولية عبر بوابة كاشير من صفحة التبرع، أو التحويل البنكي على حساب المؤسسة في بنك CIB رقم 100043605733 (بيانات SWIFT متاحة عند الطلب). تواصل معنا على واتساب +201097000137 لأي استفسار عن التحويلات الدولية.",
+    "answer_en": "Yes. Pay with an international card through the Kashier gateway on the donate page, or wire to the foundation's CIB account 100043605733 (SWIFT details on request). Contact us on WhatsApp +201097000137 for any question about international transfers.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "trust",
+    "question_ar": "هل يمكن للمتبرع مرافقة القوافل الميدانية أثناء التوزيع؟",
+    "question_en": "Can donors accompany field caravans?",
+    "answer_ar": "نرحب بالمتبرعين لمرافقة قوافلنا الميدانية والتأكد بأنفسهم من تسليم المساعدات للأهالي في القرى الأكثر احتياجاً.",
+    "answer_en": "Donors are welcome to join our field caravans to personally observe deliveries to deserving village families.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "trust",
+    "question_ar": "أين يمكنني مراجعة التقارير المالية وميزانيات المؤسسة؟",
+    "question_en": "Where can I inspect audited financial statements?",
+    "answer_ar": "ننشر تقارير ربع سنوية وسنوية معتمدة من محاسب قانوني خارجي على صفحة 'الشفافية والموثوقية' وهي متاحة للجميع للاطلاع والتحميل.",
+    "answer_en": "We publish quarterly and annual financial statements audited by external certified accountants on our Trust page.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "volunteer",
+    "question_ar": "ما هي شروط الانضمام لفريق متطوعي مؤسسة اليسر؟",
+    "question_en": "What are the requirements to join as a volunteer?",
+    "answer_ar": "أن يكون عمر المتقدم 16 سنة فما فوق، ولديه الرغبة الصادقة في العمل الإنساني والالتزام بأخلاقيات ومعايير المؤسسة الميدانية.",
+    "answer_en": "Applicants must be at least 16 years old with genuine commitment to humanitarian work and organizational ethics.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "volunteer",
+    "question_ar": "هل يحصل المتطوع على شهادة خبرة معتمدة بساعات التطوع؟",
+    "question_en": "Do volunteers receive an official certificate?",
+    "answer_ar": "نعم، تمنح المؤسسة شهادة تطوع رسمية معتمدة بعد إتمام عدد الساعات أو المشاريع المتفق عليها، مع توثيق المهام المنجزة.",
+    "answer_en": "Yes, official certificates documenting completed volunteer hours and project impact are awarded.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "volunteer",
+    "question_ar": "ما هي المجالات المتاحة للتطوع بالمؤسسة؟",
+    "question_en": "What volunteer tracks are available?",
+    "answer_ar": "المجال الميداني وتعبئة الكراتين، القوافل الطبية، التصوير وصناعة المحتوى، الدعم التقني والبرمجة، والبحث الاجتماعي للأسر.",
+    "answer_en": "Field distribution, medical caravans, media & photography, IT & tech, and family social field research.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "services",
+    "question_ar": "ما هي القطاعات التنموية الرئيسية التي تغطيها المؤسسة؟",
+    "question_en": "What main developmental sectors do you cover?",
+    "answer_ar": "قطاع الأمن الغذائي (كراتين الغذاء والإطعام)، قطاع الصحة والعلاج، قطاع سقيا الماء وحفر الآبار، قطاع الإيواء وتأهيل المنازل.",
+    "answer_en": "Food security, health & medical clinics, clean water wells, and housing rehabilitation.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "services",
+    "question_ar": "كيف يتم التحقق من حاجة القرية أو المنطقة لمشروع سقيا ماء أو محطة تنقية؟",
+    "question_en": "How do you verify water well projects?",
+    "answer_ar": "نقوم بإجراء تحاليل معملية معتمدة لنسبة ملوحة وشوائب المياه في القرية بالتعاون مع شركة المياه والجهات المختصة لتحديد الأولوية.",
+    "answer_en": "We run certified laboratory water tests for salinity and purity in collaboration with water authorities to set priority.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "general",
+    "question_ar": "هل تتيح المؤسسة التبرع عبر المحافظ الإلكترونية وإنستاباي InstaPay؟",
+    "question_en": "Do you support mobile wallets and InstaPay?",
+    "answer_ar": "نعم، يمكنك التحويل فوراً على رقم إنستاباي المعتمد أو محفظة فودافون كاش الرسمية وتأكيد التبرع خلال ثوانٍ.",
+    "answer_en": "Yes, you can transfer instantly via our certified InstaPay handle or Vodafone Cash wallet.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-zell",
+    "question_ar": "ما هي حملة ظل؟",
+    "question_en": "What is the Zell campaign?",
+    "answer_ar": "حملة من مؤسسة اليسر الخيرية تنفذ أسقف المنازل ووصلات المياه وخطوط المياه والأبواب والشبابيك والمراوح لأسر مستحقة، وجميع أنشطتها صدقات جارية.",
+    "answer_en": "A campaign by Al-Yusr Foundation that provides house roofs, water connections, water lines, doors, windows and fans for families in need. All its activities are ongoing charity.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-zell",
+    "question_ar": "كم تكلفة تسقيف منزل وكيف أساهم بجزء منها؟",
+    "question_en": "How much does a roof cost and how can I contribute part of it?",
+    "answer_ar": "يتراوح سعر السقف حاليًا (2026) من 15,000 إلى 20,000 جنيه مصري حسب مساحة المنزل، ويمكنك المساهمة بسهم بقيمة 500 جنيه ليشارك أكثر من متبرع في إتمام سقف واحد.",
+    "answer_en": "A roof currently (2026) costs between EGP 15,000 and 20,000 depending on the house size. You can contribute a EGP 500 share so that several donors complete one roof together.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-zell",
+    "question_ar": "كم تكلفة وصلة المياه، وما الذي تشمله؟",
+    "question_en": "How much is a water connection and what does it include?",
+    "answer_ar": "من 7,000 إلى 8,000 جنيه مصري، وتشمل المواسير وموتور الرفع وخزان المياه وحوض المطبخ والحنفيات والدش ومصاريف التركيب كاملة، ويمكن تقسيمها إلى أسهم بـ 500 جنيه.",
+    "answer_en": "EGP 7,000 to 8,000. It includes pipes, a lifting pump, a water tank, a kitchen sink, taps, a shower and full installation costs, and it can be split into EGP 500 shares.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-zell",
+    "question_ar": "هل يمكن التبرع بوصلة مياه عن شخص متوفى؟",
+    "question_en": "Can I donate a water connection on behalf of a deceased person?",
+    "answer_ar": "نعم، يمكنك نية الوصلة صدقة جارية عن أحد المتوفين من أسرتك أو عن الأحياء، فسُقيا الماء من أفضل الصدقات الجارية.",
+    "answer_en": "Yes. You can intend the connection as ongoing charity for a deceased family member or for the living; giving water to drink is one of the best forms of ongoing charity.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-zell",
+    "question_ar": "ما العمر الافتراضي للسقف ووصلة المياه؟",
+    "question_en": "What is the lifespan of the roof and water connection?",
+    "answer_ar": "السقف من 8 إلى 10 أعوام، ووصلة المياه من 5 إلى 10 سنوات حسب صيانة الموتور واستخدام الأسرة.",
+    "answer_en": "A roof lasts 8 to 10 years; a water connection 5 to 10 years, depending on pump maintenance and household use.",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-zell",
+    "question_ar": "في أي محافظات تنفذ الحملة؟",
+    "question_en": "In which governorates does the campaign operate?",
+    "answer_ar": "في 2026 ركزنا على الدقهلية وكفر الشيخ والشرقية، ومنذ 2021 وصلت الحملة أيضًا إلى الفيوم والإسماعيلية والوادي الجديد وسوهاج وقنا. ونتحرك دائمًا بحسب أولوية المستحقين وليس المكان.",
+    "answer_en": "In 2026 we focused on Dakahlia, Kafr El-Sheikh and Sharqia; since 2021 the campaign has also reached Fayoum, Ismailia, New Valley, Sohag and Qena. We always move by the priority of those in need, not by location.",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-sitr",
+    "question_ar": "ما هي حملة ستر؟",
+    "question_en": "What is the Sitr campaign?",
+    "answer_ar": "حملة شتوية من مؤسسة اليسر الخيرية تؤمن منازل الأسر المستحقة وتوفر لها الأسرة والمراتب والألحفة الفايبر والكسوة الشتوية، انطلاقاً من الحديث النبوي في فضل ستر المسلم.",
+    "answer_en": "A winter campaign by Al-Yusr Foundation that secures the homes of families in need and provides them with beds, mattresses, fiber quilts and winter clothing, inspired by the Prophetic hadith on the virtue of shielding a Muslim.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-sitr",
+    "question_ar": "متى تبدأ حملة ستر وإلى متى تستمر؟",
+    "question_en": "When does Sitr start and how long does it run?",
+    "answer_ar": "تنطلق سنويًا في شهر أكتوبر مع بداية الخريف وتستمر حتى شهر فبراير لمواجهة أشد موجات البرد.",
+    "answer_en": "It launches every year in October at the start of autumn and continues until February to face the harshest cold waves.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-sitr",
+    "question_ar": "ماذا تشمل الحملة بالتحديد؟",
+    "question_en": "What exactly does the campaign cover?",
+    "answer_ar": "الأسقف والأبواب والشبابيك، والأسرة الخشبية والمراتب، والألحفة الفايبر، وكسوة الشتاء الثقيلة لأفراد الأسرة.",
+    "answer_en": "Roofs, doors and windows; wooden beds and mattresses; fiber quilts; and heavy winter clothing for family members.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-sitr",
+    "question_ar": "لماذا تهتم الحملة بالأسّرة والمراتب؟",
+    "question_en": "Why does the campaign focus on beds and mattresses?",
+    "answer_ar": "لأن كثيرًا من الأسر تنام على الأرض الباردة، فنرفع الأطفال وكبار السن عنها ونوفر لهم نوماً هادئاً وصحياً.",
+    "answer_en": "Because many families sleep on the cold floor; we lift children and the elderly off it and give them calm, healthy sleep.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-sitr",
+    "question_ar": "من ينفذ أعمال الحملة ميدانياً؟",
+    "question_en": "Who carries out the campaign's work?",
+    "answer_ar": "فريق المتطوعين بالمؤسسة، بالتعاون مع فنيين محترفين من نجارين وبنائين لضمان جودة الأمان والتنفيذ.",
+    "answer_en": "The foundation's volunteer team, together with professional carpenters and builders.",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-sitr",
+    "question_ar": "هل يمكنني التبرع بكفالة شتوية كاملة لأسرة؟",
+    "question_en": "Can I donate a full winter sponsorship for a family?",
+    "answer_ar": "نعم، يمكنك اختيار قيمة السهم أو التبرع بكفالة شتوية كاملة لأسرة من خلال زر التبرع في الصفحة.",
+    "answer_en": "Yes. You can choose a share value or donate a full winter sponsorship for a family through the donation button on this page.",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-markoon",
+    "question_ar": "ما هي حملة مركون؟",
+    "question_en": "What is the Markoon campaign?",
+    "answer_ar": "هي أول حملة مصرية تجمع الأشياء غير المستخدمة في بيوتكم (أثاث، أجهزة، ملابس، أدوية، كتب) لتوزيعها على أسر مستحقة بعد فحصها وتأهيلها وصيانتها.",
+    "answer_en": "The first Egyptian campaign that collects items you no longer use at home (furniture, appliances, clothes, medicine, books) and distributes them to families in need after inspection and preparation.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-markoon",
+    "question_ar": "ما الذي يمكنني التبرع به في حملة مركون؟",
+    "question_en": "What can I donate in Markoon?",
+    "answer_ar": "الأثاث المنزلي، الأجهزة الكهربائية، الملابس المستعملة بحالة جيدة، الأدوية الفائضة الصالحة للاستخدام، والكتب المدرسية والثقافية والتعليمية.",
+    "answer_en": "Household furniture, electrical appliances, used clothes in good condition, surplus usable medicine, and school, cultural and educational books.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-markoon",
+    "question_ar": "هل يصلني مندوب لاستلام التبرعات من المنزل؟",
+    "question_en": "Will a representative come to collect donations from my home?",
+    "answer_ar": "نعم، بمجرد تواصلك على 01097000137 يتوجه مندوب المؤسسة بمركبات المؤسسة الرسمية لاستلام التبرعات وتوثيقها بكرامة واحترافية.",
+    "answer_en": "Yes. As soon as you call 01097000137, a foundation representative comes in the foundation's vehicles to collect and document the donations.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-markoon",
+    "question_ar": "ماذا يحدث للأدوية التي أتبرع بها؟",
+    "question_en": "What happens to the medicine I donate?",
+    "answer_ar": "يتم فحصها وتصنيفها تحت إشراف طبي دقيق من صيادلة متخصصين، ثم توزيعها مجانًا على المرضى غير القادرين على توفير تكلفة العلاج.",
+    "answer_en": "It is checked and classified under careful medical supervision, then distributed free to patients who cannot afford treatment.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-markoon",
+    "question_ar": "كيف تضمنون وصول التبرع العيني للمكان المناسب؟",
+    "question_en": "How do you make sure in-kind donations reach the right place?",
+    "answer_ar": "نعتمد على نظام رقمي وقواعد بيانات دقيقة تربط كل قطعة بالاحتياج الفعلي للأسرة، وتمر التبرعات بمراحل فحص وتأهيل وصيانة قبل التسليم.",
+    "answer_en": "We use a digital system and accurate databases that match each item to the family's actual need, and donations go through inspection, preparation and maintenance before delivery.",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-ramadan",
+    "question_ar": "ما هو موسم الخير في رمضان؟",
+    "question_en": "What is the Season of Goodness in Ramadan?",
+    "answer_ar": "هو موسم مؤسسة اليسر الخيرية في رمضان لتأمين الغذاء وإدخال الفرحة على الأسر المتعففة والأيتام، عبر كرتونة الخير 25 كجم، مطبخ اليسر للوجبات، الذبائح، تيسير الزواج، كسوة وكعك العيد، ومسابقات القرآن.",
+    "answer_en": "It is Al-Yusr Foundation's Ramadan season for securing food and bringing joy to humble families and orphans, through the Goodness Box, Al-Yusr Kitchen, sacrifices, marriage support, Eid clothes and cookies, and Quran competitions.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-ramadan",
+    "question_ar": "ماذا تحتوي كرتونة الخير في رمضان؟",
+    "question_en": "What does the Ramadan Goodness Box contain?",
+    "answer_ar": "تزن 25 كيلو وتشمل بقوليات ومعلبات وأساسيات البيت من منتجات بلدي طازجة 100%، ويُرفق بها لحوم بلدي طازجة ودواجن لتكفي الأسرة شهراً كاملاً.",
+    "answer_en": "It weighs 25 kg and includes legumes, canned goods and household basics from 100% local products, plus fresh local meat and poultry sustaining the family for the whole month.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-ramadan",
+    "question_ar": "من يستفيد من وجبات مطبخ اليسر الرمضانية؟",
+    "question_en": "Who benefits from Al-Yusr Kitchen meals?",
+    "answer_ar": "عابرو السبيل، المسافرون، ومرافقو المرضى في المستشفيات الحكومية، بالإضافة إلى الأسر المستحقة والمتعففة في منازلها.",
+    "answer_en": "Passers-by, travellers and patients' companions in hospitals, as well as families in need and humble families in their homes.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-ramadan",
+    "question_ar": "هل يمكنني إخراج زكاة المال وزكاة الفطر عن طريق المؤسسة؟",
+    "question_en": "Can I pay Zakat al-Mal and Zakat al-Fitr through the foundation?",
+    "answer_ar": "نعم، نوصل زكاة مالك وزكاة فطرك إلى مستحقيها الشرعيين في مصارفها المحددة بمنتهى الدقة والشفافية.",
+    "answer_en": "Yes. We deliver your Zakat al-Mal and Zakat al-Fitr to its rightful recipients with accuracy and transparency.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-ramadan",
+    "question_ar": "متى تُوزع زكاة الفطر؟",
+    "question_en": "When is Zakat al-Fitr distributed?",
+    "answer_ar": "تُجمع وتُوزع في مواعيدها الشرعية خلال العشر الأواخر من رمضان، وقبل صلاة العيد لتدخل البهجة على البيوت المستحقة.",
+    "answer_en": "It is collected and distributed at its prescribed times during the last ten days of Ramadan, before the Eid prayer.",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-ramadan",
+    "question_ar": "ما هي حملة «الفرحة فرحتين» لتيسير الزواج في رمضان؟",
+    "question_en": "What is the 'Double the Joy' campaign?",
+    "answer_ar": "حملة لتيسير الزواج بتجهيز العرائس من البنات اليتيمات وغير القادرات، لتجتمع فرحة الزواج بفرحة العيد وتوفير الأجهزة الأساسية لبدء حياة مستقرة.",
+    "answer_en": "A marriage-support campaign that prepares brides among orphaned and underprivileged girls, so the joy of the wedding meets the joy of Eid.",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-athar",
+    "question_ar": "ما هي حملة أثر؟",
+    "question_en": "What is the Athar campaign?",
+    "answer_ar": "حملة تعليمية من مؤسسة اليسر الخيرية تدعم الطلاب غير القادرين والأيتام بالحقيبة والأدوات والزي المدرسي ومصاريف الدراسة، إلى جانب مبادرة استدامة ودور تحفيظ القرآن والحضانات.",
+    "answer_en": "An educational campaign by Al-Yusr Foundation that supports students in need and orphans with bags, supplies, uniforms and school fees, alongside the Istidama initiative, Quran memorisation centres and nurseries.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-athar",
+    "question_ar": "متى تنطلق حملة أثر؟",
+    "question_en": "When does Athar campaign launch?",
+    "answer_ar": "تنطلق سنويًا مع بداية الموسم الدراسي لتجهيز الطلاب قبل اليوم الأول للدراسة وضمان حضورهم بثقة وكرامة.",
+    "answer_en": "It launches every year at the start of the school season to equip students before day one.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-athar",
+    "question_ar": "ماذا تشمل الحقيبة المدرسية في حملة أثر؟",
+    "question_en": "What does the school bag include?",
+    "answer_ar": "شنطة مدرسية متينة ومجهزة بالكامل بأفضل أدوات الكتابة والرسم والكشاكيل لتلبي احتياجات الطالب طوال العام الدراسي.",
+    "answer_en": "A sturdy, fully equipped school bag with the best writing and drawing tools to meet the student's needs throughout the year.",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-athar",
+    "question_ar": "ما هي مبادرة استدامة لتجميع الكتب المدرسية؟",
+    "question_en": "What is the Istidama initiative?",
+    "answer_ar": "مبادرة لجمع الكتب الدراسية المستعملة وإعادة تدويرها لتصل لطلاب غير قادرين على شرائها، مع رسالة تشجيعية بخط يد الطالب المتبرع في أول صفحة لزرع التكافل والأخوة.",
+    "answer_en": "An initiative to collect used school books and recycle them so they reach students who cannot afford them, with a handwritten encouraging note from the donor student on the first page.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-athar",
+    "question_ar": "هل يمكنني دفع مصروفات طالب غير قادر بالكامل؟",
+    "question_en": "Can I pay a student's school fees?",
+    "answer_ar": "نعم، تكفل الحملة المصاريف المدرسية للطلاب العاجزين عن سدادها لضمان استمرارهم في التعليم ومنع تسربهم من المدارس.",
+    "answer_en": "Yes. The campaign sponsors school fees for students unable to pay, so they stay in school and do not drop out.",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-athar",
+    "question_ar": "ما هي الحضانات النموذجية التابعة للمؤسسة؟",
+    "question_en": "What nurseries does the foundation operate?",
+    "answer_ar": "حضانة أبي بكر الصديق، وحضانة الفاروق عمر، وحضانة أثر (الجاري تجهيزها لتكون منارة تعليمية جديدة).",
+    "answer_en": "Abu Bakr Al-Siddiq Nursery, Al-Farouq Omar Nursery, and Athar Nursery (under construction and equipping).",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-arboun-kheir",
+    "question_ar": "إيه هي مبادرة عربون خير للفريلانسرز؟",
+    "question_en": "What is the Arboun Kheir initiative for freelancers?",
+    "answer_ar": "مبادرة «عربون خير» هي فكرة بتشجع الشباب المشتغلين في العمل الحر (الفريلانس) على استقطاع نسبة مرنة من أرباح كل مشروع يتم تسليمه، وتوجيهها كصدقة لدعم الأسر المحتاجة، بهدف جلب البركة وعلاج قلق وضغط الشغل.",
+    "answer_en": "The 'Arboun Kheir' initiative encourages young people working in freelancing to set aside a flexible percentage of the earnings of every delivered project and direct it as charity to support families in need, aiming to bring blessing and ease work anxiety and pressure.",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-arboun-kheir",
+    "question_ar": "هل في حد أدنى للتبرع من أرباح المشاريع في عربون خير؟",
+    "question_en": "Is there a minimum donation from project earnings?",
+    "answer_ar": "لا يوجد حد أدنى. يمكنك التبرع بأي مبلغ أو نسبة تراها مناسبة من أرباح مشروعك (مثل 1% أو 5%). الهدف هو الاستمرارية وجعل الصدقة عادة تطمئن قلبك وترتبط بنجاحك.",
+    "answer_en": "There is no minimum. You can donate any amount or percentage you see fit from your project's earnings (such as 1% or 5%). The aim is consistency and making charity a habit that reassures your heart and is tied to your success.",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-arboun-kheir",
+    "question_ar": "كيف يؤثر التبرع على عملي واستقراري كفريلانسر؟",
+    "question_en": "How does donating affect my work as a freelancer?",
+    "answer_ar": "إخراج الصدقات يُعد «زكاة للمهنة»، وهو سبب مباشر في تخفيف ضغوط العمل، تبديد الخوف من ركود السوق، وتيسير التعامل مع العملاء. قال ﷺ: «ما نقص مال من صدقة».",
+    "answer_en": "Giving charity is considered 'zakat for the profession,' and is a direct reason for easing work pressure, dispelling fear of market slumps, and making dealing with clients easier. 'Wealth never decreases because of charity.'",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-arboun-kheir",
+    "question_ar": "أين تذهب تبرعات مبادرة عربون خير؟",
+    "question_en": "Where do Arboun Kheir donations go?",
+    "answer_ar": "يتم توجيه التبرعات لتنفيذ مشاريع حقيقية تحت مظلة مؤسسة اليسر الخيرية (ترخيص 2665 لسنة 2019)، وتشمل تيسير زواج الفتيات بالأجهزة المعمرة، كفالة الأيتام، وصلات المياه وتسقيف المنازل، ودعم تعليم الأطفال.",
+    "answer_en": "Donations are directed to real projects under the umbrella of Al-Yusr Charity Foundation (licence No. 2665 of 2019), including marriage support for girls, orphan sponsorship, ongoing charity such as water connections and house roofing, and children's education support.",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-arboun-kheir",
+    "question_ar": "هل يمكنني التبرع بعملات أجنبية إذا كنت أعمل مع عملاء من الخارج؟",
+    "question_en": "Can I donate in foreign currencies if I work with clients abroad?",
+    "answer_ar": "نعم بالتأكيد. إذا كنت تتلقى أرباحك بالدولار، الريال السعودي، أو أي عملة أخرى، يمكنك تحويل تبرعك بكل سهولة عبر بوابات الدفع الإلكترونية الآمنة المتاحة على موقعنا.",
+    "answer_en": "Yes, absolutely. If you receive your earnings in dollars, Saudi riyals or any other currency, you can easily transfer your donation through the secure online payment gateways available on our website.",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "campaign-arboun-kheir",
+    "question_ar": "ما معنى اسم «عربون خير»؟",
+    "question_en": "What does 'Arboun Kheir' mean?",
+    "answer_ar": "«العربون» هو دفعة مقدمة؛ والمقصود أن تُخرج جزءاً من أرباح مشروعك صدقةً اليوم، كأنه دفعة مقدمة تتفاءل بها برزق الغد وبركته وتوسعة أعمالك.",
+    "answer_en": "'Arboun' means a down payment; the idea is to give a part of your project's earnings as charity today, like an advance payment, hopeful for tomorrow's provision and blessing.",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/faqsApi.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "إزاي أتأكد إن صك الأضحية بيوصل فعلاً للأسر في الدقهلية؟",
+    "question_en": "How do I confirm my Qurbani share reaches Dakahlia families?",
+    "answer_ar": "بنوثّق كل أضحية بصور وفيديو من المعاينة قبل الذبح، ساعة الذبح الشرعي، ولحظة التسليم في بيت الأسرة المستفيدة في المنصورة أو القرية بتاعتها.",
+    "answer_en": "We document every animal: pre-slaughter inspection photos, slaughter video, and delivery photos at the recipient family's door in Mansoura or its village.",
+    "sort_order": 100,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل الأضحية بتتعاين قبل الذبح؟",
+    "question_en": "Is the animal inspected before slaughter?",
+    "answer_ar": "أيوة. فريق طبي بيتأكد من سلامة كل عجل أو خروف قبل الذبح، ولو الحيوان مش مطابق بنرفضه ونعوّضه.",
+    "answer_en": "Yes. A veterinary team checks every cow and sheep. Non-compliant animals are rejected and replaced.",
+    "sort_order": 101,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "كم سعر صك الأضحية في 2026؟",
+    "question_en": "What does a Qurbani share cost in 2026?",
+    "answer_ar": "الخروف من 7000 جنيه، السبع في العجل من 4500 جنيه، والعجل الكامل من 32,000 جنيه. الأسعار قابلة للتحديث حسب السوق.",
+    "answer_en": "Sheep from 7,000 EGP, cow share (1/7) from 4,500 EGP, whole cow from 32,000 EGP. Prices may adjust with market rates.",
+    "sort_order": 102,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل بتغطوا كل مدن الدقهلية؟",
+    "question_en": "Do you cover all Dakahlia cities?",
+    "answer_ar": "نغطي المنصورة، ميت غمر، بلقاس، دكرنس، شربين، أجا، السنبلاوين، المطرية، طلخا، نبروه، الجمالية، ميت سلسيل، بني عبيد، والمنزلة، بالإضافة لقرى ومراكز الدقهلية كافة.",
+    "answer_en": "Yes — Mansoura, Mit Ghamr, Belqas, Dikirnis, Sherbin, Aga, Sinbillawayn, Matareya, Talkha, Nabaroh, Gamalia, Mit Salsil, Bani Ubaid, and Manzala plus all surrounding villages.",
+    "sort_order": 103,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "إمتى بتتوزع اللحمة؟",
+    "question_en": "When is the meat distributed?",
+    "answer_ar": "نفس يوم العيد بالظبط — الذبح من فجر العيد، والتسليم لباب البيت قبل المغرب.",
+    "answer_en": "On Eid day itself — slaughter at dawn, doorstep delivery before sunset.",
+    "sort_order": 104,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل بتقدروا تقسموا الأضحية؟ (1/3 لي + 1/3 أقارب + 1/3 الفقراء)؟",
+    "question_en": "Can you split the share (1/3 me, 1/3 family, 1/3 poor)?",
+    "answer_ar": "أيوة. ممكن تختار توزيع تقليدي 100% للفقراء أو نخصص ثلث ليك ولأقاربك بنسلمه في عنوان تحدده داخل الدقهلية.",
+    "answer_en": "Yes. Choose 100% to the poor, or allocate one-third to you/your family delivered to any Dakahlia address.",
+    "sort_order": 105,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل بتستلم الإيصال إلكتروني؟",
+    "question_en": "Will I get an electronic receipt?",
+    "answer_ar": "أيوة. بعد الحجز مباشرة هتستلم إيصال PDF مختوم برقم تتبع، وبعد العيد بتستلم رابط لصور وفيديو أضحيتك.",
+    "answer_en": "Yes. A stamped PDF with a tracking number is sent immediately, and after Eid you receive a link to your animal's photos & video.",
+    "sort_order": 106,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "إمتى يفتح حجز صك الأضحية 2026؟",
+    "question_en": "When does Qurbani 2026 booking open?",
+    "answer_ar": "باب الحجز بيفتح رسمياً يوم 15 مارس 2026 وبيقفل لما تخلص الكميات أو قبل العيد بأسبوعين أيهما أقرب — ننصح بالحجز المبكر.",
+    "answer_en": "Booking opens officially on March 15, 2026 and closes when stock runs out or two weeks before Eid — whichever is sooner. Book early.",
+    "sort_order": 107,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل ينفع أدفع أونلاين بفيزا أو فودافون كاش أو إنستاباي؟",
+    "question_en": "Can I pay online by Visa, Vodafone Cash or InstaPay?",
+    "answer_ar": "أيوة. بنقبل فيزا/ماستركارد عبر بوابة دفع آمنة، فودافون كاش، إنستاباي، وتحويل بنكي على حساب CIB رقم 100043605733.",
+    "answer_en": "Yes. We accept Visa/Mastercard via a secure gateway, Vodafone Cash, InstaPay, and bank transfer to CIB account 100043605733.",
+    "sort_order": 108,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل ينفع أحجز صك أضحية باسم متوفي؟",
+    "question_en": "Can I dedicate my Qurbani to a deceased person?",
+    "answer_ar": "أيوة. بنسجل الأضحية باسم اللي تختاره (المتوفي أو شخص حي)، وبيتقال اسمه عند النية ساعة الذبح، وبيظهر في الإيصال وفي صور التوثيق.",
+    "answer_en": "Yes. We register the share in any name you choose (deceased or living), the name is mentioned at slaughter, and it appears on the receipt and in your documentation.",
+    "sort_order": 109,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل صك الأضحية يجزي عن العقيقة؟",
+    "question_en": "Does a Qurbani share cover an Aqiqah?",
+    "answer_ar": "العقيقة لها أحكام فقهية مختلفة عن الأضحية. عندنا برنامج عقيقة منفصل بنفس مستوى التوثيق — تواصل معانا واتساب 01097000137 لتفاصيل العقيقة.",
+    "answer_en": "Aqiqah has different rulings. We offer a dedicated Aqiqah program with the same documentation — WhatsApp 01097000137 for details.",
+    "sort_order": 110,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل بتتبرعوا بالأضحية كاملة في قرية واحدة ولا بتوزعوها على أكتر من بيت؟",
+    "question_en": "Is the whole share given to one family or many?",
+    "answer_ar": "كل صك (سبع عجل أو خروف كامل) بنوزّعه على 5–7 أسر في نفس قرية الدقهلية المستهدفة، عشان أكبر عدد بيوت تفرح يوم العيد.",
+    "answer_en": "Each share (1/7 cow or whole sheep) is split across 5–7 families in the same Dakahlia village to bring joy to as many homes as possible.",
+    "sort_order": 111,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل الذبح بيتم على الطريقة الشرعية؟",
+    "question_en": "Is the slaughter Sharia-compliant?",
+    "answer_ar": "أيوة، الذبح بيتم على يد جزّار شرعي مع التسمية والتكبير، وبنوثّق العملية بفيديو مرفق برقم تتبع الصك.",
+    "answer_en": "Yes — performed by a licensed butcher with Tasmiyah and Takbir, and documented on video tied to your share's tracking number.",
+    "sort_order": 112,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل ممكن أحضر الذبح بنفسي؟",
+    "question_en": "Can I attend the slaughter in person?",
+    "answer_ar": "أيوة. لو من سكان الدقهلية ينفع تحضر الذبح في المسلخ المعتمد بعد التنسيق المسبق، وبنوفر لك مكان مظلل وكوباية شاي 😊.",
+    "answer_en": "Yes. Dakahlia residents can attend at our certified abattoir after coordination — we'll save you a shaded spot and a cup of tea 😊.",
+    "sort_order": 113,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل بتصدروا تقرير سنوي بمصارف الأضحية؟",
+    "question_en": "Do you publish an annual transparency report?",
+    "answer_ar": "أيوة. بنشر تقرير شفاف بعد كل موسم بعدد الأضاحي والأسر المستفيدة وقرى الدقهلية اللي وصلتها — متاح في صفحة التقارير على الموقع.",
+    "answer_en": "Yes. After every season we publish a public report with animal counts, beneficiary families and the Dakahlia villages reached — available on our Reports page.",
+    "sort_order": 114,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "إيه الفرق بين خروف وسبع عجل وعجل كامل؟",
+    "question_en": "Difference between sheep, cow share and whole cow?",
+    "answer_ar": "السبع في العجل بيجزي عن شخص واحد بحسب جمهور الفقهاء، الخروف يجزي عن شخص واحد، والعجل الكامل يجزي عن 7 أشخاص. اختار حسب نيتك وميزانيتك.",
+    "answer_en": "1/7 cow share suffices for one person (per majority of scholars), a whole sheep suffices for one person, and a whole cow suffices for 7 people. Pick by intention and budget.",
+    "sort_order": 115,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "هل ممكن أهدي صك أضحية لحد كهدية؟",
+    "question_en": "Can I gift a Qurbani share to someone?",
+    "answer_ar": "أيوة. بنبعت كارت إلكتروني فاخر باسم الشخص المُهدى إليه مع رقم تتبع الصك، ولو حابب نبعت كارت مطبوع بنوصله بالبريد.",
+    "answer_en": "Yes. We send a beautiful e-card in the recipient's name with the share's tracking number, and we can mail a printed card on request.",
+    "sort_order": 116,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  },
+  {
+    "faq_category_slug": "qurbani",
+    "question_ar": "ممكن أحجز ربع أو نصف عجل بدل صك كامل؟",
+    "question_en": "Can I book a quarter or half cow instead of a full share?",
+    "answer_ar": "أيوة، تقدر تحجز ربع عجل (4000 ج)، نصف عجل (8000 ج)، ثلاثة أرباع (12000 ج)، أو عجل كامل (16000 ج). كل خيار سعره واضح من غير رسوم خفية، وبيتربط مباشرة بفورم التبرع تحت بند «صك الأضحية».",
+    "answer_en": "Yes. You can book 1/4 cow (4,000 EGP), 1/2 cow (8,000 EGP), 3/4 cow (12,000 EGP), or a full cow (16,000 EGP). Every option has a clear price with no hidden fees and is linked directly to the donation form under 'Qurbani share'.",
+    "sort_order": 117,
+    "is_active": true,
+    "extra": {
+      "source": "src/data/qurbaniFaq.ts"
+    }
+  }
+]

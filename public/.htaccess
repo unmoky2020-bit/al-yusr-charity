@@ -44,8 +44,10 @@
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # D. React SPA Fallback: route everything else to index.html
-    RewriteRule ^ index.html [L]
+    # D. React SPA fallback through seo.php: same index.html, plus the page's own title, description,
+    #    image and summary for social previews and crawlers that do not run JavaScript.
+    #    (seo.php serves the untouched index.html if anything goes wrong.)
+    RewriteRule ^ seo.php [L]
 </IfModule>
 
 # 3. CACHING & PERFORMANCE (LiteSpeed & Apache Expires)

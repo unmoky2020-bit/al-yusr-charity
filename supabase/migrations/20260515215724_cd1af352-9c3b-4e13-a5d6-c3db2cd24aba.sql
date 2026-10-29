@@ -1,1 +1,0 @@
-REVOKE ALL ON FUNCTION public.create_public_donation(uuid, uuid, numeric, text, text, text, text, text, text, text, text) FROM anon, authenticated, PUBLIC;

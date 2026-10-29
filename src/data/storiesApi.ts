@@ -1,15 +1,13 @@
 /**
  * storiesApi.ts
- * Unified Stories API — supports three providers in priority order:
- *   1. "laravel":   reads from Laravel API /stories (primary source)
- *   2. "supabase":  reads/writes Supabase `stories` table (fallback)
- *   3. "static":    static fallback data when both are unavailable
- *
- * If the `stories` table does not exist or returns 404, gracefully falls back
- * to static data. localStorage is used for local overrides & deletes so the
- * admin panel works 100% locally even without Supabase.
+ * Stories — Laravel `/stories` is the only source of truth.
+ *   - Public pages: read published stories from Laravel; fall back to STATIC_STORIES when the API
+ *     has none (unchanged public look).
+ *   - Admin: list / get / create / update / delete through Laravel only. Failures are returned as
+ *     `{ error }` (or thrown for reads) — there is NO localStorage fallback any more.
  */
-import { storiesApi as laravelStoriesApi, type LaravelStory } from "@/data/laravelApi";
+import { storiesApi as laravelStoriesApi, invalidateApiCache, type LaravelStory } from "@/data/laravelApi";
+import { apiErrorMessage, fetchItem, fetchList, sendJson } from "@/data/api/adminApiHelpers";
 import family from "@/assets/family-hope.jpg";
 import hands from "@/assets/hands-sprout.jpg";
 import edu from "@/assets/program-education.jpg";
@@ -196,37 +194,22 @@ export const STATIC_STORIES: StoryCard[] = [
   },
 ];
 
-// ─── localStorage keys ───────────────────────────────────────────────────────
-const OVERRIDES_KEY = "alyusr_stories_overrides";
-const DELETED_KEY   = "alyusr_stories_deleted";
-function getOverrides(): Record<string, Partial<StoryCard>> {
-  try { return JSON.parse(localStorage.getItem(OVERRIDES_KEY) || "{}"); } catch { return {}; }
-}
-function getDeleted(): Set<string> {
-  try { return new Set(JSON.parse(localStorage.getItem(DELETED_KEY) || "[]")); } catch { return new Set(); }
-}
-function saveOverrides(o: Record<string, Partial<StoryCard>>) {
-  try { localStorage.setItem(OVERRIDES_KEY, JSON.stringify(o)); } catch {}
-}
-function saveDeleted(d: Set<string>) {
-  try { localStorage.setItem(DELETED_KEY, JSON.stringify([...d])); } catch {}
-}
 
-// ─── Apply overrides + deleted onto static list ──────────────────────────────
-function applyLocal(base: StoryCard[]): StoryCard[] {
-  const deleted  = getDeleted();
-  const overrides = getOverrides();
-  const extras = Object.values(overrides).filter((o): o is StoryCard => !!o.id && !base.find((b) => b.id === o.id));
-  return [...base, ...extras]
-    .filter((s) => !deleted.has(s.slug) && !deleted.has(s.id))
-    .map((s) => ({ ...s, ...(overrides[s.slug] || overrides[s.id] || {}) }))
-    .sort((a, b) => a.sort_order - b.sort_order);
-}
+// ─── Laravel mapping ─────────────────────────────────────────────────────────
 
-// ─── Public API ──────────────────────────────────────────────────────────────
+type LaravelStoryExtended = LaravelStory & {
+  quote_ar?: string | null;
+  quote_en?: string | null;
+  program_node_id?: number | string | null;
+  pillar_slug?: string | null;
+  case_id?: number | string | null;
+  pending_review?: boolean | number | null;
+  seo?: Record<string, unknown> | null;
+};
 
 /** Map a LaravelStory to a StoryCard */
-function mapLaravelStory(s: LaravelStory): StoryCard {
+function mapLaravelStory(raw: LaravelStory): StoryCard {
+  const s = raw as LaravelStoryExtended;
   return {
     id: String(s.id),
     slug: s.slug,
@@ -234,21 +217,63 @@ function mapLaravelStory(s: LaravelStory): StoryCard {
     title_en: s.title_en || s.title_ar,
     role_ar: s.category_ar || "",
     role_en: s.category_en || s.category_ar || "",
-    quote_ar: s.description_ar || "",
-    quote_en: s.description_en || s.description_ar || "",
+    quote_ar: s.quote_ar || s.description_ar || "",
+    quote_en: s.quote_en || s.description_en || s.description_ar || "",
     body_ar: s.description_ar,
     body_en: s.description_en || undefined,
     beneficiary_name: s.beneficiary_name || null,
     location_ar: s.location_ar || null,
     location_en: s.location_en || null,
     image_url: s.cover_image_url || s.cover_image || null,
+    program_node_id: s.program_node_id != null ? String(s.program_node_id) : null,
+    pillar_slug: s.pillar_slug || null,
+    case_id: s.case_id != null ? String(s.case_id) : null,
     is_published: s.status === "published",
     is_featured: Boolean(s.is_featured),
+    pending_review: Boolean(s.pending_review),
     sort_order: Number(s.sort_order ?? 99),
+    seo: s.seo || {},
     created_at: s.created_at,
     updated_at: s.updated_at,
   };
 }
+
+/**
+ * StoryCard → Laravel `/stories` body. Columns that exist today (Postman): slug, title_ar/en,
+ * category_ar/en, beneficiary_name, location_ar/en, description_ar/en, cover_image, sort_order,
+ * status, is_featured. NEW columns (see backend-handoff/02-replace-supabase-admin.md):
+ * quote_ar/en, cover_image_url, program_node_id, pillar_slug, case_id, pending_review, seo.
+ */
+function toLaravelPayload(story: Partial<StoryCard>): Record<string, unknown> {
+  const p: Record<string, unknown> = {};
+  if (story.slug !== undefined) p.slug = story.slug;
+  if (story.title_ar !== undefined) p.title_ar = story.title_ar;
+  if (story.title_en !== undefined) p.title_en = story.title_en || story.title_ar || "";
+  if (story.role_ar !== undefined) p.category_ar = story.role_ar;
+  if (story.role_en !== undefined) p.category_en = story.role_en;
+  if (story.quote_ar !== undefined) p.quote_ar = story.quote_ar;
+  if (story.quote_en !== undefined) p.quote_en = story.quote_en;
+  if (story.body_ar !== undefined || story.quote_ar !== undefined) p.description_ar = story.body_ar || story.quote_ar || "";
+  if (story.body_en !== undefined || story.quote_en !== undefined) p.description_en = story.body_en || story.quote_en || "";
+  if (story.beneficiary_name !== undefined) p.beneficiary_name = story.beneficiary_name || "";
+  if (story.location_ar !== undefined) p.location_ar = story.location_ar;
+  if (story.location_en !== undefined) p.location_en = story.location_en;
+  // Plain URL string (uploaded via the gallery/media picker). `cover_image` is reserved for multipart files.
+  if (story.image_url !== undefined) p.cover_image_url = story.image_url && !story.image_url.startsWith("blob:") ? story.image_url : null;
+  if (story.program_node_id !== undefined) p.program_node_id = story.program_node_id || null;
+  if (story.pillar_slug !== undefined) p.pillar_slug = story.pillar_slug || null;
+  if (story.case_id !== undefined) p.case_id = story.case_id || null;
+  if (story.is_published !== undefined) p.status = story.is_published ? "published" : "draft";
+  if (story.is_featured !== undefined) p.is_featured = Boolean(story.is_featured);
+  if (story.pending_review !== undefined) p.pending_review = Boolean(story.pending_review);
+  if (story.sort_order !== undefined) p.sort_order = Number(story.sort_order ?? 0);
+  if (story.seo !== undefined) p.seo = story.seo || {};
+  return p;
+}
+
+const isStaticId = (id?: string | null) => !id || id.startsWith("static-");
+
+// ─── Public API (public pages keep the static fallback) ──────────────────────
 
 /** List all published stories (featured first) */
 export async function listPublishedStories(): Promise<StoryCard[]> {
@@ -263,9 +288,8 @@ export async function listPublishedStories(): Promise<StoryCard[]> {
     }
   } catch {}
 
-
   // 2. Static fallback
-  return applyLocal(STATIC_STORIES).filter((s) => s.is_published);
+  return [...STATIC_STORIES].filter((s) => s.is_published).sort((a, b) => a.sort_order - b.sort_order);
 }
 
 
@@ -287,113 +311,70 @@ export async function getStoryBySlug(slug: string): Promise<StoryCard | null> {
     }
   } catch {}
 
-
   // 2. Static fallback
-  return applyLocal(STATIC_STORIES).find((s) => s.slug === slug && s.is_published) || null;
+  return STATIC_STORIES.find((s) => s.slug === slug && s.is_published) || null;
 }
 
-/** List ALL stories for admin (including drafts) */
+// ─── Admin API (Laravel only — failures are reported, never faked) ────────────
+
+/** List ALL stories for admin (including drafts). Throws on failure; [] when the DB has none. */
 export async function listAllStories(): Promise<StoryCard[]> {
+  const rows = await fetchList<LaravelStory>("/stories", { per_page: 200, status: "all" });
+  return rows.map(mapLaravelStory).sort((a, b) => a.sort_order - b.sort_order);
+}
+
+/** GET /stories/{id} for the admin editor. Throws on failure. */
+export async function getStoryById(id: string): Promise<StoryCard> {
+  return mapLaravelStory(await fetchItem<LaravelStory>(`/stories/${id}`));
+}
+
+/** Upsert (create or update) a story. Returns the saved story, or `error` with the server message. */
+export async function upsertStory(
+  story: Partial<StoryCard> & { slug: string },
+): Promise<{ error?: string; story?: StoryCard }> {
   try {
-    const lStories = await laravelStoriesApi.listAll();
-    if (Array.isArray(lStories) && lStories.length > 0) {
-      return lStories.map(mapLaravelStory);
-    }
+    const payload = toLaravelPayload({
+      title_en: story.title_en || story.title_ar,
+      beneficiary_name: story.beneficiary_name || "",
+      role_ar: story.role_ar || "عام",
+      role_en: story.role_en || "General",
+      ...story,
+    });
+    const saved = !isStaticId(story.id)
+      ? await sendJson<LaravelStory>(`/stories/${story.id}`, "PUT", payload)
+      : await sendJson<LaravelStory>("/stories", "POST", payload);
+    invalidateApiCache("/stories");
+    return { story: saved && (saved as LaravelStory).id !== undefined ? mapLaravelStory(saved) : undefined };
   } catch (err) {
-    console.warn("Could not fetch stories from Laravel API:", err);
+    return { error: apiErrorMessage(err, "فشل حفظ القصة") };
   }
-
-  return applyLocal(STATIC_STORIES);
 }
 
-/** Upsert (create or update) a story */
-export async function upsertStory(story: Partial<StoryCard> & { slug: string }): Promise<{ error?: string }> {
+/** Delete a story (DELETE /stories/{id}). */
+export async function deleteStory(id: string, _slug?: string): Promise<{ error?: string }> {
+  if (isStaticId(id)) return { error: "هذه قصة افتراضية غير محفوظة في قاعدة البيانات" };
   try {
-    const payload = {
-      slug: story.slug,
-      title_ar: story.title_ar || "قصة نجاح",
-      title_en: story.title_en || story.title_ar || "Success Story",
-      description_ar: story.body_ar || story.quote_ar || "تفاصيل القصة",
-      description_en: story.body_en || story.quote_en || "Story details",
-      beneficiary_name: story.beneficiary_name || "مستفيد",
-      category_ar: story.role_ar || "عام",
-      category_en: story.role_en || "General",
-      status: story.is_published ? "published" : "draft",
-      is_featured: Boolean(story.is_featured),
-      sort_order: Number(story.sort_order ?? 0),
-    };
-
-    if (story.id && !story.id.startsWith("static-")) {
-      await laravelStoriesApi.update(story.id, payload as any);
-      return {};
-    } else {
-      const created = await laravelStoriesApi.create(payload as any);
-      if (created) return {};
-    }
-  } catch (err: any) {
-    console.warn("Could not upsert story on Laravel API:", err);
-  }
-
-  // local override fallback
-  const overrides = getOverrides();
-  const key = story.id || story.slug;
-  overrides[key] = { ...(overrides[key] || {}), ...story };
-  saveOverrides(overrides);
-  return {};
-}
-
-/** Delete a story */
-export async function deleteStory(id: string, slug: string): Promise<{ error?: string }> {
-  try {
-    if (id && !id.startsWith("static-")) {
-      await laravelStoriesApi.remove(id);
-    }
+    await sendJson(`/stories/${id}`, "DELETE");
+    invalidateApiCache("/stories");
+    return {};
   } catch (err) {
-    console.warn("Could not delete story on Laravel API:", err);
+    return { error: apiErrorMessage(err, "فشل حذف القصة") };
   }
-
-  // mark as deleted locally
-  const deleted = getDeleted();
-  deleted.add(id);
-  deleted.add(slug);
-  saveDeleted(deleted);
-  const overrides = getOverrides();
-  delete overrides[id];
-  delete overrides[slug];
-  saveOverrides(overrides);
-  return {};
 }
 
-/** Toggle a boolean field (is_published, is_featured, pending_review) */
+/** Toggle a boolean field (is_published, is_featured, pending_review) via PUT /stories/{id}. */
 export async function toggleStoryField(
   id: string,
-  slug: string,
+  _slug: string,
   field: "is_published" | "is_featured" | "pending_review",
   value: boolean
 ): Promise<{ error?: string }> {
+  if (isStaticId(id)) return { error: "احفظ القصة في قاعدة البيانات أولًا (زر المزامنة)" };
   try {
-    if (id && !id.startsWith("static-")) {
-      const payload: Record<string, unknown> = {};
-      if (field === "is_published") payload.status = value ? "published" : "draft";
-      if (field === "is_featured") payload.is_featured = value;
-      await laravelStoriesApi.update(id, payload as any);
-    }
+    await sendJson(`/stories/${id}`, "PUT", toLaravelPayload({ [field]: value }));
+    invalidateApiCache("/stories");
+    return {};
   } catch (err) {
-    console.warn("Could not toggle story field on Laravel API:", err);
+    return { error: apiErrorMessage(err, "فشل التحديث") };
   }
-
-  // local override
-  const overrides = getOverrides();
-  const key = id || slug;
-  overrides[key] = { ...(overrides[key] || {}), [field]: value };
-  saveOverrides(overrides);
-  return {};
-}
-
-/** Reset local overrides (used in admin "sync") */
-export function resetLocalStories() {
-  try {
-    localStorage.removeItem(OVERRIDES_KEY);
-    localStorage.removeItem(DELETED_KEY);
-  } catch {}
 }

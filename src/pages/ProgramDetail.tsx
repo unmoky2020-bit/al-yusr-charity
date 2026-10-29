@@ -32,15 +32,19 @@ import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
-import { getProgram, programs } from "@/data/programs";
+import { usePrograms } from "@/data/sources/programs";
 import { track } from "@/lib/track";
 import { BrideTrousseau } from "@/components/sections/BrideTrousseau";
-import { supabase } from "@/integrations/supabase/client";
+import { getDonationNodeBySlug, getDonationNodeById, listDonationNodeChildren } from "@/data/api/publicDonationNodesApi";
 import { RelatedContentLinks } from "@/components/common/RelatedContentLinks";
 import { FieldConvoysGallery } from "@/components/sections/FieldConvoysGallery";
 import { StickyQurbaniCTA } from "@/components/common/StickyQurbaniCTA";
 import { TagsRail } from "@/components/common/TagsRail";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
+import { useProgramFaqs } from "@/data/programFaqs";
+import { DetailPageSkeleton } from "@/components/common/ContentSkeletons";
+import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
+import { programSeo } from "@/data/programSeo";
 
 type SubOption = {
   id: string;
@@ -59,7 +63,9 @@ const ProgramDetail = () => {
   const { lang, t } = useLang();
   const ALIAS_OF: Record<string, string> = { satr: "shelter", food: "box" };
   const aliasRedirect = slug && ALIAS_OF[slug] ? ALIAS_OF[slug] : undefined;
-  const program = slug ? getProgram(slug) : undefined;
+  // Static by default; reads /programs when VITE_CONTENT_SOURCE is "api"/"auto" (same shape, static fallback per slug).
+  const { programs, isLoading: programsLoading } = usePrograms();
+  const program = slug ? programs.find((p) => p.slug === slug) : undefined;
   const [subOptions, setSubOptions] = useState<SubOption[]>([]);
   // Parent sector slug — used so "donate to whole program" routes through
   // the sector view (where the donor can pick any sub-program with any
@@ -72,48 +78,25 @@ const ProgramDetail = () => {
     if (!slug) return;
     let alive = true;
     (async () => {
-      type DonationParent = { id: string; parent_id: string | null };
-      type DonationChild = SubOption;
-      type DonationSector = { slug: string; type: string };
-
-      const result = await supabase
-        .from("donation_nodes")
-        .select("id, parent_id")
-        .eq("slug", slug)
-        .eq("active", true)
-        .maybeSingle();
-      const parent = result.data as DonationParent | null;
+      // Laravel GET /donation-nodes (proposed). Returns null/[] while the content source is
+      // "static" or on API error, so the page keeps its static content (no sub-options).
+      const parent = await getDonationNodeBySlug(slug);
       if (!parent || !alive) return;
-      try {
-        const kidsResult = await supabase
-          .from("donation_nodes")
-          .select("id, slug, title_ar, title_en, description_ar, description_en, amount, image_url, sort_order")
-          .eq("parent_id", parent.id)
-          .eq("active", true)
-          .order("sort_order", { ascending: true });
-        if (alive && kidsResult && Array.isArray(kidsResult.data)) {
-          setSubOptions(kidsResult.data as DonationChild[]);
-        } else if (alive) {
-          setSubOptions([]);
-        }
-      } catch {
-        if (alive) setSubOptions([]);
+      const kids = await listDonationNodeChildren(parent.id);
+      if (alive) {
+        setSubOptions(kids.map((k) => ({
+          id: k.id, slug: k.slug, title_ar: k.title_ar, title_en: k.title_en,
+          description_ar: k.description_ar, description_en: k.description_en,
+          amount: k.amount, image_url: k.image_url, sort_order: k.sort_order,
+        })));
       }
       // Resolve the sector slug above this program (if any) so the
       // "donate whole program" CTA can land the donor in sector context.
-      const parentId = parent.parent_id;
-      if (parentId) {
-        try {
-          const sectorResult = await supabase
-            .from("donation_nodes")
-            .select("slug, type")
-            .eq("id", parentId)
-            .maybeSingle();
-          const sector = sectorResult?.data as DonationSector | null;
-          if (alive && sector && sector.type === "sector") {
-            setParentSectorSlug(sector.slug);
-          }
-        } catch {}
+      if (parent.parent_id) {
+        const sector = await getDonationNodeById(parent.parent_id);
+        if (alive && sector && sector.type === "sector") {
+          setParentSectorSlug(sector.slug);
+        }
       }
     })();
     return () => { alive = false; };
@@ -121,6 +104,8 @@ const ProgramDetail = () => {
 
   const reduce = useReducedMotion();
   const isRTL = lang === "ar";
+  // Program FAQ: own questions -> linked FAQ category -> "programs" category (see src/data/programFaqs.ts).
+  const linkedFaqs = useProgramFaqs(program, isRTL, []);
 
   // Always run hooks before early return
   useEffect(() => {
@@ -140,9 +125,17 @@ const ProgramDetail = () => {
   const dirX = isRTL ? 1 : -1;
 
   if (aliasRedirect) return <Navigate to={`/programs/${aliasRedirect}`} replace />;
+  if (programsLoading) return <PageLayout><DetailPageSkeleton /></PageLayout>;
   if (!program) return <Navigate to="/404" replace />;
 
   const content = program[lang];
+  const seo = programSeo(program, lang);
+  const hero = {
+    title: program.hero?.[lang].title || content.name,
+    subtitle: program.hero?.[lang].subtitle || content.tagline,
+    badge: program.hero?.[lang].badge || (isRTL ? "برنامج معتمد" : "Verified program"),
+    image: program.hero?.image || program.image,
+  };
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   const baseUrl = "https://elyusr.org";
   const url = `${baseUrl}/programs/${program.slug}`;
@@ -170,7 +163,7 @@ const ProgramDetail = () => {
     });
 
   // Steps & FAQ keyed by program slug; fall back to a generic set.
-  const steps =
+  const defaultSteps =
     isRTL
       ? [
           { icon: HandHeart, t: "اختيار الحالة", d: "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر." },
@@ -184,8 +177,17 @@ const ProgramDetail = () => {
           { icon: Truck, t: "Delivery", d: "Dignified doorstep delivery by our certified volunteer team." },
           { icon: Camera, t: "Documentation", d: "Photo and video reports sent to you right after execution." },
         ];
+  // «أقسام الصفحة» from the dashboard replace the defaults when they have items.
+  const STEP_ICONS = [HandHeart, ShieldCheck, Truck, Camera];
+  const sectionSteps = program.sections?.steps?.[lang];
+  const steps = sectionSteps?.length
+    ? sectionSteps.map((s, i) => ({ icon: STEP_ICONS[i % STEP_ICONS.length], t: s.t, d: s.d }))
+    : defaultSteps;
+  const benefits = program.sections?.benefits?.[lang]?.length ? program.sections.benefits[lang] : content.benefits;
+  const longContent = program.sections?.details?.[lang]?.length ? program.sections.details[lang] : content.longContent;
+  const impactItems = program.sections?.impact?.[lang];
 
-  const faqs =
+  const genericFaqs =
     isRTL
       ? [
           { q: "هل تبرعي يصل فعلاً للمستحقين؟", a: "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل." },
@@ -199,12 +201,13 @@ const ProgramDetail = () => {
           { q: "Can I designate a specific governorate?", a: "Yes, you can designate your donation to Dakahlia or any governorate we operate in." },
           { q: "What payment methods are supported?", a: "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB." },
         ];
+  const faqs = linkedFaqs.length ? linkedFaqs : genericFaqs;
 
   return (
     <PageLayout>
       <SEOHelmet
-        title={`${content.name} — ${isRTL ? "مؤسسة اليسر الخيرية | المنصورة - الدقهلية" : "Al-Yusr Charity | Mansoura - Dakahlia"}`}
-        description={content.desc}
+        title={seo.title}
+        description={seo.description}
         path={`/programs/${program.slug}`}
         image={program.image}
       />
@@ -313,10 +316,10 @@ const ProgramDetail = () => {
               />
             </div>
             <span className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-              <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "برنامج معتمد" : "Verified program"}
+              <Sparkles className="h-3.5 w-3.5" /> {hero.badge}
             </span>
-            <h1 className="mt-3 text-2xl font-black leading-tight md:text-4xl">{content.name}</h1>
-            <p className="mt-4 text-lg text-primary-foreground/85 md:text-xl">{content.tagline}</p>
+            <h1 className="mt-3 text-2xl font-black leading-tight md:text-4xl">{hero.title}</h1>
+            <p className="mt-4 text-lg text-primary-foreground/85 md:text-xl">{hero.subtitle}</p>
             <p className="mt-3 mx-auto md:mx-0 max-w-xl text-primary-foreground/75">{content.desc}</p>
 
             <div className="mt-7 flex flex-wrap justify-center gap-3 sm:justify-start">
@@ -368,8 +371,8 @@ const ProgramDetail = () => {
           <div className="relative mx-auto w-full max-w-md md:max-w-full">
             <div className="absolute -inset-4 rounded-[2.5rem] bg-secondary/25 blur-3xl" />
             <img decoding="async"
-              src={program.image}
-              alt={content.name}
+              src={hero.image}
+              alt={hero.title}
               fetchpriority="high"
               className="relative w-full max-h-[360px] sm:max-h-[400px] md:max-h-[440px] lg:max-h-[460px] rounded-[2rem] object-cover object-top shadow-card md:rounded-[2.5rem]"
               loading="eager"
@@ -420,7 +423,7 @@ const ProgramDetail = () => {
             </h2>
           </div>
           <div className="mx-auto mt-10 grid max-w-4xl gap-4 sm:grid-cols-2">
-            {content.benefits.map((b, i) => (
+            {benefits.map((b, i) => (
               <div
                 key={i}
                 className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:shadow-card"
@@ -589,7 +592,7 @@ const ProgramDetail = () => {
             </h2>
           </div>
           <div className="mt-8 space-y-4 text-base leading-relaxed text-foreground/85">
-            {content.longContent.map((p, i) => (
+            {longContent.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
           </div>
@@ -651,12 +654,14 @@ const ProgramDetail = () => {
             </p>
           </div>
           <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
+            {(impactItems?.length
+              ? impactItems.slice(0, 4).map((it, i) => ({ Icon: [HandHeart, Search, PackageCheck, ClipboardCheck][i], n: String(i + 1).padStart(2, "0"), t: it.t, d: it.d }))
+              : [
               { Icon: HandHeart, n: "01", t: isRTL ? "تبرعك" : "Your donation", d: isRTL ? "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي." : "Pick an amount, pay securely via card, wallet or InstaPay." },
               { Icon: Search, n: "02", t: isRTL ? "بحث ميداني" : "Field assessment", d: isRTL ? "زيارة بيت الأسرة وتحقق من الاستحقاق." : "Home visit and eligibility verification." },
               { Icon: PackageCheck, n: "03", t: isRTL ? "تجهيز وتنفيذ" : "Prepare & execute", d: isRTL ? "تجهيز الاحتياج بجودة سوبر ماركت." : "Prepared at supermarket-grade quality." },
               { Icon: ClipboardCheck, n: "04", t: isRTL ? "تسليم وتقرير" : "Deliver & report", d: isRTL ? "تسليم لباب البيت + تقرير مصوّر وإيصال." : "Doorstep delivery + photo report and e-receipt." },
-            ].map(({ Icon, n, t: title, d }, i) => (
+            ]).map(({ Icon, n, t: title, d }, i) => (
               <li key={n}>
                 <motion.div
                   initial={false}
@@ -779,6 +784,13 @@ const ProgramDetail = () => {
           variant={program.slug === "odhya" ? "qurbani" : "all"}
           donateHref={`/donate?program=${program.slug}`}
         />
+      )}
+
+      {/* Field cases of this program (live from the backend) */}
+      {program.apiId && (
+        <LinkedCasesSection filter={{ programId: program.apiId }} isRTL={isRTL}
+          title={isRTL ? `حالات ضمن ${content.name}` : `Cases in ${content.name}`}
+          subtitle={isRTL ? "اختار حالة بعينها، وتبرعك هيوصل لها هي وهتتابع تحديثاتها." : "Choose a specific case; your donation goes to it and you follow its updates."} />
       )}
 
       {/* FAQ */}

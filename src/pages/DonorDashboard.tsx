@@ -15,7 +15,7 @@ import { useAuth } from "@/auth/AuthContext";
 import { RequireAuth } from "@/auth/RequireAuth";
 import { donationsStore, subscribeDonations, type DonationRecord } from "@/data/donationsStore";
 import { listMyDonations, listCaseDocuments } from "@/data/casesApi";
-import { supabase } from "@/integrations/supabase/client";
+import { formatServerImageUrl } from "@/data/laravelApi";
 import { toast } from "@/hooks/use-toast";
 
 type Tab = "impact" | "donations" | "account";
@@ -120,14 +120,13 @@ const Inner = () => {
 
   useEffect(() => {
     if (!user) return;
-    listMyDonations().then(setDbDonations).catch(() => {});
-    // Realtime: refresh donations when this donor's rows change
-    const ch = supabase
-      .channel(`donations-self-${user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "donations", filter: `donor_id=eq.${user.id}` },
-        () => { listMyDonations().then(setDbDonations).catch(() => {}); })
-      .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    const refresh = () => { listMyDonations().then(setDbDonations).catch(() => {}); };
+    refresh();
+    // Refresh when the donor comes back to the tab (e.g. after paying in another tab) —
+    // replaces the old Supabase realtime channel.
+    const onVisible = () => { if (document.visibilityState === "visible") refresh(); };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => { document.removeEventListener("visibilitychange", onVisible); };
   }, [user]);
 
   // Lazy-load public documents for the case linked to a donation when expanded.
@@ -141,10 +140,8 @@ const Inner = () => {
     }).catch(() => { /* ignore — RLS may block private docs */ });
   }, [openRef, dbDonations, docsByCase]);
 
-  const publicDocUrl = (path: string) => {
-    const { data } = supabase.storage.from("case-media").getPublicUrl(path);
-    return data.publicUrl;
-  };
+  // Documents come from Laravel (GET /cases/{id}/documents) as full URLs or storage paths.
+  const publicDocUrl = (path: string) => formatServerImageUrl(path) || path;
 
   // Dedupe local entries against DB rows (DB is the source of truth).
   const dbRefs = useMemo(
@@ -182,9 +179,11 @@ const Inner = () => {
       name: user!.name, email: user!.email, phone: user!.phone || "",
       currency: "EGP", language: lang,
     });
-    const save = () => {
-      updateProfile(user!.id, { name: form.name, email: form.email, phone: form.phone });
-      toast({ title: lang === "ar" ? " تم الحفظ" : " Saved" });
+    const save = async () => {
+      try {
+        await updateProfile(user!.id, { name: form.name, email: form.email, phone: form.phone });
+        toast({ title: lang === "ar" ? " تم الحفظ" : " Saved" });
+      } catch { /* AuthContext already showed the server error */ }
     };
     const onLogout = () => { logout(); navigate("/"); };
     const onDelete = () => {

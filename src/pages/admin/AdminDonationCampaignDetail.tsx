@@ -12,13 +12,10 @@ import {
   XCircle,
   Eye,
   Megaphone,
-  Upload,
   X,
-  Image as ImageIcon,
   Globe,
   Search,
   HelpCircle,
-  Sparkles,
   Layers,
   MapPin,
   TrendingUp,
@@ -30,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { ChoiceSelect, ImageUrlField } from "@/components/admin/programs/FormKit";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
@@ -38,30 +36,53 @@ import {
   donationCampaignCategoriesApi,
   type LaravelDonationCampaign,
   type LaravelDonationCampaignCategory,
-  type LaravelDonationPackage,
-  formatServerImageUrl,
-  uploadImage,
 } from "@/data/laravelApi";
-import { CAMPAIGNS_DATA } from "@/pages/site/CampaignsPage";
 import {
-  getStoredCampaignSeo,
-  saveStoredCampaignSeo,
-  OFFICIAL_CAMPAIGN_SEO_PRESETS,
-  matchCampaignPresetKey,
-  type CampaignSeoData,
-} from "@/data/campaignSeoStore";
-import { getCampaignDefaultFaqs } from "@/data/faqsApi";
+  donationCampaignsAdminApi,
+  findIgnoredCampaignFields,
+  parseJsonColumn,
+  CAMPAIGN_FIELD_LABELS_AR,
+  type CampaignPackage,
+  type CampaignRecord,
+  type CampaignSeo,
+} from "@/data/api/donationCampaignsAdminApi";
+import { BACKEND_PENDING_AR, describeWriteError } from "@/data/api/backendPending";
+import { CampaignPackagesManager } from "@/components/admin/campaigns/CampaignPackagesManager";
+import { DEFAULT_NEW_CAMPAIGN_PACKAGES, createPackagesForCampaign, sortPackages } from "@/components/admin/campaigns/packageHelpers";
+import { getCampaignSeoPreset, type CampaignSeoData } from "@/data/campaignSeoStore";
+import { EntityFaqManager } from "@/components/admin/faq/EntityFaqManager";
 import { useQueryClient } from "@tanstack/react-query";
-import { HeroPanel, HadithPanel, StatsPanel, SectionsPanel, CtaPanel } from "@/components/admin/CampaignPageContentEditor";
-import { campaignPagesApi, getCampaignPageMetaForCampaign, mergeCampaignContent, type CampaignPageContent } from "@/data/campaignPages";
+import { HeroPanel, HadithPanel, StatsPanel, SectionsPanel, CtaPanel, campaignSectionTabs, sectionKeysFor } from "@/components/admin/CampaignPageContentEditor";
+import { getCampaignPageMetaForCampaign, mergeCampaignContent, type CampaignPageContent } from "@/data/campaignPages";
+import { campaignPagesApi, contentFromCampaign, seoColumnFromForm, toCampaignColumns } from "@/data/campaignPages/api";
 
-const DEFAULT_CATEGORIES: Array<{ id: number; name_ar: string; name_en: string; slug: string }> = [
-  { id: 1, name_ar: "صدقات جارية", name_en: "Ongoing Charity", slug: "ongoing-charity" },
-  { id: 2, name_ar: "مواسم الخير", name_en: "Seasons of Goodness", slug: "seasons-of-goodness" },
-  { id: 3, name_ar: "استدامة وتبرع عيني", name_en: "Sustainability & In-Kind", slug: "sustainability-in-kind" },
-  { id: 4, name_ar: "تعليم وبناء الإنسان", name_en: "Education & Human Development", slug: "education-human-development" },
-  { id: 5, name_ar: "مشاريع الخير", name_en: "Goodness Projects", slug: "good" },
-];
+const EMPTY_SEO: CampaignSeoData = {
+  meta_title_ar: "",
+  meta_title_en: "",
+  meta_description_ar: "",
+  meta_description_en: "",
+  focus_keywords_ar: "",
+  focus_keywords_en: "",
+  canonical_url: "",
+  noindex: false,
+  nofollow: false,
+};
+
+/** SEO form <- `seo` column (or a landing page's saved seo). Blank fields keep the given fallback. */
+const seoFormFromColumn = (se: CampaignSeo, fallback: CampaignSeoData): CampaignSeoData => ({
+  ...fallback,
+  meta_title_ar: se.title?.ar || fallback.meta_title_ar,
+  meta_title_en: se.title?.en || fallback.meta_title_en,
+  meta_description_ar: se.description?.ar || fallback.meta_description_ar,
+  meta_description_en: se.description?.en || fallback.meta_description_en,
+  focus_keywords_ar: se.keywords?.ar || fallback.focus_keywords_ar,
+  focus_keywords_en: se.keywords?.en || fallback.focus_keywords_en,
+  canonical_url: se.canonical ?? fallback.canonical_url,
+  noindex: se.noindex ?? fallback.noindex,
+  nofollow: se.nofollow ?? fallback.nofollow,
+});
+
+
 
 export default function AdminDonationCampaignDetail() {
   const { id } = useParams<{ id: string }>();
@@ -70,151 +91,112 @@ export default function AdminDonationCampaignDetail() {
   const isAr = lang === "ar";
   const isNew = id === "new";
 
-  const [campaign, setCampaign] = useState<Partial<LaravelDonationCampaign> | null>(null);
+  const [campaign, setCampaign] = useState<Partial<CampaignRecord> | null>(null);
   const [categories, setCategories] = useState<LaravelDonationCampaignCategory[]>([]);
-  const [packages, setPackages] = useState<LaravelDonationPackage[]>([]);
+  const [packages, setPackages] = useState<CampaignPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  /** Fields the backend did not keep on the last save (shown as a persistent banner, not only a toast). */
+  const [backendWarnings, setBackendWarnings] = useState<string[]>([]);
 
-  // SEO State
-  const [seoData, setSeoData] = useState<CampaignSeoData>({
-    meta_title_ar: "",
-    meta_title_en: "",
-    meta_description_ar: "",
-    meta_description_en: "",
-    focus_keywords_ar: "",
-    focus_keywords_en: "",
-    canonical_url: "",
-    noindex: false,
-    nofollow: false,
-  });
+  // SEO State (initial value: saved `seo` column > hard-coded preset > generated from the name)
+  const [seoData, setSeoData] = useState<CampaignSeoData>(EMPTY_SEO);
   const [seoPreviewLang, setSeoPreviewLang] = useState<"ar" | "en">("ar");
 
-  // FAQs State
-  const [campaignFaqs, setCampaignFaqs] = useState<
-    Array<{ question_ar: string; answer_ar: string; question_en?: string; answer_en?: string }>
-  >([]);
-  const [newFaqQAr, setNewFaqQAr] = useState("");
-  const [newFaqAAr, setNewFaqAAr] = useState("");
-  const [newFaqQEn, setNewFaqQEn] = useState("");
-  const [newFaqAEn, setNewFaqAEn] = useState("");
-  const [showAddFaqForm, setShowAddFaqForm] = useState(false);
-
-  // Landing page content (hero / hadith / prices / sections / CTA). Saved together with the campaign.
-  // FAQ and SEO come from this screen's existing tabs and are written into the same content object.
+  // Landing page content (hero / hadith / sections / CTA). Saved on the campaign record as `page_content`
+  // together with `seo` and `faqs` (PUT /donation-campaigns/{id}). Prices are the donation packages.
   const queryClient = useQueryClient();
   const [pageContent, setPageContent] = useState<CampaignPageContent | null>(null);
+  /** One tab per landing section (families like areas_now/areas_before share the parent's tab). */
+  const sectionTabs = useMemo(() => (pageContent ? campaignSectionTabs(pageContent) : []), [pageContent]);
   const [pageHasOverride, setPageHasOverride] = useState(false);
+  const [pageSource, setPageSource] = useState<"campaign" | "legacy" | null>(null);
   const [pageSeoSaved, setPageSeoSaved] = useState(false);
   const seoInitialRef = useRef<string>("");
   const pageMeta = useMemo(() => getCampaignPageMetaForCampaign(campaign), [campaign?.slug, campaign?.id, campaign?.name_ar]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const loadPageContent = async (loaded: any) => {
+  /**
+   * Landing content: the campaign's own columns first; the legacy `/content` item is read ONLY when the record has
+   * no content (old saves). A new campaign whose slug matches a landing page starts from that page's defaults.
+   */
+  const loadPageContent = async (loaded: Partial<CampaignRecord>, opts?: { isNew?: boolean }) => {
     const meta = getCampaignPageMetaForCampaign(loaded);
-    if (!meta) { setPageContent(null); setPageHasOverride(false); setPageSeoSaved(false); return; }
+    if (!meta) { setPageContent(null); setPageHasOverride(false); setPageSource(null); return; }
     try {
-      const [defaults, rec] = await Promise.all([meta.load(), campaignPagesApi.load(meta.slug, { fresh: true })]);
-      const merged = mergeCampaignContent(defaults, rec.content);
-      setPageContent(merged);
-      setPageHasOverride(!!rec.content && Object.keys(rec.content).length > 0);
-      // FAQ tab source of truth: saved page FAQs > backend faqs > the landing page's own defaults
-      const savedFaq = Array.isArray(rec.content?.faq) && (rec.content?.faq?.length || 0) > 0;
-      if (savedFaq || !(Array.isArray(loaded.faqs) && loaded.faqs.length > 0)) {
-        setCampaignFaqs(merged.faq.map((f) => ({ question_ar: f.q.ar, answer_ar: f.a.ar, question_en: f.q.en || undefined, answer_en: f.a.en || undefined })));
+      const defaults = await meta.load();
+      let saved = opts?.isNew ? null : contentFromCampaign(loaded);
+      let source: "campaign" | "legacy" | null = saved ? "campaign" : null;
+      if (!saved && !opts?.isNew) {
+        const legacy = await campaignPagesApi.loadLegacy(meta.slug, { fresh: true });
+        saved = legacy.content;
+        source = saved ? "legacy" : null;
       }
-      // SEO tab: a saved page SEO wins over local presets
-      if (rec.content?.seo && merged.seo) {
+      const merged = mergeCampaignContent(defaults, saved);
+      setPageContent(merged);
+      setPageHasOverride(!!saved);
+      setPageSource(source);
+      // SEO tab: a saved landing SEO (legacy) wins over presets when the record has no `seo` yet
+      if (saved?.seo && merged.seo && !parseJsonColumn<CampaignSeo>(loaded.seo)) {
         const se = merged.seo;
         setPageSeoSaved(true);
         setSeoData((prev) => {
-          const next = {
-            ...prev,
-            meta_title_ar: se.title.ar || prev.meta_title_ar,
-            meta_title_en: se.title.en || prev.meta_title_en,
-            meta_description_ar: se.description.ar || prev.meta_description_ar,
-            meta_description_en: se.description.en || prev.meta_description_en,
-            focus_keywords_ar: se.keywords.ar || prev.focus_keywords_ar,
-            focus_keywords_en: se.keywords.en || prev.focus_keywords_en,
-            canonical_url: se.canonical ?? prev.canonical_url,
-            noindex: se.noindex ?? prev.noindex,
-            nofollow: se.nofollow ?? prev.nofollow,
-          };
+          const next = seoFormFromColumn(se, prev);
           seoInitialRef.current = JSON.stringify(next);
           return next;
         });
-      } else {
-        setPageSeoSaved(false);
-        setSeoData((prev) => { seoInitialRef.current = JSON.stringify(prev); return prev; });
       }
-    } catch {
-      /* page content is optional: the campaign screen keeps working without it */
+    } catch (e: unknown) {
+      toast({
+        title: isAr ? "تعذر تحميل محتوى صفحة الهبوط" : "Could not load landing content",
+        description: (e as Error)?.message,
+        variant: "destructive",
+      });
     }
   };
 
-  const savePageContent = async () => {
-    if (!pageMeta || !pageContent) return;
-    const seoChanged = JSON.stringify(seoData) !== seoInitialRef.current;
-    const content: CampaignPageContent = {
-      ...pageContent,
-      faq: campaignFaqs
-        .filter((f) => f.question_ar?.trim() && f.answer_ar?.trim())
-        .map((f) => ({ q: { ar: f.question_ar.trim(), en: (f.question_en || "").trim() }, a: { ar: f.answer_ar.trim(), en: (f.answer_en || "").trim() } })),
-      // Only persist SEO once the admin has actually edited it (or it was saved before); otherwise the
-      // landing page keeps its hand-written static title/description.
-      ...(pageSeoSaved || seoChanged
-        ? { seo: {
-            title: { ar: seoData.meta_title_ar || "", en: seoData.meta_title_en || "" },
-            description: { ar: seoData.meta_description_ar || "", en: seoData.meta_description_en || "" },
-            keywords: { ar: seoData.focus_keywords_ar || "", en: seoData.focus_keywords_en || "" },
-            canonical: seoData.canonical_url || undefined,
-            noindex: !!seoData.noindex,
-            nofollow: !!seoData.nofollow,
-          } }
-        : {}),
-    };
-    await campaignPagesApi.save(pageMeta.slug, content, pageMeta.name);
-    await queryClient.invalidateQueries({ queryKey: ["campaign-page", pageMeta.slug] });
-    setPageContent(content);
-    setPageHasOverride(true);
-    if (content.seo) { setPageSeoSaved(true); seoInitialRef.current = JSON.stringify(seoData); }
-  };
-
-  const resetPageContent = async () => {
-    if (!pageMeta || !campaign) return;
-    if (!window.confirm(isAr ? "إرجاع صفحة الحملة إلى نصوصها الافتراضية؟ سيُحذف المحتوى المخصص (بما فيه الأسئلة والسيو المحفوظة)." : "Restore the landing page to its default texts? Saved custom content (incl. FAQs and SEO) will be removed.")) return;
-    try {
-      await campaignPagesApi.reset(pageMeta.slug);
-      await queryClient.invalidateQueries({ queryKey: ["campaign-page", pageMeta.slug] });
-      await loadPageContent(campaign);
-      toast({ title: isAr ? "تمت الإعادة إلى الافتراضي" : "Reset to defaults" });
-    } catch (e: any) {
-      toast({ title: isAr ? "تعذرت الإعادة" : "Reset failed", description: e?.message, variant: "destructive" });
-    }
-  };
-
-  // New package inline form
-  const [newPkgName, setNewPkgName] = useState("سهم مساهمة");
-  const [newPkgAmount, setNewPkgAmount] = useState<number | string>(100);
-  const [addingPkg, setAddingPkg] = useState(false);
+  // A NEW campaign whose slug matches a landing page gets that page's editable content (saved on create).
+  useEffect(() => {
+    if (!isNew || !campaign) return;
+    if (pageMeta && !pageContent) void loadPageContent(campaign, { isNew: true });
+    if (!pageMeta && pageContent) setPageContent(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isNew, pageMeta?.slug]);
 
   // Benefits editing
   const [benefitText, setBenefitText] = useState("");
-  const [pendingImageFile, setPendingImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>("");
-  const imgInputRef = useRef<HTMLInputElement>(null);
+
+  const initSeo = (loaded: Partial<CampaignRecord>) => {
+    const preset = getCampaignSeoPreset(loaded.slug || loaded.name_ar || "");
+    const generated: CampaignSeoData = {
+      ...EMPTY_SEO,
+      meta_title_ar: loaded.name_ar ? `${loaded.name_ar} | مؤسسة اليسر الخيرية` : "",
+      meta_title_en: loaded.name_en || loaded.name_ar ? `${loaded.name_en || loaded.name_ar} | Al-Yusr Charity Foundation` : "",
+      meta_description_ar: loaded.description_ar || "",
+      meta_description_en: loaded.description_en || "",
+      focus_keywords_ar: loaded.name_ar || "",
+      focus_keywords_en: loaded.name_en || "",
+      canonical_url: loaded.slug ? `https://elyusr.org/campaigns/${loaded.slug}` : "",
+    };
+    const fallback = preset ? { ...generated, ...preset } : generated;
+    const saved = parseJsonColumn<CampaignSeo>(loaded.seo);
+    const next = saved ? seoFormFromColumn(saved, fallback) : fallback;
+    setSeoData(next);
+    setPageSeoSaved(!!saved);
+    seoInitialRef.current = JSON.stringify(next);
+  };
 
   const loadData = async () => {
     setLoading(true);
     try {
-      // Load categories
-      const catsRes = await donationCampaignCategoriesApi.listAll().catch(() => []);
-      const catsList = Array.isArray(catsRes) && catsRes.length > 0 ? catsRes : (DEFAULT_CATEGORIES as any);
+      // Categories: only what the backend has (no invented ids).
+      const catsRes = await donationCampaignCategoriesApi.listAll().catch(() => [] as LaravelDonationCampaignCategory[]);
+      const catsList = Array.isArray(catsRes) ? catsRes : [];
       setCategories(catsList);
 
       if (isNew) {
-        setCampaign({
+        const draft: Partial<CampaignRecord> = {
           id: "new",
-          category_id: catsList[0]?.id ? Number(catsList[0].id) : 1,
+          category_id: catsList[0]?.id ? Number(catsList[0].id) : null,
           name_ar: "",
           name_en: "",
           slug: `campaign-${Date.now().toString(36)}`,
@@ -230,36 +212,28 @@ export default function AdminDonationCampaignDetail() {
           is_active: true,
           sort_order: 1,
           benefits: [],
-        });
-        setPackages([
-          { id: 1, name_ar: "سهم الخير", amount: 100, is_active: true },
-          { id: 2, name_ar: "سهم البركة", amount: 250, is_active: true },
-          { id: 3, name_ar: "سهم الإحسان", amount: 500, is_active: true },
-        ]);
-        setSeoData({
-          meta_title_ar: "",
-          meta_title_en: "",
-          meta_description_ar: "",
-          meta_description_en: "",
-          focus_keywords_ar: "",
-          focus_keywords_en: "",
-          canonical_url: "",
-          noindex: false,
-          nofollow: false,
-        });
-        setCampaignFaqs([]);
+        };
+        setCampaign(draft);
+        // Default packages of a new campaign: created on the backend right after the campaign (see handleSave).
+        setPackages(DEFAULT_NEW_CAMPAIGN_PACKAGES.map((p) => ({ ...p })));
+        setSeoData(EMPTY_SEO);
+        seoInitialRef.current = JSON.stringify(EMPTY_SEO);
+        setPageSeoSaved(false);
+        setPageContent(null);
+        setPageHasOverride(false);
+        setPageSource(null);
         setLoading(false);
         return;
       }
 
-      // Existing campaign
-      let loaded: any = null;
+      // Existing campaign (fresh read: the dashboard must see what the backend really stored)
+      let loaded: CampaignRecord | null = null;
       try {
-        loaded = await donationCampaignsApi.get(id!);
+        loaded = await donationCampaignsAdminApi.get(id!, { fresh: true });
       } catch {
-        // Fallback to searching all campaigns
-        const all = await donationCampaignsApi.listAll().catch(() => []);
-        loaded = all.find((c: any) => String(c.id) === id || c.slug === id);
+        // Lists leave out landing content unless asked (?include=content).
+        const all = await donationCampaignsApi.listAll({ include: "content" }, { useCache: false }).catch(() => [] as LaravelDonationCampaign[]);
+        loaded = (all.find((c) => String(c.id) === id || c.slug === id) as CampaignRecord | undefined) || null;
       }
 
       if (!loaded) {
@@ -271,50 +245,16 @@ export default function AdminDonationCampaignDetail() {
         return;
       }
 
-      setCampaign(loaded);
-      void loadPageContent(loaded);
-      setPackages(Array.isArray(loaded.donation_packages) ? loaded.donation_packages : [
-        { id: 1, name_ar: "سهم الخير", amount: 100, is_active: true },
-        { id: 2, name_ar: "سهم البركة", amount: 250, is_active: true },
-      ]);
+      setCampaign({ ...loaded, category_id: loaded.category_id ?? loaded.category?.id ?? null } as Partial<CampaignRecord>);
+      // Packages: exactly what the backend returned (empty list = empty state, no invented packages).
+      setPackages(sortPackages(loaded.donation_packages));
+      initSeo(loaded);
 
-      // Initialize SEO from store or fallback
-      const cKey = loaded.slug || String(loaded.id);
-      const storedSeo = getStoredCampaignSeo(cKey) || getStoredCampaignSeo(loaded.id);
-      if (storedSeo) {
-        setSeoData(storedSeo);
-      } else {
-        setSeoData({
-          meta_title_ar: loaded.meta_title_ar || `${loaded.name_ar} | أسقف ووصلات مياه صدقة جارية — مؤسسة اليسر`,
-          meta_title_en: loaded.meta_title_en || `${loaded.name_en || loaded.name_ar} | Al-Yusr Charity Foundation`,
-          meta_description_ar: loaded.meta_description_ar || loaded.description_ar || "",
-          meta_description_en: loaded.meta_description_en || loaded.description_en || "",
-          focus_keywords_ar: loaded.focus_keywords_ar || loaded.name_ar || "",
-          focus_keywords_en: loaded.focus_keywords_en || loaded.name_en || "",
-          canonical_url: loaded.canonical_url || `https://elyusr.org/campaigns/${loaded.slug || ""}`,
-          noindex: loaded.noindex || false,
-          nofollow: loaded.nofollow || false,
-        });
-      }
-
-      // Initialize FAQs
-      const defaultFaqs = getCampaignDefaultFaqs(cKey);
-      if (Array.isArray(loaded.faqs) && loaded.faqs.length > 0) {
-        setCampaignFaqs(loaded.faqs);
-      } else if (defaultFaqs.length > 0) {
-        setCampaignFaqs(
-          defaultFaqs.map((f) => ({
-            question_ar: f.question_ar,
-            answer_ar: f.answer_ar,
-            question_en: f.question_en || undefined,
-            answer_en: f.answer_en || undefined,
-          }))
-        );
-      }
-    } catch (err: any) {
+      await loadPageContent(loaded);
+    } catch (err: unknown) {
       toast({
         title: isAr ? "خطأ في تحميل الحملة" : "Error loading campaign",
-        description: err.message,
+        description: (err as Error)?.message,
         variant: "destructive",
       });
     } finally {
@@ -327,108 +267,8 @@ export default function AdminDonationCampaignDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const updateField = (field: keyof LaravelDonationCampaign, value: any) => {
+  const updateField = (field: keyof CampaignRecord, value: unknown) => {
     setCampaign((prev) => (prev ? { ...prev, [field]: value } : prev));
-  };
-
-  const handleApplyPdfSeoPreset = () => {
-    if (!campaign) return;
-    const cKey = matchCampaignPresetKey(campaign.slug || campaign.name_ar || String(campaign.id));
-    if (cKey && OFFICIAL_CAMPAIGN_SEO_PRESETS[cKey]) {
-      const preset = OFFICIAL_CAMPAIGN_SEO_PRESETS[cKey];
-      setSeoData((prev) => ({ ...prev, ...preset }));
-      toast({
-        title: isAr ? "تم تطبيق إعدادات السيو الرسمية من الـ PDF" : "Applied official SEO preset from PDF",
-        description: isAr ? `تم تحديث الميتا والكلمات المفتاحية لحملة ${campaign.name_ar}` : "SEO metadata updated",
-      });
-    } else {
-      toast({
-        title: isAr ? "لا يوجد قالب محدد لهذه الحملة" : "No specific preset found",
-        description: isAr ? "يمكنك إدخال العنوان والميتا يدوياً أدناه" : "Fill fields manually",
-      });
-    }
-  };
-
-  const handleImportPdfFaqs = () => {
-    if (!campaign) return;
-    const cKey = matchCampaignPresetKey(campaign.slug || campaign.name_ar || String(campaign.id));
-    if (cKey) {
-      const faqsList = getCampaignDefaultFaqs(cKey);
-      if (faqsList.length > 0) {
-        setCampaignFaqs(
-          faqsList.map((f) => ({
-            question_ar: f.question_ar,
-            answer_ar: f.answer_ar,
-            question_en: f.question_en || undefined,
-            answer_en: f.answer_en || undefined,
-          }))
-        );
-        toast({
-          title: isAr ? `تم استيراد ${faqsList.length} أسئلة من الـ PDF` : `Imported ${faqsList.length} FAQs from PDF`,
-        });
-        return;
-      }
-    }
-    toast({
-      title: isAr ? "لم يتم العثور على أسئلة جاهزة لهذا الاسم" : "No FAQs found for this campaign",
-      variant: "destructive",
-    });
-  };
-
-  const handleAddCampaignFaq = () => {
-    if (!newFaqQAr.trim() || !newFaqAAr.trim()) {
-      toast({
-        title: isAr ? "يرجى ملء السؤال والإجابة بالعربية" : "Please fill question and answer",
-        variant: "destructive",
-      });
-      return;
-    }
-    setCampaignFaqs((prev) => [
-      ...prev,
-      {
-        question_ar: newFaqQAr.trim(),
-        answer_ar: newFaqAAr.trim(),
-        question_en: newFaqQEn.trim() || undefined,
-        answer_en: newFaqAEn.trim() || undefined,
-      },
-    ]);
-    setNewFaqQAr("");
-    setNewFaqAAr("");
-    setNewFaqQEn("");
-    setNewFaqAEn("");
-    setShowAddFaqForm(false);
-    toast({ title: isAr ? "تمت إضافة السؤال بنجاح" : "FAQ added" });
-  };
-
-  const handleRemoveCampaignFaq = (index: number) => {
-    setCampaignFaqs((prev) => prev.filter((_, i) => i !== index));
-    toast({ title: isAr ? "تم حذف السؤال" : "FAQ removed" });
-  };
-
-  const handleImageSelect = (file: File) => {
-    const allowed = ["image/jpeg", "image/png", "image/webp", "image/jpg", "image/gif", "image/svg+xml"];
-    if (!allowed.includes(file.type) && !file.type.startsWith("image/")) {
-      toast({
-        title: isAr ? "نوع غير مدعوم" : "Unsupported type",
-        description: isAr ? "يرجى اختيار صورة (JPG, PNG, WebP)" : "Please select an image file",
-        variant: "destructive",
-      });
-      return;
-    }
-    setPendingImageFile(file);
-    const localUrl = URL.createObjectURL(file);
-    setImagePreview(localUrl);
-    updateField("image", localUrl);
-    toast({
-      title: isAr ? "تم اختيار الصورة" : "Image selected",
-      description: isAr ? "سيتم حفظها في قاعدة البيانات فور الضغط على «حفظ التعديلات»" : "Will be saved when you click Save",
-    });
-  };
-
-  const handleRemoveImage = () => {
-    setPendingImageFile(null);
-    setImagePreview("");
-    updateField("image", "");
   };
 
   const handleAddBenefit = () => {
@@ -446,56 +286,29 @@ export default function AdminDonationCampaignDetail() {
     updateField("benefits", current);
   };
 
-  const handleAddPackage = async () => {
-    if (!newPkgName.trim() || Number(newPkgAmount) <= 0) {
-      toast({
-        title: isAr ? "اكتب اسم الباقة والمبلغ" : "Fill package name and amount",
-        variant: "destructive",
-      });
-      return;
+  /** `page_content` / `seo` / `faqs` for the campaign PUT/POST. `null`s when resetting to the code defaults. */
+  const buildContentColumns = (reset: boolean): Record<string, unknown> => {
+    if (reset) return { page_content: null, seo: null, faqs: null };
+    const out: Record<string, unknown> = {};
+    // SEO is stored only once the admin edited it (or it was saved before); otherwise the landing page keeps its
+    // hand-written static meta.
+    if (pageSeoSaved || JSON.stringify(seoData) !== seoInitialRef.current) out.seo = seoColumnFromForm(seoData);
+    if (pageMeta && pageContent) out.page_content = toCampaignColumns(pageContent).page_content;
+    return out;
+  };
+
+  /** Re-read the campaign and list what the backend dropped from what we sent. */
+  const verifySaved = async (campaignId: number | string, sent: Record<string, unknown>): Promise<string[]> => {
+    const fresh = await donationCampaignsAdminApi.get(campaignId, { fresh: true });
+    const ignored = findIgnoredCampaignFields(sent, fresh as unknown as Record<string, unknown>);
+    for (const k of ["page_content", "seo", "faqs"]) {
+      if (k in sent && !Object.prototype.hasOwnProperty.call(fresh, k)) ignored.push(k);
     }
-
-    setAddingPkg(true);
-    try {
-      const pkgPayload = {
-        name_ar: newPkgName.trim(),
-        name_en: newPkgName.trim(),
-        amount: Number(newPkgAmount),
-        is_active: true,
-        sort_order: packages.length + 1,
-      };
-
-      if (!isNew && campaign?.id && !String(campaign.id).startsWith("static-")) {
-        await donationCampaignsApi.addPackage(campaign.id, pkgPayload);
-        toast({ title: isAr ? "تم حفظ الباقة في قاعدة البيانات" : "Package added to DB" });
-      }
-
-      setPackages((prev) => [...prev, { ...pkgPayload, id: Date.now() }]);
-      setNewPkgName("سهم مساهمة");
-      setNewPkgAmount(100);
-    } catch (err: any) {
-      toast({
-        title: isAr ? "فشل إضافة الباقة" : "Failed to add package",
-        description: err.message,
-        variant: "destructive",
-      });
-    } finally {
-      setAddingPkg(false);
-    }
+    return ignored;
   };
 
-  const handleRemovePackage = (pkgId: number | string | undefined) => {
-    setPackages((prev) => prev.filter((p) => p.id !== pkgId));
-    toast({ title: isAr ? "تمت إزالة الباقة من القائمة" : "Package removed" });
-  };
-
-  const handleTogglePackage = (pkgId: number | string | undefined) => {
-    setPackages((prev) =>
-      prev.map((p) => (p.id === pkgId ? { ...p, is_active: !p.is_active } : p))
-    );
-  };
-
-  const handleSave = async () => {
+  const handleSave = async (opts?: { resetContent?: boolean }) => {
+    const resetContent = !!opts?.resetContent;
     if (!campaign || !campaign.name_ar?.trim()) {
       toast({
         title: isAr ? "يرجى إدخال اسم الحملة بالعربية" : "Please enter Arabic campaign name",
@@ -506,12 +319,7 @@ export default function AdminDonationCampaignDetail() {
 
     setSaving(true);
     try {
-      // Save SEO locally as overlay
-      const cKey = campaign.slug || campaign.id || "new";
-      saveStoredCampaignSeo(cKey, seoData);
-
       const payload: Record<string, unknown> = {
-        category_id: campaign.category_id ? Number(campaign.category_id) : 1,
         name_ar: campaign.name_ar.trim(),
         name_en: campaign.name_en?.trim() || campaign.name_ar.trim(),
         slug: campaign.slug?.trim() || campaign.name_ar.trim().toLowerCase().replace(/\s+/g, "-"),
@@ -520,60 +328,87 @@ export default function AdminDonationCampaignDetail() {
         description_ar: campaign.description_ar?.trim() || campaign.name_ar.trim(),
         description_en: campaign.description_en?.trim() || null,
         target_amount: Number(campaign.target_amount || 0),
+        collected_amount: Number(campaign.collected_amount || 0),
         minimum_amount: Number(campaign.minimum_amount || 50),
         donation_available: campaign.donation_available !== false,
         is_active: campaign.is_active !== false,
         sort_order: Number(campaign.sort_order || 1),
         benefits: Array.isArray(campaign.benefits) ? campaign.benefits : [],
-        // SEO fields sent to backend (when supported)
-        meta_title_ar: seoData.meta_title_ar,
-        meta_title_en: seoData.meta_title_en,
-        meta_description_ar: seoData.meta_description_ar,
-        meta_description_en: seoData.meta_description_en,
-        focus_keywords_ar: seoData.focus_keywords_ar,
-        focus_keywords_en: seoData.focus_keywords_en,
-        canonical_url: seoData.canonical_url,
-        noindex: seoData.noindex,
-        nofollow: seoData.nofollow,
-        faqs: campaignFaqs,
+        ...buildContentColumns(resetContent),
       };
-
-      if (pendingImageFile) {
-        payload.image = pendingImageFile;
+      if (campaign.category_id !== undefined && campaign.category_id !== null && String(campaign.category_id) !== "") {
+        payload.category_id = Number(campaign.category_id);
       }
+      // Cover image: a link (uploads go to the media library first; the backend accepts file or link).
+      payload.image = campaign.image ? campaign.image : null;
 
       if (isNew) {
-        const res = await donationCampaignsApi.create(payload as any);
-        toast({ title: isAr ? "تم إنشاء الحملة بنجاح" : "Campaign created successfully" });
-        navigate(`/admin/donation-campaigns/${res.id || res.slug || ""}`);
+        const res = (await donationCampaignsApi.create(payload as Partial<LaravelDonationCampaign>)) as CampaignRecord;
+        const newId = res?.id;
+        if (newId === undefined || newId === null || String(newId) === "") {
+          throw new Error(isAr ? "الخادم لم يرجع رقم الحملة الجديدة" : "Server returned no campaign id");
+        }
+        // Default/draft packages are created on the new campaign one by one.
+        const { created, failed } = await createPackagesForCampaign(newId, packages);
+        const warnings: string[] = [];
+        try {
+          warnings.push(...(await verifySaved(newId, payload)).map((k) => CAMPAIGN_FIELD_LABELS_AR[k] || k));
+        } catch { /* verification is best effort */ }
+        if (failed.length) warnings.push(...failed.map((f) => `باقة «${f.name}»: ${f.error}`));
+        setBackendWarnings(warnings);
+        toast({
+          title: isAr ? `تم إنشاء الحملة (#${newId}) و${created.length} باقة` : `Campaign #${newId} created with ${created.length} packages`,
+          description: warnings.length ? (isAr ? `لم يُحفظ: ${warnings.join("، ")}` : `Not saved: ${warnings.join(", ")}`) : undefined,
+          variant: warnings.length ? "destructive" : undefined,
+        });
+        navigate(`/admin/donation-campaigns/${newId}`);
         return;
       }
 
-      if (campaign.id && !String(campaign.id).startsWith("static-")) {
-        const res = await donationCampaignsApi.update(campaign.id, payload as any);
-        setPendingImageFile(null);
-        const updatedImg = (res as any)?.data?.image || (res as any)?.image;
-        if (updatedImg) {
-          updateField("image", updatedImg);
-          setImagePreview("");
+      if (campaign.id === undefined || campaign.id === null) return;
+      await donationCampaignsApi.update(campaign.id, payload as Partial<LaravelDonationCampaign>);
+
+      // The PUT returned 2xx: check what the backend really kept.
+      let ignored: string[] = [];
+      try {
+        ignored = await verifySaved(campaign.id, payload);
+      } catch { /* verification is best effort */ }
+      if (resetContent && pageMeta) {
+        try {
+          await campaignPagesApi.clearLegacy(pageMeta.slug);
+        } catch (e) {
+          ignored.push(`مسح النسخة القديمة من /content: ${describeWriteError(e)}`);
         }
       }
-      try {
-        await savePageContent();
-      } catch (e: any) {
-        toast({ title: isAr ? "تم حفظ الحملة، لكن تعذر حفظ محتوى صفحة الهبوط" : "Campaign saved, but landing page content failed to save", description: e?.message, variant: "destructive" });
+      if (pageMeta) await queryClient.invalidateQueries({ queryKey: ["campaign-page", pageMeta.slug] });
+
+      const labels = ignored.map((k) => CAMPAIGN_FIELD_LABELS_AR[k] || k);
+      setBackendWarnings(labels);
+      if (labels.length) {
+        toast({
+          title: isAr ? "تم حفظ بيانات الحملة الأساسية، لكن الباك إند تجاهل بعض الحقول" : "Campaign saved, but the backend ignored some fields",
+          description: `${labels.join("، ")} — ${BACKEND_PENDING_AR}`,
+          variant: "destructive",
+        });
+      } else {
+        toast({ title: resetContent ? (isAr ? "تمت إعادة صفحة الحملة للافتراضي" : "Landing page reset") : (isAr ? "تم حفظ الحملة بنجاح" : "Campaign saved successfully") });
       }
-      toast({ title: isAr ? "تم حفظ الحملة بنجاح" : "Campaign saved successfully" });
-      void loadData();
-    } catch (err: any) {
+      await loadData();
+    } catch (err: unknown) {
       toast({
         title: isAr ? "فشل حفظ الحملة" : "Failed to save campaign",
-        description: err.message,
+        description: describeWriteError(err, "PUT /donation-campaigns/{id}"),
         variant: "destructive",
       });
     } finally {
       setSaving(false);
     }
+  };
+
+  const resetPageContent = async () => {
+    if (!pageMeta || !campaign || isNew) return;
+    if (!window.confirm(isAr ? "إرجاع صفحة الحملة إلى نصوصها الافتراضية؟ سيُحذف المحتوى المخصص (بما فيه الأسئلة والسيو المحفوظة) من قاعدة البيانات." : "Restore the landing page to its default texts? Saved custom content (incl. FAQs and SEO) will be removed.")) return;
+    await handleSave({ resetContent: true });
   };
 
   const handleDelete = async () => {
@@ -669,7 +504,7 @@ export default function AdminDonationCampaignDetail() {
             )}
 
             <Button
-              onClick={handleSave}
+              onClick={() => void handleSave()}
               disabled={saving}
               className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold gap-1.5 shadow-sm"
               size="sm"
@@ -698,6 +533,25 @@ export default function AdminDonationCampaignDetail() {
           </div>
         )}
 
+        {backendWarnings.length > 0 && (
+          <div className="flex items-start justify-between gap-3 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-xs text-amber-900 dark:text-amber-200">
+            <div className="space-y-1">
+              <p className="font-black">
+                {isAr ? `آخر حفظ: الباك إند لم يحتفظ بالحقول التالية (${BACKEND_PENDING_AR})` : "Last save: the backend did not keep these fields"}
+              </p>
+              <ul className="list-disc ps-5 space-y-0.5">
+                {backendWarnings.map((w) => <li key={w}>{w}</li>)}
+              </ul>
+              <p className="text-[11px] opacity-80">
+                {isAr ? "التفاصيل للمطور في backend-handoff/05-campaigns-seasons-section.md" : "Details: backend-handoff/05-campaigns-seasons-section.md"}
+              </p>
+            </div>
+            <Button type="button" variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => setBackendWarnings([])}>
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+
         {/* Main Tabs Container */}
         <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-soft">
           <Tabs defaultValue="basics" dir={isAr ? "rtl" : "ltr"}>
@@ -716,10 +570,11 @@ export default function AdminDonationCampaignDetail() {
                       <span className="rounded-full bg-muted-foreground/15 text-[10px] px-1.5 font-mono font-black">{pageContent.stats.length}</span>
                     </TabsTrigger>
                   )}
-                  <TabsTrigger value="sections" className="text-xs font-bold py-2 gap-1.5">
-                    <span>{isAr ? "الأقسام" : "Sections"}</span>
-                    {!!pageContent && <span className="rounded-full bg-muted-foreground/15 text-[10px] px-1.5 font-mono font-black">{Object.keys(pageContent.sections).length}</span>}
-                  </TabsTrigger>
+                  {sectionTabs.map((t) => (
+                    <TabsTrigger key={t.id} value={`sec-${t.id}`} className="text-xs font-bold py-2">
+                      {(isAr ? t.label.ar : t.label.en || t.label.ar) || t.id}
+                    </TabsTrigger>
+                  ))}
                   <TabsTrigger value="cta" className="text-xs font-bold py-2">{isAr ? "الختام" : "Closing"}</TabsTrigger>
                 </>
               )}
@@ -730,11 +585,6 @@ export default function AdminDonationCampaignDetail() {
               <TabsTrigger value="faqs" className="text-xs font-bold py-2 gap-1.5">
                 <HelpCircle className="h-3.5 w-3.5 text-amber-500" />
                 <span>{isAr ? "الأسئلة الشائعة" : "FAQs"}</span>
-                {campaignFaqs.length > 0 && (
-                  <span className="rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-200 text-[10px] px-1.5 font-mono font-black">
-                    {campaignFaqs.length}
-                  </span>
-                )}
               </TabsTrigger>
             </TabsList>
 
@@ -781,17 +631,10 @@ export default function AdminDonationCampaignDetail() {
                   <Label className="mb-1.5 block text-xs font-bold text-foreground">
                     {isAr ? "التصنيف / الفئة" : "Category"}
                   </Label>
-                  <select
-                    value={campaign.category_id || ""}
-                    onChange={(e) => updateField("category_id", Number(e.target.value))}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    {categories.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {isAr ? cat.name_ar : (cat.name_en || cat.name_ar)}
-                      </option>
-                    ))}
-                  </select>
+                  <ChoiceSelect value={campaign.category_id != null ? String(campaign.category_id) : ""}
+                    onChange={(v) => updateField("category_id", v ? Number(v) : null)}
+                    noneLabel={categories.length ? (isAr ? "— بدون تصنيف —" : "— No category —") : (isAr ? "لا توجد تصنيفات في قاعدة البيانات" : "No categories in the database")}
+                    options={categories.map((cat) => ({ value: String(cat.id), label: isAr ? cat.name_ar : (cat.name_en || cat.name_ar) }))} />
                 </div>
 
                 <div>
@@ -819,59 +662,9 @@ export default function AdminDonationCampaignDetail() {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <Label className="mb-1.5 block text-xs font-bold text-foreground">
-                    {isAr ? "صورة الغلاف (يدعم JPG, PNG, WebP)" : "Cover Image (JPG, PNG, WebP)"}
-                  </Label>
-                  <input
-                    ref={imgInputRef}
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/svg+xml"
-                    className="hidden"
-                    onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageSelect(f); e.target.value = ""; }}
-                  />
-                  <div
-                    className="relative group rounded-2xl border-2 border-dashed border-border hover:border-primary/60 bg-muted/30 transition-colors overflow-hidden"
-                    style={{ minHeight: 160 }}
-                    onDragOver={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = "var(--primary)"; }}
-                    onDragLeave={(e) => { e.currentTarget.style.borderColor = ""; }}
-                    onDrop={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = ""; const f = e.dataTransfer.files?.[0]; if (f) handleImageSelect(f); }}
-                  >
-                    {(imagePreview || campaign.image) ? (
-                      <>
-                        <img
-                          src={imagePreview || formatServerImageUrl(campaign.image) || campaign.image}
-                          alt="Preview"
-                          className="w-full object-cover rounded-2xl"
-                          style={{ maxHeight: 240 }}
-                          onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
-                        />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center gap-2">
-                          <Button type="button" size="sm" variant="secondary" className="gap-1.5 rounded-xl text-xs font-bold shadow-md" onClick={() => imgInputRef.current?.click()}>
-                            <Upload className="h-3.5 w-3.5" />
-                            {isAr ? "تغيير الصورة" : "Change Image"}
-                          </Button>
-                          <Button type="button" size="sm" variant="destructive" className="gap-1.5 rounded-xl text-xs font-bold shadow-md" onClick={handleRemoveImage}>
-                            <X className="h-3.5 w-3.5" />
-                            {isAr ? "حذف" : "Remove"}
-                          </Button>
-                        </div>
-                      </>
-                    ) : (
-                      <button type="button" className="w-full h-full flex flex-col items-center justify-center gap-3 p-8 text-muted-foreground hover:text-primary transition-colors" onClick={() => imgInputRef.current?.click()}>
-                        <ImageIcon className="h-8 w-8" />
-                        <div className="text-center">
-                          <p className="text-sm font-bold">{isAr ? "انقر لاختيار صورة من جهازك" : "Click to select image from device"}</p>
-                          <p className="text-xs mt-1 text-muted-foreground">{isAr ? "أو اسحب وأفلت هنا (يدعم كل الصيغ JPG, PNG, WebP)" : "or drag & drop here (JPG, PNG, WebP)"}</p>
-                        </div>
-                      </button>
-                    )}
-                  </div>
-                  {pendingImageFile && (
-                    <p className="mt-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      {isAr ? `تم اختيار: ${pendingImageFile.name} (سيتم حفظها في السيرفر عند حفظ الحملة)` : `Selected: ${pendingImageFile.name} (will save to server upon campaign save)`}
-                    </p>
-                  )}
+                  <ImageUrlField label={isAr ? "صورة الغلاف" : "Cover image"} value={campaign.image || ""} aspect="wide" collection="campaigns"
+                    onChange={(v) => updateField("image", v)}
+                    hint={isAr ? "بتظهر في كارت الحملة وأعلى صفحتها. ارفع صورة أو الصق رابطها." : undefined} />
                 </div>
 
                 <div className="sm:col-span-2">
@@ -1036,91 +829,18 @@ export default function AdminDonationCampaignDetail() {
               </div>
             </TabsContent>
 
-            {/* TAB 4: Donation Packages */}
+            {/* TAB 4: Donation Packages (live: each change goes straight to the backend) */}
             <TabsContent value="packages" className="space-y-4 pt-2">
-              <div className="rounded-xl border border-border/80 bg-muted/20 p-4">
-                <h3 className="text-xs font-bold text-foreground mb-3">
-                  {isAr ? "إضافة باقة أو سهم تبرع جديد" : "Add Donation Package"}
-                </h3>
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="sm:col-span-2">
-                    <Label className="mb-1 block text-[11px] font-bold text-muted-foreground">
-                      {isAr ? "اسم الباقة / السهم" : "Package Name"}
-                    </Label>
-                    <Input
-                      dir="rtl"
-                      value={newPkgName}
-                      onChange={(e) => setNewPkgName(e.target.value)}
-                      placeholder="مثال: سهم توصيل وصلة مياه"
-                    />
-                  </div>
-                  <div>
-                    <Label className="mb-1 block text-[11px] font-bold text-muted-foreground">
-                      {isAr ? "المبلغ (ج.م)" : "Amount (EGP)"}
-                    </Label>
-                    <div className="flex gap-2">
-                      <Input
-                        dir="ltr"
-                        type="number"
-                        value={newPkgAmount}
-                        onChange={(e) => setNewPkgAmount(e.target.value)}
-                      />
-                      <Button
-                        onClick={handleAddPackage}
-                        disabled={addingPkg}
-                        className="bg-secondary text-secondary-foreground font-bold shrink-0"
-                      >
-                        {addingPkg ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2 mt-4">
-                <p className="text-xs font-bold text-muted-foreground">
-                  {isAr ? "باقات التبرع السريع المسجلة:" : "Registered Donation Packages:"}
-                </p>
-                {packages.length === 0 ? (
-                  <p className="text-xs text-muted-foreground/60 italic py-4 text-center">
-                    {isAr ? "لا توجد باقات تبرع مدخلة لهذه الحملة." : "No donation packages for this campaign."}
-                  </p>
-                ) : (
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {packages.map((pkg, idx) => (
-                      <div
-                        key={pkg.id || idx}
-                        className="flex items-center justify-between rounded-xl border border-border/80 bg-card p-3 shadow-xs"
-                      >
-                        <div className="flex items-center gap-2">
-                          <Tag className="h-4 w-4 text-secondary shrink-0" />
-                          <div>
-                            <p className="text-xs font-bold text-foreground">{pkg.name_ar}</p>
-                            <p className="font-mono text-xs font-bold text-emerald-600">
-                              {Number(pkg.amount).toLocaleString("en-US")} ج.م
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <Switch
-                            checked={pkg.is_active !== false}
-                            onCheckedChange={() => handleTogglePackage(pkg.id)}
-                          />
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleRemovePackage(pkg.id)}
-                            className="h-7 w-7 p-0 text-destructive/80 hover:text-destructive"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <CampaignPackagesManager
+                campaignId={isNew ? null : (campaign.id ?? null)}
+                packages={packages}
+                onChange={(next) => {
+                  setPackages(next);
+                  if (pageMeta) void queryClient.invalidateQueries({ queryKey: ["campaign-packages", pageMeta.slug] });
+                }}
+                isAr={isAr}
+                priceKeys={(pageContent?.prices || []).map((p) => ({ id: p.id, label: p.label }))}
+              />
             </TabsContent>
 
             {/* Landing page content tabs (hero / hadith / figures / sections / closing). Prices come from donation packages. */}
@@ -1131,8 +851,15 @@ export default function AdminDonationCampaignDetail() {
                     {isAr
                       ? `صفحة الهبوط elyusr.org${pageMeta.path} — التصميم ثابت، والنصوص تتعدل من هنا وتُحفظ بزر «حفظ التغييرات» أعلى الصفحة. الأسعار تُقرأ من «باقات التبرع».`
                       : `Landing page elyusr.org${pageMeta.path}: layout is fixed; texts are edited here and saved with the main Save button. Prices come from "Donation packages".`}
+                    {pageSource === "legacy" && (
+                      <span className="mt-1 block font-bold text-amber-700 dark:text-amber-400">
+                        {isAr
+                          ? "المحتوى المعروض مقروء من النسخة القديمة (/content). عند الحفظ يُكتب في سجل الحملة (page_content)."
+                          : "Showing content from the legacy /content item. Saving writes it to the campaign record (page_content)."}
+                      </span>
+                    )}
                   </p>
-                  {pageHasOverride && (
+                  {pageHasOverride && !isNew && (
                     <Button type="button" variant="outline" size="sm" onClick={resetPageContent} className="shrink-0 text-xs font-bold text-destructive hover:text-destructive">
                       {isAr ? "إعادة نصوص الصفحة للافتراضي" : "Reset page texts to defaults"}
                     </Button>
@@ -1144,9 +871,17 @@ export default function AdminDonationCampaignDetail() {
               return (
                 <>
                   <TabsContent value="hero" className="space-y-4 pt-2">{bar}{panel(HeroPanel)}</TabsContent>
-                  <TabsContent value="hadith" className="space-y-4 pt-2">{bar}{panel(HadithPanel)}</TabsContent>
+                  <TabsContent value="hadith" className="space-y-4 pt-2">
+                    {bar}{panel(HadithPanel)}
+                    {pageContent && <SectionsPanel value={pageContent} onChange={setPageContent} isAr={isAr} keys={sectionKeysFor(pageContent, "hadith")} />}
+                  </TabsContent>
                   <TabsContent value="stats" className="space-y-4 pt-2">{bar}{panel(StatsPanel)}</TabsContent>
-                  <TabsContent value="sections" className="space-y-4 pt-2">{bar}{panel(SectionsPanel)}</TabsContent>
+                  {sectionTabs.map((t) => (
+                    <TabsContent key={t.id} value={`sec-${t.id}`} className="space-y-4 pt-2">
+                      {bar}
+                      {pageContent && <SectionsPanel value={pageContent} onChange={setPageContent} isAr={isAr} keys={t.keys} />}
+                    </TabsContent>
+                  ))}
                   <TabsContent value="cta" className="space-y-4 pt-2">{bar}{panel(CtaPanel)}</TabsContent>
                 </>
               );
@@ -1154,6 +889,16 @@ export default function AdminDonationCampaignDetail() {
 
             {/* TAB 5: SEO & Meta Settings with Google Preview */}
             <TabsContent value="seo" className="space-y-6 pt-2">
+              {pageMeta && pageContent && sectionKeysFor(pageContent, "seo").length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-xs text-muted-foreground">
+                    {isAr
+                      ? "عنوان ووصف صفحة الهبوط (بيظهروا في المسار ووصف الصفحة لما خانات الميتا تحت تكون فاضية)."
+                      : "Landing page title and description (used when the meta fields below are empty)."}
+                  </p>
+                  <SectionsPanel value={pageContent} onChange={setPageContent} isAr={isAr} keys={sectionKeysFor(pageContent, "seo")} />
+                </div>
+              )}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-blue-500/10 via-primary/5 to-transparent p-4 border border-blue-500/20">
                 <div className="flex items-center gap-3">
                   <div className="grid h-10 w-10 place-items-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400">
@@ -1171,16 +916,6 @@ export default function AdminDonationCampaignDetail() {
                   </div>
                 </div>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleApplyPdfSeoPreset}
-                  className="gap-1.5 text-xs font-bold border-blue-500/30 text-blue-700 dark:text-blue-400 hover:bg-blue-500/10 shrink-0"
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  <span>{isAr ? "استعادة إعدادات السيو من الـ PDF" : "Load PDF SEO Preset"}</span>
-                </Button>
               </div>
 
               {/* Google Live SERP Preview */}
@@ -1488,194 +1223,22 @@ export default function AdminDonationCampaignDetail() {
             </TabsContent>
 
             {/* TAB 6: Campaign FAQs */}
-            <TabsContent value="faqs" className="space-y-4 pt-2">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl bg-amber-500/10 p-4 border border-amber-500/20">
-                <div className="flex items-center gap-3">
-                  <div className="grid h-10 w-10 place-items-center rounded-xl bg-amber-500/20 text-amber-700 dark:text-amber-300">
-                    <HelpCircle className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-black text-foreground">
-                      {isAr ? "بنك الأسئلة الشائعة الخاص بالحملة" : "Campaign FAQ Bank"}
-                    </h3>
-                    <p className="text-xs text-muted-foreground">
-                      {isAr
-                        ? "الأسئلة الشائعة المعروضة في صفحة هبوط الحملة للإجابة على استفسارات المتبرعين وزيادة الثقة."
-                        : "Specific FAQs displayed on this campaign's landing page."}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleImportPdfFaqs}
-                    className="gap-1.5 text-xs font-bold border-amber-500/30 text-amber-800 dark:text-amber-200 hover:bg-amber-500/10"
-                  >
-                    <Sparkles className="h-3.5 w-3.5" />
-                    <span>{isAr ? "استيراد أسئلة الحملة من الـ PDF" : "Import PDF FAQs"}</span>
-                  </Button>
-
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => setShowAddFaqForm(!showAddFaqForm)}
-                    className="gap-1 text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white"
-                  >
-                    <Plus className="h-3.5 w-3.5" />
-                    <span>{isAr ? "إضافة سؤال" : "Add FAQ"}</span>
-                  </Button>
-                </div>
-              </div>
-
-              {/* Add FAQ Form */}
-              {showAddFaqForm && (
-                <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4 space-y-3 animate-in fade-in">
-                  <h4 className="text-xs font-black text-foreground flex items-center gap-1.5">
-                    <Plus className="h-3.5 w-3.5 text-amber-600" />
-                    {isAr ? "إضافة سؤال شائع جديد للحملة" : "Add New Campaign Question"}
-                  </h4>
-
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div>
-                      <Label className="text-[11px] font-bold text-foreground mb-1 block">
-                        {isAr ? "السؤال (بالعربية) *" : "Question (Arabic) *"}
-                      </Label>
-                      <Input
-                        dir="rtl"
-                        value={newFaqQAr}
-                        onChange={(e) => setNewFaqQAr(e.target.value)}
-                        placeholder="مثال: كم تكلفة السهم في هذه الحملة؟"
-                        className="h-9 text-xs"
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="text-[11px] font-bold text-foreground mb-1 block">
-                        {isAr ? "السؤال (بالإنجليزية)" : "Question (English)"}
-                      </Label>
-                      <Input
-                        dir="ltr"
-                        value={newFaqQEn}
-                        onChange={(e) => setNewFaqQEn(e.target.value)}
-                        placeholder="e.g. How much does a share cost?"
-                        className="h-9 text-xs"
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="text-[11px] font-bold text-foreground mb-1 block">
-                        {isAr ? "الإجابة (بالعربية) *" : "Answer (Arabic) *"}
-                      </Label>
-                      <Textarea
-                        dir="rtl"
-                        rows={2}
-                        value={newFaqAAr}
-                        onChange={(e) => setNewFaqAAr(e.target.value)}
-                        placeholder="إجابة مفصلة وموثقة..."
-                        className="text-xs"
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="text-[11px] font-bold text-foreground mb-1 block">
-                        {isAr ? "الإجابة (بالإنجليزية)" : "Answer (English)"}
-                      </Label>
-                      <Textarea
-                        dir="ltr"
-                        rows={2}
-                        value={newFaqAEn}
-                        onChange={(e) => setNewFaqAEn(e.target.value)}
-                        placeholder="Detailed answer..."
-                        className="text-xs"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end gap-2 pt-1">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowAddFaqForm(false)}
-                      className="text-xs"
-                    >
-                      {isAr ? "إلغاء" : "Cancel"}
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      onClick={handleAddCampaignFaq}
-                      className="text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white"
-                    >
-                      {isAr ? "حفظ السؤال" : "Save Question"}
-                    </Button>
-                  </div>
-                </div>
+            <TabsContent value="faqs" className="space-y-4 pt-2" dir="rtl">
+              {pageMeta && pageContent && sectionKeysFor(pageContent, "faqs").length > 0 && (
+                <SectionsPanel value={pageContent} onChange={setPageContent} isAr={isAr} keys={sectionKeysFor(pageContent, "faqs")} />
               )}
-
-              {/* FAQs List */}
-              <div className="space-y-2.5">
-                {campaignFaqs.length === 0 ? (
-                  <div className="py-12 text-center text-muted-foreground border border-dashed rounded-2xl">
-                    <HelpCircle className="mx-auto h-8 w-8 text-muted-foreground/30 mb-2" />
-                    <p className="text-xs font-bold">
-                      {isAr ? "لا توجد أسئلة شائعة مسجلة لهذه الحملة حالياً." : "No FAQs registered for this campaign."}
-                    </p>
-                    <p className="text-[11px] text-muted-foreground mt-1">
-                      {isAr
-                        ? "اضغط على «استيراد أسئلة الحملة من الـ PDF» لإدراج الأسئلة الـ 6 المعتمدة بنقرة واحدة."
-                        : "Click 'Import PDF FAQs' to automatically load the 6 approved questions."}
-                    </p>
-                  </div>
-                ) : (
-                  campaignFaqs.map((faq, index) => (
-                    <div
-                      key={index}
-                      className="rounded-xl border border-border/80 bg-card p-3.5 shadow-xs hover:border-primary/30 transition-colors space-y-1.5"
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="flex items-start gap-2">
-                          <span className="grid h-6 w-6 place-items-center rounded-lg bg-amber-500/15 text-amber-700 dark:text-amber-300 font-mono text-[11px] font-black shrink-0">
-                            {index + 1}
-                          </span>
-                          <div>
-                            <h5 className="text-xs font-bold text-foreground">
-                              {faq.question_ar}
-                            </h5>
-                            {faq.question_en && (
-                              <p className="text-[11px] text-muted-foreground font-mono mt-0.5">
-                                {faq.question_en}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleRemoveCampaignFaq(index)}
-                          className="h-7 w-7 p-0 text-destructive/70 hover:text-destructive hover:bg-destructive/10"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </div>
-
-                      <div className="pr-8 text-xs text-muted-foreground leading-relaxed bg-muted/20 p-2.5 rounded-lg border border-border/40">
-                        <p>{faq.answer_ar}</p>
-                        {faq.answer_en && (
-                          <p className="mt-1 text-[11px] text-muted-foreground/80 font-mono border-t border-border/40 pt-1">
-                            {faq.answer_en}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
+              <EntityFaqManager
+                kind="campaign"
+                saved={!isNew && !!campaign?.id}
+                linkedCategoryId={campaign?.faq_category_id}
+                slug={campaign?.slug || ""}
+                nameAr={campaign?.name_ar || ""}
+                onLink={async (faq_category_id) => {
+                  await donationCampaignsApi.update(campaign!.id!, { faq_category_id } as Partial<LaravelDonationCampaign>);
+                  updateField("faq_category_id", faq_category_id);
+                  void queryClient.invalidateQueries({ queryKey: ["campaign-page"] });
+                }}
+              />
             </TabsContent>
           </Tabs>
         </div>

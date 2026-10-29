@@ -5,13 +5,11 @@ import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { RequireAuth } from "@/auth/RequireAuth";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import type { Database } from "@/integrations/supabase/types";
+import { volunteerApplicationsApi, type VolunteerApplication } from "@/data/api/volunteerApplicationsApi";
+import { apiErrorMessage, isEndpointMissing, FEATURE_PENDING_MSG } from "@/data/api/adminApiHelpers";
 
-type App = Database["public"]["Tables"]["volunteer_applications"]["Row"];
-type Camp = Database["public"]["Tables"]["volunteer_campaigns"]["Row"];
-type Joined = App & { campaign?: Camp | null };
+type Joined = VolunteerApplication;
 
 const STATUS_META: Record<string, { ar: string; en: string; cls: string; icon: typeof Clock4 }> = {
   pending:  { ar: "قيد المراجعة", en: "Pending",  cls: "bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300", icon: Hourglass },
@@ -27,33 +25,17 @@ const Inner = () => {
   const [apps, setApps] = useState<Joined[]>([]);
   const [tab, setTab] = useState<"all" | "pending" | "approved" | "rejected" | "attended">("all");
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const load = async () => {
     if (!user) return;
     setLoading(true);
+    setLoadError(null);
     try {
-      const isUuid = Boolean(user.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(user.id)));
-      const query = supabase.from("volunteer_applications").select("*");
-      if (isUuid && user.email) {
-        query.or(`volunteer_id.eq.${user.id},email.eq.${user.email}`);
-      } else if (isUuid) {
-        query.eq("volunteer_id", user.id);
-      } else if (user.email) {
-        query.eq("email", user.email);
-      }
-      const { data: rows, error } = await query.order("created_at", { ascending: false });
-      if (error) { toast({ title: error.message, variant: "destructive" }); setLoading(false); return; }
-      const safeRows = Array.isArray(rows) ? rows : [];
-      const ids = Array.from(new Set(safeRows.map((r) => r.campaign_id))).filter(Boolean);
-      let camps: Camp[] = [];
-      if (ids.length) {
-        const { data: cs } = await supabase.from("volunteer_campaigns").select("*").in("id", ids);
-        if (Array.isArray(cs)) camps = cs;
-      }
-      const map = new Map(camps.map((c) => [c.id, c]));
-      setApps(safeRows.map((r) => ({ ...r, campaign: map.get(r.campaign_id) ?? null })));
-    } catch {
+      setApps(await volunteerApplicationsApi.listMine());
+    } catch (e) {
       setApps([]);
+      setLoadError(isEndpointMissing(e) ? FEATURE_PENDING_MSG : apiErrorMessage(e, "تعذر تحميل المهام"));
     } finally {
       setLoading(false);
     }
@@ -72,8 +54,12 @@ const Inner = () => {
 
   const cancel = async (id: string) => {
     if (!confirm(lang === "ar" ? "تأكيد إلغاء طلب المشاركة؟" : "Cancel this participation request?")) return;
-    const { error } = await supabase.from("volunteer_applications").delete().eq("id", id);
-    if (error) { toast({ title: error.message, variant: "destructive" }); return; }
+    try {
+      await volunteerApplicationsApi.cancel(id);
+    } catch (e) {
+      toast({ title: lang === "ar" ? "فشل إلغاء الطلب" : "Cancel failed", description: apiErrorMessage(e), variant: "destructive" });
+      return;
+    }
     toast({ title: lang === "ar" ? "تم إلغاء الطلب" : "Request cancelled" });
     void load();
   };
@@ -108,7 +94,12 @@ const Inner = () => {
 
       <div className="mt-4 space-y-3">
         {loading && <div className="rounded-2xl bg-card p-8 text-center text-sm text-muted-foreground shadow-soft">…</div>}
-        {!loading && filtered.length === 0 && (
+        {!loading && loadError && (
+          <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-4 text-center text-sm font-bold text-destructive">
+            {loadError}
+          </div>
+        )}
+        {!loading && !loadError && filtered.length === 0 && (
           <div className="rounded-2xl bg-card p-8 text-center shadow-soft">
             <p className="text-sm text-muted-foreground">
               {lang === "ar" ? "لا توجد مهام في هذا التبويب." : "No tasks in this tab."}
@@ -158,7 +149,7 @@ const Inner = () => {
                         <span>•</span>
                       </>
                     )}
-                    <span dir="ltr">{new Date(a.created_at).toLocaleDateString()}</span>
+                    <span dir="ltr">{a.created_at ? new Date(a.created_at).toLocaleDateString() : ""}</span>
                   </div>
 
                   {/* Required docs hint */}

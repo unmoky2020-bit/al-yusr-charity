@@ -19,10 +19,12 @@ const ProfileInner = () => {
   const [form, setForm] = useState({ name: user!.name, email: user!.email, phone: user!.phone || "", bio: user!.bio || "" });
   const [pwd, setPwd] = useState({ old: "", neu: "", confirm: "" });
 
-  const saveProfile = (e: React.FormEvent) => {
+  const saveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile(user!.id, { name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim(), bio: form.bio.trim() });
-    toast({ title: lang === "ar" ? " تم تحديث البيانات" : " Profile updated" });
+    try {
+      await updateProfile(user!.id, { name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim(), bio: form.bio.trim() });
+      toast({ title: lang === "ar" ? " تم تحديث البيانات" : " Profile updated" });
+    } catch { /* AuthContext already showed the server error */ }
   };
 
   const savePwd = async (e: React.FormEvent) => {

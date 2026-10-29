@@ -1,50 +1,47 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft, ArrowRight, Save, Trash2, Loader2, ExternalLink, Globe2, Tag, DollarSign, Image as ImageIcon,
-  CheckCircle2, XCircle, Plus, BookOpen, Compass, Calendar, Eye, EyeOff, Sparkles, HeartHandshake, Upload, X
+  ArrowLeft, ArrowRight, BookOpen, Compass, DollarSign, Globe2, Image as ImageIcon, LayoutTemplate,
+  Loader2, RefreshCw, Save, Sparkles, Trash2, ExternalLink, AlertTriangle,
 } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
+import { axesApi, seasonsApi, type LaravelAxis, type LaravelSeason } from "@/data/laravelApi";
 import {
-  programsApiV1, axesApi, seasonsApi,
-  type LaravelProgram, type LaravelAxis, type LaravelSeason,
-  formatServerImageUrl, uploadImage,
-} from "@/data/laravelApi";
+  apiErrorMessageAr,
+  programsAdminApi,
+  type AdminProgramRecord,
+} from "@/data/api/programsAdminApi";
+import { BilingualField, ChoiceSelect, Field, ImageUrlField, SectionCard, ToggleCard } from "@/components/admin/programs/FormKit";
+import { AiFields, GeoFields, SeoFields } from "@/components/admin/programs/SeoGeoAiFields";
+import { PackagesEditor } from "@/components/admin/programs/PackagesEditor";
+import { PageSectionsEditor } from "@/components/admin/programs/PageSectionsEditor";
+import { EntityFaqManager } from "@/components/admin/faq/EntityFaqManager";
+import {
+  compactPayload,
+  diffPayload,
+  keysMissingFromResponse,
+  validateSeo,
+  type SeoFormState,
+} from "@/components/admin/programs/formUtils";
+import {
+  emptyProgramForm,
+  isTopSectionEmpty,
+  programFormFromRecord,
+  programPayload,
+  topSectionFromRecord,
+  topSectionPayload,
+  type ProgramForm,
+  type TopSectionForm,
+} from "@/components/admin/programs/programForm";
 
-const EMPTY_FORM = {
-  slug: "",
-  name_ar: "",
-  name_en: "",
-  tagline_ar: "",
-  tagline_en: "",
-  description_ar: "",
-  description_en: "",
-  content_ar: "",
-  content_en: "",
-  period_ar: "",
-  period_en: "",
-  target_amount: "",
-  minimum_amount: "",
-  image: "",
-  axis_id: "",
-  status: "published" as "published" | "draft",
-  is_active: true,
-  donation_available: true,
-  hide_from_audience: false,
-  sort_order: "",
-  benefits_ar: "",
-  benefits_en: "",
-};
-
-type FormState = typeof EMPTY_FORM;
+const triggerCls = "rounded-xl px-3 py-2 text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs";
 
 export default function AdminProgramDetail() {
   const { lang } = useLang();
@@ -54,213 +51,160 @@ export default function AdminProgramDetail() {
   const nav = useNavigate();
 
   const [axes, setAxes] = useState<LaravelAxis[]>([]);
+  const [seasons, setSeasons] = useState<LaravelSeason[]>([]);
+  const [record, setRecord] = useState<AdminProgramRecord | null>(null);
+  const [form, setForm] = useState<ProgramForm>(emptyProgramForm);
+  const [origForm, setOrigForm] = useState<ProgramForm>(emptyProgramForm);
+  const [top, setTop] = useState<TopSectionForm>(() => topSectionFromRecord(null));
+  const [origTop, setOrigTop] = useState<TopSectionForm>(() => topSectionFromRecord(null));
   const [loading, setLoading] = useState(!isNew);
+  const [loadError, setLoadError] = useState("");
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [packages, setPackages] = useState<any[]>([]);
-  const [newPkg, setNewPkg] = useState({ name_ar: "سهم تبرع", name_en: "Contribution Share", amount: 100, is_active: true });
-  const [savingPkg, setSavingPkg] = useState(false);
-  const [form, setForm] = useState<FormState>({ ...EMPTY_FORM });
-  const [pendingImageFile, setPendingImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>("");
-  const imgInputRef = useRef<HTMLInputElement>(null);
+  const [notSaved, setNotSaved] = useState<string[]>([]);
+
+  const applyRecord = useCallback((p: AdminProgramRecord) => {
+    const f = programFormFromRecord(p);
+    const t = topSectionFromRecord(p.top_section);
+    setRecord(p);
+    setForm(f);
+    setOrigForm(f);
+    setTop(t);
+    setOrigTop(t);
+  }, []);
+
+  const load = useCallback(async () => {
+    if (isNew || !id) return;
+    setLoading(true);
+    setLoadError("");
+    try {
+      applyRecord(await programsAdminApi.get(id));
+    } catch (err) {
+      setLoadError(apiErrorMessageAr(err));
+    } finally {
+      setLoading(false);
+    }
+  }, [id, isNew, applyRecord]);
 
   useEffect(() => {
-    axesApi.list().catch(() => [] as LaravelAxis[]).then(setAxes);
-    if (!isNew && id) {
-      setLoading(true);
-      programsApiV1.get(id).then((p) => {
-        setForm({
-          slug: p.slug || "",
-          name_ar: p.name_ar || p.name || "",
-          name_en: p.name_en || "",
-          tagline_ar: p.tagline_ar || "",
-          tagline_en: p.tagline_en || "",
-          description_ar: p.description_ar || p.description || "",
-          description_en: p.description_en || "",
-          content_ar: p.content_ar || "",
-          content_en: p.content_en || "",
-          period_ar: p.period_ar || "",
-          period_en: p.period_en || "",
-          target_amount: String(p.target_amount || ""),
-          minimum_amount: String(p.minimum_amount || ""),
-          image: p.image || "",
-          axis_id: String(p.axis_id || ""),
-          status: (p.status as "published" | "draft") || "published",
-          is_active: p.is_active !== false,
-          donation_available: p.donation_available !== false,
-          hide_from_audience: !!p.hide_from_audience,
-          sort_order: String(p.sort_order || ""),
-          benefits_ar: (p.benefits_ar || []).join("\n"),
-          benefits_en: (p.benefits_en || []).join("\n"),
-        });
-        setPackages(p.donation_packages || []);
-      }).catch(() => {
-        toast({
-          title: isAr ? "خطأ" : "Error",
-          description: isAr ? "تعذر تحميل بيانات البرنامج من الخادم" : "Could not load program data",
-          variant: "destructive"
-        });
-      }).finally(() => setLoading(false));
+    axesApi.list().then(setAxes).catch(() => setAxes([]));
+    seasonsApi.listAll().then((s) => setSeasons(Array.isArray(s) ? s : [])).catch(() => setSeasons([]));
+  }, []);
+
+  useEffect(() => {
+    if (isNew) {
+      const f = emptyProgramForm();
+      setRecord(null);
+      setForm(f);
+      setOrigForm(f);
+      setTop(topSectionFromRecord(null));
+      setOrigTop(topSectionFromRecord(null));
+      setLoading(false);
+      return;
     }
-  }, [id, isNew, isAr]);
+    void load();
+  }, [isNew, load]);
 
-  const set = (key: keyof FormState, val: string | boolean) => setForm((f) => ({ ...f, [key]: val }));
+  const set = <K extends keyof ProgramForm>(key: K, val: ProgramForm[K]) =>
+    setForm((f) => {
+      const next = { ...f, [key]: val };
+      // "title" has no field of its own any more: it follows the name unless it was set to something else.
+      if (key === "name_ar" && (!f.title_ar || f.title_ar === f.name_ar)) next.title_ar = val as string;
+      if (key === "name_en" && (!f.title_en || f.title_en === f.name_en)) next.title_en = val as string;
+      return next;
+    });
+  const setSeo = (p: Partial<SeoFormState>) => setForm((f) => ({ ...f, seo: { ...f.seo, ...p } }));
+  const setT = <K extends keyof TopSectionForm>(key: K, val: TopSectionForm[K]) => setTop((t) => ({ ...t, [key]: val }));
 
-  const buildPayload = (): Record<string, unknown> => {
-    const payload: Record<string, unknown> = {
-      slug: form.slug.trim() || form.name_ar.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "") || undefined,
-      name_ar: form.name_ar.trim(),
-      name_en: form.name_en.trim() || undefined,
-      name: form.name_ar.trim(),
-      title_ar: form.name_ar.trim(),
-      title_en: form.name_en.trim() || undefined,
-      tagline_ar: form.tagline_ar.trim() || undefined,
-      tagline_en: form.tagline_en.trim() || undefined,
-      description_ar: form.description_ar.trim() || undefined,
-      description_en: form.description_en.trim() || undefined,
-      description: form.description_ar.trim() || undefined,
-      content_ar: form.content_ar.trim() || undefined,
-      content_en: form.content_en.trim() || undefined,
-      period_ar: form.period_ar.trim() || undefined,
-      period_en: form.period_en.trim() || undefined,
-      target_amount: form.target_amount ? Number(form.target_amount) : undefined,
-      minimum_amount: form.minimum_amount ? Number(form.minimum_amount) : undefined,
-      axis_id: form.axis_id ? Number(form.axis_id) : (axes[0]?.id || undefined),
-      status: form.status,
-      is_active: form.is_active,
-      donation_available: form.donation_available,
-      hide_from_audience: form.hide_from_audience,
-      sort_order: form.sort_order ? Number(form.sort_order) : undefined,
-      benefits_ar: form.benefits_ar ? form.benefits_ar.split("\n").map((s) => s.trim()).filter(Boolean) : undefined,
-      benefits_en: form.benefits_en ? form.benefits_en.split("\n").map((s) => s.trim()).filter(Boolean) : undefined,
-    };
-
-    if (pendingImageFile) {
-      payload.image = pendingImageFile;
-    }
-    return payload;
-  };
+  const programDiff = useMemo(() => diffPayload(programPayload(form), programPayload(origForm)), [form, origForm]);
+  const topChanged = useMemo(
+    () => JSON.stringify(topSectionPayload(top, record?.top_section)) !== JSON.stringify(topSectionPayload(origTop, record?.top_section)),
+    [top, origTop, record],
+  );
+  const dirty = Object.keys(programDiff).length > 0 || topChanged;
 
   const handleSave = async () => {
     if (!form.name_ar.trim()) {
-      toast({
-        title: isAr ? "حقل مطلوب" : "Required",
-        description: isAr ? "يرجى كتابة اسم البرنامج بالعربية" : "Arabic program name is required",
-        variant: "destructive"
-      });
+      toast({ variant: "destructive", title: "حقل مطلوب", description: "اكتب اسم البرنامج بالعربية" });
       return;
     }
+    const seoErrors = validateSeo(form.seo);
+    if (seoErrors.length) {
+      toast({ variant: "destructive", title: "راجع حقول SEO / GEO", description: seoErrors.join(" — ") });
+      return;
+    }
+    if (!isNew && !dirty) {
+      toast({ title: "لا توجد تغييرات للحفظ" });
+      return;
+    }
+
     setSaving(true);
+    const problems: string[] = [];
+    let programId: number | string | undefined = isNew ? undefined : id;
+    let returned: unknown = null;
+    let sent: Record<string, unknown> = {};
+
+    // 1) Program columns (JSON)
     try {
-      const payload = buildPayload();
       if (isNew) {
-        const created = await programsApiV1.create(payload as any);
-        toast({ title: isAr ? "تم إنشاء البرنامج بنجاح" : "Program created successfully" });
-        const newId = (created as any)?.data?.id ?? (created as any)?.id;
-        if (newId) {
-          nav(`/admin/programs/${newId}`, { replace: true });
-        } else {
-          nav("/admin/programs");
-        }
-      } else {
-        const res = await programsApiV1.update(id!, payload as any);
-        toast({ title: isAr ? "تم حفظ التعديلات بنجاح" : "Changes saved successfully" });
-        setPendingImageFile(null);
-        const updatedImg = (res as any)?.data?.image || (res as any)?.image;
-        if (updatedImg) {
-          set("image", updatedImg);
-          setImagePreview("");
-        }
+        const payload = compactPayload(programPayload(form));
+        if (!payload.axis_id && axes[0]?.id) payload.axis_id = Number(axes[0].id);
+        const created = await programsAdminApi.create(payload);
+        returned = created;
+        sent = payload;
+        programId = created?.id;
+        if (!programId) throw new Error("لم يرجع الخادم رقم البرنامج الجديد");
+      } else if (Object.keys(programDiff).length) {
+        returned = await programsAdminApi.update(id!, programDiff);
+        sent = programDiff;
       }
-    } catch (err: any) {
-      toast({
-        title: isAr ? "خطأ في الحفظ" : "Save Error",
-        description: err?.message || (isAr ? "تعذر حفظ البرنامج" : "Could not save program"),
-        variant: "destructive"
-      });
-    } finally {
+    } catch (err) {
+      toast({ variant: "destructive", title: "فشل حفظ البرنامج", description: apiErrorMessageAr(err) });
       setSaving(false);
+      return;
+    }
+
+    // 3) top_section (own endpoint)
+    if (programId && (isNew ? !isTopSectionEmpty(top) : topChanged)) {
+      try {
+        await programsAdminApi.updateTopSection(programId, topSectionPayload(top, record?.top_section));
+      } catch (err) {
+        problems.push(`القسم العلوي: ${apiErrorMessageAr(err)}`);
+      }
+    }
+
+    const missing = keysMissingFromResponse(sent, returned, ["season_ids", "name", "description"]);
+    setNotSaved(missing);
+
+    if (problems.length) {
+      toast({ variant: "destructive", title: "تم حفظ بيانات البرنامج، لكن بعض الأجزاء فشلت", description: problems.join(" — ") });
+    } else if (missing.length) {
+      toast({ variant: "destructive", title: "الخادم تجاهل بعض الحقول", description: `لم تُحفظ: ${missing.join("، ")}` });
+    } else {
+      toast({ title: isNew ? "تم إنشاء البرنامج" : "تم حفظ التعديلات" });
+    }
+
+    setSaving(false);
+    if (isNew && programId) {
+      nav(`/admin/programs/${programId}`, { replace: true });
+    } else {
+      await load();
     }
   };
 
   const handleDelete = async () => {
     if (!id || isNew) return;
-    const ok = window.confirm(isAr ? "هل أنت متأكد من حذف هذا البرنامج نهائياً من قاعدة البيانات؟" : "Are you sure you want to delete this program permanently?");
-    if (!ok) return;
+    if (!window.confirm("هل أنت متأكد من حذف هذا البرنامج نهائياً من قاعدة البيانات؟")) return;
     setDeleting(true);
     try {
-      await programsApiV1.remove(id);
-      toast({ title: isAr ? "تم حذف البرنامج" : "Program deleted" });
+      await programsAdminApi.remove(id);
+      toast({ title: "تم حذف البرنامج" });
       nav("/admin/programs");
-    } catch (err: any) {
-      toast({
-        title: isAr ? "خطأ في الحذف" : "Delete Error",
-        description: err?.message || "",
-        variant: "destructive"
-      });
+    } catch (err) {
+      toast({ variant: "destructive", title: "فشل الحذف", description: apiErrorMessageAr(err) });
     } finally {
       setDeleting(false);
     }
-  };
-
-  const handleAddPackage = async () => {
-    if (!id || isNew) {
-      toast({
-        title: isAr ? "تنبيه" : "Notice",
-        description: isAr ? "يرجى حفظ البرنامج أولاً قبل إضافة باقات تبرع" : "Save the program first before adding donation packages"
-      });
-      return;
-    }
-    if (!newPkg.name_ar.trim() || !newPkg.amount) return;
-    setSavingPkg(true);
-    try {
-      await programsApiV1.addPackage(id, {
-        name_ar: newPkg.name_ar.trim(),
-        name_en: newPkg.name_en.trim() || undefined,
-        amount: Number(newPkg.amount),
-        sort_order: packages.length + 1,
-        is_active: newPkg.is_active,
-      });
-      toast({ title: isAr ? "تمت إضافة باقة التبرع" : "Donation package added" });
-      const updated = await programsApiV1.get(id);
-      setPackages(updated.donation_packages || []);
-      setNewPkg({ name_ar: "سهم تبرع", name_en: "Contribution Share", amount: 100, is_active: true });
-    } catch (err: any) {
-      toast({
-        title: isAr ? "خطأ" : "Error",
-        description: err?.message || "",
-        variant: "destructive"
-      });
-    } finally {
-      setSavingPkg(false);
-    }
-  };
-
-  const handleImageSelect = (file: File) => {
-    const allowed = ["image/jpeg", "image/png", "image/webp", "image/jpg", "image/gif", "image/svg+xml"];
-    if (!allowed.includes(file.type) && !file.type.startsWith("image/")) {
-      toast({
-        title: isAr ? "نوع غير مدعوم" : "Unsupported type",
-        description: isAr ? "يرجى اختيار صورة (JPG, PNG, WebP)" : "Please select an image file",
-        variant: "destructive"
-      });
-      return;
-    }
-    setPendingImageFile(file);
-    const localUrl = URL.createObjectURL(file);
-    setImagePreview(localUrl);
-    set("image", localUrl);
-    toast({
-      title: isAr ? "تم اختيار الصورة" : "Image selected",
-      description: isAr ? "سيتم حفظها في قاعدة البيانات فور الضغط على «حفظ التغييرات»" : "Will be saved when you click Save Changes",
-    });
-  };
-
-  const handleRemoveImage = () => {
-    setPendingImageFile(null);
-    setImagePreview("");
-    set("image", "");
   };
 
   const BackArrow = isAr ? ArrowRight : ArrowLeft;
@@ -268,564 +212,237 @@ export default function AdminProgramDetail() {
   if (loading) {
     return (
       <AdminLayout>
-        <div className="flex h-[50vh] flex-col items-center justify-center gap-3 text-muted-foreground" dir={isAr ? "rtl" : "ltr"}>
+        <div className="flex h-[50vh] flex-col items-center justify-center gap-3 text-muted-foreground" dir="rtl">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm font-bold">{isAr ? "جاري تحميل تفاصيل البرنامج..." : "Loading program details..."}</p>
+          <p className="text-sm font-bold">جاري تحميل تفاصيل البرنامج…</p>
         </div>
       </AdminLayout>
     );
   }
 
+  if (loadError) {
+    return (
+      <AdminLayout>
+        <div className="mx-auto max-w-lg space-y-3 rounded-3xl border border-destructive/40 bg-card p-6 text-center" dir="rtl">
+          <AlertTriangle className="mx-auto h-8 w-8 text-destructive" />
+          <p className="text-sm font-bold text-foreground">تعذر تحميل البرنامج</p>
+          <p className="text-xs text-muted-foreground">{loadError}</p>
+          <div className="flex justify-center gap-2">
+            <Button variant="outline" size="sm" asChild><Link to="/admin/programs">العودة للبرامج</Link></Button>
+            <Button size="sm" onClick={() => void load()} className="gap-1"><RefreshCw className="h-3.5 w-3.5" /> إعادة المحاولة</Button>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
+
   return (
     <AdminLayout>
-      <div className="space-y-6" dir={isAr ? "rtl" : "ltr"}>
-        {/* Top Header Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-border/80 bg-card p-5 sm:p-6 shadow-card">
+      <div className="space-y-6" dir="rtl">
+        {/* Header */}
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-border/80 bg-card p-5 shadow-card sm:p-6">
           <div className="flex items-center gap-3">
             <Button asChild variant="outline" size="icon" className="h-10 w-10 rounded-2xl border-border">
-              <Link to="/admin/programs" aria-label={isAr ? "العودة للبرامج" : "Back to programs"}>
-                <BackArrow className="h-5 w-5" />
-              </Link>
+              <Link to="/admin/programs" aria-label="العودة للبرامج"><BackArrow className="h-5 w-5" /></Link>
             </Button>
             <div>
               <div className="flex items-center gap-2">
-                <span className="grid h-8 w-8 place-items-center rounded-xl bg-primary/10 text-primary">
-                  <BookOpen className="h-4 w-4" />
-                </span>
+                <span className="grid h-8 w-8 place-items-center rounded-xl bg-primary/10 text-primary"><BookOpen className="h-4 w-4" /></span>
                 <h1 className="text-xl font-black text-foreground sm:text-2xl">
-                  {isNew
-                    ? (isAr ? "إضافة برنامج جديد" : "New Program")
-                    : (form.name_ar || (isAr ? "تفاصيل البرنامج" : "Program Details"))}
+                  {isNew ? "إضافة برنامج جديد" : form.name_ar || "تفاصيل البرنامج"}
                 </h1>
+                {dirty && <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold text-amber-700">تعديلات غير محفوظة</span>}
               </div>
               <p className="mt-1 text-xs font-semibold text-muted-foreground">
-                {isNew
-                  ? (isAr ? "إضافة برنامج جديد وتحديد محاوره وباقات تبرعه" : "Create a new charity program with packages")
-                  : `${isAr ? "معرف البرنامج:" : "Program ID:"} ${id} · ${form.slug || "-"}`}
+                {isNew ? "بعد الحفظ الأول ستظهر أقسام الصفحة والباقات" : `رقم البرنامج: ${id} · ${form.slug || "-"}`}
               </p>
             </div>
           </div>
-
           <div className="flex flex-wrap items-center gap-2.5">
             {!isNew && form.slug && (
               <Button asChild variant="ghost" size="sm" className="gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
-                <Link to={`/programs/${form.slug}`} target="_blank">
-                  <ExternalLink className="h-3.5 w-3.5" />
-                  {isAr ? "معاينة بالموقع" : "View Live"}
-                </Link>
+                <Link to={`/programs/${form.slug}`} target="_blank"><ExternalLink className="h-3.5 w-3.5" /> معاينة بالموقع</Link>
               </Button>
             )}
-
             {!isNew && (
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={handleDelete}
-                disabled={deleting}
-                className="gap-1.5 rounded-xl font-bold"
-              >
-                {deleting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
-                {isAr ? "حذف" : "Delete"}
+              <Button variant="destructive" size="sm" onClick={handleDelete} disabled={deleting} className="gap-1.5 rounded-xl font-bold">
+                {deleting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />} حذف
               </Button>
             )}
-
-            <Button
-              onClick={handleSave}
-              disabled={saving}
-              className="gap-1.5 rounded-xl bg-primary text-primary-foreground font-black shadow-md hover:bg-primary/95"
-            >
-              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              {isAr ? "حفظ التغييرات" : "Save Changes"}
+            <Button onClick={handleSave} disabled={saving} className="gap-1.5 rounded-xl bg-primary font-black text-primary-foreground shadow-md hover:bg-primary/95">
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} حفظ التغييرات
             </Button>
           </div>
         </div>
 
-        {/* Quick Status Bar */}
+        {notSaved.length > 0 && (
+          <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-amber-800 dark:text-amber-300">
+            <b>تنبيه:</b> الخادم لم يُرجع هذه الحقول بعد الحفظ، غالباً لأنها غير موجودة في الباك إند أو غير مسموح بها في التحقق: {notSaved.join("، ")}
+          </div>
+        )}
+
+        {/* Quick visibility bar */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-card p-3.5 shadow-xs">
-            <div>
-              <Label className="text-xs font-bold text-foreground">{isAr ? "حالة النشر" : "Publish Status"}</Label>
-              <p className="text-[11px] font-semibold text-muted-foreground">
-                {form.status === "published" ? (isAr ? "منشور ومتاح" : "Published") : (isAr ? "مسودة" : "Draft")}
-              </p>
-            </div>
-            <Switch
-              checked={form.status === "published"}
-              onCheckedChange={(c) => set("status", c ? "published" : "draft")}
-            />
-          </div>
-
-          <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-card p-3.5 shadow-xs">
-            <div>
-              <Label className="text-xs font-bold text-foreground">{isAr ? "برنامج نشط" : "Active"}</Label>
-              <p className="text-[11px] font-semibold text-muted-foreground">
-                {form.is_active ? (isAr ? "مفعّل" : "Active") : (isAr ? "معطّل" : "Inactive")}
-              </p>
-            </div>
-            <Switch checked={form.is_active} onCheckedChange={(c) => set("is_active", c)} />
-          </div>
-
-          <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-card p-3.5 shadow-xs">
-            <div>
-              <Label className="text-xs font-bold text-foreground">{isAr ? "قبول التبرعات" : "Donations"}</Label>
-              <p className="text-[11px] font-semibold text-muted-foreground">
-                {form.donation_available ? (isAr ? "مفتوح للتبرع" : "Accepting") : (isAr ? "مغلق" : "Closed")}
-              </p>
-            </div>
-            <Switch checked={form.donation_available} onCheckedChange={(c) => set("donation_available", c)} />
-          </div>
-
-          <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-card p-3.5 shadow-xs">
-            <div>
-              <Label className="text-xs font-bold text-foreground">{isAr ? "إخفاء عن الجمهور" : "Hide"}</Label>
-              <p className="text-[11px] font-semibold text-muted-foreground">
-                {form.hide_from_audience ? (isAr ? "مخفي" : "Hidden") : (isAr ? "ظاهر" : "Visible")}
-              </p>
-            </div>
-            <Switch checked={form.hide_from_audience} onCheckedChange={(c) => set("hide_from_audience", c)} />
-          </div>
+          {/* What each switch does (shown under its name), so the four are never confused. */}
+          <ToggleCard label="النشر" checked={form.status === "published"} onChange={(c) => set("status", c ? "published" : "draft")}
+            hint={form.status === "published" ? "منشور — جاهز وبيظهر في الموقع" : "مسودة — لسه بيتجهز ومش بيظهر"} />
+          <ToggleCard label="التفعيل" checked={form.is_active} onChange={(c) => set("is_active", c)}
+            hint={form.is_active ? "شغّال" : "موقوف مؤقتاً — بيختفي من غير ما يتمسح"} />
+          <ToggleCard label="استقبال التبرعات" checked={form.donation_available} onChange={(c) => set("donation_available", c)}
+            hint={form.donation_available ? "زرار التبرع شغّال" : "الصفحة ظاهرة بس التبرع مقفول (مثلاً الموسم خلص)"} />
+          <ToggleCard label="الظهور في القوائم" checked={!form.hide_from_audience} onChange={(c) => set("hide_from_audience", !c)}
+            hint={form.hide_from_audience ? "مش ظاهر في قوائم البرامج — متاح بالرابط وفي فورم التبرع" : "ظاهر في صفحة البرامج والرئيسية"} />
         </div>
 
-        {/* Form Tabs */}
-        <Tabs defaultValue="basic" dir={isAr ? "rtl" : "ltr"} className="space-y-4">
-          <TabsList className="grid h-12 w-full grid-cols-4 rounded-2xl bg-muted/60 p-1" dir={isAr ? "rtl" : "ltr"}>
-            <TabsTrigger value="basic" className="rounded-xl text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs">
-              {isAr ? "البيانات الأساسية" : "Basic Info"}
-            </TabsTrigger>
-            <TabsTrigger value="content" className="rounded-xl text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs">
-              {isAr ? "القصة والمحتوى" : "Content & Story"}
-            </TabsTrigger>
-            <TabsTrigger value="financial" className="rounded-xl text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs">
-              {isAr ? "المالية والباقات" : "Financial & Packages"}
-            </TabsTrigger>
-            <TabsTrigger value="classification" className="rounded-xl text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs">
-              {isAr ? "المحور والتصنيف" : "Classification"}
-            </TabsTrigger>
+        <Tabs defaultValue="basic" dir="rtl" className="space-y-4">
+          <TabsList className="flex h-auto w-full flex-wrap justify-start gap-1 rounded-2xl bg-muted/60 p-1" dir="rtl">
+            <TabsTrigger value="basic" className={triggerCls}>البيانات الأساسية</TabsTrigger>
+            <TabsTrigger value="hero" className={triggerCls}>أعلى الصفحة</TabsTrigger>
+            <TabsTrigger value="sections" className={triggerCls}>أقسام الصفحة</TabsTrigger>
+            <TabsTrigger value="content" className={triggerCls}>الوصف</TabsTrigger>
+            <TabsTrigger value="packages" className={triggerCls}>التبرع والباقات</TabsTrigger>
+            <TabsTrigger value="seo" className={triggerCls}>SEO والمشاركة</TabsTrigger>
+            <TabsTrigger value="geo" className={triggerCls}>الموقع الجغرافي</TabsTrigger>
+            <TabsTrigger value="ai" className={triggerCls}>الأسئلة الشائعة</TabsTrigger>
+            <TabsTrigger value="visibility" className={triggerCls}>المحور والمواسم</TabsTrigger>
           </TabsList>
 
-          {/* Tab 1: Basic Info */}
-          <TabsContent value="basic" className="space-y-4" dir={isAr ? "rtl" : "ltr"}>
-            <div className="rounded-3xl border border-border/80 bg-card p-5 sm:p-6 shadow-card space-y-4">
-              <h2 className="text-sm font-black text-foreground flex items-center gap-2">
-                <Globe2 className="h-4 w-4 text-primary" />
-                {isAr ? "الأسماء والشعارات (عربي / إنجليزي)" : "Names & Taglines"}
-              </h2>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "اسم البرنامج بالعربية *" : "Arabic Name *"}</Label>
-                  <Input
-                    dir="rtl"
-                    value={form.name_ar}
-                    onChange={(e) => set("name_ar", e.target.value)}
-                    placeholder={isAr ? "مثال: كفالة طالب علم" : "e.g. Student Sponsorship"}
-                    className="mt-1.5 h-10 rounded-xl"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "اسم البرنامج بالإنجليزية" : "English Name"}</Label>
-                  <Input
-                    value={form.name_en}
-                    onChange={(e) => set("name_en", e.target.value)}
-                    placeholder="e.g. Student Sponsorship"
-                    className="mt-1.5 h-10 rounded-xl text-left"
-                    dir="ltr"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "الرابط المختصر (Slug)" : "URL Slug"}</Label>
-                  <Input
-                    value={form.slug}
-                    onChange={(e) => set("slug", e.target.value)}
-                    placeholder="e.g. education"
-                    className="mt-1.5 h-10 rounded-xl text-left font-mono text-xs"
-                    dir="ltr"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "ترتيب العرض (Sort Order)" : "Sort Order"}</Label>
-                  <Input
-                    type="number"
-                    dir="ltr"
-                    value={form.sort_order}
-                    onChange={(e) => set("sort_order", e.target.value)}
-                    placeholder="1"
-                    className="mt-1.5 h-10 rounded-xl"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "الشعار المختصر بالعربية (Tagline)" : "Arabic Tagline"}</Label>
-                  <Input
-                    dir="rtl"
-                    value={form.tagline_ar}
-                    onChange={(e) => set("tagline_ar", e.target.value)}
-                    placeholder={isAr ? "مثال: تعليم يكسر دورة الفقر" : "Brief slogan"}
-                    className="mt-1.5 h-10 rounded-xl"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "الشعار المختصر بالإنجليزية" : "English Tagline"}</Label>
-                  <Input
-                    value={form.tagline_en}
-                    onChange={(e) => set("tagline_en", e.target.value)}
-                    placeholder="Brief slogan"
-                    className="mt-1.5 h-10 rounded-xl text-left"
-                    dir="ltr"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "الموسم أو الفترة بالعربية" : "Arabic Season/Period"}</Label>
-                  <Input
-                    dir="rtl"
-                    value={form.period_ar}
-                    onChange={(e) => set("period_ar", e.target.value)}
-                    placeholder={isAr ? "مثال: طوال العام أو موسم الشتاء" : "e.g. Year-round"}
-                    className="mt-1.5 h-10 rounded-xl"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "الموسم أو الفترة بالإنجليزية" : "English Season/Period"}</Label>
-                  <Input
-                    value={form.period_en}
-                    onChange={(e) => set("period_en", e.target.value)}
-                    placeholder="e.g. Year-round"
-                    className="mt-1.5 h-10 rounded-xl text-left"
-                    dir="ltr"
-                  />
-                </div>
+          {/* Basic */}
+          <TabsContent value="basic" className="space-y-4" dir="rtl">
+            <SectionCard icon={<Globe2 className="h-4 w-4 text-primary" />} title="الأسماء والعناوين">
+              <BilingualField label="اسم البرنامج *" valueAr={form.name_ar} valueEn={form.name_en}
+                onAr={(v) => set("name_ar", v)} onEn={(v) => set("name_en", v)} placeholderAr="مثال: كفالة طالب علم" />
+              <BilingualField label="الشعار المختصر (tagline)" valueAr={form.tagline_ar} valueEn={form.tagline_en}
+                onAr={(v) => set("tagline_ar", v)} onEn={(v) => set("tagline_en", v)} />
+              <BilingualField label="الموسم أو الفترة (period)" valueAr={form.period_ar} valueEn={form.period_en}
+                onAr={(v) => set("period_ar", v)} onEn={(v) => set("period_en", v)} placeholderAr="طوال العام" />
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Field label="الرابط المختصر (slug)" hint="يظهر في رابط الصفحة /programs/slug">
+                  <Input dir="ltr" value={form.slug} placeholder="odhya" className="h-10 rounded-xl font-mono text-xs"
+                    onChange={(e) => set("slug", e.target.value.trim().toLowerCase().replace(/\s+/g, "-"))} />
+                </Field>
+                <Field label="ترتيب العرض (sort_order)">
+                  <Input dir="ltr" type="number" value={form.sort_order} className="h-10 rounded-xl" onChange={(e) => set("sort_order", e.target.value)} />
+                </Field>
               </div>
+            </SectionCard>
+            <SectionCard icon={<ImageIcon className="h-4 w-4 text-primary" />} title="صورة البطاقة"
+              description="الصورة اللي بتظهر في كروت البرامج وصورة المشاركة على السوشيال. صورة أعلى صفحة البرنامج ليها خانة منفصلة في «أعلى الصفحة».">
+              <ImageUrlField label="صورة البطاقة" value={form.image} onChange={(v) => set("image", v)} collection="programs"
+                hint="يفضّل 1200×900 (4:3). ارفع صورة أو الصق رابطها — الاتنين بيتحفظوا كرابط." />
+            </SectionCard>
+          </TabsContent>
 
-              {/* Image Upload Widget */}
+          {/* Hero: everything shown at the top of the public program page */}
+          <TabsContent value="hero" className="space-y-4" dir="rtl">
+            <SectionCard icon={<LayoutTemplate className="h-4 w-4 text-primary" />} title="أعلى صفحة البرنامج"
+              description="اللي بيظهر أول ما الزائر يفتح صفحة البرنامج. أي خانة فاضية بتاخد قيمتها من البيانات الأساسية (الاسم والشعار وصورة البطاقة).">
+              <BilingualField label="العنوان الكبير (H1)" valueAr={form.hero_h1_ar} valueEn={form.hero_h1_en}
+                onAr={(v) => set("hero_h1_ar", v)} onEn={(v) => set("hero_h1_en", v)}
+                placeholderAr={form.name_ar || "اسم البرنامج"}
+                hint="أهم سطر للسيو: حط فيه الكلمة اللي الناس بتدوّر بيها، مثال: صك أضحية 2026 بالمنصورة" />
+              <BilingualField label="السطر تحت العنوان" multiline rows={2} valueAr={form.hero_h3_ar} valueEn={form.hero_h3_en}
+                onAr={(v) => set("hero_h3_ar", v)} onEn={(v) => set("hero_h3_en", v)}
+                placeholderAr={form.tagline_ar || "الشعار المختصر"} />
+              <Field label="الشارة فوق العنوان" hint="مثال: برنامج معتمد — موسم الأضاحي 2026">
+                <Input dir="rtl" value={top.badge_ar} className="h-10 rounded-xl" placeholder="برنامج معتمد" onChange={(e) => setT("badge_ar", e.target.value)} />
+              </Field>
+              <ImageUrlField label="صورة أعلى الصفحة" value={form.hero_image} onChange={(v) => set("hero_image", v)}
+                collection="programs" aspect="wide"
+                hint="يفضّل صورة عرضية 1600×900 أو أكبر. لو فاضية بتظهر صورة البطاقة." />
+            </SectionCard>
+          </TabsContent>
+
+          {/* Page sections */}
+          <TabsContent value="sections" className="space-y-4" dir="rtl">
+            {isNew || !id ? (
+              <div className="rounded-3xl border border-dashed border-border p-6 text-center text-xs text-muted-foreground">احفظ البرنامج أولاً لإدارة أقسام الصفحة.</div>
+            ) : (
+              <PageSectionsEditor programId={id} />
+            )}
+          </TabsContent>
+
+          {/* Content: the short description only; benefits / steps / details live in «أقسام الصفحة» */}
+          <TabsContent value="content" className="space-y-4" dir="rtl">
+            <SectionCard icon={<Sparkles className="h-4 w-4 text-primary" />} title="الوصف القصير"
+              description="بيظهر تحت العنوان في أعلى الصفحة وفي كروت البرامج ووصف جوجل لو خانة السيو فاضية.">
+              <BilingualField label="الوصف القصير" multiline rows={3} valueAr={form.description_ar} valueEn={form.description_en}
+                onAr={(v) => set("description_ar", v)} onEn={(v) => set("description_en", v)} />
+            </SectionCard>
+            <div className="rounded-2xl border border-dashed border-primary/30 bg-primary/5 p-4 text-xs font-semibold text-foreground/80">
+              المزايا وخطوات «كيف يعمل البرنامج» والتفاصيل ورحلة التبرع بتتعدل من تاب <b>«أقسام الصفحة»</b> — هي اللي بتظهر في صفحة البرنامج.
+            </div>
+          </TabsContent>
+
+          {/* Packages */}
+          <TabsContent value="packages" className="space-y-4" dir="rtl">
+            <SectionCard icon={<DollarSign className="h-4 w-4 text-primary" />} title="المبالغ">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <Field label="المبلغ المستهدف (ج.م)"><Input dir="ltr" type="number" value={form.target_amount} className="h-10 rounded-xl" onChange={(e) => set("target_amount", e.target.value)} /></Field>
+                <Field label="الحد الأدنى / السعر يبدأ من (ج.م)"><Input dir="ltr" type="number" value={form.minimum_amount} className="h-10 rounded-xl" onChange={(e) => set("minimum_amount", e.target.value)} /></Field>
+                <Field label="المحصّل حتى الآن"><Input dir="ltr" disabled value={record?.collected_amount ? String(Number(record.collected_amount)) : "0"} className="h-10 rounded-xl" /></Field>
+              </div>
+            </SectionCard>
+            <SectionCard icon={<DollarSign className="h-4 w-4 text-primary" />} title="باقات وأسهم التبرع"
+              description="إضافة وتعديل وحذف وترتيب الباقات بتتحفظ على السيرفر مباشرة.">
+              <PackagesEditor kind="programs" ownerId={isNew ? null : id ?? null} />
+            </SectionCard>
+          </TabsContent>
+
+          {/* SEO */}
+          <TabsContent value="seo" className="space-y-4" dir="rtl">
+            <SeoFields value={form.seo} onChange={setSeo} previewImage={form.image} previewTitleAr={form.name_ar}
+              previewDescAr={form.description_ar} previewPath={`/programs/${form.slug || "slug"}`} />
+          </TabsContent>
+
+          {/* Geo */}
+          <TabsContent value="geo" className="space-y-4" dir="rtl">
+            <GeoFields value={form.seo} onChange={setSeo} />
+          </TabsContent>
+
+          {/* AI */}
+          <TabsContent value="ai" className="space-y-4" dir="rtl">
+            <EntityFaqManager
+              kind="program"
+              saved={!isNew && !!id}
+              linkedCategoryId={record?.faq_category_id}
+              slug={form.slug}
+              nameAr={form.name_ar}
+              onLink={async (faq_category_id) => {
+                const updated = await programsAdminApi.update(id!, { faq_category_id });
+                setRecord((r) => (r ? { ...r, faq_category_id: updated.faq_category_id ?? faq_category_id } : r));
+              }}
+            />
+            <AiFields value={form.seo} onChange={setSeo} nameAr={form.name_ar} nameEn={form.name_en} descAr={form.description_ar} showFaq={false} />
+          </TabsContent>
+
+          {/* Visibility & classification */}
+          <TabsContent value="visibility" className="space-y-4" dir="rtl">
+            <SectionCard icon={<Compass className="h-4 w-4 text-primary" />} title="المحور والمواسم">
+              <Field label="المحور (axis_id)">
+                <ChoiceSelect value={form.axis_id} onChange={(v) => set("axis_id", v)} noneLabel="بدون محور" ariaLabel="المحور"
+                  options={axes.map((ax) => ({ value: String(ax.id), label: ax.name_ar }))} />
+              </Field>
               <div>
-                <Label className="text-xs font-bold">{isAr ? "الصورة الرئيسية للبرنامج (يدعم JPG, PNG, WebP)" : "Cover Image (JPG, PNG, WebP)"}</Label>
-                <input
-                  ref={imgInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/svg+xml"
-                  className="hidden"
-                  onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageSelect(f); e.target.value = ""; }}
-                />
-
-                {/* Image Preview Area */}
-                <div
-                  className="mt-2 relative group rounded-2xl border-2 border-dashed border-border hover:border-primary/60 bg-muted/30 transition-colors overflow-hidden"
-                  style={{ minHeight: 160 }}
-                  onDragOver={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = "var(--primary)"; }}
-                  onDragLeave={(e) => { e.currentTarget.style.borderColor = ""; }}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    e.currentTarget.style.borderColor = "";
-                    const f = e.dataTransfer.files?.[0];
-                    if (f) handleImageSelect(f);
-                  }}
-                >
-                  {(imagePreview || form.image) ? (
-                    <>
-                      <img
-                        src={imagePreview || formatServerImageUrl(form.image) || form.image}
-                        alt="program cover"
-                        className="w-full object-cover rounded-2xl"
-                        style={{ maxHeight: 240 }}
-                        onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
-                      />
-                      {/* Overlay on hover */}
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center gap-2">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="secondary"
-                          className="gap-1.5 rounded-xl text-xs font-bold shadow-md"
-                          onClick={() => imgInputRef.current?.click()}
-                        >
-                          <Upload className="h-3.5 w-3.5" />
-                          {isAr ? "تغيير الصورة" : "Change Image"}
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="destructive"
-                          className="gap-1.5 rounded-xl text-xs font-bold shadow-md"
-                          onClick={handleRemoveImage}
-                        >
-                          <X className="h-3.5 w-3.5" />
-                          {isAr ? "حذف" : "Remove"}
-                        </Button>
-                      </div>
-                    </>
-                  ) : (
-                    <button
-                      type="button"
-                      className="w-full h-full flex flex-col items-center justify-center gap-3 p-8 text-muted-foreground hover:text-primary transition-colors"
-                      onClick={() => imgInputRef.current?.click()}
-                    >
-                      <ImageIcon className="h-8 w-8" />
-                      <div className="text-center">
-                        <p className="text-sm font-bold">
-                          {isAr ? "انقر لاختيار صورة من جهازك" : "Click to select image from device"}
-                        </p>
-                        <p className="text-xs mt-1 text-muted-foreground">
-                          {isAr ? "أو اسحب وأفلت الصورة هنا (يدعم كل الصيغ JPG, PNG, WebP)" : "or drag & drop here (JPG, PNG, WebP)"}
-                        </p>
-                      </div>
-                    </button>
-                  )}
-                </div>
-
-                {pendingImageFile && (
-                  <p className="mt-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3.5 w-3.5" />
-                    {isAr ? `تم اختيار: ${pendingImageFile.name} (سيتم حفظها في السيرفر عند حفظ البرنامج)` : `Selected: ${pendingImageFile.name} (will save to server upon program save)`}
-                  </p>
-                )}
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* Tab 2: Content & Story */}
-          <TabsContent value="content" className="space-y-4" dir={isAr ? "rtl" : "ltr"}>
-            <div className="rounded-3xl border border-border/80 bg-card p-5 sm:p-6 shadow-card space-y-4">
-              <h2 className="text-sm font-black text-foreground flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" />
-                {isAr ? "الوصف والقصة الكاملة والمميزات" : "Description, Story & Benefits"}
-              </h2>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "الوصف القصير بالعربية" : "Arabic Short Description"}</Label>
-                  <Textarea
-                    rows={3}
-                    dir="rtl"
-                    value={form.description_ar}
-                    onChange={(e) => set("description_ar", e.target.value)}
-                    placeholder={isAr ? "وصف مختصر يظهر في الكروت والقوائم..." : "Short description for cards..."}
-                    className="mt-1.5 rounded-xl text-xs"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "الوصف القصير بالإنجليزية" : "English Short Description"}</Label>
-                  <Textarea
-                    rows={3}
-                    value={form.description_en}
-                    onChange={(e) => set("description_en", e.target.value)}
-                    placeholder="Short description for cards..."
-                    className="mt-1.5 rounded-xl text-xs text-left"
-                    dir="ltr"
-                  />
-                </div>
-
-                <div className="sm:col-span-2">
-                  <Label className="text-xs font-bold">{isAr ? "محتوى القصة الكامل بالعربية" : "Full Story Content (Arabic)"}</Label>
-                  <Textarea
-                    rows={6}
-                    dir="rtl"
-                    value={form.content_ar}
-                    onChange={(e) => set("content_ar", e.target.value)}
-                    placeholder={isAr ? "اكتب تفاصيل البرنامج وقصته الميدانية وأثره على الأسر المستحقة..." : "Full program story and impact..."}
-                    className="mt-1.5 rounded-xl text-xs leading-relaxed"
-                  />
-                </div>
-
-                <div className="sm:col-span-2">
-                  <Label className="text-xs font-bold">{isAr ? "محتوى القصة الكامل بالإنجليزية" : "Full Story Content (English)"}</Label>
-                  <Textarea
-                    rows={4}
-                    value={form.content_en}
-                    onChange={(e) => set("content_en", e.target.value)}
-                    placeholder="Full program story in English..."
-                    className="mt-1.5 rounded-xl text-xs leading-relaxed text-left"
-                    dir="ltr"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-xs font-bold">
-                    {isAr ? "مميزات البرنامج بالعربية (كل سطر ميزة)" : "Benefits (Arabic - 1 per line)"}
-                  </Label>
-                  <Textarea
-                    rows={4}
-                    dir="rtl"
-                    value={form.benefits_ar}
-                    onChange={(e) => set("benefits_ar", e.target.value)}
-                    placeholder={isAr ? "توزيع موثّق بالصور والفيديو\nإيصال فوري بعد التبرع\nمتابعة ميدانية مستمرة" : "One benefit per line"}
-                    className="mt-1.5 rounded-xl text-xs font-mono"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-xs font-bold">
-                    {isAr ? "مميزات البرنامج بالإنجليزية (كل سطر ميزة)" : "Benefits (English - 1 per line)"}
-                  </Label>
-                  <Textarea
-                    rows={4}
-                    value={form.benefits_en}
-                    onChange={(e) => set("benefits_en", e.target.value)}
-                    placeholder="Documented distribution\nInstant receipt\nField follow-up"
-                    className="mt-1.5 rounded-xl text-xs font-mono text-left"
-                    dir="ltr"
-                  />
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* Tab 3: Financial & Packages */}
-          <TabsContent value="financial" className="space-y-4" dir={isAr ? "rtl" : "ltr"}>
-            <div className="rounded-3xl border border-border/80 bg-card p-5 sm:p-6 shadow-card space-y-5">
-              <h2 className="text-sm font-black text-foreground flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-primary" />
-                {isAr ? "المبالغ المستهدفة وأسهم التبرع" : "Amounts & Donation Shares"}
-              </h2>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "المبلغ المستهدف الإجمالي (ج.م)" : "Target Amount (EGP)"}</Label>
-                  <Input
-                    type="number"
-                    dir="ltr"
-                    value={form.target_amount}
-                    onChange={(e) => set("target_amount", e.target.value)}
-                    placeholder="50000"
-                    className="mt-1.5 h-10 rounded-xl"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs font-bold">{isAr ? "الحد الأدنى للتبرع / سعر السهم يبدأ من (ج.م)" : "Minimum / Price From (EGP)"}</Label>
-                  <Input
-                    type="number"
-                    dir="ltr"
-                    value={form.minimum_amount}
-                    onChange={(e) => set("minimum_amount", e.target.value)}
-                    placeholder="100"
-                    className="mt-1.5 h-10 rounded-xl"
-                  />
-                </div>
-              </div>
-
-              {/* Donation Packages list */}
-              <div className="border-t border-border/70 pt-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-xs font-black text-foreground">{isAr ? "باقات وأسهم التبرع المتاحة للبرنامج" : "Donation Packages"}</h3>
-                    <p className="text-[11px] text-muted-foreground">{isAr ? "الباقات التي تظهر للمتبرع لاختيار قيمة المساهمة" : "Predefined donation amounts for donors"}</p>
-                  </div>
-                  <span className="rounded-full bg-secondary/15 px-2.5 py-0.5 text-xs font-black text-secondary">
-                    {packages.length} {isAr ? "باقات" : "packages"}
-                  </span>
-                </div>
-
-                {packages.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-border p-4 text-center text-xs text-muted-foreground">
-                    {isAr ? "لا توجد باقات تبرع مسجلة لهذا البرنامج حالياً. يمكنك إضافة باقة تبرع جديدة أدناه." : "No donation packages created yet."}
-                  </div>
+                <Label className="text-xs font-bold">المواسم المرتبطة (season_ids)</Label>
+                {seasons.length === 0 ? (
+                  <p className="mt-1 text-[11px] text-muted-foreground">لا توجد مواسم في الخادم.</p>
                 ) : (
-                  <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-                    {packages.map((pkg, i) => (
-                      <div key={pkg.id || i} className="flex items-center justify-between rounded-2xl border border-border/70 bg-muted/40 p-3 text-xs">
-                        <div>
-                          <p className="font-black text-foreground">{pkg.name_ar || pkg.name || "-"}</p>
-                          {pkg.name_en && <p className="text-[10px] text-muted-foreground">{pkg.name_en}</p>}
-                        </div>
-                        <span className="rounded-xl bg-primary/10 px-2.5 py-1 font-mono font-black text-primary">
-                          {Number(pkg.amount).toLocaleString(isAr ? "ar-EG" : "en-US")} {isAr ? "ج" : "EGP"}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Add package form */}
-                {!isNew && (
-                  <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 space-y-3">
-                    <h4 className="text-xs font-black text-primary flex items-center gap-1.5">
-                      <Plus className="h-3.5 w-3.5" />
-                      {isAr ? "إضافة باقة أو سهم تبرع جديد" : "Add New Donation Package"}
-                    </h4>
-                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                      <Input
-                        dir="rtl"
-                        value={newPkg.name_ar}
-                        onChange={(e) => setNewPkg({ ...newPkg, name_ar: e.target.value })}
-                        placeholder={isAr ? "اسم الباقة (مثال: سهم الخير 200 ج)" : "Package Name (Ar)"}
-                        className="h-9 rounded-xl text-xs"
-                      />
-                      <Input
-                        value={newPkg.name_en}
-                        onChange={(e) => setNewPkg({ ...newPkg, name_en: e.target.value })}
-                        placeholder="Package Name (En)"
-                        className="h-9 rounded-xl text-xs text-left"
-                        dir="ltr"
-                      />
-                      <div className="flex gap-2">
-                        <Input
-                          type="number"
-                          dir="ltr"
-                          value={newPkg.amount}
-                          onChange={(e) => setNewPkg({ ...newPkg, amount: Number(e.target.value) })}
-                          placeholder="المبلغ"
-                          className="h-9 rounded-xl text-xs"
-                        />
-                        <Button
-                          size="sm"
-                          onClick={handleAddPackage}
-                          disabled={savingPkg}
-                          className="shrink-0 rounded-xl h-9 px-4 font-bold"
-                        >
-                          {savingPkg ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
-                          {isAr ? "إضافة" : "Add"}
-                        </Button>
-                      </div>
-                    </div>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {seasons.map((s) => {
+                      const checked = form.season_ids.includes(Number(s.id));
+                      return (
+                        <label key={s.id} className={`flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs transition ${checked ? "border-primary bg-primary/10 font-bold text-primary" : "border-border bg-card text-muted-foreground hover:bg-muted"}`}>
+                          <Switch checked={checked} onCheckedChange={(c) => set("season_ids", c ? [...form.season_ids, Number(s.id)] : form.season_ids.filter((x) => x !== Number(s.id)))} />
+                          {s.name_ar}
+                        </label>
+                      );
+                    })}
                   </div>
                 )}
               </div>
-            </div>
-          </TabsContent>
-
-          {/* Tab 4: Classification */}
-          <TabsContent value="classification" className="space-y-4" dir={isAr ? "rtl" : "ltr"}>
-            <div className="rounded-3xl border border-border/80 bg-card p-5 sm:p-6 shadow-card space-y-4">
-              <h2 className="text-sm font-black text-foreground flex items-center gap-2">
-                <Compass className="h-4 w-4 text-primary" />
-                {isAr ? "ربط البرنامج بمحاور رسالة المؤسسة" : "Work Axis Association"}
-              </h2>
-
-              <div>
-                <Label className="text-xs font-bold">{isAr ? "المحور الأساسي التابع له البرنامج *" : "Primary Work Axis *"}</Label>
-                <div className="mt-2 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                  {axes.map((ax) => {
-                    const isSelected = String(form.axis_id) === String(ax.id);
-                    return (
-                      <button
-                        key={ax.id}
-                        type="button"
-                        onClick={() => set("axis_id", String(ax.id))}
-                        className={`flex items-center gap-3 rounded-2xl border p-3.5 text-start transition-all ${
-                          isSelected
-                            ? "border-primary bg-primary/10 shadow-xs ring-2 ring-primary/30"
-                            : "border-border/80 bg-muted/30 hover:border-border hover:bg-muted/60"
-                        }`}
-                      >
-                        <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl font-bold ${isSelected ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground border border-border"}`}>
-                          {ax.id}
-                        </span>
-                        <div>
-                          <p className="text-xs font-black text-foreground">{ax.name_ar || ax.name_en}</p>
-                          <p className="text-[10px] text-muted-foreground">{ax.slug}</p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-                {axes.length === 0 && (
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {isAr ? "جاري تحميل قائمة المحاور من قاعدة البيانات..." : "Loading available axes..."}
-                  </p>
-                )}
-              </div>
-            </div>
+            </SectionCard>
           </TabsContent>
         </Tabs>
       </div>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { X, Loader2, CreditCard, RefreshCw, Clock, Copy, ExternalLink } from "lucide-react";
+import { X, Loader2, RefreshCw, Clock, Copy, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   createKashierSession,
@@ -32,6 +32,20 @@ interface KashierCheckoutModalProps {
 
 const VERIFY_ATTEMPTS = 12; // ~30s of active verification after a "success" hint
 const VERIFY_INTERVAL_MS = 2500;
+/** Background check while the checkout is open: fast at first, then slower, until the session expires. */
+const POLL_FAST_MS = 2500;
+const POLL_SLOW_MS = 6000;
+const POLL_FAST_FOR_MS = 5 * 60_000;
+const POLL_STOP_AFTER_MS = 30 * 60_000; // the backend creates Kashier sessions that expire after 30 minutes
+
+/**
+ * Messages Kashier's hosted page posts to its parent when it runs inside our iframe
+ * (developers.kashier.io → Payment sessions → Embed). In an iframe Kashier never redirects by
+ * itself: on `urlRedirection` it waits for the host page — we close the frame instead and let the
+ * backend (webhook → GET /donations/track/{ref}) decide paid / failed.
+ */
+const KASHIER_DONE_MESSAGES = new Set(["paymentSuccess", "success", "urlRedirection", "merchantStoreRedirect"]);
+const KASHIER_FAILED_MESSAGES = new Set(["failure", "paymentFailed"]);
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 export function KashierCheckoutModal({
@@ -201,80 +215,59 @@ export function KashierCheckoutModal({
       }
       if (!d || typeof d !== "object") return;
 
-      const statusStr = String(
-        d.status || d.paymentStatus || d?.data?.status || d?.data?.paymentStatus || ""
-      ).toUpperCase();
-      const looksPaid =
-        d.message === "paymentSuccess" ||
+      const kind = String(d.message || d.type || d.event || "");
+      const payload = d.params || d.data || d;
+      const statusStr = String(payload?.paymentStatus || payload?.status || d.status || "").toUpperCase();
+      const failed = KASHIER_FAILED_MESSAGES.has(kind) || statusStr === "FAILURE" || statusStr === "FAILED";
+      const done =
+        KASHIER_DONE_MESSAGES.has(kind) ||
         d.type === "KASHIER_SUCCESS" ||
         statusStr === "SUCCESS" ||
-        statusStr === "PAID" ||
-        (d.event === "pay" && (statusStr === "SUCCESS" || d?.data?.transactionResponseCode === "00"));
-      const looksFailed =
-        d.message === "paymentFailed" || statusStr === "FAILURE" || statusStr === "FAILED";
+        statusStr === "PAID";
 
-      if (looksPaid || looksFailed) {
-        // Both outcomes are confirmed with the backend before anything is shown.
-        void verifyWithBackend(looksFailed ? 2 : VERIFY_ATTEMPTS);
+      if (failed || done) {
+        // Nothing is shown from the message itself: the backend confirms paid / failed first.
+        void verifyWithBackend(failed ? 3 : VERIFY_ATTEMPTS);
         return;
       }
-      if (d.message === "closeIframe") {
+      if (kind === "closeIframe") {
         onClose();
         return;
       }
-      if (d.message === "contentLoaded" || d.type === "FRAME_LOADED") {
+      if (kind === "contentLoaded" || kind === "iframeLoaded" || kind === "FRAME_LOADED") {
         setLoading(false);
       }
     };
 
     window.addEventListener("message", handleMessage);
 
-    // 2. Background backend polling — stops after repeated 404s to avoid hammering.
-    let consecutiveNotFound = 0;
-    let totalAttempts = 0;
-    const MAX_CONSECUTIVE_404 = 3;
-    const MAX_TOTAL_ATTEMPTS = 40;
-
+    // 2. Background verification for as long as the Kashier session lives: the webhook usually
+    //    marks the donation paid a few seconds after the donor confirms, whatever the iframe shows.
+    const openedAt = Date.now();
+    let pollTimer: ReturnType<typeof setTimeout> | undefined;
     const poll = async () => {
-      if (successFiredRef.current || verifyingRef.current || !aliveRef.current) return;
-      const ref = orderIdRef.current;
-      if (!ref) return;
-      totalAttempts++;
-      if (totalAttempts > MAX_TOTAL_ATTEMPTS) {
-        clearInterval(fastPoll);
-        clearInterval(slowPoll);
-        return;
-      }
-      try {
-        const { status, data } = await verifyDonationPayment(ref);
-        if (!data) {
-          consecutiveNotFound++;
-          if (consecutiveNotFound >= MAX_CONSECUTIVE_404) clearInterval(fastPoll);
-          return;
+      if (!aliveRef.current || successFiredRef.current) return;
+      const elapsed = Date.now() - openedAt;
+      if (elapsed > POLL_STOP_AFTER_MS) return;
+      if (!verifyingRef.current && orderIdRef.current) {
+        try {
+          const { status } = await verifyDonationPayment(orderIdRef.current);
+          if (status === "paid" || status === "failed") {
+            applyOutcome(status);
+            return;
+          }
+        } catch {
+          // network blip: try again on the next tick
         }
-        consecutiveNotFound = 0;
-        if (status === "paid") {
-          clearInterval(fastPoll);
-          clearInterval(slowPoll);
-          applyOutcome("paid");
-        } else if (status === "failed") {
-          clearInterval(fastPoll);
-          clearInterval(slowPoll);
-          applyOutcome("failed");
-        }
-      } catch {
-        // silent
       }
+      pollTimer = setTimeout(poll, elapsed < POLL_FAST_FOR_MS ? POLL_FAST_MS : POLL_SLOW_MS);
     };
-
-    const fastPoll = setInterval(poll, 1500);
-    const slowPoll = setInterval(poll, 6000);
+    pollTimer = setTimeout(poll, POLL_FAST_MS);
 
     return () => {
       aliveRef.current = false;
       clearTimeout(loadTimer);
-      clearInterval(fastPoll);
-      clearInterval(slowPoll);
+      if (pollTimer) clearTimeout(pollTimer);
       window.removeEventListener("message", handleMessage);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -301,28 +294,17 @@ export function KashierCheckoutModal({
         aria-modal="true"
         aria-labelledby="kashier-modal-title"
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30 shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-emerald-500/15 text-emerald-600 border border-emerald-500/20">
-              <CreditCard className="h-4 w-4" />
-            </div>
-            <div>
-              <h3 id="kashier-modal-title" className="text-sm font-bold text-foreground leading-tight">
-                بوابة الدفع الآمن
-              </h3>
-              <p className="text-xs text-muted-foreground">{amountDisplay}</p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition cursor-pointer"
-            aria-label="إغلاق"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+        <h3 id="kashier-modal-title" className="sr-only">
+          بوابة الدفع الآمن — {amountDisplay}
+        </h3>
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute end-2 top-2 z-20 grid h-9 w-9 place-items-center rounded-full bg-black/55 text-white shadow-md backdrop-blur transition hover:bg-destructive cursor-pointer"
+          aria-label="إغلاق بوابة الدفع"
+        >
+          <X className="h-5 w-5" />
+        </button>
 
         {/* Body */}
         <div className="relative flex-1 w-full bg-white overflow-hidden">

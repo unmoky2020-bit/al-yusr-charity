@@ -1,4 +1,5 @@
 import { useState, memo } from "react";
+import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { Link } from "react-router-dom";
 import {
   Heart,
@@ -733,6 +734,10 @@ export const CampaignsPage = () => {
 
         </div>
       </section>
+      {/* Cases that belong to our campaigns (live from the backend) */}
+      <LinkedCasesSection filter={{ linkedTo: "campaign" }} showOwner isRTL={isRTL} className="bg-muted/30"
+        title={isRTL ? "حالات بتتجمع لها التبرعات في حملاتنا" : "Cases our campaigns are funding"}
+        subtitle={isRTL ? "اختار حالة بعينها وتابع تحديثاتها بالصور لحد ما تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
     </PageLayout>
   );
 };

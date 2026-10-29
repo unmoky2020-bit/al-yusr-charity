@@ -36,6 +36,31 @@ export type ProgramContent = {
   gallery?: string[];
   /** Optional season/timing badge text shown on cards. */
   season?: { ar: string; en: string };
+  /**
+   * Detail-page hero overrides edited in the dashboard («أعلى الصفحة»). Only set when the API
+   * has them; the page falls back to name / tagline / image.
+   */
+  hero?: {
+    image?: string;
+    ar: { title?: string; subtitle?: string; badge?: string };
+    en: { title?: string; subtitle?: string; badge?: string };
+  };
+  /**
+   * Page sections edited in the dashboard («أقسام الصفحة»). When a section has items it replaces the
+   * matching default on the detail page (benefits list, how-it-works steps, details text, journey).
+   */
+  sections?: {
+    benefits?: { ar: string[]; en: string[] };
+    steps?: { ar: { t: string; d: string }[]; en: { t: string; d: string }[] };
+    details?: { ar: string[]; en: string[] };
+    impact?: { ar: { t: string; d: string }[]; en: { t: string; d: string }[] };
+  };
+  /** Search title/description from the dashboard SEO tab (meta_title_* / meta_description_*). */
+  seo?: { ar: { title?: string; description?: string }; en: { title?: string; description?: string } };
+  /** Backend id (API mode) — used to load the program's cases. */
+  apiId?: number;
+  /** FAQ category linked in the dashboard (program → «الأسئلة الشائعة» tab, stored on the faq page section). */
+  faqCategory?: string;
 };
 
 export const programs: ProgramContent[] = [

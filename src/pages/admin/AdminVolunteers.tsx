@@ -10,7 +10,8 @@ import { programs } from "@/data/programs";
 import { toast } from "@/hooks/use-toast";
 import { ALL_PERMISSIONS, PERMISSION_LABEL, inferPermissions, Permission } from "@/auth/permissions";
 import { Campaign, listAllCampaigns, submitApplication } from "@/data/campaignsApi";
-import { volunteersApi, type LaravelVolunteer } from "@/data/laravelApi";
+import type { LaravelVolunteer } from "@/data/laravelApi";
+import { apiErrorMessage, fetchList } from "@/data/api/adminApiHelpers";
 
 const StatusPill = ({ s, lang }: { s?: string; lang: "ar" | "en" }) => {
   const map: Record<string, { ar: string; en: string; cls: string }> = {
@@ -38,38 +39,46 @@ const Inner = () => {
   const [laravelVolunteers, setLaravelVolunteers] = useState<LaravelVolunteer[]>([]);
   const [laravelLoading, setLaravelLoading] = useState(true);
 
+  const [loadError, setLoadError] = useState<string | null>(null);
   const reloadVolunteers = () => {
     setLaravelLoading(true);
-    volunteersApi.listAll()
-      .then((data) => { if (Array.isArray(data)) setLaravelVolunteers(data); })
-      .catch(() => {})
+    setLoadError(null);
+    // GET /volunteers (throws on failure — no silent empty list)
+    fetchList<LaravelVolunteer>("/volunteers", { per_page: 500 })
+      .then((data) => setLaravelVolunteers(data))
+      .catch((e) => {
+        setLaravelVolunteers([]);
+        setLoadError(apiErrorMessage(e, "تعذر تحميل المتطوعين"));
+      })
       .finally(() => setLaravelLoading(false));
   };
 
   // Load Laravel volunteers
   useEffect(() => { reloadVolunteers(); }, []);
 
-  useEffect(() => { listAllCampaigns().then(setCampaigns).catch(() => {}); }, []);
+  useEffect(() => { listAllCampaigns().then(setCampaigns).catch(() => setCampaigns([])); }, []);
 
   // Merge: Laravel volunteers take priority, AuthContext fills remaining
   const volunteers = useMemo(() => {
     if (laravelVolunteers.length > 0) {
       // Map Laravel volunteers into User-compatible shape
-      return laravelVolunteers.map((v): User => ({
-        id: String(v.id),
-        name: v.name || v.email || "",
-        email: v.email,
-        phone: v.phone || "",
-        city: v.city || "",
-        roles: ["volunteer"],
-        volunteerStatus: (v.status as User["volunteerStatus"]) || "pending",
-        skills: Array.isArray(v.skills) ? v.skills : (v.skills ? [v.skills] : []),
-        bio: v.notes || "",
-        createdAt: (v.created_at || "").slice(0, 10),
-        avatarUrl: undefined,
-        assignedProgram: undefined,
-        permissions: undefined,
-      }));
+      return laravelVolunteers.map((v): User => {
+        const extra = v as LaravelVolunteer & { program_slug?: string | null; permissions?: Permission[] | null };
+        return {
+          id: String(v.id),
+          name: v.name || v.email || "",
+          email: v.email,
+          phone: v.phone || "",
+          city: v.city || "",
+          roles: ["volunteer"],
+          volunteerStatus: (v.status as User["volunteerStatus"]) || "pending",
+          skills: Array.isArray(v.skills) ? v.skills : (v.skills ? [v.skills] : []),
+          bio: v.notes || "",
+          createdAt: (v.created_at || "").slice(0, 10),
+          assignedProgram: extra.program_slug || undefined,
+          permissions: Array.isArray(extra.permissions) ? extra.permissions : undefined,
+        };
+      });
     }
     // Fallback to AuthContext
     return users.filter((u) => u.roles.includes("volunteer"));
@@ -106,6 +115,7 @@ const Inner = () => {
     if (targets.length === 0) return;
     setInviting(true);
     let ok = 0, fail = 0;
+    let lastErr: unknown = null;
     for (const v of targets) {
       try {
         await submitApplication({
@@ -120,37 +130,53 @@ const Inner = () => {
           status: "pending",
         });
         ok++;
-      } catch { fail++; }
+      } catch (e) { fail++; lastErr = e; }
     }
     setInviting(false);
     setPicked({});
-    toast({ title: lang === "ar" ? ` تم إنشاء ${ok} طلب${fail ? ` (فشل ${fail})` : ""}` : `📨 ${ok} invites created${fail ? ` (${fail} failed)` : ""}` });
+    toast({
+      title: lang === "ar" ? ` تم إنشاء ${ok} طلب${fail ? ` (فشل ${fail})` : ""}` : `📨 ${ok} invites created${fail ? ` (${fail} failed)` : ""}`,
+      ...(fail ? { variant: "destructive" as const, description: apiErrorMessage(lastErr) } : {}),
+    });
   };
 
   const action = async (id: string, status: "approved" | "rejected" | "suspended") => {
-    // Optimistic local update
-    setVolunteerStatus(id, status);
     try {
-      await volunteersApi.update(id, { status });
+      // PUT /volunteers/{id} {status}
+      await setVolunteerStatus(id, status);
       toast({ title: lang === "ar" ? (status === "approved" ? " تم اعتماد المتطوع" : status === "rejected" ? " تم رفض المتطوع" : "⏸ تم تعليق المتطوع") : (status === "approved" ? " Volunteer approved" : status === "rejected" ? " Volunteer rejected" : "⏸ Volunteer suspended"), });
-    } catch (err: any) {
-      toast({ title: lang === "ar" ? "فشل تحديث الحالة" : "Status update failed", description: err?.message, variant: "destructive" } as any);
+    } catch (err: unknown) {
+      toast({ title: lang === "ar" ? "فشل تحديث الحالة" : "Status update failed", description: apiErrorMessage(err), variant: "destructive" });
     }
     if (selected?.id === id) setSelected(null);
     // Refresh from API to get latest data
     reloadVolunteers();
   };
 
-  const assign = (id: string, slug: string) => {
-    setVolunteerStatus(id, "approved", slug);
-    toast({ title: lang === "ar" ? " تم تعيين البرنامج" : " Program assigned" });
+  const assign = async (id: string, slug: string) => {
+    try {
+      // PUT /volunteers/{id} {status: "approved", program_slug}
+      await setVolunteerStatus(id, "approved", slug);
+      setSelected((s) => (s && s.id === id ? { ...s, assignedProgram: slug, volunteerStatus: "approved" } : s));
+      toast({ title: lang === "ar" ? " تم تعيين البرنامج" : " Program assigned" });
+      reloadVolunteers();
+    } catch (err: unknown) {
+      toast({ title: lang === "ar" ? "فشل تعيين البرنامج" : "Assignment failed", description: apiErrorMessage(err), variant: "destructive" });
+    }
   };
 
-  const togglePerm = (u: User, p: Permission) => {
+  const togglePerm = async (u: User, p: Permission) => {
     const current = u.permissions || inferPermissions(u.skills);
     const next = current.includes(p) ? current.filter((x) => x !== p) : [...current, p];
-    setUserPermissions(u.id, next);
-    toast({ title: lang === "ar" ? " تم تحديث الصلاحيات" : " Permissions updated" });
+    try {
+      // PUT /volunteers/{id} {permissions}
+      await setUserPermissions(u.id, next);
+      setSelected((s) => (s && s.id === u.id ? { ...s, permissions: next } : s));
+      toast({ title: lang === "ar" ? " تم تحديث الصلاحيات" : " Permissions updated" });
+      reloadVolunteers();
+    } catch (err: unknown) {
+      toast({ title: lang === "ar" ? "فشل تحديث الصلاحيات" : "Permissions update failed", description: apiErrorMessage(err), variant: "destructive" });
+    }
   };
 
   return (
@@ -160,6 +186,7 @@ const Inner = () => {
           <div className="text-xs text-muted-foreground">
             {laravelLoading ? (lang === "ar" ? "جاري تحميل بيانات المتطوعين..." : "Loading volunteers...") : (lang === "ar" ? `${volunteers.length} متطوع من لارافيل API` : `${volunteers.length} volunteers from Laravel API`)}
           </div>
+          {loadError && <span className="text-xs font-bold text-destructive">{loadError}</span>}
           <Button variant="outline" size="sm" disabled={laravelLoading} onClick={reloadVolunteers}>
             <RefreshCw className={`h-3.5 w-3.5 ${laravelLoading ? "animate-spin" : ""}`} />
             {lang === "ar" ? "تحديث" : "Refresh"}

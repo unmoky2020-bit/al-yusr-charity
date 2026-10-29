@@ -1,0 +1,1870 @@
+[
+ {
+  "kind": "faq-category",
+  "id": 20,
+  "url": "/faq-categories",
+  "label": "volunteer",
+  "at": "2026-10-29T03:58:30.855Z"
+ },
+ {
+  "kind": "faq-category",
+  "id": 21,
+  "url": "/faq-categories",
+  "label": "services",
+  "at": "2026-10-29T03:58:31.025Z"
+ },
+ {
+  "kind": "faq-category",
+  "id": 22,
+  "url": "/faq-categories",
+  "label": "general",
+  "at": "2026-10-29T03:58:31.156Z"
+ },
+ {
+  "kind": "faq",
+  "id": 102,
+  "url": "/faqs",
+  "label": "ما هي مؤسسة اليسر الخيرية؟",
+  "at": "2026-10-29T03:58:31.774Z"
+ },
+ {
+  "kind": "faq",
+  "id": 103,
+  "url": "/faqs",
+  "label": "هل اليسر جمعية أم مؤسسة؟ وما رقم إشهارها؟",
+  "at": "2026-10-29T03:58:31.945Z"
+ },
+ {
+  "kind": "faq",
+  "id": 104,
+  "url": "/faqs",
+  "label": "ما الاسم الرسمي للمؤسسة بالإنجليزية؟",
+  "at": "2026-10-29T03:58:32.108Z"
+ },
+ {
+  "kind": "faq",
+  "id": 105,
+  "url": "/faqs",
+  "label": "هل مؤسسة اليسر لها علاقة بمتجر أجهزة أو شركة تحمل اسم «اليسر",
+  "at": "2026-10-29T03:58:32.276Z"
+ },
+ {
+  "kind": "faq",
+  "id": 106,
+  "url": "/faqs",
+  "label": "هل تعمل مؤسسة اليسر خارج المنصورة والدقهلية؟",
+  "at": "2026-10-29T03:58:32.435Z"
+ },
+ {
+  "kind": "faq",
+  "id": 107,
+  "url": "/faqs",
+  "label": "كيف أتبرع لعمل خيري في المنصورة بشكل موثّق؟",
+  "at": "2026-10-29T03:58:32.598Z"
+ },
+ {
+  "kind": "faq",
+  "id": 108,
+  "url": "/faqs",
+  "label": "ما الحملات التي تنفذها مؤسسة اليسر؟",
+  "at": "2026-10-29T03:58:32.764Z"
+ },
+ {
+  "kind": "faq",
+  "id": 109,
+  "url": "/faqs",
+  "label": "كيف أختار الحملة المناسبة لنيتي؟",
+  "at": "2026-10-29T03:58:32.916Z"
+ },
+ {
+  "kind": "faq",
+  "id": 110,
+  "url": "/faqs",
+  "label": "كيف أتأكد أن تبرعي وصل فعلاً؟",
+  "at": "2026-10-29T03:58:33.088Z"
+ },
+ {
+  "kind": "faq",
+  "id": 111,
+  "url": "/faqs",
+  "label": "هل يمكن التبرع لمؤسسة اليسر من خارج مصر؟",
+  "at": "2026-10-29T03:58:33.242Z"
+ },
+ {
+  "kind": "faq",
+  "id": 112,
+  "url": "/faqs",
+  "label": "إزاي أتأكد إن صك الأضحية بيوصل فعلاً للأسر في الدقهلية؟",
+  "at": "2026-10-29T03:58:33.395Z"
+ },
+ {
+  "kind": "faq",
+  "id": 113,
+  "url": "/faqs",
+  "label": "هل الأضحية بتتعاين قبل الذبح؟",
+  "at": "2026-10-29T03:58:33.562Z"
+ },
+ {
+  "kind": "faq",
+  "id": 114,
+  "url": "/faqs",
+  "label": "كم سعر صك الأضحية في 2026؟",
+  "at": "2026-10-29T03:58:33.722Z"
+ },
+ {
+  "kind": "faq",
+  "id": 115,
+  "url": "/faqs",
+  "label": "هل بتغطوا كل مدن الدقهلية؟",
+  "at": "2026-10-29T03:58:33.907Z"
+ },
+ {
+  "kind": "faq",
+  "id": 116,
+  "url": "/faqs",
+  "label": "إمتى بتتوزع اللحمة؟",
+  "at": "2026-10-29T03:58:34.088Z"
+ },
+ {
+  "kind": "faq",
+  "id": 117,
+  "url": "/faqs",
+  "label": "هل بتقدروا تقسموا الأضحية؟ (1/3 لي + 1/3 أقارب + 1/3 الفقراء",
+  "at": "2026-10-29T03:58:34.288Z"
+ },
+ {
+  "kind": "faq",
+  "id": 118,
+  "url": "/faqs",
+  "label": "هل بتستلم الإيصال إلكتروني؟",
+  "at": "2026-10-29T03:58:34.514Z"
+ },
+ {
+  "kind": "faq",
+  "id": 119,
+  "url": "/faqs",
+  "label": "إمتى يفتح حجز صك الأضحية 2026؟",
+  "at": "2026-10-29T03:58:34.670Z"
+ },
+ {
+  "kind": "faq",
+  "id": 120,
+  "url": "/faqs",
+  "label": "هل ينفع أدفع أونلاين بفيزا أو فودافون كاش أو إنستاباي؟",
+  "at": "2026-10-29T03:58:34.854Z"
+ },
+ {
+  "kind": "faq",
+  "id": 121,
+  "url": "/faqs",
+  "label": "هل ينفع أحجز صك أضحية باسم متوفي؟",
+  "at": "2026-10-29T03:58:35.019Z"
+ },
+ {
+  "kind": "faq",
+  "id": 122,
+  "url": "/faqs",
+  "label": "هل صك الأضحية يجزي عن العقيقة؟",
+  "at": "2026-10-29T03:58:35.178Z"
+ },
+ {
+  "kind": "faq",
+  "id": 123,
+  "url": "/faqs",
+  "label": "هل بتتبرعوا بالأضحية كاملة في قرية واحدة ولا بتوزعوها على أك",
+  "at": "2026-10-29T03:58:35.364Z"
+ },
+ {
+  "kind": "faq",
+  "id": 124,
+  "url": "/faqs",
+  "label": "هل الذبح بيتم على الطريقة الشرعية؟",
+  "at": "2026-10-29T03:58:35.537Z"
+ },
+ {
+  "kind": "faq",
+  "id": 125,
+  "url": "/faqs",
+  "label": "هل ممكن أحضر الذبح بنفسي؟",
+  "at": "2026-10-29T03:58:35.698Z"
+ },
+ {
+  "kind": "faq",
+  "id": 126,
+  "url": "/faqs",
+  "label": "هل بتصدروا تقرير سنوي بمصارف الأضحية؟",
+  "at": "2026-10-29T03:58:35.901Z"
+ },
+ {
+  "kind": "faq",
+  "id": 127,
+  "url": "/faqs",
+  "label": "إيه الفرق بين خروف وسبع عجل وعجل كامل؟",
+  "at": "2026-10-29T03:58:36.070Z"
+ },
+ {
+  "kind": "faq",
+  "id": 128,
+  "url": "/faqs",
+  "label": "هل ممكن أهدي صك أضحية لحد كهدية؟",
+  "at": "2026-10-29T03:58:36.221Z"
+ },
+ {
+  "kind": "faq",
+  "id": 129,
+  "url": "/faqs",
+  "label": "ممكن أحجز ربع أو نصف عجل بدل صك كامل؟",
+  "at": "2026-10-29T03:58:36.392Z"
+ },
+ {
+  "kind": "season",
+  "id": 4,
+  "url": "/seasons",
+  "label": "thill",
+  "at": "2026-10-29T03:58:48.205Z"
+ },
+ {
+  "kind": "season",
+  "id": 5,
+  "url": "/seasons",
+  "label": "ashr",
+  "at": "2026-10-29T03:58:48.368Z"
+ },
+ {
+  "kind": "season",
+  "id": 6,
+  "url": "/seasons",
+  "label": "school",
+  "at": "2026-10-29T03:58:48.538Z"
+ },
+ {
+  "kind": "story",
+  "id": 2,
+  "url": "/stories",
+  "label": "umm-soad-mansoura",
+  "at": "2026-10-29T03:58:50.076Z"
+ },
+ {
+  "kind": "story",
+  "id": 3,
+  "url": "/stories",
+  "label": "umm-mohamed-bride",
+  "at": "2026-10-29T03:58:50.559Z"
+ },
+ {
+  "kind": "story",
+  "id": 4,
+  "url": "/stories",
+  "label": "ahmed-mit-ghamr",
+  "at": "2026-10-29T03:58:50.791Z"
+ },
+ {
+  "kind": "story",
+  "id": 5,
+  "url": "/stories",
+  "label": "khaled-belqas",
+  "at": "2026-10-29T03:58:51.555Z"
+ },
+ {
+  "kind": "story",
+  "id": 6,
+  "url": "/stories",
+  "label": "nour-sinbillawayn",
+  "at": "2026-10-29T03:58:52.065Z"
+ },
+ {
+  "kind": "story",
+  "id": 7,
+  "url": "/stories",
+  "label": "umm-mohamed-dikirnis",
+  "at": "2026-10-29T03:58:52.333Z"
+ },
+ {
+  "kind": "story",
+  "id": 8,
+  "url": "/stories",
+  "label": "ramadan-family-sherbin",
+  "at": "2026-10-29T03:58:52.668Z"
+ },
+ {
+  "kind": "story",
+  "id": 9,
+  "url": "/stories",
+  "label": "khaled-donor-ramadan",
+  "at": "2026-10-29T03:58:52.946Z"
+ },
+ {
+  "kind": "project",
+  "id": 26,
+  "url": "/projects",
+  "label": "waqf",
+  "at": "2026-10-29T03:59:09.067Z"
+ },
+ {
+  "kind": "project-package",
+  "id": 86,
+  "url": "/projects/26/donation-packages",
+  "label": "waqf/wqf-palm",
+  "at": "2026-10-29T03:59:09.217Z"
+ },
+ {
+  "kind": "project-package",
+  "id": 87,
+  "url": "/projects/26/donation-packages",
+  "label": "waqf/wqf-irr",
+  "at": "2026-10-29T03:59:09.362Z"
+ },
+ {
+  "kind": "project-package",
+  "id": 88,
+  "url": "/projects/26/donation-packages",
+  "label": "waqf/wqf-feddan",
+  "at": "2026-10-29T03:59:09.536Z"
+ },
+ {
+  "kind": "project",
+  "id": 27,
+  "url": "/projects",
+  "label": "medical",
+  "at": "2026-10-29T03:59:09.866Z"
+ },
+ {
+  "kind": "project-package",
+  "id": 89,
+  "url": "/projects/27/donation-packages",
+  "label": "medical/med-presc",
+  "at": "2026-10-29T03:59:10.021Z"
+ },
+ {
+  "kind": "project-package",
+  "id": 90,
+  "url": "/projects/27/donation-packages",
+  "label": "medical/med-tests",
+  "at": "2026-10-29T03:59:10.174Z"
+ },
+ {
+  "kind": "project-package",
+  "id": 91,
+  "url": "/projects/27/donation-packages",
+  "label": "medical/med-surg",
+  "at": "2026-10-29T03:59:10.313Z"
+ },
+ {
+  "kind": "project-package",
+  "id": 92,
+  "url": "/projects/27/donation-packages",
+  "label": "medical/med-chair",
+  "at": "2026-10-29T03:59:10.480Z"
+ },
+ {
+  "kind": "project-package",
+  "id": 93,
+  "url": "/projects/27/donation-packages",
+  "label": "medical/med-prosth",
+  "at": "2026-10-29T03:59:10.619Z"
+ },
+ {
+  "kind": "program-package",
+  "id": 94,
+  "url": "/programs/43/donation-packages",
+  "label": "general-donation/gen-50",
+  "at": "2026-10-29T03:59:10.999Z"
+ },
+ {
+  "kind": "program-package",
+  "id": 95,
+  "url": "/programs/43/donation-packages",
+  "label": "general-donation/gen-100",
+  "at": "2026-10-29T03:59:11.141Z"
+ },
+ {
+  "kind": "program-package",
+  "id": 96,
+  "url": "/programs/43/donation-packages",
+  "label": "general-donation/gen-250",
+  "at": "2026-10-29T03:59:11.296Z"
+ },
+ {
+  "kind": "program-package",
+  "id": 97,
+  "url": "/programs/43/donation-packages",
+  "label": "general-donation/gen-500",
+  "at": "2026-10-29T03:59:11.439Z"
+ },
+ {
+  "kind": "program",
+  "id": 44,
+  "url": "/programs",
+  "label": "shelter",
+  "at": "2026-10-29T03:59:11.776Z",
+  "deleted_at": "2026-10-29T04:26:12.070Z"
+ },
+ {
+  "kind": "program-section",
+  "id": 59,
+  "url": "/programs/44/page-sections",
+  "label": "shelter/top_section",
+  "at": "2026-10-29T03:59:11.930Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 60,
+  "url": "/programs/44/page-sections",
+  "label": "shelter/benefits",
+  "at": "2026-10-29T03:59:12.081Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 61,
+  "url": "/programs/44/page-sections",
+  "label": "shelter/how_it_works",
+  "at": "2026-10-29T03:59:12.228Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 62,
+  "url": "/programs/44/page-sections",
+  "label": "shelter/details",
+  "at": "2026-10-29T03:59:12.409Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 63,
+  "url": "/programs/44/page-sections",
+  "label": "shelter/impact",
+  "at": "2026-10-29T03:59:12.585Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 64,
+  "url": "/programs/44/page-sections",
+  "label": "shelter/donor_testimonials",
+  "at": "2026-10-29T03:59:12.738Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 65,
+  "url": "/programs/44/page-sections",
+  "label": "shelter/faq",
+  "at": "2026-10-29T03:59:12.937Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 66,
+  "url": "/programs/44/page-sections",
+  "label": "shelter/related_programs",
+  "at": "2026-10-29T03:59:13.076Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 45,
+  "url": "/programs",
+  "label": "treatment",
+  "at": "2026-10-29T03:59:13.854Z",
+  "deleted_at": "2026-10-29T04:26:12.232Z"
+ },
+ {
+  "kind": "program-section",
+  "id": 67,
+  "url": "/programs/45/page-sections",
+  "label": "treatment/top_section",
+  "at": "2026-10-29T03:59:14.030Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 68,
+  "url": "/programs/45/page-sections",
+  "label": "treatment/benefits",
+  "at": "2026-10-29T03:59:14.187Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 69,
+  "url": "/programs/45/page-sections",
+  "label": "treatment/how_it_works",
+  "at": "2026-10-29T03:59:14.359Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 70,
+  "url": "/programs/45/page-sections",
+  "label": "treatment/details",
+  "at": "2026-10-29T03:59:14.511Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 71,
+  "url": "/programs/45/page-sections",
+  "label": "treatment/impact",
+  "at": "2026-10-29T03:59:14.701Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 72,
+  "url": "/programs/45/page-sections",
+  "label": "treatment/donor_testimonials",
+  "at": "2026-10-29T03:59:14.859Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 73,
+  "url": "/programs/45/page-sections",
+  "label": "treatment/faq",
+  "at": "2026-10-29T03:59:15.029Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 74,
+  "url": "/programs/45/page-sections",
+  "label": "treatment/related_programs",
+  "at": "2026-10-29T03:59:15.186Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 46,
+  "url": "/programs",
+  "label": "prosthetics",
+  "at": "2026-10-29T03:59:15.493Z",
+  "deleted_at": "2026-10-29T04:26:12.416Z"
+ },
+ {
+  "kind": "program-section",
+  "id": 75,
+  "url": "/programs/46/page-sections",
+  "label": "prosthetics/top_section",
+  "at": "2026-10-29T03:59:15.644Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 76,
+  "url": "/programs/46/page-sections",
+  "label": "prosthetics/benefits",
+  "at": "2026-10-29T03:59:15.788Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 77,
+  "url": "/programs/46/page-sections",
+  "label": "prosthetics/how_it_works",
+  "at": "2026-10-29T03:59:15.948Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 78,
+  "url": "/programs/46/page-sections",
+  "label": "prosthetics/details",
+  "at": "2026-10-29T03:59:16.117Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 79,
+  "url": "/programs/46/page-sections",
+  "label": "prosthetics/impact",
+  "at": "2026-10-29T03:59:16.274Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 80,
+  "url": "/programs/46/page-sections",
+  "label": "prosthetics/donor_testimonials",
+  "at": "2026-10-29T03:59:16.421Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 81,
+  "url": "/programs/46/page-sections",
+  "label": "prosthetics/faq",
+  "at": "2026-10-29T03:59:16.571Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 82,
+  "url": "/programs/46/page-sections",
+  "label": "prosthetics/related_programs",
+  "at": "2026-10-29T03:59:16.724Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 47,
+  "url": "/programs",
+  "label": "kitchen",
+  "at": "2026-10-29T03:59:17.274Z",
+  "deleted_at": "2026-10-29T04:26:12.626Z"
+ },
+ {
+  "kind": "program-section",
+  "id": 83,
+  "url": "/programs/47/page-sections",
+  "label": "kitchen/top_section",
+  "at": "2026-10-29T03:59:17.422Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 84,
+  "url": "/programs/47/page-sections",
+  "label": "kitchen/benefits",
+  "at": "2026-10-29T03:59:17.568Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 85,
+  "url": "/programs/47/page-sections",
+  "label": "kitchen/how_it_works",
+  "at": "2026-10-29T03:59:17.727Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 86,
+  "url": "/programs/47/page-sections",
+  "label": "kitchen/details",
+  "at": "2026-10-29T03:59:17.877Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 87,
+  "url": "/programs/47/page-sections",
+  "label": "kitchen/impact",
+  "at": "2026-10-29T03:59:18.039Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 88,
+  "url": "/programs/47/page-sections",
+  "label": "kitchen/donor_testimonials",
+  "at": "2026-10-29T03:59:18.186Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 89,
+  "url": "/programs/47/page-sections",
+  "label": "kitchen/faq",
+  "at": "2026-10-29T03:59:18.331Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 90,
+  "url": "/programs/47/page-sections",
+  "label": "kitchen/related_programs",
+  "at": "2026-10-29T03:59:18.472Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 48,
+  "url": "/programs",
+  "label": "markoun",
+  "at": "2026-10-29T03:59:19.443Z",
+  "deleted_at": "2026-10-29T04:26:12.827Z"
+ },
+ {
+  "kind": "program-section",
+  "id": 91,
+  "url": "/programs/48/page-sections",
+  "label": "markoun/top_section",
+  "at": "2026-10-29T03:59:19.630Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 92,
+  "url": "/programs/48/page-sections",
+  "label": "markoun/benefits",
+  "at": "2026-10-29T03:59:19.787Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 93,
+  "url": "/programs/48/page-sections",
+  "label": "markoun/how_it_works",
+  "at": "2026-10-29T03:59:19.953Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 94,
+  "url": "/programs/48/page-sections",
+  "label": "markoun/details",
+  "at": "2026-10-29T03:59:20.111Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 95,
+  "url": "/programs/48/page-sections",
+  "label": "markoun/impact",
+  "at": "2026-10-29T03:59:20.267Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 96,
+  "url": "/programs/48/page-sections",
+  "label": "markoun/donor_testimonials",
+  "at": "2026-10-29T03:59:20.409Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 97,
+  "url": "/programs/48/page-sections",
+  "label": "markoun/faq",
+  "at": "2026-10-29T03:59:20.572Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 98,
+  "url": "/programs/48/page-sections",
+  "label": "markoun/related_programs",
+  "at": "2026-10-29T03:59:21.021Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 49,
+  "url": "/programs",
+  "label": "arboun",
+  "at": "2026-10-29T03:59:21.509Z",
+  "deleted_at": "2026-10-29T04:26:12.993Z"
+ },
+ {
+  "kind": "program-section",
+  "id": 99,
+  "url": "/programs/49/page-sections",
+  "label": "arboun/top_section",
+  "at": "2026-10-29T03:59:21.653Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 100,
+  "url": "/programs/49/page-sections",
+  "label": "arboun/benefits",
+  "at": "2026-10-29T03:59:21.802Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 101,
+  "url": "/programs/49/page-sections",
+  "label": "arboun/how_it_works",
+  "at": "2026-10-29T03:59:22.004Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 102,
+  "url": "/programs/49/page-sections",
+  "label": "arboun/details",
+  "at": "2026-10-29T03:59:22.153Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 103,
+  "url": "/programs/49/page-sections",
+  "label": "arboun/impact",
+  "at": "2026-10-29T03:59:22.315Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 104,
+  "url": "/programs/49/page-sections",
+  "label": "arboun/donor_testimonials",
+  "at": "2026-10-29T03:59:22.473Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 105,
+  "url": "/programs/49/page-sections",
+  "label": "arboun/faq",
+  "at": "2026-10-29T03:59:22.645Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-section",
+  "id": 106,
+  "url": "/programs/49/page-sections",
+  "label": "arboun/related_programs",
+  "at": "2026-10-29T03:59:22.801Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 50,
+  "url": "/programs",
+  "label": "inqadh (hidden)",
+  "at": "2026-10-29T03:59:23.606Z",
+  "deleted_at": "2026-10-29T04:26:13.192Z"
+ },
+ {
+  "kind": "program-package",
+  "id": 98,
+  "url": "/programs/50/donation-packages",
+  "label": "inqadh/inq-100",
+  "at": "2026-10-29T03:59:23.765Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 99,
+  "url": "/programs/50/donation-packages",
+  "label": "inqadh/inq-500",
+  "at": "2026-10-29T03:59:23.914Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 100,
+  "url": "/programs/50/donation-packages",
+  "label": "inqadh/inq-2000",
+  "at": "2026-10-29T03:59:24.053Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 101,
+  "url": "/programs/50/donation-packages",
+  "label": "inqadh/inq-5000",
+  "at": "2026-10-29T03:59:24.236Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 51,
+  "url": "/programs",
+  "label": "monthly-sponsorship (hidden)",
+  "at": "2026-10-29T03:59:24.540Z",
+  "deleted_at": "2026-10-29T04:26:13.362Z"
+ },
+ {
+  "kind": "program-package",
+  "id": 102,
+  "url": "/programs/51/donation-packages",
+  "label": "monthly-sponsorship/msp-200",
+  "at": "2026-10-29T03:59:24.698Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 103,
+  "url": "/programs/51/donation-packages",
+  "label": "monthly-sponsorship/msp-500",
+  "at": "2026-10-29T03:59:24.853Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 104,
+  "url": "/programs/51/donation-packages",
+  "label": "monthly-sponsorship/msp-1000",
+  "at": "2026-10-29T03:59:25.001Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 105,
+  "url": "/programs/51/donation-packages",
+  "label": "monthly-sponsorship/msp-2000",
+  "at": "2026-10-29T03:59:25.155Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 52,
+  "url": "/programs",
+  "label": "mosques (hidden)",
+  "at": "2026-10-29T03:59:25.430Z",
+  "deleted_at": "2026-10-29T04:26:13.525Z"
+ },
+ {
+  "kind": "program-package",
+  "id": 106,
+  "url": "/programs/52/donation-packages",
+  "label": "mosques/msq-carpet",
+  "at": "2026-10-29T03:59:25.579Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 107,
+  "url": "/programs/52/donation-packages",
+  "label": "mosques/msq-cement",
+  "at": "2026-10-29T03:59:25.736Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 108,
+  "url": "/programs/52/donation-packages",
+  "label": "mosques/msq-meter",
+  "at": "2026-10-29T03:59:25.879Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 109,
+  "url": "/programs/52/donation-packages",
+  "label": "mosques/msq-minaret",
+  "at": "2026-10-29T03:59:26.036Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 53,
+  "url": "/programs",
+  "label": "monthly-meat (hidden)",
+  "at": "2026-10-29T03:59:26.368Z",
+  "deleted_at": "2026-10-29T04:26:13.673Z"
+ },
+ {
+  "kind": "program-package",
+  "id": 110,
+  "url": "/programs/53/donation-packages",
+  "label": "monthly-meat/mmt-kilo",
+  "at": "2026-10-29T03:59:26.515Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 111,
+  "url": "/programs/53/donation-packages",
+  "label": "monthly-meat/mmt-family",
+  "at": "2026-10-29T03:59:26.680Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 112,
+  "url": "/programs/53/donation-packages",
+  "label": "monthly-meat/mmt-village",
+  "at": "2026-10-29T03:59:26.827Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 113,
+  "url": "/programs/53/donation-packages",
+  "label": "monthly-meat/mmt-month",
+  "at": "2026-10-29T03:59:26.969Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 54,
+  "url": "/programs",
+  "label": "quran (hidden)",
+  "at": "2026-10-29T03:59:27.637Z",
+  "deleted_at": "2026-10-29T04:26:13.832Z"
+ },
+ {
+  "kind": "program-package",
+  "id": 114,
+  "url": "/programs/54/donation-packages",
+  "label": "quran/qrn-student",
+  "at": "2026-10-29T03:59:27.783Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 115,
+  "url": "/programs/54/donation-packages",
+  "label": "quran/qrn-teacher",
+  "at": "2026-10-29T03:59:27.940Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 116,
+  "url": "/programs/54/donation-packages",
+  "label": "quran/qrn-circle",
+  "at": "2026-10-29T03:59:28.092Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 117,
+  "url": "/programs/54/donation-packages",
+  "label": "quran/qrn-center",
+  "at": "2026-10-29T03:59:28.229Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program",
+  "id": 55,
+  "url": "/programs",
+  "label": "takrim (hidden)",
+  "at": "2026-10-29T03:59:28.621Z",
+  "deleted_at": "2026-10-29T04:26:14.015Z"
+ },
+ {
+  "kind": "program-package",
+  "id": 118,
+  "url": "/programs/55/donation-packages",
+  "label": "takrim/tkr-fuel",
+  "at": "2026-10-29T03:59:28.764Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 119,
+  "url": "/programs/55/donation-packages",
+  "label": "takrim/tkr-shroud",
+  "at": "2026-10-29T03:59:28.919Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "program-package",
+  "id": 120,
+  "url": "/programs/55/donation-packages",
+  "label": "takrim/tkr-trip",
+  "at": "2026-10-29T03:59:29.059Z",
+  "deleted_at": "cascade"
+ },
+ {
+  "kind": "blog",
+  "id": 5,
+  "url": "/blog-seo",
+  "label": "shade-campaign-sqya-2026",
+  "at": "2026-10-29T04:00:16.819Z"
+ },
+ {
+  "kind": "blog",
+  "id": 6,
+  "url": "/blog-seo",
+  "label": "markoun-furniture-2026",
+  "at": "2026-10-29T04:00:29.878Z"
+ },
+ {
+  "kind": "blog",
+  "id": 7,
+  "url": "/blog-seo",
+  "label": "aid-prayer-2026",
+  "at": "2026-10-29T04:00:30.096Z"
+ },
+ {
+  "kind": "blog",
+  "id": 8,
+  "url": "/blog-seo",
+  "label": "udhiyah-2026",
+  "at": "2026-10-29T04:00:30.344Z"
+ },
+ {
+  "kind": "blog",
+  "id": 9,
+  "url": "/blog-seo",
+  "label": "qurbani-mansoura-2026-guarantees",
+  "at": "2026-10-29T04:00:30.530Z"
+ },
+ {
+  "kind": "blog",
+  "id": 10,
+  "url": "/blog-seo",
+  "label": "alyusr-convoy-feb-2026-dakahlia-kafr-elsheikh",
+  "at": "2026-10-29T04:00:30.758Z"
+ },
+ {
+  "kind": "blog",
+  "id": 11,
+  "url": "/blog-seo",
+  "label": "qurbani-2026-field-proof-dakahlia",
+  "at": "2026-10-29T04:00:30.975Z"
+ },
+ {
+  "kind": "blog",
+  "id": 12,
+  "url": "/blog-seo",
+  "label": "odhya-2026-mansoura",
+  "at": "2026-10-29T04:00:31.225Z"
+ },
+ {
+  "kind": "blog",
+  "id": 13,
+  "url": "/blog-seo",
+  "label": "zakat-mal-2026-calculator",
+  "at": "2026-10-29T04:00:31.426Z"
+ },
+ {
+  "kind": "blog",
+  "id": 14,
+  "url": "/blog-seo",
+  "label": "zakat-fitr-2026",
+  "at": "2026-10-29T04:00:31.670Z"
+ },
+ {
+  "kind": "blog",
+  "id": 15,
+  "url": "/blog-seo",
+  "label": "kafala-yatim-mansoura",
+  "at": "2026-10-29T04:00:31.908Z"
+ },
+ {
+  "kind": "blog",
+  "id": 16,
+  "url": "/blog-seo",
+  "label": "afdal-moassasa-khairya-mansoura",
+  "at": "2026-10-29T04:00:32.129Z"
+ },
+ {
+  "kind": "blog",
+  "id": 17,
+  "url": "/blog-seo",
+  "label": "shafafiya-tawtheeq-2026",
+  "at": "2026-10-29T04:00:32.314Z"
+ },
+ {
+  "kind": "blog",
+  "id": 18,
+  "url": "/blog-seo",
+  "label": "matbakh-alyusr-1500-meals",
+  "at": "2026-10-29T04:00:32.505Z"
+ },
+ {
+  "kind": "blog",
+  "id": 19,
+  "url": "/blog-seo",
+  "label": "qoum-tebbi-dakahlia",
+  "at": "2026-10-29T04:00:32.687Z"
+ },
+ {
+  "kind": "blog",
+  "id": 20,
+  "url": "/blog-seo",
+  "label": "atraf-sinaiya-mosh-hatwaqafny",
+  "at": "2026-10-29T04:00:32.904Z"
+ },
+ {
+  "kind": "blog",
+  "id": 21,
+  "url": "/blog-seo",
+  "label": "setr-tasqeef-bayt-amen",
+  "at": "2026-10-29T04:00:33.132Z"
+ },
+ {
+  "kind": "blog",
+  "id": 22,
+  "url": "/blog-seo",
+  "label": "tayseer-zawag-jawaz-3aroosa",
+  "at": "2026-10-29T04:00:33.318Z"
+ },
+ {
+  "kind": "blog",
+  "id": 23,
+  "url": "/blog-seo",
+  "label": "ramadan-2026-prep",
+  "at": "2026-10-29T04:00:33.512Z"
+ },
+ {
+  "kind": "blog",
+  "id": 24,
+  "url": "/blog-seo",
+  "label": "iftar-saiim-20-genih",
+  "at": "2026-10-29T04:00:33.714Z"
+ },
+ {
+  "kind": "blog",
+  "id": 25,
+  "url": "/blog-seo",
+  "label": "waqf-taleem-354-talib",
+  "at": "2026-10-29T04:00:33.910Z"
+ },
+ {
+  "kind": "blog",
+  "id": 26,
+  "url": "/blog-seo",
+  "label": "seqaya-maa-2026",
+  "at": "2026-10-29T04:00:34.160Z"
+ },
+ {
+  "kind": "blog",
+  "id": 27,
+  "url": "/blog-seo",
+  "label": "3elaj-wa-adwiya-2025",
+  "at": "2026-10-29T04:00:34.333Z"
+ },
+ {
+  "kind": "blog",
+  "id": 28,
+  "url": "/blog-seo",
+  "label": "compare-aleysr-vs-others",
+  "at": "2026-10-29T04:00:34.524Z"
+ },
+ {
+  "kind": "blog",
+  "id": 29,
+  "url": "/blog-seo",
+  "label": "campaign-success-cases",
+  "at": "2026-10-29T04:00:34.698Z"
+ },
+ {
+  "kind": "blog",
+  "id": 30,
+  "url": "/blog-seo",
+  "label": "akherqarar-altabarroa-online",
+  "at": "2026-10-29T04:00:34.898Z"
+ },
+ {
+  "kind": "blog",
+  "id": 31,
+  "url": "/blog-seo",
+  "label": "afdal-jamiya-khairya-dakahlia-2026",
+  "at": "2026-10-29T04:00:35.121Z"
+ },
+ {
+  "kind": "blog",
+  "id": 32,
+  "url": "/blog-seo",
+  "label": "tabarro-shahri-mansoura-2026",
+  "at": "2026-10-29T04:00:35.327Z"
+ },
+ {
+  "kind": "blog",
+  "id": 33,
+  "url": "/blog-seo",
+  "label": "kafala-yatim-shahriya-2026",
+  "at": "2026-10-29T04:00:35.561Z"
+ },
+ {
+  "kind": "blog",
+  "id": 34,
+  "url": "/blog-seo",
+  "label": "hamla-3elaj-amrad-mozmena-2026",
+  "at": "2026-10-29T04:00:35.740Z"
+ },
+ {
+  "kind": "blog",
+  "id": 35,
+  "url": "/blog-seo",
+  "label": "sotrah-banat-2026",
+  "at": "2026-10-29T04:00:35.920Z"
+ },
+ {
+  "kind": "blog",
+  "id": 36,
+  "url": "/blog-seo",
+  "label": "sala-ghedayia-shahriya-2026",
+  "at": "2026-10-29T04:00:36.132Z"
+ },
+ {
+  "kind": "blog",
+  "id": 37,
+  "url": "/blog-seo",
+  "label": "meyaah-naqya-aabaar-2026",
+  "at": "2026-10-29T04:00:36.315Z"
+ },
+ {
+  "kind": "blog",
+  "id": 38,
+  "url": "/blog-seo",
+  "label": "ramadan-2026-iftar-saiim",
+  "at": "2026-10-29T04:00:36.502Z"
+ },
+ {
+  "kind": "blog",
+  "id": 39,
+  "url": "/blog-seo",
+  "label": "shafafiya-tabaroaat-2026-takarir",
+  "at": "2026-10-29T04:00:36.680Z"
+ },
+ {
+  "kind": "blog",
+  "id": 40,
+  "url": "/blog-seo",
+  "label": "3aml-tatawwu3-mansoura-2026",
+  "at": "2026-10-29T04:00:36.852Z"
+ },
+ {
+  "kind": "blog",
+  "id": 41,
+  "url": "/blog-seo",
+  "label": "khabia-jam3-tabarro3at-mansoura",
+  "at": "2026-10-29T04:00:37.027Z"
+ },
+ {
+  "kind": "blog",
+  "id": 42,
+  "url": "/blog-seo",
+  "label": "tabarro3-malabes-shetwiya-2026",
+  "at": "2026-10-29T04:00:37.210Z"
+ },
+ {
+  "kind": "blog",
+  "id": 43,
+  "url": "/blog-seo",
+  "label": "daleel-mosa3edat-fokara-mansoura",
+  "at": "2026-10-29T04:00:37.377Z"
+ },
+ {
+  "kind": "blog",
+  "id": 44,
+  "url": "/blog-seo",
+  "label": "farq-zakat-vs-sadaqa-2026",
+  "at": "2026-10-29T04:00:37.572Z"
+ },
+ {
+  "kind": "blog",
+  "id": 45,
+  "url": "/blog-seo",
+  "label": "shahadat-tabarro3-rasmiya-2026",
+  "at": "2026-10-29T04:00:37.748Z"
+ },
+ {
+  "kind": "blog",
+  "id": 46,
+  "url": "/blog-seo",
+  "label": "qura-mansoura-mahroma-tabarro3",
+  "at": "2026-10-29T04:00:37.932Z"
+ },
+ {
+  "kind": "blog",
+  "id": 47,
+  "url": "/blog-seo",
+  "label": "how-to-zakat-mal-online-2026",
+  "at": "2026-10-29T04:00:38.108Z"
+ },
+ {
+  "kind": "blog",
+  "id": 48,
+  "url": "/blog-seo",
+  "label": "hala-3agela-tabarro3-saree3-mansoura",
+  "at": "2026-10-29T04:00:38.274Z"
+ },
+ {
+  "kind": "blog",
+  "id": 49,
+  "url": "/blog-seo",
+  "label": "tabarro3-amwal-companies-mansoura",
+  "at": "2026-10-29T04:00:38.461Z"
+ },
+ {
+  "kind": "blog",
+  "id": 50,
+  "url": "/blog-seo",
+  "label": "akbar-akhta2-tabarro3-online-2026",
+  "at": "2026-10-29T04:00:38.636Z"
+ },
+ {
+  "kind": "blog",
+  "id": 51,
+  "url": "/blog-seo",
+  "label": "dalil-sak-odhya-dakahlia-2026-13-yom",
+  "at": "2026-10-29T04:00:38.838Z"
+ },
+ {
+  "kind": "blog",
+  "id": 52,
+  "url": "/blog-seo",
+  "label": "markoun-campaign-dakahlia-2026",
+  "at": "2026-10-29T04:00:39.032Z"
+ },
+ {
+  "kind": "blog",
+  "id": 53,
+  "url": "/blog-seo",
+  "label": "markoun-donate-used-items-dakahlia",
+  "at": "2026-10-29T04:00:39.254Z"
+ },
+ {
+  "kind": "blog",
+  "id": 54,
+  "url": "/blog-seo",
+  "label": "markoun-dignity-from-stored-items",
+  "at": "2026-10-29T04:00:39.428Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 95,
+  "url": "/gallery",
+  "label": "متطوع اليسر يسلّم كرتونة العزومة لسيدة كبيرة في ال",
+  "at": "2026-10-29T04:00:40.969Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 96,
+  "url": "/gallery",
+  "label": "تسليم أكياس المساعدات لسيدة مستحقة من سيارة اليسر ",
+  "at": "2026-10-29T04:00:41.285Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 97,
+  "url": "/gallery",
+  "label": "توزيع نهاري لكراتين العزومة على الأسر بقرى كفر الش",
+  "at": "2026-10-29T04:00:41.737Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 98,
+  "url": "/gallery",
+  "label": "متطوع اليسر يسلم المساعدات ليلًا لأسرة بقرى الدقهل",
+  "at": "2026-10-29T04:00:42.167Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 99,
+  "url": "/gallery",
+  "label": "سيارة اليسر محملة بكراتين العزومة وأكياس الإغاثة 2",
+  "at": "2026-10-29T04:00:42.513Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 100,
+  "url": "/gallery",
+  "label": "قافلة اليسر 2026 — من المنصورة لكفر الشيخ ورشيد",
+  "at": "2026-10-29T04:00:42.829Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 101,
+  "url": "/gallery",
+  "label": "حظيرة معاينة ماشية الأضحية 2024 — المنصورة بإشراف ",
+  "at": "2026-10-29T04:00:43.290Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 102,
+  "url": "/gallery",
+  "label": "توثيق صك أضحية 2025 — صور وفيديو لكل متبرع",
+  "at": "2026-10-29T04:00:43.701Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 103,
+  "url": "/gallery",
+  "label": "توزيع لحوم أضحية 2025 على أسر الدقهلية يوم العيد",
+  "at": "2026-10-29T04:00:44.116Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 104,
+  "url": "/gallery",
+  "label": "صك أضحية 2025 جاهز لأسرة مستحقة بالمنصورة",
+  "at": "2026-10-29T04:00:44.442Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 105,
+  "url": "/gallery",
+  "label": "تجهيز وتغليف لحوم أضحية 2024 بإشراف بيطري",
+  "at": "2026-10-29T04:00:44.786Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 106,
+  "url": "/gallery",
+  "label": "ماشية الأضحية 2024 محصنة قبل الذبح بمسلخ المنصورة",
+  "at": "2026-10-29T04:00:45.175Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 107,
+  "url": "/gallery",
+  "label": "صك أضحية اليسر 2024 — لحم بلدي طازج بالدقهلية",
+  "at": "2026-10-29T04:00:45.518Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 108,
+  "url": "/gallery",
+  "label": "تسليم حملة مركون — أثاث وتفاصيل منزلية مجددة لأسرة",
+  "at": "2026-10-29T04:00:46.027Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 109,
+  "url": "/gallery",
+  "label": "بوستر حملة مركون — علاج شهري (بديل)",
+  "at": "2026-10-29T04:00:46.382Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 110,
+  "url": "/gallery",
+  "label": "بوستر حملة مركون — استلام وتوصيل (بديل)",
+  "at": "2026-10-29T04:00:46.791Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 111,
+  "url": "/gallery",
+  "label": "بوستر حملة مركون — مرتب شهري (بديل)",
+  "at": "2026-10-29T04:00:47.466Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 112,
+  "url": "/gallery",
+  "label": "تجهيز خزانة مركون — ملابس واحتياجات منزلية لطفل",
+  "at": "2026-10-29T04:00:47.690Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 113,
+  "url": "/gallery",
+  "label": "حملة مركون — أثاث مجدّد وكرامة توصل للبيت",
+  "at": "2026-10-29T04:00:48.288Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 114,
+  "url": "/gallery",
+  "label": "أسرة من المستفيدين — المنصورة، الدقهلية",
+  "at": "2026-10-29T04:00:49.090Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 115,
+  "url": "/gallery",
+  "label": "أيادٍ تحمل برعمًا — الأمل ينمو",
+  "at": "2026-10-29T04:00:49.330Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 116,
+  "url": "/gallery",
+  "label": "طفل يبتسم بعد وصول المساعدة — الدقهلية",
+  "at": "2026-10-29T04:00:49.593Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 117,
+  "url": "/gallery",
+  "label": "مشروع التعليم — طلاب مدرسة بميت غمر",
+  "at": "2026-10-29T04:00:50.068Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 118,
+  "url": "/gallery",
+  "label": "كفالة أيتام — أطفال السنبلاوين",
+  "at": "2026-10-29T04:00:50.497Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 119,
+  "url": "/gallery",
+  "label": "توزيع كرتونة عزومة — شربين",
+  "at": "2026-10-29T04:00:50.773Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 120,
+  "url": "/gallery",
+  "label": "برنامج شفاء ودواء — بلقاس",
+  "at": "2026-10-29T04:00:51.340Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 121,
+  "url": "/gallery",
+  "label": "عائلة سعيدة بعد أضحية العيد 2026",
+  "at": "2026-10-29T04:00:53.486Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 122,
+  "url": "/gallery",
+  "label": "عائلة قبل وصول المساعدة — حالة موثّقة",
+  "at": "2026-10-29T04:00:53.704Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 123,
+  "url": "/gallery",
+  "label": "بوستر حملة أضحية العيد 2026",
+  "at": "2026-10-29T04:00:54.508Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 124,
+  "url": "/gallery",
+  "label": "بوستر حملة كرتونة عزومة العيد",
+  "at": "2026-10-29T04:00:54.957Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 125,
+  "url": "/gallery",
+  "label": "بوستر حملة وصلات المياه — قرى الدقهلية",
+  "at": "2026-10-29T04:00:55.324Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 126,
+  "url": "/gallery",
+  "label": "تيسير زواج اليتيمات — الفرحة بقت فرحتين",
+  "at": "2026-10-29T04:00:55.909Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 127,
+  "url": "/gallery",
+  "label": "تجهيز عروسة يتيمة — تسليم الجهاز",
+  "at": "2026-10-29T04:00:56.280Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 128,
+  "url": "/gallery",
+  "label": "بوستر كفالة التعليم — 354 طالبًا",
+  "at": "2026-10-29T04:00:56.661Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 129,
+  "url": "/gallery",
+  "label": "فصل دراسي لطلاب الكفالة — المنصورة",
+  "at": "2026-10-29T04:00:57.622Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 130,
+  "url": "/gallery",
+  "label": "وجبات ساخنة للأيتام من مطبخ اليسر",
+  "at": "2026-10-29T04:00:58.427Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 131,
+  "url": "/gallery",
+  "label": "بوستر توزيع لحوم بلدي — مزرعة اليسر الوقفية",
+  "at": "2026-10-29T04:00:59.140Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 132,
+  "url": "/gallery",
+  "label": "جودة لحوم الأضاحي من مزرعة اليسر الوقفية",
+  "at": "2026-10-29T04:00:59.956Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 133,
+  "url": "/gallery",
+  "label": "مصدر موثوق — مواشي من مزارعنا",
+  "at": "2026-10-29T04:01:00.689Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 134,
+  "url": "/gallery",
+  "label": "وصلة مياه مركّبة في منزل بقرية نائية",
+  "at": "2026-10-29T04:01:01.065Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 135,
+  "url": "/gallery",
+  "label": "مزرعة اليسر الوقفية — المواشي والأعلاف",
+  "at": "2026-10-29T04:01:01.381Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 136,
+  "url": "/gallery",
+  "label": "زكاة 2026 — احسبها واصرفها",
+  "at": "2026-10-29T04:01:01.737Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 137,
+  "url": "/gallery",
+  "label": "تطوع مع اليسر — دعوة مفتوحة",
+  "at": "2026-10-29T04:01:02.228Z"
+ },
+ {
+  "kind": "gallery",
+  "id": 138,
+  "url": "/gallery",
+  "label": "قافلة تطوع في الميدان",
+  "at": "2026-10-29T04:01:03.198Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042714-poster-water-n2mem.png",
+  "url": "/media",
+  "label": "poster-water.png",
+  "at": "2026-10-29T04:27:15.771Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042717-markoun-poster-furniture-clwr7.png",
+  "url": "/media",
+  "label": "markoun-poster-furniture.png",
+  "at": "2026-10-29T04:27:18.375Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042719-convoy-2026-day-distribution-3bp8c.jpg",
+  "url": "/media",
+  "label": "convoy-2026-day-distribution.jpg",
+  "at": "2026-10-29T04:27:20.306Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042721-qurbani-2024-cattle-pen-tkzlr.jpg",
+  "url": "/media",
+  "label": "qurbani-2024-cattle-pen.jpg",
+  "at": "2026-10-29T04:27:22.099Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042722-convoy-2026-pickup-loaded-goftl.jpg",
+  "url": "/media",
+  "label": "convoy-2026-pickup-loaded.jpg",
+  "at": "2026-10-29T04:27:23.757Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042725-poster-odhya-1yyxv.png",
+  "url": "/media",
+  "label": "poster-odhya.png",
+  "at": "2026-10-29T04:27:26.635Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042726-poster-zakat-ssgmk.png",
+  "url": "/media",
+  "label": "poster-zakat.png",
+  "at": "2026-10-29T04:27:27.694Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042728-program-orphans-orn0n.jpg",
+  "url": "/media",
+  "label": "program-orphans.jpg",
+  "at": "2026-10-29T04:27:29.132Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042729-about-hero-pb4kf.jpg",
+  "url": "/media",
+  "label": "about-hero.jpg",
+  "at": "2026-10-29T04:27:29.921Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042730-hero-deco-van-2-njbhd.webp",
+  "url": "/media",
+  "label": "hero-deco-van-2.webp",
+  "at": "2026-10-29T04:27:30.804Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042731-program-food-kwcrp.jpg",
+  "url": "/media",
+  "label": "program-food.jpg",
+  "at": "2026-10-29T04:27:32.359Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042739-program-health-senqh.jpg",
+  "url": "/media",
+  "label": "program-health.jpg",
+  "at": "2026-10-29T04:27:39.910Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042740-brand-poster-frame-qlqao.jpg",
+  "url": "/media",
+  "label": "brand-poster-frame.jpg",
+  "at": "2026-10-29T04:27:41.632Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042746-poster-bride-xkw7y.png",
+  "url": "/media",
+  "label": "poster-bride.png",
+  "at": "2026-10-29T04:27:46.968Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042747-brand-bags-wavii.jpg",
+  "url": "/media",
+  "label": "brand-bags.jpg",
+  "at": "2026-10-29T04:27:48.439Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042758-brand-poster-classroom-uevjr.jpg",
+  "url": "/media",
+  "label": "brand-poster-classroom.jpg",
+  "at": "2026-10-29T04:27:59.269Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042759-brand-girl-orange-tklp0.jpg",
+  "url": "/media",
+  "label": "brand-girl-orange.jpg",
+  "at": "2026-10-29T04:28:00.424Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042802-poster-box-cabhx.png",
+  "url": "/media",
+  "label": "poster-box.png",
+  "at": "2026-10-29T04:28:02.954Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042811-poster-meat-98fmr.png",
+  "url": "/media",
+  "label": "poster-meat.png",
+  "at": "2026-10-29T04:28:12.038Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042815-poster-volunteer-gnurh.png",
+  "url": "/media",
+  "label": "poster-volunteer.png",
+  "at": "2026-10-29T04:28:16.229Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042816-brand-truck-jegxs.jpg",
+  "url": "/media",
+  "label": "brand-truck.jpg",
+  "at": "2026-10-29T04:28:17.597Z"
+ },
+ {
+  "kind": "media",
+  "id": "media/blog/20261029-042818-markoun-poster-delivery-tpzpw.png",
+  "url": "/media",
+  "label": "markoun-poster-delivery.png",
+  "at": "2026-10-29T04:28:19.578Z"
+ }
+]

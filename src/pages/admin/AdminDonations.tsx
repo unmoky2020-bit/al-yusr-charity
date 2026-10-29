@@ -1,606 +1,398 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  Download,
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
-  Filter,
-  RotateCcw,
-  FileText,
-  Printer,
-  X,
-  CreditCard,
-  RefreshCw,
-  Search,
-} from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ChevronLeft, ChevronRight, Download, ExternalLink, FileText, Loader2, RefreshCw, RotateCcw, Search, X } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DonationReceipt } from "@/components/common/DonationReceipt";
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
-import { listAllDonations, updateDonationStatus, DONATION_STATUS_TRANSITIONS, type DonationStatus } from "@/data/casesApi";
-import { DonationReceipt } from "@/components/common/DonationReceipt";
+import { DONATION_STATUS_TRANSITIONS, type DonationStatus } from "@/data/casesApi";
+import { donationCampaignsApi, programsApiV1, projectsApi } from "@/data/laravelApi";
+import {
+  donationsAdminApi,
+  filtersFromSearch,
+  filtersToParams,
+  type AdminDonation,
+  type DonationFilters,
+  type DonationStatusKey,
+} from "@/data/api/donationsAdminApi";
+import {
+  donationMethodLabel,
+  donationStatusLabel,
+  donationStatusTone,
+  donationTargetLabel,
+  formatDateTime,
+  formatMoney,
+  formatNumber,
+} from "@/lib/donationDisplay";
+import type { DonationRecord } from "@/data/donationsStore";
 
-const PAGE_SIZE = 15;
+const PER_PAGE_OPTIONS = [25, 50, 100];
+const REFRESH_MS = 30_000;
+const selectCls = "h-9 rounded-lg border border-border bg-background px-2.5 text-xs font-bold";
 
-const STATUS_TONE: Record<string, string> = {
-  paid: "bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30",
-  completed: "bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30",
-  pending: "bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30",
-  failed: "bg-rose-500/15 text-rose-800 dark:text-rose-300 border border-rose-500/30",
-  refunded: "bg-muted text-muted-foreground border border-border",
-};
-
-const fmtEGP = (n: number) => {
-  const v = Math.round(Number(n) || 0);
-  if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(v % 1_000_000 ? 2 : 0)}M`;
-  if (v >= 100_000) return `${(v / 1_000).toFixed(0)}K`;
-  return v.toLocaleString("en-US");
-};
+/** The specific-record filter that goes with each target kind. */
+const TARGET_ID_KEY = { program: "program_id", project: "project_id", campaign: "donation_campaign_id" } as const;
 
 const AdminDonations = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const queryClient = useQueryClient();
+  const [sp, setSp] = useSearchParams();
 
-  // Live Cloud donations from Laravel Backend
-  const [live, setLive] = useState<any[]>([]);
-  const [liveStatus, setLiveStatus] = useState<DonationStatus | "all">("all");
-  const [liveMethod, setLiveMethod] = useState<string>("all");
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [liveQ, setLiveQ] = useState("");
-  const [loadingLive, setLoadingLive] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
+  // URL is the single source of truth for filters / page, so a view can be reloaded or shared.
+  const filters = useMemo(() => filtersFromSearch(sp), [sp]);
+  const page = Math.max(1, Number(sp.get("page")) || 1);
+  const perPage = PER_PAGE_OPTIONS.includes(Number(sp.get("per_page"))) ? Number(sp.get("per_page")) : PER_PAGE_OPTIONS[0];
 
-  // Modal for Official PDF Receipt Preview
-  const [receiptRecord, setReceiptRecord] = useState<any | null>(null);
-
-  const reloadLive = async () => {
-    setLoadingLive(true);
-    try {
-      const data = await listAllDonations({
-        status: liveStatus,
-        method: liveMethod,
-        q: liveQ,
-        from: fromDate ? new Date(fromDate).toISOString() : undefined,
-        to: toDate ? new Date(toDate + "T23:59:59").toISOString() : undefined,
-      });
-      setLive(data);
-    } catch (e: any) {
-      toast({
-        title: isAr ? "خطأ في جلب بيانات التبرعات" : "Error loading donations",
-        description: e.message,
-        variant: "destructive",
-      });
-    } finally {
-      setLoadingLive(false);
-    }
+  const writeUrl = (next: DonationFilters, opts: { page?: number; perPage?: number } = {}) => {
+    const params = filtersToParams(next);
+    const p = opts.page ?? 1;
+    const pp = opts.perPage ?? perPage;
+    if (p > 1) params.page = String(p);
+    if (pp !== PER_PAGE_OPTIONS[0]) params.per_page = String(pp);
+    setSp(params, { replace: true });
   };
+  const setFilter = (patch: Partial<DonationFilters>) => writeUrl({ ...filters, ...patch });
 
+  // Search box: local text, written to the URL after a short pause.
+  const [qInput, setQInput] = useState(filters.q ?? "");
+  useEffect(() => setQInput(filters.q ?? ""), [filters.q]);
   useEffect(() => {
-    reloadLive();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [liveStatus, liveMethod, fromDate, toDate]);
-
-  // Debounce search text input
-  useEffect(() => {
-    const t = setTimeout(() => {
-      reloadLive();
-    }, 350);
+    if ((filters.q ?? "") === qInput.trim()) return;
+    const t = setTimeout(() => setFilter({ q: qInput }), 400);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [liveQ]);
+  }, [qInput]);
 
-  const transition = async (id: string, current: DonationStatus, next: DonationStatus) => {
+  const listQuery = useQuery({
+    queryKey: ["admin-donations", "list", filters, page, perPage],
+    queryFn: () => donationsAdminApi.list(filters, page, perPage),
+    placeholderData: keepPreviousData,
+    refetchInterval: REFRESH_MS, // gateway confirmations arrive after creation; paused while the tab is hidden
+  });
+  const statsQuery = useQuery({
+    queryKey: ["admin-donations", "stats", filters],
+    queryFn: () => donationsAdminApi.stats(filters),
+    placeholderData: keepPreviousData,
+    refetchInterval: REFRESH_MS,
+  });
+  const methodsQuery = useQuery({ queryKey: ["admin-payment-methods"], queryFn: donationsAdminApi.paymentMethods, staleTime: 5 * 60_000 });
+  const targetOptions = useQuery({
+    queryKey: ["admin-donations", "target-options", filters.target],
+    enabled: filters.target === "program" || filters.target === "project" || filters.target === "campaign",
+    staleTime: 5 * 60_000,
+    queryFn: async (): Promise<{ id: number | string; name: string }[]> => {
+      if (filters.target === "program") return (await programsApiV1.listAll()).map((p) => ({ id: p.id, name: p.name_ar || p.name }));
+      if (filters.target === "project") return (await projectsApi.listAll()).map((p) => ({ id: p.id, name: p.name }));
+      return (await donationCampaignsApi.listAll()).map((c) => ({ id: c.id, name: c.name_ar || c.name }));
+    },
+  });
+
+  const rows = listQuery.data?.rows ?? [];
+  const meta = listQuery.data?.meta;
+  const stats = statsQuery.data;
+  const loading = listQuery.isLoading;
+  const [receipt, setReceipt] = useState<DonationRecord | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const [busyId, setBusyId] = useState<number | null>(null);
+
+  const refresh = () => queryClient.invalidateQueries({ queryKey: ["admin-donations"] });
+
+  const transition = async (d: AdminDonation, next: DonationStatusKey) => {
+    if (next === "paid" && d.is_gateway &&
+      !window.confirm(isAr
+        ? "ده دفع أونلاين — بيتأكد لوحده من بوابة الدفع أول ما المتبرع يدفع. علّمه «مدفوع» يدوي بس لو اتأكدت من وصول المبلغ في حساب كاشير. متأكد؟"
+        : "Online payment — the gateway confirms it automatically. Mark it paid only if you verified the money in the Kashier account. Continue?")) {
+      return;
+    }
+    setBusyId(d.id);
     try {
-      await updateDonationStatus(id, next);
-      toast({ title: isAr ? "تم تحديث الحالة بنجاح" : "Status updated" });
-      reloadLive();
-    } catch (e: any) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      // The confirm above is the admin's explicit check for online payments.
+      const stored = await donationsAdminApi.setStatus(d.id, next, { confirmGateway: next === "paid" && d.is_gateway });
+      toast({ title: isAr ? "تم تحديث الحالة" : "Status updated", description: donationStatusLabel(stored || next, d.is_gateway, lang) });
+    } catch (e) {
+      toast({ variant: "destructive", title: isAr ? "تعذر تحديث الحالة" : "Could not update status", description: (e as Error)?.message });
+    } finally {
+      setBusyId(null);
+      void refresh();
     }
   };
 
-  const safeLive = Array.isArray(live) ? live : [];
-
-  const [page, setPage] = useState(1);
-
-  const totals = useMemo(() => {
-    const isPaid = (status: string) => status === "paid" || status === "completed";
-    const paidRows = safeLive.filter((d) => isPaid(d.payment_status));
-    const refundedRows = safeLive.filter((d) => d.payment_status === "refunded");
-    const pendingRows = safeLive.filter((d) => d.payment_status === "pending");
-    const failedRows = safeLive.filter((d) => d.payment_status === "failed");
-
-    const total = paidRows.reduce((s, d) => s + Number(d.amount || 0), 0);
-    const refundedAmt = refundedRows.reduce((s, d) => s + Number(d.amount || 0), 0);
-    const grossAmt = total + refundedAmt;
-
-    return {
-      total,
-      refundedAmt,
-      grossAmt,
-      paid: paidRows.length,
-      pending: pendingRows.length,
-      failed: failedRows.length,
-      refunded: refundedRows.length,
-      avg: paidRows.length ? Math.round(total / paidRows.length) : 0,
-    };
-  }, [safeLive]);
-
-  const totalPages = Math.max(1, Math.ceil(safeLive.length / PAGE_SIZE));
-  const pageItems = safeLive.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  useEffect(() => {
-    setPage(1);
-  }, [liveStatus, liveMethod, liveQ, fromDate, toDate]);
-
-  const resetFilters = () => {
-    setLiveStatus("all");
-    setLiveMethod("all");
-    setFromDate("");
-    setToDate("");
-    setLiveQ("");
+  const openReceipt = (d: AdminDonation) => {
+    const target = donationTargetLabel(d, lang);
+    setReceipt({
+      ref: d.transaction_reference,
+      donor: { name: d.donor?.name || (isAr ? "فاعل خير" : "Anonymous"), email: d.donor?.email || "", phone: d.donor?.phone || "" },
+      amount: Number(d.amount),
+      program: target,
+      programLabel: target,
+      method: donationMethodLabel(d, lang),
+      status: "completed",
+      createdAt: d.created_at,
+      updatedAt: d.created_at,
+      notes: d.notes || undefined,
+      items: [{ title: d.donation_package ? (isAr ? d.donation_package.name_ar : d.donation_package.name_en) || target : target, quantity: 1, amount: Number(d.amount) }],
+    });
   };
 
-  const exportCSV = () => {
-    const rows = [
-      ["Ref", "Donor", "Email", "Phone", "Amount", "Currency", "Method", "Status", "Program", "Date"],
-      ...safeLive.map((d) => [
-        d.ref_code,
-        d.donor_name || "",
-        d.donor_email || "",
-        d.donor_phone || "",
-        d.amount,
-        d.currency,
-        d.payment_method || "",
-        d.payment_status,
-        d.program?.name_ar || d.project?.name_ar || "",
+  const exportCsv = async () => {
+    setExporting(true);
+    try {
+      const all = await donationsAdminApi.listAllMatching(filters);
+      const header = ["Reference", "Donor", "Phone", "Email", "Amount (EGP)", "Method", "Status", "For", "Date"];
+      const lines = all.map((d) => [
+        d.transaction_reference,
+        d.donor?.name || "",
+        d.donor?.phone || "",
+        d.donor?.email || "",
+        String(d.amount),
+        donationMethodLabel(d, lang),
+        donationStatusLabel(d.status, d.is_gateway, lang),
+        donationTargetLabel(d, lang),
         d.created_at,
-      ]),
-    ];
-    const csv = rows.map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
-    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `alyusr-donations-${Date.now()}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+      ]);
+      const csv = [header, ...lines].map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+      const url = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" }));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `alyusr-donations-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast({ title: isAr ? `تم تصدير ${formatNumber(all.length, lang)} تبرع (كل نتائج الفلتر)` : `Exported ${all.length} donations (all filter results)` });
+    } catch (e) {
+      toast({ variant: "destructive", title: isAr ? "تعذر التصدير" : "Export failed", description: (e as Error)?.message });
+    } finally {
+      setExporting(false);
+    }
   };
 
-  const getStatusLabel = (status: string) => {
-    const s = String(status || "").toLowerCase();
-    if (s === "paid" || s === "completed") return isAr ? "مدفوع (Paid)" : "Paid";
-    if (s === "pending") return isAr ? "معلق (Pending)" : "Pending";
-    if (s === "failed") return isAr ? "فشل (Failed)" : "Failed";
-    if (s === "refunded") return isAr ? "مسترد (Refunded)" : "Refunded";
-    return status;
-  };
+  const hasFilters = Object.keys(filtersToParams(filters)).length > 0;
+  const statusCount = (k: string) => stats?.by_status?.[k]?.count ?? 0;
+  const dash = "—";
 
   return (
     <AdminLayout>
       <div dir={isAr ? "rtl" : "ltr"} className="space-y-4">
-        {/* KPI Stat Cards (No zero-flashing on load) */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-6">
-          <StatCard
-            accent
-            label={isAr ? "المجموع المدفوع" : "Paid total"}
-            value={loadingLive && !safeLive.length ? "—" : fmtEGP(totals.total)}
-            sub={isAr ? "العمليات المكتملة" : "Completed ops"}
-          />
-          <StatCard
-            label={isAr ? "إجمالي العمليات" : "Gross total"}
-            value={loadingLive && !safeLive.length ? "—" : fmtEGP(totals.grossAmt)}
-            sub="EGP"
-          />
-          <StatCard
-            label={isAr ? "متوسط التبرع" : "Avg donation"}
-            value={loadingLive && !safeLive.length ? "—" : fmtEGP(totals.avg)}
-            sub="EGP"
-          />
-          <StatCard
-            label={isAr ? "عدد المعاملات" : "Operations"}
-            value={loadingLive && !safeLive.length ? "—" : safeLive.length}
-            sub={isAr ? "ضمن الفلتر" : "within filter"}
-          />
-          <StatCard
-            label={isAr ? "مدفوعة ومكتملة" : "Paid"}
-            value={loadingLive && !safeLive.length ? "—" : totals.paid}
-            sub={isAr ? "عملية ناجحة" : "successful"}
-          />
-          <StatCard
-            label={isAr ? "مرتجعة / معلقة / فاشلة" : "Refunded / Pending / Failed"}
-            value={loadingLive && !safeLive.length ? "—" : `${totals.refunded} / ${totals.pending} / ${totals.failed}`}
-          />
+        {/* Totals over ALL donations matching the filters (computed by the server, not the current page) */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
+          <StatCard accent label={isAr ? "المبلغ المستلم (مدفوع فقط)" : "Received (paid only)"}
+            value={stats ? formatMoney(stats.paid.amount, lang) : dash}
+            sub={stats ? (isAr ? `${formatNumber(stats.paid.count, lang)} تبرع مدفوع` : `${stats.paid.count} paid donations`) : undefined} />
+          <StatCard label={isAr ? "متوسط التبرع المدفوع" : "Average paid donation"}
+            value={stats ? formatMoney(stats.paid.average, lang) : dash}
+            sub={stats ? (isAr ? `${formatNumber(stats.paid.donors, lang)} متبرع دفع` : `${stats.paid.donors} paying donors`) : undefined} />
+          <StatCard label={isAr ? "كل العمليات في الفلتر" : "All operations in filter"}
+            value={stats ? formatNumber(stats.total_count, lang) : dash}
+            sub={isAr ? "بكل حالاتها" : "any status"} />
+          <StatCard label={isAr ? "معلق / فاشل / مسترد" : "Pending / Failed / Refunded"}
+            value={stats ? `${formatNumber(statusCount("pending"), lang)} / ${formatNumber(statusCount("failed"), lang)} / ${formatNumber(statusCount("refunded"), lang)}` : dash}
+            sub={stats?.by_status?.pending ? (isAr ? `معلق بقيمة ${formatMoney(stats.by_status.pending.amount, lang)} (مش محسوب في المستلم)` : `pending worth ${formatMoney(stats.by_status.pending.amount, lang)} (not counted as received)`) : undefined} />
+          <StatCard label={isAr ? "نسبة نجاح الدفع" : "Payment success rate"}
+            value={stats ? (stats.success_rate == null ? dash : `${formatNumber(stats.success_rate, lang)}%`) : dash}
+            sub={isAr ? "مدفوع ÷ (مدفوع + فاشل)" : "paid ÷ (paid + failed)"} />
         </div>
+        {statsQuery.isError && (
+          <p className="rounded-xl border border-destructive/30 bg-destructive/5 p-3 text-xs font-bold text-destructive">
+            {isAr ? "تعذر تحميل الإجماليات من السيرفر." : "Could not load totals from the server."}
+          </p>
+        )}
 
-        {/* Live Cloud donations from Laravel backend */}
         <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <h2 className="text-base font-black text-primary">
-                {isAr
-                  ? `تبرعات النظام المالي (${safeLive.length})`
-                  : `Backend Donations (${safeLive.length})`}
-              </h2>
-              {loadingLive && (
-                <span className="flex items-center gap-1 text-[11px] font-bold text-muted-foreground">
-                  <RefreshCw className="h-3 w-3 animate-spin text-primary" />
-                  {isAr ? "تحديث مباشر..." : "Syncing..."}
-                </span>
-              )}
-            </div>
-
-            {/* Direct, clean filters aligned strictly with Laravel API */}
+          {/* Filters — every one is applied by the server */}
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <h2 className="flex items-center gap-2 text-base font-black text-primary">
+              {isAr ? "سجل التبرعات" : "Donations"}
+              {meta && <span className="text-xs font-bold text-muted-foreground">({formatNumber(meta.total, lang)})</span>}
+              {listQuery.isFetching && <RefreshCw className="h-3.5 w-3.5 animate-spin text-primary" />}
+            </h2>
             <div className="flex flex-wrap items-center gap-2">
-              <div className="relative">
-                <Search className="pointer-events-none absolute right-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground rtl:right-2.5 rtl:left-auto ltr:left-2.5 ltr:right-auto" />
-                <Input
-                  placeholder={isAr ? "بحث: كود/اسم/جوال/إيميل" : "Search: ref/name/phone/email"}
-                  value={liveQ}
-                  onChange={(e) => setLiveQ(e.target.value)}
-                  className="h-8 w-44 text-xs font-medium px-8"
-                />
-              </div>
-
-              {/* Status Filter */}
-              <select
-                value={liveStatus}
-                onChange={(e) => setLiveStatus(e.target.value as any)}
-                className="h-8 rounded-md border border-border bg-background px-2.5 text-xs font-bold"
-              >
-                <option value="all">{isAr ? "كل الحالات" : "All statuses"}</option>
-                <option value="paid">{isAr ? "مدفوع ومكتمل (Paid)" : "Paid"}</option>
-                <option value="pending">{isAr ? "معلق (Pending)" : "Pending"}</option>
-                <option value="failed">{isAr ? "فشل (Failed)" : "Failed"}</option>
-                <option value="refunded">{isAr ? "مسترد (Refunded)" : "Refunded"}</option>
-              </select>
-
-              {/* Payment Method Filter */}
-              <select
-                value={liveMethod}
-                onChange={(e) => setLiveMethod(e.target.value)}
-                className="h-8 rounded-md border border-border bg-background px-2.5 text-xs font-bold"
-              >
-                <option value="all">{isAr ? "كل طرق الدفع" : "All methods"}</option>
-                <option value="kashier">كاشير (Kashier)</option>
-                <option value="paymob">باي موب (Paymob)</option>
-                <option value="visa">فيزا / ماستركارد (Card)</option>
-                <option value="vodafone">فودافون كاش (Vodafone)</option>
-                <option value="instapay">إنستا باي (InstaPay)</option>
-                <option value="bank">{isAr ? "تحويل بنكي" : "Bank Transfer"}</option>
-                <option value="cash">{isAr ? "نقدي" : "Cash"}</option>
-                <option value="delegate">{isAr ? "مندوب تحصيل" : "Delegate"}</option>
-              </select>
-
-              <Button
-                size="sm"
-                variant={showFilters ? "secondary" : "outline"}
-                onClick={() => setShowFilters((v) => !v)}
-                className="h-8 gap-1.5 text-xs font-bold"
-              >
-                <Filter className="h-3.5 w-3.5" />
-                <span>{isAr ? "تاريخ" : "Dates"}</span>
+              <Button size="sm" variant="outline" onClick={() => void refresh()} className="h-9 gap-1 text-xs font-bold">
+                <RefreshCw className="h-3.5 w-3.5" /> {isAr ? "تحديث" : "Refresh"}
               </Button>
-
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={reloadLive}
-                disabled={loadingLive}
-                className="h-8 gap-1 text-xs font-bold"
-              >
-                <RefreshCw className={`h-3 w-3 ${loadingLive ? "animate-spin" : ""}`} />
-                <span>{isAr ? "تحديث" : "Refresh"}</span>
-              </Button>
-
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={resetFilters}
-                className="h-8 gap-1 text-xs font-bold"
-                title={isAr ? "إعادة ضبط الفلاتر" : "Reset filters"}
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-              </Button>
-
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={exportCSV}
-                className="h-8 gap-1 text-xs font-bold"
-              >
-                <Download className="h-3.5 w-3.5" /> CSV
+              {hasFilters && (
+                <Button size="sm" variant="outline" onClick={() => writeUrl({})} className="h-9 gap-1 text-xs font-bold">
+                  <RotateCcw className="h-3.5 w-3.5" /> {isAr ? "مسح الفلاتر" : "Clear filters"}
+                </Button>
+              )}
+              <Button size="sm" variant="outline" onClick={() => void exportCsv()} disabled={exporting || !meta?.total} className="h-9 gap-1 text-xs font-bold"
+                title={isAr ? "بيصدّر كل التبرعات المطابقة للفلتر (مش الصفحة الحالية بس)" : "Exports every donation matching the filters"}>
+                {exporting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />} CSV
               </Button>
             </div>
           </div>
 
-          {/* Expandable Date Filters */}
-          {showFilters && (
-            <div className="mb-4 grid gap-3 rounded-xl border border-border/80 bg-muted/20 p-3 text-xs sm:grid-cols-2">
-              <label className="space-y-1">
-                <span className="font-bold text-muted-foreground">{isAr ? "من تاريخ" : "From date"}</span>
-                <Input
-                  type="date"
-                  value={fromDate}
-                  onChange={(e) => setFromDate(e.target.value)}
-                  className="h-8"
-                />
-              </label>
-              <label className="space-y-1">
-                <span className="font-bold text-muted-foreground">{isAr ? "إلى تاريخ" : "To date"}</span>
-                <Input
-                  type="date"
-                  value={toDate}
-                  onChange={(e) => setToDate(e.target.value)}
-                  className="h-8"
-                />
-              </label>
+          <div className="mb-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
+            <div className="relative sm:col-span-2">
+              <Search className="pointer-events-none absolute start-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input value={qInput} onChange={(e) => setQInput(e.target.value)} className="h-9 ps-8 text-xs"
+                placeholder={isAr ? "بحث: رقم العملية / الاسم / الموبايل / الإيميل" : "Search: reference / name / phone / email"} />
             </div>
-          )}
+            <select aria-label={isAr ? "الحالة" : "Status"} className={selectCls} value={filters.status ?? ""} onChange={(e) => setFilter({ status: e.target.value })}>
+              <option value="">{isAr ? "كل الحالات" : "All statuses"}</option>
+              <option value="paid">{isAr ? "مدفوع" : "Paid"}</option>
+              <option value="pending">{isAr ? "معلق" : "Pending"}</option>
+              <option value="failed">{isAr ? "فشل" : "Failed"}</option>
+              <option value="refunded">{isAr ? "مسترد" : "Refunded"}</option>
+            </select>
+            <select aria-label={isAr ? "القناة" : "Channel"} className={selectCls} value={filters.channel ?? ""} onChange={(e) => setFilter({ channel: (e.target.value || undefined) as DonationFilters["channel"] })}>
+              <option value="">{isAr ? "أونلاين ويدوي" : "Online & manual"}</option>
+              <option value="gateway">{isAr ? "أونلاين (بوابة دفع)" : "Online (gateway)"}</option>
+              <option value="manual">{isAr ? "يدوي (تحويل/محفظة/مندوب)" : "Manual"}</option>
+            </select>
+            <select aria-label={isAr ? "طريقة الدفع" : "Method"} className={selectCls} value={filters.payment_method_id ?? ""} onChange={(e) => setFilter({ payment_method_id: e.target.value })}>
+              <option value="">{isAr ? "كل طرق الدفع" : "All methods"}</option>
+              {(methodsQuery.data ?? []).map((m) => (
+                <option key={m.id} value={String(m.id)}>{isAr ? m.name_ar : m.name_en || m.name_ar}</option>
+              ))}
+            </select>
+            <select aria-label={isAr ? "نوع الجهة" : "Target kind"} className={selectCls} value={filters.target ?? ""}
+              onChange={(e) => writeUrl({ ...filters, target: (e.target.value || undefined) as DonationFilters["target"], program_id: "", project_id: "", donation_campaign_id: "" })}>
+              <option value="">{isAr ? "كل الجهات" : "Any target"}</option>
+              <option value="program">{isAr ? "برامج" : "Programs"}</option>
+              <option value="project">{isAr ? "مشاريع" : "Projects"}</option>
+              <option value="campaign">{isAr ? "حملات" : "Campaigns"}</option>
+              <option value="case">{isAr ? "حالات" : "Cases"}</option>
+            </select>
+            {filters.target && filters.target !== "case" ? (
+              <select aria-label={isAr ? "الجهة" : "Target"} className={selectCls}
+                value={filters[TARGET_ID_KEY[filters.target]] ?? ""}
+                onChange={(e) => setFilter({ [TARGET_ID_KEY[filters.target as keyof typeof TARGET_ID_KEY]]: e.target.value })}>
+                <option value="">{isAr ? "الكل" : "All"}</option>
+                {(targetOptions.data ?? []).map((o) => <option key={o.id} value={String(o.id)}>{o.name}</option>)}
+              </select>
+            ) : (
+              <select aria-label={isAr ? "الترتيب" : "Sort"} className={selectCls} value={filters.sort ?? "-created_at"} onChange={(e) => setFilter({ sort: e.target.value as DonationFilters["sort"] })}>
+                <option value="-created_at">{isAr ? "الأحدث أولاً" : "Newest first"}</option>
+                <option value="created_at">{isAr ? "الأقدم أولاً" : "Oldest first"}</option>
+                <option value="-amount">{isAr ? "الأعلى مبلغاً" : "Highest amount"}</option>
+                <option value="amount">{isAr ? "الأقل مبلغاً" : "Lowest amount"}</option>
+              </select>
+            )}
+            <label className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+              {isAr ? "من" : "From"}
+              <Input type="date" value={filters.from ?? ""} onChange={(e) => setFilter({ from: e.target.value })} className="h-9 text-xs" />
+            </label>
+            <label className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+              {isAr ? "إلى" : "To"}
+              <Input type="date" value={filters.to ?? ""} onChange={(e) => setFilter({ to: e.target.value })} className="h-9 text-xs" />
+            </label>
+          </div>
 
-          {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
-              <thead className="text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground bg-muted/30">
+              <thead className="bg-muted/30 text-[11px] font-extrabold text-muted-foreground">
                 <tr>
-                  {[
-                    isAr ? "كود العملية" : "Ref",
-                    isAr ? "المتبرع" : "Donor",
-                    isAr ? "المبلغ" : "Amount",
-                    isAr ? "طريقة الدفع" : "Method",
-                    isAr ? "البرنامج / المبادرة" : "Program",
-                    isAr ? "الحالة" : "Status",
-                    isAr ? "التاريخ" : "Date",
-                    isAr ? "الإيصال المعتمد" : "Receipt",
-                    "",
-                  ].map((h, i) => (
-                    <th key={i} className="px-3 py-2.5 text-start font-black">
-                      {h}
-                    </th>
+                  {[isAr ? "رقم العملية" : "Reference", isAr ? "المتبرع" : "Donor", isAr ? "المبلغ" : "Amount", isAr ? "طريقة الدفع" : "Method",
+                    isAr ? "التبرع لـ" : "For", isAr ? "الحالة" : "Status", isAr ? "التاريخ" : "Date", ""].map((h, i) => (
+                    <th key={i} className="px-3 py-2.5 text-start font-black">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {loadingLive && !safeLive.length ? (
-                  <tr>
-                    <td colSpan={9} className="p-8 text-center text-muted-foreground">
-                      <div className="flex flex-col items-center justify-center gap-2">
-                        <RefreshCw className="h-5 w-5 animate-spin text-primary" />
-                        <span className="text-xs font-bold">
-                          {isAr ? "جاري تحميل سجل التبرعات من الخادم..." : "Loading donations from server..."}
+                {loading &&
+                  Array.from({ length: 6 }).map((_, i) => (
+                    <tr key={i} className="border-t border-border/60">
+                      <td colSpan={8} className="px-3 py-3"><div className="h-4 w-full animate-pulse rounded bg-muted" /></td>
+                    </tr>
+                  ))}
+                {listQuery.isError && !rows.length && (
+                  <tr><td colSpan={8} className="p-8 text-center font-bold text-destructive">{isAr ? "تعذر تحميل التبرعات من السيرفر." : "Could not load donations."}</td></tr>
+                )}
+                {!loading && !listQuery.isError && rows.length === 0 && (
+                  <tr><td colSpan={8} className="p-8 text-center font-bold text-muted-foreground">{isAr ? "مفيش تبرعات مطابقة للفلتر" : "No donations match the filters"}</td></tr>
+                )}
+                {rows.map((d) => {
+                  const allowed = DONATION_STATUS_TRANSITIONS[d.status as DonationStatus] ?? [];
+                  const target = donationTargetLabel(d, lang);
+                  return (
+                    <tr key={d.id} className="border-t border-border/60 transition-colors hover:bg-muted/15">
+                      <td className="px-3 py-2.5 font-mono font-bold">{d.transaction_reference}</td>
+                      <td className="px-3 py-2.5">
+                        {d.donor ? (
+                          <Link to={`/admin/donors/${d.donor.id}`} className="font-extrabold hover:text-primary hover:underline">{d.donor.name || (isAr ? "فاعل خير" : "Anonymous")}</Link>
+                        ) : (
+                          <span className="font-extrabold">{isAr ? "فاعل خير" : "Anonymous"}</span>
+                        )}
+                        <div className="text-[10px] text-muted-foreground" dir="ltr">{d.donor?.phone || d.donor?.email || ""}</div>
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-2.5 font-black text-emerald-700 dark:text-emerald-400">{formatMoney(Number(d.amount), lang)}</td>
+                      <td className="px-3 py-2.5 font-semibold">{donationMethodLabel(d, lang)}</td>
+                      <td className="max-w-[220px] truncate px-3 py-2.5" title={target}>{target}</td>
+                      <td className="px-3 py-2.5">
+                        <span className={`whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10px] font-black ${donationStatusTone(d.status, d.is_gateway)}`}>
+                          {donationStatusLabel(d.status, d.is_gateway, lang)}
                         </span>
-                      </div>
-                    </td>
-                  </tr>
-                ) : (
-                  pageItems.map((d) => {
-                    const allowed = DONATION_STATUS_TRANSITIONS[d.payment_status as DonationStatus] || [];
-                    const programLabel =
-                      d.program?.name_ar ||
-                      d.program?.name ||
-                      d.project?.name_ar ||
-                      d.project?.name ||
-                      d.donation_campaign?.name_ar ||
-                      d.donation_campaign?.name ||
-                      (d.cases?.title ? `حالة: ${d.cases.title}` : "صدقة عامة");
-
-                    return (
-                      <tr key={d.id} className="border-t border-border/60 hover:bg-muted/15 transition-colors">
-                        <td className="px-3 py-2.5 font-mono font-bold text-foreground">{d.ref_code}</td>
-                        <td className="px-3 py-2.5 font-bold">
-                          {d.donor_id ? (
-                            <Link
-                              to={`/admin/donors/${d.donor_id}`}
-                              className="hover:text-primary hover:underline font-extrabold text-foreground"
-                            >
-                              {d.donor_name || (isAr ? "متبرع كريم" : "Kind Donor")}
-                            </Link>
-                          ) : (
-                            <span className="text-foreground">{d.donor_name || (isAr ? "متبرع كريم" : "Kind Donor")}</span>
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">{formatDateTime(d.created_at, lang)}</td>
+                      <td className="px-3 py-2.5">
+                        <div className="flex flex-wrap justify-end gap-1">
+                          {allowed.map((next) => (
+                            <button key={next} type="button" disabled={busyId === d.id} onClick={() => void transition(d, next as DonationStatusKey)}
+                              className="rounded-md bg-secondary/20 px-2 py-1 text-[10px] font-black text-primary hover:bg-secondary/30 disabled:opacity-50">
+                              → {donationStatusLabel(next, false, lang)}
+                            </button>
+                          ))}
+                          {d.status === "paid" && (
+                            <button type="button" onClick={() => openReceipt(d)}
+                              className="inline-flex items-center gap-1 rounded-md border border-emerald-600/30 bg-emerald-500/10 px-2 py-1 text-[10px] font-black text-emerald-800 hover:bg-emerald-500/20 dark:text-emerald-300">
+                              <FileText className="h-3 w-3" /> {isAr ? "إيصال" : "Receipt"}
+                            </button>
                           )}
-                          <div className="text-[10px] font-normal text-muted-foreground" dir="ltr">
-                            {d.donor_phone || d.donor_email || "—"}
-                          </div>
-                        </td>
-                        <td className="px-3 py-2.5 font-black whitespace-nowrap text-emerald-700 dark:text-emerald-400">
-                          {Number(d.amount).toLocaleString()} {d.currency || "EGP"}
-                        </td>
-                        <td className="px-3 py-2.5">
-                          <span className="inline-flex items-center gap-1 font-semibold text-foreground/90">
-                            <CreditCard className="h-3 w-3 text-muted-foreground" />
-                            {d.payment_method || "—"}
-                          </span>
-                        </td>
-                        <td className="px-3 py-2.5 font-medium max-w-xs truncate" title={programLabel}>
-                          {programLabel}
-                        </td>
-                        <td className="px-3 py-2.5">
-                          <span
-                            className={`rounded-full px-2.5 py-0.5 text-[10px] font-black ${STATUS_TONE[d.payment_status] || "bg-muted text-muted-foreground"
-                              }`}
-                          >
-                            {getStatusLabel(d.payment_status)}
-                          </span>
-                        </td>
-                        <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">
-                          {new Date(d.created_at).toLocaleDateString(isAr ? "ar-EG" : "en-US")}
-                        </td>
-                        <td className="px-3 py-2.5">
-                          {/* Official PDF Receipt Button */}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const targetType = d.cases
-                                ? (isAr ? "حالة إنسانية عاجلة" : "Urgent Humanitarian Case")
-                                : d.project
-                                  ? (isAr ? "مشروع تنموي" : "Development Project")
-                                  : d.program
-                                    ? (isAr ? "برنامج خيري رئيسي" : "Charity Program")
-                                    : d.donation_campaign
-                                      ? (isAr ? "حملة إغاثية / تطوعية" : "Relief / Volunteer Campaign")
-                                      : d.donation_package
-                                        ? (isAr ? "باقة خيرية معتمدة" : "Verified Charity Package")
-                                        : (isAr ? "كفالة البرامج العامة والمساعدات" : "General Charity Programs");
-
-                              const items = Array.isArray(d.items) && d.items.length > 0
-                                ? d.items.map((it: any) => ({
-                                  title: it.title || it.title_ar || it.name || it.name_ar || it.program_name || it.item_name || it.description || programLabel,
-                                  category: it.category || it.type || targetType,
-                                  quantity: Number(it.quantity || it.qty || 1),
-                                  amount: Number(it.amount || it.total || it.price || d.amount),
-                                }))
-                                : [
-                                  {
-                                    title: programLabel,
-                                    category: targetType,
-                                    quantity: 1,
-                                    amount: d.amount,
-                                  },
-                                ];
-
-                              setReceiptRecord({
-                                ref: d.ref_code,
-                                amount: d.amount,
-                                program: programLabel,
-                                programLabel: programLabel,
-                                method: d.payment_method,
-                                status: d.payment_status,
-                                createdAt: d.created_at,
-                                updatedAt: d.updated_at || d.created_at,
-                                donor: {
-                                  name: d.donor_name,
-                                  phone: d.donor_phone,
-                                  email: d.donor_email,
-                                },
-                                notes: d.notes,
-                                targetType,
-                                items,
-                              });
-                            }}
-                            className="inline-flex items-center gap-1 rounded-lg border border-emerald-600/30 bg-emerald-500/10 px-2 py-1 text-[11px] font-extrabold text-emerald-800 hover:bg-emerald-500/20 dark:text-emerald-300 transition-colors"
-                            title={isAr ? "تحميل إيصال PDF رسمي" : "Official PDF Receipt"}
-                          >
-                            <FileText className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                            <span>{isAr ? "إيصال PDF" : "PDF"}</span>
-                          </button>
-                        </td>
-                        <td className="px-3 py-2.5 text-end">
-                          <div className="flex flex-wrap justify-end gap-1">
-                            {allowed.map((next) => (
-                              <button
-                                key={next}
-                                onClick={() => transition(d.id, d.payment_status, next)}
-                                className="rounded-md bg-secondary/20 px-2 py-1 text-[10px] font-black text-primary hover:bg-secondary/30"
-                              >
-                                → {next}
-                              </button>
-                            ))}
-                            <Link
-                              to={`/admin/donations/${d.id}`}
-                              className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2.5 py-1 text-[10px] font-black text-primary hover:bg-primary/20"
-                              title="Details"
-                            >
-                              <ExternalLink className="h-3 w-3" />
-                              <span>{isAr ? "تفاصيل" : "Details"}</span>
-                            </Link>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-
-                {!loadingLive && safeLive.length === 0 && (
-                  <tr>
-                    <td colSpan={9} className="p-8 text-center text-muted-foreground font-bold">
-                      {isAr ? "لا توجد تبرعات مطابقة للبحث أو الفلتر" : "No donations match your filters"}
-                    </td>
-                  </tr>
-                )}
+                          <Link to={`/admin/donations/${d.id}`} className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2 py-1 text-[10px] font-black text-primary hover:bg-primary/20">
+                            <ExternalLink className="h-3 w-3" /> {isAr ? "تفاصيل" : "Details"}
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
-
-              {safeLive.length > 0 && (
-                <tfoot className="border-t-2 border-border bg-muted/30 text-xs font-black text-primary">
-                  <tr>
-                    <td className="px-3 py-2.5" colSpan={2}>
-                      {isAr ? `إجمالي العمليات: ${safeLive.length}` : `Total ${safeLive.length} records`}
-                    </td>
-                    <td className="px-3 py-2.5 whitespace-nowrap text-emerald-700 dark:text-emerald-400 font-black">
-                      {totals.total.toLocaleString("en-US")} EGP
-                    </td>
-                    <td className="px-3 py-2.5 text-muted-foreground font-semibold" colSpan={6}>
-                      {isAr
-                        ? `المدفوع فقط: ${totals.total.toLocaleString("en-US")} EGP · إجمالي شامل المسترد: ${totals.grossAmt.toLocaleString("en-US")} EGP`
-                        : `Paid only: ${totals.total.toLocaleString("en-US")} EGP · Gross: ${totals.grossAmt.toLocaleString("en-US")} EGP`}
-                    </td>
-                  </tr>
-                </tfoot>
-              )}
             </table>
           </div>
+
+          {/* Server pagination */}
+          {meta && meta.total > 0 && (
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <span className="font-medium text-muted-foreground">
+                {isAr
+                  ? `عرض ${formatNumber(meta.from ?? 0, lang)}–${formatNumber(meta.to ?? 0, lang)} من ${formatNumber(meta.total, lang)}`
+                  : `Showing ${meta.from}–${meta.to} of ${meta.total}`}
+              </span>
+              <div className="flex items-center gap-2">
+                <select aria-label={isAr ? "عدد الصفوف" : "Rows per page"} className={selectCls} value={perPage}
+                  onChange={(e) => writeUrl(filters, { perPage: Number(e.target.value) })}>
+                  {PER_PAGE_OPTIONS.map((n) => <option key={n} value={n}>{isAr ? `${n} في الصفحة` : `${n} / page`}</option>)}
+                </select>
+                <button type="button" aria-label={isAr ? "الصفحة السابقة" : "Previous page"} disabled={page <= 1}
+                  onClick={() => writeUrl(filters, { page: page - 1 })} className="grid h-9 w-9 place-items-center rounded-lg border border-border disabled:opacity-40">
+                  {isAr ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                </button>
+                <span className="font-bold">{isAr ? `صفحة ${formatNumber(page, lang)} من ${formatNumber(meta.last_page, lang)}` : `Page ${page} of ${meta.last_page}`}</span>
+                <button type="button" aria-label={isAr ? "الصفحة التالية" : "Next page"} disabled={page >= meta.last_page}
+                  onClick={() => writeUrl(filters, { page: page + 1 })} className="grid h-9 w-9 place-items-center rounded-lg border border-border disabled:opacity-40">
+                  {isAr ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Modal for Official PDF Receipt Preview & Download */}
-        {receiptRecord && (
-          <div
-            onClick={() => setReceiptRecord(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/25 backdrop-blur-xs p-4 animate-in fade-in duration-200"
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl bg-card rounded-3xl border border-border shadow-2xl p-5 max-h-[92vh] overflow-y-auto"
-            >
-              <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-emerald-600" />
-                  <h3 className="font-black text-base text-foreground">
-                    {isAr ? "إيصال التبرع المعتمد إلكترونياً (PDF)" : "Official Certified Receipt"}
-                  </h3>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setReceiptRecord(null)}
-                  className="rounded-lg h-8 w-8 grid place-items-center text-muted-foreground hover:bg-muted"
-                >
+        {receipt && (
+          <div onClick={() => setReceipt(null)} className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/25 p-4 backdrop-blur-xs">
+            <div onClick={(e) => e.stopPropagation()} className="relative max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-border bg-card p-5 shadow-2xl">
+              <div className="mb-4 flex items-center justify-between border-b border-border pb-3">
+                <h3 className="flex items-center gap-2 text-base font-black"><FileText className="h-5 w-5 text-emerald-600" />{isAr ? "إيصال التبرع" : "Donation receipt"}</h3>
+                <button type="button" aria-label={isAr ? "إغلاق" : "Close"} onClick={() => setReceipt(null)} className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:bg-muted">
                   <X className="h-4 w-4" />
                 </button>
               </div>
-
-              <DonationReceipt d={receiptRecord} />
+              <DonationReceipt d={receipt} />
             </div>
           </div>
         )}
-
-        {/* Pagination */}
-        <div className="flex items-center justify-between gap-2 rounded-xl bg-card px-4 py-2.5 text-xs shadow-soft">
-          <span className="text-muted-foreground font-medium">
-            {isAr ? `صفحة ${page} من ${totalPages}` : `Page ${page} of ${totalPages}`}
-          </span>
-          <div className="flex items-center gap-2">
-            <Button onClick={exportCSV} variant="outline" size="sm" className="h-8 gap-1 font-bold">
-              <Download className="h-3.5 w-3.5" /> CSV
-            </Button>
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="grid h-8 w-8 place-items-center rounded-md border border-border disabled:opacity-40"
-            >
-              <ChevronLeft className="h-4 w-4 rtl:hidden" />
-              <ChevronRight className="h-4 w-4 ltr:hidden" />
-            </button>
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              className="grid h-8 w-8 place-items-center rounded-md border border-border disabled:opacity-40"
-            >
-              <ChevronRight className="h-4 w-4 rtl:hidden" />
-              <ChevronLeft className="h-4 w-4 ltr:hidden" />
-            </button>
-          </div>
-        </div>
       </div>
     </AdminLayout>
   );

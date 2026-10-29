@@ -6,7 +6,7 @@ import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
-import { getSeason, useSeasonEnabled, SEASONS } from "@/data/seasons";
+import { useSeasons, useSeasonEnabled, SEASONS, type SeasonSlug } from "@/data/seasons";
 import { HomeSeasons } from "@/components/sections/HomeSeasons";
 
 /** Per-season landing page — SEO-tuned, with enable/disable awareness. */
@@ -14,9 +14,10 @@ const SeasonDetail = () => {
   const { slug = "" } = useParams();
   const { lang } = useLang();
   const isAr = lang === "ar";
-  const season = getSeason(slug);
+  // Hooks run before the early return (rules of hooks). Static by default; /seasons values on top in api mode.
+  const season = useSeasons().find((s) => s.slug === slug);
+  const enabled = useSeasonEnabled(slug as SeasonSlug);
   if (!season) return <Navigate to="/programs" replace />;
-  const enabled = useSeasonEnabled(season.slug);
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
   const wa = `https://wa.me/201097000137?text=${encodeURIComponent(

@@ -1,0 +1,844 @@
+[
+  {
+    "image": "src/assets/field/convoy-2026-elder-handover.jpg",
+    "external_url": null,
+    "title_ar": "متطوع اليسر يسلّم كرتونة العزومة لسيدة كبيرة في السن بكرامة — المنصورة 2026",
+    "title_en": "Al-Yusr volunteer hands a food box to an elderly woman with dignity — Mansoura 2026",
+    "alt_ar": "متطوع اليسر يسلّم كرتونة العزومة لسيدة كبيرة في السن بكرامة — المنصورة 2026",
+    "alt_en": "Al-Yusr volunteer hands a food box to an elderly woman with dignity — Mansoura 2026",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mansoura",
+    "program": "families",
+    "donation_program": "box",
+    "sort_order": 1,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-038"
+    }
+  },
+  {
+    "image": "src/assets/field/convoy-2026-night-handover.jpg",
+    "external_url": null,
+    "title_ar": "تسليم أكياس المساعدات لسيدة مستحقة من سيارة اليسر ليلًا بقرى الدقهلية 2026",
+    "title_en": "Night handover of relief bags to an eligible woman from Al-Yusr van — Dakahlia 2026",
+    "alt_ar": "تسليم أكياس المساعدات لسيدة مستحقة من سيارة اليسر ليلًا بقرى الدقهلية 2026",
+    "alt_en": "Night handover of relief bags to an eligible woman from Al-Yusr van — Dakahlia 2026",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Dakahlia",
+    "program": "families",
+    "donation_program": "box",
+    "sort_order": 2,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-037"
+    }
+  },
+  {
+    "image": "src/assets/field/convoy-2026-day-distribution.jpg",
+    "external_url": null,
+    "title_ar": "توزيع نهاري لكراتين العزومة على الأسر بقرى كفر الشيخ — قافلة اليسر 2026",
+    "title_en": "Food box daytime distribution to families — Kafr El-Sheikh villages, Al-Yusr convoy 2026",
+    "alt_ar": "توزيع نهاري لكراتين العزومة على الأسر بقرى كفر الشيخ — قافلة اليسر 2026",
+    "alt_en": "Food box daytime distribution to families — Kafr El-Sheikh villages, Al-Yusr convoy 2026",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Kafr El-Sheikh",
+    "program": "families",
+    "donation_program": "box",
+    "sort_order": 3,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-036"
+    }
+  },
+  {
+    "image": "src/assets/field/convoy-2026-night-delivery.jpg",
+    "external_url": null,
+    "title_ar": "متطوع اليسر يسلم المساعدات ليلًا لأسرة بقرى الدقهلية",
+    "title_en": "Al-Yusr volunteer delivering aid at night — Dakahlia villages",
+    "alt_ar": "متطوع اليسر يسلم المساعدات ليلًا لأسرة بقرى الدقهلية",
+    "alt_en": "Al-Yusr volunteer delivering aid at night — Dakahlia villages",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Dakahlia",
+    "program": "families",
+    "donation_program": "box",
+    "sort_order": 4,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-034"
+    }
+  },
+  {
+    "image": "src/assets/field/convoy-2026-pickup-loaded.jpg",
+    "external_url": null,
+    "title_ar": "سيارة اليسر محملة بكراتين العزومة وأكياس الإغاثة 2026",
+    "title_en": "Al-Yusr van loaded with food boxes — relief campaign 2026",
+    "alt_ar": "سيارة اليسر محملة بكراتين العزومة وأكياس الإغاثة 2026",
+    "alt_en": "Al-Yusr van loaded with food boxes — relief campaign 2026",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "families",
+    "donation_program": "box",
+    "sort_order": 5,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-033"
+    }
+  },
+  {
+    "image": "src/assets/field/convoy-2026-fuwah-road.jpg",
+    "external_url": null,
+    "title_ar": "قافلة اليسر 2026 — من المنصورة لكفر الشيخ ورشيد",
+    "title_en": "Al-Yusr 2026 convoy — Mansoura to Kafr El-Sheikh & Rasheed",
+    "alt_ar": "قافلة اليسر 2026 — من المنصورة لكفر الشيخ ورشيد",
+    "alt_en": "Al-Yusr 2026 convoy — Mansoura to Kafr El-Sheikh & Rasheed",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Kafr El-Sheikh",
+    "program": "families",
+    "donation_program": "box",
+    "sort_order": 6,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-032"
+    }
+  },
+  {
+    "image": "src/assets/field/qurbani-2024-cattle-pen.jpg",
+    "external_url": null,
+    "title_ar": "حظيرة معاينة ماشية الأضحية 2024 — المنصورة بإشراف بيطري قبل الذبح",
+    "title_en": "Qurbani 2024 livestock inspection pen — Mansoura, vet supervision before slaughter",
+    "alt_ar": "حظيرة معاينة ماشية الأضحية 2024 — المنصورة بإشراف بيطري قبل الذبح",
+    "alt_en": "Qurbani 2024 livestock inspection pen — Mansoura, vet supervision before slaughter",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mansoura",
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 7,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-035"
+    }
+  },
+  {
+    "image": "src/assets/field/qurbani-2025-prep-c.jpg",
+    "external_url": null,
+    "title_ar": "توثيق صك أضحية 2025 — صور وفيديو لكل متبرع",
+    "title_en": "Qurbani 2025 documentation — photo and video proof per donor",
+    "alt_ar": "توثيق صك أضحية 2025 — صور وفيديو لكل متبرع",
+    "alt_en": "Qurbani 2025 documentation — photo and video proof per donor",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 8,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-031"
+    }
+  },
+  {
+    "image": "src/assets/field/qurbani-2025-prep-b.jpg",
+    "external_url": null,
+    "title_ar": "توزيع لحوم أضحية 2025 على أسر الدقهلية يوم العيد",
+    "title_en": "Qurbani 2025 meat distribution to Dakahlia families on Eid day",
+    "alt_ar": "توزيع لحوم أضحية 2025 على أسر الدقهلية يوم العيد",
+    "alt_en": "Qurbani 2025 meat distribution to Dakahlia families on Eid day",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Dakahlia",
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 9,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-030"
+    }
+  },
+  {
+    "image": "src/assets/field/qurbani-2025-prep-a.jpg",
+    "external_url": null,
+    "title_ar": "صك أضحية 2025 جاهز لأسرة مستحقة بالمنصورة",
+    "title_en": "Al-Yusr Qurbani 2025 share ready for a Mansoura family",
+    "alt_ar": "صك أضحية 2025 جاهز لأسرة مستحقة بالمنصورة",
+    "alt_en": "Al-Yusr Qurbani 2025 share ready for a Mansoura family",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mansoura",
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 10,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-029"
+    }
+  },
+  {
+    "image": "src/assets/field/qurbani-2024-packing-area.jpg",
+    "external_url": null,
+    "title_ar": "تجهيز وتغليف لحوم أضحية 2024 بإشراف بيطري",
+    "title_en": "Qurbani 2024 hygienic cutting & packaging under vet supervision",
+    "alt_ar": "تجهيز وتغليف لحوم أضحية 2024 بإشراف بيطري",
+    "alt_en": "Qurbani 2024 hygienic cutting & packaging under vet supervision",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 11,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-028"
+    }
+  },
+  {
+    "image": "src/assets/field/qurbani-2024-cattle-truck.jpg",
+    "external_url": null,
+    "title_ar": "ماشية الأضحية 2024 محصنة قبل الذبح بمسلخ المنصورة",
+    "title_en": "Vaccinated Qurbani cattle 2024 — Mansoura slaughterhouse",
+    "alt_ar": "ماشية الأضحية 2024 محصنة قبل الذبح بمسلخ المنصورة",
+    "alt_en": "Vaccinated Qurbani cattle 2024 — Mansoura slaughterhouse",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mansoura",
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 12,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-027"
+    }
+  },
+  {
+    "image": "src/assets/field/qurbani-2024-meat-tray.jpg",
+    "external_url": null,
+    "title_ar": "صك أضحية اليسر 2024 — لحم بلدي طازج بالدقهلية",
+    "title_en": "Al-Yusr Qurbani 2024 — fresh local meat tray, Dakahlia",
+    "alt_ar": "صك أضحية اليسر 2024 — لحم بلدي طازج بالدقهلية",
+    "alt_en": "Al-Yusr Qurbani 2024 — fresh local meat tray, Dakahlia",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mansoura",
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 13,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-026"
+    }
+  },
+  {
+    "image": "src/assets/markoun-poster-furniture.png",
+    "external_url": null,
+    "title_ar": "تسليم حملة مركون — أثاث وتفاصيل منزلية مجددة لأسرة بالدقهلية",
+    "title_en": "Markoun delivery — donated furniture and repaired home items to a Dakahlia family",
+    "alt_ar": "تسليم حملة مركون — أثاث وتفاصيل منزلية مجددة لأسرة بالدقهلية",
+    "alt_en": "Markoun delivery — donated furniture and repaired home items to a Dakahlia family",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mansoura",
+    "program": "campaigns",
+    "donation_program": "markoun",
+    "sort_order": 14,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "markoun-01",
+      "program_slug": "markoun"
+    }
+  },
+  {
+    "image": "src/assets/markoun-poster-medbottle.png",
+    "external_url": null,
+    "title_ar": "بوستر حملة مركون — علاج شهري (بديل)",
+    "title_en": "Markoun — medication poster (replacement)",
+    "alt_ar": "بوستر حملة مركون — علاج شهري (بديل)",
+    "alt_en": "Markoun — medication poster (replacement)",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mansoura",
+    "program": "campaigns",
+    "donation_program": "markoun",
+    "sort_order": 15,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "markoun-02",
+      "program_slug": "markoun"
+    }
+  },
+  {
+    "image": "src/assets/markoun-poster-delivery.png",
+    "external_url": null,
+    "title_ar": "بوستر حملة مركون — استلام وتوصيل (بديل)",
+    "title_en": "Markoun — delivery poster (replacement)",
+    "alt_ar": "بوستر حملة مركون — استلام وتوصيل (بديل)",
+    "alt_en": "Markoun — delivery poster (replacement)",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mit Ghamr",
+    "program": "campaigns",
+    "donation_program": "markoun",
+    "sort_order": 16,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "markoun-03",
+      "program_slug": "markoun"
+    }
+  },
+  {
+    "image": "src/assets/markoun-poster-clothes.png",
+    "external_url": null,
+    "title_ar": "بوستر حملة مركون — مرتب شهري (بديل)",
+    "title_en": "Markoun — stipend/poster alternative",
+    "alt_ar": "بوستر حملة مركون — مرتب شهري (بديل)",
+    "alt_en": "Markoun — stipend/poster alternative",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Talkha",
+    "program": "campaigns",
+    "donation_program": "markoun",
+    "sort_order": 17,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "markoun-04",
+      "program_slug": "markoun"
+    }
+  },
+  {
+    "image": "src/assets/marqqqqqun.jpg",
+    "external_url": null,
+    "title_ar": "تجهيز خزانة مركون — ملابس واحتياجات منزلية لطفل",
+    "title_en": "Markoun wardrobe setup — clothing and home essentials for a child",
+    "alt_ar": "تجهيز خزانة مركون — ملابس واحتياجات منزلية لطفل",
+    "alt_en": "Markoun wardrobe setup — clothing and home essentials for a child",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Belqas",
+    "program": "campaigns",
+    "donation_program": "markoun",
+    "sort_order": 18,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "markoun-05",
+      "program_slug": "markoun"
+    }
+  },
+  {
+    "image": "src/assets/markoun-poster-furniture.png",
+    "external_url": null,
+    "title_ar": "حملة مركون — أثاث مجدّد وكرامة توصل للبيت",
+    "title_en": "Markoun campaign — refurbished home essentials and dignity delivery",
+    "alt_ar": "حملة مركون — أثاث مجدّد وكرامة توصل للبيت",
+    "alt_en": "Markoun campaign — refurbished home essentials and dignity delivery",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "campaigns",
+    "donation_program": "markoun",
+    "sort_order": 19,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "markoun-06",
+      "program_slug": "markoun"
+    }
+  },
+  {
+    "image": "src/assets/family-hope.jpg",
+    "external_url": null,
+    "title_ar": "أسرة من المستفيدين — المنصورة، الدقهلية",
+    "title_en": "Family of beneficiaries — Mansoura, Dakahlia",
+    "alt_ar": "أسرة من المستفيدين — المنصورة، الدقهلية",
+    "alt_en": "Family of beneficiaries — Mansoura, Dakahlia",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mansoura",
+    "program": "families",
+    "donation_program": "box",
+    "sort_order": 20,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-001"
+    }
+  },
+  {
+    "image": "src/assets/hands-sprout.jpg",
+    "external_url": null,
+    "title_ar": "أيادٍ تحمل برعمًا — الأمل ينمو",
+    "title_en": "Hands holding a sprout — hope grows",
+    "alt_ar": "أيادٍ تحمل برعمًا — الأمل ينمو",
+    "alt_en": "Hands holding a sprout — hope grows",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "campaigns",
+    "donation_program": null,
+    "sort_order": 21,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-002"
+    }
+  },
+  {
+    "image": "src/assets/hero-child.jpg",
+    "external_url": null,
+    "title_ar": "طفل يبتسم بعد وصول المساعدة — الدقهلية",
+    "title_en": "Smiling child after aid — Dakahlia",
+    "alt_ar": "طفل يبتسم بعد وصول المساعدة — الدقهلية",
+    "alt_en": "Smiling child after aid — Dakahlia",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Dakahlia",
+    "program": "families",
+    "donation_program": "education",
+    "sort_order": 22,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-003"
+    }
+  },
+  {
+    "image": "src/assets/program-education.jpg",
+    "external_url": null,
+    "title_ar": "مشروع التعليم — طلاب مدرسة بميت غمر",
+    "title_en": "Education project — schoolchildren in Mit Ghamr",
+    "alt_ar": "مشروع التعليم — طلاب مدرسة بميت غمر",
+    "alt_en": "Education project — schoolchildren in Mit Ghamr",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mit Ghamr",
+    "program": "education",
+    "donation_program": "education",
+    "sort_order": 23,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-004"
+    }
+  },
+  {
+    "image": "src/assets/program-orphans.jpg",
+    "external_url": null,
+    "title_ar": "كفالة أيتام — أطفال السنبلاوين",
+    "title_en": "Orphan sponsorship — kids in Sinbillawayn",
+    "alt_ar": "كفالة أيتام — أطفال السنبلاوين",
+    "alt_en": "Orphan sponsorship — kids in Sinbillawayn",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Sinbillawayn",
+    "program": "families",
+    "donation_program": "education",
+    "sort_order": 24,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-005"
+    }
+  },
+  {
+    "image": "src/assets/program-food.jpg",
+    "external_url": null,
+    "title_ar": "توزيع كرتونة عزومة — شربين",
+    "title_en": "Food box distribution — Sherbin",
+    "alt_ar": "توزيع كرتونة عزومة — شربين",
+    "alt_en": "Food box distribution — Sherbin",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Sherbin",
+    "program": "families",
+    "donation_program": "box",
+    "sort_order": 25,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-006"
+    }
+  },
+  {
+    "image": "src/assets/program-health.jpg",
+    "external_url": null,
+    "title_ar": "برنامج شفاء ودواء — بلقاس",
+    "title_en": "Healing & medicine program — Belqas",
+    "alt_ar": "برنامج شفاء ودواء — بلقاس",
+    "alt_en": "Healing & medicine program — Belqas",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Belqas",
+    "program": "health",
+    "donation_program": "treatment",
+    "sort_order": 26,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-007"
+    }
+  },
+  {
+    "image": "src/assets/hero-happy-family-new.png",
+    "external_url": null,
+    "title_ar": "عائلة سعيدة بعد أضحية العيد 2026",
+    "title_en": "Happy family after Eid Qurbani 2026",
+    "alt_ar": "عائلة سعيدة بعد أضحية العيد 2026",
+    "alt_en": "Happy family after Eid Qurbani 2026",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 27,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-008"
+    }
+  },
+  {
+    "image": "src/assets/hero-sad.jpg",
+    "external_url": null,
+    "title_ar": "عائلة قبل وصول المساعدة — حالة موثّقة",
+    "title_en": "Family before aid arrived — case study",
+    "alt_ar": "عائلة قبل وصول المساعدة — حالة موثّقة",
+    "alt_en": "Family before aid arrived — case study",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "families",
+    "donation_program": "box",
+    "sort_order": 28,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-009"
+    }
+  },
+  {
+    "image": "src/assets/poster-odhya.png",
+    "external_url": null,
+    "title_ar": "بوستر حملة أضحية العيد 2026",
+    "title_en": "Qurbani Eid 2026 campaign poster",
+    "alt_ar": "بوستر حملة أضحية العيد 2026",
+    "alt_en": "Qurbani Eid 2026 campaign poster",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 29,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-010"
+    }
+  },
+  {
+    "image": "src/assets/poster-box.png",
+    "external_url": null,
+    "title_ar": "بوستر حملة كرتونة عزومة العيد",
+    "title_en": "Eid feast box campaign poster",
+    "alt_ar": "بوستر حملة كرتونة عزومة العيد",
+    "alt_en": "Eid feast box campaign poster",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "campaigns",
+    "donation_program": "box",
+    "sort_order": 30,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-011"
+    }
+  },
+  {
+    "image": "src/assets/poster-water.png",
+    "external_url": null,
+    "title_ar": "بوستر حملة وصلات المياه — قرى الدقهلية",
+    "title_en": "Water connection campaign poster — Dakahlia villages",
+    "alt_ar": "بوستر حملة وصلات المياه — قرى الدقهلية",
+    "alt_en": "Water connection campaign poster — Dakahlia villages",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "water",
+    "donation_program": "water",
+    "sort_order": 31,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-012"
+    }
+  },
+  {
+    "image": "src/assets/poster-bride.png",
+    "external_url": null,
+    "title_ar": "تيسير زواج اليتيمات — الفرحة بقت فرحتين",
+    "title_en": "Marriage support for orphan brides — Al-Yusr",
+    "alt_ar": "تيسير زواج اليتيمات — الفرحة بقت فرحتين",
+    "alt_en": "Marriage support for orphan brides — Al-Yusr",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "campaigns",
+    "donation_program": "bride",
+    "sort_order": 32,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-013"
+    }
+  },
+  {
+    "image": "src/assets/yusr-bride.png",
+    "external_url": null,
+    "title_ar": "تجهيز عروسة يتيمة — تسليم الجهاز",
+    "title_en": "Bride trousseau handover ceremony",
+    "alt_ar": "تجهيز عروسة يتيمة — تسليم الجهاز",
+    "alt_en": "Bride trousseau handover ceremony",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "families",
+    "donation_program": "bride",
+    "sort_order": 33,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-014"
+    }
+  },
+  {
+    "image": "src/assets/poster-education.png",
+    "external_url": null,
+    "title_ar": "بوستر كفالة التعليم — 354 طالبًا",
+    "title_en": "Education sponsorship poster — 354 students",
+    "alt_ar": "بوستر كفالة التعليم — 354 طالبًا",
+    "alt_en": "Education sponsorship poster — 354 students",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "education",
+    "donation_program": "education",
+    "sort_order": 34,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-015"
+    }
+  },
+  {
+    "image": "src/assets/brand-poster-classroom.jpg",
+    "external_url": null,
+    "title_ar": "فصل دراسي لطلاب الكفالة — المنصورة",
+    "title_en": "Classroom of sponsored students — Mansoura",
+    "alt_ar": "فصل دراسي لطلاب الكفالة — المنصورة",
+    "alt_en": "Classroom of sponsored students — Mansoura",
+    "description_ar": null,
+    "description_en": null,
+    "city": "Mansoura",
+    "program": "education",
+    "donation_program": "education",
+    "sort_order": 35,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-016"
+    }
+  },
+  {
+    "image": "src/assets/yusr-orphans-meals.jpg",
+    "external_url": null,
+    "title_ar": "وجبات ساخنة للأيتام من مطبخ اليسر",
+    "title_en": "Hot meals served to orphans by Al-Yusr kitchen",
+    "alt_ar": "وجبات ساخنة للأيتام من مطبخ اليسر",
+    "alt_en": "Hot meals served to orphans by Al-Yusr kitchen",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "families",
+    "donation_program": "kitchen",
+    "sort_order": 36,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-017"
+    }
+  },
+  {
+    "image": "src/assets/poster-meat.png",
+    "external_url": null,
+    "title_ar": "بوستر توزيع لحوم بلدي — مزرعة اليسر الوقفية",
+    "title_en": "Fresh meat distribution poster — Al-Yusr farm",
+    "alt_ar": "بوستر توزيع لحوم بلدي — مزرعة اليسر الوقفية",
+    "alt_en": "Fresh meat distribution poster — Al-Yusr farm",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "campaigns",
+    "donation_program": "box",
+    "sort_order": 37,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-018"
+    }
+  },
+  {
+    "image": "src/assets/qurbani-meat-quality.png",
+    "external_url": null,
+    "title_ar": "جودة لحوم الأضاحي من مزرعة اليسر الوقفية",
+    "title_en": "Quality cuts from Al-Yusr endowment farm",
+    "alt_ar": "جودة لحوم الأضاحي من مزرعة اليسر الوقفية",
+    "alt_en": "Quality cuts from Al-Yusr endowment farm",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 38,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-019"
+    }
+  },
+  {
+    "image": "src/assets/qurbani-trusted-source.png",
+    "external_url": null,
+    "title_ar": "مصدر موثوق — مواشي من مزارعنا",
+    "title_en": "Trusted source — livestock from our own farm",
+    "alt_ar": "مصدر موثوق — مواشي من مزارعنا",
+    "alt_en": "Trusted source — livestock from our own farm",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "qurbani",
+    "donation_program": "odhya",
+    "sort_order": 39,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-020"
+    }
+  },
+  {
+    "image": "src/assets/yusr-water.png",
+    "external_url": null,
+    "title_ar": "وصلة مياه مركّبة في منزل بقرية نائية",
+    "title_en": "Water connection installed in a village home",
+    "alt_ar": "وصلة مياه مركّبة في منزل بقرية نائية",
+    "alt_en": "Water connection installed in a village home",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "water",
+    "donation_program": "water",
+    "sort_order": 40,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-021"
+    }
+  },
+  {
+    "image": "src/assets/farm-hero.jpg",
+    "external_url": null,
+    "title_ar": "مزرعة اليسر الوقفية — المواشي والأعلاف",
+    "title_en": "Al-Yusr endowment farm — livestock & feed",
+    "alt_ar": "مزرعة اليسر الوقفية — المواشي والأعلاف",
+    "alt_en": "Al-Yusr endowment farm — livestock & feed",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "campaigns",
+    "donation_program": "box",
+    "sort_order": 41,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-022"
+    }
+  },
+  {
+    "image": "src/assets/poster-zakat.png",
+    "external_url": null,
+    "title_ar": "زكاة 2026 — احسبها واصرفها",
+    "title_en": "Zakat 2026 — calculate and channel",
+    "alt_ar": "زكاة 2026 — احسبها واصرفها",
+    "alt_en": "Zakat 2026 — calculate and channel",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "campaigns",
+    "donation_program": "zakat",
+    "sort_order": 42,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-023"
+    }
+  },
+  {
+    "image": "src/assets/poster-volunteer.png",
+    "external_url": null,
+    "title_ar": "تطوع مع اليسر — دعوة مفتوحة",
+    "title_en": "Volunteer with Al-Yusr — open call",
+    "alt_ar": "تطوع مع اليسر — دعوة مفتوحة",
+    "alt_en": "Volunteer with Al-Yusr — open call",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "campaigns",
+    "donation_program": null,
+    "sort_order": 43,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-024"
+    }
+  },
+  {
+    "image": "src/assets/poster-volunteer-field.png",
+    "external_url": null,
+    "title_ar": "قافلة تطوع في الميدان",
+    "title_en": "Volunteer convoy in the field",
+    "alt_ar": "قافلة تطوع في الميدان",
+    "alt_en": "Volunteer convoy in the field",
+    "description_ar": null,
+    "description_en": null,
+    "city": null,
+    "program": "campaigns",
+    "donation_program": null,
+    "sort_order": 44,
+    "is_featured": false,
+    "is_public": true,
+    "extra": {
+      "static_id": "g-025"
+    }
+  }
+]

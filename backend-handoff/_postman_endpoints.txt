@@ -1,0 +1,202 @@
+POST   /register  [Authentication] {(raw)}
+POST   /login  [Authentication] {email,password}
+POST   /login  [Authentication] {email,password}
+POST   /login  [Authentication] {email,password}
+GET    /profile  [Authentication] 
+POST   /logout  [Authentication] 
+POST   /change-password  [Authentication] {current_password,password,password_confirmation}
+POST   /users/super-admin  [Authentication] {name,email,phone,password,password_confirmation}
+POST   /login  [Authentication] {email,password}
+GET    /dashboard  [Dashboard] 
+GET    /cases  [الحالات] 
+GET    /cases  [الحالات] 
+GET    /cases  [الحالات] 
+GET    /cases  [الحالات] 
+GET    /cases  [الحالات] 
+GET    /case-categories  [الحالات] 
+GET    /cases/statistics  [الحالات] 
+POST   /cases  [الحالات] {project_id,category_id,title,beneficiary_name,governorate,target_amount,priority,description,code}
+POST   /cases  [الحالات] {title,category_id,beneficiary_name,Age,governorate,City,target_amount,Deadline,priority,cover_image,code,description}
+PUT    /cases/21  [الحالات] {title,category_id,beneficiary_name,Age,governorate,City,target_amount,Deadline,priority,cover_image,code,description}
+DELETE /cases/{id}  [الحالات] 
+GET    /programs/40  [البرامج] 
+GET    /programs/13/donation-packages  [البرامج] 
+POST   /programs/28/donation-packages  [البرامج] {name_ar,name_en,amount,sort_order,is_active}
+GET    /programs/20/donation-packages  [البرامج] 
+GET    /programs  [البرامج] 
+POST   /programs  [البرامج] {name_ar,name_en,title_ar,title_en,slug,description_ar,description_en,donation_available,target_amount,minimum_amount,status,is_active,sort_order,image,donation_available,axis_id,season_ids[]}
+GET    /programs/{id}  [البرامج] 
+PUT    /programs/13  [البرامج] {name_ar,name_en,title_ar,title_en,tagline_ar,tagline_en,description_ar,description_en,content_ar,content_en,minimum_amount}
+DELETE /programs/24  [البرامج] 
+GET    /programs/35/page-sections  [تفاصيل البرامج] 
+POST   /programs/35/page-sections  [تفاصيل البرامج] {section_key,title_ar,title_en,settings,is_enabled,sort_order}
+PUT    /api/v1/programs/35/page-sections/58  [تفاصيل البرامج] {section_key,title_ar,title_en,subtitle_ar,subtitle_en,content_ar,content_en,settings,is_enabled,sort_order}
+PATCH  /programs/35/page-sections/ID/toggle  [تفاصيل البرامج] {is_enabled}
+DELETE /programs/35/page-sections/57  [تفاصيل البرامج] 
+PUT    /api/v1/programs/35/top-section  [تفاصيل البرامج] {top_section}
+GET    /projects/24  [المشاريع] 
+POST   /projects  [المشاريع] {name,name_en,slug,short_description,short_description_en,target_amount,starting_price,display_order,is_active,cover_image}
+GET    /projects  [المشاريع] 
+PUT    /projects/1  [المشاريع] {name,description}
+DELETE /projects/22  [المشاريع] 
+GET    /projects/24/donation-packages  [المشاريع] 
+POST   /projects/24/donation-packages  [المشاريع] {name_ar,amount}
+GET    /users  [Users] 
+POST   /users  [Users] {name,email,password,password_confirmation,status,role_ids}
+GET    /users/{id}  [Users] 
+PUT    /users/{id}  [Users] {name,email,password,password_confirmation}
+DELETE /users/{id}  [Users] 
+GET    /roles  [الادوار] 
+POST   /roles  [الادوار] {name,description}
+GET    /roles/{id}  [الادوار] 
+PUT    /roles/{id}  [الادوار] {name,description}
+DELETE /roles/5  [الادوار] 
+GET    /permissions  [الاذونات] 
+POST   /permissions  [الاذونات] {name,description}
+GET    /permissions/{id}  [الاذونات] 
+PUT    /permissions/{id}  [الاذونات] {name,description}
+DELETE /permissions/{id}  [الاذونات] 
+GET    /donors  [المتبرعون] 
+POST   /donors  [المتبرعون] {name,email,phone}
+GET    /donors/{id}  [المتبرعون] 
+PUT    /donors/{id}  [المتبرعون] {name,email,phone}
+DELETE /donors/{id}  [المتبرعون] 
+GET    /donations  [التبرعات] 
+GET    /donations/track/YSR-4WNLYTFR-2191  [التبرعات] 
+POST   /donations  [التبرعات] {donor_id,program_id,donation_package_id,case_id,amount,payment_method,payment_method_id,notes}
+POST   /donations/submit  [التبرعات] {donation_campaign_id,provider,donation_target,name,email,phone,address,payment_method_id,amount,notes}
+GET    /donations/{id}  [التبرعات] 
+PUT    /donations/{id}  [التبرعات] {amount,donor_id}
+DELETE /donations/{id}  [التبرعات] 
+POST   /paymob/callback  [التبرعات] {obj,hmac}
+GET    /payment-methods  [طرق الدفع] 
+GET    /payment-methods  [طرق الدفع] 
+POST   /payment-methods  [طرق الدفع] {name_ar,name_en,slug,type,provider_ar,provider_en,details,description_ar,description_en,sort_order,is_active}
+PUT    /payment-methods/3  [طرق الدفع] {name_ar,name_en,slug,type,provider_ar,provider_en,details,description_ar,description_en,sort_order,is_active}
+DELETE /payment-methods/1  [طرق الدفع] {name_ar,name_en,slug,type,provider_ar,provider_en,details,description_ar,description_en,sort_order,is_active}
+GET    /payment-methods/active  [طرق الدفع] 
+GET    /payment-methods/active  [طرق الدفع] 
+GET    /volunteers  [المتطوعون] 
+POST   /volunteers  [المتطوعون] {name,email,phone,governorate,city,address,skills,status,notes}
+GET      [المتطوعون] 
+GET    /volunteer-campaigns  [حملات التطوع] 
+DELETE /volunteer-campaigns/1  [حملات التطوع] 
+POST   /volunteer-campaigns  [حملات التطوع] {title_ar,title_en,event_date,event_time,governorate,city,location,required_volunteers,required_skills,description_ar,description_en,status}
+GET    /volunteer-campaigns/statistics  [حملات التطوع] 
+GET    /content  [ادارة المحتوي] 
+GET    /content  [ادارة المحتوي] 
+GET    /content  [ادارة المحتوي] 
+GET    /content  [ادارة المحتوي] 
+GET    /content  [ادارة المحتوي] 
+GET    /content  [ادارة المحتوي] 
+GET    /content  [ادارة المحتوي] 
+GET    /content  [ادارة المحتوي] 
+GET    /content/statistics  [ادارة المحتوي] 
+POST   /content  [ادارة المحتوي] {type,status,slug,title_ar,title_en,summary_ar,summary_en,content_ar,content_en,cover_image,tags,author_id}
+GET    /stories  [القصص] 
+GET    /stories/statistics  [القصص] 
+GET    /stories  [القصص] 
+GET    /stories  [القصص] 
+GET    /stories  [القصص] 
+GET    /stories  [القصص] 
+POST   /stories  [القصص] {slug,title_ar,category_ar,category_en ,beneficiary_name,location_ar,location_en,description_ar,description_en,cover_image ,sort_order,status,is_featured }
+GET    /gallery  [معرض الصور] 
+GET    /gallery  [معرض الصور] 
+GET    /gallery  [معرض الصور] 
+GET    /gallery  [معرض الصور] 
+GET    /gallery  [معرض الصور] 
+GET    /gallery/statistics  [معرض الصور] 
+POST   /gallery  [معرض الصور] {image,external_url,title_ar,title_en,alt_ar,alt_en,description_ar,description_en,city,program,donation_program,sort_order,is_featured,is_public}
+GET    /content-change-requests  [ادارة المحتوي] 
+GET    /content-change-requests/1  [ادارة المحتوي] 
+POST   /content-change-requests/1/approve  [ادارة المحتوي] {name}
+POST   /content-change-requests/1/reject  [ادارة المحتوي] 
+GET    /home-numbers  [الارقام والانجازات] 
+GET    /home-numbers  [الارقام والانجازات] 
+POST   /home-numbers  [الارقام والانجازات] {title_ar,title_en,number,number_label_ar,number_label_en,icon,fallback_image,sort_order,is_visible}
+DELETE /home-numbers/1  [الارقام والانجازات] {title_ar,title_en,number,number_label_ar,number_label_en,icon,fallback_image,sort_order,is_visible}
+GET    /achievements  [الارقام والانجازات] 
+POST   /achievements  [الارقام والانجازات] {title_ar,title_en,number,number_suffix_ar,number_suffix_en,icon,image,sort_order,is_active}
+GET    /blog-seo/1  [blog-seo] 
+GET    /blog-seo  [blog-seo] 
+GET    /blog-seo  [blog-seo] 
+GET    /blog-seo  [blog-seo] 
+GET    /blog-seo  [blog-seo] 
+GET    /blog-seo  [blog-seo] 
+POST   /blog-seo  [blog-seo] {slug,title_ar,title_en,summary_ar,summary_en,content_ar,content_en,cover_image,svg,author_id,primary_keyword,category_ar,category_en,tags_ar,tags_en,og_image,og_image_url,schema_type,schema_data,og_data,workflow_status,scheduled_at}
+GET    /blog-seo/statistics  [blog-seo] 
+PUT    /blog-seo/2  [blog-seo] {title_ar,summary_ar,primary_keyword,category_ar,tags_ar,workflow_status}
+DELETE /blog-seo/2  [blog-seo] {title_ar,summary_ar,primary_keyword,category_ar,tags_ar,workflow_status}
+GET    /newsletter  [النشرة البريدية] 
+POST   /newsletter  [النشرة البريدية] {email,status,language,source}
+GET    /newsletter/statistics  [النشرة البريدية] 
+GET    /newsletter  [النشرة البريدية] 
+GET    /newsletter  [النشرة البريدية] 
+GET    /newsletter  [النشرة البريدية] 
+GET    /homepage/hero  [واجهة الهيرو ومحتوي الرئيسية > الهيرو] 
+PUT    /homepage/hero  [واجهة الهيرو ومحتوي الرئيسية > الهيرو] {hero_badge_ar,hero_badge_en,hero_title_line1_ar,hero_title_line1_en,hero_title_accent_ar,hero_title_accent_en,hero_description_ar,hero_description_en,hero_image,primary_cta_ar,primary_cta_en,primary_cta_url,secondary_cta_ar,secondary_cta_en,secondary_cta_url,transparency_ar,transparency_en}
+GET    /homepage/content  [واجهة الهيرو ومحتوي الرئيسية > محتوي الرئيسية] 
+PUT    /homepage/content  [واجهة الهيرو ومحتوي الرئيسية > محتوي الرئيسية] {section2_badge_ar,section2_badge_en,section2_title_ar,section2_title_en,section2_title_accent_a,section2_title_accent_en,section2_description_ar,section2_description_en,section2_card_title_ar,section2_card_title_en,section2_card_subtitle_ar,section2_card_subtitle_en,section2_card_url,section2_primary_cta_ar,section2_primary_cta_en,section2_primary_cta_url,section2_primary_cta_icon,section2_secondary_cta_ar,section2_secondary_cta_en,section2_secondary_cta_url,section2_secondary_cta_icon,section2_main_image,section2_left_top_image,section2_left_bottom_image}
+GET    /homepage-content  [واجهة الهيرو ومحتوي الرئيسية] 
+POST   /admin/axes  [المحاور] {slug,name_ar,name_en,badge_ar,badge_en,description_ar,description_en,sort_order,is_active,statistics[students_supported],statistics[educational_centers],statistics[follow_up_months],features_ar[0],features_ar[1],features_ar[2],features_en[0],features_en[1],features_en[2],image}
+PUT    /admin/axes/10  [المحاور] {slug,name_ar,name_en,badge_ar,badge_en,description_ar,description_en,sort_order,is_active,statistics[students_supported],statistics[educational_centers],statistics[follow_up_months],features_ar[0],features_ar[1],features_ar[2],features_en[0],features_en[1],features_en[2],image}
+PUT    /admin/axes/7  [المحاور] {image}
+GET    /axes  [المحاور] 
+GET    /axes/education  [المحاور] 
+DELETE /admin/axes/11  [المحاور] 
+GET    /admin/about-us  [من نحن] 
+GET    /about-us  [من نحن] 
+PUT    /admin/about-us/hero  [من نحن] {content}
+PUT    /admin/about-us/stats  [من نحن] {content}
+PUT    /admin/about-us/programs  [من نحن] {content}
+PUT    /admin/about-us/trust  [من نحن] {content}
+PUT    /admin/about-us/why-us  [من نحن] {content}
+PUT    /admin/about-us/values  [من نحن] {content}
+PUT    /admin/about-us/story  [من نحن] {content}
+PUT    /admin/about-us/vision-2030  [من نحن] {content}
+GET    /about-us/hero  [من نحن] 
+GET    /about-us/stats  [من نحن] 
+GET    /about-us/programs  [من نحن] 
+GET    /about-us/trust  [من نحن] 
+GET    /about-us/trust  [من نحن] 
+GET    /about-us/values  [من نحن] 
+GET    /about-us/story  [من نحن] 
+GET    /about-us/vision-2030  [من نحن] 
+GET    /seasons  [المواسم] 
+POST   /seasons  [المواسم] {name_ar,name_en,period_ar,period_en,tagline_ar,tagline_en,description_ar,description_en,is_active,donation_available,sort_order}
+PATCH  /seasons/3  [المواسم] {is_active,donation_available}
+POST   /settings  [الاعدادات] {key,value,type,group}
+GET    /settings  [الاعدادات] 
+GET    /faq-categories  [الاسئلة وتصنيفاتها] 
+POST   /faq-categories  [الاسئلة وتصنيفاتها] {name_ar,name_en,slug,is_active,sort_order}
+POST   /faqs  [الاسئلة وتصنيفاتها] {faq_category_id,question_ar,question_en,answer_ar,answer_en,is_active,sort_order}
+GET    /faqs  [الاسئلة وتصنيفاتها] 
+GET    /faqs  [الاسئلة وتصنيفاتها] 
+GET    /donation-campaign-categories  [الحملات] 
+DELETE /donation-campaign-categories/5  [الحملات] 
+POST   /donation-campaign-categories  [الحملات] {name_ar,name_en,slug,is_active,sort_order}
+GET    /donation-campaigns  [الحملات] 
+POST   /donation-campaigns  [الحملات] {category_id,name_ar,name_en,slug,subtitle_ar,subtitle_en,description_ar,description_en,target_amount,collected_amount,minimum_amount,donation_available,is_active,sort_order,image}
+PUT    /donation-campaigns  [الحملات] {category_id,name_ar,name_en,slug,subtitle_ar,subtitle_en,description_ar,description_en,target_amount,collected_amount,minimum_amount,donation_available,is_active,sort_order,image}
+DELETE /donation-campaigns/1  [الحملات] {category_id,name_ar,name_en,slug,subtitle_ar,subtitle_en,description_ar,description_en,target_amount,collected_amount,minimum_amount,donation_available,is_active,sort_order,image}
+GET    /donation-campaigns  [الحملات] 
+GET    /donation-campaigns  [الحملات] 
+POST   /donation-campaigns/9/donation-packages  [الحملات] {name_ar,name_en,amount,sort_order,is_active}
+GET    /donation-campaigns/1/donation-packages  [الحملات] 
+GET    /notifications  [الاشعارات] 
+GET    /notifications/unread-count  [الاشعارات] 
+PATCH  /notifications/622fee2a-a954-4d86-9faa-cc2ac66095a5/read  [الاشعارات] 
+PATCH  /notifications/read-all  [الاشعارات] 
+GET    /activity-logs  [سجل النشاط] 
+GET    /payment-gateways  [بوابات الدفع] 
+PUT    /payment-gateways/kashier  [بوابات الدفع] {is_active,credentials}
+PATCH  /payment-gateways/kashier/toggle  [بوابات الدفع] 
+POST   /payment-gateways/kashier/test  [بوابات الدفع] 
+GET    /kashier/redirect  [بوابات الدفع] 
+GET    /homepage/carousel  [carousel] 
+GET    /admin/homepage/carousel  [carousel] 
+PUT    /admin/homepage/carousel/settings  [carousel] {is_active,autoplay,autoplay_speed,show_dots}
+POST   /admin/homepage/carousel/items  [carousel] {title_ar,title_en,description_ar,description_en,image,link_url,sort_order,is_active}
+PATCH  /admin/homepage/carousel/items/1/toggle  [carousel] 
+DELETE /admin/homepage/carousel/items/1  [carousel] 
+POST   /admin/homepage/carousel/reorder  [carousel] {items}

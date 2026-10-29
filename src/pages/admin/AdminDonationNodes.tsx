@@ -1,28 +1,19 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { donationNodesApi, type DonationNode } from "@/data/api/donationNodesApi";
+import { apiErrorMessage, isEndpointMissing, FEATURE_PENDING_MSG } from "@/data/api/adminApiHelpers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Plus, Trash2, ChevronRight } from "lucide-react";
 
-type Node = {
-  id: string;
-  parent_id: string | null;
-  type: "program" | "project" | "campaign" | "option";
-  slug: string;
-  title_ar: string;
-  title_en: string;
-  amount: number | null;
-  active: boolean;
-  direct_checkout: boolean;
-  sort_order: number;
-};
+type Node = DonationNode;
 
 export default function AdminDonationNodes() {
   const [path, setPath] = useState<Node[]>([]);
   const [items, setItems] = useState<Node[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState({ slug: "", title_ar: "", title_en: "", amount: "", direct_checkout: false });
 
@@ -30,27 +21,45 @@ export default function AdminDonationNodes() {
 
   const reload = async () => {
     setLoading(true);
-    const q = supabase.from("donation_nodes" as any).select("*").order("sort_order");
-    const { data } = parent
-      ? await q.eq("parent_id", parent.id)
-      : await q.is("parent_id", null);
-    setItems((data as any) || []);
-    setLoading(false);
+    setLoadError(null);
+    try {
+      setItems(await donationNodesApi.listChildren(parent?.id ?? null));
+    } catch (e) {
+      setItems([]);
+      setLoadError(isEndpointMissing(e) ? FEATURE_PENDING_MSG : apiErrorMessage(e, "تعذر تحميل العناصر"));
+    } finally {
+      setLoading(false);
+    }
   };
+  const fail = (title: string, e: unknown) =>
+    toast({ variant: "destructive", title, description: apiErrorMessage(e) });
   useEffect(() => { void reload(); }, [parent?.id]);
 
   const toggleActive = async (n: Node) => {
-    await (supabase.from("donation_nodes" as any) as any).update({ active: !n.active }).eq("id", n.id);
-    toast({ title: !n.active ? "تم التفعيل" : "تم التعطيل" });
+    try {
+      await donationNodesApi.update(n.id, { active: !n.active });
+      toast({ title: !n.active ? "تم التفعيل" : "تم التعطيل" });
+    } catch (e) {
+      fail("فشل تغيير الحالة", e);
+    }
     reload();
   };
   const toggleDirect = async (n: Node) => {
-    await (supabase.from("donation_nodes" as any) as any).update({ direct_checkout: !n.direct_checkout }).eq("id", n.id);
+    try {
+      await donationNodesApi.update(n.id, { direct_checkout: !n.direct_checkout });
+    } catch (e) {
+      fail("فشل تغيير التبرع المباشر", e);
+    }
     reload();
   };
   const remove = async (n: Node) => {
     if (!confirm("حذف العنصر وكل أبنائه؟")) return;
-    await (supabase.from("donation_nodes" as any) as any).delete().eq("id", n.id);
+    try {
+      await donationNodesApi.remove(n.id);
+      toast({ title: "تم الحذف" });
+    } catch (e) {
+      fail("فشل الحذف", e);
+    }
     reload();
   };
   const create = async () => {
@@ -58,18 +67,20 @@ export default function AdminDonationNodes() {
       toast({ title: "أدخل slug والاسم العربي" });
       return;
     }
-    const { error } = await (supabase.from("donation_nodes" as any) as any).insert({
-      parent_id: parent?.id ?? null,
-      type: parent ? "option" : "program",
-      slug: draft.slug,
-      title_ar: draft.title_ar,
-      title_en: draft.title_en,
-      amount: draft.amount ? Number(draft.amount) : null,
-      direct_checkout: draft.direct_checkout,
-      sort_order: items.length,
-    });
-    if (error) {
-      toast({ title: "فشل الإضافة", description: error.message });
+    try {
+      await donationNodesApi.create({
+        parent_id: parent?.id ?? null,
+        type: parent ? "option" : "program",
+        slug: draft.slug,
+        title_ar: draft.title_ar,
+        title_en: draft.title_en,
+        amount: draft.amount ? Number(draft.amount) : null,
+        active: true,
+        direct_checkout: draft.direct_checkout,
+        sort_order: items.length,
+      });
+    } catch (e) {
+      fail("فشل الإضافة", e);
       return;
     }
     setDraft({ slug: "", title_ar: "", title_en: "", amount: "", direct_checkout: false });
@@ -85,7 +96,7 @@ export default function AdminDonationNodes() {
       <div className="mt-4 flex flex-wrap items-center gap-2 text-xs font-bold">
         <button onClick={() => setPath([])} className="rounded-full bg-muted px-3 py-1 hover:text-primary">الجذر</button>
         {path.map((p, i) => (
-          <span key={p.id} className="inline-flex items-center gap-1">
+          <span key={String(p.id)} className="inline-flex items-center gap-1">
             <ChevronRight className="h-3 w-3 rotate-180" />
             <button onClick={() => setPath((a) => a.slice(0, i + 1))} className="rounded-full bg-muted px-3 py-1 text-primary">{p.title_ar}</button>
           </span>
@@ -97,9 +108,10 @@ export default function AdminDonationNodes() {
           <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin" /></div>
         ) : (
           <div className="divide-y divide-border">
-            {items.length === 0 && <div className="py-6 text-center text-sm text-muted-foreground">لا توجد عناصر هنا</div>}
+            {loadError && <div className="py-6 text-center text-sm font-bold text-destructive">{loadError}</div>}
+            {!loadError && items.length === 0 && <div className="py-6 text-center text-sm text-muted-foreground">لا توجد عناصر هنا</div>}
             {items.map((n) => (
-              <div key={n.id} className="flex flex-wrap items-center gap-3 py-3">
+              <div key={String(n.id)} className="flex flex-wrap items-center gap-3 py-3">
                 <button onClick={() => setPath((a) => [...a, n])} className="text-start">
                   <div className="font-extrabold text-primary">{n.title_ar}</div>
                   <div className="text-[11px] text-muted-foreground">{n.slug} · {n.type}{n.amount ? ` · ${n.amount} EGP` : ""}</div>

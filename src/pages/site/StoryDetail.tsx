@@ -10,7 +10,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { getStoryBySlug, listPublishedStories, type StoryCard } from "@/data/storiesApi";
-import { supabase } from "@/integrations/supabase/client";
+import { getDonationNodeById } from "@/data/api/publicDonationNodesApi";
 import { toast } from "@/hooks/use-toast";
 
 export default function StoryDetail() {
@@ -33,9 +33,9 @@ export default function StoryDetail() {
       setStory(data || null);
 
       if (data?.program_node_id) {
-        const { data: p } = await (supabase.from("donation_nodes" as any) as any)
-          .select("slug,title_ar,title_en").eq("id", data.program_node_id).maybeSingle();
-        if (!cancelled) setProgram(p || null);
+        // Laravel GET /donation-nodes/{id} (proposed); null in "static" mode or on error.
+        const p = await getDonationNodeById(String(data.program_node_id));
+        if (!cancelled) setProgram(p ? { slug: p.slug, title_ar: p.title_ar, title_en: p.title_en } : null);
       }
 
       // Fetch related stories (excluding current)

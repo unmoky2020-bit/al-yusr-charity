@@ -245,12 +245,10 @@ const Cases = () => {
                 const imgUrl = getCaseImageUrl({
                   cover_image_url: c.cover_image_url,
                   title: c.title,
-                  category_id: c.category_id,
+                  category_id: c.category_name_ar ?? undefined,
                   ref_code: c.ref_code,
                 });
-                const catName =
-                  (c as any).case_categories?.name_ar ||
-                  (c.category_id && c.category_id !== "general" ? c.category_id : isRTL ? "حالة إنسانية" : "Humanitarian Case");
+                const catName = c.category_name_ar || (isRTL ? "حالة إنسانية" : "Humanitarian Case");
 
                 return (
                   <article

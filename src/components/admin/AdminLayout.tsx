@@ -7,7 +7,7 @@ import {
   HandHeart, HeartHandshake, ShieldCheck, UserCog, Megaphone, ClipboardCheck,
   ListChecks, Mail, BarChart3, Activity, Wallet, Image as ImageIcon, FolderArchive, Loader2,
   Server, Sparkles, Building2, Compass, Calendar, ChevronDown, Heart, BookOpen, Target,
-  HelpCircle, SlidersHorizontal,
+  HelpCircle, SlidersHorizontal, Bell,
 } from "lucide-react";
 import { Logo } from "@/components/common/Logo";
 import logoAsset from "@/assets/logo-circle.png";
@@ -15,6 +15,7 @@ import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { inferPermissions } from "@/auth/permissions";
 import { NotificationsBell } from "@/components/common/NotificationsBell";
+import { BACKEND_PENDING_AR, PENDING_ADMIN_SCREENS, pendingForPath } from "@/data/api/backendPending";
 
 type NavItem = { href: string; ar: string; en: string; icon: typeof LayoutDashboard };
 
@@ -26,6 +27,7 @@ const ALL_NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/admin", ar: "لوحة التحكم", en: "Dashboard", icon: LayoutDashboard },
       { href: "/admin/analytics", ar: "التحليلات", en: "Analytics", icon: TrendingUp },
+      { href: "/admin/notifications", ar: "الإشعارات", en: "Notifications", icon: Bell },
     ],
   },
   {
@@ -56,6 +58,7 @@ const ALL_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/content", ar: "المقالات والمدونة", en: "Articles & Blog", icon: FileEdit },
       { href: "/admin/blog-seo", ar: "سيو المدونة", en: "Blog SEO", icon: Search },
       { href: "/admin/faqs", ar: "الأسئلة الشائعة", en: "FAQs CMS", icon: HelpCircle },
+      { href: "/admin/inbox", ar: "رسائل تواصل معنا", en: "Contact inbox", icon: Mail },
       { href: "/admin/newsletter", ar: "النشرة البريدية", en: "Newsletter", icon: Mail },
       { href: "/admin/review",  ar: "مراجعة واعتماد التعديلات", en: "Change Approvals", icon: ClipboardCheck },
     ],
@@ -93,21 +96,21 @@ const ROLE_ALLOWED: Record<string, string[]> = {
     "/admin/donations", "/admin/cases", "/admin/my-cases", "/admin/delegates", "/admin/projects", "/admin/programs", "/admin/axes", "/admin/services", "/admin/donation-campaigns",
     "/admin/campaigns", "/admin/my-tasks", "/admin/reports", "/admin/volunteers",
     "/admin/donors", "/admin/transactions",
-    "/admin/profile",
+    "/admin/profile", "/admin/notifications",
   ],
   editor: [
     "/admin", "/admin/analytics",
     "/admin/homepage-content", "/admin/about-us", "/admin/axes",
     "/admin/projects", "/admin/programs", "/admin/services", "/admin/donation-campaigns", "/admin/campaigns", "/admin/seasons", "/admin/reports",
     "/admin/content", "/admin/stories", "/admin/site-stats", "/admin/gallery", "/admin/media",
-    "/admin/review", "/admin/blog-seo", "/admin/faqs", "/admin/newsletter",
-    "/admin/my-tasks", "/admin/profile", "/admin/campaigns-section",
+    "/admin/review", "/admin/blog-seo", "/admin/faqs", "/admin/newsletter", "/admin/inbox",
+    "/admin/my-tasks", "/admin/profile", "/admin/notifications", "/admin/campaigns-section",
   ],
   volunteer: [
-    "/admin", "/admin/campaigns", "/admin/my-tasks", "/admin/profile",
+    "/admin", "/admin/campaigns", "/admin/my-tasks", "/admin/profile", "/admin/notifications",
   ],
   delegate: [
-    "/admin", "/admin/my-cases", "/admin/my-tasks", "/admin/profile",
+    "/admin", "/admin/my-cases", "/admin/my-tasks", "/admin/profile", "/admin/notifications",
   ],
 };
 
@@ -155,6 +158,7 @@ export const AdminLayout = ({
   const { user, logout } = useAuth();
   const nav = useNavigate();
   const { pathname } = useLocation();
+  const pending = pendingForPath(pathname);
   const [open, setOpen] = useState(false);
 
   const roleKey = pickRoleKey(user?.roles as unknown as string[] | undefined);
@@ -244,6 +248,16 @@ export const AdminLayout = ({
 
           <main className="relative flex-1 overflow-y-auto p-3 md:p-6">
             <div key={pathname} className="admin-fade-in admin-stagger">
+              {pending && (
+                <div className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900" dir="rtl">
+                  <p className="font-black">
+                    {pending.partial ? `جزء من الشاشة دي ${BACKEND_PENDING_AR}:` : `الشاشة دي ${BACKEND_PENDING_AR}:`}
+                  </p>
+                  <ul className="mt-1 list-disc space-y-0.5 ps-5 font-semibold">
+                    {pending.missing.map((m) => <li key={m}>{m}</li>)}
+                  </ul>
+                </div>
+              )}
               {children}
             </div>
             {loading && (
@@ -397,7 +411,17 @@ const SidebarContent = ({
                     }`}
                   >
                     <Icon className="h-4 w-4 shrink-0" />
-                    <span className="truncate text-start flex-1">{it[lang]}</span>
+                    <span className="flex min-w-0 flex-1 flex-col text-start">
+                      <span className="truncate">{it[lang]}</span>
+                      {PENDING_ADMIN_SCREENS[it.href] && (
+                        <span
+                          className="truncate text-[9.5px] font-bold text-amber-300"
+                          title={PENDING_ADMIN_SCREENS[it.href].missing.join("\n")}
+                        >
+                          {PENDING_ADMIN_SCREENS[it.href].partial ? `جزء ${BACKEND_PENDING_AR}` : BACKEND_PENDING_AR}
+                        </span>
+                      )}
+                    </span>
                   </NavLink>
                 );
               })}

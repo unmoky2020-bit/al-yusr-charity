@@ -6,9 +6,10 @@ import { useLang } from "@/i18n/LangContext";
 import { prefetchHandlers } from "@/lib/prefetch";
 import { useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { newsletterApi } from "@/data/laravelApi";
 import { track } from "@/lib/track";
 import ctaHourglass from "@/assets/cta-hourglass-banner.jpg";
+import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 
 export const Footer = () => {
   const { t, lang } = useLang();
@@ -26,15 +27,14 @@ export const Footer = () => {
     }
     setSubscribing(true);
     try {
-      const { data, error } = await supabase.functions.invoke("newsletter-subscribe", {
-        body: { email: value, lang, source: `footer:${pathname}` },
-      });
-      if (error || (data && (data as any).error)) throw error || new Error((data as any).error);
+      // Laravel POST /newsletter — same call the homepage Newsletter section uses.
+      // apiFetch throws on any non-2xx, so success is only shown for a real 2xx.
+      const res = await newsletterApi.subscribe(value, lang === "en" ? "en" : "ar");
       setSubscribed(true);
       setEmail("");
       track("newsletter_subscribe", {
         fbEvent: "Lead",
-        payload: { email_domain: value.split("@")[1], lang, source: "footer", path: pathname, status: (data as any)?.status ?? "pending" },
+        payload: { email_domain: value.split("@")[1], lang, source: "footer", path: pathname, status: res?.data?.status ?? "confirmed" },
       });
     } catch (err) {
       if (import.meta.env.DEV) {
@@ -278,6 +278,7 @@ export const Footer = () => {
               <li><Link to="/programs" {...prefetchHandlers("/programs")} className="block text-primary-foreground/85 hover:text-secondary">{t.nav.programs}</Link></li>
               <li><Link to="/projects" {...prefetchHandlers("/projects")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "مشاريعنا" : "Projects"}</Link></li>
               <li><Link to="/cases" {...prefetchHandlers("/cases")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الحالات الإنسانية" : "Cases"}</Link></li>
+              <li><Link to="/trust" {...prefetchHandlers("/trust")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الشفافية" : "Transparency"}</Link></li>
               <li><Link to="/about#achievements" {...prefetchHandlers("/about")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "إنجازاتنا" : "Achievements"}</Link></li>
               <li><Link to="/gallery" {...prefetchHandlers("/gallery")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "معرض الصور" : "Gallery"}</Link></li>
               <li><Link to="/blog" {...prefetchHandlers("/blog")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المدونة" : "Blog"}</Link></li>
@@ -326,7 +327,7 @@ export const Footer = () => {
               </li>
               <li className="flex items-center justify-center gap-2 sm:justify-start">
                 <Mail className="hidden h-4 w-4 shrink-0 text-secondary sm:inline-block" aria-hidden />
-                <a href="mailto:info@elyosrcharity.com" className="text-primary-foreground/80 hover:text-secondary">info@elyosrcharity.com</a>
+                <a href={`mailto:${FOUNDATION_EMAIL}`} className="text-primary-foreground/80 hover:text-secondary">{FOUNDATION_EMAIL}</a>
               </li>
               <li className="flex items-start justify-center gap-2 sm:justify-start">
                 <Building2 className="mt-0.5 hidden h-4 w-4 shrink-0 text-secondary sm:inline-block" aria-hidden />

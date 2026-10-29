@@ -48,3 +48,7 @@ contact-*.png
 # Local notes and server scripts that hold real credentials: never commit
 AGENT.md
 scripts/check-server.mjs
+
+# Postman collections can carry real keys and tokens
+*.postman_collection.json
+*.postman_environment.json

@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { FormSkeleton } from "@/components/common/ContentSkeletons";
 import { formatNumberEN } from "@/lib/utils";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
@@ -26,10 +27,12 @@ import { toast } from "sonner";
 import { programs } from "@/data/programs";
 import { DONATION_ENTITIES, type DonationEntity } from "@/data/donationEntities";
 import {
-  useCampaignsSettings,
+  useCampaignsSectionAdmin,
   type CarouselCard,
   type CarouselSourceType,
+  type SectionWriteResult,
 } from "@/data/campaignsSettings";
+import { describeWriteError, BACKEND_PENDING_AR } from "@/data/api/backendPending";
 import { useCampaignsMetrics } from "@/lib/campaignsMetrics";
 import {
   programsApiV1,
@@ -53,18 +56,30 @@ import {
   Sparkles,
   Layers,
   HelpCircle,
+  Save,
+  Loader2,
+  AlertTriangle,
+  Undo2,
 } from "lucide-react";
 
 const AdminCampaignsSection = () => {
   const {
     settings,
+    dirty,
+    loading: sectionLoading,
+    sectionState,
+    loadErrors,
     update,
+    saveSettings,
+    discardDraft,
     addCard,
     updateCard,
     deleteCard,
     moveCard,
     toggleCard,
-  } = useCampaignsSettings();
+  } = useCampaignsSectionAdmin();
+  const [savingSettings, setSavingSettings] = useState(false);
+  const [cardBusy, setCardBusy] = useState(false);
 
   const { metrics, reset: resetMetrics } = useCampaignsMetrics();
   const { lang } = useLang();
@@ -216,6 +231,49 @@ const AdminCampaignsSection = () => {
     return list;
   }, [backendProjects]);
 
+  /** Run a card write (awaited). Carousel failure = error toast; section (price/links) not saved = warning toast. */
+  const runCardOp = async (op: () => Promise<SectionWriteResult | null>, okMsg: string, route: string): Promise<boolean> => {
+    setCardBusy(true);
+    try {
+      const res = await op();
+      if (res && !res.sectionSaved) {
+        toast.warning(
+          isAr ? `${okMsg} — لكن السعر ورابط التبرع ومصدر البطاقة لم تُحفظ` : `${okMsg}, but price / donate link / source were not saved`,
+          { description: res.sectionError || BACKEND_PENDING_AR, duration: 10000 },
+        );
+      } else if (res) {
+        toast.success(okMsg);
+      }
+      return true;
+    } catch (e) {
+      toast.error(isAr ? "لم يتم حفظ التغيير في قاعدة البيانات" : "Change not saved", { description: describeWriteError(e, route) });
+      return false;
+    } finally {
+      setCardBusy(false);
+    }
+  };
+
+  const handleSaveSettings = async () => {
+    setSavingSettings(true);
+    try {
+      const res = await saveSettings();
+      if (res.sectionSaved) {
+        toast.success(isAr ? "تم حفظ إعدادات القسم في قاعدة البيانات" : "Section settings saved");
+      } else {
+        toast.warning(
+          isAr
+            ? "تم حفظ الإظهار والسرعة في الكاروسيل، لكن العناوين والمفاتيح الأخرى لم تُحفظ"
+            : "Visibility and speed saved; titles and the other switches were not",
+          { description: res.sectionError || BACKEND_PENDING_AR, duration: 10000 },
+        );
+      }
+    } catch (e) {
+      toast.error(isAr ? "لم يتم حفظ إعدادات القسم" : "Settings not saved", { description: describeWriteError(e, "PUT /admin/homepage/carousel/settings") });
+    } finally {
+      setSavingSettings(false);
+    }
+  };
+
   // Modal State for Add / Edit
   const [cardModalOpen, setCardModalOpen] = useState(false);
   const [editingCardId, setEditingCardId] = useState<string | null>(null);
@@ -349,15 +407,17 @@ const AdminCampaignsSection = () => {
     }
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formCard.name_ar.trim()) {
       toast.error(isAr ? "يرجى كتابة عنوان البطاقة" : "Card title is required");
       return;
     }
 
+    let ok = false;
     if (editingCardId) {
-      updateCard(editingCardId, {
+      const id = editingCardId;
+      ok = await runCardOp(() => updateCard(id, {
         sourceType: formSourceType,
         sourceId: formSourcePick,
         slug: formCard.slug,
@@ -372,10 +432,9 @@ const AdminCampaignsSection = () => {
           ? formCard.donateUrl
           : `/donate?${formSourceType === "campaign" ? "campaign" : formSourceType === "project" ? "project" : "program"}=${encodeURIComponent(formCard.slug || "")}`,
         is_active: formCard.is_active,
-      });
-      toast.success(isAr ? "تم تحديث البطاقة بنجاح" : "Card updated successfully");
+      }), isAr ? "تم تحديث البطاقة" : "Card updated", "PUT /admin/homepage/carousel/items/{id}");
     } else {
-      addCard({
+      ok = await runCardOp(() => addCard({
         sourceType: formSourceType,
         sourceId: formSourcePick,
         slug: formCard.slug || `card-${Date.now()}`,
@@ -390,12 +449,14 @@ const AdminCampaignsSection = () => {
           ? formCard.donateUrl
           : `/donate?${formSourceType === "campaign" ? "campaign" : formSourceType === "project" ? "project" : "program"}=${encodeURIComponent(formCard.slug || "")}`,
         is_active: formCard.is_active,
-      });
-      toast.success(isAr ? "تمت إضافة البطاقة للكاروسيل" : "Card added to carousel");
+      }), isAr ? "تمت إضافة البطاقة للكاروسيل" : "Card added to carousel", "POST /admin/homepage/carousel/items");
     }
 
-    setCardModalOpen(false);
+    if (ok) setCardModalOpen(false);
   };
+
+  // Until the server settings arrive, show a skeleton instead of the built-in defaults.
+  if (sectionLoading) return <AdminLayout><FormSkeleton sections={3} /></AdminLayout>;
 
   return (
     <AdminLayout>
@@ -434,6 +495,41 @@ const AdminCampaignsSection = () => {
           </TabsList>
 
           <TabsContent value="content" className="mt-6 space-y-5">
+            {(sectionState === "missing" || loadErrors.length > 0) && (
+              <div className="flex items-start gap-3 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-xs text-amber-900 dark:text-amber-200">
+                <AlertTriangle className="h-5 w-5 shrink-0" />
+                <div className="space-y-1">
+                  {sectionState === "missing" && (
+                    <p>
+                      <b>{BACKEND_PENDING_AR}:</b>{" "}
+                      {isAr
+                        ? "GET/PUT /homepage/campaigns-section غير موجود بعد. الإظهار والسرعة والبطاقات تُحفظ في الكاروسيل، أما العناوين وزر الدعوة والتمرير التفاعلي وزر التخطي وسعر/رابط كل بطاقة فلن تُحفظ حتى يُضاف."
+                        : "GET/PUT /homepage/campaigns-section does not exist yet: titles, switches and card prices/links cannot be saved."}
+                    </p>
+                  )}
+                  {loadErrors.map((e) => <p key={e}>{e}</p>)}
+                </div>
+              </div>
+            )}
+
+            {dirty && (
+              <div className="sticky top-2 z-10 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-primary/30 bg-card/95 p-3 shadow-sm backdrop-blur">
+                <span className="text-xs font-bold text-foreground">
+                  {isAr ? "تعديلات غير محفوظة في إعدادات القسم (مسودة في هذه الصفحة فقط)" : "Unsaved section settings (draft on this page only)"}
+                </span>
+                <div className="flex items-center gap-2">
+                  <Button size="sm" variant="ghost" className="h-8 gap-1 text-xs" onClick={discardDraft} disabled={savingSettings}>
+                    <Undo2 className="h-3.5 w-3.5" />
+                    {isAr ? "تجاهل" : "Discard"}
+                  </Button>
+                  <Button size="sm" className="h-8 gap-1.5 text-xs font-bold" onClick={() => void handleSaveSettings()} disabled={savingSettings}>
+                    {savingSettings ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+                    {isAr ? "حفظ إعدادات القسم" : "Save section settings"}
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {/* إعدادات العرض والسرعة — كامل العرض */}
             <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-xs space-y-4">
                 <div className="flex items-center gap-2 border-b pb-3">
@@ -642,6 +738,17 @@ const AdminCampaignsSection = () => {
                 </div>
               </div>
 
+              {sectionLoading && cards.length === 0 && (
+                <div className="flex items-center justify-center gap-2 py-8 text-xs text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {isAr ? "جاري تحميل البطاقات من قاعدة البيانات..." : "Loading cards..."}
+                </div>
+              )}
+              {!sectionLoading && cards.length === 0 && (
+                <p className="py-8 text-center text-xs text-muted-foreground">
+                  {isAr ? "لا توجد بطاقات في الكاروسيل بقاعدة البيانات." : "No carousel cards in the database."}
+                </p>
+              )}
               <ul className="space-y-2 pt-1">
                 {cards.map((c, i) => {
                   const isVisible = c.is_active;
@@ -687,8 +794,8 @@ const AdminCampaignsSection = () => {
                         <Button
                           size="icon"
                           variant="ghost"
-                          disabled={i === 0}
-                          onClick={() => moveCard(c.id, -1)}
+                          disabled={i === 0 || cardBusy}
+                          onClick={() => void runCardOp(() => moveCard(c.id, -1), isAr ? "تم حفظ الترتيب" : "Order saved", "POST /admin/homepage/carousel/reorder")}
                           className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground"
                           title={isAr ? "تحريك لأعلى" : "Move up"}
                         >
@@ -697,8 +804,8 @@ const AdminCampaignsSection = () => {
                         <Button
                           size="icon"
                           variant="ghost"
-                          disabled={i === cards.length - 1}
-                          onClick={() => moveCard(c.id, 1)}
+                          disabled={i === cards.length - 1 || cardBusy}
+                          onClick={() => void runCardOp(() => moveCard(c.id, 1), isAr ? "تم حفظ الترتيب" : "Order saved", "POST /admin/homepage/carousel/reorder")}
                           className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground"
                           title={isAr ? "تحريك لأسفل" : "Move down"}
                         >
@@ -716,9 +823,10 @@ const AdminCampaignsSection = () => {
                         <Button
                           size="icon"
                           variant="ghost"
+                          disabled={cardBusy}
                           onClick={() => {
-                            deleteCard(c.id);
-                            toast.success(isAr ? "تم حذف البطاقة" : "Card deleted");
+                            if (!window.confirm(isAr ? `حذف البطاقة «${c.name_ar}» من الكاروسيل؟` : `Delete card "${c.name_en || c.name_ar}"?`)) return;
+                            void runCardOp(() => deleteCard(c.id), isAr ? "تم حذف البطاقة" : "Card deleted", "DELETE /admin/homepage/carousel/items/{id}");
                           }}
                           className="h-8 w-8 rounded-lg text-muted-foreground hover:text-destructive"
                           title={isAr ? "حذف البطاقة" : "Delete card"}
@@ -727,7 +835,8 @@ const AdminCampaignsSection = () => {
                         </Button>
                         <Switch
                           checked={isVisible}
-                          onCheckedChange={() => toggleCard(c.id)}
+                          disabled={cardBusy}
+                          onCheckedChange={() => void runCardOp(() => toggleCard(c.id), isAr ? "تم تغيير ظهور البطاقة" : "Card visibility changed", "PATCH /admin/homepage/carousel/items/{id}/toggle")}
                         />
                       </div>
                     </li>

@@ -8,7 +8,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { getGeo, GEO_GOVERNORATES } from "@/data/geoPages";
-import { getProgram, programs } from "@/data/programs";
+import { usePrograms } from "@/data/sources/programs";
 import { RelatedContentLinks } from "@/components/common/RelatedContentLinks";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 
@@ -25,7 +25,8 @@ const GeoProgram = () => {
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
   const geo = getGeo(governorate);
-  const prog = getProgram(program);
+  const { programs } = usePrograms();
+  const prog = programs.find((p) => p.slug === program);
   const copy = geo?.programs[program];
 
   if (!geo || !prog || !copy) return <Navigate to="/programs" replace />;

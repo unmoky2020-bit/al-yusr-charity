@@ -1,0 +1,477 @@
+[
+  {
+    "file": "src/assets/about-hero.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "services"
+    ]
+  },
+  {
+    "file": "src/assets/brand-bags.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts"
+    ]
+  },
+  {
+    "file": "src/assets/brand-girl-orange.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts"
+    ]
+  },
+  {
+    "file": "src/assets/brand-poster-classroom.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/brand-poster-frame.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "donation_campaigns",
+      "donation_entities",
+      "homepage_campaigns_section",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/brand-truck.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts"
+    ]
+  },
+  {
+    "file": "src/assets/family-hope.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery",
+      "stories"
+    ]
+  },
+  {
+    "file": "src/assets/farm-hero.jpg",
+    "exists": true,
+    "used_by": [
+      "donation_entities",
+      "gallery",
+      "programs",
+      "projects",
+      "services"
+    ]
+  },
+  {
+    "file": "src/assets/field/convoy-2026-day-distribution.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/convoy-2026-elder-handover.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/convoy-2026-fuwah-road.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/convoy-2026-night-delivery.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/convoy-2026-night-handover.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/convoy-2026-pickup-loaded.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/qurbani-2024-cattle-pen.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/qurbani-2024-cattle-truck.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/qurbani-2024-meat-tray.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/qurbani-2024-packing-area.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/qurbani-2025-prep-a.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/qurbani-2025-prep-b.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/field/qurbani-2025-prep-c.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/hands-sprout.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery",
+      "stories"
+    ]
+  },
+  {
+    "file": "src/assets/hero-child.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery",
+      "stories"
+    ]
+  },
+  {
+    "file": "src/assets/hero-deco-van-2.webp",
+    "exists": true,
+    "used_by": [
+      "blog_posts"
+    ]
+  },
+  {
+    "file": "src/assets/hero-happy-family-new.png",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/hero-sad.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/markoun-furniture.jpg",
+    "exists": true,
+    "used_by": [
+      "donation_campaigns",
+      "donation_entities",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/markoun-poster-clothes.png",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/markoun-poster-delivery.png",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/markoun-poster-furniture.png",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/markoun-poster-medbottle.png",
+    "exists": true,
+    "used_by": [
+      "gallery",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/markoun-puzzle.jpg",
+    "exists": true,
+    "used_by": [
+      "homepage_campaigns_section",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/marqqqqqun.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/poster-box.png",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/poster-bride.png",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery",
+      "homepage_campaigns_section",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/poster-education.png",
+    "exists": true,
+    "used_by": [
+      "donation_campaigns",
+      "donation_entities",
+      "gallery",
+      "homepage_campaigns_section",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/poster-meat.png",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/poster-odhya.png",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "donation_entities",
+      "gallery",
+      "homepage_campaigns_section",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/poster-volunteer-field.png",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/poster-volunteer.png",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/poster-water.png",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery",
+      "services"
+    ]
+  },
+  {
+    "file": "src/assets/poster-zakat.png",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/program-education.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery",
+      "stories"
+    ]
+  },
+  {
+    "file": "src/assets/program-food-new.jpg",
+    "exists": true,
+    "used_by": [
+      "donation_entities",
+      "homepage_campaigns_section",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/program-food.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery",
+      "homepage_campaigns_section",
+      "programs",
+      "stories"
+    ]
+  },
+  {
+    "file": "src/assets/program-health.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "gallery",
+      "stories"
+    ]
+  },
+  {
+    "file": "src/assets/program-health.png",
+    "exists": true,
+    "used_by": [
+      "donation_entities",
+      "homepage_campaigns_section",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/program-orphans.jpg",
+    "exists": true,
+    "used_by": [
+      "blog_posts",
+      "donation_entities",
+      "gallery",
+      "homepage_campaigns_section",
+      "programs",
+      "stories"
+    ]
+  },
+  {
+    "file": "src/assets/program-water-new.jpg",
+    "exists": true,
+    "used_by": [
+      "donation_campaigns",
+      "donation_entities",
+      "homepage_campaigns_section",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/program-zakat-new.jpg",
+    "exists": true,
+    "used_by": [
+      "homepage_campaigns_section",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/Prosthetics.jpg",
+    "exists": true,
+    "used_by": [
+      "donation_entities",
+      "homepage_campaigns_section",
+      "programs",
+      "projects"
+    ]
+  },
+  {
+    "file": "src/assets/qurbani-meat-quality.png",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/qurbani-trusted-source.png",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/takrim-van.jpg",
+    "exists": true,
+    "used_by": [
+      "donation_entities",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/yusr-bride.png",
+    "exists": true,
+    "used_by": [
+      "gallery",
+      "stories"
+    ]
+  },
+  {
+    "file": "src/assets/yusr-orphans-meals.jpg",
+    "exists": true,
+    "used_by": [
+      "gallery"
+    ]
+  },
+  {
+    "file": "src/assets/yusr-ramadan-box.png",
+    "exists": true,
+    "used_by": [
+      "donation_campaigns",
+      "donation_entities",
+      "programs"
+    ]
+  },
+  {
+    "file": "src/assets/yusr-water.png",
+    "exists": true,
+    "used_by": [
+      "gallery",
+      "services"
+    ]
+  }
+]

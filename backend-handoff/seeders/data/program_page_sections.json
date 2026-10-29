@@ -1,0 +1,4548 @@
+[
+  {
+    "program_slug": "odhya",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "odhya",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "جودة مضمونة 100% — معاينة مسبقة وذبح شرعي",
+        "icon": "check-circle"
+      },
+      {
+        "text": "توزيع موثّق بالصور والفيديو لكل صك",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تغطية أوسع لأسر المنصورة وقرى الدقهلية",
+        "icon": "check-circle"
+      },
+      {
+        "text": "إيصال إلكتروني فوري بعد التبرع",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "100% guaranteed quality with prior inspection and Shariah-compliant slaughter",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Photo and video documentation for every voucher",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Wide coverage of Mansoura families and Dakahlia villages",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Instant electronic receipt after donation",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "odhya",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "odhya",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "في مؤسسة اليسر بنؤمن إن الأضحية أمانة قبل ما تكون عبادة. عشان كده بنعاين كل أضحية بنفسنا قبل الذبح ونوثّق العملية بالكامل."
+      },
+      {
+        "text": "الأسر المستفيدة بتتفلتر على أساس معايير الفقر الفعلي في الدقهلية، وبنوصل اللحمة لباب البيت في يوم العيد بنفس جودة اللي بناكلها في بيوتنا."
+      },
+      {
+        "text": "تبرعك بصك أضحية مش بس بيفرّح أسرة في يوم العيد — ده بيوصل بروتين عالي الجودة لأطفال محرومين منه طول السنة."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "At Al-Yusr we believe Qurbani is a trust before it is worship. That's why we personally inspect every animal before slaughter and document the entire process."
+      },
+      {
+        "text": "Beneficiary families are filtered based on real poverty criteria in Dakahlia, and we deliver the meat to their doorstep on Eid day at the same quality we serve in our own homes."
+      },
+      {
+        "text": "Your Qurbani voucher doesn't just bring joy on Eid — it delivers high-quality protein to children deprived of it all year."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "odhya",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "odhya",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "odhya",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "odhya",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "zakat",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "zakat",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "توزيع شرعي على المصارف الثمانية",
+        "icon": "check-circle"
+      },
+      {
+        "text": "بحث اجتماعي ميداني لكل حالة",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تقرير شفاف بكيفية الصرف",
+        "icon": "check-circle"
+      },
+      {
+        "text": "إمكانية تخصيص الزكاة لمحافظة معينة",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Shariah-compliant distribution to the eight channels",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Field social research for every case",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Transparent reporting on how funds are spent",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Option to designate Zakat to a specific governorate",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "zakat",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "zakat",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "زكاة المال عبادة وأمانة. بنتعامل معاها بمنهجية صارمة: بحث اجتماعي، تحقق من الاستحقاق، ثم توزيع موثّق."
+      },
+      {
+        "text": "بنخصص فريق محاسبي مستقل لمراجعة كل جنيه يدخل تحت بند الزكاة، عشان نضمن إنه يصل بنسبة 100% لمستحقيه."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Zakat is worship and trust. We handle it with strict methodology: social research, eligibility verification, then documented distribution."
+      },
+      {
+        "text": "An independent accounting team reviews every pound categorized under Zakat to ensure 100% reaches its rightful recipients."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "zakat",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "zakat",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "zakat",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "zakat",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "water",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "water",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "أسهم من 200 / 500 / 1000 جنيه",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تنفيذ موثّق بالصور",
+        "icon": "check-circle"
+      },
+      {
+        "text": "صدقة جارية مستمرة",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تغطية قرى الدقهلية والصعيد",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Shares of 200 / 500 / 1000 EGP",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Implementation documented with photos",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Continuous Sadaqah Jariyah",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Coverage of Dakahlia and Upper Egypt villages",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "water",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "water",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "في قرى كتيرة لسه الأهالي بيمشوا كيلومترات عشان يجيبوا مياه. وصلة المياه بتختصر الرحلة دي وبتحمي الأطفال من الأمراض."
+      },
+      {
+        "text": "كل وصلة مياه بنعملها بتفيد أسرة واحدة وأحيانًا أكتر، وبتفضل صدقة جارية ليك ما دامت تنزل منها قطرة."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "In many villages, families still walk kilometers to fetch water. A water connection eliminates this and protects children from disease."
+      },
+      {
+        "text": "Every water line we install benefits one or more families and remains a continuous charity for you as long as a drop flows."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "water",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "water",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "water",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "water",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "box",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "box",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "محتوى يكفي شهر كامل لأسرة 5 أفراد",
+        "icon": "check-circle"
+      },
+      {
+        "text": "كيلو لحمة بلدي من مزارع اليسر مع كل كرتونة",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تغليف بهوية اليسر",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تسليم بكرامة لباب البيت",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Contents sufficient for one month for a family of 5",
+        "icon": "check-circle"
+      },
+      {
+        "text": "1 kg of fresh farm meat included with every box",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Branded Al-Yusr packaging",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Dignified doorstep delivery",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "box",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "box",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "الغذاء الشهري عندنا مش مجرد مساعدة، دي رسالة كرامة. بنعبي الكرتونة بمنتجات حقيقية وبكميات واقعية تكفي الأسرة شهر كامل، ومعاها كيلو لحمة بلدي طازج من مزارعنا الوقفية عشان البروتين يبقى جزء من سفرة كل أسرة."
+      },
+      {
+        "text": "بنوصلها بكرامة كاملة لباب البيت، من غير تجمعات أو مذلة لأي أسرة."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Our monthly food package isn't just aid — it's a message of dignity. We pack the box with real products in realistic quantities to last one full month, and include a kilo of fresh farm meat so protein becomes part of every family's table."
+      },
+      {
+        "text": "We deliver it with full dignity to the doorstep, without gatherings or humiliation for any family."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "box",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "box",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "box",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "box",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "education",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "education",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "حملة موسمية تُفتح في شهر سبتمبر فقط مع بداية العام الدراسي",
+        "icon": "check-circle"
+      },
+      {
+        "text": "أسهم من 100 / 250 / 500 جنيه",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تغطية مصروفات + زي + أدوات",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تقرير دوري عن مستوى الطفل",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Seasonal campaign — opens in September only at the start of the school year",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Shares of 100 / 250 / 500 EGP",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Tuition + uniform + supplies covered",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Periodic report on the child's progress",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "education",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "education",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "كل سنة بنخسر آلاف الأطفال من المدارس بسبب المصاريف. حملة «ادفع مصروفه وابني مستقبله» تُطلق سنويًا في شهر سبتمبر فقط مع بداية العام الدراسي عشان نلحق نسجّل الأطفال ونوفّر مصروفاتهم قبل بداية الدراسة."
+      },
+      {
+        "text": "بنغطي مصاريف المدرسة، الزي، الأدوات، وحتى الدروس الخصوصية للحالات اللي محتاجة، ضمانًا لاستمرارية الطفل في التعليم."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Every year, thousands of children drop out of school due to fees. The “Pay His Tuition, Build His Future” campaign launches every September only — timed with the start of the school year so we can register children and cover their fees before classes begin."
+      },
+      {
+        "text": "We cover tuition, uniforms, supplies, and even tutoring when needed, ensuring continuity in the child's education."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "education",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "education",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "education",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "education",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "bride",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "bride",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "تجهيز كامل لشقة جديدة (غرفة نوم، صالون، مطبخ، أجهزة)",
+        "icon": "check-circle"
+      },
+      {
+        "text": "أولوية لبنات الأيتام والأرامل",
+        "icon": "check-circle"
+      },
+      {
+        "text": "بحث ميداني دقيق قبل الاختيار",
+        "icon": "check-circle"
+      },
+      {
+        "text": "سهمك بـ 250 ج ضمن مشروع متكامل",
+        "icon": "check-circle"
+      },
+      {
+        "text": "حسنات لا تنقطع: إدخال سرور وستر",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تقرير مصور لكل عروسة بعد التجهيز",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Complete preparation of a new apartment (bedroom, living room, kitchen, appliances)",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Priority for orphan and widow daughters",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Detailed field research before selection",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Your 250 EGP share inside a full project",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Continuous reward: bringing joy & shelter",
+        "icon": "check-circle"
+      },
+      {
+        "text": "A photo report for every bride after preparation",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "bride",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "bride",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "هو جهاز عروسة… أه. بس في الحقيقة جهاز حسنات لا بيعدّلك حسنات كل ثانية. كل قطعة في الشقة بتفضل صدقة جارية ليك ولأهلك."
+      },
+      {
+        "text": "عايز تتبرع في العشر الأواخر وخيرك يكون أثره كبير؟ انت وصلت للمكان الصح. الحسنة في العشر الأواخر بـ 700 ضعف، وإدخال السرور على المسلم من أحب الأعمال إلى الله، ومن ستر مسلمًا ستره الله يوم القيامة."
+      },
+      {
+        "text": "كل الخير ده تقدر تكسبه بتبرع بسيط منك — سعر السهم 250 ج فقط ضمن مشروع تجهيز عروسة كامل (غرفة نوم، صالون، مطبخ، أجهزة كهربائية، ملابس العروسة)."
+      },
+      {
+        "text": "ابعتلنا كلمة «تبرع» على واتساب وسارع قبل فوات الأوان — جمعنا 9 من أصل 15 عروسة، وفاضل 6 بس عشان نكمل الفرحة."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "It is a bride's trousseau… yes. But in reality it's a trousseau of rewards that keeps writing good deeds for you every second. Every piece in that apartment becomes ongoing charity for you and your family."
+      },
+      {
+        "text": "Want to donate in the last ten nights of Ramadan with the greatest impact? You are exactly in the right place. The reward in those nights is multiplied by 700, bringing joy to a Muslim is among the most beloved deeds, and whoever shields a Muslim, Allah will shield them on the Day of Judgement."
+      },
+      {
+        "text": "All this good is within reach with a small donation — one share is only 250 EGP, inside a complete bride preparation project (bedroom, living room, kitchen, appliances, bride's clothing)."
+      },
+      {
+        "text": "Send us the word \"Donate\" on WhatsApp and hurry before it's too late — we've gathered 9 out of 15 brides, only 6 left to complete the joy."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "bride",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "bride",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "bride",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "bride",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "shelter",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "shelter",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "تسقيف بمواد عازلة من البوتامين والخشب",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تركيب أبواب وشبابيك تحفظ كرامة الأسرة",
+        "icon": "check-circle"
+      },
+      {
+        "text": "أولوية لقرى الدقهلية والحفير بكفر الشيخ",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تقرير صور قبل/بعد لكل بيت",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Roofing with bitumen and wood insulation",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Doors and windows that preserve dignity",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Priority for Dakahlia and Hafir villages",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Before/after photo report for every home",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "shelter",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "shelter",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "برنامج «ستر» يعمل في فترات الشتاء والصيف لتأمين الأسر من تقلبات الجو، مع تركيز واضح على منازل الأسر الأشد احتياجًا. في 2025 سقّفنا 70 منزلًا بمساحة 8361 مترًا."
+      },
+      {
+        "text": "السهم يبدأ من 500 ج، والبيت الكامل يبدأ من 9000 ج. كل قطعة خشب تتحول لصدقة جارية تحمي الأسرة من برد الشتاء أو حر الصيف."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "The Sitr program runs across winter and summer to protect families from harsh weather, with a special focus on the most vulnerable homes. In 2025 we roofed 70 homes spanning 8,361 m²."
+      },
+      {
+        "text": "Shares start at 500 EGP and a complete home from 9,000 EGP. Every piece of wood becomes ongoing charity protecting a family from winter cold and summer heat."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "shelter",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "shelter",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "shelter",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "shelter",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "orphans",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "orphans",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "كفالة شهرية ثابتة من 300 ج",
+        "icon": "check-circle"
+      },
+      {
+        "text": "متابعة تعليمية وصحية كل 3 شهور",
+        "icon": "check-circle"
+      },
+      {
+        "text": "أولوية لأبناء الأرامل وحالات الأشد فقرًا",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تقرير دوري عن حال اليتيم",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Fixed monthly sponsorship from 300 EGP",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Educational & health follow-up every 3 months",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Priority for widows' children and most urgent cases",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Periodic report on the orphan's wellbeing",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "orphans",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "orphans",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "كفالة اليتيم عند اليسر مش مجرد مبلغ شهري — دي رعاية متكاملة بنغطي بيها احتياجات الطفل المادية والمعنوية والتعليمية."
+      },
+      {
+        "text": "في 2025 كفلنا تعليميًا 354 طالبًا، وبنطمح نوصل لكفالات أوسع مع كل متبرع جديد."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Orphan sponsorship at Al-Yusr isn't just a monthly amount — it's integrated care covering the child's material, emotional, and educational needs."
+      },
+      {
+        "text": "In 2025 we educationally sponsored 354 students and continue to grow with every new donor."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "orphans",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "orphans",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "orphans",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "orphans",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "treatment",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "treatment",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "تغطية أدوية شهرية للأمراض المزمنة",
+        "icon": "check-circle"
+      },
+      {
+        "text": "عمليات جراحية عاجلة بعد بحث طبي",
+        "icon": "check-circle"
+      },
+      {
+        "text": "قوافل طبية تخصصية للقرى",
+        "icon": "check-circle"
+      },
+      {
+        "text": "مركز غسيل كلوي مجاني بالمنزلة",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Monthly medication for chronic diseases",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Urgent surgeries after medical screening",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Specialty medical convoys to villages",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Free kidney dialysis center in El-Manzala",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "treatment",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "treatment",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "سهم العلاج بيغطي أدوية الأمراض المزمنة، وعمليات قلب وعظام وعيون عاجلة، وجلسات علاج طبيعي للحالات الميؤوس منها."
+      },
+      {
+        "text": "وراء السهم ده مجمّع طبي كامل بالدقهلية ومركز غسيل كلوي وقوافل تخصصية بتجوب القرى البعيدة."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "The treatment share covers chronic-disease medication, urgent heart, ortho and eye surgeries, and intensive physiotherapy for hopeless cases."
+      },
+      {
+        "text": "Behind it stands a full medical complex in Dakahlia, a dialysis center, and specialty convoys reaching remote villages."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "treatment",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "treatment",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "treatment",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "treatment",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "prosthetics",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "prosthetics",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "أطراف صناعية مخصصة لكل حالة",
+        "icon": "check-circle"
+      },
+      {
+        "text": "كراسي متحركة وأجهزة مساعدة",
+        "icon": "check-circle"
+      },
+      {
+        "text": "متابعة نفسية ودمج اجتماعي",
+        "icon": "check-circle"
+      },
+      {
+        "text": "ربط مع فرص عمل مناسبة",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Prosthetics tailored to each case",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Wheelchairs and assistive devices",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Psychological follow-up & social integration",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Linkage to suitable employment",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "prosthetics",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "prosthetics",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "مشروع «لن تمنعني» بيوفّر للأشخاص ذوي الإعاقة الأطراف الصناعية والكراسي والأجهزة اللي ترجّعهم لحياتهم الطبيعية."
+      },
+      {
+        "text": "بنشتغل على إعادة الدمج المجتمعي وربطهم بفرص عمل تحفظ كرامتهم وتمنحهم استقلال مادي."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "“Won't Stop Me” provides people with disabilities the prosthetics, wheelchairs, and devices that return them to normal life."
+      },
+      {
+        "text": "We focus on social reintegration and connecting them with employment that preserves dignity and grants financial independence."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "prosthetics",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "prosthetics",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "prosthetics",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "prosthetics",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "kitchen",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "kitchen",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "وجبة ساخنة بـ 50 ج فقط",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تشغيل يومي طوال السنة",
+        "icon": "check-circle"
+      },
+      {
+        "text": "تركيز على المسافرين ومرافقي المرضى",
+        "icon": "check-circle"
+      },
+      {
+        "text": "وجبات إفطار ضخمة في رمضان",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "A hot meal for just 50 EGP",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Year-round daily operation",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Focus on travelers and patients' companions",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Mass iftar meals in Ramadan",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "kitchen",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "kitchen",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "مطبخ اليسر بيشتغل طول السنة، وبيكثّف خدمته في رمضان لتوصيل الإفطار للصائم في الشارع وأمام المستشفيات."
+      },
+      {
+        "text": "كل وجبة ساخنة بـ 50 ج بس — تبرعك بيتحول مباشرة لطبق طازج يوصل لمن يحتاجه."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Al-Yusr Kitchen runs all year, intensifying in Ramadan to deliver iftar to fasters on the street and outside hospitals."
+      },
+      {
+        "text": "Every hot meal is just 50 EGP — your donation turns directly into a fresh plate reaching someone in need."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "kitchen",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "kitchen",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "kitchen",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "kitchen",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "markoun",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "markoun",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "الأثاث المنزلي: غرف نوم وأسرة وخزائن لتجهيز بيوت المحتاجين",
+        "icon": "check-circle"
+      },
+      {
+        "text": "الأجهزة الكهربائية: ثلاجات وغسالات ومراوح وبوتاجازات",
+        "icon": "check-circle"
+      },
+      {
+        "text": "الملابس والكساء: فرز وتنظيف وإعادة تقديم بكرامة تامة",
+        "icon": "check-circle"
+      },
+      {
+        "text": "الصيدلية المستدامة: فرز الأدوية الصالحة تحت إشراف طبي وتوزيعها مجاناً",
+        "icon": "check-circle"
+      },
+      {
+        "text": "المعرفة والتعليم: كتب مدرسية وثقافية لإعادة تدوير المعرفة",
+        "icon": "check-circle"
+      },
+      {
+        "text": "راحة المتبرع: مندوب المؤسسة يصلك حتى باب المنزل (01097000137)",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Home furniture: bedrooms, beds, wardrobes for needy homes",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Appliances: fridges, washers, fans, stoves",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Clothing: sorted, cleaned, and presented with full dignity",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Sustainable Pharmacy: valid medication checked by medical staff",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Books & Education: school and cultural books redistributed",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Doorstep pickup service by official delegates: 01097000137",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "markoun",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "markoun",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "«حملة مركون» هي أول حملة مصرية تنطلق برؤية فريدة: أن تبني حياة كريمة وتُعمر بيوتاً من كنزٍ مركون في منزلك. نحن لا نجمع مجرد أغراض فائضة، بل نعيد صياغة الأمل وننقل الدفء والاستقرار من بيوتكم إلى بيوت أهالينا المستحقين."
+      },
+      {
+        "text": "نعتمد على نظام رقمي وقواعد بيانات دقيقة تضمن ذهاب كل قطعة تبرع عيني إلى مكانها الصحيح والأنسب لاحتياج الأسرة الفعلي، مع فحص وتأهيل وصيانة دقيقة لتصل للمستفيدين وكأنها جديدة تماماً."
+      },
+      {
+        "text": "وفرنا منظومة حركية متكاملة؛ لست بحاجة للتحرك من منزلك، بمجرد تواصلك معنا (01097000137)، يتوجه مندوبنا الرسمي بمركبات المؤسسة لاستلام التبرعات وتوثيقها بشكل احترافي."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Markoun is the first Egyptian initiative dedicated to restoring and matching surplus household goods with validated deserving families, preserving donor convenience and recipient dignity."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "markoun",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "markoun",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "markoun",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "markoun",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  },
+  {
+    "program_slug": "arboun",
+    "section_key": "top_section",
+    "title_ar": "روابط الأقسام",
+    "title_en": "Section Navigation",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": {
+      "top_section": [
+        {
+          "key": "benefits",
+          "title_ar": "المزايا",
+          "title_en": "Benefits",
+          "url": "#benefits",
+          "is_enabled": true,
+          "sort_order": 1
+        },
+        {
+          "key": "how_it_works",
+          "title_ar": "كيف يعمل البرنامج",
+          "title_en": "How It Works",
+          "url": "#how-it-works",
+          "is_enabled": true,
+          "sort_order": 2
+        },
+        {
+          "key": "details",
+          "title_ar": "التفاصيل",
+          "title_en": "Details",
+          "url": "#details",
+          "is_enabled": true,
+          "sort_order": 3
+        },
+        {
+          "key": "impact",
+          "title_ar": "الأثر",
+          "title_en": "Impact",
+          "url": "#impact",
+          "is_enabled": true,
+          "sort_order": 4
+        },
+        {
+          "key": "testimonials",
+          "title_ar": "آراء المتبرعين",
+          "title_en": "Testimonials",
+          "url": "#testimonials",
+          "is_enabled": true,
+          "sort_order": 5
+        },
+        {
+          "key": "faq",
+          "title_ar": "أسئلة شائعة",
+          "title_en": "FAQ",
+          "url": "#faq",
+          "is_enabled": true,
+          "sort_order": 6
+        },
+        {
+          "key": "related",
+          "title_ar": "برامج مشابهة",
+          "title_en": "Related Programs",
+          "url": "#related",
+          "is_enabled": true,
+          "sort_order": 7
+        }
+      ]
+    },
+    "is_enabled": true,
+    "sort_order": 0
+  },
+  {
+    "program_slug": "arboun",
+    "section_key": "benefits",
+    "title_ar": "مزايا البرنامج",
+    "title_en": "Program Benefits",
+    "subtitle_ar": "ليه البرنامج ده",
+    "subtitle_en": "Why this program",
+    "content_ar": [
+      {
+        "text": "علاج القلق وضغط الشغل وتيسير التعامل مع العملاء",
+        "icon": "check-circle"
+      },
+      {
+        "text": "زكاة المهنة وشكر نعمة المهارة والوقت",
+        "icon": "check-circle"
+      },
+      {
+        "text": "استثمار مضمون في الآخرة ورصيد حسنات دائم",
+        "icon": "check-circle"
+      },
+      {
+        "text": "شارة «مستقل داعم» رقمية للبورتفوليو والموقع الشخصي",
+        "icon": "check-circle"
+      },
+      {
+        "text": "توجيه التبرعات لتيسير الزواج، كفالة الأيتام، والصدقات الجارية",
+        "icon": "check-circle"
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Relieves client stress and market anxiety",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Acts as Zakat on professional craft and skills",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Guaranteed eternal impact and ongoing reward",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Digital 'Impact Freelancer' badge for your portfolio",
+        "icon": "check-circle"
+      },
+      {
+        "text": "Funds bride setups, orphan education, and water taps",
+        "icon": "check-circle"
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 1
+  },
+  {
+    "program_slug": "arboun",
+    "section_key": "how_it_works",
+    "title_ar": "كيف يعمل البرنامج؟",
+    "title_en": "How does it work?",
+    "subtitle_ar": "كل خطوة موثقة وكل قرش يصل لمن يستحق",
+    "subtitle_en": "Every step is documented.",
+    "content_ar": [
+      {
+        "title": "اختيار الحالة",
+        "description": "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "التحقق والاعتماد",
+        "description": "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "التنفيذ والتسليم",
+        "description": "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "التوثيق",
+        "description": "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Case selection",
+        "description": "Field research to identify the most deserving families in Dakahlia and across Egypt.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Verification",
+        "description": "Shariah and accounting review of every operation for full transparency.",
+        "icon": "shield-check",
+        "step": 2
+      },
+      {
+        "title": "Delivery",
+        "description": "Dignified doorstep delivery by our certified volunteer team.",
+        "icon": "truck",
+        "step": 3
+      },
+      {
+        "title": "Documentation",
+        "description": "Photo and video reports sent to you right after execution.",
+        "icon": "camera",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 2
+  },
+  {
+    "program_slug": "arboun",
+    "section_key": "details",
+    "title_ar": "كل ما تحتاج معرفته",
+    "title_en": "Everything You Need to Know",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "text": "مبادرة «عربون خير» فكرة مبتكرة موجهة لمجتمع الفريلانسرز والشباب العاملين في مجالات العمل الحر والتقني والخدمي. أول ما تقفّل المشروع وتستلم أرباحك، بتحدد نسبة مرنة (1% أو 5% أو أي مبلغ) يخرج كصدقة جارية."
+      },
+      {
+        "text": "الصدقة بتطمن القلب، بتشيل ضغط وتوتر تسليم المشاريع، وبتفتح أبواب لعملاء جدد تصديقاً لقوله ﷺ «ما نقص مال من صدقة»."
+      },
+      {
+        "text": "كل تبرع بيتحول مباشرة لمشاريع تنموية موثقة: تيسير زواج يتيمات بأجهزة معمرة، كفالة أيتام، بناء أسقف وتركيب وصالت مياه، وإغاثة غذائية تحت إشراف مؤسسة اليسر (مشهرة برقم 2665 لسنة 2019)."
+      }
+    ],
+    "content_en": [
+      {
+        "text": "Arboun Khair empowers remote workers and freelancers to seamlessly link project milestones with charitable giving. Allocate 1-5% of project earnings upon client payout to build lasting community assets."
+      },
+      {
+        "text": "All donations disburse into registered projects by Al-Yusr Charity Foundation (License No. 2665 of 2019) with transparent digital reports and portfolio verification badges."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 3
+  },
+  {
+    "program_slug": "arboun",
+    "section_key": "impact",
+    "title_ar": "٤ مراحل من تبرعك لباب البيت",
+    "title_en": "4 stages from your donation to the family's door",
+    "subtitle_ar": "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت.",
+    "subtitle_en": "Every stage is logged in a field report with photos before we move to delivery.",
+    "content_ar": [
+      {
+        "title": "تبرعك",
+        "description": "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "بحث ميداني",
+        "description": "زيارة بيت الأسرة وتحقق من الاستحقاق.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "تجهيز وتنفيذ",
+        "description": "تجهيز الاحتياج بجودة سوبر ماركت.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "تسليم وتقرير",
+        "description": "تسليم لباب البيت + تقرير مصوّر وإيصال.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "content_en": [
+      {
+        "title": "Your donation",
+        "description": "Pick an amount, pay securely via card, wallet or InstaPay.",
+        "icon": "hand-heart",
+        "step": 1
+      },
+      {
+        "title": "Field assessment",
+        "description": "Home visit and eligibility verification.",
+        "icon": "search",
+        "step": 2
+      },
+      {
+        "title": "Prepare & execute",
+        "description": "Prepared at supermarket-grade quality.",
+        "icon": "package-check",
+        "step": 3
+      },
+      {
+        "title": "Deliver & report",
+        "description": "Doorstep delivery + photo report and e-receipt.",
+        "icon": "clipboard-check",
+        "step": 4
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 4
+  },
+  {
+    "program_slug": "arboun",
+    "section_key": "donor_testimonials",
+    "title_ar": "آراء المتبرعين",
+    "title_en": "Donor Testimonials",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 5
+  },
+  {
+    "program_slug": "arboun",
+    "section_key": "faq",
+    "title_ar": "أسئلة شائعة",
+    "title_en": "Frequently Asked Questions",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [
+      {
+        "question": "هل تبرعي يصل فعلاً للمستحقين؟",
+        "answer": "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل."
+      },
+      {
+        "question": "هل أحصل على إيصال رسمي؟",
+        "answer": "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة."
+      },
+      {
+        "question": "هل يمكنني تخصيص محافظة معينة؟",
+        "answer": "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها."
+      },
+      {
+        "question": "ما طرق الدفع المتاحة؟",
+        "answer": "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB."
+      }
+    ],
+    "content_en": [
+      {
+        "question": "Does my donation really reach the beneficiaries?",
+        "answer": "Yes — every donation is documented with photos and videos, and reviewed by our independent accounting team."
+      },
+      {
+        "question": "Will I receive an official receipt?",
+        "answer": "An electronic receipt and a tracking reference are emailed to you instantly after payment."
+      },
+      {
+        "question": "Can I designate a specific governorate?",
+        "answer": "Yes, you can designate your donation to Dakahlia or any governorate we operate in."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB."
+      }
+    ],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 6
+  },
+  {
+    "program_slug": "arboun",
+    "section_key": "related_programs",
+    "title_ar": "برامج مشابهة",
+    "title_en": "Related Programs",
+    "subtitle_ar": null,
+    "subtitle_en": null,
+    "content_ar": [],
+    "content_en": [],
+    "settings": [],
+    "is_enabled": true,
+    "sort_order": 7
+  }
+]

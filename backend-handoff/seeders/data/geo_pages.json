@@ -1,0 +1,2306 @@
+[
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "odhya",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "صك الأضحية في الدقهلية — توصيل لباب البيت يوم العيد",
+    "headline_en": "Qurbani in Dakahlia — Doorstep Delivery on Eid",
+    "intro_ar": "بنوزّع صكوك الأضحية في الدقهلية على الأسر الأكثر استحقاقاً، مع معاينة شرعية قبل الذبح وتوثيق بالصور والفيديو في نفس يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Dakahlia to the neediest families, with Shariah inspection before slaughter and full photo/video documentation on Eid day itself.",
+    "why_here_ar": "فريق اليسر في الدقهلية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لتحديد المستحقين فعلاً، وبيوصّل اللحمة طازجة بدون تخزين.",
+    "why_here_en": "Our Dakahlia team partners with mosque imams and local social units to identify deserving families and deliver fresh meat with no storage.",
+    "coverage_ar": "تغطية كاملة لمراكز وقرى الدقهلية في إقليم دلتا مصر، مع توصيل مجاني للأسر اللي ما تقدرش تيجي بنفسها.",
+    "coverage_en": "Full coverage of Dakahlia districts and villages in دلتا مصر region, with free delivery for families unable to attend in person.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمان جودة الأضحية في الدقهلية؟",
+        "answer_ar": "كل ذبيحة بتعدّي على بيطري معتمد قبل وبعد الذبح، والتقرير المصوّر بيوصلك في خلال 48 ساعة.",
+        "question_en": "What guarantees the Qurbani quality in Dakahlia?",
+        "answer_en": "Every animal passes a certified vet check pre- and post-slaughter, and you receive the photo report within 48 hours."
+      },
+      {
+        "question_ar": "هل أقدر أحضر التوزيع في الدقهلية؟",
+        "answer_ar": "أيوه، نقدر نرتّبلك زيارة ميدانية أو تتابع البث المباشر يوم العيد.",
+        "question_en": "Can I attend distribution in Dakahlia?",
+        "answer_en": "Yes — we can arrange an on-site visit or share the live stream from Eid day."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "box",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "كرتونة العزومة في الدقهلية — مؤن شهر كامل للأسر المحتاجة",
+    "headline_en": "Food Box in Dakahlia — A Month of Essentials for Needy Families",
+    "intro_ar": "كرتونة العزومة بتسد احتياج عيلة كاملة في الدقهلية لمدة شهر، فيها زيت وأرز وسكر ومكرونة وبقوليات ولحوم وسلع أساسية بمواصفات سوبر ماركت.",
+    "intro_en": "Our food box covers a full family in Dakahlia for a month with oil, rice, sugar, pasta, legumes, meat and household essentials at supermarket grade.",
+    "why_here_ar": "بنشتري السلع من تجار الجملة في الدقهلية نفسها لتقليل التكلفة ودعم السوق المحلي، والتوزيع بيتم عن طريق متطوعين من نفس المنطقة.",
+    "why_here_en": "We source from wholesale suppliers in Dakahlia itself to lower cost and support the local economy; distribution is handled by volunteers from the same area.",
+    "coverage_ar": "بنغطي قرى ومراكز الدقهلية داخل إقليم دلتا مصر بشكل دوري، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "We cover Dakahlia villages and districts in دلتا مصر on a rotating basis, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إمتى بتوصل الكرتونة في الدقهلية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي رمضان خلال 48 ساعة.",
+        "question_en": "When does the box arrive in Dakahlia?",
+        "answer_en": "Within 5 working days of donation confirmation; during Ramadan within 48 hours."
+      },
+      {
+        "question_ar": "هل تقدر تخصص الكرتونة لأسرة معينة؟",
+        "answer_ar": "أيوه، تقدر تطلب تخصيص لأسرة عندك بياناتها أو نختارلك من قاعدة بياناتنا.",
+        "question_en": "Can I designate a specific family?",
+        "answer_en": "Yes — give us their details or let us pick from our verified database."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "water",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "سقيا الماء في الدقهلية — وصلات مياه نظيفة للأسر الأكثر فقراً",
+    "headline_en": "Clean Water in Dakahlia — Connections for the Poorest Families",
+    "intro_ar": "بنركّب وصلات مياه نظيفة لأسر الدقهلية اللي بتشيل المياه على بُعد كيلومترات، وبنحفر آبار ارتوازية للقرى البعيدة عن الشبكة.",
+    "intro_en": "We install clean water connections for Dakahlia families who carry water for kilometres, and drill artesian wells for villages off the grid.",
+    "why_here_ar": "بنشتغل مع شركة مياه الدقهلية بتصاريح رسمية، وكل وصلة بتطلع باسم الأسرة عشان متبقاش عرضة للقطع.",
+    "why_here_en": "We operate with the official Dakahlia water company; every line is registered in the family's name so it can never be cut.",
+    "coverage_ar": "أولوية لقرى دلتا مصر الطرفية، خصوصاً اللي فيها أطفال بيمشوا لجلب المياه أو نسبة أمراض كلى عالية.",
+    "coverage_en": "Priority for remote دلتا مصر villages — especially those where children walk to fetch water or kidney-disease rates are high.",
+    "faqs": [
+      {
+        "question_ar": "كم تكلفة وصلة المياه في الدقهلية؟",
+        "answer_ar": "تبدأ من 1500 جنيه شاملة العداد والتوصيل والتركيب.",
+        "question_en": "What does a water line cost in Dakahlia?",
+        "answer_en": "From 1,500 EGP including meter, piping and installation."
+      },
+      {
+        "question_ar": "هل في صيانة مستمرة بعد التركيب؟",
+        "answer_ar": "أيوه، فريقنا بيتابع الوصلة لمدة سنة كاملة بدون تكلفة إضافية.",
+        "question_en": "Is post-install maintenance covered?",
+        "answer_en": "Yes, our team monitors the connection for a full year at no extra cost."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "zakat",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "زكاة المال في الدقهلية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Zakat in Dakahlia — Documented Field Delivery",
+    "intro_ar": "زكاة المال في الدقهلية: توزيع الزكاة على المصارف الشرعية الثمانية بإشراف محاسبي مستقل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Zakat in Dakahlia: Zakat distributed across the eight Shariah channels with independent accounting under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الدقهلية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Dakahlia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الدقهلية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Dakahlia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ زكاة المال في الدقهلية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Zakat in Dakahlia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ زكاة المال في الدقهلية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Zakat start in Dakahlia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "education",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "الكفالة التعليمية في الدقهلية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Education sponsorship in Dakahlia — Documented Field Delivery",
+    "intro_ar": "الكفالة التعليمية في الدقهلية: مصاريف وأدوات وزي مدرسي لأطفال الأسر المستحقة قبل بداية الدراسة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Education sponsorship in Dakahlia: Tuition, supplies and uniforms for children before the school year begins under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الدقهلية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Dakahlia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الدقهلية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Dakahlia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ الكفالة التعليمية في الدقهلية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Education sponsorship in Dakahlia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ الكفالة التعليمية في الدقهلية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Education sponsorship start in Dakahlia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "bride",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "تجهيز عرايس اليسر في الدقهلية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Bride trousseau in Dakahlia — Documented Field Delivery",
+    "intro_ar": "تجهيز عرايس اليسر في الدقهلية: تجهيز شقة كاملة بغرفة نوم وصالون ومطبخ وأجهزة لكل عروسة مستحقة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Bride trousseau in Dakahlia: A full apartment — bedroom, living room, kitchen and appliances — for every deserving bride under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الدقهلية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Dakahlia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الدقهلية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Dakahlia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ تجهيز عرايس اليسر في الدقهلية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Bride trousseau in Dakahlia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ تجهيز عرايس اليسر في الدقهلية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Bride trousseau start in Dakahlia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "shelter",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "ستر بيوت في الدقهلية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Home shelter in Dakahlia — Documented Field Delivery",
+    "intro_ar": "ستر بيوت في الدقهلية: تسقيف عازل بالبوتامين وأبواب وشبابيك آمنة لحماية الأسر من البرد والمطر بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Home shelter in Dakahlia: Insulated bitumen roofing with safe doors and windows to protect families from cold and rain under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الدقهلية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Dakahlia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الدقهلية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Dakahlia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ ستر بيوت في الدقهلية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Home shelter in Dakahlia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ ستر بيوت في الدقهلية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Home shelter start in Dakahlia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "orphans",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "كفالة يتيم في الدقهلية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Orphan sponsorship in Dakahlia — Documented Field Delivery",
+    "intro_ar": "كفالة يتيم في الدقهلية: كفالة شهرية لطفل يتيم مع تقرير شهري بالصور والفيديو ومتابعة مدرسية وصحية بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Orphan sponsorship in Dakahlia: Monthly sponsorship of an orphan with a monthly photo/video report and school & health follow-up under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الدقهلية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Dakahlia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الدقهلية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Dakahlia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ كفالة يتيم في الدقهلية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Orphan sponsorship in Dakahlia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ كفالة يتيم في الدقهلية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Orphan sponsorship start in Dakahlia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "treatment",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "علاج الحالات الحرجة في الدقهلية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Medical treatment in Dakahlia — Documented Field Delivery",
+    "intro_ar": "علاج الحالات الحرجة في الدقهلية: تغطية تكاليف العمليات والعلاج للحالات الحرجة عبر مستشفيات شريكة معتمدة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Medical treatment in Dakahlia: Covering surgeries and treatment for critical cases through certified partner hospitals under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الدقهلية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Dakahlia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الدقهلية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Dakahlia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ علاج الحالات الحرجة في الدقهلية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Medical treatment in Dakahlia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ علاج الحالات الحرجة في الدقهلية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Medical treatment start in Dakahlia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "prosthetics",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "أطراف صناعية وكراسي في الدقهلية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Prosthetics & wheelchairs in Dakahlia — Documented Field Delivery",
+    "intro_ar": "أطراف صناعية وكراسي في الدقهلية: أطراف صناعية وكراسي متحركة وأجهزة مساعدة لذوي الهمم بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Prosthetics & wheelchairs in Dakahlia: Prosthetics, wheelchairs and assistive devices for people of determination under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الدقهلية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Dakahlia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الدقهلية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Dakahlia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ أطراف صناعية وكراسي في الدقهلية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Prosthetics & wheelchairs in Dakahlia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ أطراف صناعية وكراسي في الدقهلية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Prosthetics & wheelchairs start in Dakahlia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "kitchen",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "مطبخ اليسر في الدقهلية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Al-Yusr kitchen in Dakahlia — Documented Field Delivery",
+    "intro_ar": "مطبخ اليسر في الدقهلية: آلاف الوجبات الساخنة يوميًا للأسر والمرضى وأبناء السبيل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Al-Yusr kitchen in Dakahlia: Thousands of hot meals daily for families, patients and travellers under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الدقهلية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Dakahlia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الدقهلية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Dakahlia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مطبخ اليسر في الدقهلية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Al-Yusr kitchen in Dakahlia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مطبخ اليسر في الدقهلية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Al-Yusr kitchen start in Dakahlia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "dakahlia",
+    "program_slug": "markoun",
+    "governorate_ar": "الدقهلية",
+    "governorate_en": "Dakahlia",
+    "region_ar": "دلتا مصر",
+    "lat": 31.038,
+    "lon": 31.381,
+    "headline_ar": "مركون اليسر في الدقهلية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Markoun reuse in Dakahlia — Documented Field Delivery",
+    "intro_ar": "مركون اليسر في الدقهلية: إعادة تدوير الأثاث والأجهزة والملابس المستعملة وتوصيلها لأسر محتاجة بحالة ممتازة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Markoun reuse in Dakahlia: Refurbished furniture, appliances and clothing delivered to needy families in great condition under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الدقهلية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Dakahlia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الدقهلية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Dakahlia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مركون اليسر في الدقهلية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Markoun reuse in Dakahlia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مركون اليسر في الدقهلية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Markoun reuse start in Dakahlia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "odhya",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "صك الأضحية في الشرقية — توصيل لباب البيت يوم العيد",
+    "headline_en": "Qurbani in Sharqia — Doorstep Delivery on Eid",
+    "intro_ar": "بنوزّع صكوك الأضحية في الشرقية على الأسر الأكثر استحقاقاً، مع معاينة شرعية قبل الذبح وتوثيق بالصور والفيديو في نفس يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Sharqia to the neediest families, with Shariah inspection before slaughter and full photo/video documentation on Eid day itself.",
+    "why_here_ar": "فريق اليسر في الشرقية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لتحديد المستحقين فعلاً، وبيوصّل اللحمة طازجة بدون تخزين.",
+    "why_here_en": "Our Sharqia team partners with mosque imams and local social units to identify deserving families and deliver fresh meat with no storage.",
+    "coverage_ar": "تغطية كاملة لمراكز وقرى الشرقية في إقليم دلتا مصر، مع توصيل مجاني للأسر اللي ما تقدرش تيجي بنفسها.",
+    "coverage_en": "Full coverage of Sharqia districts and villages in دلتا مصر region, with free delivery for families unable to attend in person.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمان جودة الأضحية في الشرقية؟",
+        "answer_ar": "كل ذبيحة بتعدّي على بيطري معتمد قبل وبعد الذبح، والتقرير المصوّر بيوصلك في خلال 48 ساعة.",
+        "question_en": "What guarantees the Qurbani quality in Sharqia?",
+        "answer_en": "Every animal passes a certified vet check pre- and post-slaughter, and you receive the photo report within 48 hours."
+      },
+      {
+        "question_ar": "هل أقدر أحضر التوزيع في الشرقية؟",
+        "answer_ar": "أيوه، نقدر نرتّبلك زيارة ميدانية أو تتابع البث المباشر يوم العيد.",
+        "question_en": "Can I attend distribution in Sharqia?",
+        "answer_en": "Yes — we can arrange an on-site visit or share the live stream from Eid day."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "box",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "كرتونة العزومة في الشرقية — مؤن شهر كامل للأسر المحتاجة",
+    "headline_en": "Food Box in Sharqia — A Month of Essentials for Needy Families",
+    "intro_ar": "كرتونة العزومة بتسد احتياج عيلة كاملة في الشرقية لمدة شهر، فيها زيت وأرز وسكر ومكرونة وبقوليات ولحوم وسلع أساسية بمواصفات سوبر ماركت.",
+    "intro_en": "Our food box covers a full family in Sharqia for a month with oil, rice, sugar, pasta, legumes, meat and household essentials at supermarket grade.",
+    "why_here_ar": "بنشتري السلع من تجار الجملة في الشرقية نفسها لتقليل التكلفة ودعم السوق المحلي، والتوزيع بيتم عن طريق متطوعين من نفس المنطقة.",
+    "why_here_en": "We source from wholesale suppliers in Sharqia itself to lower cost and support the local economy; distribution is handled by volunteers from the same area.",
+    "coverage_ar": "بنغطي قرى ومراكز الشرقية داخل إقليم دلتا مصر بشكل دوري، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "We cover Sharqia villages and districts in دلتا مصر on a rotating basis, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إمتى بتوصل الكرتونة في الشرقية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي رمضان خلال 48 ساعة.",
+        "question_en": "When does the box arrive in Sharqia?",
+        "answer_en": "Within 5 working days of donation confirmation; during Ramadan within 48 hours."
+      },
+      {
+        "question_ar": "هل تقدر تخصص الكرتونة لأسرة معينة؟",
+        "answer_ar": "أيوه، تقدر تطلب تخصيص لأسرة عندك بياناتها أو نختارلك من قاعدة بياناتنا.",
+        "question_en": "Can I designate a specific family?",
+        "answer_en": "Yes — give us their details or let us pick from our verified database."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "water",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "سقيا الماء في الشرقية — وصلات مياه نظيفة للأسر الأكثر فقراً",
+    "headline_en": "Clean Water in Sharqia — Connections for the Poorest Families",
+    "intro_ar": "بنركّب وصلات مياه نظيفة لأسر الشرقية اللي بتشيل المياه على بُعد كيلومترات، وبنحفر آبار ارتوازية للقرى البعيدة عن الشبكة.",
+    "intro_en": "We install clean water connections for Sharqia families who carry water for kilometres, and drill artesian wells for villages off the grid.",
+    "why_here_ar": "بنشتغل مع شركة مياه الشرقية بتصاريح رسمية، وكل وصلة بتطلع باسم الأسرة عشان متبقاش عرضة للقطع.",
+    "why_here_en": "We operate with the official Sharqia water company; every line is registered in the family's name so it can never be cut.",
+    "coverage_ar": "أولوية لقرى دلتا مصر الطرفية، خصوصاً اللي فيها أطفال بيمشوا لجلب المياه أو نسبة أمراض كلى عالية.",
+    "coverage_en": "Priority for remote دلتا مصر villages — especially those where children walk to fetch water or kidney-disease rates are high.",
+    "faqs": [
+      {
+        "question_ar": "كم تكلفة وصلة المياه في الشرقية؟",
+        "answer_ar": "تبدأ من 1500 جنيه شاملة العداد والتوصيل والتركيب.",
+        "question_en": "What does a water line cost in Sharqia?",
+        "answer_en": "From 1,500 EGP including meter, piping and installation."
+      },
+      {
+        "question_ar": "هل في صيانة مستمرة بعد التركيب؟",
+        "answer_ar": "أيوه، فريقنا بيتابع الوصلة لمدة سنة كاملة بدون تكلفة إضافية.",
+        "question_en": "Is post-install maintenance covered?",
+        "answer_en": "Yes, our team monitors the connection for a full year at no extra cost."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "zakat",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "زكاة المال في الشرقية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Zakat in Sharqia — Documented Field Delivery",
+    "intro_ar": "زكاة المال في الشرقية: توزيع الزكاة على المصارف الشرعية الثمانية بإشراف محاسبي مستقل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Zakat in Sharqia: Zakat distributed across the eight Shariah channels with independent accounting under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الشرقية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Sharqia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الشرقية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Sharqia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ زكاة المال في الشرقية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Zakat in Sharqia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ زكاة المال في الشرقية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Zakat start in Sharqia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "education",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "الكفالة التعليمية في الشرقية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Education sponsorship in Sharqia — Documented Field Delivery",
+    "intro_ar": "الكفالة التعليمية في الشرقية: مصاريف وأدوات وزي مدرسي لأطفال الأسر المستحقة قبل بداية الدراسة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Education sponsorship in Sharqia: Tuition, supplies and uniforms for children before the school year begins under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الشرقية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Sharqia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الشرقية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Sharqia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ الكفالة التعليمية في الشرقية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Education sponsorship in Sharqia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ الكفالة التعليمية في الشرقية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Education sponsorship start in Sharqia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "bride",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "تجهيز عرايس اليسر في الشرقية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Bride trousseau in Sharqia — Documented Field Delivery",
+    "intro_ar": "تجهيز عرايس اليسر في الشرقية: تجهيز شقة كاملة بغرفة نوم وصالون ومطبخ وأجهزة لكل عروسة مستحقة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Bride trousseau in Sharqia: A full apartment — bedroom, living room, kitchen and appliances — for every deserving bride under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الشرقية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Sharqia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الشرقية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Sharqia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ تجهيز عرايس اليسر في الشرقية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Bride trousseau in Sharqia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ تجهيز عرايس اليسر في الشرقية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Bride trousseau start in Sharqia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "shelter",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "ستر بيوت في الشرقية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Home shelter in Sharqia — Documented Field Delivery",
+    "intro_ar": "ستر بيوت في الشرقية: تسقيف عازل بالبوتامين وأبواب وشبابيك آمنة لحماية الأسر من البرد والمطر بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Home shelter in Sharqia: Insulated bitumen roofing with safe doors and windows to protect families from cold and rain under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الشرقية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Sharqia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الشرقية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Sharqia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ ستر بيوت في الشرقية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Home shelter in Sharqia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ ستر بيوت في الشرقية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Home shelter start in Sharqia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "orphans",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "كفالة يتيم في الشرقية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Orphan sponsorship in Sharqia — Documented Field Delivery",
+    "intro_ar": "كفالة يتيم في الشرقية: كفالة شهرية لطفل يتيم مع تقرير شهري بالصور والفيديو ومتابعة مدرسية وصحية بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Orphan sponsorship in Sharqia: Monthly sponsorship of an orphan with a monthly photo/video report and school & health follow-up under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الشرقية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Sharqia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الشرقية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Sharqia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ كفالة يتيم في الشرقية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Orphan sponsorship in Sharqia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ كفالة يتيم في الشرقية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Orphan sponsorship start in Sharqia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "treatment",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "علاج الحالات الحرجة في الشرقية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Medical treatment in Sharqia — Documented Field Delivery",
+    "intro_ar": "علاج الحالات الحرجة في الشرقية: تغطية تكاليف العمليات والعلاج للحالات الحرجة عبر مستشفيات شريكة معتمدة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Medical treatment in Sharqia: Covering surgeries and treatment for critical cases through certified partner hospitals under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الشرقية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Sharqia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الشرقية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Sharqia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ علاج الحالات الحرجة في الشرقية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Medical treatment in Sharqia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ علاج الحالات الحرجة في الشرقية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Medical treatment start in Sharqia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "prosthetics",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "أطراف صناعية وكراسي في الشرقية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Prosthetics & wheelchairs in Sharqia — Documented Field Delivery",
+    "intro_ar": "أطراف صناعية وكراسي في الشرقية: أطراف صناعية وكراسي متحركة وأجهزة مساعدة لذوي الهمم بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Prosthetics & wheelchairs in Sharqia: Prosthetics, wheelchairs and assistive devices for people of determination under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الشرقية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Sharqia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الشرقية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Sharqia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ أطراف صناعية وكراسي في الشرقية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Prosthetics & wheelchairs in Sharqia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ أطراف صناعية وكراسي في الشرقية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Prosthetics & wheelchairs start in Sharqia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "kitchen",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "مطبخ اليسر في الشرقية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Al-Yusr kitchen in Sharqia — Documented Field Delivery",
+    "intro_ar": "مطبخ اليسر في الشرقية: آلاف الوجبات الساخنة يوميًا للأسر والمرضى وأبناء السبيل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Al-Yusr kitchen in Sharqia: Thousands of hot meals daily for families, patients and travellers under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الشرقية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Sharqia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الشرقية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Sharqia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مطبخ اليسر في الشرقية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Al-Yusr kitchen in Sharqia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مطبخ اليسر في الشرقية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Al-Yusr kitchen start in Sharqia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "sharqia",
+    "program_slug": "markoun",
+    "governorate_ar": "الشرقية",
+    "governorate_en": "Sharqia",
+    "region_ar": "دلتا مصر",
+    "lat": 30.587,
+    "lon": 31.502,
+    "headline_ar": "مركون اليسر في الشرقية — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Markoun reuse in Sharqia — Documented Field Delivery",
+    "intro_ar": "مركون اليسر في الشرقية: إعادة تدوير الأثاث والأجهزة والملابس المستعملة وتوصيلها لأسر محتاجة بحالة ممتازة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Markoun reuse in Sharqia: Refurbished furniture, appliances and clothing delivered to needy families in great condition under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الشرقية بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Sharqia team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الشرقية في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Sharqia districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مركون اليسر في الشرقية؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Markoun reuse in Sharqia?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مركون اليسر في الشرقية؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Markoun reuse start in Sharqia?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "odhya",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "صك الأضحية في كفر الشيخ — توصيل لباب البيت يوم العيد",
+    "headline_en": "Qurbani in Kafr El Sheikh — Doorstep Delivery on Eid",
+    "intro_ar": "بنوزّع صكوك الأضحية في كفر الشيخ على الأسر الأكثر استحقاقاً، مع معاينة شرعية قبل الذبح وتوثيق بالصور والفيديو في نفس يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Kafr El Sheikh to the neediest families, with Shariah inspection before slaughter and full photo/video documentation on Eid day itself.",
+    "why_here_ar": "فريق اليسر في كفر الشيخ بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لتحديد المستحقين فعلاً، وبيوصّل اللحمة طازجة بدون تخزين.",
+    "why_here_en": "Our Kafr El Sheikh team partners with mosque imams and local social units to identify deserving families and deliver fresh meat with no storage.",
+    "coverage_ar": "تغطية كاملة لمراكز وقرى كفر الشيخ في إقليم دلتا مصر، مع توصيل مجاني للأسر اللي ما تقدرش تيجي بنفسها.",
+    "coverage_en": "Full coverage of Kafr El Sheikh districts and villages in دلتا مصر region, with free delivery for families unable to attend in person.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمان جودة الأضحية في كفر الشيخ؟",
+        "answer_ar": "كل ذبيحة بتعدّي على بيطري معتمد قبل وبعد الذبح، والتقرير المصوّر بيوصلك في خلال 48 ساعة.",
+        "question_en": "What guarantees the Qurbani quality in Kafr El Sheikh?",
+        "answer_en": "Every animal passes a certified vet check pre- and post-slaughter, and you receive the photo report within 48 hours."
+      },
+      {
+        "question_ar": "هل أقدر أحضر التوزيع في كفر الشيخ؟",
+        "answer_ar": "أيوه، نقدر نرتّبلك زيارة ميدانية أو تتابع البث المباشر يوم العيد.",
+        "question_en": "Can I attend distribution in Kafr El Sheikh?",
+        "answer_en": "Yes — we can arrange an on-site visit or share the live stream from Eid day."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "box",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "كرتونة العزومة في كفر الشيخ — مؤن شهر كامل للأسر المحتاجة",
+    "headline_en": "Food Box in Kafr El Sheikh — A Month of Essentials for Needy Families",
+    "intro_ar": "كرتونة العزومة بتسد احتياج عيلة كاملة في كفر الشيخ لمدة شهر، فيها زيت وأرز وسكر ومكرونة وبقوليات ولحوم وسلع أساسية بمواصفات سوبر ماركت.",
+    "intro_en": "Our food box covers a full family in Kafr El Sheikh for a month with oil, rice, sugar, pasta, legumes, meat and household essentials at supermarket grade.",
+    "why_here_ar": "بنشتري السلع من تجار الجملة في كفر الشيخ نفسها لتقليل التكلفة ودعم السوق المحلي، والتوزيع بيتم عن طريق متطوعين من نفس المنطقة.",
+    "why_here_en": "We source from wholesale suppliers in Kafr El Sheikh itself to lower cost and support the local economy; distribution is handled by volunteers from the same area.",
+    "coverage_ar": "بنغطي قرى ومراكز كفر الشيخ داخل إقليم دلتا مصر بشكل دوري، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "We cover Kafr El Sheikh villages and districts in دلتا مصر on a rotating basis, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إمتى بتوصل الكرتونة في كفر الشيخ؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي رمضان خلال 48 ساعة.",
+        "question_en": "When does the box arrive in Kafr El Sheikh?",
+        "answer_en": "Within 5 working days of donation confirmation; during Ramadan within 48 hours."
+      },
+      {
+        "question_ar": "هل تقدر تخصص الكرتونة لأسرة معينة؟",
+        "answer_ar": "أيوه، تقدر تطلب تخصيص لأسرة عندك بياناتها أو نختارلك من قاعدة بياناتنا.",
+        "question_en": "Can I designate a specific family?",
+        "answer_en": "Yes — give us their details or let us pick from our verified database."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "water",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "سقيا الماء في كفر الشيخ — وصلات مياه نظيفة للأسر الأكثر فقراً",
+    "headline_en": "Clean Water in Kafr El Sheikh — Connections for the Poorest Families",
+    "intro_ar": "بنركّب وصلات مياه نظيفة لأسر كفر الشيخ اللي بتشيل المياه على بُعد كيلومترات، وبنحفر آبار ارتوازية للقرى البعيدة عن الشبكة.",
+    "intro_en": "We install clean water connections for Kafr El Sheikh families who carry water for kilometres, and drill artesian wells for villages off the grid.",
+    "why_here_ar": "بنشتغل مع شركة مياه كفر الشيخ بتصاريح رسمية، وكل وصلة بتطلع باسم الأسرة عشان متبقاش عرضة للقطع.",
+    "why_here_en": "We operate with the official Kafr El Sheikh water company; every line is registered in the family's name so it can never be cut.",
+    "coverage_ar": "أولوية لقرى دلتا مصر الطرفية، خصوصاً اللي فيها أطفال بيمشوا لجلب المياه أو نسبة أمراض كلى عالية.",
+    "coverage_en": "Priority for remote دلتا مصر villages — especially those where children walk to fetch water or kidney-disease rates are high.",
+    "faqs": [
+      {
+        "question_ar": "كم تكلفة وصلة المياه في كفر الشيخ؟",
+        "answer_ar": "تبدأ من 1500 جنيه شاملة العداد والتوصيل والتركيب.",
+        "question_en": "What does a water line cost in Kafr El Sheikh?",
+        "answer_en": "From 1,500 EGP including meter, piping and installation."
+      },
+      {
+        "question_ar": "هل في صيانة مستمرة بعد التركيب؟",
+        "answer_ar": "أيوه، فريقنا بيتابع الوصلة لمدة سنة كاملة بدون تكلفة إضافية.",
+        "question_en": "Is post-install maintenance covered?",
+        "answer_en": "Yes, our team monitors the connection for a full year at no extra cost."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "zakat",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "زكاة المال في كفر الشيخ — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Zakat in Kafr El Sheikh — Documented Field Delivery",
+    "intro_ar": "زكاة المال في كفر الشيخ: توزيع الزكاة على المصارف الشرعية الثمانية بإشراف محاسبي مستقل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Zakat in Kafr El Sheikh: Zakat distributed across the eight Shariah channels with independent accounting under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في كفر الشيخ بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Kafr El Sheikh team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى كفر الشيخ في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Kafr El Sheikh districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ زكاة المال في كفر الشيخ؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Zakat in Kafr El Sheikh?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ زكاة المال في كفر الشيخ؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Zakat start in Kafr El Sheikh?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "education",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "الكفالة التعليمية في كفر الشيخ — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Education sponsorship in Kafr El Sheikh — Documented Field Delivery",
+    "intro_ar": "الكفالة التعليمية في كفر الشيخ: مصاريف وأدوات وزي مدرسي لأطفال الأسر المستحقة قبل بداية الدراسة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Education sponsorship in Kafr El Sheikh: Tuition, supplies and uniforms for children before the school year begins under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في كفر الشيخ بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Kafr El Sheikh team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى كفر الشيخ في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Kafr El Sheikh districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ الكفالة التعليمية في كفر الشيخ؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Education sponsorship in Kafr El Sheikh?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ الكفالة التعليمية في كفر الشيخ؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Education sponsorship start in Kafr El Sheikh?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "bride",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "تجهيز عرايس اليسر في كفر الشيخ — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Bride trousseau in Kafr El Sheikh — Documented Field Delivery",
+    "intro_ar": "تجهيز عرايس اليسر في كفر الشيخ: تجهيز شقة كاملة بغرفة نوم وصالون ومطبخ وأجهزة لكل عروسة مستحقة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Bride trousseau in Kafr El Sheikh: A full apartment — bedroom, living room, kitchen and appliances — for every deserving bride under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في كفر الشيخ بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Kafr El Sheikh team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى كفر الشيخ في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Kafr El Sheikh districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ تجهيز عرايس اليسر في كفر الشيخ؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Bride trousseau in Kafr El Sheikh?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ تجهيز عرايس اليسر في كفر الشيخ؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Bride trousseau start in Kafr El Sheikh?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "shelter",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "ستر بيوت في كفر الشيخ — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Home shelter in Kafr El Sheikh — Documented Field Delivery",
+    "intro_ar": "ستر بيوت في كفر الشيخ: تسقيف عازل بالبوتامين وأبواب وشبابيك آمنة لحماية الأسر من البرد والمطر بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Home shelter in Kafr El Sheikh: Insulated bitumen roofing with safe doors and windows to protect families from cold and rain under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في كفر الشيخ بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Kafr El Sheikh team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى كفر الشيخ في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Kafr El Sheikh districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ ستر بيوت في كفر الشيخ؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Home shelter in Kafr El Sheikh?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ ستر بيوت في كفر الشيخ؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Home shelter start in Kafr El Sheikh?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "orphans",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "كفالة يتيم في كفر الشيخ — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Orphan sponsorship in Kafr El Sheikh — Documented Field Delivery",
+    "intro_ar": "كفالة يتيم في كفر الشيخ: كفالة شهرية لطفل يتيم مع تقرير شهري بالصور والفيديو ومتابعة مدرسية وصحية بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Orphan sponsorship in Kafr El Sheikh: Monthly sponsorship of an orphan with a monthly photo/video report and school & health follow-up under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في كفر الشيخ بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Kafr El Sheikh team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى كفر الشيخ في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Kafr El Sheikh districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ كفالة يتيم في كفر الشيخ؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Orphan sponsorship in Kafr El Sheikh?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ كفالة يتيم في كفر الشيخ؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Orphan sponsorship start in Kafr El Sheikh?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "treatment",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "علاج الحالات الحرجة في كفر الشيخ — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Medical treatment in Kafr El Sheikh — Documented Field Delivery",
+    "intro_ar": "علاج الحالات الحرجة في كفر الشيخ: تغطية تكاليف العمليات والعلاج للحالات الحرجة عبر مستشفيات شريكة معتمدة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Medical treatment in Kafr El Sheikh: Covering surgeries and treatment for critical cases through certified partner hospitals under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في كفر الشيخ بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Kafr El Sheikh team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى كفر الشيخ في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Kafr El Sheikh districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ علاج الحالات الحرجة في كفر الشيخ؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Medical treatment in Kafr El Sheikh?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ علاج الحالات الحرجة في كفر الشيخ؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Medical treatment start in Kafr El Sheikh?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "prosthetics",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "أطراف صناعية وكراسي في كفر الشيخ — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Prosthetics & wheelchairs in Kafr El Sheikh — Documented Field Delivery",
+    "intro_ar": "أطراف صناعية وكراسي في كفر الشيخ: أطراف صناعية وكراسي متحركة وأجهزة مساعدة لذوي الهمم بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Prosthetics & wheelchairs in Kafr El Sheikh: Prosthetics, wheelchairs and assistive devices for people of determination under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في كفر الشيخ بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Kafr El Sheikh team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى كفر الشيخ في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Kafr El Sheikh districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ أطراف صناعية وكراسي في كفر الشيخ؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Prosthetics & wheelchairs in Kafr El Sheikh?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ أطراف صناعية وكراسي في كفر الشيخ؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Prosthetics & wheelchairs start in Kafr El Sheikh?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "kitchen",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "مطبخ اليسر في كفر الشيخ — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Al-Yusr kitchen in Kafr El Sheikh — Documented Field Delivery",
+    "intro_ar": "مطبخ اليسر في كفر الشيخ: آلاف الوجبات الساخنة يوميًا للأسر والمرضى وأبناء السبيل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Al-Yusr kitchen in Kafr El Sheikh: Thousands of hot meals daily for families, patients and travellers under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في كفر الشيخ بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Kafr El Sheikh team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى كفر الشيخ في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Kafr El Sheikh districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مطبخ اليسر في كفر الشيخ؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Al-Yusr kitchen in Kafr El Sheikh?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مطبخ اليسر في كفر الشيخ؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Al-Yusr kitchen start in Kafr El Sheikh?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "kafr-el-sheikh",
+    "program_slug": "markoun",
+    "governorate_ar": "كفر الشيخ",
+    "governorate_en": "Kafr El Sheikh",
+    "region_ar": "دلتا مصر",
+    "lat": 31.111,
+    "lon": 30.94,
+    "headline_ar": "مركون اليسر في كفر الشيخ — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Markoun reuse in Kafr El Sheikh — Documented Field Delivery",
+    "intro_ar": "مركون اليسر في كفر الشيخ: إعادة تدوير الأثاث والأجهزة والملابس المستعملة وتوصيلها لأسر محتاجة بحالة ممتازة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Markoun reuse in Kafr El Sheikh: Refurbished furniture, appliances and clothing delivered to needy families in great condition under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في كفر الشيخ بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Kafr El Sheikh team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى كفر الشيخ في إقليم دلتا مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Kafr El Sheikh districts and villages in دلتا مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مركون اليسر في كفر الشيخ؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Markoun reuse in Kafr El Sheikh?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مركون اليسر في كفر الشيخ؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Markoun reuse start in Kafr El Sheikh?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "odhya",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "صك الأضحية في الفيوم — توصيل لباب البيت يوم العيد",
+    "headline_en": "Qurbani in Fayoum — Doorstep Delivery on Eid",
+    "intro_ar": "بنوزّع صكوك الأضحية في الفيوم على الأسر الأكثر استحقاقاً، مع معاينة شرعية قبل الذبح وتوثيق بالصور والفيديو في نفس يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Fayoum to the neediest families, with Shariah inspection before slaughter and full photo/video documentation on Eid day itself.",
+    "why_here_ar": "فريق اليسر في الفيوم بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لتحديد المستحقين فعلاً، وبيوصّل اللحمة طازجة بدون تخزين.",
+    "why_here_en": "Our Fayoum team partners with mosque imams and local social units to identify deserving families and deliver fresh meat with no storage.",
+    "coverage_ar": "تغطية كاملة لمراكز وقرى الفيوم في إقليم صعيد مصر، مع توصيل مجاني للأسر اللي ما تقدرش تيجي بنفسها.",
+    "coverage_en": "Full coverage of Fayoum districts and villages in صعيد مصر region, with free delivery for families unable to attend in person.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمان جودة الأضحية في الفيوم؟",
+        "answer_ar": "كل ذبيحة بتعدّي على بيطري معتمد قبل وبعد الذبح، والتقرير المصوّر بيوصلك في خلال 48 ساعة.",
+        "question_en": "What guarantees the Qurbani quality in Fayoum?",
+        "answer_en": "Every animal passes a certified vet check pre- and post-slaughter, and you receive the photo report within 48 hours."
+      },
+      {
+        "question_ar": "هل أقدر أحضر التوزيع في الفيوم؟",
+        "answer_ar": "أيوه، نقدر نرتّبلك زيارة ميدانية أو تتابع البث المباشر يوم العيد.",
+        "question_en": "Can I attend distribution in Fayoum?",
+        "answer_en": "Yes — we can arrange an on-site visit or share the live stream from Eid day."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "box",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "كرتونة العزومة في الفيوم — مؤن شهر كامل للأسر المحتاجة",
+    "headline_en": "Food Box in Fayoum — A Month of Essentials for Needy Families",
+    "intro_ar": "كرتونة العزومة بتسد احتياج عيلة كاملة في الفيوم لمدة شهر، فيها زيت وأرز وسكر ومكرونة وبقوليات ولحوم وسلع أساسية بمواصفات سوبر ماركت.",
+    "intro_en": "Our food box covers a full family in Fayoum for a month with oil, rice, sugar, pasta, legumes, meat and household essentials at supermarket grade.",
+    "why_here_ar": "بنشتري السلع من تجار الجملة في الفيوم نفسها لتقليل التكلفة ودعم السوق المحلي، والتوزيع بيتم عن طريق متطوعين من نفس المنطقة.",
+    "why_here_en": "We source from wholesale suppliers in Fayoum itself to lower cost and support the local economy; distribution is handled by volunteers from the same area.",
+    "coverage_ar": "بنغطي قرى ومراكز الفيوم داخل إقليم صعيد مصر بشكل دوري، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "We cover Fayoum villages and districts in صعيد مصر on a rotating basis, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إمتى بتوصل الكرتونة في الفيوم؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي رمضان خلال 48 ساعة.",
+        "question_en": "When does the box arrive in Fayoum?",
+        "answer_en": "Within 5 working days of donation confirmation; during Ramadan within 48 hours."
+      },
+      {
+        "question_ar": "هل تقدر تخصص الكرتونة لأسرة معينة؟",
+        "answer_ar": "أيوه، تقدر تطلب تخصيص لأسرة عندك بياناتها أو نختارلك من قاعدة بياناتنا.",
+        "question_en": "Can I designate a specific family?",
+        "answer_en": "Yes — give us their details or let us pick from our verified database."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "water",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "سقيا الماء في الفيوم — وصلات مياه نظيفة للأسر الأكثر فقراً",
+    "headline_en": "Clean Water in Fayoum — Connections for the Poorest Families",
+    "intro_ar": "بنركّب وصلات مياه نظيفة لأسر الفيوم اللي بتشيل المياه على بُعد كيلومترات، وبنحفر آبار ارتوازية للقرى البعيدة عن الشبكة.",
+    "intro_en": "We install clean water connections for Fayoum families who carry water for kilometres, and drill artesian wells for villages off the grid.",
+    "why_here_ar": "بنشتغل مع شركة مياه الفيوم بتصاريح رسمية، وكل وصلة بتطلع باسم الأسرة عشان متبقاش عرضة للقطع.",
+    "why_here_en": "We operate with the official Fayoum water company; every line is registered in the family's name so it can never be cut.",
+    "coverage_ar": "أولوية لقرى صعيد مصر الطرفية، خصوصاً اللي فيها أطفال بيمشوا لجلب المياه أو نسبة أمراض كلى عالية.",
+    "coverage_en": "Priority for remote صعيد مصر villages — especially those where children walk to fetch water or kidney-disease rates are high.",
+    "faqs": [
+      {
+        "question_ar": "كم تكلفة وصلة المياه في الفيوم؟",
+        "answer_ar": "تبدأ من 1500 جنيه شاملة العداد والتوصيل والتركيب.",
+        "question_en": "What does a water line cost in Fayoum?",
+        "answer_en": "From 1,500 EGP including meter, piping and installation."
+      },
+      {
+        "question_ar": "هل في صيانة مستمرة بعد التركيب؟",
+        "answer_ar": "أيوه، فريقنا بيتابع الوصلة لمدة سنة كاملة بدون تكلفة إضافية.",
+        "question_en": "Is post-install maintenance covered?",
+        "answer_en": "Yes, our team monitors the connection for a full year at no extra cost."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "zakat",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "زكاة المال في الفيوم — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Zakat in Fayoum — Documented Field Delivery",
+    "intro_ar": "زكاة المال في الفيوم: توزيع الزكاة على المصارف الشرعية الثمانية بإشراف محاسبي مستقل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Zakat in Fayoum: Zakat distributed across the eight Shariah channels with independent accounting under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الفيوم بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Fayoum team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الفيوم في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Fayoum districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ زكاة المال في الفيوم؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Zakat in Fayoum?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ زكاة المال في الفيوم؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Zakat start in Fayoum?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "education",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "الكفالة التعليمية في الفيوم — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Education sponsorship in Fayoum — Documented Field Delivery",
+    "intro_ar": "الكفالة التعليمية في الفيوم: مصاريف وأدوات وزي مدرسي لأطفال الأسر المستحقة قبل بداية الدراسة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Education sponsorship in Fayoum: Tuition, supplies and uniforms for children before the school year begins under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الفيوم بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Fayoum team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الفيوم في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Fayoum districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ الكفالة التعليمية في الفيوم؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Education sponsorship in Fayoum?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ الكفالة التعليمية في الفيوم؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Education sponsorship start in Fayoum?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "bride",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "تجهيز عرايس اليسر في الفيوم — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Bride trousseau in Fayoum — Documented Field Delivery",
+    "intro_ar": "تجهيز عرايس اليسر في الفيوم: تجهيز شقة كاملة بغرفة نوم وصالون ومطبخ وأجهزة لكل عروسة مستحقة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Bride trousseau in Fayoum: A full apartment — bedroom, living room, kitchen and appliances — for every deserving bride under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الفيوم بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Fayoum team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الفيوم في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Fayoum districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ تجهيز عرايس اليسر في الفيوم؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Bride trousseau in Fayoum?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ تجهيز عرايس اليسر في الفيوم؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Bride trousseau start in Fayoum?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "shelter",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "ستر بيوت في الفيوم — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Home shelter in Fayoum — Documented Field Delivery",
+    "intro_ar": "ستر بيوت في الفيوم: تسقيف عازل بالبوتامين وأبواب وشبابيك آمنة لحماية الأسر من البرد والمطر بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Home shelter in Fayoum: Insulated bitumen roofing with safe doors and windows to protect families from cold and rain under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الفيوم بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Fayoum team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الفيوم في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Fayoum districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ ستر بيوت في الفيوم؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Home shelter in Fayoum?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ ستر بيوت في الفيوم؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Home shelter start in Fayoum?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "orphans",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "كفالة يتيم في الفيوم — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Orphan sponsorship in Fayoum — Documented Field Delivery",
+    "intro_ar": "كفالة يتيم في الفيوم: كفالة شهرية لطفل يتيم مع تقرير شهري بالصور والفيديو ومتابعة مدرسية وصحية بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Orphan sponsorship in Fayoum: Monthly sponsorship of an orphan with a monthly photo/video report and school & health follow-up under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الفيوم بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Fayoum team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الفيوم في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Fayoum districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ كفالة يتيم في الفيوم؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Orphan sponsorship in Fayoum?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ كفالة يتيم في الفيوم؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Orphan sponsorship start in Fayoum?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "treatment",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "علاج الحالات الحرجة في الفيوم — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Medical treatment in Fayoum — Documented Field Delivery",
+    "intro_ar": "علاج الحالات الحرجة في الفيوم: تغطية تكاليف العمليات والعلاج للحالات الحرجة عبر مستشفيات شريكة معتمدة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Medical treatment in Fayoum: Covering surgeries and treatment for critical cases through certified partner hospitals under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الفيوم بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Fayoum team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الفيوم في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Fayoum districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ علاج الحالات الحرجة في الفيوم؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Medical treatment in Fayoum?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ علاج الحالات الحرجة في الفيوم؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Medical treatment start in Fayoum?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "prosthetics",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "أطراف صناعية وكراسي في الفيوم — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Prosthetics & wheelchairs in Fayoum — Documented Field Delivery",
+    "intro_ar": "أطراف صناعية وكراسي في الفيوم: أطراف صناعية وكراسي متحركة وأجهزة مساعدة لذوي الهمم بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Prosthetics & wheelchairs in Fayoum: Prosthetics, wheelchairs and assistive devices for people of determination under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الفيوم بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Fayoum team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الفيوم في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Fayoum districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ أطراف صناعية وكراسي في الفيوم؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Prosthetics & wheelchairs in Fayoum?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ أطراف صناعية وكراسي في الفيوم؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Prosthetics & wheelchairs start in Fayoum?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "kitchen",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "مطبخ اليسر في الفيوم — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Al-Yusr kitchen in Fayoum — Documented Field Delivery",
+    "intro_ar": "مطبخ اليسر في الفيوم: آلاف الوجبات الساخنة يوميًا للأسر والمرضى وأبناء السبيل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Al-Yusr kitchen in Fayoum: Thousands of hot meals daily for families, patients and travellers under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الفيوم بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Fayoum team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الفيوم في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Fayoum districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مطبخ اليسر في الفيوم؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Al-Yusr kitchen in Fayoum?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مطبخ اليسر في الفيوم؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Al-Yusr kitchen start in Fayoum?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "fayoum",
+    "program_slug": "markoun",
+    "governorate_ar": "الفيوم",
+    "governorate_en": "Fayoum",
+    "region_ar": "صعيد مصر",
+    "lat": 29.31,
+    "lon": 30.842,
+    "headline_ar": "مركون اليسر في الفيوم — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Markoun reuse in Fayoum — Documented Field Delivery",
+    "intro_ar": "مركون اليسر في الفيوم: إعادة تدوير الأثاث والأجهزة والملابس المستعملة وتوصيلها لأسر محتاجة بحالة ممتازة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Markoun reuse in Fayoum: Refurbished furniture, appliances and clothing delivered to needy families in great condition under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في الفيوم بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Fayoum team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى الفيوم في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Fayoum districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مركون اليسر في الفيوم؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Markoun reuse in Fayoum?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مركون اليسر في الفيوم؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Markoun reuse start in Fayoum?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "odhya",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "صك الأضحية في المنيا — توصيل لباب البيت يوم العيد",
+    "headline_en": "Qurbani in Minya — Doorstep Delivery on Eid",
+    "intro_ar": "بنوزّع صكوك الأضحية في المنيا على الأسر الأكثر استحقاقاً، مع معاينة شرعية قبل الذبح وتوثيق بالصور والفيديو في نفس يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Minya to the neediest families, with Shariah inspection before slaughter and full photo/video documentation on Eid day itself.",
+    "why_here_ar": "فريق اليسر في المنيا بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لتحديد المستحقين فعلاً، وبيوصّل اللحمة طازجة بدون تخزين.",
+    "why_here_en": "Our Minya team partners with mosque imams and local social units to identify deserving families and deliver fresh meat with no storage.",
+    "coverage_ar": "تغطية كاملة لمراكز وقرى المنيا في إقليم صعيد مصر، مع توصيل مجاني للأسر اللي ما تقدرش تيجي بنفسها.",
+    "coverage_en": "Full coverage of Minya districts and villages in صعيد مصر region, with free delivery for families unable to attend in person.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمان جودة الأضحية في المنيا؟",
+        "answer_ar": "كل ذبيحة بتعدّي على بيطري معتمد قبل وبعد الذبح، والتقرير المصوّر بيوصلك في خلال 48 ساعة.",
+        "question_en": "What guarantees the Qurbani quality in Minya?",
+        "answer_en": "Every animal passes a certified vet check pre- and post-slaughter, and you receive the photo report within 48 hours."
+      },
+      {
+        "question_ar": "هل أقدر أحضر التوزيع في المنيا؟",
+        "answer_ar": "أيوه، نقدر نرتّبلك زيارة ميدانية أو تتابع البث المباشر يوم العيد.",
+        "question_en": "Can I attend distribution in Minya?",
+        "answer_en": "Yes — we can arrange an on-site visit or share the live stream from Eid day."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "box",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "كرتونة العزومة في المنيا — مؤن شهر كامل للأسر المحتاجة",
+    "headline_en": "Food Box in Minya — A Month of Essentials for Needy Families",
+    "intro_ar": "كرتونة العزومة بتسد احتياج عيلة كاملة في المنيا لمدة شهر، فيها زيت وأرز وسكر ومكرونة وبقوليات ولحوم وسلع أساسية بمواصفات سوبر ماركت.",
+    "intro_en": "Our food box covers a full family in Minya for a month with oil, rice, sugar, pasta, legumes, meat and household essentials at supermarket grade.",
+    "why_here_ar": "بنشتري السلع من تجار الجملة في المنيا نفسها لتقليل التكلفة ودعم السوق المحلي، والتوزيع بيتم عن طريق متطوعين من نفس المنطقة.",
+    "why_here_en": "We source from wholesale suppliers in Minya itself to lower cost and support the local economy; distribution is handled by volunteers from the same area.",
+    "coverage_ar": "بنغطي قرى ومراكز المنيا داخل إقليم صعيد مصر بشكل دوري، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "We cover Minya villages and districts in صعيد مصر on a rotating basis, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إمتى بتوصل الكرتونة في المنيا؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي رمضان خلال 48 ساعة.",
+        "question_en": "When does the box arrive in Minya?",
+        "answer_en": "Within 5 working days of donation confirmation; during Ramadan within 48 hours."
+      },
+      {
+        "question_ar": "هل تقدر تخصص الكرتونة لأسرة معينة؟",
+        "answer_ar": "أيوه، تقدر تطلب تخصيص لأسرة عندك بياناتها أو نختارلك من قاعدة بياناتنا.",
+        "question_en": "Can I designate a specific family?",
+        "answer_en": "Yes — give us their details or let us pick from our verified database."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "water",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "سقيا الماء في المنيا — وصلات مياه نظيفة للأسر الأكثر فقراً",
+    "headline_en": "Clean Water in Minya — Connections for the Poorest Families",
+    "intro_ar": "بنركّب وصلات مياه نظيفة لأسر المنيا اللي بتشيل المياه على بُعد كيلومترات، وبنحفر آبار ارتوازية للقرى البعيدة عن الشبكة.",
+    "intro_en": "We install clean water connections for Minya families who carry water for kilometres, and drill artesian wells for villages off the grid.",
+    "why_here_ar": "بنشتغل مع شركة مياه المنيا بتصاريح رسمية، وكل وصلة بتطلع باسم الأسرة عشان متبقاش عرضة للقطع.",
+    "why_here_en": "We operate with the official Minya water company; every line is registered in the family's name so it can never be cut.",
+    "coverage_ar": "أولوية لقرى صعيد مصر الطرفية، خصوصاً اللي فيها أطفال بيمشوا لجلب المياه أو نسبة أمراض كلى عالية.",
+    "coverage_en": "Priority for remote صعيد مصر villages — especially those where children walk to fetch water or kidney-disease rates are high.",
+    "faqs": [
+      {
+        "question_ar": "كم تكلفة وصلة المياه في المنيا؟",
+        "answer_ar": "تبدأ من 1500 جنيه شاملة العداد والتوصيل والتركيب.",
+        "question_en": "What does a water line cost in Minya?",
+        "answer_en": "From 1,500 EGP including meter, piping and installation."
+      },
+      {
+        "question_ar": "هل في صيانة مستمرة بعد التركيب؟",
+        "answer_ar": "أيوه، فريقنا بيتابع الوصلة لمدة سنة كاملة بدون تكلفة إضافية.",
+        "question_en": "Is post-install maintenance covered?",
+        "answer_en": "Yes, our team monitors the connection for a full year at no extra cost."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "zakat",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "زكاة المال في المنيا — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Zakat in Minya — Documented Field Delivery",
+    "intro_ar": "زكاة المال في المنيا: توزيع الزكاة على المصارف الشرعية الثمانية بإشراف محاسبي مستقل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Zakat in Minya: Zakat distributed across the eight Shariah channels with independent accounting under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في المنيا بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Minya team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى المنيا في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Minya districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ زكاة المال في المنيا؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Zakat in Minya?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ زكاة المال في المنيا؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Zakat start in Minya?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "education",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "الكفالة التعليمية في المنيا — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Education sponsorship in Minya — Documented Field Delivery",
+    "intro_ar": "الكفالة التعليمية في المنيا: مصاريف وأدوات وزي مدرسي لأطفال الأسر المستحقة قبل بداية الدراسة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Education sponsorship in Minya: Tuition, supplies and uniforms for children before the school year begins under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في المنيا بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Minya team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى المنيا في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Minya districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ الكفالة التعليمية في المنيا؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Education sponsorship in Minya?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ الكفالة التعليمية في المنيا؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Education sponsorship start in Minya?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "bride",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "تجهيز عرايس اليسر في المنيا — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Bride trousseau in Minya — Documented Field Delivery",
+    "intro_ar": "تجهيز عرايس اليسر في المنيا: تجهيز شقة كاملة بغرفة نوم وصالون ومطبخ وأجهزة لكل عروسة مستحقة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Bride trousseau in Minya: A full apartment — bedroom, living room, kitchen and appliances — for every deserving bride under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في المنيا بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Minya team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى المنيا في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Minya districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ تجهيز عرايس اليسر في المنيا؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Bride trousseau in Minya?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ تجهيز عرايس اليسر في المنيا؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Bride trousseau start in Minya?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "shelter",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "ستر بيوت في المنيا — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Home shelter in Minya — Documented Field Delivery",
+    "intro_ar": "ستر بيوت في المنيا: تسقيف عازل بالبوتامين وأبواب وشبابيك آمنة لحماية الأسر من البرد والمطر بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Home shelter in Minya: Insulated bitumen roofing with safe doors and windows to protect families from cold and rain under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في المنيا بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Minya team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى المنيا في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Minya districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ ستر بيوت في المنيا؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Home shelter in Minya?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ ستر بيوت في المنيا؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Home shelter start in Minya?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "orphans",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "كفالة يتيم في المنيا — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Orphan sponsorship in Minya — Documented Field Delivery",
+    "intro_ar": "كفالة يتيم في المنيا: كفالة شهرية لطفل يتيم مع تقرير شهري بالصور والفيديو ومتابعة مدرسية وصحية بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Orphan sponsorship in Minya: Monthly sponsorship of an orphan with a monthly photo/video report and school & health follow-up under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في المنيا بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Minya team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى المنيا في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Minya districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ كفالة يتيم في المنيا؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Orphan sponsorship in Minya?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ كفالة يتيم في المنيا؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Orphan sponsorship start in Minya?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "treatment",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "علاج الحالات الحرجة في المنيا — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Medical treatment in Minya — Documented Field Delivery",
+    "intro_ar": "علاج الحالات الحرجة في المنيا: تغطية تكاليف العمليات والعلاج للحالات الحرجة عبر مستشفيات شريكة معتمدة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Medical treatment in Minya: Covering surgeries and treatment for critical cases through certified partner hospitals under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في المنيا بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Minya team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى المنيا في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Minya districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ علاج الحالات الحرجة في المنيا؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Medical treatment in Minya?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ علاج الحالات الحرجة في المنيا؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Medical treatment start in Minya?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "prosthetics",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "أطراف صناعية وكراسي في المنيا — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Prosthetics & wheelchairs in Minya — Documented Field Delivery",
+    "intro_ar": "أطراف صناعية وكراسي في المنيا: أطراف صناعية وكراسي متحركة وأجهزة مساعدة لذوي الهمم بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Prosthetics & wheelchairs in Minya: Prosthetics, wheelchairs and assistive devices for people of determination under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في المنيا بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Minya team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى المنيا في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Minya districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ أطراف صناعية وكراسي في المنيا؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Prosthetics & wheelchairs in Minya?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ أطراف صناعية وكراسي في المنيا؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Prosthetics & wheelchairs start in Minya?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "kitchen",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "مطبخ اليسر في المنيا — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Al-Yusr kitchen in Minya — Documented Field Delivery",
+    "intro_ar": "مطبخ اليسر في المنيا: آلاف الوجبات الساخنة يوميًا للأسر والمرضى وأبناء السبيل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Al-Yusr kitchen in Minya: Thousands of hot meals daily for families, patients and travellers under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في المنيا بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Minya team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى المنيا في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Minya districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مطبخ اليسر في المنيا؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Al-Yusr kitchen in Minya?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مطبخ اليسر في المنيا؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Al-Yusr kitchen start in Minya?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "minya",
+    "program_slug": "markoun",
+    "governorate_ar": "المنيا",
+    "governorate_en": "Minya",
+    "region_ar": "صعيد مصر",
+    "lat": 28.087,
+    "lon": 30.762,
+    "headline_ar": "مركون اليسر في المنيا — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Markoun reuse in Minya — Documented Field Delivery",
+    "intro_ar": "مركون اليسر في المنيا: إعادة تدوير الأثاث والأجهزة والملابس المستعملة وتوصيلها لأسر محتاجة بحالة ممتازة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Markoun reuse in Minya: Refurbished furniture, appliances and clothing delivered to needy families in great condition under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في المنيا بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Minya team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى المنيا في إقليم صعيد مصر، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Minya districts and villages in صعيد مصر, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مركون اليسر في المنيا؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Markoun reuse in Minya?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مركون اليسر في المنيا؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Markoun reuse start in Minya?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "odhya",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "صك الأضحية في القاهرة — توصيل لباب البيت يوم العيد",
+    "headline_en": "Qurbani in Cairo — Doorstep Delivery on Eid",
+    "intro_ar": "بنوزّع صكوك الأضحية في القاهرة على الأسر الأكثر استحقاقاً، مع معاينة شرعية قبل الذبح وتوثيق بالصور والفيديو في نفس يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Cairo to the neediest families, with Shariah inspection before slaughter and full photo/video documentation on Eid day itself.",
+    "why_here_ar": "فريق اليسر في القاهرة بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لتحديد المستحقين فعلاً، وبيوصّل اللحمة طازجة بدون تخزين.",
+    "why_here_en": "Our Cairo team partners with mosque imams and local social units to identify deserving families and deliver fresh meat with no storage.",
+    "coverage_ar": "تغطية كاملة لمراكز وقرى القاهرة في إقليم إقليم القاهرة الكبرى، مع توصيل مجاني للأسر اللي ما تقدرش تيجي بنفسها.",
+    "coverage_en": "Full coverage of Cairo districts and villages in إقليم القاهرة الكبرى region, with free delivery for families unable to attend in person.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمان جودة الأضحية في القاهرة؟",
+        "answer_ar": "كل ذبيحة بتعدّي على بيطري معتمد قبل وبعد الذبح، والتقرير المصوّر بيوصلك في خلال 48 ساعة.",
+        "question_en": "What guarantees the Qurbani quality in Cairo?",
+        "answer_en": "Every animal passes a certified vet check pre- and post-slaughter, and you receive the photo report within 48 hours."
+      },
+      {
+        "question_ar": "هل أقدر أحضر التوزيع في القاهرة؟",
+        "answer_ar": "أيوه، نقدر نرتّبلك زيارة ميدانية أو تتابع البث المباشر يوم العيد.",
+        "question_en": "Can I attend distribution in Cairo?",
+        "answer_en": "Yes — we can arrange an on-site visit or share the live stream from Eid day."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "box",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "كرتونة العزومة في القاهرة — مؤن شهر كامل للأسر المحتاجة",
+    "headline_en": "Food Box in Cairo — A Month of Essentials for Needy Families",
+    "intro_ar": "كرتونة العزومة بتسد احتياج عيلة كاملة في القاهرة لمدة شهر، فيها زيت وأرز وسكر ومكرونة وبقوليات ولحوم وسلع أساسية بمواصفات سوبر ماركت.",
+    "intro_en": "Our food box covers a full family in Cairo for a month with oil, rice, sugar, pasta, legumes, meat and household essentials at supermarket grade.",
+    "why_here_ar": "بنشتري السلع من تجار الجملة في القاهرة نفسها لتقليل التكلفة ودعم السوق المحلي، والتوزيع بيتم عن طريق متطوعين من نفس المنطقة.",
+    "why_here_en": "We source from wholesale suppliers in Cairo itself to lower cost and support the local economy; distribution is handled by volunteers from the same area.",
+    "coverage_ar": "بنغطي قرى ومراكز القاهرة داخل إقليم إقليم القاهرة الكبرى بشكل دوري، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "We cover Cairo villages and districts in إقليم القاهرة الكبرى on a rotating basis, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إمتى بتوصل الكرتونة في القاهرة؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي رمضان خلال 48 ساعة.",
+        "question_en": "When does the box arrive in Cairo?",
+        "answer_en": "Within 5 working days of donation confirmation; during Ramadan within 48 hours."
+      },
+      {
+        "question_ar": "هل تقدر تخصص الكرتونة لأسرة معينة؟",
+        "answer_ar": "أيوه، تقدر تطلب تخصيص لأسرة عندك بياناتها أو نختارلك من قاعدة بياناتنا.",
+        "question_en": "Can I designate a specific family?",
+        "answer_en": "Yes — give us their details or let us pick from our verified database."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "water",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "سقيا الماء في القاهرة — وصلات مياه نظيفة للأسر الأكثر فقراً",
+    "headline_en": "Clean Water in Cairo — Connections for the Poorest Families",
+    "intro_ar": "بنركّب وصلات مياه نظيفة لأسر القاهرة اللي بتشيل المياه على بُعد كيلومترات، وبنحفر آبار ارتوازية للقرى البعيدة عن الشبكة.",
+    "intro_en": "We install clean water connections for Cairo families who carry water for kilometres, and drill artesian wells for villages off the grid.",
+    "why_here_ar": "بنشتغل مع شركة مياه القاهرة بتصاريح رسمية، وكل وصلة بتطلع باسم الأسرة عشان متبقاش عرضة للقطع.",
+    "why_here_en": "We operate with the official Cairo water company; every line is registered in the family's name so it can never be cut.",
+    "coverage_ar": "أولوية لقرى إقليم القاهرة الكبرى الطرفية، خصوصاً اللي فيها أطفال بيمشوا لجلب المياه أو نسبة أمراض كلى عالية.",
+    "coverage_en": "Priority for remote إقليم القاهرة الكبرى villages — especially those where children walk to fetch water or kidney-disease rates are high.",
+    "faqs": [
+      {
+        "question_ar": "كم تكلفة وصلة المياه في القاهرة؟",
+        "answer_ar": "تبدأ من 1500 جنيه شاملة العداد والتوصيل والتركيب.",
+        "question_en": "What does a water line cost in Cairo?",
+        "answer_en": "From 1,500 EGP including meter, piping and installation."
+      },
+      {
+        "question_ar": "هل في صيانة مستمرة بعد التركيب؟",
+        "answer_ar": "أيوه، فريقنا بيتابع الوصلة لمدة سنة كاملة بدون تكلفة إضافية.",
+        "question_en": "Is post-install maintenance covered?",
+        "answer_en": "Yes, our team monitors the connection for a full year at no extra cost."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "zakat",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "زكاة المال في القاهرة — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Zakat in Cairo — Documented Field Delivery",
+    "intro_ar": "زكاة المال في القاهرة: توزيع الزكاة على المصارف الشرعية الثمانية بإشراف محاسبي مستقل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Zakat in Cairo: Zakat distributed across the eight Shariah channels with independent accounting under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في القاهرة بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Cairo team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى القاهرة في إقليم إقليم القاهرة الكبرى، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Cairo districts and villages in إقليم القاهرة الكبرى, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ زكاة المال في القاهرة؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Zakat in Cairo?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ زكاة المال في القاهرة؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Zakat start in Cairo?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "education",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "الكفالة التعليمية في القاهرة — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Education sponsorship in Cairo — Documented Field Delivery",
+    "intro_ar": "الكفالة التعليمية في القاهرة: مصاريف وأدوات وزي مدرسي لأطفال الأسر المستحقة قبل بداية الدراسة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Education sponsorship in Cairo: Tuition, supplies and uniforms for children before the school year begins under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في القاهرة بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Cairo team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى القاهرة في إقليم إقليم القاهرة الكبرى، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Cairo districts and villages in إقليم القاهرة الكبرى, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ الكفالة التعليمية في القاهرة؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Education sponsorship in Cairo?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ الكفالة التعليمية في القاهرة؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Education sponsorship start in Cairo?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "bride",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "تجهيز عرايس اليسر في القاهرة — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Bride trousseau in Cairo — Documented Field Delivery",
+    "intro_ar": "تجهيز عرايس اليسر في القاهرة: تجهيز شقة كاملة بغرفة نوم وصالون ومطبخ وأجهزة لكل عروسة مستحقة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Bride trousseau in Cairo: A full apartment — bedroom, living room, kitchen and appliances — for every deserving bride under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في القاهرة بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Cairo team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى القاهرة في إقليم إقليم القاهرة الكبرى، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Cairo districts and villages in إقليم القاهرة الكبرى, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ تجهيز عرايس اليسر في القاهرة؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Bride trousseau in Cairo?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ تجهيز عرايس اليسر في القاهرة؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Bride trousseau start in Cairo?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "shelter",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "ستر بيوت في القاهرة — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Home shelter in Cairo — Documented Field Delivery",
+    "intro_ar": "ستر بيوت في القاهرة: تسقيف عازل بالبوتامين وأبواب وشبابيك آمنة لحماية الأسر من البرد والمطر بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Home shelter in Cairo: Insulated bitumen roofing with safe doors and windows to protect families from cold and rain under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في القاهرة بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Cairo team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى القاهرة في إقليم إقليم القاهرة الكبرى، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Cairo districts and villages in إقليم القاهرة الكبرى, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ ستر بيوت في القاهرة؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Home shelter in Cairo?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ ستر بيوت في القاهرة؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Home shelter start in Cairo?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "orphans",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "كفالة يتيم في القاهرة — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Orphan sponsorship in Cairo — Documented Field Delivery",
+    "intro_ar": "كفالة يتيم في القاهرة: كفالة شهرية لطفل يتيم مع تقرير شهري بالصور والفيديو ومتابعة مدرسية وصحية بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Orphan sponsorship in Cairo: Monthly sponsorship of an orphan with a monthly photo/video report and school & health follow-up under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في القاهرة بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Cairo team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى القاهرة في إقليم إقليم القاهرة الكبرى، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Cairo districts and villages in إقليم القاهرة الكبرى, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ كفالة يتيم في القاهرة؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Orphan sponsorship in Cairo?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ كفالة يتيم في القاهرة؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Orphan sponsorship start in Cairo?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "treatment",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "علاج الحالات الحرجة في القاهرة — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Medical treatment in Cairo — Documented Field Delivery",
+    "intro_ar": "علاج الحالات الحرجة في القاهرة: تغطية تكاليف العمليات والعلاج للحالات الحرجة عبر مستشفيات شريكة معتمدة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Medical treatment in Cairo: Covering surgeries and treatment for critical cases through certified partner hospitals under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في القاهرة بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Cairo team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى القاهرة في إقليم إقليم القاهرة الكبرى، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Cairo districts and villages in إقليم القاهرة الكبرى, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ علاج الحالات الحرجة في القاهرة؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Medical treatment in Cairo?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ علاج الحالات الحرجة في القاهرة؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Medical treatment start in Cairo?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "prosthetics",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "أطراف صناعية وكراسي في القاهرة — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Prosthetics & wheelchairs in Cairo — Documented Field Delivery",
+    "intro_ar": "أطراف صناعية وكراسي في القاهرة: أطراف صناعية وكراسي متحركة وأجهزة مساعدة لذوي الهمم بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Prosthetics & wheelchairs in Cairo: Prosthetics, wheelchairs and assistive devices for people of determination under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في القاهرة بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Cairo team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى القاهرة في إقليم إقليم القاهرة الكبرى، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Cairo districts and villages in إقليم القاهرة الكبرى, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ أطراف صناعية وكراسي في القاهرة؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Prosthetics & wheelchairs in Cairo?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ أطراف صناعية وكراسي في القاهرة؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Prosthetics & wheelchairs start in Cairo?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "kitchen",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "مطبخ اليسر في القاهرة — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Al-Yusr kitchen in Cairo — Documented Field Delivery",
+    "intro_ar": "مطبخ اليسر في القاهرة: آلاف الوجبات الساخنة يوميًا للأسر والمرضى وأبناء السبيل بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Al-Yusr kitchen in Cairo: Thousands of hot meals daily for families, patients and travellers under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في القاهرة بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Cairo team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى القاهرة في إقليم إقليم القاهرة الكبرى، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Cairo districts and villages in إقليم القاهرة الكبرى, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مطبخ اليسر في القاهرة؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Al-Yusr kitchen in Cairo?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مطبخ اليسر في القاهرة؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Al-Yusr kitchen start in Cairo?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "governorate_slug": "cairo",
+    "program_slug": "markoun",
+    "governorate_ar": "القاهرة",
+    "governorate_en": "Cairo",
+    "region_ar": "إقليم القاهرة الكبرى",
+    "lat": 30.044,
+    "lon": 31.236,
+    "headline_ar": "مركون اليسر في القاهرة — تسليم ميداني موثّق لباب البيت",
+    "headline_en": "Markoun reuse in Cairo — Documented Field Delivery",
+    "intro_ar": "مركون اليسر في القاهرة: إعادة تدوير الأثاث والأجهزة والملابس المستعملة وتوصيلها لأسر محتاجة بحالة ممتازة بإشراف فريق اليسر الميداني وبحث اجتماعي قبل الصرف وتوثيق بالصور والفيديو.",
+    "intro_en": "Markoun reuse in Cairo: Refurbished furniture, appliances and clothing delivered to needy families in great condition under Al-Yusr's field team, with social assessment before spending and full photo/video documentation.",
+    "why_here_ar": "فريقنا في القاهرة بيتعامل مع شيوخ الجوامع والوحدات الاجتماعية لاختيار الأسر الفعلية المحتاجة، وبيوصّل الخير بكرامة كاملة بدون إعلانات على الأسرة.",
+    "why_here_en": "Our Cairo team partners with mosque imams and local social units to identify truly deserving families, and delivers aid with full dignity and no public exposure.",
+    "coverage_ar": "بنغطي كل مراكز وقرى القاهرة في إقليم إقليم القاهرة الكبرى، مع أولوية للأسر اللي عندها أيتام أو مرضى أو كبار سن.",
+    "coverage_en": "Full coverage of Cairo districts and villages in إقليم القاهرة الكبرى, prioritising families with orphans, sick members or elderly.",
+    "faqs": [
+      {
+        "question_ar": "إيه ضمانات الجودة لـ مركون اليسر في القاهرة؟",
+        "answer_ar": "كل تبرع يمر بمعاينة ميدانية وتوثيق مصوّر، ويوصلك تقرير الصرف خلال 48 ساعة من التنفيذ.",
+        "question_en": "What quality guarantees Markoun reuse in Cairo?",
+        "answer_en": "Every donation passes field assessment and photo documentation; you receive the spending report within 48 hours."
+      },
+      {
+        "question_ar": "إمتى يبدأ تنفيذ مركون اليسر في القاهرة؟",
+        "answer_ar": "خلال 5 أيام عمل من تأكيد التبرع، وفي المواسم خلال 48 ساعة.",
+        "question_en": "How soon does Markoun reuse start in Cairo?",
+        "answer_en": "Within 5 working days of donation confirmation, or 48 hours during peak seasons."
+      }
+    ],
+    "is_active": true
+  }
+]

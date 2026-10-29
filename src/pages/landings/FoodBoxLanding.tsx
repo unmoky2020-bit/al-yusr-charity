@@ -13,7 +13,8 @@ import mealsBoxes from "@/assets/yusr-orphans-meals.jpg";
 import iftarTrays from "@/assets/yusr-meals.jpg";
 import doorstep from "@/assets/program-food-new.jpg";
 
-const DONATE = "/donate?program=monthly-meat";
+import { campaignDonateHref } from "@/data/campaignPages/index";
+const DONATE = campaignDonateHref("food");
 const SLUG = "food";
 
 /**

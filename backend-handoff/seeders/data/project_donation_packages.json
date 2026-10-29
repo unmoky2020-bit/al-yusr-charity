@@ -1,0 +1,86 @@
+[
+  {
+    "project_slug": "waqf",
+    "key": "wqf-palm",
+    "name_ar": "سهم نخلة مثمرة صدقة جارية",
+    "name_en": "Productive Date Palm Share",
+    "amount": "500.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "project_slug": "waqf",
+    "key": "wqf-irr",
+    "name_ar": "سهم شبكة ري حديثة بالطاقة الشمسية",
+    "name_en": "Modern Solar Irrigation Share",
+    "amount": "1000.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "project_slug": "waqf",
+    "key": "wqf-feddan",
+    "name_ar": "سهم استصلاح وزراعة ربع فدان وقفي",
+    "name_en": "Quarter Feddan Reclamation",
+    "amount": "2500.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "project_slug": "medical",
+    "key": "med-presc",
+    "name_ar": "سهم روشتة علاج ودواء شهري",
+    "name_en": "Monthly Prescription Share",
+    "amount": "200.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "project_slug": "medical",
+    "key": "med-tests",
+    "name_ar": "سهم تحاليل وأشعة تشخيصية",
+    "name_en": "Lab & Diagnostics Share",
+    "amount": "400.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "project_slug": "medical",
+    "key": "med-surg",
+    "name_ar": "سهم مساهمة في عملية جراحية",
+    "name_en": "Surgery Contribution Share",
+    "amount": "1000.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "project_slug": "medical",
+    "key": "med-chair",
+    "name_ar": "كرسي متحرك طبي قياسي كامل",
+    "name_en": "Standard Medical Wheelchair",
+    "amount": "2500.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "project_slug": "medical",
+    "key": "med-prosth",
+    "name_ar": "سهم مساهمة في تركيب طرف صناعي",
+    "name_en": "Prosthetic Limb Share",
+    "amount": "3000.00",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {}
+  }
+]

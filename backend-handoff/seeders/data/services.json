@@ -1,0 +1,1486 @@
+[
+  {
+    "slug": "mosques",
+    "program_slug": "mosques",
+    "sector": "general",
+    "hero_image": "src/assets/about-hero.jpg",
+    "badge_ar": "منشآت ومشاريع كبرى · مساجد",
+    "badge_en": "Major projects · Mosques",
+    "title_ar": "بناء وترميم المساجد",
+    "title_en": "Mosque Building & Restoration",
+    "intro_ar": "هدفنا إعادة بناء وترميم 20 مسجد سنة 2025، في القرى والمناطق الأكثر احتياجًا — صدقة جارية بتفضل تنفع طول العمر.",
+    "intro_en": "We aim to rebuild and restore 20 mosques in 2025 across rural and underserved areas — a perpetual charity that keeps giving for a lifetime.",
+    "meta_title_ar": "بناء وترميم المساجد — صدقة جارية | مؤسسة اليسر",
+    "meta_title_en": "Mosque Building & Restoration — Perpetual Sadaqah | Al-Yusr",
+    "meta_description_ar": "ساهم في بناء وترميم 20 مسجدًا في 2025 بإشراف هندسي وتقارير دورية. صدقة جارية موثّقة من مؤسسة اليسر.",
+    "meta_description_en": "Help build and restore 20 mosques in 2025 with engineering supervision and periodic reports — a documented perpetual charity by Al-Yusr.",
+    "bullets_ar": [
+      "إشراف هندسي معتمد لكل مرحلة.",
+      "تقرير دوري بالصور والمستندات لكل متبرع.",
+      "أولوية للقرى والمساجد المتهالكة في الدقهلية والمناطق المهمشة."
+    ],
+    "bullets_en": [
+      "Certified engineering supervision at every stage.",
+      "Periodic photo & document report for each donor.",
+      "Priority for villages and dilapidated rural mosques."
+    ],
+    "stats": [
+      {
+        "value_ar": "20",
+        "value_en": "20",
+        "label_ar": "مسجد هدف 2025",
+        "label_en": "mosques goal 2025"
+      },
+      {
+        "value_ar": "+8",
+        "value_en": "+8",
+        "label_ar": "تم تنفيذها",
+        "label_en": "completed"
+      },
+      {
+        "value_ar": "12",
+        "value_en": "12",
+        "label_ar": "قرية مستفيدة",
+        "label_en": "villages served"
+      },
+      {
+        "value_ar": "100%",
+        "value_en": "100%",
+        "label_ar": "إشراف هندسي",
+        "label_en": "engineering supervision"
+      }
+    ],
+    "features": [
+      {
+        "icon": "Building2",
+        "title_ar": "تخطيط هندسي",
+        "title_en": "Engineering design",
+        "description_ar": "رسومات معتمدة وحساب تكاليف شفاف لكل مشروع.",
+        "description_en": "Certified drawings and transparent cost estimation per project."
+      },
+      {
+        "icon": "HardHat",
+        "title_ar": "إشراف ميداني",
+        "title_en": "Site supervision",
+        "description_ar": "مهندس إشراف بصفة دورية حتى الافتتاح.",
+        "description_en": "An on-site engineer until opening day."
+      },
+      {
+        "icon": "Hammer",
+        "title_ar": "ترميم وبناء جديد",
+        "title_en": "Restoration & new builds",
+        "description_ar": "نتعامل مع المساجد القديمة المتهالكة وبناء مساجد جديدة.",
+        "description_en": "We restore old mosques and build new ones from scratch."
+      },
+      {
+        "icon": "Heart",
+        "title_ar": "صدقة جارية",
+        "title_en": "Perpetual charity",
+        "description_ar": "أجر مستمر طول عمر المسجد، باسم المتبرع أو من يحب.",
+        "description_en": "Continuing reward as long as the mosque stands, in your or a loved one's name."
+      },
+      {
+        "icon": "BookOpen",
+        "title_ar": "مكتبة وتحفيظ",
+        "title_en": "Library & memorization",
+        "description_ar": "بنحرص يكون لكل مسجد ركن للمكتبة وحلقة تحفيظ.",
+        "description_en": "Each mosque includes a library corner and a memorization circle."
+      },
+      {
+        "icon": "MapPin",
+        "title_ar": "أولوية القرى",
+        "title_en": "Rural priority",
+        "description_ar": "بنبدأ بالقرى الأبعد عن الخدمات والأكثر حاجة.",
+        "description_en": "We start with the most underserved rural areas."
+      }
+    ],
+    "tiers": [
+      {
+        "amount": 1000,
+        "unit_ar": "سهم بناء",
+        "unit_en": "Build share",
+        "desc_ar": "مساهمة في تكاليف الأساسات.",
+        "desc_en": "Contribution to foundation costs."
+      },
+      {
+        "amount": 5000,
+        "unit_ar": "سهم متر مربع",
+        "unit_en": "Sqm share",
+        "desc_ar": "بناء متر مربع تقريبًا من المسجد.",
+        "desc_en": "Roughly one sqm of mosque construction.",
+        "highlight": true
+      },
+      {
+        "amount": 25000,
+        "unit_ar": "تجهيزات داخلية",
+        "unit_en": "Interior fit-out",
+        "desc_ar": "سجاد وإنارة وصوتيات لمسجد قروي.",
+        "desc_en": "Carpets, lighting and sound for a village mosque."
+      },
+      {
+        "amount": 150000,
+        "unit_ar": "ترميم مسجد كامل",
+        "unit_en": "Full mosque restoration",
+        "desc_ar": "ترميم وافتتاح مسجد قائم بالكامل.",
+        "desc_en": "Full restoration & reopening of an existing mosque."
+      }
+    ],
+    "related": [
+      {
+        "to": "/services/wells",
+        "ar": "حفر الآبار وشبكات المياه",
+        "en": "Wells & water networks"
+      },
+      {
+        "to": "/services/housing",
+        "ar": "سكن كريم",
+        "en": "Dignified housing"
+      },
+      {
+        "to": "/services/farm",
+        "ar": "مزرعة اليسر الوقفية",
+        "en": "Al-Yusr endowment farm"
+      }
+    ],
+    "faqs": [],
+    "is_active": true,
+    "sort_order": 1,
+    "has_custom_jsx_block": false
+  },
+  {
+    "slug": "wells",
+    "program_slug": "water",
+    "sector": "general",
+    "hero_image": "src/assets/yusr-water.png",
+    "badge_ar": "منشآت ومشاريع كبرى · مياه",
+    "badge_en": "Major projects · Water",
+    "title_ar": "حفر الآبار وشبكات المياه",
+    "title_en": "Wells & Water Networks",
+    "intro_ar": "نحفر الآبار ونمدّ شبكات المياه ووصلات منزلية، لنوصل المياه النظيفة لكل بيت محتاج. حتى الآن: 750 متر شبكات و100 وصلة منزلية.",
+    "intro_en": "We dig wells and extend water networks and home connections so clean water reaches every needy household. To date: 750m of pipelines and 100 home connections.",
+    "meta_title_ar": "حفر الآبار وشبكات المياه النظيفة | مؤسسة اليسر",
+    "meta_title_en": "Wells & Clean Water Networks | Al-Yusr",
+    "meta_description_ar": "750م شبكات مياه و100 وصلة منزلية — ساهم في توصيل المياه النظيفة لقرى مصر بإشراف فني وتقارير دورية.",
+    "meta_description_en": "750m of pipelines and 100 home connections — help bring clean water to Egyptian villages with technical supervision and periodic reporting.",
+    "bullets_ar": [
+      "حفر آبار جوفية بإشراف فني وفحص جودة المياه.",
+      "مدّ شبكات وتوصيلات منزلية مباشرة.",
+      "صيانة دورية مجانية لمدة سنة بعد التركيب."
+    ],
+    "bullets_en": [
+      "Groundwater wells with technical supervision and water quality testing.",
+      "Pipeline networks and direct home connections.",
+      "Free periodic maintenance for one year post-installation."
+    ],
+    "stats": [
+      {
+        "value_ar": "750م",
+        "value_en": "750m",
+        "label_ar": "شبكات تم مدها",
+        "label_en": "of pipelines laid"
+      },
+      {
+        "value_ar": "100",
+        "value_en": "100",
+        "label_ar": "وصلة منزلية",
+        "label_en": "home connections"
+      },
+      {
+        "value_ar": "+30",
+        "value_en": "+30",
+        "label_ar": "بئر تم حفره",
+        "label_en": "wells dug"
+      },
+      {
+        "value_ar": "1 سنة",
+        "value_en": "1 year",
+        "label_ar": "ضمان وصيانة",
+        "label_en": "warranty & maintenance"
+      }
+    ],
+    "features": [
+      {
+        "icon": "Droplets",
+        "title_ar": "آبار جوفية",
+        "title_en": "Groundwater wells",
+        "description_ar": "حفر بمعدات معتمدة وإشراف هيدروجيولوجي.",
+        "description_en": "Drilled with certified equipment under hydrogeology supervision."
+      },
+      {
+        "icon": "Pipette",
+        "title_ar": "فحص جودة المياه",
+        "title_en": "Water quality testing",
+        "description_ar": "تحليل معملي للمياه قبل التشغيل وبشكل دوري.",
+        "description_en": "Lab analysis before commissioning and periodically after."
+      },
+      {
+        "icon": "Wrench",
+        "title_ar": "صيانة دورية",
+        "title_en": "Periodic maintenance",
+        "description_ar": "فريق صيانة لمدة سنة كاملة بدون أي تكلفة على الأهالي.",
+        "description_en": "A full year of free maintenance for residents."
+      },
+      {
+        "icon": "Truck",
+        "title_ar": "مدّ الشبكات",
+        "title_en": "Network extension",
+        "description_ar": "مدّ مواسير وتركيب عدادات بشروط فنية مطابقة.",
+        "description_en": "Pipelines and meters installed to technical specifications."
+      },
+      {
+        "icon": "Sparkles",
+        "title_ar": "أثر مستدام",
+        "title_en": "Sustainable impact",
+        "description_ar": "كل بئر بيخدم في المتوسط 200 أسرة سنويًا.",
+        "description_en": "Each well serves an average of 200 families per year."
+      },
+      {
+        "icon": "ShieldCheck",
+        "title_ar": "توثيق كامل",
+        "title_en": "Full documentation",
+        "description_ar": "صور قبل وبعد، وإحداثيات GPS لكل بئر.",
+        "description_en": "Before/after photos and GPS coordinates per well."
+      }
+    ],
+    "tiers": [
+      {
+        "amount": 500,
+        "unit_ar": "متر شبكة",
+        "unit_en": "1m of pipeline",
+        "desc_ar": "تكلفة مد متر مياه نظيف.",
+        "desc_en": "Cost of laying one meter of clean water pipe."
+      },
+      {
+        "amount": 2500,
+        "unit_ar": "وصلة منزلية",
+        "unit_en": "Home connection",
+        "desc_ar": "إيصال المياه لباب بيت أسرة محتاجة.",
+        "desc_en": "Bring water to one needy family's home.",
+        "highlight": true
+      },
+      {
+        "amount": 25000,
+        "unit_ar": "بئر صغير",
+        "unit_en": "Small well",
+        "desc_ar": "بئر يخدم قرية صغيرة (~50 أسرة).",
+        "desc_en": "A well serving a small village (~50 families)."
+      },
+      {
+        "amount": 80000,
+        "unit_ar": "بئر ارتوازي كامل",
+        "unit_en": "Full artesian well",
+        "desc_ar": "بئر بمضخة وخزان لخدمة 200+ أسرة.",
+        "desc_en": "Pump + tank, serving 200+ families."
+      }
+    ],
+    "related": [
+      {
+        "to": "/services/mosques",
+        "ar": "بناء وترميم المساجد",
+        "en": "Mosque rebuilding"
+      },
+      {
+        "to": "/services/farm",
+        "ar": "مزرعة وقفية",
+        "en": "Endowment farm"
+      },
+      {
+        "to": "/services/housing",
+        "ar": "سكن كريم",
+        "en": "Dignified housing"
+      }
+    ],
+    "faqs": [],
+    "is_active": true,
+    "sort_order": 2,
+    "has_custom_jsx_block": false
+  },
+  {
+    "slug": "farm",
+    "program_slug": "farm",
+    "sector": "general",
+    "hero_image": "src/assets/farm-hero.jpg",
+    "badge_ar": "منشآت ومشاريع كبرى · مزرعة وقفية",
+    "badge_en": "Major projects · Endowment farm",
+    "title_ar": "مزرعة اليسر الوقفية",
+    "title_en": "Al-Yusr Endowment Farm",
+    "intro_ar": "مزرعة وقفية بتنتج لحوم بلدي طازجة بأكثر من 4 طن سنويًا تُوزّع مجانًا على الأسر المتعففة، بدون وسطاء وبدون هامش ربح.",
+    "intro_en": "An endowment farm producing 4+ tons of fresh local meat annually, distributed for free to needy families — zero middlemen, zero profit margin.",
+    "meta_title_ar": "مزرعة اليسر الوقفية — لحوم بلدي بدون وسطاء | المنصورة",
+    "meta_title_en": "Al-Yusr Endowment Farm — Local meat, zero middlemen | Mansoura",
+    "meta_description_ar": "مزرعة وقفية في المنصورة بتنتج لحوم بلدي عالية الجودة لصكوك الأضحية والمواسم، وقف مستدام بدون وسطاء.",
+    "meta_description_en": "An endowment farm in Mansoura producing premium local meat for Qurbani and seasonal aid — sustainable, no middlemen.",
+    "bullets_ar": [
+      "ماشية بلدي محصنة بسجلات بيطرية معتمدة.",
+      "ذبح شرعي موثّق بالصور والفيديو.",
+      "صيانة الوقف وإعادة الاستثمار لزيادة الإنتاج كل سنة."
+    ],
+    "bullets_en": [
+      "Vaccinated local livestock with certified vet records.",
+      "Sharia-compliant slaughter with photo & video documentation.",
+      "Endowment principal preserved and reinvested to grow yearly output."
+    ],
+    "stats": [
+      {
+        "value_ar": "4 طن",
+        "value_en": "4 tons",
+        "label_ar": "لحوم وُزعت 2025",
+        "label_en": "meat distributed 2025"
+      },
+      {
+        "value_ar": "+1,200",
+        "value_en": "+1,200",
+        "label_ar": "أسرة سنويًا",
+        "label_en": "families/year"
+      },
+      {
+        "value_ar": "12",
+        "value_en": "12",
+        "label_ar": "محافظة تغطية",
+        "label_en": "governorates covered"
+      },
+      {
+        "value_ar": "0%",
+        "value_en": "0%",
+        "label_ar": "هامش ربح",
+        "label_en": "profit margin"
+      }
+    ],
+    "features": [
+      {
+        "icon": "Beef",
+        "title_ar": "لحوم بلدي",
+        "title_en": "Local meat",
+        "description_ar": "ماشية بلدي 100% بدون هرمونات.",
+        "description_en": "100% local livestock, hormone-free."
+      },
+      {
+        "icon": "Stethoscope",
+        "title_ar": "إشراف بيطري",
+        "title_en": "Veterinary oversight",
+        "description_ar": "تطعيمات وفحص دوري لكل رأس.",
+        "description_en": "Vaccinations and periodic checks per head."
+      },
+      {
+        "icon": "Sprout",
+        "title_ar": "وقف مستدام",
+        "title_en": "Sustainable endowment",
+        "description_ar": "أرباح الإنتاج بترجع لزيادة الرؤوس وخدمة أسر أكتر.",
+        "description_en": "Profits reinvested to grow the herd and serve more families."
+      },
+      {
+        "icon": "Truck",
+        "title_ar": "تسليم بكرامة",
+        "title_en": "Dignified delivery",
+        "description_ar": "اللحوم بتوصل طازجة لباب البيت في نفس اليوم.",
+        "description_en": "Fresh meat reaches doorsteps the same day."
+      },
+      {
+        "icon": "ShieldCheck",
+        "title_ar": "ذبح شرعي",
+        "title_en": "Sharia slaughter",
+        "description_ar": "بإشراف شرعي ومسلخ مجهز بكاميرات.",
+        "description_en": "Performed under Sharia supervision in a camera-equipped abattoir."
+      },
+      {
+        "icon": "Users",
+        "title_ar": "وظائف محلية",
+        "title_en": "Local jobs",
+        "description_ar": "30 شاب مصري بيشتغل في المزرعة وخدماتها.",
+        "description_en": "30 Egyptian youth employed at the farm and its operations."
+      }
+    ],
+    "tiers": [
+      {
+        "amount": 200,
+        "unit_ar": "كيلو لحمة لأسرة",
+        "unit_en": "1kg of meat",
+        "desc_ar": "كيلو لحمة بلدي طازج لأسرة محتاجة.",
+        "desc_en": "Fresh local meat for one family."
+      },
+      {
+        "amount": 1500,
+        "unit_ar": "صك أضحية (سهم بقري)",
+        "unit_en": "Qurbani (bovine share)",
+        "desc_ar": "سهم في عجل، يُذبح ويُوزَّع بالكامل.",
+        "desc_en": "A share in a bovine, fully slaughtered and distributed.",
+        "highlight": true
+      },
+      {
+        "amount": 12000,
+        "unit_ar": "خروف كامل",
+        "unit_en": "Whole sheep",
+        "desc_ar": "أضحية كاملة باسم المتبرع.",
+        "desc_en": "A whole Qurbani sheep in the donor's name."
+      },
+      {
+        "amount": 32000,
+        "unit_ar": "بقرة كاملة",
+        "unit_en": "Whole cow",
+        "desc_ar": "بقرة كاملة (7 أسهم).",
+        "desc_en": "A whole cow (7 shares)."
+      }
+    ],
+    "related": [
+      {
+        "to": "/services/farm",
+        "ar": "تفاصيل مزرعة اليسر",
+        "en": "Full farm story"
+      },
+      {
+        "to": "/programs/odhya",
+        "ar": "صك الأضحية بالدقهلية",
+        "en": "Qurbani vouchers"
+      },
+      {
+        "to": "/services/housing",
+        "ar": "سكن كريم",
+        "en": "Dignified housing"
+      }
+    ],
+    "faqs": [],
+    "is_active": true,
+    "sort_order": 3,
+    "has_custom_jsx_block": false
+  },
+  {
+    "slug": "housing",
+    "program_slug": "housing",
+    "sector": "general",
+    "hero_image": "src/assets/poster-water.png",
+    "badge_ar": "منشآت ومشاريع كبرى · سكن كريم",
+    "badge_en": "Major projects · Dignified housing",
+    "title_ar": "سكن كريم — ترميم وأسقف للأسر المتعففة",
+    "title_en": "Sakan Kareem — Restoration & Roofing",
+    "intro_ar": "حملة سكن كريم بترمّم البيوت المتهالكة وتركّب أسقف آمنة للأسر المتعففة في الدقهلية ومحافظات مصر، علشان كل أسرة يكون لها سقف يحميها.",
+    "intro_en": "Sakan Kareem restores dilapidated homes and installs safe roofs for needy families in Dakahlia and across Egypt — every family deserves a roof that protects.",
+    "meta_title_ar": "سكن كريم — ترميم وأسقف للأسر المتعففة | مؤسسة اليسر",
+    "meta_title_en": "Sakan Kareem — Home Restoration & Roofing | Al-Yusr",
+    "meta_description_ar": "ترميم بيوت وتركيب أسقف آمنة للأسر المتعففة في مصر، بإشراف فني وتقارير ميدانية موثّقة من مؤسسة اليسر.",
+    "meta_description_en": "Restoring homes and installing safe roofs for needy families in Egypt, with technical supervision and field-verified reports by Al-Yusr.",
+    "bullets_ar": [
+      "إشراف فني وعقود مع مقاولين موثوقين.",
+      "أولوية للأرامل وكبار السن وذوي الاحتياجات.",
+      "توثيق قبل/بعد لكل بيت بتقرير مصور."
+    ],
+    "bullets_en": [
+      "Technical supervision and contracts with trusted contractors.",
+      "Priority for widows, elderly and people with disabilities.",
+      "Before/after documentation for every home, photo report included."
+    ],
+    "stats": [
+      {
+        "value_ar": "+40",
+        "value_en": "+40",
+        "label_ar": "بيت تم ترميمه",
+        "label_en": "homes restored"
+      },
+      {
+        "value_ar": "5",
+        "value_en": "5",
+        "label_ar": "محافظات",
+        "label_en": "governorates"
+      },
+      {
+        "value_ar": "100%",
+        "value_en": "100%",
+        "label_ar": "إشراف فني",
+        "label_en": "tech supervision"
+      },
+      {
+        "value_ar": "365",
+        "value_en": "365",
+        "label_ar": "يوم استجابة",
+        "label_en": "days response"
+      }
+    ],
+    "features": [
+      {
+        "icon": "House",
+        "title_ar": "ترميم شامل",
+        "title_en": "Full restoration",
+        "description_ar": "حوائط، أرضيات، كهرباء، صرف صحي.",
+        "description_en": "Walls, floors, electricity, sanitation."
+      },
+      {
+        "icon": "Construction",
+        "title_ar": "أسقف آمنة",
+        "title_en": "Safe roofs",
+        "description_ar": "تركيب أسقف خرسانية أو معدنية بحسب الحالة.",
+        "description_en": "Concrete or metal roofs depending on the case."
+      },
+      {
+        "icon": "Bed",
+        "title_ar": "تأثيث أساسي",
+        "title_en": "Basic furnishing",
+        "description_ar": "سرير، مرتبة، بطاطين، دولاب لكل أسرة.",
+        "description_en": "Bed, mattress, blankets, wardrobe for each family."
+      },
+      {
+        "icon": "KeyRound",
+        "title_ar": "تسليم بمفتاح",
+        "title_en": "Turn-key handover",
+        "description_ar": "تسليم البيت جاهز للسكن الفوري.",
+        "description_en": "Home is handed over ready for immediate living."
+      },
+      {
+        "icon": "ShieldCheck",
+        "title_ar": "ضمان فني",
+        "title_en": "Technical warranty",
+        "description_ar": "ضمان على الأعمال الإنشائية والكهرباء.",
+        "description_en": "Warranty on structural and electrical works."
+      },
+      {
+        "icon": "MapPin",
+        "title_ar": "تغطية ميدانية",
+        "title_en": "Field coverage",
+        "description_ar": "أولوية للقرى والمناطق المهمشة.",
+        "description_en": "Priority for villages and underserved areas."
+      }
+    ],
+    "tiers": [
+      {
+        "amount": 750,
+        "unit_ar": "متر سقف معدني",
+        "unit_en": "1 sqm metal roof",
+        "desc_ar": "تكلفة متر مربع تقريبي لسقف معدني آمن.",
+        "desc_en": "Approximate cost per sqm of safe metal roofing."
+      },
+      {
+        "amount": 5000,
+        "unit_ar": "ترميم غرفة",
+        "unit_en": "Room restoration",
+        "desc_ar": "ترميم غرفة كاملة بحوائط وأرضية.",
+        "desc_en": "Restore a full room — walls and flooring.",
+        "highlight": true
+      },
+      {
+        "amount": 25000,
+        "unit_ar": "تأهيل بيت صغير",
+        "unit_en": "Small home rehab",
+        "desc_ar": "تأهيل بيت من غرفتين بشكل أساسي.",
+        "desc_en": "Basic rehabilitation of a 2-room home."
+      },
+      {
+        "amount": 80000,
+        "unit_ar": "بيت كامل بمفتاح",
+        "unit_en": "Full turn-key home",
+        "desc_ar": "بيت كامل جاهز للسكن لأسرة واحدة.",
+        "desc_en": "A full move-in-ready home for one family."
+      }
+    ],
+    "related": [
+      {
+        "to": "/services/wells",
+        "ar": "حفر الآبار وشبكات المياه",
+        "en": "Wells & water"
+      },
+      {
+        "to": "/services/mosques",
+        "ar": "بناء وترميم المساجد",
+        "en": "Mosque rebuilding"
+      },
+      {
+        "to": "/services/farm",
+        "ar": "مزرعة اليسر الوقفية",
+        "en": "Al-Yusr endowment farm"
+      }
+    ],
+    "faqs": [],
+    "is_active": true,
+    "sort_order": 4,
+    "has_custom_jsx_block": false
+  },
+  {
+    "slug": "ster",
+    "program_slug": "box",
+    "sector": "general",
+    "hero_image": "src/assets/poster-water.png",
+    "badge_ar": "موسم الشتاء · حملة ستر",
+    "badge_en": "Winter season · Ster Campaign",
+    "title_ar": "حملة ستر — دفء وأمان للأسر المتعففة",
+    "title_en": "Ster — Warmth & Shelter for Needy Families",
+    "intro_ar": "حملة 'ستر' بتنطلق من أكتوبر لفبراير: لحاف وفايبر، مراتب، كسوة شتوية، أسقف، وأبواب وشبابيك — تحت شعار 'من ستر مسلمًا ستره الله'.",
+    "intro_en": "Ster runs Oct–Feb: blankets & fiber duvets, mattresses, winter clothes, roofs, doors and windows — 'Whoever shelters a Muslim, Allah shelters them'.",
+    "meta_title_ar": "حملة ستر للشتاء — دفء وكسوة للأسر المتعففة | مؤسسة اليسر",
+    "meta_title_en": "Ster Winter Campaign — Warmth for Needy Families | Al-Yusr",
+    "meta_description_ar": "تبرّع لحملة ستر: لحف، مراتب، كسوة شتوية، أسقف وأبواب وشبابيك للأسر المتعففة في الدقهلية ومحافظات مصر.",
+    "meta_description_en": "Donate to the Ster winter campaign: blankets, mattresses, winter clothes, roofs and doors for needy families in Dakahlia & across Egypt.",
+    "bullets_ar": [
+      "لحف فايبر ومراتب جديدة 100%.",
+      "كسوة شتوية كاملة لكل أفراد الأسرة.",
+      "ترميم وإصلاح الأسقف والأبواب والشبابيك قبل البرد."
+    ],
+    "bullets_en": [
+      "Brand-new fiber duvets and mattresses.",
+      "Full winter clothing for every family member.",
+      "Roof, door & window repairs before the cold."
+    ],
+    "stats": [
+      {
+        "value_ar": "أكتوبر→فبراير",
+        "value_en": "Oct→Feb",
+        "label_ar": "موسم الحملة",
+        "label_en": "campaign window"
+      },
+      {
+        "value_ar": "+1,200",
+        "value_en": "+1,200",
+        "label_ar": "أسرة استفادت",
+        "label_en": "families served"
+      },
+      {
+        "value_ar": "70",
+        "value_en": "70",
+        "label_ar": "بيت تم تسقيفه 2025",
+        "label_en": "homes roofed 2025"
+      },
+      {
+        "value_ar": "8,361م²",
+        "value_en": "8,361m²",
+        "label_ar": "إجمالي مساحات",
+        "label_en": "total sqm"
+      }
+    ],
+    "features": [
+      {
+        "icon": "Snowflake",
+        "title_ar": "بطاطين ولحف",
+        "title_en": "Blankets & duvets",
+        "description_ar": "لحف فايبر ثقيلة لمواجهة موجات البرد.",
+        "description_en": "Heavy fiber duvets for cold waves."
+      },
+      {
+        "icon": "Bed",
+        "title_ar": "مراتب جديدة",
+        "title_en": "New mattresses",
+        "description_ar": "مراتب طبية بديل المراتب القديمة.",
+        "description_en": "Medical mattresses replacing worn ones."
+      },
+      {
+        "icon": "Construction",
+        "title_ar": "أسقف وأبواب",
+        "title_en": "Roofs & doors",
+        "description_ar": "تركيب أسقف وأبواب وشبابيك تمنع تسرب الماء والبرد.",
+        "description_en": "Installing roofs, doors and windows that block rain and cold."
+      },
+      {
+        "icon": "Gift",
+        "title_ar": "كسوة شتوية",
+        "title_en": "Winter clothing",
+        "description_ar": "ملابس وأحذية للأطفال والكبار قبل المدارس.",
+        "description_en": "Clothing and shoes for kids and adults before school season."
+      },
+      {
+        "icon": "ShieldCheck",
+        "title_ar": "أولوية الأرامل",
+        "title_en": "Widows priority",
+        "description_ar": "نبدأ بالأرامل وكبار السن وذوي الهمم.",
+        "description_en": "Starting with widows, elderly and people with disabilities."
+      },
+      {
+        "icon": "MapPin",
+        "title_ar": "تغطية ميدانية",
+        "title_en": "Field coverage",
+        "description_ar": "نزول مباشر للقرى والكفور المهمشة.",
+        "description_en": "Direct field visits to underserved villages."
+      }
+    ],
+    "tiers": [
+      {
+        "amount": 350,
+        "unit_ar": "لحاف فايبر",
+        "unit_en": "Fiber duvet",
+        "desc_ar": "لحاف ثقيل لأسرة واحدة.",
+        "desc_en": "Heavy duvet for one family."
+      },
+      {
+        "amount": 800,
+        "unit_ar": "كسوة طفل",
+        "unit_en": "Child winter kit",
+        "desc_ar": "ملابس وحذاء وكاب لطفل.",
+        "desc_en": "Clothes, shoes and cap for one child.",
+        "highlight": true
+      },
+      {
+        "amount": 2500,
+        "unit_ar": "حزمة دفء أسرة",
+        "unit_en": "Family warmth pack",
+        "desc_ar": "لحف ومراتب وكسوة لأسرة كاملة.",
+        "desc_en": "Duvets, mattresses & clothing for a full family."
+      },
+      {
+        "amount": 12000,
+        "unit_ar": "تسقيف بيت صغير",
+        "unit_en": "Small home roofing",
+        "desc_ar": "تركيب سقف معدني آمن لبيت محتاج.",
+        "desc_en": "Safe metal roof for one needy home."
+      }
+    ],
+    "related": [
+      {
+        "to": "/services/housing",
+        "ar": "سكن كريم",
+        "en": "Dignified housing"
+      },
+      {
+        "to": "/services/markoun",
+        "ar": "حملة مركون — أجهزة كهربائية",
+        "en": "Markoun — appliances"
+      },
+      {
+        "to": "/services/food-box",
+        "ar": "كرتونة الخير",
+        "en": "Food box"
+      }
+    ],
+    "faqs": [
+      {
+        "question_ar": "إمتى بتبدأ حملة ستر؟",
+        "answer_ar": "بتنطلق من أول أكتوبر وتستمر حتى نهاية فبراير كل سنة.",
+        "question_en": "When does the Ster campaign start?",
+        "answer_en": "It runs from October 1 through the end of February every year."
+      },
+      {
+        "question_ar": "هل التوزيع للدقهلية فقط؟",
+        "answer_ar": "لا، الدقهلية أولوية لكن قوافلنا بتوصل لكفر الشيخ والشرقية والفيوم والمنيا.",
+        "question_en": "Is distribution only in Dakahlia?",
+        "answer_en": "No — Dakahlia is a priority, but our caravans reach Kafr El-Sheikh, Sharqia, Fayoum and Minya."
+      }
+    ],
+    "is_active": true,
+    "sort_order": 5,
+    "has_custom_jsx_block": false
+  },
+  {
+    "slug": "markoun",
+    "program_slug": "markoun",
+    "sector": "general",
+    "hero_image": "src/assets/poster-water.png",
+    "badge_ar": "استدامة · حملة مركون",
+    "badge_en": "Sustainability · Markoun",
+    "title_ar": "حملة مركون — أجهزة مستعملة بحياة جديدة",
+    "title_en": "Markoun — Refurbished Appliances, New Life",
+    "intro_ar": "بدل ما تبيع جهازك أو أثاثك خردة، تبرّع به لحملة مركون. بنجدّد الأجهزة والأثاث والدواء ونوصّله لأسر متعفّفة في الدقهلية وكفر الشيخ مع توثيق كامل.",
+    "intro_en": "Instead of selling your used appliance or furniture as scrap, give it to Markoun. We refurbish appliances, furniture and medicine and deliver them to needy families in Dakahlia and Kafr El Sheikh with full documentation.",
+    "meta_title_ar": "حملة مركون — تبرع بأثاث وأجهزة ودواء مترمم | مؤسسة اليسر",
+    "meta_title_en": "Markoun — Donate Used Furniture, Appliances & Medicine | Al-Yusr",
+    "meta_description_ar": "تبرّع بأثاث، أجهزة كهربائية، ملابس أو أدوية — حملة مركون تجدّدها وتوصلها لأسرة محتاجة في الدقهلية.",
+    "meta_description_en": "Donate furniture, appliances, clothes or medicine — Markoun refurbishes and delivers them to a needy family in Dakahlia.",
+    "bullets_ar": [
+      "فحص فني وتصليح كامل قبل التسليم.",
+      "مطابقة الجهاز بأسرة محتاجة فعلًا.",
+      "ضمان فني لمدة 3 شهور بعد التسليم."
+    ],
+    "bullets_en": [
+      "Full technical inspection and repair before handover.",
+      "Each appliance matched to a family in genuine need.",
+      "3-month technical warranty post-delivery."
+    ],
+    "stats": [
+      {
+        "value_ar": "+450",
+        "value_en": "+450",
+        "label_ar": "جهاز تم تجديده",
+        "label_en": "appliances refurbished"
+      },
+      {
+        "value_ar": "+300",
+        "value_en": "+300",
+        "label_ar": "أسرة استفادت",
+        "label_en": "families served"
+      },
+      {
+        "value_ar": "3 شهور",
+        "value_en": "3 months",
+        "label_ar": "ضمان فني",
+        "label_en": "tech warranty"
+      },
+      {
+        "value_ar": "100%",
+        "value_en": "100%",
+        "label_ar": "إعادة استخدام",
+        "label_en": "reuse rate"
+      }
+    ],
+    "features": [
+      {
+        "icon": "Refrigerator",
+        "title_ar": "ثلاجات وغسالات",
+        "title_en": "Fridges & washers",
+        "description_ar": "تجديد كامل وفحص كهربائي.",
+        "description_en": "Full refurb and electrical check."
+      },
+      {
+        "icon": "Wind",
+        "title_ar": "مراوح ومكيفات",
+        "title_en": "Fans & coolers",
+        "description_ar": "تنظيف وصيانة قبل صيف كل سنة.",
+        "description_en": "Cleaning and maintenance before each summer."
+      },
+      {
+        "icon": "Recycle",
+        "title_ar": "اقتصاد دائري",
+        "title_en": "Circular economy",
+        "description_ar": "بدل الخردة — حياة جديدة لكل جهاز.",
+        "description_en": "From scrap to new life for every appliance."
+      },
+      {
+        "icon": "Truck",
+        "title_ar": "بيك أب مجاني",
+        "title_en": "Free pickup",
+        "description_ar": "بنستلم الجهاز من بيتك مجانًا في الدقهلية.",
+        "description_en": "Free home pickup across Dakahlia."
+      },
+      {
+        "icon": "ShieldCheck",
+        "title_ar": "ضمان",
+        "title_en": "Warranty",
+        "description_ar": "3 شهور ضمان على كل جهاز يتم تسليمه.",
+        "description_en": "3-month warranty on every delivered unit."
+      },
+      {
+        "icon": "Heart",
+        "title_ar": "صدقة جارية",
+        "title_en": "Ongoing sadaqah",
+        "description_ar": "كل جهاز بيخدم أسرة لسنين — أجر مستمر.",
+        "description_en": "Each appliance serves a family for years — continuing reward."
+      }
+    ],
+    "tiers": [
+      {
+        "amount": 200,
+        "unit_ar": "تكلفة فحص وتصليح",
+        "unit_en": "Inspection & repair",
+        "desc_ar": "تغطية تكلفة فحص جهاز كهربائي.",
+        "desc_en": "Cover the cost of inspecting one appliance."
+      },
+      {
+        "amount": 800,
+        "unit_ar": "صيانة مروحة/سخان",
+        "unit_en": "Fan/heater service",
+        "desc_ar": "تجديد مروحة أو سخان وتسليمه.",
+        "desc_en": "Refurbish and deliver one fan or heater.",
+        "highlight": true
+      },
+      {
+        "amount": 3500,
+        "unit_ar": "تجديد ثلاجة",
+        "unit_en": "Refurbish a fridge",
+        "desc_ar": "تجديد ثلاجة وتسليمها لأسرة.",
+        "desc_en": "Refurbish and deliver a fridge to one family."
+      },
+      {
+        "amount": 6000,
+        "unit_ar": "تجديد غسالة",
+        "unit_en": "Refurbish a washer",
+        "desc_ar": "تجديد غسالة كاملة وتسليمها.",
+        "desc_en": "Refurbish and deliver a full washing machine."
+      }
+    ],
+    "related": [
+      {
+        "to": "/services/ster",
+        "ar": "حملة ستر",
+        "en": "Ster winter campaign"
+      },
+      {
+        "to": "/services/housing",
+        "ar": "سكن كريم",
+        "en": "Dignified housing"
+      }
+    ],
+    "faqs": [],
+    "is_active": true,
+    "sort_order": 6,
+    "has_custom_jsx_block": false
+  },
+  {
+    "slug": "treatment",
+    "program_slug": "education",
+    "sector": "general",
+    "hero_image": "src/assets/about-hero.jpg",
+    "badge_ar": "محور الصحة · سهم العلاج",
+    "badge_en": "Health axis · Treatment Share",
+    "title_ar": "سهم العلاج — مجمّع طبي وقوافل ومركز غسيل كلوي",
+    "title_en": "Treatment Share — Medical Complex, Caravans & Dialysis",
+    "intro_ar": "بنوفّر العلاج للأسر المتعففة عبر مجمّع طبي بـ4 طوابق، مركز غسيل كلوي بالمنزلة، قوافل طبية، وعمليات جراحية عاجلة.",
+    "intro_en": "We provide care to needy families via a 4-floor medical complex, a dialysis center in El-Manzala, mobile clinics, and urgent surgeries.",
+    "meta_title_ar": "سهم العلاج — مجمّع طبي وغسيل كلوي وقوافل | مؤسسة اليسر",
+    "meta_title_en": "Treatment Share — Medical complex & dialysis | Al-Yusr",
+    "meta_description_ar": "ساهم في تشغيل المجمّع الطبي ومركز الغسيل الكلوي وقوافل اليسر — علاج وعمليات وأطراف صناعية للأسر المتعففة.",
+    "meta_description_en": "Help operate the medical complex, dialysis center & medical caravans — treatment, surgeries and prosthetics for needy families.",
+    "bullets_ar": [
+      "مجمّع طبي 4 طوابق بالمنصورة بعيادات تخصصية.",
+      "مركز غسيل كلوي يخدم محافظة الدقهلية.",
+      "أطراف صناعية وكراسي متحركة لذوي الهمم."
+    ],
+    "bullets_en": [
+      "4-floor medical complex in Mansoura with specialist clinics.",
+      "Dialysis center serving Dakahlia governorate.",
+      "Prosthetics and wheelchairs for people with disabilities."
+    ],
+    "stats": [
+      {
+        "value_ar": "4",
+        "value_en": "4",
+        "label_ar": "طوابق مجمّع طبي",
+        "label_en": "medical complex floors"
+      },
+      {
+        "value_ar": "1",
+        "value_en": "1",
+        "label_ar": "مركز غسيل كلوي",
+        "label_en": "dialysis center"
+      },
+      {
+        "value_ar": "+700",
+        "value_en": "+700",
+        "label_ar": "أسرة دعم نقدي",
+        "label_en": "families supported"
+      },
+      {
+        "value_ar": "365",
+        "value_en": "365",
+        "label_ar": "يوم استجابة",
+        "label_en": "days of response"
+      }
+    ],
+    "features": [
+      {
+        "icon": "Stethoscope",
+        "title_ar": "عيادات تخصصية",
+        "title_en": "Specialist clinics",
+        "description_ar": "أسرة، أطفال، باطنة، عظام بأسعار رمزية.",
+        "description_en": "Family, pediatrics, internal & ortho at symbolic fees."
+      },
+      {
+        "icon": "Activity",
+        "title_ar": "غسيل كلوي",
+        "title_en": "Dialysis",
+        "description_ar": "جلسات منتظمة لمرضى الفشل الكلوي.",
+        "description_en": "Regular sessions for dialysis patients."
+      },
+      {
+        "icon": "Truck",
+        "title_ar": "قوافل طبية",
+        "title_en": "Medical caravans",
+        "description_ar": "نزول دوري للقرى البعيدة عن الخدمات.",
+        "description_en": "Periodic outreach to underserved villages."
+      },
+      {
+        "icon": "HandCoins",
+        "title_ar": "دعم عمليات",
+        "title_en": "Surgery support",
+        "description_ar": "تغطية عمليات جراحية عاجلة لغير القادرين.",
+        "description_en": "Cover urgent surgeries for those who can't afford care."
+      },
+      {
+        "icon": "ShieldCheck",
+        "title_ar": "أطراف وكراسي",
+        "title_en": "Prosthetics & chairs",
+        "description_ar": "أطراف صناعية وكراسي متحركة لذوي الهمم.",
+        "description_en": "Prosthetics & wheelchairs for people with disabilities."
+      },
+      {
+        "icon": "Sparkles",
+        "title_ar": "كورونا 2020",
+        "title_en": "COVID 2020",
+        "description_ar": "وفّرنا الأكسجين لـ37 أسرة وقت الأزمة.",
+        "description_en": "We supplied oxygen to 37 families during the crisis."
+      }
+    ],
+    "tiers": [
+      {
+        "amount": 200,
+        "unit_ar": "علبة دواء",
+        "unit_en": "Medication pack",
+        "desc_ar": "علبة دواء شهرية لمريض مزمن.",
+        "desc_en": "Monthly medication pack for a chronic patient."
+      },
+      {
+        "amount": 1500,
+        "unit_ar": "جلسة غسيل",
+        "unit_en": "Dialysis session",
+        "desc_ar": "جلسة غسيل كلوي كاملة بمستلزماتها.",
+        "desc_en": "A full dialysis session with all consumables.",
+        "highlight": true
+      },
+      {
+        "amount": 8000,
+        "unit_ar": "كرسي متحرك",
+        "unit_en": "Wheelchair",
+        "desc_ar": "كرسي متحرك جديد لذوي الهمم.",
+        "desc_en": "A brand-new wheelchair for people with disabilities."
+      },
+      {
+        "amount": 25000,
+        "unit_ar": "عملية جراحية",
+        "unit_en": "Surgery",
+        "desc_ar": "تكلفة عملية جراحية متوسطة.",
+        "desc_en": "Cost of a mid-size surgery."
+      }
+    ],
+    "related": [
+      {
+        "to": "/services/orphans",
+        "ar": "كفالة الأيتام",
+        "en": "Orphan sponsorship"
+      },
+      {
+        "to": "/services/food-box",
+        "ar": "كرتونة الخير",
+        "en": "Food box"
+      },
+      {
+        "to": "/services/housing",
+        "ar": "سكن كريم",
+        "en": "Dignified housing"
+      }
+    ],
+    "faqs": [
+      {
+        "question_ar": "هل المجمّع الطبي مجاني؟",
+        "answer_ar": "بنشتغل بأسعار رمزية لتغطية التشغيل، مع علاج مجاني للحالات غير القادرة بإثبات.",
+        "question_en": "Is the medical complex free?",
+        "answer_en": "We work at symbolic fees to cover operations, with free care for verified low-income cases."
+      }
+    ],
+    "is_active": true,
+    "sort_order": 7,
+    "has_custom_jsx_block": false
+  },
+  {
+    "slug": "orphans",
+    "program_slug": "education",
+    "sector": "general",
+    "hero_image": "src/assets/about-hero.jpg",
+    "badge_ar": "رعاية اجتماعية · كفالة الأيتام",
+    "badge_en": "Social care · Orphan sponsorship",
+    "title_ar": "كفالة الأيتام — رعاية مادية ومعنوية وتعليمية",
+    "title_en": "Orphan Sponsorship — Material, Emotional & Educational Care",
+    "intro_ar": "كفالة شهرية بترعى اليتيم: مصاريف معيشة، مدرسة، علاج، ولعب — مع متابعة دورية ومرشد اجتماعي لكل حالة.",
+    "intro_en": "Monthly sponsorship covering living costs, school, healthcare and play — with periodic follow-up and a social worker per case.",
+    "meta_title_ar": "كفالة يتيم — اليسر | رعاية شاملة وتقارير متابعة",
+    "meta_title_en": "Sponsor an Orphan — Al-Yusr | Full care & follow-up",
+    "meta_description_ar": "اكفل يتيم في الدقهلية ومحافظات مصر مع مؤسسة اليسر — كفالة شاملة بتقارير شهرية وأثر موثّق.",
+    "meta_description_en": "Sponsor an orphan in Dakahlia & Egypt with Al-Yusr — full sponsorship with monthly reports and documented impact.",
+    "bullets_ar": [
+      "كفالة شاملة شهرية تغطي المعيشة والتعليم والصحة.",
+      "مرشد اجتماعي بيتابع كل يتيم وأسرته.",
+      "تقرير شهري وصور سنوية للكافل."
+    ],
+    "bullets_en": [
+      "Comprehensive monthly sponsorship — living, school, health.",
+      "A social worker follows every orphan and family.",
+      "Monthly report and yearly photos for sponsors."
+    ],
+    "stats": [
+      {
+        "value_ar": "354",
+        "value_en": "354",
+        "label_ar": "طالب كفالة تعليمية 2025",
+        "label_en": "students sponsored 2025"
+      },
+      {
+        "value_ar": "12",
+        "value_en": "12",
+        "label_ar": "شهر متابعة",
+        "label_en": "months follow-up"
+      },
+      {
+        "value_ar": "100%",
+        "value_en": "100%",
+        "label_ar": "وصول مباشر",
+        "label_en": "direct delivery"
+      },
+      {
+        "value_ar": "+5 سنوات",
+        "value_en": "5+ yrs",
+        "label_ar": "خبرة في الكفالة",
+        "label_en": "sponsorship experience"
+      }
+    ],
+    "features": [
+      {
+        "icon": "GraduationCap",
+        "title_ar": "تعليم",
+        "title_en": "Education",
+        "description_ar": "مصاريف وزي ومستلزمات وكتب خارجية.",
+        "description_en": "Tuition, uniform, supplies and external books."
+      },
+      {
+        "icon": "Heart",
+        "title_ar": "رعاية معنوية",
+        "title_en": "Emotional care",
+        "description_ar": "أنشطة ورحلات وزيارات منتظمة.",
+        "description_en": "Activities, trips and regular visits."
+      },
+      {
+        "icon": "Stethoscope",
+        "title_ar": "صحة",
+        "title_en": "Healthcare",
+        "description_ar": "كشف وعلاج بالمجمّع الطبي بدون أعباء.",
+        "description_en": "Examinations and care at our medical complex."
+      },
+      {
+        "icon": "Users",
+        "title_ar": "مرشد اجتماعي",
+        "title_en": "Social worker",
+        "description_ar": "مرشد متفرّغ يتابع كل أسرة شهريًا.",
+        "description_en": "A dedicated social worker visits monthly."
+      },
+      {
+        "icon": "ShieldCheck",
+        "title_ar": "خصوصية وكرامة",
+        "title_en": "Privacy & dignity",
+        "description_ar": "بنحفظ هوية اليتيم والأسرة في كل التواصل.",
+        "description_en": "Identity is protected throughout all communication."
+      },
+      {
+        "icon": "Calendar",
+        "title_ar": "تقارير دورية",
+        "title_en": "Periodic reports",
+        "description_ar": "تقرير شهري للكافل بالأثر والأنشطة.",
+        "description_en": "Monthly report to the sponsor on impact and activities."
+      }
+    ],
+    "tiers": [
+      {
+        "amount": 500,
+        "unit_ar": "مساهمة شهرية",
+        "unit_en": "Monthly contribution",
+        "desc_ar": "مساهمة في كفالة يتيم شهريًا.",
+        "desc_en": "Monthly contribution toward orphan care."
+      },
+      {
+        "amount": 1500,
+        "unit_ar": "كفالة شهرية كاملة",
+        "unit_en": "Full monthly sponsorship",
+        "desc_ar": "كفالة شهرية كاملة ليتيم واحد.",
+        "desc_en": "Full monthly sponsorship for one orphan.",
+        "highlight": true
+      },
+      {
+        "amount": 18000,
+        "unit_ar": "كفالة سنة كاملة",
+        "unit_en": "Full annual sponsorship",
+        "desc_ar": "12 شهر كفالة شاملة بدون انقطاع.",
+        "desc_en": "12 months of comprehensive sponsorship."
+      },
+      {
+        "amount": 50000,
+        "unit_ar": "صندوق تعليم 5 طلاب",
+        "unit_en": "5 students fund",
+        "desc_ar": "كفالة تعليمية لـ5 طلاب لمدة سنة.",
+        "desc_en": "Educational sponsorship for 5 students for one year."
+      }
+    ],
+    "related": [
+      {
+        "to": "/services/marriage",
+        "ar": "تيسير زواج اليتيمات",
+        "en": "Bride support"
+      },
+      {
+        "to": "/services/treatment",
+        "ar": "سهم العلاج",
+        "en": "Treatment share"
+      },
+      {
+        "to": "/services/food-box",
+        "ar": "كرتونة الخير",
+        "en": "Food box"
+      }
+    ],
+    "faqs": [],
+    "is_active": true,
+    "sort_order": 8,
+    "has_custom_jsx_block": false
+  },
+  {
+    "slug": "marriage",
+    "program_slug": "bride",
+    "sector": "general",
+    "hero_image": "src/assets/about-hero.jpg",
+    "badge_ar": "رعاية اجتماعية · تيسير زواج اليتيمات",
+    "badge_en": "Social care · Bride support",
+    "title_ar": "تيسير زواج اليتيمات — الفرحة بقت فرحتين",
+    "title_en": "Marriage Support for Orphan Brides",
+    "intro_ar": "بنساهم في تجهيز العرائس بأفضل الخامات: أجهزة كهربائية، مفروشات، وملابس — لبناء بيت مسلم مستقر بكرامة.",
+    "intro_en": "We help equip orphan brides with quality essentials: appliances, furnishings and clothing — building a stable Muslim home with dignity.",
+    "meta_title_ar": "تيسير زواج اليتيمات — جهاز عروسة كامل | مؤسسة اليسر",
+    "meta_title_en": "Marriage Support for Orphan Brides | Al-Yusr",
+    "meta_description_ar": "ساهم في تجهيز عروسة يتيمة: أجهزة، مفروشات، ذهب، وفرحة بكرامة — مع مؤسسة اليسر.",
+    "meta_description_en": "Help equip an orphan bride — appliances, furnishings, dowry and a dignified celebration with Al-Yusr.",
+    "bullets_ar": [
+      "جهاز عروسة كامل بأفضل خامات.",
+      "تنظيم فرحة جماعية بكرامة.",
+      "متابعة بعد الزواج لضمان الاستقرار."
+    ],
+    "bullets_en": [
+      "Full bridal kit with quality essentials.",
+      "Group wedding organized with dignity.",
+      "Post-marriage follow-up to ensure stability."
+    ],
+    "stats": [
+      {
+        "value_ar": "9",
+        "value_en": "9",
+        "label_ar": "عروسة جُهزت 2025",
+        "label_en": "brides equipped 2025"
+      },
+      {
+        "value_ar": "+50",
+        "value_en": "+50",
+        "label_ar": "عروسة منذ التأسيس",
+        "label_en": "brides since 2019"
+      },
+      {
+        "value_ar": "100%",
+        "value_en": "100%",
+        "label_ar": "متابعة بعد الزواج",
+        "label_en": "post-wedding follow-up"
+      }
+    ],
+    "features": [
+      {
+        "icon": "Refrigerator",
+        "title_ar": "أجهزة كهربائية",
+        "title_en": "Appliances",
+        "description_ar": "ثلاجة، غسالة، بوتاجاز، تليفزيون.",
+        "description_en": "Fridge, washer, stove and TV."
+      },
+      {
+        "icon": "Bed",
+        "title_ar": "مفروشات وغرف نوم",
+        "title_en": "Furniture & bedroom",
+        "description_ar": "غرفة نوم كاملة بمفروشاتها.",
+        "description_en": "Full bedroom set with furnishings."
+      },
+      {
+        "icon": "Gift",
+        "title_ar": "ملابس ومستلزمات",
+        "title_en": "Clothing & essentials",
+        "description_ar": "ملابس عروس وملابس بيت.",
+        "description_en": "Bridal and household clothing."
+      },
+      {
+        "icon": "Heart",
+        "title_ar": "احتفال بكرامة",
+        "title_en": "Dignified celebration",
+        "description_ar": "تنظيم فرحة جماعية بمشاركة الأهل.",
+        "description_en": "A group celebration with families."
+      },
+      {
+        "icon": "ShieldCheck",
+        "title_ar": "خصوصية تامة",
+        "title_en": "Full privacy",
+        "description_ar": "حماية هوية العرائس وأسرهن.",
+        "description_en": "Identity of brides and families protected."
+      },
+      {
+        "icon": "Calendar",
+        "title_ar": "متابعة سنوية",
+        "title_en": "Annual follow-up",
+        "description_ar": "زيارة سنوية للأسرة الجديدة.",
+        "description_en": "Annual visit to the new household."
+      }
+    ],
+    "tiers": [
+      {
+        "amount": 1000,
+        "unit_ar": "سهم تجهيز",
+        "unit_en": "Equip share",
+        "desc_ar": "مساهمة في جهاز عروسة.",
+        "desc_en": "Contribution to bridal kit."
+      },
+      {
+        "amount": 5000,
+        "unit_ar": "جهاز كهربائي",
+        "unit_en": "One appliance",
+        "desc_ar": "ثلاجة أو غسالة أو بوتاجاز.",
+        "desc_en": "Fridge, washer or stove.",
+        "highlight": true
+      },
+      {
+        "amount": 25000,
+        "unit_ar": "غرفة نوم كاملة",
+        "unit_en": "Full bedroom set",
+        "desc_ar": "غرفة نوم بمفروشاتها لعروسة.",
+        "desc_en": "Full bedroom set with furnishings."
+      },
+      {
+        "amount": 75000,
+        "unit_ar": "جهاز عروسة كامل",
+        "unit_en": "Full bridal kit",
+        "desc_ar": "جهاز كامل لعروسة يتيمة.",
+        "desc_en": "Complete bridal kit for one orphan bride."
+      }
+    ],
+    "related": [
+      {
+        "to": "/services/orphans",
+        "ar": "كفالة الأيتام",
+        "en": "Orphan sponsorship"
+      },
+      {
+        "to": "/services/housing",
+        "ar": "سكن كريم",
+        "en": "Dignified housing"
+      }
+    ],
+    "faqs": [],
+    "is_active": true,
+    "sort_order": 9,
+    "has_custom_jsx_block": false
+  },
+  {
+    "slug": "food-box",
+    "program_slug": "box",
+    "sector": "general",
+    "hero_image": "src/assets/about-hero.jpg",
+    "badge_ar": "موسم الخير · كرتونة العزومة",
+    "badge_en": "Ramadan season · Family Food Box",
+    "title_ar": "كرتونة الخير — 25 كيلو من الأساسيات",
+    "title_en": "Al-Khair Food Box — 25kg of Essentials",
+    "intro_ar": "كرتونة 25 كيلو غنية بقوليات ومعلبات وأساسيات بجودة 'بلدي طازج' — بتطعم أسرة شهر كامل.",
+    "intro_en": "A 25kg box of legumes, canned goods and essentials of fresh local quality — feeds a family for a full month.",
+    "meta_title_ar": "كرتونة الخير 25 كيلو — تبرّع بإطعام أسرة | مؤسسة اليسر",
+    "meta_title_en": "25kg Family Food Box — Feed a family | Al-Yusr",
+    "meta_description_ar": "تبرّع بكرتونة 25 كيلو لأسرة محتاجة في الدقهلية: بقوليات، معلبات، أساسيات، بجودة بلدي طازج.",
+    "meta_description_en": "Donate a 25kg food box to a needy family in Dakahlia: legumes, canned goods and pantry essentials of fresh local quality.",
+    "bullets_ar": [
+      "25 كيلو من الأساسيات لأسرة شهر كامل.",
+      "بقوليات، معلبات، زيت، أرز، سكر، شاي، لحوم.",
+      "توزيع بكرامة لباب البيت بدون إعلانات."
+    ],
+    "bullets_en": [
+      "25kg of essentials — a full month for a family.",
+      "Legumes, canned goods, oil, rice, sugar, tea, meat.",
+      "Dignified doorstep delivery — no public photos."
+    ],
+    "stats": [
+      {
+        "value_ar": "1,100",
+        "value_en": "1,100",
+        "label_ar": "كرتونة وُزعت 2025",
+        "label_en": "boxes delivered 2025"
+      },
+      {
+        "value_ar": "25 كجم",
+        "value_en": "25kg",
+        "label_ar": "وزن الكرتونة",
+        "label_en": "box weight"
+      },
+      {
+        "value_ar": "30 يوم",
+        "value_en": "30 days",
+        "label_ar": "يكفي أسرة",
+        "label_en": "feeds a family"
+      },
+      {
+        "value_ar": "+5 محافظات",
+        "value_en": "5+ govs",
+        "label_ar": "تغطية",
+        "label_en": "coverage"
+      }
+    ],
+    "features": [
+      {
+        "icon": "Package",
+        "title_ar": "كرتونة 25 كيلو",
+        "title_en": "25kg box",
+        "description_ar": "وزن وافي بأساسيات الشهر.",
+        "description_en": "Full weight covering pantry essentials."
+      },
+      {
+        "icon": "UtensilsCrossed",
+        "title_ar": "بقوليات وأرز",
+        "title_en": "Legumes & rice",
+        "description_ar": "فول، عدس، أرز، مكرونة، سكر، شاي.",
+        "description_en": "Beans, lentils, rice, pasta, sugar, tea."
+      },
+      {
+        "icon": "Beef",
+        "title_ar": "بروتين",
+        "title_en": "Protein",
+        "description_ar": "معلبات تونة وبيض ولحمة بلدي من المزرعة.",
+        "description_en": "Tuna, eggs, and local meat from our farm."
+      },
+      {
+        "icon": "Truck",
+        "title_ar": "توصيل لباب البيت",
+        "title_en": "Doorstep delivery",
+        "description_ar": "بنوصل بكرامة بدون وقفات أو صور للأسرة.",
+        "description_en": "Dignified delivery — no lines or family photos."
+      },
+      {
+        "icon": "ShieldCheck",
+        "title_ar": "جودة بلدي طازج",
+        "title_en": "Fresh local quality",
+        "description_ar": "نختار أعلى جودة ممكنة لكل صنف.",
+        "description_en": "We pick the best available quality per item."
+      },
+      {
+        "icon": "Calendar",
+        "title_ar": "كل المواسم",
+        "title_en": "Year-round",
+        "description_ar": "بنوزّع رمضان والمواسم الكبرى وعند الطلب.",
+        "description_en": "Distributed in Ramadan, major seasons, and on demand."
+      }
+    ],
+    "tiers": [
+      {
+        "amount": 350,
+        "unit_ar": "نصف كرتونة",
+        "unit_en": "Half a box",
+        "desc_ar": "نصف كرتونة لأسرة محتاجة.",
+        "desc_en": "Half a food box for a needy family."
+      },
+      {
+        "amount": 700,
+        "unit_ar": "كرتونة كاملة",
+        "unit_en": "One full box",
+        "desc_ar": "كرتونة 25 كيلو كاملة.",
+        "desc_en": "A full 25kg box.",
+        "highlight": true
+      },
+      {
+        "amount": 3500,
+        "unit_ar": "5 كراتين",
+        "unit_en": "5 boxes",
+        "desc_ar": "إطعام 5 أسر شهر كامل.",
+        "desc_en": "Feed 5 families for a full month."
+      },
+      {
+        "amount": 21000,
+        "unit_ar": "30 كرتونة",
+        "unit_en": "30 boxes",
+        "desc_ar": "إطعام 30 أسرة (قرية كاملة تقريبًا).",
+        "desc_en": "Feed 30 families (≈ a full small village)."
+      }
+    ],
+    "related": [
+      {
+        "to": "/services/orphans",
+        "ar": "كفالة الأيتام",
+        "en": "Orphan sponsorship"
+      },
+      {
+        "to": "/services/treatment",
+        "ar": "سهم العلاج",
+        "en": "Treatment share"
+      },
+      {
+        "to": "/services/farm",
+        "ar": "مزرعة اليسر الوقفية",
+        "en": "Al-Yusr farm"
+      }
+    ],
+    "faqs": [],
+    "is_active": true,
+    "sort_order": 10,
+    "has_custom_jsx_block": false
+  }
+]

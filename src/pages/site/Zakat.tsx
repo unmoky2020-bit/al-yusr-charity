@@ -159,7 +159,7 @@ const Zakat = () => {
   return (
     <PageLayout>
       <SEOHelmet
-        title={isRTL ? "حاسبة الزكاة 2026 بسعر الذهب اليوم بالدقهلية | زكاة المال والفطر — اليسر" : "Zakat Calculator 2026 — Live Gold Price (Dakahlia) | Al-Yusr"}
+        title={isRTL ? "حاسبة الزكاة 2026 بسعر الذهب اليوم | مؤسسة اليسر" : "Zakat Calculator 2026 — Live Gold Price (Dakahlia) | Al-Yusr"}
         description={isRTL ? "احسب زكاتك أونلاين بسعر الذهب الحي في مصر اليوم (24/21/18 قيراط)، زكاة المال والتجارة والفطر، واصرفها في أبواب موثّقة بالدقهلية والمنصورة: كفالة يتيم، علاج، سداد ديون الغارمين، ومشاريع صغيرة عبر مؤسسة اليسر." : "Calculate Zakat online with Egypt's live gold price (24/21/18K), wealth, business and Zakat al-Fitr, then channel it through verified causes in Dakahlia & Mansoura via Al-Yusr."}
         path="/zakat"
       />

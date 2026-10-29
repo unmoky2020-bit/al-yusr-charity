@@ -10,6 +10,8 @@ import { LocalFAQ, FAQItem } from "@/components/common/LocalFAQ";
 import { useLang } from "@/i18n/LangContext";
 import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";
+import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
+import { getCampaignPageMeta } from "@/data/campaignPages/index";
 
 export type LandingProps = {
   slug: string;
@@ -53,6 +55,7 @@ export type LandingProps = {
 export const CampaignLandingShell = (p: LandingProps) => {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const campaignId = getCampaignPageMeta(p.slug)?.apiIds[0];
   const [stickyOpen, setStickyOpen] = useState(true);
   const [scrolledPastHero, setScrolledPastHero] = useState(false);
   const [hideNearFooter, setHideNearFooter] = useState(false);
@@ -344,6 +347,13 @@ export const CampaignLandingShell = (p: LandingProps) => {
       )}
 
       </>)}
+
+      {/* Cases linked to this campaign in the dashboard (renders nothing when there are none). */}
+      {campaignId && (
+        <LinkedCasesSection filter={{ campaignId }} isRTL={isAr} className="bg-muted/30"
+          title={isAr ? "حالات بتتجمع لها التبرعات في الحملة دي" : "Cases this campaign is funding"}
+          subtitle={isAr ? "اختار حالة بعينها وتابع تحديثاتها بالصور لحد ما تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
+      )}
 
       {/* Related links */}
       {p.relatedLinks && p.relatedLinks.length > 0 && (

@@ -1,7 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
 import { Loader2, Building2, HardHat, Hammer, Heart, BookOpen, MapPin, ShieldCheck, Truck, Sparkles, Users, Droplets, Wrench, Pipette, Sprout, Beef, Stethoscope, Home, Bed, Construction, KeyRound, Snowflake, Recycle, Refrigerator, Wind, Activity, GraduationCap, HandCoins, Gift, UtensilsCrossed, Package, Calendar } from "lucide-react";
 import { ServicePage, type ServicePageConfig } from "@/components/services/ServicePage";
-import { SERVICE_PAGES } from "@/data/servicePagesConfig";
+import { useServicePage } from "@/data/sources/services";
 import { useServiceDetail } from "@/hooks/useServices";
 
 const ICON_MAP: Record<string, any> = {
@@ -25,7 +25,7 @@ function resolveIcon(icon: any) {
 const ServiceRouter = () => {
   const { slug = "" } = useParams();
   const { data: remoteDetail, isLoading } = useServiceDetail(slug);
-  const staticConfig = SERVICE_PAGES[slug];
+  const { servicePage: staticConfig } = useServicePage(slug);
 
   if (isLoading && !staticConfig) {
     return (

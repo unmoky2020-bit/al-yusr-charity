@@ -7,26 +7,14 @@ const odhyaSector = { id: "s1", parent_id: null, type: "sector", slug: "sector-o
 const odhyaProgram = { id: "p1", parent_id: "s1", type: "program", slug: "odhya", title_ar: "صك الأضحية", title_en: "Udhiya", description_ar: null, description_en: null, image_url: null, amount: null, target_amount: null, collected_amount: 0, active: true, direct_checkout: false, sort_order: 3 };
 const zakatSector = { id: "s2", parent_id: null, type: "sector", slug: "sector-zakat", title_ar: "الزكاة", title_en: "Zakat", description_ar: null, description_en: null, image_url: null, amount: null, target_amount: null, collected_amount: 0, active: true, direct_checkout: false, sort_order: 8 };
 
-function makeQuery(rows: any[]) {
-  const q: any = {
-    _rows: rows, _filters: [] as any[],
-    select: vi.fn(function (this: any) { return this; }),
-    eq: vi.fn(function (this: any, c: string, v: any) { this._filters.push(["eq", c, v]); return this; }),
-    in: vi.fn(function (this: any, c: string, v: any[]) { this._filters.push(["in", c, v]); return this; }),
-    is: vi.fn(function (this: any, c: string, v: any) { this._filters.push(["is", c, v]); return this; }),
-    order: vi.fn(function (this: any) { return this; }),
-    limit: vi.fn(function (this: any) { return this; }),
-    maybeSingle: vi.fn(function (this: any) { return Promise.resolve({ data: apply(this._rows, this._filters)[0] ?? null }); }),
-    then: function (r: any) { return Promise.resolve({ data: apply(this._rows, this._filters) }).then(r); },
-  };
-  return q;
-}
-function apply(rows: any[], filters: any[]) {
-  return rows.filter((r) => filters.every(([op, c, v]) => op === "eq" ? r[c] === v : op === "is" ? r[c] === v : op === "in" ? (v as any[]).includes(r[c]) : true));
-}
+const rows = [odhyaSector, odhyaProgram, zakatSector];
 
-vi.mock("@/integrations/supabase/client", () => ({
-  supabase: { from: () => makeQuery([odhyaSector, odhyaProgram, zakatSector]) },
+// The selector reads the donation tree through the Laravel wrapper (no Supabase any more).
+vi.mock("@/data/api/publicDonationNodesApi", () => ({
+  listDonationNodeChildren: vi.fn(async (parentId: string | null) => rows.filter((r) => r.parent_id === parentId)),
+  getDonationNodeBySlug: vi.fn(async (slug: string) => rows.find((r) => r.slug === slug) ?? null),
+  getDonationNodeById: vi.fn(async (id: string) => rows.find((r) => r.id === id) ?? null),
+  hasActiveChildren: vi.fn(async (id: string) => rows.some((r) => r.parent_id === id)),
 }));
 vi.mock("@/i18n/LangContext", () => ({ useLang: () => ({ lang: "ar" }) }));
 

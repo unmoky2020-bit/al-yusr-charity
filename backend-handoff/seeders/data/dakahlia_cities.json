@@ -1,0 +1,528 @@
+[
+  {
+    "slug": "mansoura",
+    "name_ar": "المنصورة",
+    "name_en": "Mansoura",
+    "lat": 31.038,
+    "lon": 31.381,
+    "families_count": 3200,
+    "programs": [
+      "odhya",
+      "box",
+      "education"
+    ],
+    "highlight_ar": "المقر الرئيسي — كل البرامج نشطة",
+    "highlight_en": "HQ — all programs active",
+    "intro_ar": "بنوزّع صكوك الأضحية في المنصورة كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في المنصورة هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Mansoura every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Mansoura reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في المنصورة بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Mansoura team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز المنصورة داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Mansoura villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط البلد",
+        "en": "Downtown"
+      },
+      {
+        "ar": "توريل",
+        "en": "Toril"
+      },
+      {
+        "ar": "ميت خميس",
+        "en": "Mit Khamis"
+      },
+      {
+        "ar": "المختلط",
+        "en": "Mokhtalat"
+      },
+      {
+        "ar": "حي الجامعة",
+        "en": "University District"
+      },
+      {
+        "ar": "السكة الجديدة",
+        "en": "New Railway"
+      },
+      {
+        "ar": "جزيرة الورد",
+        "en": "Rose Island"
+      },
+      {
+        "ar": "ميت حدر",
+        "en": "Mit Hadr"
+      },
+      {
+        "ar": "محلة دمنة",
+        "en": "Mahallet Damna"
+      }
+    ],
+    "sort_order": 1,
+    "is_active": true
+  },
+  {
+    "slug": "mit-ghamr",
+    "name_ar": "ميت غمر",
+    "name_en": "Mit Ghamr",
+    "lat": 30.717,
+    "lon": 31.262,
+    "families_count": 1100,
+    "programs": [
+      "odhya",
+      "box",
+      "water"
+    ],
+    "highlight_ar": "تركيز على وصلات المياه والكرتونة",
+    "highlight_en": "Focus on water lines & food boxes",
+    "intro_ar": "بنوزّع صكوك الأضحية في ميت غمر كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في ميت غمر هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Mit Ghamr every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Mit Ghamr reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في ميت غمر بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Mit Ghamr team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز ميت غمر داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Mit Ghamr villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط ميت غمر",
+        "en": "Mit Ghamr Center"
+      },
+      {
+        "ar": "الزنكلون",
+        "en": "Zankalon"
+      },
+      {
+        "ar": "ميت طريف",
+        "en": "Mit Tarif"
+      },
+      {
+        "ar": "كفر الجرايدة",
+        "en": "Kafr El-Garayda"
+      }
+    ],
+    "sort_order": 2,
+    "is_active": true
+  },
+  {
+    "slug": "belqas",
+    "name_ar": "بلقاس",
+    "name_en": "Belqas",
+    "lat": 31.213,
+    "lon": 31.358,
+    "families_count": 850,
+    "programs": [
+      "odhya",
+      "box",
+      "bride"
+    ],
+    "highlight_ar": "حملات جواز عرائس فعالة",
+    "highlight_en": "Active brides preparation campaigns",
+    "intro_ar": "بنوزّع صكوك الأضحية في بلقاس كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في بلقاس هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Belqas every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Belqas reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في بلقاس بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Belqas team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز بلقاس داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Belqas villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط بلقاس",
+        "en": "Belqas Center"
+      },
+      {
+        "ar": "كفر بلقاس",
+        "en": "Kafr Belqas"
+      },
+      {
+        "ar": "البصارطة",
+        "en": "El-Basarta"
+      },
+      {
+        "ar": "شابور",
+        "en": "Shabour"
+      }
+    ],
+    "sort_order": 3,
+    "is_active": true
+  },
+  {
+    "slug": "dikirnis",
+    "name_ar": "دكرنس",
+    "name_en": "Dikirnis",
+    "lat": 31.092,
+    "lon": 31.589,
+    "families_count": 620,
+    "programs": [
+      "odhya",
+      "box",
+      "education"
+    ],
+    "highlight_ar": "20 طفل تحت الكفالة التعليمية",
+    "highlight_en": "20 children under education sponsorship",
+    "intro_ar": "بنوزّع صكوك الأضحية في دكرنس كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في دكرنس هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Dikirnis every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Dikirnis reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في دكرنس بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Dikirnis team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز دكرنس داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Dikirnis villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط دكرنس",
+        "en": "Dikirnis Center"
+      },
+      {
+        "ar": "ميت العامل",
+        "en": "Mit El-Amel"
+      },
+      {
+        "ar": "محلة حسن",
+        "en": "Mahallet Hassan"
+      }
+    ],
+    "sort_order": 4,
+    "is_active": true
+  },
+  {
+    "slug": "sherbin",
+    "name_ar": "شربين",
+    "name_en": "Sherbin",
+    "lat": 31.181,
+    "lon": 31.524,
+    "families_count": 480,
+    "programs": [
+      "odhya",
+      "water"
+    ],
+    "highlight_ar": "12 وصلة مياه نظيفة",
+    "highlight_en": "12 clean water lines installed",
+    "intro_ar": "بنوزّع صكوك الأضحية في شربين كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في شربين هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Sherbin every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Sherbin reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في شربين بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Sherbin team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز شربين داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Sherbin villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط شربين",
+        "en": "Sherbin Center"
+      },
+      {
+        "ar": "كفر الفقهاء",
+        "en": "Kafr El-Fuqaha"
+      },
+      {
+        "ar": "محلة قيل",
+        "en": "Mahallet Qeel"
+      }
+    ],
+    "sort_order": 5,
+    "is_active": true
+  },
+  {
+    "slug": "aga",
+    "name_ar": "أجا",
+    "name_en": "Aga",
+    "lat": 30.94,
+    "lon": 31.237,
+    "families_count": 730,
+    "programs": [
+      "odhya",
+      "box"
+    ],
+    "highlight_ar": "توزيع شهري للحوم",
+    "highlight_en": "Monthly meat distribution",
+    "intro_ar": "بنوزّع صكوك الأضحية في أجا كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في أجا هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Aga every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Aga reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في أجا بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Aga team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز أجا داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Aga villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط أجا",
+        "en": "Aga Center"
+      },
+      {
+        "ar": "كفر العرب",
+        "en": "Kafr El-Arab"
+      },
+      {
+        "ar": "ميت بدر حلاوة",
+        "en": "Mit Badr Halawa"
+      }
+    ],
+    "sort_order": 6,
+    "is_active": true
+  },
+  {
+    "slug": "sinbillawayn",
+    "name_ar": "السنبلاوين",
+    "name_en": "Sinbillawayn",
+    "lat": 30.881,
+    "lon": 31.456,
+    "families_count": 540,
+    "programs": [
+      "odhya",
+      "zakat",
+      "box"
+    ],
+    "highlight_ar": "توزيع زكاة المال على المستحقين",
+    "highlight_en": "Zakat distribution to eligible families",
+    "intro_ar": "بنوزّع صكوك الأضحية في السنبلاوين كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في السنبلاوين هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Sinbillawayn every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Sinbillawayn reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في السنبلاوين بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Sinbillawayn team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز السنبلاوين داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Sinbillawayn villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط السنبلاوين",
+        "en": "Sinbillawayn Center"
+      },
+      {
+        "ar": "ميت غراب",
+        "en": "Mit Ghorab"
+      },
+      {
+        "ar": "نوسا الغيط",
+        "en": "Nawasa El-Gheit"
+      }
+    ],
+    "sort_order": 7,
+    "is_active": true
+  },
+  {
+    "slug": "matareya",
+    "name_ar": "المطرية",
+    "name_en": "Matareya",
+    "lat": 31.183,
+    "lon": 32.033,
+    "families_count": 410,
+    "programs": [
+      "odhya",
+      "water"
+    ],
+    "highlight_ar": "قرى ساحلية محتاجة",
+    "highlight_en": "Coastal villages in need",
+    "intro_ar": "بنوزّع صكوك الأضحية في المطرية كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في المطرية هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Matareya every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Matareya reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في المطرية بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Matareya team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز المطرية داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Matareya villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط المطرية",
+        "en": "Matareya Center"
+      },
+      {
+        "ar": "السرو",
+        "en": "El-Saro"
+      },
+      {
+        "ar": "كفر البدماص",
+        "en": "Kafr El-Badamas"
+      }
+    ],
+    "sort_order": 8,
+    "is_active": true
+  },
+  {
+    "slug": "talkha",
+    "name_ar": "طلخا",
+    "name_en": "Talkha",
+    "lat": 31.054,
+    "lon": 31.378,
+    "families_count": 390,
+    "programs": [
+      "odhya",
+      "box"
+    ],
+    "highlight_ar": "تخدم القرى الغربية للنيل",
+    "highlight_en": "Serves Nile-west villages",
+    "intro_ar": "بنوزّع صكوك الأضحية في طلخا كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في طلخا هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Talkha every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Talkha reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في طلخا بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Talkha team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز طلخا داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Talkha villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط طلخا",
+        "en": "Talkha Center"
+      },
+      {
+        "ar": "ميت العز",
+        "en": "Mit El-Ezz"
+      },
+      {
+        "ar": "كفر الباز",
+        "en": "Kafr El-Baz"
+      }
+    ],
+    "sort_order": 9,
+    "is_active": true
+  },
+  {
+    "slug": "nabaroh",
+    "name_ar": "نبروه",
+    "name_en": "Nabaroh",
+    "lat": 31.107,
+    "lon": 31.33,
+    "families_count": 260,
+    "programs": [
+      "odhya",
+      "box"
+    ],
+    "highlight_ar": "توزيع لحوم شهري",
+    "highlight_en": "Monthly meat distribution",
+    "intro_ar": "بنوزّع صكوك الأضحية في نبروه كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في نبروه هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Nabaroh every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Nabaroh reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في نبروه بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Nabaroh team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز نبروه داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Nabaroh villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط نبروه",
+        "en": "Nabaroh Center"
+      },
+      {
+        "ar": "محلة الأمير",
+        "en": "Mahallet El-Amir"
+      }
+    ],
+    "sort_order": 10,
+    "is_active": true
+  },
+  {
+    "slug": "gamalia",
+    "name_ar": "الجمالية",
+    "name_en": "Gamalia",
+    "lat": 31.18,
+    "lon": 31.87,
+    "families_count": 220,
+    "programs": [
+      "odhya",
+      "box"
+    ],
+    "highlight_ar": "قرى زراعية فقيرة",
+    "highlight_en": "Poor agricultural villages",
+    "intro_ar": "بنوزّع صكوك الأضحية في الجمالية كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في الجمالية هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Gamalia every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Gamalia reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في الجمالية بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Gamalia team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز الجمالية داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Gamalia villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط الجمالية",
+        "en": "Gamalia Center"
+      },
+      {
+        "ar": "كفر سعد",
+        "en": "Kafr Saad"
+      }
+    ],
+    "sort_order": 11,
+    "is_active": true
+  },
+  {
+    "slug": "mit-salsil",
+    "name_ar": "ميت سلسيل",
+    "name_en": "Mit Salsil",
+    "lat": 31.241,
+    "lon": 31.668,
+    "families_count": 180,
+    "programs": [
+      "odhya",
+      "water"
+    ],
+    "highlight_ar": "احتياج كبير لمياه نظيفة",
+    "highlight_en": "High need for clean water",
+    "intro_ar": "بنوزّع صكوك الأضحية في ميت سلسيل كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في ميت سلسيل هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Mit Salsil every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Mit Salsil reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في ميت سلسيل بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Mit Salsil team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز ميت سلسيل داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Mit Salsil villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط ميت سلسيل",
+        "en": "Mit Salsil Center"
+      },
+      {
+        "ar": "البراشية",
+        "en": "El-Barashia"
+      }
+    ],
+    "sort_order": 12,
+    "is_active": true
+  },
+  {
+    "slug": "bani-ubaid",
+    "name_ar": "بني عبيد",
+    "name_en": "Bani Ubaid",
+    "lat": 30.92,
+    "lon": 31.555,
+    "families_count": 200,
+    "programs": [
+      "odhya",
+      "box"
+    ],
+    "highlight_ar": "توزيع كرتونة العزومة",
+    "highlight_en": "Food box distribution",
+    "intro_ar": "بنوزّع صكوك الأضحية في بني عبيد كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في بني عبيد هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Bani Ubaid every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Bani Ubaid reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في بني عبيد بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Bani Ubaid team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز بني عبيد داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Bani Ubaid villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط بني عبيد",
+        "en": "Bani Ubaid Center"
+      },
+      {
+        "ar": "كفر شلشلمون",
+        "en": "Kafr Shalshalmoun"
+      }
+    ],
+    "sort_order": 13,
+    "is_active": true
+  },
+  {
+    "slug": "manzala",
+    "name_ar": "المنزلة",
+    "name_en": "Manzala",
+    "lat": 31.165,
+    "lon": 31.94,
+    "families_count": 340,
+    "programs": [
+      "odhya",
+      "box",
+      "water"
+    ],
+    "highlight_ar": "قرى الصيادين الفقيرة",
+    "highlight_en": "Poor fishermen villages",
+    "intro_ar": "بنوزّع صكوك الأضحية في المنزلة كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في المنزلة هيوصل لباب البيت يوم العيد.",
+    "intro_en": "We distribute Qurbani shares in Manzala every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Manzala reaches the family's doorstep on Eid day.",
+    "local_note_ar": "فريق اليسر في المنزلة بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.",
+    "local_note_en": "Our Manzala team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day.",
+    "coverage_ar": "تغطية كاملة لقرى ومراكز المنزلة داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+    "coverage_en": "Full coverage of Manzala villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+    "districts": [
+      {
+        "ar": "وسط المنزلة",
+        "en": "Manzala Center"
+      },
+      {
+        "ar": "العدلية",
+        "en": "El-Adlia"
+      },
+      {
+        "ar": "البشاتية",
+        "en": "El-Bashatia"
+      }
+    ],
+    "sort_order": 14,
+    "is_active": true
+  }
+]

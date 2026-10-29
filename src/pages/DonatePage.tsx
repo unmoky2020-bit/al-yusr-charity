@@ -18,19 +18,21 @@ import { useLang } from "@/i18n/LangContext";
 import { SimpleDonateHero } from "@/components/sections/SimpleDonateHero";
 import { donationsStore, type DonationRecord } from "@/data/donationsStore";
 import { toast } from "@/hooks/use-toast";
-import { createDonation, getCaseByRef } from "@/data/casesApi";
+import { createDonation, getCaseByRef, verifyDonationPayment } from "@/data/casesApi";
+import { fromLaravelRow } from "@/data/donationRecordMapper";
 import { useAuth } from "@/auth/AuthContext";
 
 import { trackAdEvent } from "@/lib/adCampaignTracker";
 import { trackDonationStarted } from "@/lib/track";
 import { PaymentBrandIcon } from "@/components/donate/PaymentBrandLogos";
 import {
-  DONATION_ENTITIES,
   DonationEntity,
   DonationShare,
   LinkedCase,
   EntityType,
 } from "@/data/donationEntities";
+import { findEntityForLink, useDonationEntities } from "@/data/sources/donationEntities";
+import { targetOfBasket } from "@/data/donationTarget";
 import {
   DonationEntityItem,
   DonationItemState,
@@ -149,61 +151,44 @@ const badgeClasses: Record<string, string> = {
 export type { DonationItemState };
 
 const DonatePage = () => {
+  // Backend programs / projects / campaigns (static list only while loading or when the API is unreachable).
+  const { entities: DONATION_ENTITIES, fromApi: entitiesFromApi } = useDonationEntities();
   const { lang, t } = useLang();
   const { user } = useAuth();
   const [params] = useSearchParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Gateway return (top-window redirect). The query params are only a hint of
-    // WHICH transaction to look at — never of its outcome. The status page asks
-    // the backend and shows "paid" only when the backend confirms it.
-    const ref =
-      params.get("ref") ||
-      params.get("paymob_ref") ||
-      params.get("merchantOrderId") ||
-      params.get("orderReference") ||
-      params.get("orderId");
-    if (ref) {
-      navigate(`/donate/status/${encodeURIComponent(ref.trim())}`, { replace: true });
-    }
-  }, [params, navigate]);
+  // Gateway return (top-window redirect, or the home quick-donate card): the reference in the URL
+  // is only a hint of WHICH transaction to look at. The effect below asks the backend, and shows
+  // the thank-you step only when the backend confirms the payment.
+  const returnRef = (
+    params.get("ref") ||
+    params.get("paymob_ref") ||
+    params.get("merchantOrderId") ||
+    params.get("orderReference") ||
+    params.get("orderId") ||
+    ""
+  ).trim();
+  const [verifyingReturn, setVerifyingReturn] = useState<boolean>(!!returnRef);
 
 
+  const entityParam     = params.get("entity");
   const programSlug     = params.get("program");
   const campaignSlug    = params.get("campaign");
   const projectSlug     = params.get("project");
   const caseRef         = params.get("case");
   const sectorSlugParam = params.get("sector");
 
-  const SLUG_ALIASES: Record<string, string> = {
-    treatment: "medical",
-    prosthetics: "medical",
-    health: "medical",
-    education: "athar",
-    box: "monthly-meat",
-    food: "monthly-meat",
-    "food-box": "monthly-meat",
-    kitchen: "general",
-    zakat: "general",
-    bride: "shelter",
-  };
+  /** The entity a donate link points at (?entity= id, or ?program= / ?project= / ?campaign= slug). */
+  const linkedEntity = findEntityForLink(DONATION_ENTITIES, {
+    entity: entityParam,
+    program: programSlug,
+    project: projectSlug,
+    campaign: campaignSlug,
+  });
+  const hasLinkTarget = !!(entityParam || programSlug || campaignSlug || projectSlug);
 
-  const resolveEntityFromQuery = (slug: string | null): DonationEntity | undefined => {
-    if (!slug) return undefined;
-    const clean = decodeURIComponent(slug).trim().toLowerCase();
-    const direct = DONATION_ENTITIES.find((e) => e.id.toLowerCase() === clean);
-    if (direct) return direct;
-    const aliased = SLUG_ALIASES[clean];
-    if (aliased) {
-      const found = DONATION_ENTITIES.find((e) => e.id === aliased);
-      if (found) return found;
-    }
-    return DONATION_ENTITIES.find((e) => e.id.toLowerCase().includes(clean) || clean.includes(e.id.toLowerCase()));
-  };
-
-  const targetQuery = programSlug || campaignSlug || projectSlug;
-  const initialEntity = resolveEntityFromQuery(targetQuery) || DONATION_ENTITIES[0];
+  const initialEntity = linkedEntity || DONATION_ENTITIES[0];
   const initialMode = initialEntity.isMarkoun ? "in_kind" : "general";
   const initialAmount = Number(params.get("amount")) || (initialMode === "in_kind" ? 0 : initialEntity.priceFrom || 100);
 
@@ -229,29 +214,30 @@ const DonatePage = () => {
     return items.reduce((sum, it) => sum + (it.donationMode === "in_kind" ? 0 : (Number(it.amount) || 0)), 0);
   }, [items]);
 
+  /** Set once the donor changes the basket; link params then stop overriding it. */
+  const basketEditedRef = useRef(false);
+
   useEffect(() => {
     setSectorFilter(sectorSlugParam || "all");
-    const target = programSlug || campaignSlug || projectSlug;
-    if (target) {
-      const ent = resolveEntityFromQuery(target);
-      if (ent) {
-        const defMode = ent.isMarkoun ? "in_kind" : "general";
-        const paramAmt = Number(params.get("amount"));
-        const defAmount = paramAmt > 0 ? paramAmt : (defMode === "in_kind" ? 0 : ent.priceFrom || 100);
-        setItems([
-          {
-            id: "item-init",
-            entityId: ent.id,
-            donationMode: defMode,
-            amount: defAmount,
-            selectedShares: {},
-            selectedCaseId: caseRef || null,
-          },
-        ]);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    }
-  }, [sectorSlugParam, programSlug, campaignSlug, projectSlug, caseRef, params]);
+    if (!hasLinkTarget || basketEditedRef.current || !linkedEntity) return;
+    // ?package=<backend package id | share id>: open the form on that share.
+    const pkgParam = params.get("package");
+    const share = pkgParam ? linkedEntity.shares.find((s) => String(s.apiId) === pkgParam || s.id === pkgParam) : undefined;
+    const defMode = linkedEntity.isMarkoun ? "in_kind" : share ? "shares" : "general";
+    const paramAmt = Number(params.get("amount"));
+    const defAmount = share ? share.price : paramAmt > 0 ? paramAmt : (defMode === "in_kind" ? 0 : linkedEntity.priceFrom || 100);
+    setItems([
+      {
+        id: "item-init",
+        entityId: linkedEntity.id,
+        donationMode: defMode,
+        amount: defAmount,
+        selectedShares: share ? { [share.id]: 1 } : {},
+        selectedCaseId: null,
+      },
+    ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectorSlugParam, entityParam, programSlug, campaignSlug, projectSlug, linkedEntity?.id, entitiesFromApi]);
 
   const MAX_BASKET_ITEMS = 3;
 
@@ -266,6 +252,7 @@ const DonatePage = () => {
       });
       return;
     }
+    basketEditedRef.current = true;
     const existing = new Set(items.map((i) => i.entityId));
     const nextEnt = DONATION_ENTITIES.find((p) => !existing.has(p.id) && !p.isMarkoun) || DONATION_ENTITIES[0];
     const defaultAmt = nextEnt.priceFrom && nextEnt.priceFrom > 0 ? nextEnt.priceFrom : 100;
@@ -284,10 +271,12 @@ const DonatePage = () => {
 
   const removeItem = (id: string) => {
     if (items.length <= 1) return;
+    basketEditedRef.current = true;
     setItems((prev) => prev.filter((i) => i.id !== id));
   };
 
   const updateItem = (updated: DonationItemState) => {
+    basketEditedRef.current = true;
     setItems((prev) => prev.map((it) => (it.id === updated.id ? updated : it)));
     if (fieldErrors[`amount_${updated.id}`]) {
       setFieldErrors((p) => ({ ...p, [`amount_${updated.id}`]: "" }));
@@ -363,6 +352,30 @@ const DonatePage = () => {
 
   const [processing, setProcessing]           = useState(false);
   const [record, setRecord]                   = useState<DonationRecord | null>(null);
+
+  // Returning from the payment gateway: confirmed paid -> thank-you step (animation, ref, receipt);
+  // anything else -> the status page, which keeps checking and never shows "paid" on its own.
+  useEffect(() => {
+    if (!returnRef) return;
+    let cancelled = false;
+    void (async () => {
+      const { status, data } = await verifyDonationPayment(returnRef);
+      if (cancelled) return;
+      if (status === "paid" && data) {
+        const confirmed = fromLaravelRow(data);
+        setRecord({ ...confirmed, ref: confirmed.ref || returnRef, status: "completed" });
+        setStep(3);
+        window.history.replaceState({}, "", window.location.pathname); // drop the reference from the URL
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setVerifyingReturn(false);
+      } else {
+        navigate(`/donate/status/${encodeURIComponent(returnRef)}`, { replace: true });
+      }
+    })();
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [returnRef]);
+
   const [receiptDataUrl, setReceiptDataUrl]   = useState<string>("");
   const [receiptFilename, setReceiptFilename] = useState<string>("");
   const [caseId, setCaseId]                   = useState<string | null>(null);
@@ -381,10 +394,17 @@ const DonatePage = () => {
         setCaseId(c.id); setCaseTitle(c.title);
         if (Number(c.needed_amount) - Number(c.raised_amount) > 0) {
           const suggested = Math.min(500, Math.max(50, Math.ceil((Number(c.needed_amount) - Number(c.raised_amount)) / 10)));
+          const owner =
+            DONATION_ENTITIES.find((e) => e.apiId && (
+              (e.entityType === "program" && String(e.apiId) === String(c.program_id)) ||
+              (e.entityType === "project" && String(e.apiId) === String(c.project_id)) ||
+              (e.entityType === "campaign" && String(e.apiId) === String(c.donation_campaign_id))
+            )) || DONATION_ENTITIES[0];
+          basketEditedRef.current = true;
           setItems([
             {
               id: "item-case",
-              entityId: "treatment",
+              entityId: owner.id,
               donationMode: "case",
               amount: suggested,
               selectedShares: {},
@@ -425,9 +445,15 @@ const DonatePage = () => {
   const errorSummaryRef = useRef<HTMLDivElement | null>(null);
 
   const primaryItem = items[0] || { entityId: "general", amount: 100, donationMode: "general" };
+
+  /** Backend record the payment is booked on (null → general program, breakdown in the notes). */
+  const donationTarget = useMemo(
+    () => targetOfBasket(items, (id) => DONATION_ENTITIES.find((e) => e.id === id), caseId),
+    [items, DONATION_ENTITIES, caseId],
+  );
   const selectedEntity = useMemo(() => {
     return DONATION_ENTITIES.find((x) => x.id === primaryItem.entityId) || DONATION_ENTITIES[0];
-  }, [primaryItem.entityId]);
+  }, [primaryItem.entityId, DONATION_ENTITIES]);
   const selectedProgram = selectedEntity;
 
   // Is any item in the basket an in-kind (مركون) donation?
@@ -459,7 +485,7 @@ const DonatePage = () => {
         return `${name} (${(Number(it.amount) || 0).toLocaleString()} ج.م)`;
       })
       .join(" + ");
-  }, [items, lang]);
+  }, [items, lang, DONATION_ENTITIES]);
 
   const programLabel = useMemo(() => {
     if (items.length === 1) {
@@ -467,7 +493,7 @@ const DonatePage = () => {
       return lang === "ar" ? ent.ar : ent.en;
     }
     return lang === "ar" ? `سلة تبرعات (${items.length} بنود)` : `Donation Basket (${items.length} items)`;
-  }, [items, lang]);
+  }, [items, lang, DONATION_ENTITIES]);
 
   const validateStep1 = (): Record<string, string> => {
     const errs: Record<string, string> = {};
@@ -488,8 +514,9 @@ const DonatePage = () => {
       });
     }
 
-    if (donor.name.trim().length < 2) {
-      errs.name = lang === "ar" ? "أدخل الاسم بالكامل" : "Enter your full name";
+    // Name is optional (empty = «فاعل خير»); the phone is always required to confirm the donation.
+    if (donor.name.trim().length === 1) {
+      errs.name = lang === "ar" ? "اكتب الاسم بالكامل أو سيبه فاضي للتبرع كفاعل خير" : "Enter your full name or leave it empty to give anonymously";
     }
     if (!phoneRe.test(donor.phone.trim())) {
       errs.phone = lang === "ar" ? "رقم الهاتف غير صحيح (01 + 9 أرقام، مثال: 01012345678)" : "Phone must be 01 + 9 digits";
@@ -541,7 +568,7 @@ const DonatePage = () => {
         void (async () => {
           try {
             const saved: any = await createDonation({
-              case_id: caseId,
+              target: donationTarget,
               amount: totalAmount,
               donor_name: donor.name,
               donor_email: donor.email,
@@ -621,6 +648,14 @@ const DonatePage = () => {
 
   return (
     <PageLayout>
+      {verifyingReturn && (
+        <div className="fixed inset-0 z-[70] grid place-items-center bg-background/90 backdrop-blur-sm" role="status" aria-live="polite">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <p className="text-base font-black text-primary">{lang === "ar" ? "بنأكد عملية الدفع…" : "Confirming your payment…"}</p>
+          </div>
+        </div>
+      )}
       <SEOHelmet
         title={lang === "ar" ? "تبرع الآن — مؤسسة اليسر الخيرية" : "Donate Now — Al-Yusr Charity"}
         description={lang === "ar" ? "تبرع بأمان عبر بوابة كاشير أو فودافون كاش أو إنستاباي." : "Donate safely via Kashier, Vodafone Cash, or InstaPay."}
@@ -834,7 +869,7 @@ const DonatePage = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3 lg:gap-4">
                     <div>
                       <label className="block text-xs font-bold text-muted-foreground mb-1">
-                        {lang === "ar" ? "الاسم بالكامل *" : "Full Name *"}
+                        {lang === "ar" ? "الاسم (اختياري)" : "Name (optional)"}
                       </label>
                       <Input
                         type="text"
@@ -844,7 +879,7 @@ const DonatePage = () => {
                           setDonor((d) => ({ ...d, name: e.target.value }));
                           if (fieldErrors.name) setFieldErrors((p) => ({ ...p, name: "" }));
                         }}
-                        placeholder={lang === "ar" ? "مثال: أحمد محمد" : "e.g., Ahmed Mohamed"}
+                        placeholder={lang === "ar" ? "سيبه فاضي للتبرع كفاعل خير" : "Leave empty to give anonymously"}
                         className="h-10 sm:h-10.5 rounded-xl bg-card border-border/70 text-xs sm:text-sm font-bold focus:border-secondary focus:ring-2 focus:ring-secondary/20"
                       />
                       {fieldErrors.name && (
@@ -1432,16 +1467,12 @@ const DonatePage = () => {
                         setProcessing(true);
                         try {
                           const orderId = `YSR-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
-                          let sessionUrl: string | undefined;
-                          let realOrderId = orderId;
-
-                          try {
-                            const res: any = await createDonation({
-                              case_id: caseId || undefined,
-                              category_id: undefined,
+                          // Throws the server's message (e.g. a target that no longer accepts donations).
+                          const res: any = await createDonation({
+                              target: donationTarget,
                               amount: Number(totalAmount),
                               donor_name: donor.name,
-                              donor_email: donor.email || "donor@elyusr.org",
+                              donor_email: donor.email || undefined,
                               donor_phone: donor.phone,
                               payment_method: "kashier",
                               payment_status: "pending",
@@ -1451,15 +1482,14 @@ const DonatePage = () => {
                               ].filter(Boolean).join(" | "),
                               idempotency_key: idemKey.current,
                             });
-                            sessionUrl = res?.payment?.session_url;
-                            realOrderId = res?.donation?.transaction_reference || res?.ref_code || orderId;
-                          } catch (backendErr: any) {
-                            console.warn("[Kashier] Backend submit notice:", backendErr?.message);
-                          }
+                          const sessionUrl: string | undefined = res?.payment?.session_url;
+                          const realOrderId = res?.donation?.transaction_reference || res?.ref_code || orderId;
+                          // No session = no checkout: opening one here would create a second, untargeted donation.
+                          if (!sessionUrl) throw new Error(lang === "ar" ? "تعذر فتح بوابة الدفع، حاول مرة أخرى." : "Could not open the payment page, please try again.");
 
                           void trackAdEvent("donation_started", { donationAmount: Number(totalAmount) });
                           setKashierOrderId(realOrderId);
-                          if (sessionUrl) setKashierSessionUrl(sessionUrl);
+                          setKashierSessionUrl(sessionUrl);
                           setIsKashierModalOpen(true);
                           setProcessing(false);
                           return;
@@ -1685,7 +1715,7 @@ const DonatePage = () => {
 
           const created: DonationRecord = {
             ref: finalRef,
-            donor,
+            donor: { ...donor, name: donor.name.trim() || (lang === "ar" ? "فاعل خير" : "Anonymous donor") },
             amount: totalAmount,
             program: items.length === 1 ? items[0].entityId : "multiple",
             programLabel,

@@ -1,15 +1,22 @@
 ﻿/**
- * servicesApi.ts
- * Unified Services API — supports two providers:
- *   - "supabase" (default): reads/writes Supabase `services` table
- *   - "static": reads from servicePagesConfig.ts static data (no writes)
+ * servicesApi.ts — service pages (/services/:slug, cards on /services-map, AdminServices).
  *
- * If the `services` table does not exist in Supabase yet (404), it gracefully
- * stores `alyusr_services_supabase_available = false` in localStorage so zero 404 HTTP errors
- * are output to the console on subsequent requests/reloads, while full CRUD works 100% locally.
+ * Source of truth: Laravel `/services` (NEW — proposed, see src/data/api/servicesRemoteApi.ts and
+ * backend-handoff/01-replace-supabase-public.md). Supabase and the localStorage "overrides"
+ * are gone: admin edits are saved on the server or fail with a real error.
+ *
+ * Public reads follow the content-source flag (src/lib/contentSource.ts):
+ *   - "static" (default): static SERVICE_PAGES / SERVICE_PAGE_LIST — same as today.
+ *   - "api" / "auto":     Laravel first; on error / empty response the static data is used,
+ *                         and a slug the API does not have keeps its static page.
  */
-import { supabase } from "@/integrations/supabase/client";
 import { SERVICE_PAGES, SERVICE_PAGE_LIST } from "@/data/servicePagesConfig";
+import { useApiContent } from "@/lib/contentSource";
+import { formatServerImageUrl } from "@/data/laravelApi";
+import {
+  fetchServices, fetchService, saveService, patchService, deleteService, reorderServices,
+  type RawService,
+} from "@/data/api/servicesRemoteApi";
 
 export type ServiceCard = {
   id: string;
@@ -49,319 +56,215 @@ export type ServiceDetail = ServiceCard & {
   related: { to: string; ar: string; en: string }[];
 };
 
-const STORAGE_KEY = "alyusr_services_overrides";
-const DELETED_KEY = "alyusr_services_deleted";
-const SUPABASE_CHECK_KEY = "alyusr_services_supabase_available";
+const s = (v: unknown, fb = ""): string => (v === null || v === undefined ? fb : String(v));
+const list = <T,>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : []);
 
-function getSupabaseAvailable(): boolean {
-  try {
-    const val = localStorage.getItem(SUPABASE_CHECK_KEY);
-    if (val === "false") return false;
-  } catch {}
-  return true;
-}
-
-let supabaseTableExists = getSupabaseAvailable();
-
-function handleSupabaseError(error: any) {
-  if (error) {
-    const msg = String(error.message || "");
-    const status = Number(error.status || 0);
-    if (error.code === "42P01" || error.code === "PGRST204" || status === 404 || msg.includes("Could not find the table")) {
-      supabaseTableExists = false;
-      try {
-        localStorage.setItem(SUPABASE_CHECK_KEY, "false");
-      } catch {}
-    }
-  }
-}
-
-function getLocalOverrides(): Record<string, Partial<ServiceDetail>> {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
-  }
-}
-
-function saveLocalOverride(slug: string, data: Partial<ServiceDetail>) {
-  try {
-    const current = getLocalOverrides();
-    current[slug] = { ...current[slug], ...data };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
-    unmarkDeleted(slug);
-  } catch (err) {
-    console.error("Failed to save local override:", err);
-  }
-}
-
-function getDeletedSlugs(): string[] {
-  try {
-    const raw = localStorage.getItem(DELETED_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-function markDeleted(slug: string) {
-  try {
-    const deleted = new Set(getDeletedSlugs());
-    deleted.add(slug);
-    localStorage.setItem(DELETED_KEY, JSON.stringify(Array.from(deleted)));
-  } catch (err) {
-    console.error("Failed to mark deleted:", err);
-  }
-}
-
-function unmarkDeleted(slug: string) {
-  try {
-    const deleted = getDeletedSlugs().filter((s) => s !== slug);
-    localStorage.setItem(DELETED_KEY, JSON.stringify(deleted));
-  } catch (err) {
-    console.error("Failed to unmark deleted:", err);
-  }
-}
-
-const isSupabase = () =>
-  supabaseTableExists && (import.meta.env.VITE_DATA_PROVIDER || "supabase") !== "static";
-
-/** Map a Supabase row to ServiceCard */
-function rowToCard(r: Record<string, unknown>): ServiceCard {
+/** Map a Laravel /services record to ServiceCard. */
+function rowToCard(r: RawService): ServiceCard {
+  const hero = s(r.hero_image ?? r.hero ?? r.image ?? r.cover_image);
   return {
-    id: String(r.id ?? r.slug ?? ""),
-    slug: String(r.slug ?? ""),
-    programSlug: String(r.program_slug ?? r.slug ?? ""),
-    sector: String(r.sector ?? "general"),
-    hero: String(r.hero ?? ""),
-    badge_ar: String(r.badge_ar ?? ""),
-    badge_en: String(r.badge_en ?? ""),
-    title_ar: String(r.title_ar ?? ""),
-    title_en: String(r.title_en ?? ""),
-    intro_ar: String(r.intro_ar ?? ""),
-    intro_en: String(r.intro_en ?? ""),
-    active: Boolean(r.active ?? true),
-    sort_order: Number(r.sort_order ?? 0),
+    id: s(r.id ?? r.slug),
+    slug: s(r.slug),
+    programSlug: s(r.program_slug ?? r.slug),
+    sector: s(r.sector, "general") || "general",
+    hero: hero ? formatServerImageUrl(hero) || hero : "",
+    badge_ar: s(r.badge_ar),
+    badge_en: s(r.badge_en),
+    title_ar: s(r.title_ar ?? r.title),
+    title_en: s(r.title_en),
+    intro_ar: s(r.intro_ar ?? r.description_ar),
+    intro_en: s(r.intro_en ?? r.description_en),
+    active: r.is_active === undefined && r.active === undefined ? true : Boolean(r.is_active ?? r.active),
+    sort_order: Number(r.sort_order ?? 0) || 0,
   };
 }
 
-/** Map a Supabase row to ServiceDetail */
-function rowToDetail(r: Record<string, unknown>): ServiceDetail {
+/** Map a Laravel /services record to ServiceDetail (accepts both the admin and the reader key styles). */
+function rowToDetail(r: RawService): ServiceDetail {
+  type R = Record<string, unknown>;
   return {
     ...rowToCard(r),
-    seo_title_ar: String(r.seo_title_ar ?? ""),
-    seo_title_en: String(r.seo_title_en ?? ""),
-    seo_desc_ar: String(r.seo_desc_ar ?? ""),
-    seo_desc_en: String(r.seo_desc_en ?? ""),
-    bullets_ar: (r.bullets_ar as string[]) ?? [],
-    bullets_en: (r.bullets_en as string[]) ?? [],
-    stats: (r.stats as ServiceDetail["stats"]) ?? [],
-    features: (r.features as ServiceDetail["features"]) ?? [],
-    tiers: (r.tiers as DonationTier[]) ?? [],
-    related: (r.related as ServiceDetail["related"]) ?? [],
+    seo_title_ar: s(r.seo_title_ar ?? r.meta_title_ar),
+    seo_title_en: s(r.seo_title_en ?? r.meta_title_en),
+    seo_desc_ar: s(r.seo_desc_ar ?? r.meta_description_ar),
+    seo_desc_en: s(r.seo_desc_en ?? r.meta_description_en),
+    bullets_ar: list<string>(r.bullets_ar).map(String),
+    bullets_en: list<string>(r.bullets_en).map(String),
+    stats: list<R>(r.stats).map((x) => ({
+      ar: s(x.ar ?? x.value_ar ?? x.value), en: s(x.en ?? x.value_en ?? x.value),
+      arL: s(x.arL ?? x.label_ar), enL: s(x.enL ?? x.label_en),
+    })),
+    features: list<R>(r.features).map((x) => ({
+      icon: s(x.icon ?? x.Icon), t_ar: s(x.t_ar ?? x.title_ar), t_en: s(x.t_en ?? x.title_en),
+      d_ar: s(x.d_ar ?? x.desc_ar ?? x.description_ar), d_en: s(x.d_en ?? x.desc_en ?? x.description_en),
+    })),
+    tiers: list<R>(r.tiers).map((x) => {
+      const t: DonationTier = {
+        amount: Number(x.amount ?? 0) || 0,
+        unit_ar: s(x.unit_ar ?? x.name_ar), unit_en: s(x.unit_en ?? x.name_en),
+        desc_ar: s(x.desc_ar ?? x.description_ar), desc_en: s(x.desc_en ?? x.description_en),
+      };
+      if (x.highlight === true || x.is_popular === true) t.highlight = true;
+      return t;
+    }),
+    related: list<R>(r.related).map((x) => ({ to: s(x.to ?? x.url), ar: s(x.ar ?? x.label_ar), en: s(x.en ?? x.label_en) })),
   };
 }
 
-/** Convert static ServicePageConfig to ServiceCard */
-function staticToCard(s: (typeof SERVICE_PAGE_LIST)[0], idx: number): ServiceCard {
-  const overrides = getLocalOverrides()[s.slug] || {};
+/** Static ServicePageConfig → ServiceCard. */
+function staticToCard(sp: (typeof SERVICE_PAGE_LIST)[0], idx: number): ServiceCard {
   return {
-    id: s.slug,
-    slug: s.slug,
-    programSlug: (overrides.programSlug as string) || s.programSlug || s.slug,
-    sector: (overrides.sector as string) || s.sector || "general",
-    hero: (overrides.hero as string) || s.hero || "",
-    badge_ar: (overrides.badge_ar as string) || s.badge_ar || "",
-    badge_en: (overrides.badge_en as string) || s.badge_en || "",
-    title_ar: (overrides.title_ar as string) || s.title_ar || "",
-    title_en: (overrides.title_en as string) || s.title_en || "",
-    intro_ar: (overrides.intro_ar as string) || s.intro_ar || "",
-    intro_en: (overrides.intro_en as string) || s.intro_en || "",
-    active: overrides.active !== undefined ? Boolean(overrides.active) : true,
-    sort_order: overrides.sort_order !== undefined ? Number(overrides.sort_order) : idx + 1,
+    id: sp.slug,
+    slug: sp.slug,
+    programSlug: sp.programSlug || sp.slug,
+    sector: (sp as { sector?: string }).sector || "general",
+    hero: sp.hero || "",
+    badge_ar: sp.badge_ar || "",
+    badge_en: sp.badge_en || "",
+    title_ar: sp.title_ar || "",
+    title_en: sp.title_en || "",
+    intro_ar: sp.intro_ar || "",
+    intro_en: sp.intro_en || "",
+    active: true,
+    sort_order: idx + 1,
   };
 }
 
-/** Convert static ServicePageConfig to ServiceDetail */
+/** Icon component → its name (static features hold lucide components, the API stores names). */
+function iconName(icon: unknown): string {
+  if (typeof icon === "string") return icon;
+  const named = icon as { displayName?: string; name?: string } | null;
+  return named?.displayName || named?.name || "Heart";
+}
+
+/** Static ServicePageConfig → ServiceDetail. */
 function staticToDetail(slug: string): ServiceDetail | null {
-  if (getDeletedSlugs().includes(slug)) return null;
-  const s = SERVICE_PAGES[slug];
-  const overrides = getLocalOverrides()[slug] || {};
-  if (!s && !overrides.slug) return null;
-  const baseCard = s ? staticToCard(s, 0) : {
-    id: slug, slug, programSlug: slug, sector: "general", hero: "", badge_ar: "", badge_en: "",
-    title_ar: slug, title_en: slug, intro_ar: "", intro_en: "", active: true, sort_order: 0,
-  };
+  const sp = SERVICE_PAGES[slug];
+  if (!sp) return null;
+  const idx = SERVICE_PAGE_LIST.findIndex((x) => x.slug === slug);
   return {
-    ...baseCard,
-    ...overrides,
-    seo_title_ar: (overrides.seo_title_ar as string) || s?.seo_title_ar || s?.title_ar || "",
-    seo_title_en: (overrides.seo_title_en as string) || s?.seo_title_en || s?.title_en || "",
-    seo_desc_ar: (overrides.seo_desc_ar as string) || s?.seo_desc_ar || s?.intro_ar || "",
-    seo_desc_en: (overrides.seo_desc_en as string) || s?.seo_desc_en || s?.intro_en || "",
-    bullets_ar: (overrides.bullets_ar as string[]) || s?.bullets_ar || [],
-    bullets_en: (overrides.bullets_en as string[]) || s?.bullets_en || [],
-    stats: (overrides.stats as ServiceDetail["stats"]) || s?.stats || [],
-    features: (overrides.features as ServiceDetail["features"]) || (s?.features as any) || [],
-    tiers: (overrides.tiers as DonationTier[]) || (s?.tiers as any) || [],
-    related: (overrides.related as ServiceDetail["related"]) || s?.related || [],
+    ...staticToCard(sp, idx < 0 ? 0 : idx),
+    seo_title_ar: sp.seo_title_ar || sp.title_ar || "",
+    seo_title_en: sp.seo_title_en || sp.title_en || "",
+    seo_desc_ar: sp.seo_desc_ar || sp.intro_ar || "",
+    seo_desc_en: sp.seo_desc_en || sp.intro_en || "",
+    bullets_ar: sp.bullets_ar || [],
+    bullets_en: sp.bullets_en || [],
+    stats: sp.stats || [],
+    // `Icon` (the original lucide component) is kept alongside the name so ServiceRouter,
+    // which prefers `f.Icon`, renders exactly the same icon as before.
+    features: (sp.features || []).map((f) => ({
+      icon: iconName((f as { Icon?: unknown }).Icon), t_ar: f.t_ar, t_en: f.t_en, d_ar: f.d_ar, d_en: f.d_en,
+      Icon: (f as { Icon?: unknown }).Icon,
+    })),
+    tiers: (sp.tiers || []) as DonationTier[],
+    related: sp.related || [],
   };
+}
+
+const staticCards = (): ServiceCard[] => SERVICE_PAGE_LIST.map(staticToCard);
+
+/** API cards + static cards whose slug the API does not have, sorted by sort_order. */
+function mergeWithStatic(apiCards: ServiceCard[]): ServiceCard[] {
+  const seen = new Set(apiCards.map((c) => c.slug));
+  return [...apiCards, ...staticCards().filter((c) => !seen.has(c.slug))]
+    .sort((a, b) => a.sort_order - b.sort_order);
+}
+
+/** Admin form → Laravel body (field names shared with src/data/sources/services.ts). */
+function toPayload(data: Partial<ServiceDetail>): RawService {
+  const payload: RawService = {
+    program_slug: data.programSlug,
+    sector: data.sector,
+    hero_image: data.hero,
+    badge_ar: data.badge_ar,
+    badge_en: data.badge_en,
+    title_ar: data.title_ar,
+    title_en: data.title_en,
+    intro_ar: data.intro_ar,
+    intro_en: data.intro_en,
+    // Column names as in backend-handoff/03-seeders.md (services table).
+    meta_title_ar: data.seo_title_ar,
+    meta_title_en: data.seo_title_en,
+    meta_description_ar: data.seo_desc_ar,
+    meta_description_en: data.seo_desc_en,
+    bullets_ar: data.bullets_ar,
+    bullets_en: data.bullets_en,
+    stats: data.stats,
+    features: data.features,
+    tiers: data.tiers,
+    related: data.related,
+    is_active: data.active,
+    sort_order: data.sort_order,
+  };
+  Object.keys(payload).forEach((k) => payload[k] === undefined && delete payload[k]);
+  return payload;
 }
 
 // ── API ───────────────────────────────────────────────────────────────────
 
 export const servicesApi = {
-  /** List all active services */
+  /** Public: active services for ServicesMap. */
   async list(): Promise<ServiceCard[]> {
-    if (isSupabase()) {
-      try {
-        const { data, error } = await supabase
-          .from("services")
-          .select("id,slug,program_slug,sector,hero,badge_ar,badge_en,title_ar,title_en,intro_ar,intro_en,active,sort_order")
-          .eq("active", true)
-          .order("sort_order", { ascending: true });
-        if (error) handleSupabaseError(error);
-        else if (data && data.length > 0) {
-          return (data as Record<string, unknown>[]).map(rowToCard);
-        }
-      } catch (e) {
-        handleSupabaseError(e);
-      }
+    if (!useApiContent) return staticCards();
+    try {
+      const rows = (await fetchServices()).map(rowToCard).filter((c) => c.slug && c.active);
+      if (rows.length > 0) return mergeWithStatic(rows);
+    } catch (err) {
+      if (import.meta.env.DEV) console.warn("[services] API unavailable, using static list:", err);
     }
-    const deleted = getDeletedSlugs();
-    return SERVICE_PAGE_LIST.map(staticToCard).filter((s) => s.active && !deleted.includes(s.slug));
+    return staticCards();
   },
 
-  /** Get full service detail by slug */
+  /** Public: full service detail by slug. */
   async get(slug: string): Promise<ServiceDetail | null> {
-    if (getDeletedSlugs().includes(slug)) return null;
-    if (isSupabase()) {
-      try {
-        const { data, error } = await supabase
-          .from("services")
-          .select("*")
-          .eq("slug", slug)
-          .single();
-        if (error) handleSupabaseError(error);
-        else if (data) {
-          return rowToDetail(data as Record<string, unknown>);
-        }
-      } catch (e) {
-        handleSupabaseError(e);
+    if (!useApiContent) return staticToDetail(slug);
+    try {
+      const row = await fetchService(slug);
+      if (row) {
+        const detail = rowToDetail(row);
+        if (detail.active) return detail;
+        return null;
       }
+    } catch (err) {
+      if (import.meta.env.DEV) console.warn("[services] API unavailable, using static page:", err);
     }
     return staticToDetail(slug);
   },
 
-  /** Admin: list ALL services (including inactive) */
+  /**
+   * Admin: every service incl. inactive. Services that exist only in the static config are listed
+   * too, so the admin can save them into the database. If the API is unreachable the static list
+   * is shown (read-only — saving will report the real error).
+   */
   async listAll(): Promise<ServiceCard[]> {
-    if (isSupabase()) {
-      try {
-        const { data, error } = await supabase
-          .from("services")
-          .select("id,slug,program_slug,sector,hero,badge_ar,badge_en,title_ar,title_en,intro_ar,intro_en,active,sort_order")
-          .order("sort_order", { ascending: true });
-        if (error) handleSupabaseError(error);
-        else if (data && data.length > 0) {
-          return (data as Record<string, unknown>[]).map(rowToCard);
-        }
-      } catch (e) {
-        handleSupabaseError(e);
-      }
+    try {
+      const rows = (await fetchServices({ all: true })).map(rowToCard).filter((c) => c.slug);
+      return mergeWithStatic(rows);
+    } catch (err) {
+      if (import.meta.env.DEV) console.warn("[services] admin list unavailable, showing static list:", err);
+      return staticCards();
     }
-    const deleted = getDeletedSlugs();
-    const staticList = SERVICE_PAGE_LIST.map(staticToCard).filter((s) => !deleted.includes(s.slug));
-    const overrides = getLocalOverrides();
-    
-    Object.keys(overrides).forEach((slug) => {
-      if (!deleted.includes(slug) && !staticList.some((s) => s.slug === slug)) {
-        const d = staticToDetail(slug);
-        if (d) staticList.push(d);
-      }
-    });
-    return staticList.sort((a, b) => a.sort_order - b.sort_order);
   },
 
-  /** Admin: upsert a service */
+  /** Admin: create or update a service (PUT /services/{slug}, POST /services when new). Throws on failure. */
   async upsert(data: Partial<ServiceDetail> & { slug: string }): Promise<ServiceDetail> {
-    saveLocalOverride(data.slug, data);
-
-    if (isSupabase()) {
-      try {
-        const payload = {
-          slug: data.slug,
-          program_slug: data.programSlug,
-          sector: data.sector,
-          hero: data.hero,
-          badge_ar: data.badge_ar,
-          badge_en: data.badge_en,
-          title_ar: data.title_ar,
-          title_en: data.title_en,
-          intro_ar: data.intro_ar,
-          intro_en: data.intro_en,
-          seo_title_ar: data.seo_title_ar,
-          seo_title_en: data.seo_title_en,
-          seo_desc_ar: data.seo_desc_ar,
-          seo_desc_en: data.seo_desc_en,
-          bullets_ar: data.bullets_ar,
-          bullets_en: data.bullets_en,
-          stats: data.stats,
-          features: data.features,
-          tiers: data.tiers,
-          related: data.related,
-          active: data.active ?? true,
-          sort_order: data.sort_order ?? 0,
-        };
-        const { error } = await supabase
-          .from("services")
-          .upsert(payload, { onConflict: "slug" });
-        if (error) handleSupabaseError(error);
-      } catch (e) {
-        handleSupabaseError(e);
-      }
-    }
-    return staticToDetail(data.slug)!;
+    const saved = await saveService(data.slug, toPayload({ ...data, active: data.active ?? true, sort_order: data.sort_order ?? 0 }));
+    return saved ? rowToDetail({ slug: data.slug, ...saved }) : ({ ...staticToDetail(data.slug), ...data } as ServiceDetail);
   },
 
-  /** Admin: toggle active status */
+  /** Admin: toggle active status. Throws on failure. */
   async setActive(slug: string, active: boolean): Promise<void> {
-    saveLocalOverride(slug, { active });
-    if (isSupabase()) {
-      try {
-        const { error } = await supabase.from("services").update({ active }).eq("slug", slug);
-        if (error) handleSupabaseError(error);
-      } catch (e) {
-        handleSupabaseError(e);
-      }
-    }
+    await patchService(slug, { is_active: active });
   },
 
-  /** Admin: delete a service */
+  /** Admin: delete a service. Throws on failure. */
   async delete(slug: string): Promise<void> {
-    markDeleted(slug);
-    if (isSupabase()) {
-      try {
-        const { error } = await supabase.from("services").delete().eq("slug", slug);
-        if (error) handleSupabaseError(error);
-      } catch (e) {
-        handleSupabaseError(e);
-      }
-    }
+    await deleteService(slug);
   },
 
-  /** Admin: bulk update sort order */
+  /** Admin: bulk update sort order. Throws on failure. */
   async reorder(slugs: string[]): Promise<void> {
-    slugs.forEach((slug, i) => saveLocalOverride(slug, { sort_order: i }));
-    if (isSupabase()) {
-      try {
-        for (let i = 0; i < slugs.length; i++) {
-          const { error } = await supabase.from("services").update({ sort_order: i }).eq("slug", slugs[i]);
-          if (error) handleSupabaseError(error);
-        }
-      } catch (e) {
-        handleSupabaseError(e);
-      }
-    }
+    await reorderServices(slugs);
   },
 };

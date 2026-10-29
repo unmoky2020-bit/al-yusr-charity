@@ -11,12 +11,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
 import { track } from "@/lib/track";
-import { supabase } from "@/integrations/supabase/client";
+import { submitContactMessage, buildWhatsAppUrl } from "@/data/api/contactApi";
+import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { z } from "zod";
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs } from "@/data/faqsApi";
 import { LocalFAQ } from "@/components/common/LocalFAQ";
+import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 
 /* ─── Inquiry options ─────────────────────────────────────────── */
 const INQUIRY_OPTIONS = [
@@ -115,6 +117,8 @@ const Contact = () => {
   const focused = useRef(false);
   const [hp, setHp] = useState("");
   const [refCode, setRefCode] = useState<string | null>(null);
+  // Set when the API call fails: a wa.me link pre-filled with the visitor's message so nothing is lost.
+  const [whatsAppFallback, setWhatsAppFallback] = useState<string | null>(null);
   const [copiedBank, setCopiedBank] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
 
@@ -188,21 +192,45 @@ const Contact = () => {
       }
     } catch {}
     setSending(true);
+    setWhatsAppFallback(null);
     try {
-      const { data, error } = await supabase
-        .from("contact_messages")
-        .insert({ name: parsed.data.name, email: parsed.data.email, phone: parsed.data.phone || null, section: parsed.data.section, message: parsed.data.message, user_agent: navigator.userAgent.slice(0, 200) })
-        .select("ref_code")
-        .single<{ ref_code: string }>();
-      if (error || !data) throw error || new Error("Missing ref");
-      const ref = data.ref_code;
-      setRefCode(ref);
+      // Laravel POST /contact-messages — throws on any non-2xx, so success below is real.
+      const { ref_code } = await submitContactMessage({
+        name: parsed.data.name,
+        email: parsed.data.email,
+        phone: parsed.data.phone || null,
+        section: parsed.data.section,
+        message: parsed.data.message,
+      });
+      const ref = ref_code ?? "";
+      setRefCode(ref || null);
       try { localStorage.setItem("alyusr.contact.last", JSON.stringify({ email: form.email, at: Date.now(), ref })); } catch {}
       track("contact_submit", { fbEvent: "Lead", payload: { ref } });
-      toast({ title: isRTL ? ` تم استلام رسالتك (${ref}) — هنرد عليك خلال 24 ساعة` : `✅ Message received (${ref}) — we'll reply within 24 hours` });
+      toast({
+        title: ref
+          ? (isRTL ? ` تم استلام رسالتك (${ref}) — هنرد عليك خلال 24 ساعة` : `✅ Message received (${ref}) — we'll reply within 24 hours`)
+          : (isRTL ? " تم استلام رسالتك — هنرد عليك خلال 24 ساعة" : "✅ Message received — we'll reply within 24 hours"),
+      });
       setForm({ name: "", email: "", phone: "", message: "", section: "general" });
-    } catch {
-      toast({ title: isRTL ? "تعذّر إرسال الرسالة — حاول مجدداً" : "Couldn't send — please try again", variant: "destructive" });
+    } catch (err) {
+      if (import.meta.env.DEV) console.error(err);
+      const sectionLabel = INQUIRY_OPTIONS.find((o) => o.value === parsed.data.section)?.ar ?? parsed.data.section;
+      const waText = [
+        "رسالة من صفحة تواصل معنا",
+        `الاسم: ${parsed.data.name}`,
+        `البريد: ${parsed.data.email}`,
+        parsed.data.phone ? `الهاتف: ${parsed.data.phone}` : "",
+        `نوع الاستفسار: ${sectionLabel}`,
+        `الرسالة: ${parsed.data.message}`,
+      ].filter(Boolean).join("\n");
+      setWhatsAppFallback(buildWhatsAppUrl(waText));
+      toast({
+        title: isRTL ? "تعذّر إرسال الرسالة" : "Couldn't send your message",
+        description: isRTL
+          ? "حصلت مشكلة في الاتصال بالخادم. تقدر تبعت نفس الرسالة على واتساب من الزر اللي تحت."
+          : "We couldn't reach the server. You can send the same message on WhatsApp using the button below.",
+        variant: "destructive",
+      });
     } finally {
       setSending(false);
     }
@@ -257,7 +285,7 @@ const Contact = () => {
               {isRTL ? "اتصل الآن" : "Call now"}
             </a>
             <a
-              href="mailto:info@elyosrcharity.com"
+              href={`mailto:${FOUNDATION_EMAIL}`}
               className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-6 py-2.5 text-xs font-black text-primary-foreground backdrop-blur transition hover:bg-white/20"
             >
               <Mail className="h-4 w-4" />
@@ -356,7 +384,7 @@ const Contact = () => {
 
                     {/* Email */}
                     <a
-                      href="mailto:info@elyosrcharity.com"
+                      href={`mailto:${FOUNDATION_EMAIL}`}
                       className="group/mail flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5 transition hover:border-secondary/40 hover:bg-card"
                     >
                       <div className="flex items-center gap-2.5 min-w-0 flex-1">
@@ -366,7 +394,7 @@ const Contact = () => {
                         <div className="min-w-0 flex-1">
                           <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "البريد الإلكتروني" : "Email"}</div>
                           <div className="text-xs sm:text-sm font-extrabold text-foreground truncate group-hover/mail:text-primary transition-colors">
-                            info@elyosrcharity.com
+                            {FOUNDATION_EMAIL}
                           </div>
                         </div>
                       </div>
@@ -609,6 +637,23 @@ const Contact = () => {
               <ShieldCheck className="h-3.5 w-3.5 text-secondary shrink-0" />
               <span>{isRTL ? "بياناتك مشفرة ومحمية ولا تتم مشاركتها نهائياً" : "Your data is strictly confidential and protected"}</span>
             </div>
+
+            {whatsAppFallback && (
+              <div role="alert" className="mx-auto mt-4 max-w-md rounded-2xl border border-destructive/30 bg-destructive/5 p-4 text-center">
+                <p className="text-xs font-bold text-destructive">
+                  {isRTL ? "لم تصل رسالتك للخادم. ابعتها لنا على واتساب بضغطة واحدة:" : "Your message didn't reach our server. Send it on WhatsApp in one tap:"}
+                </p>
+                <a
+                  href={whatsAppFallback}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-black text-white shadow transition hover:opacity-90"
+                >
+                  <WhatsAppIcon className="h-4 w-4" />
+                  {isRTL ? "إرسال الرسالة عبر واتساب" : "Send via WhatsApp"}
+                </a>
+              </div>
+            )}
 
             {refCode && (
               <p className="mt-3 text-center text-xs font-extrabold text-primary">

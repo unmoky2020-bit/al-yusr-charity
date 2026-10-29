@@ -1,15 +1,26 @@
+# A crawler follows only the most specific group that names it, so every group below
+# carries the same Disallow rules.
+
+# Search engines, social previews and AI search / answer engines — allowed on purpose so
+# Google, Bing, ChatGPT, Claude, Perplexity, Gemini and Copilot can show and cite the pages.
+# Site summary for AI assistants: https://elyusr.org/llms.txt
 User-agent: Googlebot
-Allow: /
-
 User-agent: Bingbot
-Allow: /
-
 User-agent: Twitterbot
-Allow: /
-
 User-agent: facebookexternalhit
-Allow: /
-
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: ClaudeBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot
+User-agent: Applebot-Extended
+User-agent: DuckAssistBot
+User-agent: meta-externalagent
 User-agent: *
 Allow: /
 
@@ -27,3 +38,5 @@ Disallow: /donation/status
 
 Sitemap: https://elyusr.org/sitemap.xml
 Sitemap: https://elyusr.org/image-sitemap.xml
+# Live list of programs, axes, cases, stories and articles (updates as soon as they are published)
+Sitemap: https://api.elyusr.org/sitemap-content.xml

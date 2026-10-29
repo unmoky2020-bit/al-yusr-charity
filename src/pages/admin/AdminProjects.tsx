@@ -1,15 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  FolderKanban, Plus, Pencil, Trash2, Loader2, Save, X, Search,
-  Tag, ExternalLink, Users, ArrowUpRight,
+  FolderKanban, Plus, Pencil, Trash2, Search, Tag, Users, ArrowUpRight,
 } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
@@ -20,6 +17,8 @@ import {
   type LaravelProject,
   type LaravelCase,
 } from "@/data/laravelApi";
+import { apiErrorMessageAr, projectsAdminApi } from "@/data/api/programsAdminApi";
+import { PackagesEditor } from "@/components/admin/programs/PackagesEditor";
 
 export default function AdminProjects() {
   const { lang } = useLang();
@@ -31,14 +30,8 @@ export default function AdminProjects() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
 
-  // Edit / Add Project Dialog
-  const [editing, setEditing] = useState<Partial<LaravelProject> | null>(null);
-  const [saving, setSaving] = useState(false);
-
-  // Packages Dialog
+  // Packages Dialog (inline edit / delete / reorder via PackagesEditor)
   const [pkgProject, setPkgProject] = useState<LaravelProject | null>(null);
-  const [newPkg, setNewPkg] = useState({ name_ar: "سهم مساهمة", amount: 200, is_active: true });
-  const [savingPkg, setSavingPkg] = useState(false);
 
   // Linked Cases Drawer/Dialog
   const [viewCasesProject, setViewCasesProject] = useState<LaravelProject | null>(null);
@@ -53,7 +46,7 @@ export default function AdminProjects() {
 
       setAllCases(Array.isArray(casesRes) ? casesRes : []);
       setProjects(Array.isArray(projRes) ? projRes : []);
-    } catch (e: any) {
+    } catch (e) {
       console.warn("Failed to load projects:", e);
       toast({ title: isAr ? "خطأ في تحميل المشاريع" : "Failed to load projects", variant: "destructive" });
     } finally {
@@ -94,116 +87,31 @@ export default function AdminProjects() {
     return { total, active, totalTarget, totalCollected, overallPct };
   }, [projects]);
 
-  // Open New Project
-  const openNew = () => {
-    setEditing({
-      name: "",
-      name_ar: "",
-      name_en: "",
-      description: "",
-      target_amount: 50000,
-      collected_amount: 0,
-      is_active: true,
-    });
-  };
-
-  // Open Edit Project
-  const openEdit = (p: LaravelProject) => {
-    setEditing({ ...p, name_ar: p.name_ar || p.name });
-  };
-
-  // Save Project
-  const handleSaveProject = async () => {
-    if (!editing || (!editing.name?.trim() && !editing.name_ar?.trim())) {
-      toast({ title: isAr ? "يرجى كتابة اسم المشروع" : "Please enter project name", variant: "destructive" });
-      return;
-    }
-
-    setSaving(true);
-    try {
-      const finalName = editing.name_ar?.trim() || editing.name?.trim() || "";
-      const payload: Partial<LaravelProject> = {
-        name: finalName,
-        name_ar: finalName,
-        name_en: editing.name_en?.trim() || finalName,
-        description: editing.description?.trim() || "",
-        target_amount: Number(editing.target_amount || 0),
-        is_active: editing.is_active !== false,
-      };
-
-      if (editing.id && !String(editing.id).startsWith("static-")) {
-        await projectsApi.update(editing.id, payload as any);
-        toast({ title: isAr ? "تم تحديث المشروع بنجاح" : "Project updated successfully" });
-      } else {
-        await projectsApi.create(payload as any);
-        toast({ title: isAr ? "تم إنشاء المشروع بنجاح في قاعدة البيانات" : "Project created successfully" });
-      }
-
-      setEditing(null);
-      await loadData();
-    } catch (e: any) {
-      toast({ title: e.message || "Failed to save project", variant: "destructive" });
-    } finally {
-      setSaving(false);
-    }
-  };
-
   // Delete Project
   const handleDeleteProject = async (id: number | string) => {
     if (!confirm(isAr ? "هل أنت متأكد من حذف هذا المشروع؟" : "Are you sure you want to delete this project?")) return;
     try {
-      if (!String(id).startsWith("static-")) {
-        await projectsApi.remove(id);
-      }
+      await projectsAdminApi.remove(id);
       setProjects((prev) => prev.filter((p) => String(p.id) !== String(id)));
       toast({ title: isAr ? "تم حذف المشروع" : "Project deleted" });
-    } catch (e: any) {
-      toast({ title: e.message || "Failed to delete", variant: "destructive" });
+    } catch (e) {
+      toast({ title: isAr ? "فشل حذف المشروع" : "Delete failed", description: apiErrorMessageAr(e), variant: "destructive" });
     }
   };
 
   // Toggle Active
   const handleToggleActive = async (p: LaravelProject) => {
-    const next = !p.is_active;
+    const next = !(p.is_active !== false);
     try {
-      if (!String(p.id).startsWith("static-")) {
-        await projectsApi.update(p.id, { is_active: next } as any);
-      }
+      await projectsAdminApi.update(p.id, { is_active: next });
       setProjects((prev) =>
         prev.map((item) => (String(item.id) === String(p.id) ? { ...item, is_active: next } : item))
       );
       toast({ title: isAr ? `تم ${next ? "تفعيل" : "تعطيل"} المشروع` : `Project ${next ? "activated" : "deactivated"}` });
-    } catch (e: any) {
-      toast({ title: e.message, variant: "destructive" });
+    } catch (e) {
+      toast({ title: isAr ? "فشل تغيير الحالة" : "Update failed", description: apiErrorMessageAr(e), variant: "destructive" });
     }
   };
-
-  // Add Donation Package
-  const handleAddPackage = async () => {
-    if (!pkgProject || !newPkg.name_ar.trim() || Number(newPkg.amount) <= 0) {
-      toast({ title: isAr ? "اكتب اسم الباقة والمبلغ" : "Fill package name and amount", variant: "destructive" });
-      return;
-    }
-    setSavingPkg(true);
-    try {
-      if (!String(pkgProject.id).startsWith("static-")) {
-        await projectsApi.createPackage(pkgProject.id, {
-          name_ar: newPkg.name_ar.trim(),
-          amount: Number(newPkg.amount),
-        });
-        toast({ title: isAr ? "تمت إضافة باقة التبرع للمشروع" : "Donation package added" });
-      } else {
-        toast({ title: isAr ? "احفظ المشروع أولاً في قاعدة البيانات لإضافة باقات إليه" : "Save project to backend DB first" });
-      }
-      setPkgProject(null);
-      await loadData();
-    } catch (e: any) {
-      toast({ title: e.message || "Failed to add package", variant: "destructive" });
-    } finally {
-      setSavingPkg(false);
-    }
-  };
-
 
   return (
     <AdminLayout>
@@ -353,7 +261,7 @@ export default function AdminProjects() {
               const linkedCases = allCases.filter(
                 (c) => String(c.project_id) === String(proj.id) || (c.project && String(c.project.id) === String(proj.id))
               );
-              const rawImg = (proj as any).cover_image || proj.image || (proj as any).cover_image_url || (proj as any).image_url;
+              const rawImg = proj.cover_image || proj.image || proj.cover_image_url || proj.image_url;
               const imageSrc = rawImg ? formatServerImageUrl(rawImg) : null;
 
               return (
@@ -411,7 +319,7 @@ export default function AdminProjects() {
                     </div>
 
                     <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
-                      {proj.description || (isAr ? "لا يوجد وصف مدخل لهذا المشروع." : "No description provided.")}
+                      {(proj as { short_description?: string | null }).short_description || proj.description || (isAr ? "لا يوجد وصف مدخل لهذا المشروع." : "No description provided.")}
                     </p>
 
                     {/* Progress Bar */}
@@ -493,142 +401,29 @@ export default function AdminProjects() {
         )}
       </div>
 
-      {/* ── Dialog: Create / Edit Project ── */}
-      <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-xl font-bold">
-              <FolderKanban className="h-5 w-5 text-primary" />
-              {editing?.id && !String(editing.id).startsWith("static-")
-                ? (isAr ? "تعديل بيانات المشروع" : "Edit Project")
-                : (isAr ? "إضافة مشروع خيري جديد" : "New Project")}
-            </DialogTitle>
-          </DialogHeader>
-
-          {editing && (
-            <div className="space-y-4 py-2 text-sm">
-              <div>
-                <Label>{isAr ? "اسم المشروع (عربي) *" : "Project Name (Arabic) *"}</Label>
-                <Input
-                  value={editing.name_ar || editing.name || ""}
-                  onChange={(e) => setEditing({ ...editing, name: e.target.value, name_ar: e.target.value })}
-                  placeholder="مثال: جهاز عروسه"
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label>{isAr ? "اسم المشروع (إنجليزي)" : "Project Name (English)"}</Label>
-                <Input
-                  value={editing.name_en || ""}
-                  onChange={(e) => setEditing({ ...editing, name_en: e.target.value })}
-                  placeholder="Bride Trousseau Project"
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label>{isAr ? "وصف المشروع وأهدافه" : "Description"}</Label>
-                <Textarea
-                  value={editing.description || ""}
-                  onChange={(e) => setEditing({ ...editing, description: e.target.value })}
-                  placeholder="اكتب نبذة عن الفئات المستفيدة ومجال المشروع..."
-                  rows={3}
-                  className="mt-1"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label>{isAr ? "المبلغ المستهدف (ج.م) *" : "Target Amount (EGP) *"}</Label>
-                  <Input
-                    type="number"
-                    value={editing.target_amount ?? 50000}
-                    onChange={(e) => setEditing({ ...editing, target_amount: Number(e.target.value) })}
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label>{isAr ? "المبلغ المحصل (ج.م)" : "Collected Amount"}</Label>
-                  <Input
-                    type="number"
-                    value={editing.collected_amount ?? 0}
-                    onChange={(e) => setEditing({ ...editing, collected_amount: Number(e.target.value) })}
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 pt-2 border-t border-border">
-                <Switch
-                  checked={editing.is_active !== false}
-                  onCheckedChange={(c) => setEditing({ ...editing, is_active: c })}
-                />
-                <Label>{isAr ? "مشروع نشط ومتاح للتبرع" : "Active"}</Label>
-              </div>
-            </div>
-          )}
-
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setEditing(null)}>
-              {isAr ? "إلغاء" : "Cancel"}
-            </Button>
-            <Button onClick={handleSaveProject} disabled={saving} className="gap-1.5 bg-primary text-primary-foreground">
-              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              {isAr ? "حفظ المشروع" : "Save Project"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       {/* ── Dialog: Project Donation Packages (الأسهم) ── */}
-      <Dialog open={!!pkgProject} onOpenChange={(open) => !open && setPkgProject(null)}>
-        <DialogContent className="max-w-md">
+      <Dialog
+        open={!!pkgProject}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPkgProject(null);
+            void loadData();
+          }
+        }}
+      >
+        <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto" dir="rtl">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 font-bold text-lg">
+            <DialogTitle className="flex items-center gap-2 text-lg font-bold">
               <Tag className="h-5 w-5 text-secondary" />
-              {isAr ? `باقات المساهمة — ${pkgProject?.name_ar || pkgProject?.name}` : "Donation Packages"}
+              {`باقات المساهمة — ${pkgProject?.name_ar || pkgProject?.name || ""}`}
             </DialogTitle>
           </DialogHeader>
-
-          <div className="space-y-4 py-2 text-sm">
-            <p className="text-xs text-muted-foreground">
-              {isAr
-                ? "إضافة أسهم تبرع محددة لهذا المشروع (مثل: سهم جهاز ثلاجة 5000 ج، سهم مساهمة عام 200 ج)."
-                : "Add preset contribution packages for this project."}
-            </p>
-
-            <div className="rounded-xl border border-border p-3 space-y-3 bg-muted/20">
-              <Label className="font-bold">{isAr ? "إضافة باقة جديدة:" : "Add New Package:"}</Label>
-              <div>
-                <Label className="text-xs">{isAr ? "اسم الباقة (عربي)" : "Package Name"}</Label>
-                <Input
-                  value={newPkg.name_ar}
-                  onChange={(e) => setNewPkg({ ...newPkg, name_ar: e.target.value })}
-                  placeholder="سهم 200 جنيه"
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label className="text-xs">{isAr ? "المبلغ (ج.م)" : "Amount (EGP)"}</Label>
-                <Input
-                  type="number"
-                  value={newPkg.amount}
-                  onChange={(e) => setNewPkg({ ...newPkg, amount: Number(e.target.value) })}
-                  className="mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setPkgProject(null)}>
-              {isAr ? "إغلاق" : "Close"}
-            </Button>
-            <Button onClick={handleAddPackage} disabled={savingPkg} className="gap-1.5 bg-secondary text-secondary-foreground">
-              {savingPkg && <Loader2 className="h-4 w-4 animate-spin" />}
-              {isAr ? "إضافة الباقة" : "Add Package"}
-            </Button>
+          <p className="text-xs text-muted-foreground">
+            الإضافة تعمل الآن. تعديل الاسم/المبلغ/التفعيل والحذف والترتيب تحتاج المسارات المقترحة في الباك إند، وستظهر رسالة واضحة لو لم تكن مفعّلة.
+          </p>
+          {pkgProject && <PackagesEditor kind="projects" ownerId={pkgProject.id} />}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setPkgProject(null); void loadData(); }}>إغلاق</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

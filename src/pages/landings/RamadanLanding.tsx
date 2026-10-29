@@ -11,7 +11,8 @@ import yusrMeals from "@/assets/yusr-meals.jpg";
 import yusrDistribution from "@/assets/yusr-distribution-1.jpg";
 import farmHero from "@/assets/farm-hero.jpg";
 
-const DONATE = "/donate?program=ramadan";
+import { campaignDonateHref } from "@/data/campaignPages/index";
+const DONATE = campaignDonateHref("ramadan");
 
 /** Order of the giving-table rows (price ids from the content model). */
 const TABLE_IDS = ["iftar", "fitr", "meat", "eid_clothes", "box", "bride"];

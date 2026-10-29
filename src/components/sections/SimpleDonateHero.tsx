@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
 import { ShieldCheck, Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
-import { DONATION_ENTITIES } from "@/data/donationEntities";
+import { useDonationEntities } from "@/data/sources/donationEntities";
 
 /**
  * Lightweight, centered donate hero — replaces the heavy cinematic "journey".
@@ -23,6 +23,7 @@ export function SimpleDonateHero({
   const { lang } = useLang();
   const isAR = lang === "ar";
   const stripRef = useRef<HTMLDivElement | null>(null);
+  const { entities } = useDonationEntities();
 
   // Tabs matching the 3 main pillars + key highlights
   const SECTORS: { id: string; ar: string; en: string }[] = [
@@ -38,7 +39,7 @@ export function SimpleDonateHero({
   const filter = sectorFilter;
 
   const allItems = useMemo(() => {
-    return DONATION_ENTITIES.map((ent) => ({
+    return entities.map((ent) => ({
       slug: ent.id,
       name: isAR ? ent.ar : ent.en,
       image: ent.image,
@@ -48,7 +49,7 @@ export function SimpleDonateHero({
       sharesCount: ent.shares.length,
       casesCount: ent.cases.length,
     }));
-  }, [isAR]);
+  }, [isAR, entities]);
 
   const items = useMemo(() => {
     if (filter === "all") return allItems;

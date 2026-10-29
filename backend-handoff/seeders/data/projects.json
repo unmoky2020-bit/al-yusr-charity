@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "waqf",
+    "name": "المزرعة الوقفية — وقف إنتاجي",
+    "name_en": "Waqf Farm — Productive Endowment",
+    "description": "صدقة جارية مستدامة تدر أثراً وتمويلاً خيرياً دائماً",
+    "short_description": "صدقة جارية مستدامة تدر أثراً وتمويلاً خيرياً دائماً",
+    "short_description_en": "Sustainable productive endowment generating perpetual charity",
+    "target_amount": null,
+    "starting_price": "500.00",
+    "display_order": 1,
+    "cover_image": "src/assets/farm-hero.jpg",
+    "is_active": true,
+    "extra": {
+      "source": "src/data/donationEntities.ts",
+      "description_en": "Sustainable productive endowment generating perpetual charity",
+      "donation_entity_id": "waqf",
+      "entity_type": "project",
+      "donation_type": "cash",
+      "category_ar": "وقف إنتاجي",
+      "category_en": "Productive Waqf",
+      "color": "#84cc16",
+      "entity_image": "src/assets/farm-hero.jpg"
+    }
+  },
+  {
+    "slug": "medical",
+    "name": "المجمعات الطبية — رعاية صحية شاملة",
+    "name_en": "Medical Complexes — Comprehensive Healthcare",
+    "description": "كشوفات طبية وأدوية شهرية وعمليات وأطراف صناعية لغير القادرين",
+    "short_description": "كشوفات طبية وأدوية شهرية وعمليات وأطراف صناعية لغير القادرين",
+    "short_description_en": "Medical checkups, monthly medicines, surgeries and prosthetics for the poor",
+    "target_amount": null,
+    "starting_price": "200.00",
+    "display_order": 2,
+    "cover_image": "src/assets/Prosthetics.jpg",
+    "is_active": true,
+    "extra": {
+      "source": "src/data/donationEntities.ts",
+      "description_en": "Medical checkups, monthly medicines, surgeries and prosthetics for the poor",
+      "donation_entity_id": "medical",
+      "entity_type": "project",
+      "donation_type": "cash",
+      "category_ar": "رعاية صحية",
+      "category_en": "Healthcare",
+      "color": "#10b981",
+      "entity_image": "src/assets/Prosthetics.jpg"
+    }
+  }
+]

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import {
   ArrowRight,
   ArrowLeft,
@@ -24,124 +25,55 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { useLang } from "@/i18n/LangContext";
-import { DONATION_ENTITIES } from "@/data/donationEntities";
+import { useProjectCards, type ProjectCard } from "@/data/sources/projects";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 // ── Images ──
-import waqfImg from "@/assets/farm-hero.jpg";
-import shelterImg from "@/assets/hero-sad.jpg";
-import waterImg from "@/assets/program-water-new.jpg";
-import brideImg from "@/assets/poster-bride.png";
-import takrimImg from "@/assets/takrim-van.jpg";
-import mosquesImg from "@/assets/yusr-hospital.jpg";
 import familyImg from "@/assets/family-hope.jpg";
 
-interface ProjectItem {
-  id: string;
+/** Look of a project card (icon + colours + optional landing page), by project slug. Text, image and
+ *  prices come from the backend (dashboard → المشاريع); a project without an entry gets DEFAULT_THEME. */
+interface ProjectTheme {
   icon: typeof Landmark;
-  ar: string;
-  en: string;
-  tagAr: string;
-  tagEn: string;
-  descAr: string;
-  descEn: string;
-  img: string;
   bgGradient: string;
   accentColor: string;
-  priceFrom: number;
-  featured?: boolean;
   landingUrl?: string;
 }
 
-const PROJECTS: ProjectItem[] = [
-  {
-    id: "mosques",
-    icon: Landmark,
-    ar: "عمارة وبناء بيوت الله",
-    en: "Mosque Building & Renovation",
-    tagAr: "صدقة جارية في كل صلاة",
-    tagEn: "Charity with every prayer",
-    descAr: "ساهم في بناء أو ترميم مساجد القرى — من فرش السجاد حتى رفع المئذنة. كل سهم تبني به بيتاً في الجنة ويُكتب لك أجر كل من ركع وسجد فيه.",
-    descEn: "Build or restore village mosques. Every share builds your home in Jannah and earns rewards for every prayer performed.",
-    img: mosquesImg,
-    bgGradient: "from-indigo-950 via-slate-950/85 to-transparent",
-    accentColor: "#6366f1",
-    priceFrom: 250,
-    featured: true,
-  },
-  {
-    id: "waqf",
-    icon: Leaf,
-    ar: "المزرعة الوقفية — وقف إنتاجي",
-    en: "Waqf Farm — Productive Endowment",
-    tagAr: "صدقة جارية لا تنقطع",
-    tagEn: "Perpetual flowing charity",
-    descAr: "أرض وقفية تُنتج وتُوزع ثمارها على الفقراء والأيتام سنوياً، وتدر عائداً مستداماً للأسر المتعففة.",
-    descEn: "Endowment land producing fruits for the needy and orphans, yielding sustainable returns.",
-    img: waqfImg,
-    bgGradient: "from-emerald-950 via-slate-950/85 to-transparent",
-    accentColor: "#10b981",
-    priceFrom: 500,
-    landingUrl: "/farm",
-  },
-  {
-    id: "shelter",
-    icon: Home,
-    ar: "ستر — تسقيف وترميم المنازل",
-    en: "Sitr — Roofing & Home Repair",
-    tagAr: "لأن المأوى الكريم حق",
-    tagEn: "Dignified shelter is a right",
-    descAr: "تسقيف المنازل المتهالكة لحماية الأسر وأطفالهم من برد الشتاء ومياه الأمطار وإعادة كرامتهم.",
-    descEn: "Roofing vulnerable rural homes to protect families from winter cold and rain.",
-    img: shelterImg,
-    bgGradient: "from-amber-950 via-slate-950/85 to-transparent",
-    accentColor: "#f59e0b",
-    priceFrom: 500,
-    landingUrl: "/setr",
-  },
-  {
-    id: "water",
-    icon: Droplets,
-    ar: "سقيا الماء — وصلة مياه نظيفة",
-    en: "Clean Water Connections",
-    tagAr: "أفضل الصدقة سقي الماء",
-    tagEn: "The best charity is giving water",
-    descAr: "إيصال مياه شرب نقية وصالحة لبيوت الأسر المحرومة بالقرى بعدادات رسمية وفلاتر معتمدة.",
-    descEn: "Connecting clean running tap water to underprivileged rural households.",
-    img: waterImg,
-    bgGradient: "from-sky-950 via-slate-950/85 to-transparent",
-    accentColor: "#0284c7",
-    priceFrom: 300,
-  },
-  {
-    id: "bride",
-    icon: Heart,
-    ar: "تيسير زواج — جهاز عروسة يتيمة",
-    en: "Bride's Trousseau (Marriage Aid)",
-    tagAr: "ستر وتكريم الفتيات",
-    tagEn: "Dignity for orphan brides",
-    descAr: "توفير الأجهزة الكهربائية والمفروشات الأساسية لإتمام زواج الفتيات اليتيمات وبناء أسرة كريمة.",
-    descEn: "Providing essential home appliances and furnishings to support orphan brides.",
-    img: brideImg,
-    bgGradient: "from-pink-950 via-slate-950/85 to-transparent",
-    accentColor: "#ec4899",
-    priceFrom: 250,
-  },
-  {
-    id: "takrim",
-    icon: Truck,
-    ar: "سيارات تكريم الإنسان",
-    en: "Takrim Mortuary Vans",
-    tagAr: "تكريم الإنسان في آخر رحلاته",
-    tagEn: "Honouring the departed",
-    descAr: "أسطول سيارات مجهز لنقل الموتى بكرامة وإنسانية مجاناً لوجه الله للأسر غير القادرة في أنحاء مصر.",
-    descEn: "Free dignified mortuary transport service honoring the departed for underprivileged families.",
-    img: takrimImg,
-    bgGradient: "from-slate-950 via-slate-950/85 to-transparent",
-    accentColor: "#64748b",
-    priceFrom: 100,
-  },
-];
+const DEFAULT_THEME: ProjectTheme = { icon: Building2, bgGradient: "from-slate-950 via-slate-950/85 to-transparent", accentColor: "#0f766e" };
+
+const PROJECT_THEMES: Record<string, ProjectTheme> = {
+  mosques: { icon: Landmark, bgGradient: "from-indigo-950 via-slate-950/85 to-transparent", accentColor: "#6366f1" },
+  waqf: { icon: Leaf, bgGradient: "from-emerald-950 via-slate-950/85 to-transparent", accentColor: "#10b981", landingUrl: "/farm" },
+  shelter: { icon: Home, bgGradient: "from-amber-950 via-slate-950/85 to-transparent", accentColor: "#f59e0b", landingUrl: "/setr" },
+  water: { icon: Droplets, bgGradient: "from-sky-950 via-slate-950/85 to-transparent", accentColor: "#0284c7" },
+  bride: { icon: Heart, bgGradient: "from-pink-950 via-slate-950/85 to-transparent", accentColor: "#ec4899" },
+  takrim: { icon: Truck, bgGradient: "from-slate-950 via-slate-950/85 to-transparent", accentColor: "#64748b" },
+};
+
+type ProjectItem = ProjectCard & ProjectTheme;
+
+const toItem = (p: ProjectCard): ProjectItem => ({ ...p, ...(PROJECT_THEMES[p.slug] ?? DEFAULT_THEME) });
+
+/** Details: the campaign landing page when the project has one, else its own page. */
+const detailsHref = (p: ProjectItem) => p.landingUrl ?? `/projects/${p.slug}`;
+const donateHref = (p: ProjectItem) => `/donate?project=${encodeURIComponent(p.slug)}`;
+
+const pct = (raised: number, target: number) => Math.min(100, Math.round((raised / (target || 1)) * 100));
+
+function ProjectsGridSkeleton() {
+  return (
+    <div className="space-y-8" aria-busy="true">
+      <Skeleton className="h-[380px] sm:h-[420px] w-full rounded-3xl" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Skeleton key={i} className="h-[460px] w-full rounded-3xl" />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 /* ═══════════════════════════════════════════════════════════════════ */
 
@@ -150,7 +82,9 @@ const ProjectsPage = () => {
   const isAR = lang === "ar";
   const Arrow = isAR ? ArrowLeft : ArrowRight;
 
-  const projectEntities = DONATION_ENTITIES.filter((e) => e.entityType === "project");
+  const { projects: cards, isLoading } = useProjectCards();
+  const PROJECTS = cards.map(toItem);
+  const totalShares = cards.reduce((n, p) => n + p.sharesCount, 0);
 
   const waMsg = encodeURIComponent(
     isAR
@@ -245,8 +179,8 @@ const ProjectsPage = () => {
         <div className="container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-4 sm:py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-0 text-center">
             {[
-              { num: `${PROJECTS.length}`, labelAr: "مشاريع تنموية كبرى", labelEn: "Active Mega Projects" },
-              { num: "٢٢+", labelAr: "سهم مالي متاح", labelEn: "Available Shares" },
+              { num: isLoading ? "…" : `${PROJECTS.length}`, labelAr: "مشاريع تنموية كبرى", labelEn: "Active Mega Projects" },
+              { num: isLoading ? "…" : `${totalShares}`, labelAr: "سهم مالي متاح", labelEn: "Available Shares" },
               { num: "١٢،٥٠٠+", labelAr: "مستفيد مباشر بالقرى", labelEn: "Direct Rural Beneficiaries" },
               { num: "١٠٠٪", labelAr: "توثيق ميداني معتمد", labelEn: "Documented Impact" },
             ].map((s, idx) => {
@@ -296,10 +230,10 @@ const ProjectsPage = () => {
           </div>
 
           {/* ── 1. Featured Large Card (Project #1: Mosque Construction) ── */}
-          {(() => {
+          {isLoading && PROJECTS.length === 0 && <ProjectsGridSkeleton />}
+          {PROJECTS.length > 0 && (() => {
             const proj = PROJECTS[0];
-            const entity = projectEntities.find((e) => e.id === proj.id);
-            const activeCase = entity?.cases?.[0];
+            const activeCase = proj.firstCase;
             const Icon = proj.icon;
 
             return (
@@ -308,7 +242,7 @@ const ProjectsPage = () => {
                   {/* Full Background Photo */}
                   <div className="absolute inset-0">
                     <img
-                      src={proj.img}
+                      src={proj.image}
                       alt={isAR ? proj.ar : proj.en}
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-40 sm:opacity-50"
                       loading="eager"
@@ -328,7 +262,7 @@ const ProjectsPage = () => {
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/20 px-3.5 py-1 text-xs font-black text-indigo-300">
                           <Icon className="h-3.5 w-3.5" />
-                          {isAR ? proj.tagAr : proj.tagEn}
+                          {isAR ? "صدقة جارية" : "Ongoing charity"}
                         </span>
                         <span className="inline-flex items-center gap-1 rounded-full bg-secondary/20 border border-secondary/40 px-3 py-1 text-xs font-black text-secondary">
                           <Sparkles className="h-3 w-3" />
@@ -359,7 +293,7 @@ const ProjectsPage = () => {
                               {isAR ? "حالة ميدانية نشطة:" : "Active Field Case:"}
                             </span>
                             <span className="text-[11px] text-white/70">
-                              {activeCase.city} · {activeCase.governorate}
+                              {[activeCase.city, activeCase.governorate].filter(Boolean).join(" · ")}
                             </span>
                           </div>
                           <p className="text-xs sm:text-sm font-semibold text-white/95 line-clamp-1 mb-2.5">
@@ -370,21 +304,18 @@ const ProjectsPage = () => {
                             <div
                               className="bg-secondary h-full rounded-full transition-all duration-700"
                               style={{
-                                width: `${Math.min(
-                                  100,
-                                  Math.round((activeCase.raisedAmount / (activeCase.neededAmount || 1)) * 100)
-                                )}%`,
+                                width: `${pct(activeCase.raised, activeCase.target)}%`,
                               }}
                             />
                           </div>
                           <div className="flex justify-between items-center text-[10.5px] font-bold text-white/70 mt-1.5">
                             <span>
                               {isAR
-                                ? `تم جمع ${activeCase.raisedAmount.toLocaleString()} من ${activeCase.neededAmount.toLocaleString()} ج.م`
-                                : `Collected ${activeCase.raisedAmount.toLocaleString()} of ${activeCase.neededAmount.toLocaleString()} EGP`}
+                                ? `تم جمع ${activeCase.raised.toLocaleString()} من ${activeCase.target.toLocaleString()} ج.م`
+                                : `Collected ${activeCase.raised.toLocaleString()} of ${activeCase.target.toLocaleString()} EGP`}
                             </span>
                             <span className="text-secondary font-black">
-                              {Math.round((activeCase.raisedAmount / (activeCase.neededAmount || 1)) * 100)}%
+                              {Math.round((activeCase.raised / (activeCase.target || 1)) * 100)}%
                             </span>
                           </div>
                         </div>
@@ -396,21 +327,30 @@ const ProjectsPage = () => {
                       <div className="flex items-center gap-4 text-xs font-bold text-white/80">
                         <span className="flex items-center gap-1">
                           <Target className="h-4 w-4 text-secondary" />
-                          {entity?.shares.length ?? 4} {isAR ? "أسهم تبرع متاحة" : "Available Shares"}
+                          {proj.sharesCount} {isAR ? "أسهم تبرع متاحة" : "Available Shares"}
                         </span>
                         <span className="flex items-center gap-1">
                           <Heart className="h-4 w-4 text-rose-400" />
-                          {entity?.cases.length ?? 2} {isAR ? "مساجد قيد البناء" : "Linked Mosques"}
+                          {proj.casesCount} {isAR ? "حالات مرتبطة بالمشروع" : "Linked cases"}
                         </span>
                       </div>
 
-                      <Link
-                        to={`/donate?entity=${proj.id}`}
-                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-secondary px-7 py-3 text-sm font-black text-slate-950 shadow-lg shadow-secondary/30 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
-                      >
-                        {isAR ? "تبرع في عمارة المساجد الآن" : "Donate to Mosque Now"}
-                        <Arrow className="h-4 w-4" />
-                      </Link>
+                      <div className="flex flex-col gap-2.5 sm:flex-row">
+                        <Link
+                          to={detailsHref(proj)}
+                          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/20"
+                        >
+                          <ExternalLink className="h-4 w-4 text-secondary" />
+                          {isAR ? "تفاصيل المشروع" : "Project details"}
+                        </Link>
+                        <Link
+                          to={donateHref(proj)}
+                          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-secondary px-7 py-3 text-sm font-black text-slate-950 shadow-lg shadow-secondary/30 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
+                        >
+                          {isAR ? `تبرع في ${proj.ar} الآن` : `Donate to ${proj.en} now`}
+                          <Arrow className="h-4 w-4" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -424,12 +364,12 @@ const ProjectsPage = () => {
               const Icon = proj.icon;
 
               return (
-                <ScrollReveal key={proj.id} delay={i * 0.06}>
+                <ScrollReveal key={proj.slug} delay={i * 0.06}>
                   <article className="group relative overflow-hidden rounded-3xl border border-border/60 bg-slate-950 shadow-md hover:shadow-2xl hover:border-secondary/40 transition-all duration-500 flex flex-col justify-between min-h-[460px] sm:min-h-[500px]">
                     {/* Full-bleed background image */}
                     <div className="absolute inset-0">
                       <img
-                        src={proj.img}
+                        src={proj.image}
                         alt={isAR ? proj.ar : proj.en}
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                         loading="lazy"
@@ -442,7 +382,7 @@ const ProjectsPage = () => {
                     <div className="relative z-10 p-4 flex items-center justify-between gap-2">
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/35 backdrop-blur-md px-2.5 py-0.5 text-[11px] font-semibold text-white/90 shadow-xs">
                         <Icon className="h-3 w-3 text-secondary" />
-                        {isAR ? proj.tagAr : proj.tagEn}
+                        {isAR ? "صدقة جارية" : "Ongoing charity"}
                       </span>
 
                       <span className="rounded-full bg-secondary text-slate-950 font-black px-2.5 py-0.5 text-[11px] shadow-md">
@@ -471,22 +411,20 @@ const ProjectsPage = () => {
                       {/* Actions */}
                       <div className="flex items-center gap-2.5 pt-3 border-t border-white/10">
                         <Link
-                          to={`/donate?entity=${proj.id}`}
+                          to={donateHref(proj)}
                           className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-secondary px-4 py-2.5 text-xs sm:text-sm font-black text-slate-950 shadow-lg shadow-secondary/25 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98]"
                         >
                           {isAR ? "تبرع الآن" : "Donate Now"}
                           <Arrow className="h-3.5 w-3.5" />
                         </Link>
 
-                        {proj.landingUrl && (
-                          <Link
-                            to={proj.landingUrl}
-                            className="inline-flex items-center justify-center gap-1 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-3.5 py-2.5 text-xs font-bold text-white transition hover:bg-white/20 hover:border-white/40 shrink-0"
-                          >
-                            <ExternalLink className="h-3.5 w-3.5 text-secondary" />
-                            {isAR ? "تفاصيل" : "Details"}
-                          </Link>
-                        )}
+                        <Link
+                          to={detailsHref(proj)}
+                          className="inline-flex items-center justify-center gap-1 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-3.5 py-2.5 text-xs font-bold text-white transition hover:bg-white/20 hover:border-white/40 shrink-0"
+                        >
+                          <ExternalLink className="h-3.5 w-3.5 text-secondary" />
+                          {isAR ? "تفاصيل" : "Details"}
+                        </Link>
                       </div>
                     </div>
                   </article>
@@ -641,12 +579,11 @@ const ProjectsPage = () => {
 
                   <div className="space-y-2.5">
                     {PROJECTS.map((proj) => {
-                      const entity = projectEntities.find((e) => e.id === proj.id);
                       const Icon = proj.icon;
                       return (
                         <Link
-                          key={proj.id}
-                          to={`/donate?entity=${proj.id}`}
+                          key={proj.slug}
+                          to={donateHref(proj)}
                           className="flex items-center gap-3 rounded-2xl border border-border/60 bg-muted/20 px-3.5 py-3 hover:border-secondary/60 hover:bg-secondary/10 transition-all group"
                         >
                           <span
@@ -660,14 +597,8 @@ const ProjectsPage = () => {
                               {isAR ? proj.ar : proj.en}
                             </p>
                             <p className="text-[11px] text-muted-foreground mt-0.5">
-                              {entity?.priceFrom
-                                ? isAR
-                                  ? `يبدأ من ${entity.priceFrom} ج.م`
-                                  : `Starts at ${entity.priceFrom} EGP`
-                                : `يبدأ من ${proj.priceFrom} ج.م`}
-                              {entity?.shares.length
-                                ? ` · ${entity.shares.length} ${isAR ? "أسهم متاحة" : "shares"}`
-                                : ""}
+                              {isAR ? `يبدأ من ${proj.priceFrom} ج.م` : `Starts at ${proj.priceFrom} EGP`}
+                              {proj.sharesCount ? ` · ${proj.sharesCount} ${isAR ? "أسهم متاحة" : "shares"}` : ""}
                             </p>
                           </div>
                           <Arrow className="h-4 w-4 text-muted-foreground group-hover:text-secondary group-hover:translate-x-[-2px] rtl:group-hover:translate-x-[2px] transition-all shrink-0" />
@@ -760,6 +691,11 @@ const ProjectsPage = () => {
       </section>
 
       {/* ══════════ CTA (Expanded max-w-[1440px]) ══════════ */}
+      {/* Cases that belong to our projects (live from the backend) */}
+      <LinkedCasesSection filter={{ linkedTo: "project" }} showOwner isRTL={isAR}
+        title={isAR ? "حالات ميدانية ضمن مشاريعنا" : "Field cases in our projects"}
+        subtitle={isAR ? "كل حالة اتعمل لها بحث ميداني، وتبرعك ليها بيروح لنفس المشروع." : "Every case is field-verified; your donation goes to the same project."} />
+
       <section className="pt-10 sm:pt-14 pb-16 sm:pb-20 bg-primary relative overflow-hidden">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_60%_50%,theme(colors.secondary.DEFAULT)_0%,transparent_60%)] pointer-events-none" />
         <div className="relative z-10 container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 text-center">

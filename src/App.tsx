@@ -25,6 +25,7 @@ const Contact = lazy(() => import("./pages/site/Contact.tsx"));
 const Stories = lazy(() => import("./pages/site/Stories.tsx"));
 const Projects = lazy(() => import("./pages/site/Projects.tsx"));
 const ProjectsPage = lazy(() => import("./pages/site/ProjectsPage.tsx"));
+const ProjectDetail = lazy(() => import("./pages/site/ProjectDetail.tsx"));
 const Cases = lazy(() => import("./pages/site/Cases.tsx"));
 const CaseDetail = lazy(() => import("./pages/site/CaseDetail.tsx"));
 const Zakat = lazy(() => import("./pages/site/Zakat.tsx"));
@@ -85,6 +86,8 @@ const AdminSiteStats = lazy(() => import("./pages/admin/AdminSiteStats.tsx"));
 const AdminReports = lazy(() => import("./pages/admin/AdminReports.tsx"));
 const AdminGallery = lazy(() => import("./pages/admin/AdminGallery.tsx"));
 const AdminMediaLibrary = lazy(() => import("./pages/admin/AdminMediaLibrary.tsx"));
+const AdminNotifications = lazy(() => import("./pages/admin/AdminNotifications.tsx"));
+const AdminInbox = lazy(() => import("./pages/admin/AdminInbox.tsx"));
 const AdminActivityLog = lazy(() => import("./pages/admin/AdminActivityLog.tsx"));
 const AdminPermissions = lazy(() => import("./pages/admin/AdminPermissions.tsx"));
 const AdminContentEditor = lazy(() => import("./pages/admin/AdminContentEditor.tsx"));
@@ -190,6 +193,7 @@ const App = () => (
                   <Route path="/stories" element={<Stories />} />
                   <Route path="/stories/:slug" element={<StoryDetail />} />
                   <Route path="/projects" element={<ProjectsPage />} />
+                  <Route path="/projects/:slug" element={<ProjectDetail />} />
                   <Route path="/cases" element={<Cases />} />
                   <Route path="/cases/:ref" element={<CaseDetail />} />
                   <Route path="/zakat" element={<Zakat />} />
@@ -296,6 +300,8 @@ const App = () => (
                   <Route path="/admin/site-stats" element={<RequireAuth roles={["admin", "editor"]}><AdminSiteStats /></RequireAuth>} />
                   <Route path="/admin/gallery" element={<RequireAuth roles={["admin"]}><AdminGallery /></RequireAuth>} />
                   <Route path="/admin/media" element={<RequireAuth roles={["admin", "editor"]}><AdminMediaLibrary /></RequireAuth>} />
+                  <Route path="/admin/inbox" element={<RequireAuth roles={["admin", "editor"]}><AdminInbox /></RequireAuth>} />
+                  <Route path="/admin/notifications" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminNotifications /></RequireAuth>} />
                   <Route path="/admin/reports" element={<RequireAuth roles={["admin", "caseworker"]}><AdminReports /></RequireAuth>} />
                   <Route path="/admin/seasons" element={<RequireAuth roles={["admin", "editor"]}><AdminSeasons /></RequireAuth>} />
                   <Route path="/donate/status" element={<DonationStatus />} />

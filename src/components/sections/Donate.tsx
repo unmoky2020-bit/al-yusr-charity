@@ -37,11 +37,15 @@ export const Donate = () => {
   const [custom, setCustom] = useState("");
   const [method, setMethod] = useState<MethodId>("card_kashier");
   const [processing, setProcessing] = useState(false);
+  /** Name optional (empty = «فاعل خير»); phone required so the team can confirm the donation. */
+  const [donorName, setDonorName] = useState("");
+  const [donorPhone, setDonorPhone] = useState("");
   const [checkout, setCheckout] = useState<{ open: boolean; orderId: string; sessionUrl?: string }>({ open: false, orderId: "" });
   const idemKey = useRef(`quick-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
 
   const selected = METHODS.find((m) => m.id === method)!;
   const valid = amount >= MIN_AMOUNT;
+  const phoneOk = /^(\+?\d{8,15}|01\d{9})$/.test(donorPhone.replace(/[\s-]/g, ""));
   const fmt = (n: number) => n.toLocaleString(isAr ? "ar-EG" : "en-US");
 
   const pickPreset = (v: number) => { setAmount(v); setCustom(""); };
@@ -53,6 +57,7 @@ export const Donate = () => {
 
   const submit = async () => {
     if (!valid || processing) return;
+    if (!selected.manual && !phoneOk) return;
     trackDonationStarted({ amount, method, source: "home-quick" });
 
     if (selected.manual) {
@@ -68,6 +73,8 @@ export const Donate = () => {
     try {
       const res: any = await createDonation({
         amount,
+        donor_name: donorName.trim() || undefined,
+        donor_phone: donorPhone.trim(),
         category_id: String(GENERAL_PROGRAM_ID),
         payment_method: "kashier",
         payment_status: "pending",
@@ -77,10 +84,14 @@ export const Donate = () => {
       sessionUrl = res?.payment?.session_url;
       orderId = res?.donation?.transaction_reference || res?.ref_code || fallbackId;
     } catch (err: any) {
-      // The checkout modal can still build a session itself; only log here.
-      console.warn("[QuickDonate] backend notice:", err?.message);
-    } finally {
       setProcessing(false);
+      toast({ variant: "destructive", title: isAr ? "تعذر فتح بوابة الدفع" : "Could not open checkout", description: err?.message });
+      return;
+    }
+    setProcessing(false);
+    if (!sessionUrl) {
+      toast({ variant: "destructive", title: isAr ? "تعذر فتح بوابة الدفع، حاول مرة أخرى." : "Could not open checkout, please try again." });
+      return;
     }
     setCheckout({ open: true, orderId, sessionUrl });
   };
@@ -88,7 +99,7 @@ export const Donate = () => {
   const onPaid = () => {
     donationsStore.create({
       ref: checkout.orderId,
-      donor: { name: isAr ? "فاعل خير" : "Anonymous donor", email: "", phone: "" },
+      donor: { name: donorName.trim() || (isAr ? "فاعل خير" : "Anonymous donor"), email: "", phone: donorPhone.trim() },
       amount,
       program: "general",
       programLabel: isAr ? "تبرع عام" : "General donation",
@@ -97,11 +108,14 @@ export const Donate = () => {
     });
     setCheckout((c) => ({ ...c, open: false }));
     idemKey.current = `quick-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    navigate(`/donate/status/${checkout.orderId}`);
+    // Thank-you page (animation, reference, receipt); it re-checks the payment with the backend first.
+    navigate(`/donate?ref=${encodeURIComponent(checkout.orderId)}`);
   };
 
   const ctaLabel = !valid
     ? (isAr ? `أقل مبلغ ${fmt(MIN_AMOUNT)} جنيه` : `Minimum ${MIN_AMOUNT} EGP`)
+    : !selected.manual && !phoneOk
+      ? (isAr ? "اكتب رقم موبايلك للمتابعة" : "Enter your mobile number to continue")
     : selected.manual
       ? (isAr ? `متابعة التحويل بـ ${fmt(amount)} جنيه` : `Continue with ${fmt(amount)} EGP`)
       : (isAr ? `ادفع ${fmt(amount)} جنيه الآن` : `Pay ${fmt(amount)} EGP now`);
@@ -191,10 +205,49 @@ export const Donate = () => {
               </div>
             </fieldset>
 
+            {/* 3. Donor (card payments; manual methods collect it on /donate) */}
+            {!selected.manual && (
+              <fieldset className="mt-7">
+                <legend className="text-sm font-black text-primary">{isAr ? "٣. بياناتك" : "3. Your details"}</legend>
+                <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-1 block text-xs font-bold text-muted-foreground">{isAr ? "رقم الموبايل *" : "Mobile number *"}</span>
+                    <input
+                      type="tel"
+                      dir="ltr"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      value={donorPhone}
+                      onChange={(e) => setDonorPhone(e.target.value)}
+                      placeholder="01XXXXXXXXX"
+                      aria-invalid={!!donorPhone && !phoneOk}
+                      className="h-12 w-full rounded-xl border-2 border-border bg-background px-4 text-base font-bold transition-colors focus:border-primary focus:outline-none aria-[invalid=true]:border-destructive"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="mb-1 block text-xs font-bold text-muted-foreground">{isAr ? "الاسم (اختياري)" : "Name (optional)"}</span>
+                    <input
+                      type="text"
+                      autoComplete="name"
+                      value={donorName}
+                      onChange={(e) => setDonorName(e.target.value)}
+                      placeholder={isAr ? "سيبه فاضي للتبرع كفاعل خير" : "Leave empty to give anonymously"}
+                      className="h-12 w-full rounded-xl border-2 border-border bg-background px-4 text-base font-bold transition-colors focus:border-primary focus:outline-none"
+                    />
+                  </label>
+                </div>
+                {!!donorPhone && !phoneOk && (
+                  <p className="mt-1.5 text-xs font-bold text-destructive" role="alert">
+                    {isAr ? "رقم الموبايل غير صحيح (مثال: 01012345678)" : "Invalid mobile number (e.g. 01012345678)"}
+                  </p>
+                )}
+              </fieldset>
+            )}
+
             <button
               type="button"
               onClick={submit}
-              disabled={!valid || processing}
+              disabled={!valid || processing || (!selected.manual && !phoneOk)}
               className="mt-7 inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-orange-grad text-base font-black text-accent-foreground shadow-cta transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {processing ? <Loader2 className="h-5 w-5 animate-spin" /> : selected.manual ? <Arrow className="h-5 w-5" /> : <Lock className="h-5 w-5" />}
@@ -222,6 +275,8 @@ export const Donate = () => {
           amount={amount}
           orderId={checkout.orderId}
           sessionUrl={checkout.sessionUrl}
+          donorName={donorName.trim() || undefined}
+          donorPhone={donorPhone.trim()}
           onClose={() => setCheckout((c) => ({ ...c, open: false }))}
           onSuccess={onPaid}
         />,

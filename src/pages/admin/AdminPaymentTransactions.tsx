@@ -1,29 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { paymentTransactionsApi, type PaymentTransaction } from "@/data/api/paymentTransactionsApi";
+import { apiErrorMessage, isEndpointMissing, FEATURE_PENDING_MSG } from "@/data/api/adminApiHelpers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, RefreshCw, ExternalLink, Save } from "lucide-react";
 
-type Tx = {
-  id: string;
-  ref_code: string;
-  status: string;
-  amount: number;
-  currency: string;
-  method: string | null;
-  provider: string;
-  donor_name: string | null;
-  donor_email: string | null;
-  donor_phone: string | null;
-  redirect_url: string | null;
-  internal_notes: string | null;
-  retry_count: number;
-  last_error: string | null;
-  created_at: string;
-};
+type Tx = PaymentTransaction;
 
 const STATUSES = ["all", "pending", "processing", "paid", "failed", "refunded"];
 const CHANNELS = ["all", "card", "wallet", "instapay", "bank"];
@@ -35,45 +20,46 @@ export default function AdminPaymentTransactions() {
   const [channel, setChannel] = useState("all");
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState<Record<string, string>>({});
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const reload = async () => {
     setLoading(true);
-    let query = (supabase.from("payment_transactions" as any) as any)
-      .select("*").order("created_at", { ascending: false }).limit(200);
-    if (status !== "all") query = query.eq("status", status);
-    if (channel !== "all") query = query.eq("method", channel);
-    if (q) query = query.or(`ref_code.ilike.%${q}%,donor_phone.ilike.%${q}%,donor_email.ilike.%${q}%`);
-    const { data } = await query;
-    setRows(((data as any) || []) as Tx[]);
-    setLoading(false);
+    setLoadError(null);
+    try {
+      setRows(await paymentTransactionsApi.list({
+        status: status !== "all" ? status : undefined,
+        method: channel !== "all" ? channel : undefined,
+        search: q.trim() || undefined,
+      }));
+    } catch (e) {
+      setRows([]);
+      setLoadError(isEndpointMissing(e) ? FEATURE_PENDING_MSG : apiErrorMessage(e, "تعذر تحميل المعاملات"));
+    } finally {
+      setLoading(false);
+    }
   };
-  useEffect(() => { void reload(); }, [status, channel]);
+  useEffect(() => { void reload(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [status, channel]);
 
   const saveNotes = async (tx: Tx) => {
     const value = editing[tx.id] ?? tx.internal_notes ?? "";
-    const { error } = await (supabase.from("payment_transactions" as any) as any)
-      .update({ internal_notes: value }).eq("id", tx.id);
-    toast({ title: error ? "فشل الحفظ" : "تم حفظ الملاحظة" });
-    if (!error) reload();
+    try {
+      await paymentTransactionsApi.updateNotes(tx.id, value);
+      toast({ title: "تم حفظ الملاحظة" });
+      reload();
+    } catch (e) {
+      toast({ variant: "destructive", title: "فشل الحفظ", description: apiErrorMessage(e) });
+    }
   };
 
   const retry = async (tx: Tx) => {
-    const { data, error } = await supabase.functions.invoke("paymob-create-payment", {
-      body: {
-        amount: tx.amount,
-        method: tx.method === "wallet" ? "wallet" : "card",
-        donor: { name: tx.donor_name, email: tx.donor_email, phone: tx.donor_phone },
-        wallet_phone: tx.donor_phone,
-      },
-    });
-    if (error || !data?.redirect_url) {
-      toast({ title: "فشلت إعادة المحاولة", description: error?.message || "حاول لاحقًا" });
-      return;
+    try {
+      const { redirect_url } = await paymentTransactionsApi.retry(tx.id);
+      if (!redirect_url) throw new Error("لم يرجع الخادم رابط دفع جديد");
+      window.open(redirect_url, "_blank", "noopener,noreferrer");
+      reload();
+    } catch (e) {
+      toast({ variant: "destructive", title: "فشلت إعادة المحاولة", description: apiErrorMessage(e, "حاول لاحقًا") });
     }
-    await (supabase.from("payment_transactions" as any) as any)
-      .update({ retry_count: (tx.retry_count || 0) + 1 }).eq("id", tx.id);
-    window.open(data.redirect_url, "_blank", "noopener,noreferrer");
-    reload();
   };
 
   const statusColor = (s: string) =>
@@ -103,7 +89,7 @@ export default function AdminPaymentTransactions() {
         {loading ? (
           <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin" /></div>
         ) : rows.length === 0 ? (
-          <div className="py-10 text-center text-sm text-muted-foreground">لا توجد معاملات</div>
+          <div className={`py-10 text-center text-sm ${loadError ? "font-bold text-destructive" : "text-muted-foreground"}`}>{loadError ?? "لا توجد معاملات"}</div>
         ) : (
           <table className="w-full text-start text-sm">
             <thead className="bg-muted/40 text-xs font-bold text-muted-foreground">
@@ -123,7 +109,7 @@ export default function AdminPaymentTransactions() {
                 <tr key={tx.id} className="align-top">
                   <td className="p-3">
                     <Link to={`/donate/status/${tx.ref_code}`} className="font-extrabold text-primary hover:underline" dir="ltr">{tx.ref_code}</Link>
-                    <div className="text-[10px] text-muted-foreground">{new Date(tx.created_at).toLocaleString()}</div>
+                    <div className="text-[10px] text-muted-foreground">{tx.created_at ? new Date(tx.created_at).toLocaleString() : ""}</div>
                   </td>
                   <td className="p-3">
                     <div className="font-bold text-primary">{tx.donor_name || "—"}</div>

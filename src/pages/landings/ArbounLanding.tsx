@@ -46,6 +46,9 @@ import { HadithBlock } from "@/components/campaigns/HadithBlock";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import ARBOUN_DEFAULTS from "@/data/campaignPages/arboun";
 
+import { campaignDonateHref } from "@/data/campaignPages/index";
+
+const DONATE = campaignDonateHref("arboun");
 /**
  * مبادرة عربون خير — للفريلانسرز والمستقلين
  * Al-Yusr Freelancers & Remote Workers Initiative
@@ -162,14 +165,14 @@ const ArbounLanding = () => {
   const PILLAR_CONFIG: Record<string, { num: string; icon: JSX.Element; actionHref: string; isOrange: boolean }> = {
     pillar_peace: { num: "01", icon: <Zap className="h-7 w-7 text-orange-400" />, actionHref: "#arboun-calculator", isOrange: true },
     pillar_skill_zakat: { num: "02", icon: <Laptop className="h-7 w-7 text-lime-400" />, actionHref: "#pricing-shares", isOrange: false },
-    pillar_eternal_roi: { num: "03", icon: <Heart className="h-7 w-7 text-orange-400" />, actionHref: "/donate?program=freelancers", isOrange: true },
+    pillar_eternal_roi: { num: "03", icon: <Heart className="h-7 w-7 text-orange-400" />, actionHref: DONATE, isOrange: true },
   };
   const pillarDetails = items("pillar_details");
   const PILLARS = items("pillars").map((p, idx) => {
     const cfg = PILLAR_CONFIG[p.id] ?? {
       num: String(idx + 1).padStart(2, "0"),
       icon: <Sparkles className="h-7 w-7 text-lime-400" />,
-      actionHref: "/donate?program=freelancers",
+      actionHref: DONATE,
       isOrange: idx % 2 === 0,
     };
     const d = pillarDetails.find((i) => i.id === p.id);
@@ -285,7 +288,7 @@ const ArbounLanding = () => {
                 name: isRTL ? "تبرع لمبادرة عربون خير" : "Donate to Arboun Khair",
                 description: isRTL ? "استقطع عربون بركة من أرباح مشروعك" : "Pledge a share of your project revenue",
                 recipient: { "@type": "NGO", name: "مؤسسة اليسر للتنمية", url: "https://elyusr.org/" },
-                target: "https://elyusr.org/donate?program=freelancers",
+                target: `https://elyusr.org${DONATE}`,
               },
               {
                 "@type": "FAQPage",
@@ -358,7 +361,7 @@ const ArbounLanding = () => {
             {/* Row 1: Donate & WhatsApp side by side */}
             <div className="flex items-center justify-center gap-2.5 sm:gap-4 w-full max-w-md mx-auto">
               <Link
-                to="/donate?program=freelancers"
+                to={DONATE}
                 className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-lime-400 text-black px-6 py-3 text-xs sm:text-sm font-black shadow-[0_0_25px_rgba(163,230,53,0.6)] transition hover:bg-lime-300 hover:scale-105 active:scale-95"
               >
                 <Heart className="h-4 w-4 fill-black shrink-0" />
@@ -675,7 +678,7 @@ const ArbounLanding = () => {
 
                   {/* Donate button — start-aligned (right in RTL, left in LTR) */}
                   <Link
-                    to={`/donate?program=freelancers&amount=${pkg.amount}`}
+                    to={`${DONATE}&amount=${pkg.amount}`}
                     className="inline-flex items-center gap-2 rounded-full bg-lime-400 hover:bg-lime-300 text-black px-6 py-2.5 text-xs sm:text-sm font-black shadow-[0_0_22px_rgba(163,230,53,0.4)] transition-all hover:-translate-y-0.5 active:scale-95"
                   >
                     <Heart className="h-3.5 w-3.5 fill-black" />
@@ -960,7 +963,7 @@ const ArbounLanding = () => {
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
               <Link
-                to="/donate?program=freelancers"
+                to={DONATE}
                 className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 rounded-full bg-lime-400 text-black px-6 py-2.5 text-xs font-black shadow-[0_0_20px_rgba(163,230,53,0.6)] transition hover:bg-lime-300"
               >
                 <Heart className="h-3.5 w-3.5 fill-black" />

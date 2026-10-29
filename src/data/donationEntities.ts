@@ -20,6 +20,8 @@ export type DonationShare = {
   nameAr: string;
   nameEn: string;
   price: number; // EGP
+  /** Backend package id (donation_packages[].id) — sent as donation_package_id for program packages. */
+  apiId?: number;
   descAr?: string;
   descEn?: string;
   popular?: boolean;
@@ -27,6 +29,8 @@ export type DonationShare = {
 
 export type LinkedCase = {
   id: string;
+  /** Backend case id — the donation target when the donor picks this case. */
+  apiId?: number;
   refCode: string;
   titleAr: string;
   titleEn: string;
@@ -41,6 +45,9 @@ export type LinkedCase = {
 
 export type DonationEntity = {
   id: string;         // unique slug
+  /** Backend record id + slug (programs / projects / donation-campaigns). Absent on static fallback items. */
+  apiId?: number;
+  slug?: string;
   ar: string;
   en: string;
   taglineAr: string;

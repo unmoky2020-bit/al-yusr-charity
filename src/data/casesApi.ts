@@ -1,13 +1,20 @@
-import type { Database } from "@/integrations/supabase/types";
-import { restApi, isRestProvider } from "./restApi";
-import { casesApiV1, LaravelCase, donationsApiV1 } from "./laravelApi";
+import { apiFetch, ApiError, casesApiV1, invalidateApiCache, LaravelCase, donationsApiV1 } from "./laravelApi";
+import { TARGET_FIELD, type DonationTarget } from "@/data/donationTarget";
 import { donationsStore } from "@/data/donationsStore";
+import type {
+  CaseStatus, Urgency, CaseRow, CategoryRow, DonationRow,
+  CaseUpdateRow, CaseMediaRow, CaseDocumentRow, JourneyStepRow, CaseMediaKind,
+} from "./api/caseTypes";
+import {
+  fetchCaseUpdates, createCaseUpdate, patchCaseUpdate, removeCaseUpdate,
+  fetchCaseMedia, uploadCaseFile, createCaseMedia, patchCaseMedia, removeCaseMedia,
+  reorderCaseMediaItems, fetchCaseDocuments, fetchCaseJourney, createCaseDocument, removeCaseDocument,
+} from "./api/caseContentApi";
 
-export type CaseStatus = Database["public"]["Enums"]["case_status"];
-export type Urgency = Database["public"]["Enums"]["urgency_level"];
-export type CaseRow = Database["public"]["Tables"]["cases"]["Row"];
-export type CategoryRow = Database["public"]["Tables"]["case_categories"]["Row"];
-export type DonationRow = Database["public"]["Tables"]["donations"]["Row"];
+export type {
+  CaseStatus, Urgency, CaseRow, CategoryRow, DonationRow,
+  CaseUpdateRow, CaseMediaRow, CaseDocumentRow, JourneyStepRow, CaseMediaKind,
+};
 export type DonationStatus = "pending" | "paid" | "failed" | "refunded";
 export const DONATION_STATUS_TRANSITIONS: Record<DonationStatus, DonationStatus[]> = {
   pending: ["paid", "failed"],
@@ -24,6 +31,8 @@ export type CaseInput = {
   story?: string;
   description?: string;
   category_id: string | number;
+  /** Axis (food / health / education…) the case belongs to. */
+  axis_id?: number | string | null;
   program_id?: number | string | null;
   project_id?: number | string | null;
   donation_campaign_id?: number | string | null;
@@ -75,41 +84,37 @@ const DEFAULT_CATEGORIES: CategoryRow[] = [
   { id: "cat-general", slug: "general", name_ar: "مساعدات عامة", name_en: "General Assistance", description_ar: "", description_en: "", icon: "Heart", active: true, sort_order: 6, created_at: "" },
 ];
 
-export async function listCategories() {
+/** Test rows like "The category field is required." must never reach a visitor or a form. */
+const isJunkCategory = (c: { name_ar?: string | null; slug?: string | null }) =>
+  /required|field is/i.test(`${c.name_ar ?? ""} ${c.slug ?? ""}`);
+
+/** Case categories from the backend (/case-categories). The static list is used only when the API is unreachable. */
+export async function listCategories(): Promise<CategoryRow[]> {
   try {
-    if (isRestProvider()) return (await restApi.listCategories()) as CategoryRow[];
-    // Try Laravel API first
-    const { caseCategoriesApi } = await import("./laravelApi");
-    const res = await caseCategoriesApi.list({ per_page: 100 });
-    const lCats = Array.isArray(res) ? res : res?.data || [];
-    if (Array.isArray(lCats) && lCats.length > 0) {
-      return lCats.map((c: any) => ({
-        id: String(c.id),
-        slug: c.slug || String(c.id),
-        name_ar: c.name_ar || c.name || c.title_ar || "",
-        name_en: c.name_en || c.name || c.title_en || "",
-        description_ar: c.description_ar || "",
-        description_en: c.description_en || "",
-        icon: c.icon || "Heart",
-        active: c.active !== false && c.is_active !== false,
-        sort_order: c.sort_order || 0,
-        created_at: c.created_at || "",
-      }) as CategoryRow);
+    const res = await apiFetch<unknown>("/case-categories", { params: { per_page: 100 }, useCache: false });
+    const rows = (Array.isArray(res) ? res : (res as { data?: unknown })?.data) as Record<string, unknown>[] | undefined;
+    if (Array.isArray(rows)) {
+      return rows
+        .map((c) => ({
+          id: String(c.id),
+          slug: String(c.slug || c.id),
+          name_ar: String(c.name_ar || c.name || ""),
+          name_en: String(c.name_en || c.name_ar || ""),
+          description_ar: (c.description_ar as string) || "",
+          description_en: (c.description_en as string) || "",
+          icon: (c.icon as string) || "Heart",
+          active: c.active !== false && c.is_active !== false,
+          sort_order: Number(c.sort_order || 0),
+          created_at: String(c.created_at || ""),
+        }) as CategoryRow)
+        .filter((c) => !isJunkCategory(c))
+        .sort((a, b) => a.sort_order - b.sort_order);
     }
-  } catch { }
+  } catch (err) {
+    if (import.meta.env.DEV) console.warn("listCategories: API unreachable, using the static list", err);
+  }
   return DEFAULT_CATEGORIES;
 }
-
-// Columns safe to expose to anonymous visitors. Sensitive internal fields
-// (delegate_notes, rejection_reason, assigned_delegate_id, beneficiary_age,
-// beneficiary_gender, scheduled_visit_at, created_by, approved_by) are
-// intentionally omitted — the `anon` Postgres role no longer has SELECT
-// privilege on them.
-const PUBLIC_CASE_COLUMNS =
-  "id,ref_code,category_id,title,story,beneficiary_name," +
-  "governorate,city,area,cover_image_url," +
-  "needed_amount,raised_amount,deadline,urgency,status," +
-  "approved_at,closed_at,created_at,updated_at";
 
 export function getCaseImageUrl(c?: {
   cover_image_url?: string | null;
@@ -387,104 +392,122 @@ export const FALLBACK_PUBLIC_CASES: CaseRow[] = [
   } as unknown as CaseRow,
 ];
 
-export async function listPublicCases(opts?: { categorySlug?: string; limit?: number }) {
+/**
+ * Public case list from the backend. The backend already hides unapproved cases from visitors and
+ * filters by category_slug / urgent. The sample cases are shown only when the API is unreachable —
+ * an empty category is an empty list, not fake cases.
+ */
+/** Which cases to list: by category, urgency, or what they belong to (one item, or any of a kind). */
+export type LinkedCasesFilter = {
+  categorySlug?: string;
+  urgent?: boolean;
+  programId?: number | string;
+  projectId?: number | string;
+  campaignId?: number | string;
+  /** Any case linked to a program / project / campaign. */
+  linkedTo?: "program" | "project" | "campaign";
+};
+
+const LINK_KEY = { program: "program_id", project: "project_id", campaign: "donation_campaign_id" } as const;
+
+export async function listPublicCases(opts?: LinkedCasesFilter & { limit?: number }) {
   try {
-    const lCases = await casesApiV1.listAll();
-    if (Array.isArray(lCases) && lCases.length > 0) {
-      let filtered = lCases.filter((c: any) => c.status === "approved" || c.status === "completed" || !c.status);
-      if (opts?.categorySlug) {
-        filtered = filtered.filter((c: any) => c.category?.toLowerCase() === opts.categorySlug?.toLowerCase() || c.category_id == opts.categorySlug);
-      }
-      if (filtered.length > 0) {
-        if (opts?.limit) filtered = filtered.slice(0, opts.limit);
-        return filtered.map(mapLaravelCaseToRow);
-      }
+    const res = await apiFetch<unknown>("/cases", {
+      params: {
+        // A "linked to any" filter is applied here, so fetch a full page first.
+        per_page: opts?.linkedTo ? 100 : Math.min(opts?.limit ?? 100, 100),
+        category_slug: opts?.categorySlug || undefined,
+        urgent: opts?.urgent ? 1 : undefined,
+        program_id: opts?.programId || undefined,
+        project_id: opts?.projectId || undefined,
+        donation_campaign_id: opts?.campaignId || undefined,
+      },
+      useCache: false,
+    });
+    const rows = (Array.isArray(res) ? res : (res as { data?: unknown })?.data) as LaravelCase[] | undefined;
+    if (Array.isArray(rows)) {
+      const linkKey = opts?.linkedTo ? LINK_KEY[opts.linkedTo] : null;
+      const visible = rows.filter(
+        (c) => (c.status === "approved" || c.status === "completed") && (!linkKey || c[linkKey] || c[linkKey.replace("_id", "") as "program" | "project" | "donation_campaign"]),
+      );
+      return (opts?.limit ? visible.slice(0, opts.limit) : visible).map(mapLaravelCaseToRow);
     }
   } catch (err) {
-    console.warn("Could not fetch public cases from Laravel API:", err);
+    if (import.meta.env.DEV) console.warn("listPublicCases: API unreachable, showing sample cases", err);
   }
-
-  // Filter fallback cases by category if requested
   let results = [...FALLBACK_PUBLIC_CASES];
   if (opts?.categorySlug) {
     const slug = opts.categorySlug.toLowerCase();
-    results = results.filter(
-      (c) =>
-        c.category_id?.toLowerCase() === slug ||
-        (c as any).case_categories?.slug?.toLowerCase() === slug
-    );
+    results = results.filter((c) => (c as unknown as { case_categories?: { slug?: string } }).case_categories?.slug?.toLowerCase() === slug);
   }
-  if (opts?.limit) {
-    results = results.slice(0, opts.limit);
-  }
-  return results;
+  return opts?.limit ? results.slice(0, opts.limit) : results;
 }
 
+/** One case by its public code (CASE-4224) or id. Visitors only get approved / completed cases. */
 export async function getCaseByRef(ref: string) {
   try {
-    const id = ref.startsWith("CASE-") ? ref.replace("CASE-", "") : ref;
-    const lCase = await casesApiV1.get(id);
-    if (lCase && lCase.id) return mapLaravelCaseToRow(lCase);
-
-    const all = await casesApiV1.listAll();
-    const found = all.find((c: any) => c.code === ref || String(c.id) === ref);
-    if (found) return mapLaravelCaseToRow(found);
-  } catch { }
-
-  const fallback = FALLBACK_PUBLIC_CASES.find(
-    (c) => c.ref_code === ref || c.id === ref || c.ref_code.toLowerCase() === ref.toLowerCase()
-  );
-  if (fallback) return fallback;
-
-  if (isRestProvider()) return (await restApi.getCaseByRef(ref)) as CaseRow | null;
-  return null;
+    const res = await apiFetch<{ data?: LaravelCase }>(`/cases/${encodeURIComponent(ref)}`, { useCache: false });
+    const c = res?.data ?? (res as unknown as LaravelCase);
+    return c && c.id ? mapLaravelCaseToRow(c) : null;
+  } catch (err) {
+    if (err instanceof ApiError && (err.status === 404 || err.status === 403)) return null;
+  }
+  return FALLBACK_PUBLIC_CASES.find((c) => c.ref_code.toLowerCase() === ref.toLowerCase() || c.id === ref) ?? null;
 }
 
-function mapLaravelCaseToRow(c: LaravelCase): CaseRow {
-  const catName = c.category_data?.name_ar || (c.category && !c.category.includes("required") ? c.category : "كفالات ورعاية");
+const toUrgency = (priority?: string): Urgency => (priority === "high" || priority === "low" ? priority : "medium");
+
+export function mapLaravelCaseToRow(c: LaravelCase): CaseRow {
+  const cat = c.category_data && !isJunkCategory(c.category_data) ? c.category_data : null;
+  const catName = cat?.name_ar || "";
+  const program = c.program as { id?: number; slug?: string; name_ar?: string; name?: string } | null | undefined;
+  const project = c.project as { id?: number; slug?: string; name?: string } | null | undefined;
+  const campaign = c.donation_campaign as { id?: number; slug?: string; name_ar?: string } | null | undefined;
+  const str = (v: unknown) => (v === null || v === undefined || v === "" ? null : String(v));
   return {
     id: String(c.id),
     ref_code: c.code || `CASE-${c.id}`,
-    category_id: catName,
+    category_id: cat ? String(cat.id) : str(c.category_id) ?? "",
+    category_slug: cat?.slug ?? null,
+    category_name_ar: catName || null,
     title: c.title || "",
-    story: c.description || (c as any).story || "",
+    story: c.description || "",
     beneficiary_name: c.beneficiary_name || "",
-    beneficiary_age: null,
+    beneficiary_age: c.age ?? null,
     beneficiary_gender: null,
-    governorate: c.governorate || "الدقهلية",
-    city: (c as any).city || c.governorate || null,
-    area: (c as any).area || null,
-    cover_image_url: getCaseImageUrl({
-      cover_image_url: c.cover_image || (c as any).cover_image_url || (c as any).image,
-      title: c.title,
-      category_id: catName,
-      ref_code: c.code || `CASE-${c.id}`,
-    }),
+    governorate: c.governorate || "",
+    city: c.city ?? null,
+    area: null,
+    cover_image_url: getCaseImageUrl({ cover_image_url: c.cover_image, title: c.title, category_id: catName, ref_code: c.code }),
+    cover_image: c.cover_image ?? null,
     needed_amount: Number(c.target_amount || 0),
     raised_amount: Number(c.collected_amount || 0),
-    deadline: null,
-    urgency: (c.priority as Urgency) || "medium",
-    status: (c.status as CaseStatus) || "approved",
-    approved_at: c.created_at || null,
+    deadline: c.deadline ? String(c.deadline).slice(0, 10) : null,
+    urgency: toUrgency(c.priority),
+    is_urgent: c.priority === "high",
+    status: (c.status as CaseStatus) || "pending_review",
+    approved_at: c.status === "approved" ? c.updated_at || null : null,
     closed_at: null,
-    created_at: c.created_at || new Date().toISOString(),
-    updated_at: c.created_at || new Date().toISOString(),
+    created_at: c.created_at || "",
+    updated_at: c.updated_at || c.created_at || "",
     approved_by: null,
     created_by: null,
     assigned_delegate_id: null,
     delegate_notes: null,
     rejection_reason: null,
     scheduled_visit_at: null,
-    case_categories: {
-      id: String(c.category_data?.id || "general"),
-      slug: c.category_data?.slug || "general",
-      name_ar: catName,
-      name_en: c.category_data?.name_en || "General",
-      icon: "Heart",
-      active: true,
-      sort_order: 0,
-      created_at: new Date().toISOString(),
-    },
+    program_id: str(program?.id ?? c.program_id),
+    program_slug: program?.slug ?? null,
+    program_name: program?.name_ar || program?.name || null,
+    project_id: str(project?.id ?? c.project_id),
+    project_slug: project?.slug ?? null,
+    project_name: project?.name || null,
+    donation_campaign_id: str(campaign?.id ?? c.donation_campaign_id),
+    donation_campaign_slug: campaign?.slug ?? null,
+    donation_campaign_name: campaign?.name_ar || null,
+    case_categories: cat
+      ? { id: String(cat.id), slug: cat.slug, name_ar: catName, name_en: cat.name_en || catName, icon: "Heart", active: true, sort_order: 0, created_at: "" }
+      : null,
   } as unknown as CaseRow;
 }
 
@@ -497,7 +520,6 @@ export async function listAllCasesForStaff() {
   } catch (err) {
     console.warn("Could not fetch cases from Laravel API:", err);
   }
-  if (isRestProvider()) return (await restApi.listAllCasesForStaff()) as CaseRow[];
   return [];
 }
 
@@ -509,87 +531,95 @@ export async function getCaseById(id: string) {
   return null;
 }
 
-export async function listDonationsForCase(_caseId: string) {
-  // Supabase removed — use Laravel donations API instead
-  return [];
+/** Donations made to one case (the backend has no case filter yet, so the full list is filtered here). */
+/** Donations of one case (GET /donations?case_id=…, filtered on the server). */
+export async function listDonationsForCase(caseId: string) {
+  const rows = await listAllDonations({ caseId });
+  return rows.filter((d: any) => String(d.case_id ?? d.case?.id ?? "") === String(caseId));
 }
 
+const toPriority = (input: Partial<CaseInput>): "low" | "medium" | "high" | undefined => {
+  if (input.priority === "low" || input.priority === "medium" || input.priority === "high") return input.priority;
+  if (!input.urgency) return undefined;
+  return input.urgency === "high" || input.urgency === "critical" ? "high" : input.urgency === "low" ? "low" : "medium";
+};
+
+/** UI status words -> backend enum (pending_review | approved | completed | closed | rejected). */
+export const toBackendStatus = (s?: string | null): string | undefined => {
+  if (!s) return undefined;
+  if (s === "draft" || s === "pending") return "pending_review";
+  if (s === "funded") return "completed";
+  return s;
+};
+
+const numOrNull = (v: unknown) => (v === null || v === undefined || v === "" ? null : Number(v));
+
+/**
+ * POST /cases. The category must be a real id (no silent fallback); the code is optional — the
+ * server generates CASE-xxxxx. JSON (not the shared serializer) so a cover image link is kept.
+ */
 export async function createCase(input: CaseInput) {
-  try {
-    const code = input.code || `CASE-${Date.now().toString(36).toUpperCase()}`;
-    const priority = input.priority || (input.urgency === "high" || (input.urgency as string) === "critical" ? "high" : (input.urgency as string) === "urgent" ? "medium" : "low");
-    const targetAmount = Number(input.target_amount ?? input.needed_amount ?? 0);
-    const created = await casesApiV1.create({
-      code,
+  const categoryId = Number(input.category_id);
+  if (!categoryId) throw new Error("اختر تصنيف الحالة");
+  const res = await apiFetch<{ data?: LaravelCase }>("/cases", {
+    method: "POST",
+    body: {
+      code: input.code?.trim() || undefined,
       title: input.title,
       beneficiary_name: input.beneficiary_name,
       governorate: input.governorate || "الدقهلية",
       city: input.city || null,
-      age: input.beneficiary_age ?? null,
-      target_amount: targetAmount,
-      category_id: !isNaN(Number(input.category_id)) ? Number(input.category_id) : 1,
-      program_id: input.program_id ? Number(input.program_id) : null,
-      project_id: input.project_id ? Number(input.project_id) : null,
-      donation_campaign_id: input.donation_campaign_id ? Number(input.donation_campaign_id) : null,
-      priority,
+      age: numOrNull(input.beneficiary_age),
+      target_amount: Number(input.target_amount ?? input.needed_amount ?? 0),
+      deadline: input.deadline || null,
+      category_id: categoryId,
+      axis_id: numOrNull(input.axis_id),
+      program_id: numOrNull(input.program_id),
+      project_id: numOrNull(input.project_id),
+      donation_campaign_id: numOrNull(input.donation_campaign_id),
+      priority: toPriority(input) ?? "medium",
       cover_image: input.cover_image || input.cover_image_url || null,
-      description: input.description || input.story || input.title || "تفاصيل الحالة للمستفيد",
-      status: input.status || "pending_review",
-    } as any);
-    return mapLaravelCaseToRow(created);
-  } catch (err) {
-    console.warn("Could not create case on Laravel API:", err);
-    throw err;
-  }
+      description: input.description || input.story || "",
+      status: toBackendStatus(input.status) || undefined,
+    },
+  });
+  invalidateApiCache("/cases");
+  return mapLaravelCaseToRow((res?.data ?? res) as LaravelCase);
 }
 
+/** PUT /cases/{id}: sends exactly the fields present in `patch` (null clears), nothing else. */
 export async function updateCase(id: string, patch: Partial<CaseInput> & { status?: string; rejection_reason?: string | null }) {
-  try {
-    const payload: Record<string, unknown> = {};
-    if (patch.title) payload.title = patch.title;
-    if (patch.code) payload.code = patch.code;
-    if (patch.beneficiary_name) payload.beneficiary_name = patch.beneficiary_name;
-    if (patch.target_amount !== undefined) payload.target_amount = Number(patch.target_amount);
-    else if (patch.needed_amount !== undefined) payload.target_amount = Number(patch.needed_amount);
-    if (patch.story) payload.description = patch.story;
-    if (patch.description) payload.description = patch.description;
-    if (patch.governorate) payload.governorate = patch.governorate;
-    if (patch.city !== undefined) payload.city = patch.city;
-    if (patch.beneficiary_age !== undefined) payload.age = patch.beneficiary_age;
-    if (patch.cover_image !== undefined) payload.cover_image = patch.cover_image;
-    else if (patch.cover_image_url !== undefined) payload.cover_image = patch.cover_image_url;
-    if (patch.category_id !== undefined && !isNaN(Number(patch.category_id))) {
-      payload.category_id = Number(patch.category_id);
-    }
-    if (patch.program_id !== undefined) payload.program_id = patch.program_id ? Number(patch.program_id) : null;
-    if (patch.project_id !== undefined) payload.project_id = patch.project_id ? Number(patch.project_id) : null;
-    if (patch.donation_campaign_id !== undefined) payload.donation_campaign_id = patch.donation_campaign_id ? Number(patch.donation_campaign_id) : null;
-    if (patch.priority) payload.priority = patch.priority;
-    else if (patch.urgency) {
-      payload.priority = (patch.urgency === "high" || (patch.urgency as string) === "critical" ? "high" : "medium") as "low" | "medium" | "high";
-    }
-    if (patch.status) {
-      const mapSt = patch.status === "funded" ? "completed" : patch.status === "pending" ? "pending_review" : patch.status;
-      payload.status = mapSt;
-    }
-    if (patch.rejection_reason) payload.rejection_reason = patch.rejection_reason;
-    const updated = await casesApiV1.update(id, payload as any);
-    return mapLaravelCaseToRow(updated);
-  } catch (err) {
-    console.warn("Could not update case on Laravel API:", err);
-    throw err;
-  }
+  const has = (k: string) => Object.prototype.hasOwnProperty.call(patch, k);
+  const body: Record<string, unknown> = {};
+  if (has("title")) body.title = patch.title;
+  if (has("code") && patch.code) body.code = patch.code;
+  if (has("beneficiary_name")) body.beneficiary_name = patch.beneficiary_name;
+  if (has("target_amount")) body.target_amount = Number(patch.target_amount);
+  else if (has("needed_amount")) body.target_amount = Number(patch.needed_amount);
+  if (has("description")) body.description = patch.description;
+  else if (has("story")) body.description = patch.story;
+  if (has("governorate")) body.governorate = patch.governorate;
+  if (has("city")) body.city = patch.city || null;
+  if (has("beneficiary_age")) body.age = numOrNull(patch.beneficiary_age);
+  if (has("deadline")) body.deadline = patch.deadline || null;
+  if (has("cover_image")) body.cover_image = patch.cover_image || null;
+  else if (has("cover_image_url")) body.cover_image = patch.cover_image_url || null;
+  if (has("category_id") && Number(patch.category_id)) body.category_id = Number(patch.category_id);
+  if (has("axis_id")) body.axis_id = numOrNull(patch.axis_id);
+  if (has("program_id")) body.program_id = numOrNull(patch.program_id);
+  if (has("project_id")) body.project_id = numOrNull(patch.project_id);
+  if (has("donation_campaign_id")) body.donation_campaign_id = numOrNull(patch.donation_campaign_id);
+  const priority = toPriority(patch);
+  if (priority) body.priority = priority;
+  if (has("status")) body.status = toBackendStatus(patch.status);
+  const res = await apiFetch<{ data?: LaravelCase }>(`/cases/${id}`, { method: "PUT", body });
+  invalidateApiCache("/cases");
+  return mapLaravelCaseToRow((res?.data ?? res) as LaravelCase);
 }
 
-export async function setCaseStatus(id: string, status: CaseStatus, rejection_reason?: string) {
-  try {
-    const mapSt = status === "funded" || status === "closed" ? "completed" : status;
-    await casesApiV1.update(id, { status: mapSt, rejection_reason: rejection_reason ?? null } as any);
-    return;
-  } catch (err) {
-    console.warn("Could not update status on Laravel API:", err);
-    throw err;
-  }
+export async function setCaseStatus(id: string, status: CaseStatus, _rejectionReason?: string) {
+  await apiFetch(`/cases/${id}`, { method: "PUT", body: { status: toBackendStatus(status) } });
+  invalidateApiCache("/cases");
 }
 
 export async function deleteCase(id: string) {
@@ -609,7 +639,6 @@ export async function listMyDonations() {
       return all as unknown as DonationRow[];
     }
   } catch { }
-  if (isRestProvider()) return (await restApi.listMyDonations()) as DonationRow[];
   return [];
 }
 
@@ -623,9 +652,12 @@ export async function listAllDonations(filters?: {
   from?: string; // ISO date
   to?: string;   // ISO date
   limit?: number;
+  /** Server-side filter (GET /donations?case_id=…). */
+  caseId?: string;
 }) {
   try {
-    const lDonations = await donationsApiV1.listAll();
+    // Always fresh: gateway callbacks change a donation's status minutes after it was created.
+    const lDonations = await donationsApiV1.listAll(filters?.caseId ? { case_id: filters.caseId } : undefined, { useCache: false });
     if (Array.isArray(lDonations) && lDonations.length > 0) {
       let mapped = lDonations.map((d: any) => {
         const pmDetails = d.payment_method_details;
@@ -650,6 +682,8 @@ export async function listAllDonations(filters?: {
           amount: Number(d.amount || 0),
           currency: d.currency || "EGP",
           payment_method: methodName,
+          /** Raw method code (visa | cash | bank…): decides whether a gateway confirms it. */
+          method_code: String(d.payment_method || "").toLowerCase(),
           payment_status: normalizedStatus,
           raw_status: rawStatus,
           created_at: d.created_at || new Date().toISOString(),
@@ -689,12 +723,6 @@ export async function listAllDonations(filters?: {
   return [];
 }
 
-export async function updateDonationStatus(id: string, status: DonationStatus) {
-  try {
-    await donationsApiV1.update(id, { status } as any);
-  } catch { }
-}
-
 /** Analytics from Laravel API only. Supabase removed. */
 export async function getDonationsAnalytics(_months = 9) {
   // Return empty analytics — use AdminAnalytics.tsx which reads from Laravel API
@@ -710,80 +738,119 @@ export async function getDonationsAnalytics(_months = 9) {
 }
 
 
-export async function listCaseDocuments(_caseId: string) {
-  // Supabase removed
-  return [];
+/**
+ * Read helpers used by public pages AND by AdminCaseDetail's Promise.all: on API failure
+ * (e.g. the proposed endpoint is not deployed yet) they log and return [] — the same
+ * empty result these functions returned before — so one missing endpoint never blocks the
+ * whole page. Writes below always throw. Screens that need the error can call the
+ * `fetch*` functions in ./api/caseContentApi directly.
+ */
+async function readOrEmpty<T>(label: string, fn: () => Promise<T[]>): Promise<T[]> {
+  try {
+    return await fn();
+  } catch (err) {
+    if (import.meta.env.DEV) console.warn(`[casesApi] ${label} unavailable:`, err);
+    return [];
+  }
 }
 
-export async function listCaseUpdates(caseId: string) {
-  if (isRestProvider()) return (await restApi.listCaseUpdates(caseId)) as Database["public"]["Tables"]["case_updates"]["Row"][];
-  return [];
+/** Case documents visible to the donor (Laravel GET /cases/{id}/documents — NEW, proposed). */
+export async function listCaseDocuments(caseId: string): Promise<CaseDocumentRow[]> {
+  return readOrEmpty("documents", () => fetchCaseDocuments(caseId));
 }
 
-export async function addCaseUpdate(caseId: string, body: string, image_url?: string | null) {
-  if (isRestProvider()) return await restApi.addCaseUpdate(caseId, body, image_url) as Database["public"]["Tables"]["case_updates"]["Row"];
-  throw new Error("Case updates require REST provider");
+export async function addCaseDocument(
+  caseId: string,
+  input: { file: File; doc_type?: string; caption?: string | null; is_public?: boolean },
+): Promise<CaseDocumentRow> {
+  return createCaseDocument(caseId, input);
 }
 
-export async function updateCaseUpdate(_id: string, _patch: { body?: string; image_url?: string | null }) {
-  throw new Error("Case updates require REST provider");
+export async function deleteCaseDocument(id: string): Promise<void> {
+  return removeCaseDocument(id);
 }
 
-export async function deleteCaseUpdate(_id: string) {
-  throw new Error("Case updates require REST provider");
+// ── Case updates (Laravel /cases/{id}/updates + /case-updates/{id} — NEW, proposed) ──
+export async function listCaseUpdates(caseId: string): Promise<CaseUpdateRow[]> {
+  return readOrEmpty("updates", () => fetchCaseUpdates(caseId));
 }
 
-export type CaseMediaRow = Database["public"]["Tables"]["case_media"]["Row"];
-export type JourneyStepRow = Database["public"]["Tables"]["donation_journey_steps"]["Row"];
-
-export async function listCaseMedia(_caseId: string) {
-  return [] as CaseMediaRow[];
+export async function addCaseUpdate(caseId: string, body: string, image_url?: string | null): Promise<CaseUpdateRow> {
+  return createCaseUpdate(caseId, body, image_url);
 }
 
-export async function listCaseMediaAdmin(_caseId: string) {
-  return [] as CaseMediaRow[];
+export async function updateCaseUpdate(id: string, patch: { body?: string; image_url?: string | null }): Promise<CaseUpdateRow> {
+  return patchCaseUpdate(id, patch);
 }
 
-export type CaseMediaKind = CaseMediaRow["kind"];
-
-/** Upload a file directly to the public case-media bucket and return its URL + path. */
-export async function uploadCaseMediaFile(_file: File, _caseId: string): Promise<{ url: string; path: string }> {
-  throw new Error("Media upload requires server integration");
+export async function deleteCaseUpdate(id: string): Promise<void> {
+  return removeCaseUpdate(id);
 }
 
-export async function createCaseMediaRow(_input: {
-  case_id: string; url: string; kind?: CaseMediaKind;
+// ── Case media (Laravel /cases/{id}/media + /case-media/{id} — NEW, proposed) ──
+/** Public media for the case page (is_public only). */
+export async function listCaseMedia(caseId: string): Promise<CaseMediaRow[]> {
+  return readOrEmpty("media", () => fetchCaseMedia(caseId));
+}
+
+/** All media incl. private (staff token required). Throws so the admin screen can show the error. */
+export async function listCaseMediaAdmin(caseId: string): Promise<CaseMediaRow[]> {
+  return fetchCaseMedia(caseId, { all: true });
+}
+
+/** Upload a file (no media row) and return its public URL + storage path. */
+export async function uploadCaseMediaFile(file: File, caseId: string): Promise<{ url: string; path: string }> {
+  return uploadCaseFile(file, caseId);
+}
+
+export async function createCaseMediaRow(input: {
+  case_id: string; url?: string; file?: File | Blob; kind?: CaseMediaKind;
   caption_ar?: string | null; caption_en?: string | null;
   is_public?: boolean; sort_order?: number;
 }): Promise<CaseMediaRow> {
-  throw new Error("Media upload requires server integration");
+  const { case_id, ...rest } = input;
+  return createCaseMedia(case_id, rest);
 }
 
-export async function updateCaseMedia(_id: string, _patch: Partial<Pick<CaseMediaRow,
+export async function updateCaseMedia(id: string, patch: Partial<Pick<CaseMediaRow,
   "kind" | "caption_ar" | "caption_en" | "is_public" | "sort_order" | "url">>): Promise<CaseMediaRow> {
-  throw new Error("Media upload requires server integration");
+  return patchCaseMedia(id, patch);
 }
 
-export async function deleteCaseMedia(_id: string, _url?: string) {
-  // no-op without Supabase storage
+/** Deletes the media row; the backend also deletes the stored file. */
+export async function deleteCaseMedia(id: string, _url?: string): Promise<void> {
+  return removeCaseMedia(id);
 }
 
-export async function reorderCaseMedia(_rows: { id: string }[]) {
-  // no-op without Supabase
+export async function reorderCaseMedia(rows: { id: string; case_id?: string }[], caseId?: string): Promise<void> {
+  const cid = caseId ?? rows.find((r) => r.case_id)?.case_id;
+  if (!cid) throw new Error("لا يمكن إعادة الترتيب بدون رقم الحالة");
+  return reorderCaseMediaItems(cid, rows.map((r) => r.id));
 }
 
-export async function listCaseJourney(_caseId: string) {
-  return [] as Pick<JourneyStepRow, "id" | "step_key" | "title_ar" | "title_en" | "note_ar" | "note_en" | "media_url" | "occurred_at" | "is_public">[];
+/** Public journey steps of a case (Laravel GET /cases/{id}/journey — NEW, proposed). */
+export async function listCaseJourney(caseId: string): Promise<Pick<JourneyStepRow,
+  "id" | "step_key" | "title_ar" | "title_en" | "note_ar" | "note_en" | "media_url" | "occurred_at" | "is_public">[]> {
+  return readOrEmpty("journey", () => fetchCaseJourney(caseId));
 }
 
-export async function uploadCaseMedia(_file: File, _opts: { caseId?: string; visibility?: "public" | "private"; docType?: string; caption?: string }) {
-  throw new Error("Media upload requires server integration");
+/** Upload a document/media file for a case and create its row in one request. */
+export async function uploadCaseMedia(file: File, opts: { caseId?: string; visibility?: "public" | "private"; docType?: string; caption?: string }): Promise<CaseMediaRow> {
+  if (!opts.caseId) throw new Error("رقم الحالة مطلوب لرفع الملف");
+  return createCaseMedia(opts.caseId, {
+    file,
+    kind: "other",
+    caption_ar: opts.caption ?? null,
+    is_public: opts.visibility !== "private",
+  });
 }
 
 /** Backend program used for general (untargeted) donations, e.g. the home quick-donate. */
 export const GENERAL_PROGRAM_ID = Number(import.meta.env.VITE_GENERAL_PROGRAM_ID) || 36;
 
 export async function createDonation(input: {
+  /** The record this donation is booked on (case / program / project / campaign); wins over the legacy fields. */
+  target?: DonationTarget | null;
   case_id?: string | null;
   category_id?: string | null;
   donation_campaign_id?: string | number | null;
@@ -826,7 +893,9 @@ export async function createDonation(input: {
   // Resolve donation target — backend requires ONE of: case_id | program_id | project_id | donation_campaign_id
   let targetField: { key: string; value: number };
   const anyInput = input as any;
-  if (input.case_id && !isNaN(Number(input.case_id)) && Number(input.case_id) > 0) {
+  if (input.target && input.target.id > 0) {
+    targetField = { key: TARGET_FIELD[input.target.kind], value: input.target.id };
+  } else if (input.case_id && !isNaN(Number(input.case_id)) && Number(input.case_id) > 0) {
     targetField = { key: "case_id", value: Number(input.case_id) };
   } else if (anyInput.donation_campaign_id && !isNaN(Number(anyInput.donation_campaign_id))) {
     targetField = { key: "donation_campaign_id", value: Number(anyInput.donation_campaign_id) };
@@ -853,10 +922,11 @@ export async function createDonation(input: {
     laravelResponse = await donationsApiV1.submit({
       donation_target: String(input.amount || 100),
       provider: pmInfo.provider,
-      name: input.donor_name || "متبرع فاعل خير",
-      email: input.donor_email || "donor@elyusr.org",
-      phone: input.donor_phone || "01000000000",
-      address: "مصر",
+      // Only what the donor typed: the backend shows «فاعل خير» when the name is empty and
+      // requires a phone number for guests (DonorResolver).
+      name: input.donor_name?.trim() || undefined,
+      email: input.donor_email?.trim() || undefined,
+      phone: input.donor_phone?.trim() || undefined,
       amount: Number(input.amount),
       payment_method_id: pmInfo.id,
       payment_method: pmInfo.method,
@@ -864,9 +934,13 @@ export async function createDonation(input: {
       merchant_redirect: frontendUrl,
       notes: input.message || "تبرع عبر بوابة اليسر",
       [targetField.key]: targetField.value,
+      ...(input.target?.packageId ? { donation_package_id: input.target.packageId } : {}),
     });
   } catch (err) {
-    console.warn("Laravel donation submit API notice:", err);
+    // Never continue with a donation the server did not record: the caller shows this message.
+    const apiErr = err as { message?: string; errors?: Record<string, string[]> };
+    const firstFieldError = apiErr?.errors ? Object.values(apiErr.errors).flat()[0] : undefined;
+    throw new Error(firstFieldError || apiErr?.message || "تعذر تسجيل التبرع، حاول مرة أخرى.");
   }
 
   // 2. Extract backend reference and payment session/secret

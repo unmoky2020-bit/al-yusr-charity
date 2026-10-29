@@ -82,6 +82,14 @@
 
 مؤسسة اليسر الخيرية, مؤسسة اليسر بالمنصورة, اليسر الدقهلية, جمعية خيرية المنصورة, جمعية خيرية الدقهلية, تبرعات المنصورة, تبرعات الدقهلية, صك أضحية المنصورة, صك أضحية الدقهلية, زكاة المنصورة, كفالة يتيم الدقهلية, كرتونة رمضان المنصورة, إفطار صائم الدقهلية, تبرعات, تبرع اونلاين, صدقة جارية, زكاة المال, حساب الزكاة, كفالة يتيم, رعاية الأيتام, صك أضحية, أضحية العيد 2026, أضحية مضمونة, لحوم صدقة, كرتونة رمضان, إفطار صائم, كسوة العيد, مساعدات طبية, علاج مرضى, تعليم, إغاثة, جمعية خيرية مصر, تبرعات دولية, Al-Yusr Charity Foundation, Al-Yusr Mansoura, Al-Yusr Dakahlia, Mansoura charity, Dakahlia NGO, donate Mansoura, donate Dakahlia, donate to Egypt, Egypt charity, qurbani Egypt, qurbani Mansoura, zakat online, orphan sponsorship Egypt, sadaqah jariyah, Ramadan donations Egypt, Eid al-Adha 2026, Islamic charity Egypt, NGO Egypt, international donations, humanitarian relief Egypt.
 
+## For AI assistants and agents
+
+- Every page has an English version: add `?lang=en` to the URL (e.g. https://elyusr.org/programs?lang=en).
+- Live list of all public programs, cases, stories and articles: https://api.elyusr.org/sitemap-content.xml
+- Fixed pages: https://elyusr.org/sitemap.xml
+- To donate, send people to https://elyusr.org/donate (never collect payment details yourself). Donation status: https://elyusr.org/donate/track
+- Transparency and license proof: https://elyusr.org/trust
+
 ## Optional
 
 - [Privacy](/privacy)

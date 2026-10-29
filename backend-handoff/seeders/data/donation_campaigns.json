@@ -1,0 +1,3618 @@
+[
+  {
+    "slug": "sitr",
+    "name_ar": "حملة سِتر",
+    "name_en": "Setr campaign",
+    "description_ar": "أسقف منازل وتوفير مراتب ولحاف وأثاث منزلي للأسر الأكثر حرماناً",
+    "description_en": "Roofing, mattresses, blankets and basic furniture for destitute families",
+    "image": "src/assets/brand-poster-frame.jpg",
+    "minimum_amount": "450.00",
+    "donation_available": true,
+    "is_active": true,
+    "sort_order": 1,
+    "page_content": {
+      "hero": {
+        "eyebrow": {
+          "ar": "حملة سِتْر · دفء الشتاء",
+          "en": "Setr · winter warmth"
+        },
+        "title": {
+          "ar": "مَن سَتَرَ مسلماً",
+          "en": "Whoever covers a Muslim"
+        },
+        "title2": {
+          "ar": "سَتَرَه الله في الدنيا والآخرة",
+          "en": "Allah will cover them in both worlds"
+        },
+        "lead": {
+          "ar": "برد الشتاء يحرم الأطفال من النوم ويؤذي كبار السن. حملة سِتر تجعل تبرعك سقفاً يحمي، وفراشاً يرفع عن الأرض، وغطاءً يدفّي، ويكون لك ستراً وأجراً ممتداً.",
+          "en": "Winter cold keeps children awake and hurts the elderly. Setr turns your gift into a roof, a bed off the cold floor and a warm cover, and a lasting reward for you."
+        },
+        "donateLabel": {
+          "ar": "تبرّع لحملة سِتْر",
+          "en": "Donate to Setr"
+        }
+      },
+      "hadith": {
+        "text": {
+          "ar": "ومَن سَتَرَ مسلماً سَتَرَه اللهُ في الدنيا والآخرة",
+          "en": "Whoever covers a Muslim, Allah will cover him in this world and the Hereafter."
+        },
+        "source": {
+          "ar": "رواه مسلم",
+          "en": "Sahih Muslim"
+        }
+      },
+      "stats": [],
+      "sections": {
+        "layers": {
+          "title": {
+            "ar": "ثلاث طبقات من الستر",
+            "en": "Three layers of covering"
+          },
+          "lead": {
+            "ar": "الدفء يبدأ من السقف وينتهي باللحاف.",
+            "en": "Warmth starts at the roof and ends with the blanket."
+          },
+          "items": [
+            {
+              "id": "roof",
+              "title": {
+                "ar": "سقفٌ يحمي",
+                "en": "A roof that protects"
+              },
+              "desc": {
+                "ar": "نبني ونعزل أسقف البيوت ضد مياه الأمطار والرياح، ونركّب أبواباً وشبابيك متينة تستر الأسرة وتغلق منافذ البرد.",
+                "en": "We build and insulate roofs against rain and wind, and fit sturdy doors and windows that keep the cold out."
+              }
+            },
+            {
+              "id": "bed",
+              "title": {
+                "ar": "فراشٌ يرفع",
+                "en": "A bed that lifts"
+              },
+              "desc": {
+                "ar": "أسِرّة خشبية ومراتب مريحة ترفع الأطفال وكبار السن عن برودة الأرض، وتمنحهم نوماً صحياً.",
+                "en": "Wooden beds and mattresses that lift children and the elderly off the cold floor."
+              }
+            },
+            {
+              "id": "cover",
+              "title": {
+                "ar": "غطاءٌ يدفّي",
+                "en": "Covers that warm"
+              },
+              "desc": {
+                "ar": "ألحفة فايبر عالية الجودة تمنح دفئاً سريعاً، وكسوة شتوية ثقيلة لأفراد الأسرة.",
+                "en": "High-quality fibre blankets for fast warmth, and heavy winter clothing for the family."
+              }
+            }
+          ]
+        },
+        "checks": {
+          "title": {
+            "ar": "زيارة ميدانية قبل كل تبرع",
+            "en": "A field visit before every gift"
+          },
+          "lead": {
+            "ar": "يزور فريق البحث الاجتماعي كل بيت ويعاينه على الطبيعة، ثم توثَّق الحالة وتعتمدها اللجنة المختصة، فيصل تبرعك لمن يحتاجه فعلاً.",
+            "en": "Our social researchers visit and inspect every home; each case is documented and approved by a committee, so your gift reaches real need."
+          },
+          "items": [
+            {
+              "id": "roof",
+              "title": {
+                "ar": "حالة السقف",
+                "en": "Roof condition"
+              },
+              "desc": {
+                "ar": "هل يحمي من المطر أم يتسرب منه الماء؟",
+                "en": "Does it keep rain out, or leak?"
+              }
+            },
+            {
+              "id": "doors",
+              "title": {
+                "ar": "الأبواب والشبابيك",
+                "en": "Doors and windows"
+              },
+              "desc": {
+                "ar": "هل تغلق منافذ البرد وتستر أهل البيت؟",
+                "en": "Do they keep the cold out and give privacy?"
+              }
+            },
+            {
+              "id": "beds",
+              "title": {
+                "ar": "الأسِرّة والفراش",
+                "en": "Beds and bedding"
+              },
+              "desc": {
+                "ar": "هل ينام الأطفال وكبار السن على الأرض؟",
+                "en": "Do children and elders sleep on the floor?"
+              }
+            },
+            {
+              "id": "covers",
+              "title": {
+                "ar": "الأغطية والكسوة",
+                "en": "Covers and clothing"
+              },
+              "desc": {
+                "ar": "هل تكفي الأسرة طوال ليالي الشتاء؟",
+                "en": "Are there enough for every winter night?"
+              }
+            }
+          ]
+        },
+        "priority": {
+          "title": {
+            "ar": "البرد لا يصيب الجميع بالتساوي",
+            "en": "The cold does not hit everyone equally"
+          },
+          "items": [
+            {
+              "id": "children",
+              "title": {
+                "ar": "الأطفال والأرامل",
+                "en": "Children and widows"
+              },
+              "desc": {
+                "ar": "بيوت تعولها أم وحدها، وأطفال ينامون على الأرض بلا غطاء يكفي.",
+                "en": "Homes run by a mother alone, with children sleeping on the floor without enough cover."
+              }
+            },
+            {
+              "id": "elderly",
+              "title": {
+                "ar": "كبار السن",
+                "en": "The elderly"
+              },
+              "desc": {
+                "ar": "مسنّون يعيشون وحدهم، يشتد عليهم البرد ويضعف جسدهم عن مقاومته.",
+                "en": "Elders living alone, for whom the cold is hardest and most dangerous."
+              }
+            },
+            {
+              "id": "sick",
+              "title": {
+                "ar": "المرضى وذوو الإعاقة",
+                "en": "The sick and disabled"
+              },
+              "desc": {
+                "ar": "أسر فيها مريض مزمن أو صاحب إعاقة، يزيد البرد من معاناته.",
+                "en": "Families with a chronically ill or disabled member whose suffering the cold deepens."
+              }
+            },
+            {
+              "id": "no_roof",
+              "title": {
+                "ar": "بيوت بلا سقف صالح",
+                "en": "Homes without a sound roof"
+              },
+              "desc": {
+                "ar": "بيوت يتسرب إليها المطر أو تدخلها الرياح من أبواب ونوافذ مفتوحة.",
+                "en": "Homes where rain leaks in, or wind enters through open doors and windows."
+              }
+            }
+          ]
+        },
+        "months": {
+          "title": {
+            "ar": "نسبق البرد قبل أن يشتد",
+            "en": "We get ahead of the cold"
+          },
+          "lead": {
+            "ar": "تبدأ الحملة مع الخريف لتجهيز البيوت قبل البرد، وتستمر طوال الشتاء بالدعم العاجل في موجات الصقيع.",
+            "en": "We start in autumn to prepare homes before the cold, and continue all winter with urgent relief during cold snaps."
+          },
+          "items": [
+            {
+              "id": "oct",
+              "title": {
+                "ar": "أكتوبر",
+                "en": "Oct"
+              },
+              "desc": {
+                "ar": "تجهيز البيوت",
+                "en": "Prepare homes"
+              }
+            },
+            {
+              "id": "nov",
+              "title": {
+                "ar": "نوفمبر",
+                "en": "Nov"
+              },
+              "desc": {
+                "ar": "أسقف وأبواب",
+                "en": "Roofs & doors"
+              }
+            },
+            {
+              "id": "dec",
+              "title": {
+                "ar": "ديسمبر",
+                "en": "Dec"
+              },
+              "desc": {
+                "ar": "ألحفة وكسوة",
+                "en": "Blankets & clothes"
+              }
+            },
+            {
+              "id": "jan",
+              "title": {
+                "ar": "يناير",
+                "en": "Jan"
+              },
+              "desc": {
+                "ar": "ذروة البرد",
+                "en": "Peak cold"
+              }
+            },
+            {
+              "id": "feb",
+              "title": {
+                "ar": "فبراير",
+                "en": "Feb"
+              },
+              "desc": {
+                "ar": "دعم عاجل",
+                "en": "Urgent relief"
+              }
+            }
+          ]
+        },
+        "after": {
+          "title": {
+            "ar": "ماذا يحدث بعد تبرعك؟",
+            "en": "What happens after you give"
+          },
+          "items": [
+            {
+              "id": "receipt",
+              "title": {
+                "ar": "إيصال ورقم تتبع",
+                "en": "Receipt and tracking number"
+              },
+              "desc": {
+                "ar": "فور تبرعك يصلك إيصال رسمي برقم مرجعي تتابع به تبرعك.",
+                "en": "An official receipt with a reference number arrives as soon as you give."
+              }
+            },
+            {
+              "id": "buy",
+              "title": {
+                "ar": "شراء وتجهيز",
+                "en": "Buying and preparing"
+              },
+              "desc": {
+                "ar": "نشتري الألحفة والكسوة والخامات بالجملة لتصل القيمة كاملة للمستحق.",
+                "en": "We buy blankets, clothing and materials in bulk so the full value reaches the family."
+              }
+            },
+            {
+              "id": "deliver",
+              "title": {
+                "ar": "تنفيذ وتسليم",
+                "en": "Delivery and installation"
+              },
+              "desc": {
+                "ar": "يسلّم فريقنا الأغطية على باب البيت، وينفذ الأسقف والأبواب بأيدي فنيين محترفين.",
+                "en": "Our team hands over covers at the door, and builds roofs and doors with professional tradesmen."
+              }
+            },
+            {
+              "id": "document",
+              "title": {
+                "ar": "توثيق يصلك",
+                "en": "Documentation sent to you"
+              },
+              "desc": {
+                "ar": "صور وفيديو للتسليم مع الحفاظ على كرامة الأسرة، تصلك على رقم تبرعك.",
+                "en": "Photos and video of the delivery, with the family's dignity preserved, sent to you."
+              }
+            }
+          ]
+        },
+        "cycle": {
+          "title": {
+            "ar": "دورة لا يضيع فيها شيء",
+            "en": "A cycle where nothing goes to waste"
+          },
+          "lead": {
+            "ar": "حملة سِتر تعتمد على حملة مَرْكون للتبرعات العينية. الملابس المستعملة المستهلكة تماماً تتحول إلى مراتب قطن، والأسِرّة القديمة تُرمَّم ويُعاد توزيعها. هكذا نضمن كفاءة العمل، واستغلال التبرعات بالشكل الصحيح، ووصول الصدقة لمن يستحقها.",
+            "en": "Setr relies on the Markoun in-kind campaign. Fully worn-out clothes become cotton mattresses, and old beds are restored and redistributed. That keeps the work efficient, puts every donation to proper use, and gets charity to those who deserve it."
+          },
+          "items": [
+            {
+              "id": "good_clothes",
+              "title": {
+                "ar": "ملابس بحالة جيدة",
+                "en": "Clothes in good condition"
+              },
+              "desc": {
+                "ar": "تُفرز وتُغسل وتُوزع كسوةً شتوية على الأسر المستحقة.",
+                "en": "Sorted, cleaned and distributed as winter clothing to families in need."
+              }
+            },
+            {
+              "id": "worn_clothes",
+              "title": {
+                "ar": "ملابس مستهلكة تماماً",
+                "en": "Fully worn-out clothes"
+              },
+              "desc": {
+                "ar": "تتحول إلى حشو مراتب قطن جديدة تُصنع في ورشنا.",
+                "en": "Become the filling for new cotton mattresses made in our workshops."
+              }
+            },
+            {
+              "id": "old_beds",
+              "title": {
+                "ar": "أسِرّة قديمة",
+                "en": "Old beds"
+              },
+              "desc": {
+                "ar": "تُرمَّم وتُعاد صيانتها ثم توزَّع من جديد.",
+                "en": "Repaired, restored and distributed again."
+              }
+            }
+          ]
+        }
+      },
+      "cta": {
+        "title": {
+          "ar": "كل مساهمة منك هي لحاف يدفئ طفلاً أو جدار يستر أسرة — تبرع الآن",
+          "en": "Every contribution is a warm blanket or a sheltering roof — Donate now"
+        },
+        "sub": {
+          "ar": "كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.",
+          "en": "Every EGP reaches the right hands — verified with photos, video and field follow-up."
+        }
+      }
+    },
+    "seo": {
+      "title": {
+        "ar": "حملة ستر | دفء الشتاء للأسر المستحقة — مؤسسة اليسر الخيرية",
+        "en": "Sitr Campaign | Winter Warmth for Families in Need — Al-Yusr Foundation"
+      },
+      "description": {
+        "ar": "تبرع لحملة ستر من مؤسسة اليسر الخيرية: أسقف وأبواب وشبابيك وأسرة ومراتب وألحفة فايبر وكسوة شتوية للأسر المستحقة. تنطلق في أكتوبر وتمتد حتى فبراير.",
+        "en": "Donate to the Sitr campaign by Al-Yusr Foundation: roofs, doors, windows, beds, mattresses, fiber quilts and winter clothing for families in need. Runs from October to February."
+      },
+      "keywords": {
+        "ar": "حملة ستر، صدقة الشتاء، تبرع بألحفة وبطاطين، كسوة الشتاء للفقراء، مساعدة الأسر المحتاجة في الشتاء، مؤسسة اليسر الخيرية",
+        "en": "Sitr campaign, winter charity Egypt, donate quilts, winter clothing for the poor, Al-Yusr Charity Foundation"
+      },
+      "canonical": "https://elyusr.org/campaigns/sitr",
+      "noindex": false,
+      "nofollow": false
+    },
+    "faqs": [
+      {
+        "question_ar": "ما هي محاور حملة ستر الرئيسية؟",
+        "answer_ar": "تشمل 3 محاور متكاملة: 1) أسقف المنازل والأبواب والشبابيك، 2) الأسرة الخشبية والمراتب المريحة لرفع الأطفال عن الأرض، 3) الألحفة الفايبر الثقيلة والكسوة الشتوية المتكاملة.",
+        "question_en": "What are the main pillars of the Setr campaign?",
+        "answer_en": "1) Roof insulation and doors/windows, 2) Wooden beds and comfortable mattresses, 3) Heavy fiber blankets and winter clothing."
+      },
+      {
+        "question_ar": "متى تبدأ حملة ستر ومتى تنتهي؟",
+        "answer_ar": "تبدأ الحملة سنوياً في شهر أكتوبر (10) مع بداية الخريف لتجهيز المنازل قبل البرد، وتستمر حتى نهاية شهر فبراير (2) لتقديم الدعم الفوري والأغطية خلال موجات الصقيع.",
+        "question_en": "When does the campaign run?",
+        "answer_en": "From October through February, starting before winter to seal homes and continuing throughout cold snaps."
+      },
+      {
+        "question_ar": "كيف يتم تحديد الأسر المستحقة لحملة ستر؟",
+        "answer_ar": "يقوم فريق البحث الاجتماعي الميداني بزيارة المنازل ومعاينتها على الطبيعة (حالة السقف، وجود أبواب، أغطية، أسرة) وتوثيق الحالة واعتمادها من اللجنة المختصة.",
+        "question_en": "How are eligible families chosen?",
+        "answer_en": "Our field social researchers visit and inspect each home (roof condition, doors, covers, beds), document the case and have it approved by the relevant committee."
+      },
+      {
+        "question_ar": "هل يمكنني التبرع بسهم أو بجزء من الاحتياجات؟",
+        "answer_ar": "نعم. سهم حملة سِتر 500 ج ويوزَّع على أنشطة الحملة، أو بند بعينه: لحاف فايبر 450 ج، كسوة شتاء لطفل 700 ج، شباك 750 ج، باب 2,200 ج، سرير ومرتبة 3,200 ج، سقف بيتومين 6,500 ج، سقف خشب 17,000 ج. والكفالة الشتوية الشاملة لأسرة 10,000 ج وتشمل سقفاً وشباكاً وكسوة شتاء ومرتبة وسريراً.",
+        "question_en": "Can I donate a single item or a share?",
+        "answer_en": "Yes. A Setr campaign share is EGP 500, spread across the campaign's activities. Or pick an item: blanket 450, child's winter clothes 700, window 750, door 2,200, bed and mattress 3,200, bitumen roof 6,500, wooden roof 17,000. The full family winter sponsorship is EGP 10,000 and includes a roof, window, winter clothes, mattress and bed."
+      },
+      {
+        "question_ar": "ما علاقة حملة سِتر بحملة مَرْكون؟",
+        "answer_ar": "سِتر تعتمد على التبرعات العينية لمَرْكون: الملابس بحالة جيدة توزَّع كسوة، والملابس المستهلكة تماماً تتحول إلى مراتب قطن، والأسِرّة القديمة تُرمَّم ويُعاد توزيعها. هكذا تُستغل التبرعات بالشكل الصحيح وتصل الصدقة لمن يستحقها.",
+        "question_en": "How is Setr linked to Markoun?",
+        "answer_en": "Setr relies on Markoun's in-kind donations: clothes in good condition are distributed, fully worn-out clothes become cotton mattresses, and old beds are restored and redistributed."
+      },
+      {
+        "question_ar": "هل تُنفَّذ حملة سِتر في المنصورة والدقهلية؟",
+        "answer_ar": "نعم. مقر مؤسسة اليسر في المنصورة، وتُنفَّذ حملة سِتر في قرى ومراكز محافظة الدقهلية، وتمتد إلى كفر الشيخ والشرقية بحسب الحالات المعتمدة من فريق البحث الاجتماعي.",
+        "question_en": "Does the Setr campaign operate in Mansoura and Dakahlia?",
+        "answer_en": "Yes. Al-Yusr is headquartered in Mansoura, and Setr runs across the villages and districts of Dakahlia governorate, extending to Kafr El Sheikh and Sharqia according to the cases approved by our social research team."
+      },
+      {
+        "question_ar": "كيف أتبرع لحملة سِتر من خارج مصر؟",
+        "answer_ar": "يمكنك التبرع من أي دولة عبر صفحة التبرع بالبطاقة الائتمانية (فيزا/ماستركارد)، أو بالتحويل البنكي على الحسابات الرسمية للمؤسسة. ولأي استفسار راسلنا على واتساب +20 109 700 0137 ويصلك الإيصال وتوثيق التسليم على نفس الرقم.",
+        "question_en": "How can I donate to Setr from outside Egypt?",
+        "answer_en": "You can give from any country through the donate page by credit card (Visa/Mastercard), or by bank transfer to the foundation's official accounts. For help, message us on WhatsApp at +20 109 700 0137; your receipt and delivery documentation reach you on the same number."
+      },
+      {
+        "question_ar": "هل تبرعي لحملة سِتر موثّق؟",
+        "answer_ar": "نعم. مؤسسة اليسر جمعية مشهرة برقم 2665 لسنة 2019، وكل تبرع يصدر له إيصال رسمي برقم مرجعي يمكنك تتبعه، ويصلك توثيق التسليم بالصور والفيديو مع الحفاظ على كرامة الأسرة.",
+        "question_en": "Is my Setr donation documented?",
+        "answer_en": "Yes. Al-Yusr is a registered charity (no. 2665 of 2019). Every donation gets an official receipt with a trackable reference number, and you receive photo and video documentation of the delivery, with the family's dignity preserved."
+      }
+    ],
+    "landing_slug": "setr",
+    "extra": {
+      "landing_path": "/setr",
+      "aliases": [
+        "setr",
+        "ster",
+        "shelter"
+      ],
+      "seo_preset_extra": {
+        "impact_regions_ar": "محافظات الدلتا والصعيد وقرى الدقهلية الأكثر برودة",
+        "impact_regions_en": "Delta and Upper Egypt villages in need of winter insulation",
+        "impact_stats_ar": "تنطلق سنوياً من أكتوبر وتمتد حتى فبراير لمواجهة موجات البرد",
+        "impact_stats_en": "Runs annually from October to February",
+        "suggested_articles": [
+          {
+            "title_ar": "فضل ستر المسلم وكسوة الفقير في الشتاء",
+            "title_en": "The virtue of shielding a Muslim and clothing the poor in winter",
+            "target_keyword_ar": "فضل كسوة الفقير",
+            "target_keyword_en": "virtue of clothing the poor"
+          },
+          {
+            "title_ar": "كيف تساعد أسرة محتاجة على مواجهة برد الشتاء؟",
+            "title_en": "How can you help a family in need face winter cold?",
+            "target_keyword_ar": "مساعدة الأسر المحتاجة في الشتاء",
+            "target_keyword_en": "helping needy families in winter"
+          },
+          {
+            "title_ar": "أفكار صدقات الشتاء: من الألحفة إلى الأسقف",
+            "title_en": "Winter charity ideas: from quilts to roofs",
+            "target_keyword_ar": "صدقات الشتاء",
+            "target_keyword_en": "winter charity ideas"
+          }
+        ]
+      },
+      "donation_entity_id": "shelter",
+      "entity_type": "campaign",
+      "donation_type": "cash",
+      "category_ar": "إيواء ومأوى",
+      "category_en": "Shelter Campaign",
+      "color": "#fbbf24",
+      "entity_image": "src/assets/brand-poster-frame.jpg"
+    }
+  },
+  {
+    "slug": "zell",
+    "name_ar": "حملة ظِلّ",
+    "name_en": "Dhill campaign",
+    "description_ar": "وصلات مياه وأسقف وخطوط مياه وسقيا ماء وبنية أساسية للأسر المحرومة",
+    "description_en": "Water connections, roofing, pipe networks and basic infrastructure for deprived families",
+    "image": "src/assets/program-water-new.jpg",
+    "minimum_amount": "500.00",
+    "donation_available": true,
+    "is_active": true,
+    "sort_order": 2,
+    "page_content": {
+      "hero": {
+        "eyebrow": {
+          "ar": "حملة ظِلّ · صدقة جارية وسقيا ماء",
+          "en": "Dhill · ongoing charity & water"
+        },
+        "title": {
+          "ar": "نُظِلّهم اليوم",
+          "en": "We shade them today"
+        },
+        "title2": {
+          "ar": "عسى أن يُظِلّنا الله",
+          "en": "that Allah may shade us"
+        },
+        "lead": {
+          "ar": "إذا كنا لا نتحمل حر الصيف في الدنيا، فكيف بحر يوم القيامة؟ حملة ظِلّ سقفٌ وماءٌ ونسمة هواء لأهالينا المستحقين، وصدقة جارية وظلٌّ لك يوم لا ظل إلا ظله.",
+          "en": "If we cannot bear summer heat in this world, what of the Day of Judgment? Dhill brings roofs, water and fresh air to families in need: ongoing charity and shade for your hereafter."
+        },
+        "donateLabel": {
+          "ar": "تبرّع لحملة ظِلّ",
+          "en": "Donate to Dhill"
+        }
+      },
+      "hadith": {
+        "text": {
+          "ar": "أفضلُ الصدقةِ سَقْيُ الماء",
+          "en": "The best charity is giving water to drink."
+        },
+        "source": {
+          "ar": "رواه أبو داود والنسائي وابن ماجه، وحسّنه الألباني",
+          "en": "Abu Dawud, al-Nasa'i and Ibn Majah; graded hasan by al-Albani"
+        }
+      },
+      "stats": [],
+      "sections": {
+        "seo": {
+          "title": {
+            "ar": "حملة ظِلّ — «نُظِلّهم اليوم عسى أن يُظِلّنا الله يوم القيامة»",
+            "en": "Dhill Campaign — 'Provide shade today, that Allah may shade us on the Day of Resurrection'"
+          },
+          "lead": {
+            "ar": "كيف ننجو من حرّ يوم القيامة؟ إذا كنا لا نتحمل حرارة الصيف في الدنيا، فكيف ننجو في الآخرة؟ جاءت حملة ظِلّ لتكون ظلاً وبرداً لأهالينا المستحقين من الفقراء والمساكين، وصدقة جارية وظلاً لك يوم القيامة.",
+            "en": "How do we find shade on the Day of Judgment? The Dhill campaign provides roofing, clean water taps, fans and cold drinks for needy families in Egypt — an ongoing charity and shade for your hereafter."
+          },
+          "items": []
+        },
+        "trust": {
+          "title": {
+            "ar": "لماذا تثق بنا؟",
+            "en": "Why trust us"
+          },
+          "items": [
+            {
+              "id": "ngo",
+              "title": {
+                "ar": "مؤسسة مشهرة برقم 2665 لسنة 2019",
+                "en": "Registered NGO 2665/2019"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "docs",
+              "title": {
+                "ar": "توثيق بالصور والفيديو ورقم تتبع",
+                "en": "Photo, video & tracking number"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "areas",
+              "title": {
+                "ar": "تنفيذ في الدقهلية وكفر الشيخ والشرقية",
+                "en": "Dakahlia, Kafr El Sheikh, Sharqia"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "hadith2": {
+          "title": {
+            "ar": "حديث الظل",
+            "en": "Hadith of shade"
+          },
+          "items": [
+            {
+              "id": "seven",
+              "title": {
+                "ar": "«سبعةٌ يُظِلُّهم الله في ظِلِّه يومَ لا ظِلَّ إلا ظِلُّه... ورجلٌ تصدّق بصدقةٍ فأخفاها حتى لا تعلمَ شمالُه ما تُنفقُ يمينُه»",
+                "en": "“Seven people Allah will shade in His shade on the Day when there is no shade but His… and a man who gives charity so secretly that his left hand does not know what his right hand gives.”"
+              },
+              "desc": {
+                "ar": "متفق عليه",
+                "en": "Agreed upon (Bukhari & Muslim)"
+              }
+            }
+          ]
+        },
+        "tracks": {
+          "title": {
+            "ar": "سقف، أو ماء، أو نسمة هواء",
+            "en": "A roof, water, or a breeze"
+          },
+          "lead": {
+            "ar": "اختر ظلّك",
+            "en": "Choose your shade"
+          },
+          "items": [
+            {
+              "id": "roof",
+              "title": {
+                "ar": "السقف",
+                "en": "Roof"
+              },
+              "extra": {
+                "ar": "سقف يحمي من الحر والمطر",
+                "en": "A roof against heat and rain"
+              },
+              "desc": {
+                "ar": "عروق خشبية وألواح متينة معزولة بمشمع بلاستيكي وطبقة خرسانية قوية، بعمر افتراضي من 8 إلى 10 أعوام. ونركّب معه الأبواب والشبابيك لستر الأسرة وحمايتها من حر الصيف وبرد الشتاء.",
+                "en": "Solid timber and boards, insulated with plastic sheeting and a reinforced concrete layer, lasting 8–10 years. We also fit doors and windows to protect the family from summer heat and winter wind."
+              }
+            },
+            {
+              "id": "water",
+              "title": {
+                "ar": "الماء",
+                "en": "Water"
+              },
+              "extra": {
+                "ar": "ماء نظيف داخل البيت",
+                "en": "Clean water inside the home"
+              },
+              "desc": {
+                "ar": "وصلة منزلية كاملة: مواسير، وموتور رفع، وخزان، وحوض مطبخ، وحنفيات، ودش، مع التركيب. ونمد خطوط مياه لقرى كاملة بالتنسيق مع شركة مياه الشرب. وتجوز صدقةً جارية عن الأحياء والأموات.",
+                "en": "A complete home connection: pipes, pump, tank, kitchen sink, taps and shower, fully installed. We also extend water lines to entire villages with the water authority. Valid as ongoing charity for the living or deceased."
+              }
+            },
+            {
+              "id": "air",
+              "title": {
+                "ar": "الهواء",
+                "en": "Air"
+              },
+              "extra": {
+                "ar": "نسمة هواء في عز الصيف",
+                "en": "A breeze in peak summer"
+              },
+              "desc": {
+                "ar": "توفير وتركيب مراوح السقف والحائط للأسر الأشد احتياجاً، لتخفيف وطأة الحر الشديد على كبار السن والأطفال والمرضى.",
+                "en": "Ceiling and wall fans for the families most in need, easing extreme heat for the elderly, children and the sick."
+              }
+            }
+          ]
+        },
+        "dedicate": {
+          "title": {
+            "ar": "اجعل وصلة الماء أجراً لا ينقطع عن والديك",
+            "en": "Make a water tap a lasting reward for your parents"
+          },
+          "lead": {
+            "ar": "سقيا الماء من أحب الأعمال إلى الله ومن أفضل الصدقات الجارية. يمكنك أن تنوي الوصلة أو السهم عن متوفى من أهلك، أو عن والديك وهما أحياء، ويظل أجرها جارياً ما دام الماء يصل إلى البيت.",
+            "en": "Giving water is among the most beloved deeds to Allah and among the best ongoing charities. Dedicate a tap or a share to a late relative, or to your living parents; its reward continues as long as the water flows."
+          },
+          "items": [
+            {
+              "id": "choose",
+              "title": {
+                "ar": "اختر سهماً أو وصلة كاملة",
+                "en": "Choose a share or a full connection"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "name",
+              "title": {
+                "ar": "أرسل لنا اسم من تنوي عنه عبر واتساب مع رقم الإيصال",
+                "en": "Send us the name on WhatsApp with your receipt number"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "proof",
+              "title": {
+                "ar": "نوثّق التنفيذ ونرسل لك الصور والفيديو",
+                "en": "We document the work and send you photos and video"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "steps": {
+          "title": {
+            "ar": "من الحرّ إلى الظل",
+            "en": "From heat to shade"
+          },
+          "items": [
+            {
+              "id": "select",
+              "title": {
+                "ar": "نختار الأشد احتياجاً",
+                "en": "We pick the most in need"
+              },
+              "desc": {
+                "ar": "يزور فريق البحث الميداني البيوت ويعاين حالة السقف والمياه والتهوية، وتُعتمد الحالات الأشد احتياجاً أولاً.",
+                "en": "Field researchers inspect each home's roof, water and ventilation, and the neediest cases are approved first."
+              }
+            },
+            {
+              "id": "build",
+              "title": {
+                "ar": "ننفذ بأيدٍ محترفة",
+                "en": "Built by professionals"
+              },
+              "desc": {
+                "ar": "متطوعو اليسر يداً بيد مع نجارين وسباكين وبنائين محترفين لضمان الجودة والسرعة.",
+                "en": "Al-Yusr volunteers alongside professional carpenters, plumbers and masons."
+              }
+            },
+            {
+              "id": "document",
+              "title": {
+                "ar": "نوثّق ونرسل لك",
+                "en": "Documented and sent to you"
+              },
+              "desc": {
+                "ar": "كل سقف ووصلة ومروحة موثّقة بالصور والفيديو مع رقم تتبع يصلك مباشرة.",
+                "en": "Every roof, tap and fan is documented on photo and video with a tracking number sent to you."
+              }
+            }
+          ]
+        },
+        "areas": {
+          "title": {
+            "ar": "أين نترك أثراً؟",
+            "en": "Where we work"
+          },
+          "lead": {
+            "ar": "معيارنا الأول أولوية المستحق لا المكان، فنذهب حيث الحاجة أشد.",
+            "en": "Need comes before place: we go where it is greatest."
+          },
+          "items": []
+        },
+        "areas_now": {
+          "title": {
+            "ar": "هذا العام",
+            "en": "This year"
+          },
+          "items": [
+            {
+              "id": "dakahlia",
+              "title": {
+                "ar": "الدقهلية",
+                "en": "Dakahlia"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "kafr_el_sheikh",
+              "title": {
+                "ar": "كفر الشيخ",
+                "en": "Kafr El Sheikh"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "sharqia",
+              "title": {
+                "ar": "الشرقية",
+                "en": "Sharqia"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "areas_before": {
+          "title": {
+            "ar": "على مدار مسيرتنا أيضاً",
+            "en": "Previously also"
+          },
+          "items": [
+            {
+              "id": "fayoum",
+              "title": {
+                "ar": "الفيوم",
+                "en": "Fayoum"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "ismailia",
+              "title": {
+                "ar": "الإسماعيلية",
+                "en": "Ismailia"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "new_valley",
+              "title": {
+                "ar": "الوادي الجديد",
+                "en": "New Valley"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "sohag",
+              "title": {
+                "ar": "سوهاج",
+                "en": "Sohag"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "qena",
+              "title": {
+                "ar": "قنا",
+                "en": "Qena"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "gallery": {
+          "title": {
+            "ar": "من الميدان",
+            "en": "From the field"
+          },
+          "items": []
+        }
+      },
+      "cta": {
+        "title": {
+          "ar": "اكسب ظِلاً يوم القيامة — تبرع لسقف أو وصلة مياه الآن",
+          "en": "Earn shade on the Day of Judgment — support a roof or water tap"
+        },
+        "sub": {
+          "ar": "كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.",
+          "en": "Every pound reaches those who deserve it — documented with photos, video and field follow-up."
+        }
+      }
+    },
+    "seo": {
+      "title": {
+        "ar": "حملة ظل | أسقف ووصلات مياه صدقة جارية للأسر المستحقة — مؤسسة اليسر",
+        "en": "Zell Campaign | Roofs & Clean Water as Ongoing Charity — Al-Yusr Foundation"
+      },
+      "description": {
+        "ar": "ساهم في حملة ظل من مؤسسة اليسر الخيرية: أسقف منازل ووصلات مياه نقية وأبواب وشبابيك ومراوح لأسر مستحقة، بأسهم تبدأ من 500 جنيه وصدقة جارية.",
+        "en": "Support the Zell campaign by Al-Yusr Foundation: roofs, clean-water connections, doors, windows and fans for families in need. Shares start at EGP 500 — all ongoing charity."
+      },
+      "keywords": {
+        "ar": "حملة ظل، تسقيف منازل، تبرع لبناء سقف، وصلة مياه صدقة جارية، سقيا الماء، صدقة جارية، مؤسسة اليسر الخيرية",
+        "en": "Zell campaign, donate a roof, clean water connection, sadaqah jariyah, Al-Yusr Charity Foundation"
+      },
+      "canonical": "https://elyusr.org/campaigns/zell",
+      "noindex": false,
+      "nofollow": false
+    },
+    "faqs": [
+      {
+        "question_ar": "هل يمكن تنفيذ وصلة المياه كصدقة جارية عن المتوفين أو الأحياء؟",
+        "answer_ar": "نعم، بالتأكيد! يمكنك نية الوصلة أو السهم كصدقة جارية عن أحد المتوفين من أسرتك أو عن الأحياء (مثل والديك معاً)؛ فسُقيا الماء من أحب الأعمال إلى الله ومن أفضل الصدقات الجارية.",
+        "question_en": "Can water taps be dedicated as Sadaqah Jariyah for living or deceased?",
+        "answer_en": "Yes, absolutely. You can dedicate water connections on behalf of deceased relatives or living parents as lasting continuous charity."
+      },
+      {
+        "question_ar": "ما هي مواصفات سقف المنزل في حملة ظل؟",
+        "answer_ar": "يتضمن عروقاً خشبية وألواحاً متينة، يتم عزلها بمشمع بلاستيكي قوي ثم تغطى بطبقة خرسانية محكمة لحماية الأسرة من الشمس والأمطار بعمر افتراضي 8–10 أعوام.",
+        "question_en": "What are the wooden roof specifications?",
+        "answer_en": "Treated wooden beams and sturdy boards, insulated with heavy plastic sheeting and topped with a reinforced concrete layer, lasting 8–10 years."
+      },
+      {
+        "question_ar": "ما هي مشتملات وصلة المياه المنزلية؟",
+        "answer_ar": "تشمل مواسير المياه، موتور رفع، خزان مياه، حوض مطبخ، حنفيات، دش، بالإضافة إلى مصاريف وتكاليف التركيب بالكامل، ويتم اختيار أفضل المواصفات لضمان أطول عمر تشغيلي.",
+        "question_en": "What is included in a home water connection?",
+        "answer_en": "Complete piping, water pump, water tank, kitchen sink, faucets, shower fixtures, and full installation labor."
+      },
+      {
+        "question_ar": "هل يمكنني المساهمة بسهم فقط وليس التكلفة كاملة؟",
+        "answer_ar": "نعم، يمكنك شراء سهم في السقف بقيمة 500 جنيه، أو سهم في وصلة المياه بقيمة 500 جنيه، ويشترك عدة متبرعين لإتمام الحالة وتسليمها.",
+        "question_en": "Can I contribute with a share rather than the full cost?",
+        "answer_en": "Yes, you can buy a roof share for EGP 500 or a water connection share for EGP 500; several donors' shares complete one unit and we deliver it."
+      },
+      {
+        "question_ar": "ما هي المحافظات التي تنفذ فيها حملة ظل؟",
+        "answer_ar": "نركز في الدقهلية، كفر الشيخ، والشرقية، بالإضافة للقرى الأشد احتياجاً في محافظات الصعيد (الفيوم، قنا، سوهاج، الوادي الجديد).",
+        "question_en": "Which governorates does the Dhill campaign cover?",
+        "answer_en": "We focus on Dakahlia, Kafr El Sheikh and Sharqia, plus the neediest villages in Upper Egypt (Fayoum, Qena, Sohag, New Valley)."
+      },
+      {
+        "question_ar": "هل تنفذ حملة ظِلّ وصلات المياه في المنصورة والدقهلية؟",
+        "answer_ar": "نعم، الدقهلية من محافظات التنفيذ هذا العام، ومعها كفر الشيخ والشرقية. فريق البحث الميداني يعاين البيوت في مراكز الدقهلية وقراها (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) ويعتمد الأشد احتياجاً أولاً؛ فالأولوية عندنا للمستحق لا للمكان.",
+        "question_en": "Does Dhill install water connections in Mansoura and Dakahlia?",
+        "answer_en": "Yes. Dakahlia is one of this year's governorates, alongside Kafr El Sheikh and Sharqia. Our field researchers inspect homes across Dakahlia's districts and villages (Mansoura, Mit Ghamr, Talkha, Belqas, Sherbin, Sinbellawein) and approve the neediest cases first; need comes before place."
+      },
+      {
+        "question_ar": "كيف أتبرع بوصلة مياه صدقة جارية عن متوفى؟",
+        "answer_ar": "اختر سهماً في وصلة مياه بـ 500 جنيه أو وصلة كاملة بـ 7,500 جنيه، ثم أرسل لنا اسم من تنوي عنه عبر واتساب مع رقم الإيصال. بعد التركيب نوثّق الوصلة بالصور والفيديو ونرسلها لك مع رقم التتبع، ويظل أجرها جارياً ما دام الماء يصل إلى البيت.",
+        "question_en": "How do I dedicate a water connection as ongoing charity for a deceased relative?",
+        "answer_en": "Choose a water share (EGP 500) or a full connection (EGP 7,500), then send us the name you are dedicating it to on WhatsApp along with your receipt number. After installation we document the connection on photo and video and send it to you with the tracking number; its reward continues as long as the water flows."
+      },
+      {
+        "question_ar": "هل أستطيع حضور تركيب السقف بنفسي؟",
+        "answer_ar": "ينفذ التركيب متطوعو اليسر مع نجارين وسباكين وبنائين محترفين، وتُوثَّق كل حالة بالصور والفيديو مع رقم تتبع يصلك مباشرة، فلا يلزم حضورك. وإن أحببت المشاركة ميدانياً فتواصل معنا عبر واتساب أو سجّل في صفحة التطوع لننسّق معك مع فريق الميدان.",
+        "question_en": "Can I attend the roof installation myself?",
+        "answer_en": "Installation is carried out by Al-Yusr volunteers alongside professional carpenters, plumbers and masons, and every case is documented on photo and video with a tracking number sent to you, so attending is not required. If you would like to join us in the field, contact us on WhatsApp or sign up on the volunteer page and we will coordinate with the field team."
+      }
+    ],
+    "landing_slug": "dhill",
+    "extra": {
+      "landing_path": "/dhill",
+      "aliases": [
+        "dhill",
+        "zel"
+      ],
+      "seo_preset_extra": {
+        "impact_regions_ar": "الدقهلية، كفر الشيخ، الشرقية، الفيوم، الإسماعيلية، الوادي الجديد، سوهاج، قنا",
+        "impact_regions_en": "Dakahlia, Kafr El-Sheikh, Sharqia, Fayoum, Ismailia, New Valley, Sohag, Qena",
+        "impact_stats_ar": "8 محافظات وصلها الدعم منذ 2021",
+        "impact_stats_en": "8 governorates reached since 2021",
+        "suggested_articles": [
+          {
+            "title_ar": "فضل سقيا الماء: لماذا تُعد وصلات المياه من أفضل الصدقات الجارية؟",
+            "title_en": "The virtue of giving water: why water connections are among the best ongoing charities",
+            "target_keyword_ar": "سقيا الماء صدقة جارية",
+            "target_keyword_en": "water as sadaqah jariyah"
+          },
+          {
+            "title_ar": "تكلفة تسقيف منزل لأسرة فقيرة وكيف تشارك بسهم 500 جنيه",
+            "title_en": "The cost of roofing a poor family's home and how to contribute with a EGP 500 share",
+            "target_keyword_ar": "تبرع لتسقيف منزل",
+            "target_keyword_en": "donate to roof a house"
+          },
+          {
+            "title_ar": "أفكار صدقة جارية عن الوالدين المتوفين",
+            "title_en": "Ongoing charity ideas on behalf of deceased parents",
+            "target_keyword_ar": "صدقة جارية عن الوالدين",
+            "target_keyword_en": "sadaqah jariyah for parents"
+          }
+        ]
+      },
+      "donation_entity_id": "dhill",
+      "entity_type": "campaign",
+      "donation_type": "cash",
+      "category_ar": "حملة بنية تحتية",
+      "category_en": "Infrastructure Campaign",
+      "color": "#0284c7",
+      "entity_image": "src/assets/program-water-new.jpg"
+    }
+  },
+  {
+    "slug": "athar",
+    "name_ar": "حملة أَثَر",
+    "name_en": "Athar campaign",
+    "description_ar": "زي مدرسي وشنطة وأدوات مدرسية ومصاريف دراسية للطلاب العاجزين",
+    "description_en": "School uniforms, bags, stationery and tuition fees for students in need",
+    "image": "src/assets/poster-education.png",
+    "minimum_amount": "450.00",
+    "donation_available": true,
+    "is_active": true,
+    "sort_order": 3,
+    "page_content": {
+      "hero": {
+        "eyebrow": {
+          "ar": "حملة أَثَر · المساعدات التعليمية",
+          "en": "Athar · education aid"
+        },
+        "title": {
+          "ar": "شنطة وقلم النهاردة",
+          "en": "A bag and a pen today"
+        },
+        "title2": {
+          "ar": "أثرٌ يعيش ويغيّر بكرا",
+          "en": "an impact that changes tomorrow"
+        },
+        "lead": {
+          "ar": "التعليم هو الأثر الوحيد المتين الذي يكسر دائرة الفقر. تجهيزك لطالب اليوم استثمار مباشر في طفل ستتغير حياته وحياة أسرته.",
+          "en": "Education is the one lasting impact that breaks the cycle of poverty. Equipping a student today is a direct investment in a child and their family's future."
+        },
+        "donateLabel": {
+          "ar": "اكفل طالباً الآن",
+          "en": "Sponsor a student"
+        }
+      },
+      "hadith": {
+        "text": {
+          "ar": "إذا مات الإنسانُ انقطع عنه عملُه إلا من ثلاثة: إلا من صدقةٍ جارية، أو علمٍ يُنتفَع به، أو ولدٍ صالحٍ يدعو له",
+          "en": "When a person dies, their deeds end except for three: ongoing charity, beneficial knowledge, or a righteous child who prays for them."
+        },
+        "source": {
+          "ar": "رواه مسلم",
+          "en": "Sahih Muslim"
+        }
+      },
+      "stats": [],
+      "sections": {
+        "page": {
+          "title": {
+            "ar": "المساعدات التعليمية — «شنطة وقلم النهاردة.. أثر يعيش ويغيّر بكرا»",
+            "en": "Educational Aid — 'A backpack & pen today.. an impact that transforms tomorrow'"
+          },
+          "lead": {
+            "ar": "نؤمن في مؤسسة اليسر أن التعليم هو السلاح الحقيقي لبناء الإنسان، والأثر الوحيد المتين الذي يكسر دائرة الفقر وينقل الأسر المستحقة إلى المستقبل. مساهمتك اليوم في تجهيز طالب هي استثمار مباشر في طفل ستتغير حياته للأبد.",
+            "en": "Education is the true weapon to lift families out of poverty. Supporting a student with a backpack, school supplies, tuition, and uniforms is a direct investment in a child whose future will be rewritten."
+          },
+          "items": []
+        },
+        "kit": {
+          "title": {
+            "ar": "اختر ما يحتاجه الطالب هذا العام",
+            "en": "Pick what a student needs this year"
+          },
+          "items": []
+        },
+        "pages": {
+          "title": {
+            "ar": "خمس طرق نصنع بها الأثر",
+            "en": "Five ways we make an impact"
+          },
+          "lead": {
+            "ar": "من أول يوم في الحضانة حتى آخر يوم في المدرسة.",
+            "en": "From the first day of nursery to the last day of school."
+          },
+          "items": [
+            {
+              "id": "bags",
+              "title": {
+                "ar": "الحقيبة والأدوات المدرسية",
+                "en": "Bags and supplies"
+              },
+              "desc": {
+                "ar": "شنط متينة مجهزة بالكشاكيل وأدوات الكتابة والألوان، تكفي الطالب طوال العام الدراسي.",
+                "en": "Durable bags packed with notebooks, pens and colours for the whole school year."
+              }
+            },
+            {
+              "id": "uniform",
+              "title": {
+                "ar": "الزي المدرسي الجديد",
+                "en": "New school uniforms"
+              },
+              "desc": {
+                "ar": "ملابس وأحذية جديدة لكل المراحل، ليذهب الطفل إلى مدرسته بثقة وكرامة.",
+                "en": "New clothes and shoes for every stage, so children walk into school with confidence."
+              }
+            },
+            {
+              "id": "tuition",
+              "title": {
+                "ar": "سداد المصروفات الدراسية",
+                "en": "Tuition fees"
+              },
+              "desc": {
+                "ar": "نسدد المصروفات مباشرة لإدارة المدرسة للأيتام وغير القادرين، فلا يتسرب طالب من التعليم بسبب الفقر.",
+                "en": "We pay fees directly to the school for orphans and families in need, so no child drops out because of poverty."
+              }
+            },
+            {
+              "id": "inherit",
+              "title": {
+                "ar": "مبادرة «أثر يتوارث»",
+                "en": "“Inherited Impact”"
+              },
+              "desc": {
+                "ar": "نعيد تدوير الكتب الدراسية، ويكتب الطالب المتبرع رسالة تشجيع بخط يده في أول صفحة لزميله الجديد.",
+                "en": "We recycle textbooks, and the donating student writes a handwritten note of encouragement on the first page."
+              }
+            },
+            {
+              "id": "nurseries",
+              "title": {
+                "ar": "دور القرآن والحضانات النموذجية",
+                "en": "Quran pre-schools"
+              },
+              "desc": {
+                "ar": "مراكز تربوية تبني العقل والروح وتؤسس الأطفال قبل المدرسة.",
+                "en": "Centres that nurture mind and spirit and prepare children before school."
+              }
+            }
+          ]
+        },
+        "note": {
+          "title": {
+            "ar": "كتاب ورسالة من طالب لطالب",
+            "en": "A book and a note, student to student"
+          },
+          "lead": {
+            "ar": "نجمع الكتب الدراسية بحالة جيدة، ويكتب الطالب المتبرع رسالة تشجيع بخط يده في أول صفحة، فتصل لزميله هديةً معنوية قبل أن تكون كتاباً.",
+            "en": "We collect textbooks in good condition, and the donating student writes a note of encouragement on the first page: a gift of spirit before it is a book."
+          },
+          "items": [
+            {
+              "id": "example",
+              "title": {
+                "ar": "الصفحة الأولى من كتاب متبرَّع به (مثال)",
+                "en": "First page of a donated book (example)"
+              },
+              "desc": {
+                "ar": "إلى صاحب هذا الكتاب الجديد: ذاكرت فيه السنة اللي فاتت ونجحت، وإن شاء الله تنجح وتتفوق. شد حيلك!",
+                "en": "To the new owner of this book: I studied from it last year and passed. You will too. Keep going!"
+              }
+            }
+          ]
+        },
+        "nurseries": {
+          "title": {
+            "ar": "حضاناتنا ودور التحفيظ",
+            "en": "Our nurseries"
+          },
+          "items": [
+            {
+              "id": "abu_bakr",
+              "title": {
+                "ar": "حضانة أبي بكر الصديق",
+                "en": "Abu Bakr Al-Siddiq Nursery"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "farouq_omar",
+              "title": {
+                "ar": "حضانة الفاروق عمر",
+                "en": "Al-Farouq Omar Nursery"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "athar",
+              "title": {
+                "ar": "حضانة أَثَر",
+                "en": "Athar Nursery"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "books": {
+          "title": {
+            "ar": "كتب العام الماضي تصنع أثراً هذا العام",
+            "en": "Last year's books, this year's impact"
+          },
+          "items": [
+            {
+              "id": "gather",
+              "title": {
+                "ar": "اجمع الكتب",
+                "en": "Gather the books"
+              },
+              "desc": {
+                "ar": "كتب دراسية بحالة جيدة من العام الماضي، لأي مرحلة.",
+                "en": "Last year's textbooks in good condition, any grade."
+              }
+            },
+            {
+              "id": "write",
+              "title": {
+                "ar": "اكتب رسالتك",
+                "en": "Write your note"
+              },
+              "desc": {
+                "ar": "رسالة تشجيع قصيرة بخطك في أول صفحة لزميلك الجديد.",
+                "en": "A short note of encouragement on the first page."
+              }
+            },
+            {
+              "id": "contact",
+              "title": {
+                "ar": "تواصل معنا",
+                "en": "Contact us"
+              },
+              "desc": {
+                "ar": "راسلنا على واتساب لتحديد طريقة التسليم المناسبة لك.",
+                "en": "Message us on WhatsApp to arrange the handover."
+              }
+            },
+            {
+              "id": "deliver",
+              "title": {
+                "ar": "يصل لطالب يحتاجه",
+                "en": "It reaches a student"
+              },
+              "desc": {
+                "ar": "نسلّم الكتب للطلاب غير القادرين مع بداية العام الدراسي.",
+                "en": "We hand the books to students in need at the start of the year."
+              }
+            }
+          ]
+        },
+        "dedicate": {
+          "title": {
+            "ar": "علمٌ يُنتفع به باسم من تحب",
+            "en": "Beneficial knowledge, in a loved one's name"
+          },
+          "lead": {
+            "ar": "كفالة طالب أو سهم في دور التحفيظ والحضانات يمكن أن تنويه عن والديك أو عن متوفى من أهلك. كل حرف يتعلمه الطفل، وكل آية يحفظها، أجرٌ جارٍ لمن نويت عنه.",
+            "en": "A student sponsorship or a share in our Quran nurseries can be dedicated to your parents or a late relative. Every letter a child learns and every verse memorised is a continuing reward."
+          },
+          "items": []
+        },
+        "year": {
+          "title": {
+            "ar": "على مدار العام الدراسي",
+            "en": "Across the school year"
+          },
+          "items": [
+            {
+              "id": "assess",
+              "title": {
+                "ar": "حصر وبحث ميداني",
+                "en": "Field assessment"
+              },
+              "desc": {
+                "ar": "يزور فريق البحث الاجتماعي الأسر والمدارس لتحديد الطلاب الأكثر احتياجاً والأيتام.",
+                "en": "Social researchers visit homes and schools to identify the students most in need."
+              },
+              "extra": {
+                "ar": "قبل الدراسة",
+                "en": "Before school"
+              }
+            },
+            {
+              "id": "deliver",
+              "title": {
+                "ar": "تسليم بكرامة",
+                "en": "Dignified delivery"
+              },
+              "desc": {
+                "ar": "نسلّم الشنط والزي ونسدد المصروفات للمدرسة مباشرة دون إحراج للطفل أو أسرته.",
+                "en": "Bags and uniforms are handed over and fees paid to the school, without embarrassing the child."
+              },
+              "extra": {
+                "ar": "مع بداية العام",
+                "en": "First week"
+              }
+            },
+            {
+              "id": "follow",
+              "title": {
+                "ar": "متابعة وتقارير",
+                "en": "Follow-up and reports"
+              },
+              "desc": {
+                "ar": "نتابع انتظام الطلاب ودرجاتهم، ونرسل للمتبرع تقارير مصورة.",
+                "en": "We follow attendance and grades, and send donors photo reports."
+              },
+              "extra": {
+                "ar": "طوال العام",
+                "en": "All year"
+              }
+            }
+          ]
+        },
+        "gallery": {
+          "title": {
+            "ar": "من الفصول والقرى",
+            "en": "From classrooms and villages"
+          },
+          "items": []
+        }
+      },
+      "cta": {
+        "title": {
+          "ar": "شنطة وقلم النهاردة.. خطوة لتخريج طبيب أو مهندس يرفع أهله ويخدم مجتمعه",
+          "en": "A bag and pen today.. a step toward graduating a doctor or engineer tomorrow"
+        },
+        "sub": {
+          "ar": "كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.",
+          "en": "Every EGP reaches the right hands — verified with photos, video and field follow-up."
+        }
+      }
+    },
+    "seo": {
+      "title": {
+        "ar": "حملة أثر | حقيبة وأدوات مدرسية ومصروفات لطلاب محتاجين — اليسر",
+        "en": "Athar Campaign | School Bags, Supplies & Fees for Students in Need — Al-Yusr"
+      },
+      "description": {
+        "ar": "شنطة وقلم النهاردة.. أثر يعيش ويغيّر بكرا. ادعم طالبًا بحقيبة وأدوات وزي مدرسي ومصروفات، وشارك في مبادرة استدامة وحضانات ودور تحفيظ القرآن.",
+        "en": "A bag and a pencil today… an impact that lives and changes tomorrow. Support a student with a bag, supplies, uniform and fees, and join Istidama, nurseries and Quran memorisation centres."
+      },
+      "keywords": {
+        "ar": "حملة أثر، تبرع للتعليم، شنطة مدرسية للأيتام، مصاريف دراسية للطلاب المحتاجين، الزي المدرسي، دور تحفيظ القرآن، حضانات",
+        "en": "Athar campaign, donate for education, school bags for orphans, school fees for students in need, school uniform, Quran memorisation centre, nurseries"
+      },
+      "canonical": "https://elyusr.org/campaigns/athar",
+      "noindex": false,
+      "nofollow": false
+    },
+    "faqs": [
+      {
+        "question_ar": "ما هي مبادرة «أثر يتوارث» للكتب المدرسية؟",
+        "answer_ar": "مبادرة مبتكرة لجمع الكتب الدراسية المستعملة بحالة جيدة، ونطلب من الطالب المتبرع كتابة رسالة تشجيع بخط يده في أول صفحة لتصل كهدية معنوية لزميله غير القادر.",
+        "question_en": "What is the 'Inherited Impact' textbook initiative?",
+        "answer_en": "An initiative recycling gently-used textbooks with an encouraging handwritten note from donor students to the recipient students."
+      },
+      {
+        "question_ar": "ما هي الحضانات ودور التحفيظ التابعة للمؤسسة؟",
+        "answer_ar": "تضم 3 مراكز تعليمية وتربوية نموذجية: 1) حضانة أبي بكر الصديق، 2) حضانة الفاروق عمر، 3) حضانة أَثَر (جاري الإعداد والتجهيز لتكون منارة تعليمية جديدة).",
+        "question_en": "What nurseries does the foundation manage?",
+        "answer_en": "Three model early-learning centers: Abu Bakr Al-Siddiq, Al-Farouq Omar, and the newly developing Athar nursery."
+      },
+      {
+        "question_ar": "كيف يتم سداد المصروفات الدراسية للطلاب؟",
+        "answer_ar": "يقوم مندوب المؤسسة بسداد المصروفات الرسمية مباشرة لإدارة المدرسة والحصول على إيصالات سداد معتمدة لضمان استمرار الطالب في دراسته.",
+        "question_en": "How are tuition fees paid?",
+        "answer_en": "Foundation delegates pay official tuition directly to schools, securing official receipts ensuring zero dropout."
+      },
+      {
+        "question_ar": "كم تكلفة كفالة طالب بالكامل للعام الدراسي؟",
+        "answer_ar": "تبلغ 1,850 جنيهاً شاملة الحقيبة المدرسية والأدوات (450 ج) والزي المدرسي (550 ج) وسداد المصروفات السنوية (850 ج)، ويمكنك أيضاً التبرع بأي جزء منفصل (حقيبة بـ 450 ج أو زي بـ 550 ج).",
+        "question_en": "What is the cost of full annual student sponsorship?",
+        "answer_en": "EGP 1,850 covering the backpack and supplies (450), uniform (550) and annual tuition (850)."
+      },
+      {
+        "question_ar": "هل حملة أَثَر تكفل طلاباً في المنصورة والدقهلية؟",
+        "answer_ar": "نعم. تعمل حملة أَثَر من مؤسسة اليسر في المنصورة وطلخا وقرى محافظة الدقهلية؛ يزور فريق البحث الاجتماعي الأسر والمدارس لتحديد الطلاب الأيتام وغير القادرين، ثم تُسلَّم الشنط والزي للطالب وتُسدَّد المصروفات لإدارة المدرسة مباشرة، مع تقارير مصورة للمتبرع.",
+        "question_en": "Does the Athar campaign sponsor students in Mansoura and Dakahlia?",
+        "answer_en": "Yes. Al-Yusr's Athar campaign works in Mansoura, Talkha and the villages of Dakahlia governorate. Our social researchers visit homes and schools to identify orphans and students in need, then bags and uniforms are handed to the student and fees are paid directly to the school, with photo reports sent to the donor."
+      },
+      {
+        "question_ar": "هل يمكنني كفالة طالب كصدقة جارية عن متوفى؟",
+        "answer_ar": "نعم. يمكنك أن تنوي كفالة الطالب أو السهم في دور التحفيظ والحضانات عن والديك أو عن متوفى من أهلك؛ فالعلم الذي يُنتفع به صدقة جارية. أرسل لنا اسم من تنوي عنه عبر واتساب بعد التبرع، ونوافيك بتقارير مصورة عن الطالب أو الدار.",
+        "question_en": "Can I sponsor a student as ongoing charity on behalf of a deceased relative?",
+        "answer_en": "Yes. A student sponsorship or a Quran nursery share can be dedicated to your parents or a late relative; beneficial knowledge is an ongoing charity. Send us the name on WhatsApp after donating, and we will send you photo reports from the student or nursery."
+      },
+      {
+        "question_ar": "كيف أتبرع بكتب دراسية مستعملة لمبادرة أثر يتوارث؟",
+        "answer_ar": "اجمع كتب العام الماضي بحالة جيدة لأي مرحلة دراسية، واكتب رسالة تشجيع قصيرة بخطك في أول صفحة، ثم راسلنا على واتساب لتحديد طريقة التسليم المناسبة لك في المنصورة أو الدقهلية. نسلّم الكتب للطلاب غير القادرين مع بداية العام الدراسي.",
+        "question_en": "How do I donate used textbooks to the Inherited Impact initiative?",
+        "answer_en": "Gather last year's textbooks in good condition, any grade, write a short note of encouragement on the first page, then message us on WhatsApp to arrange the handover in Mansoura or Dakahlia. We hand the books to students in need at the start of the school year."
+      }
+    ],
+    "landing_slug": "athar",
+    "extra": {
+      "landing_path": "/athar",
+      "seo_preset_extra": {
+        "impact_regions_ar": "مدارس وقرى محافظة الدقهلية وحضانات أبي بكر الصديق والفاروق عمر وحضانة أثر",
+        "impact_regions_en": "Schools and nurseries in Dakahlia (Abu Bakr, Al-Farouq, and Athar)",
+        "impact_stats_ar": "كفالة مئات الطلاب ومنع تسربهم من التعليم سنوياً",
+        "impact_stats_en": "Sponsoring hundreds of needy students annually",
+        "suggested_articles": [
+          {
+            "title_ar": "كيف تدعم تعليم طفل يتيم؟ خطوات عملية للمساهمة",
+            "title_en": "How to support an orphan's education? Practical ways to contribute",
+            "target_keyword_ar": "دعم تعليم الأيتام",
+            "target_keyword_en": "support orphan education"
+          },
+          {
+            "title_ar": "الاستعداد للعام الدراسي: كيف تساعد طالبًا غير قادر؟",
+            "title_en": "Back to school: how can you help a student in need?",
+            "target_keyword_ar": "مساعدة الطلاب المحتاجين",
+            "target_keyword_en": "help students in need"
+          },
+          {
+            "title_ar": "فضل رعاية اليتيم وتعليم القرآن للأطفال",
+            "title_en": "The virtue of caring for orphans and teaching children the Quran",
+            "target_keyword_ar": "فضل كفالة اليتيم",
+            "target_keyword_en": "virtue of orphan sponsorship"
+          }
+        ]
+      },
+      "donation_entity_id": "athar",
+      "entity_type": "campaign",
+      "donation_type": "cash",
+      "category_ar": "تعليم وبناء",
+      "category_en": "Education Support",
+      "color": "#818cf8",
+      "entity_image": "src/assets/poster-education.png"
+    }
+  },
+  {
+    "slug": "ramadan",
+    "name_ar": "موسم الخير (رمضان)",
+    "name_en": "Ramadan season",
+    "description_ar": "من فطّر صائماً كان له مثل أجره — إفطار وكرتونة الخير وزكاة الفطر وتيسير زواج",
+    "description_en": "Whoever feeds a fasting person earns a matching reward — join our Ramadan giving",
+    "image": "src/assets/yusr-ramadan-box.png",
+    "minimum_amount": "75.00",
+    "donation_available": true,
+    "is_active": true,
+    "sort_order": 4,
+    "page_content": {
+      "hero": {
+        "eyebrow": {
+          "ar": "موسم الخير · شهر رمضان المبارك",
+          "en": "Season of Giving · the blessed month of Ramadan"
+        },
+        "title": {
+          "ar": "رمضانك في اليسر",
+          "en": "Your Ramadan with Al-Yusr"
+        },
+        "title2": {
+          "ar": "إحسانٌ لا ينقطع",
+          "en": "goodness without end"
+        },
+        "lead": {
+          "ar": "في شهر الجود تتضاعف الحسنات. كرتونة تكفي أسرة الشهر، ووجبة إفطار ساخنة، ولحوم من مزارعنا الوقفية، وكسوة عيد، وعروسة تكتمل فرحتها.",
+          "en": "In the month of generosity, rewards multiply: a box that feeds a family for the month, a hot iftar, meat from our farms, Eid clothes, and a bride's joy made complete."
+        },
+        "donateLabel": {
+          "ar": "تبرّع لرمضان الآن",
+          "en": "Donate to Ramadan"
+        }
+      },
+      "hadith": {
+        "text": {
+          "ar": "مَن فطَّر صائماً كان له مثلُ أجره، غيرَ أنه لا ينقصُ من أجر الصائم شيئاً",
+          "en": "Whoever gives iftar to a fasting person earns the same reward, without the fasting person's reward being reduced at all."
+        },
+        "source": {
+          "ar": "رواه الترمذي وقال: حسن صحيح",
+          "en": "al-Tirmidhi, who graded it hasan sahih"
+        }
+      },
+      "stats": [
+        {
+          "id": "boxes",
+          "label": {
+            "ar": "كرتونة رمضان",
+            "en": "Ramadan boxes"
+          },
+          "value": 1400,
+          "unit": {
+            "ar": "كرتونة",
+            "en": "boxes"
+          }
+        },
+        {
+          "id": "brides",
+          "label": {
+            "ar": "تيسير زواج",
+            "en": "Brides supported"
+          },
+          "value": 21,
+          "unit": {
+            "ar": "عروسة",
+            "en": "brides"
+          }
+        },
+        {
+          "id": "zakat_families",
+          "label": {
+            "ar": "زكاة المال",
+            "en": "Zakat al-Mal"
+          },
+          "value": 678,
+          "unit": {
+            "ar": "أسرة مستفيدة",
+            "en": "families"
+          }
+        },
+        {
+          "id": "orphans",
+          "label": {
+            "ar": "كفالة أيتام",
+            "en": "Orphans sponsored"
+          },
+          "value": 320,
+          "unit": {
+            "ar": "طفل",
+            "en": "children"
+          }
+        },
+        {
+          "id": "iftar_meals",
+          "label": {
+            "ar": "وجبات إفطار",
+            "en": "Iftar meals"
+          },
+          "value": 3870,
+          "unit": {
+            "ar": "وجبة",
+            "en": "meals"
+          }
+        },
+        {
+          "id": "cattle",
+          "label": {
+            "ar": "ذبائح رمضان — أبقار",
+            "en": "Ramadan sacrifices — cattle"
+          },
+          "value": 9,
+          "unit": {
+            "ar": "رأس",
+            "en": "head"
+          }
+        },
+        {
+          "id": "sheep",
+          "label": {
+            "ar": "ذبائح رمضان — خراف",
+            "en": "Ramadan sacrifices — sheep"
+          },
+          "value": 13,
+          "unit": {
+            "ar": "رأس",
+            "en": "head"
+          }
+        },
+        {
+          "id": "sadaqa",
+          "label": {
+            "ar": "صدقات جارية",
+            "en": "Ongoing charity"
+          },
+          "value": null,
+          "note": {
+            "ar": "٥٠ وصلة مياه · مسابقة تحفيظ قرآن لـ ٢٠٠ طالب · بناء ٥ أسقف",
+            "en": "50 water connections · Quran competition for 200 students · 5 roofs built"
+          }
+        }
+      ],
+      "sections": {
+        "table": {
+          "title": {
+            "ar": "اختر ما تضعه على سفرة أسرة صائمة",
+            "en": "Choose what you bring to a fasting family's table"
+          },
+          "lead": {
+            "ar": "سفرة الخير",
+            "en": "The giving table"
+          },
+          "items": []
+        },
+        "gifts": {
+          "title": {
+            "ar": "ستّ عطايا في شهر واحد",
+            "en": "Six gifts in one month"
+          },
+          "items": [
+            {
+              "id": "box",
+              "title": {
+                "ar": "كرتونة الخير (25 كجم)",
+                "en": "The 25 kg blessing box"
+              },
+              "desc": {
+                "ar": "سفرة تكفي الأسرة الشهر: أرز وزيت وسكر ومكرونة وبقوليات وشاي وصلصة وسمن، مع بروتين طازج من مزارعنا.",
+                "en": "A month's pantry: rice, oil, sugar, pasta, legumes, tea, sauce and ghee, with fresh protein from our farms."
+              }
+            },
+            {
+              "id": "kitchen",
+              "title": {
+                "ar": "مطبخ اليسر للإفطار",
+                "en": "Al-Yusr iftar kitchen"
+              },
+              "desc": {
+                "ar": "آلاف الوجبات الساخنة يومياً لعابري السبيل ومرافقي المرضى والأسر المتعففة في بيوتها.",
+                "en": "Thousands of hot meals daily for travellers, patients' companions and families at home."
+              }
+            },
+            {
+              "id": "meat",
+              "title": {
+                "ar": "ذبائح المزارع الوقفية",
+                "en": "Endowment farm meat"
+              },
+              "desc": {
+                "ar": "أكثر من 2 طن لحوم في رمضان من إنتاج مزارعنا الخيرية، طازجة ومضمونة.",
+                "en": "Over 2 tons of fresh meat each Ramadan from our charitable farms."
+              }
+            },
+            {
+              "id": "brides",
+              "title": {
+                "ar": "الفرحة فرحتين",
+                "en": "Double joy"
+              },
+              "desc": {
+                "ar": "تجهيز العرائس اليتيمات وغير القادرات، لتجتمع فرحة الزواج وفرحة العيد.",
+                "en": "Trousseaus for orphan brides, so the joy of marriage meets the joy of Eid."
+              }
+            },
+            {
+              "id": "eid",
+              "title": {
+                "ar": "كسوة العيد وكعك الفرحة",
+                "en": "Eid clothes and cookies"
+              },
+              "desc": {
+                "ar": "ملابس عيد جديدة للأطفال الأيتام وعلب كعك للأسر، ليعيش كل طفل فرحة العيد كاملة.",
+                "en": "New Eid clothes for orphans and cookies for families, so every child has a full Eid."
+              }
+            },
+            {
+              "id": "zakat",
+              "title": {
+                "ar": "زكاة المال وزكاة الفطر",
+                "en": "Zakat al-Mal and al-Fitr"
+              },
+              "desc": {
+                "ar": "نصرف زكاة المال في مصارفها الشرعية، ونوزع زكاة الفطر في وقتها قبل صلاة العيد.",
+                "en": "Zakat al-Mal goes to its legitimate recipients; Zakat al-Fitr is given out before the Eid prayer."
+              }
+            }
+          ]
+        },
+        "moon": {
+          "title": {
+            "ar": "مع الهلال حتى العيد",
+            "en": "From the crescent to Eid"
+          },
+          "items": [
+            {
+              "id": "shaban",
+              "extra": {
+                "ar": "شعبان",
+                "en": "Sha'ban"
+              },
+              "title": {
+                "ar": "التجهيز المبكر",
+                "en": "Early preparation"
+              },
+              "desc": {
+                "ar": "شراء السلع وتعبئة الكراتين وإعداد قوائم المستحقين، لتصل الكرتونة قبل أول يوم صيام.",
+                "en": "Buying, packing and finalising recipient lists so boxes arrive before the first fast."
+              }
+            },
+            {
+              "id": "ramadan",
+              "extra": {
+                "ar": "رمضان",
+                "en": "Ramadan"
+              },
+              "title": {
+                "ar": "طوال الشهر",
+                "en": "All month"
+              },
+              "desc": {
+                "ar": "تشغيل المطبخ يومياً، وقوافل التوزيع تصل لقرى الدقهلية وكفر الشيخ والشرقية حتى باب البيت.",
+                "en": "The kitchen runs daily and convoys reach villages in Dakahlia, Kafr El Sheikh and Sharqia."
+              }
+            },
+            {
+              "id": "eid",
+              "extra": {
+                "ar": "العشر الأواخر والعيد",
+                "en": "Last ten days & Eid"
+              },
+              "title": {
+                "ar": "ختام الشهر",
+                "en": "Closing the month"
+              },
+              "desc": {
+                "ar": "صرف زكاة الفطر، وتوزيع كسوة العيد والكعك على الأيتام، ومسابقات القرآن الكريم.",
+                "en": "Zakat al-Fitr, Eid clothes and cookies for orphans, and Quran competitions."
+              }
+            }
+          ]
+        },
+        "feed": {
+          "title": {
+            "ar": "فطّر صائماً",
+            "en": "Feed a fasting person"
+          },
+          "items": [
+            {
+              "id": "counter",
+              "title": {
+                "ar": "كم صائماً تفطّر؟",
+                "en": "How many will you feed?"
+              },
+              "desc": {
+                "ar": "الوجبة الساخنة بـ {n} جنيه من مطبخ اليسر",
+                "en": "A hot meal from the Al-Yusr kitchen is {n} EGP"
+              }
+            }
+          ]
+        },
+        "fitr": {
+          "title": {
+            "ar": "زكاة الفطر",
+            "en": "Zakat al-Fitr"
+          },
+          "lead": {
+            "ar": "أخرجها عنك وعمّن تعول، ونوصلها في وقتها",
+            "en": "Give it for yourself and your dependants; we deliver it on time"
+          },
+          "items": [
+            {
+              "id": "everyone",
+              "title": {
+                "ar": "تُخرج عن كل فرد في الأسرة، صغيراً كان أو كبيراً.",
+                "en": "It is due for every member of the household, young or old."
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "timing",
+              "title": {
+                "ar": "نحصر الأسر المستحقة مسبقاً، ونوزعها في العشر الأواخر حتى صباح العيد قبل الصلاة.",
+                "en": "We list eligible families in advance and distribute during the last ten days until Eid morning, before the prayer."
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "channels",
+              "title": {
+                "ar": "تُصرف في مصارفها الشرعية، ولا تُخلط بالصدقات العامة.",
+                "en": "It is spent on its legitimate recipients and never mixed with general charity."
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "achievements": {
+          "title": {
+            "ar": "إنجازات رمضان السابق",
+            "en": "Last Ramadan's achievements"
+          },
+          "items": [
+            {
+              "id": "heading",
+              "title": {
+                "ar": "إنجازات رمضان السابق",
+                "en": "Last Ramadan's achievements"
+              },
+              "desc": {
+                "ar": "بفضل الله ثم بتبرعاتكم",
+                "en": "By Allah's grace, then your gifts"
+              }
+            }
+          ]
+        }
+      },
+      "cta": {
+        "title": {
+          "ar": "رمضانك في اليسر إحسان لا ينقطع — اكفل كرتونة أو وجبة إفطار اليوم",
+          "en": "Your Ramadan with Al-Yusr is endless goodness — sponsor a box or meal today"
+        },
+        "sub": {
+          "ar": "كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.",
+          "en": "Every EGP reaches the right hands — verified with photos, video and field follow-up."
+        }
+      }
+    },
+    "seo": {
+      "title": {
+        "ar": "موسم الخير في رمضان | كرتونة الخير وإفطار صائم وزكاة الفطر — اليسر",
+        "en": "Season of Goodness in Ramadan | Food Boxes, Iftar Meals & Zakat — Al-Yusr"
+      },
+      "description": {
+        "ar": "رمضانك في اليسر إحسان لا ينقطع: كرتونة الخير 25 كيلو، وجبات إفطار ساخنة، ذبائح، تيسير زواج، كسوة وكعك العيد، وزكاة المال وزكاة الفطر.",
+        "en": "Your Ramadan with Al-Yusr is endless giving: 25 kg food boxes, hot iftar meals, meat distribution, marriage support, Eid clothes and cookies, plus Zakat al-Mal and Zakat al-Fitr."
+      },
+      "keywords": {
+        "ar": "تبرعات رمضان، كرتونة رمضان، إفطار صائم، زكاة الفطر، زكاة المال، كسوة العيد، كعك العيد، مؤسسة اليسر الخيرية",
+        "en": "Ramadan donations, Ramadan food box, feed a fasting person, Zakat al-Fitr, Zakat al-Mal, Eid clothes, Al-Yusr Charity Foundation"
+      },
+      "canonical": "https://elyusr.org/campaigns/ramadan",
+      "noindex": false,
+      "nofollow": false
+    },
+    "faqs": [
+      {
+        "question_ar": "ما هي مكونات كرتونة رمضان في مؤسسة اليسر؟",
+        "answer_ar": "كرتونة متكاملة تزن حوالي 25 كجم من السلع الأساسية البلدي (أرز، زيت، سكر، مكرونة، لوبيا، فاصوليا، شاي، صلصة، سمن) ويُرفق معها لحوم طازجة من مزارعنا لتكفي الأسرة شهراً كاملاً.",
+        "question_en": "What are the contents of Al-Yusr's Ramadan Box?",
+        "answer_en": "A 25kg box containing premium rice, oil, sugar, pasta, legumes, tea, sauce, and ghee, accompanied by fresh meat from our endowment farms."
+      },
+      {
+        "question_ar": "أين توزع وجبات الإفطار الساخنة؟",
+        "answer_ar": "توزع يومياً لعابري السبيل والمسافرين ومرافقي المرضى في المستشفيات الحكومية، بالإضافة إلى وجبات ساخنة تصل لمنازل الأسر المتعففة في المنصورة وقرى الدقهلية.",
+        "question_en": "Where are hot iftar meals distributed?",
+        "answer_en": "To hospital patient companions, stranded travelers, and directly to the doors of deserving families across Mansoura and Delta villages."
+      },
+      {
+        "question_ar": "كيف تضمن المؤسسة وصول زكاة الفطر في موعدها الشرعي؟",
+        "answer_ar": "يتم حصر الأسر وتحديد احتياجاتها مسبقاً، ويتم إخراج وتوزيع زكاة الفطر خلال العشر الأواخر وحتى صباح يوم العيد قبل الصلاة تماماً كما تنص الشريعة.",
+        "question_en": "How is Zakat Al-Fitr distributed on time?",
+        "answer_en": "Distributed during the last ten days of Ramadan and completed before Eid prayer according to Sharia guidelines."
+      },
+      {
+        "question_ar": "هل يمكنني التبرع بتجهيز عروسة يتيمة في رمضان؟",
+        "answer_ar": "نعم، مبادرة 'الفرحة فرحتين' تتيح لك التبرع بسهم أو كفالة جهاز عروسة يتيمة كامل لتدخل الفرحة عليها مع حلول العيد.",
+        "question_en": "Can I sponsor an orphan bride's trousseau in Ramadan?",
+        "answer_en": "Yes. The 'Double Joy' initiative lets you give a share, or sponsor a complete trousseau, for an orphan bride so her joy arrives with Eid."
+      },
+      {
+        "question_ar": "هل توزع كرتونة رمضان في المنصورة والدقهلية؟",
+        "answer_ar": "نعم، تنطلق قوافل التوزيع من المنصورة إلى قرى الدقهلية وكفر الشيخ والشرقية، وتصل الكرتونة إلى باب بيت الأسرة المستحقة بعد حصرها مسبقاً، ويُوثَّق التوزيع بالصور والفيديو.",
+        "question_en": "Is the Ramadan box distributed in Mansoura and Dakahlia?",
+        "answer_en": "Yes. Distribution convoys set out from Mansoura to villages across Dakahlia, Kafr El Sheikh and Sharqia, delivering the box to the door of each pre-listed family, with photo and video documentation."
+      },
+      {
+        "question_ar": "متى تُخرج زكاة الفطر مع مؤسسة اليسر؟",
+        "answer_ar": "يمكنك إخراجها عبر صفحة التبرع في أي وقت خلال شهر رمضان، وتتولى المؤسسة صرفها للأسر المستحقة في الدقهلية والمنصورة خلال العشر الأواخر وحتى صباح العيد قبل الصلاة.",
+        "question_en": "When should I pay Zakat al-Fitr with Al-Yusr?",
+        "answer_en": "You can pay it through the donation page at any time during Ramadan; the Foundation hands it to eligible families in Dakahlia and Mansoura during the last ten days and until Eid morning, before the prayer."
+      },
+      {
+        "question_ar": "هل يمكن التبرع لموسم الخير من خارج مصر؟",
+        "answer_ar": "نعم، يمكنك التبرع أونلاين من أي دولة ببطاقة فيزا أو ماستر كارد، أو التحويل عبر إنستاباي للحساب الرسمي للمؤسسة، ويصلك توثيق التوزيع بالصور والفيديو على الواتساب أو البريد الإلكتروني.",
+        "question_en": "Can I donate to the Ramadan season from outside Egypt?",
+        "answer_en": "Yes. You can donate online from any country by Visa or Mastercard, or transfer via InstaPay to the Foundation's official account, and you receive photo and video proof of distribution on WhatsApp or email."
+      }
+    ],
+    "landing_slug": "ramadan",
+    "extra": {
+      "landing_path": "/ramadan",
+      "aliases": [
+        "ramadan-season"
+      ],
+      "seo_preset_extra": {
+        "impact_regions_ar": "المنصورة ومحافظات الدلتا والمستشفيات وعابري السبيل",
+        "impact_regions_en": "Mansoura, Delta governorates, hospitals and passers-by",
+        "impact_stats_ar": "أكثر من 2 طن لحوم بلدي وآلاف وجبات الإفطار والكراتين في رمضان",
+        "impact_stats_en": "Over 2 tons of meat and thousands of hot meals and food boxes",
+        "suggested_articles": [
+          {
+            "title_ar": "أفضل أفكار الصدقة في رمضان: كيف تضاعف أجرك؟",
+            "title_en": "The best charity ideas in Ramadan: how to multiply your reward",
+            "target_keyword_ar": "صدقة رمضان",
+            "target_keyword_en": "Ramadan charity ideas"
+          },
+          {
+            "title_ar": "الفرق بين زكاة المال وزكاة الفطر ومتى تُخرج كل منهما",
+            "title_en": "The difference between Zakat al-Mal and Zakat al-Fitr and when to pay each",
+            "target_keyword_ar": "زكاة المال وزكاة الفطر",
+            "target_keyword_en": "Zakat al-Mal vs Zakat al-Fitr"
+          },
+          {
+            "title_ar": "فضل إطعام الصائم وطرق المشاركة في الإفطار",
+            "title_en": "The virtue of feeding a fasting person and ways to take part",
+            "target_keyword_ar": "إفطار صائم",
+            "target_keyword_en": "feed a fasting person"
+          }
+        ]
+      },
+      "donation_entity_id": "ramadan",
+      "entity_type": "campaign",
+      "donation_type": "cash",
+      "category_ar": "موسم رمضان",
+      "category_en": "Ramadan Season",
+      "color": "#f59e0b",
+      "is_seasonal": true,
+      "entity_image": "src/assets/yusr-ramadan-box.png"
+    }
+  },
+  {
+    "slug": "markoon",
+    "name_ar": "حملة مَرْكون",
+    "name_en": "Markoun campaign",
+    "description_ar": "تبرع بأثاثك وأجهزتك القديمة وملابسك وكتبك لنوزعها على المحتاجين",
+    "description_en": "Donate unused furniture, appliances, clothes and books to families in need",
+    "image": "src/assets/markoun-furniture.jpg",
+    "minimum_amount": "100.00",
+    "donation_available": true,
+    "is_active": true,
+    "sort_order": 5,
+    "page_content": {
+      "hero": {
+        "eyebrow": {
+          "ar": "أول حملة مصرية.. تُحيي أُسرة بالمركون في بيتك",
+          "en": "First Egyptian campaign for surplus items"
+        },
+        "title": {
+          "ar": "كنزك المركون..",
+          "en": "What's idle in your home.."
+        },
+        "title2": {
+          "ar": "يبني حياة لغيرك!",
+          "en": "builds a new life for another!"
+        },
+        "lead": {
+          "ar": "في زوايا بيوتنا الكثير من الأشياء التي لم نَعد نستخدمها، ولكنها بالنسبة لأسر أخرى تُمثّل حلماً طال انتظاره. نحن لا نجمع مجرد أغراض فائضة، بل نعيد صياغة الأمل وننقل الدفء والاستقرار من بيوتكم إلى بيوت أهالينا المستحقين.",
+          "en": "In every home there are idle belongings that represent a lifelong dream for struggling families. We don't just collect surplus items; we restore hope and transfer comfort directly into deserving households."
+        },
+        "donateLabel": {
+          "ar": "طلب مندوب استلام",
+          "en": "Request Courier"
+        }
+      },
+      "hadith": {
+        "text": {
+          "ar": "اتقوا النارَ ولو بشِقِّ تمرة",
+          "en": "Protect yourselves from the Fire, even with half a date."
+        },
+        "source": {
+          "ar": "متفق عليه",
+          "en": "Agreed upon (Bukhari & Muslim)"
+        }
+      },
+      "stats": [],
+      "sections": {
+        "slogan": {
+          "title": {
+            "ar": "«اجعل من كركبة بيتك.. خطوة لـ عمار بيت غيرك»",
+            "en": "'Transform household clutter into comfort for another home'"
+          },
+          "items": [
+            {
+              "id": "main",
+              "title": {
+                "ar": "«اجعل من كركبة بيتك.. خطوة لـ عمار بيت غيرك»",
+                "en": "'Transform household clutter into comfort for another home'"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "pillars": {
+          "title": {
+            "ar": "خمسة مسارات شاملة لتغطية كافة الاحتياجات الأساسية للحياة الكريمة",
+            "en": "Five Core Tracks Covering All Essential Needs"
+          },
+          "lead": {
+            "ar": "تتحرك حملة مركون بشكل شامل لتغطية كافة الاحتياجات الأساسية لعيش حياة كريمة عبر خمسة محاور رئيسية:",
+            "en": "Markoun operates across five key tracks to fulfill every aspect of dignified living:"
+          },
+          "items": [
+            {
+              "id": "furniture",
+              "title": {
+                "ar": "الأثاث المنزلي",
+                "en": "Home Furniture"
+              },
+              "extra": {
+                "ar": "أثاثك القديم عاش معاك قصة وهيبدأ قصة جديدة في حياة أسرة تانية",
+                "en": "Your old furniture had a story with you, and will start a new life for another family"
+              },
+              "desc": {
+                "ar": "نجمع القطع الفائضة عن حاجتكم (غرف نوم، سرير، خزائن، كنب، طاولات ومطابخ) لنساهم في تجهيز البيوت الفقيرة ومساندة مشروعات الزواج وتأسيس منازل مستقرة، لترفع أهالينا المستحقين من النوم على الأرض إلى الستر والراحة التامة.",
+                "en": "We collect surplus furniture (bedroom sets, beds, wardrobes, tables) to furnish needy homes, support marriage aid, and restore dignity."
+              }
+            },
+            {
+              "id": "appliances",
+              "title": {
+                "ar": "الأجهزة الكهربائية",
+                "en": "Home Appliances"
+              },
+              "extra": {
+                "ar": "كل جهاز كهربائي مركون في بيتك لو تبرعت بيه هيكون صدقة جارية",
+                "en": "Every idle appliance in your home becomes an ongoing charity"
+              },
+              "desc": {
+                "ar": "نستقبل (الثلاجات، الغسالات، البوتاجازات، المراوح، الشاشات، السخانات والمكاوى) لإدخال الطمأنينة والتسهيلات الحياتية لبيوت أسر بسيطة بحاجة ماسة لها بعد فحصها وصيانتها بورش المؤسسة.",
+                "en": "We receive washers, fridges, stoves, and fans, restoring them in specialized workshops before delivery."
+              }
+            },
+            {
+              "id": "clothes",
+              "title": {
+                "ar": "الملابس والكساء",
+                "en": "Clothing & Garments"
+              },
+              "extra": {
+                "ar": "المركون في دولابك ستر لغيرك وقصة جديدة من الدفء",
+                "en": "What is idle in your wardrobe is dignity for another"
+              },
+              "desc": {
+                "ar": "نجمع الملابس المستعملة بحالة جيدة، لنقوم بفرزها، تنظيفها، وكيها وإعادة تقديمها بكرامة تامة للأسر والأطفال كـ «قصة جديدة» من الدفء والستر تليق بأهالينا المتعففين.",
+                "en": "Surplus quality garments are carefully sorted, cleaned, and presented with utmost dignity to underprivileged children and parents."
+              }
+            },
+            {
+              "id": "meds",
+              "title": {
+                "ar": "الصيدلية المستدامة (الأدوية)",
+                "en": "Sustainable Medicine Bank"
+              },
+              "extra": {
+                "ar": "علاجك الفائض طوق نجاة لمريض غير قادر على ثمن الدواء",
+                "en": "Your surplus medicine is a lifeline for struggling patients"
+              },
+              "desc": {
+                "ar": "نجمع الأدوية الفائضة والصالحة للاستخدام من الصيدليات المنزلية، ليتم فحصها وتصنيفها تحت إشراف طبي وصيدلي دقيق وتوزيعها مجاناً بالكامل على المرضى غير القادرين على توفير تكلفة العلاج الشهري.",
+                "en": "We collect valid, unexpired household medications, medically inspecting and distributing them completely free to impoverished patients."
+              }
+            },
+            {
+              "id": "books",
+              "title": {
+                "ar": "المعرفة والتعليم (الكتب)",
+                "en": "Educational Knowledge (Books)"
+              },
+              "extra": {
+                "ar": "كتاب ابنك فرصة لمستقبل ابن غيرك وطوق نجاة من الفقر",
+                "en": "Your child's book is an opportunity for another student's bright future"
+              },
+              "desc": {
+                "ar": "نستقبل الكتب المدرسية، الثقافية، والتعليمية لإعادة تدوير المعرفة وتوزيعها على الطلاب غير القادرين وتأسيس مكتبات بالقرى لإنقاذ الطلاب من خطر التسرب الدراسي.",
+                "en": "We collect textbooks and references to reuse knowledge and equip students from low-income households with essential study tools."
+              }
+            }
+          ]
+        },
+        "advantages": {
+          "title": {
+            "ar": "لماذا تتبرع لـ «مركون»؟",
+            "en": "Why Donate to Markoun?"
+          },
+          "lead": {
+            "ar": "عندما تختار التبرع لحملة مركون، فإنك تضمن أعلى مستويات الاحترافية والأمان:",
+            "en": "Your donation is handled with absolute institutional diligence and care:"
+          },
+          "items": [
+            {
+              "id": "data",
+              "title": {
+                "ar": "القضاء على العشوائية",
+                "en": "Zero Waste & Precision"
+              },
+              "desc": {
+                "ar": "نعتمد على نظام رقمي وقواعد بيانات دقيقة ومحدثة تضمن ذهاب كل قطعة تبرع عيني إلى مكانها الصحيح والأنسب لاحتياج الأسرة الفعلي.",
+                "en": "Digital field databases guarantee every in-kind item matches the exact, validated needs of verified households."
+              }
+            },
+            {
+              "id": "dignity",
+              "title": {
+                "ar": "حفظ كرامة المتلقي",
+                "en": "Preserving Dignity"
+              },
+              "desc": {
+                "ar": "نحن نؤمن أن جودة العطاء من جودة التعامل؛ لذا تمر كل التبرعات بمراحل فحص وتأهيل وصيانة وتنظيف دقيقة لتصل للمستفيدين وكأنها جديدة تماماً.",
+                "en": "All items undergo thorough repair, refurbishing, and cleaning so they reach recipient homes in pristine, dignified condition."
+              }
+            },
+            {
+              "id": "doorstep",
+              "title": {
+                "ar": "راحة المتبرع (مندوب لحد الباب)",
+                "en": "Doorstep Pickup Convenience"
+              },
+              "desc": {
+                "ar": "وفرنا منظومة لوجستية متكاملة؛ لست بحاجة للتحرك من منزلك، بمجرد تواصلك معنا يتوجه مندوبنا الرسمي بسيارات المؤسسة لاستلام وتوثيق التبرع.",
+                "en": "Our official logistics vans collect items directly from your home with zero hassle, scheduled at your convenience."
+              }
+            }
+          ]
+        },
+        "steps": {
+          "title": {
+            "ar": "خطوات بسيطة ليصلك مندوبنا",
+            "en": "Simple Steps to Participate"
+          },
+          "lead": {
+            "ar": "منظومة مريحة تضمن استلام المركون من باب بيتك وتوصيله بكامل الكرامة لأهالينا.",
+            "en": "Effortless process ensuring safe doorstep pickup and dignified family delivery."
+          },
+          "items": [
+            {
+              "id": "send",
+              "title": {
+                "ar": "أرسل كلمة «تبرع»",
+                "en": "Send 'Donate'"
+              },
+              "desc": {
+                "ar": "أرسل رسالة بكلمة «تبرع» على واتساب أو اتصل برقم 01097000137 وحدد نوع المركون عندك.",
+                "en": "Send 'Donate' via WhatsApp or phone call."
+              }
+            },
+            {
+              "id": "pickup",
+              "title": {
+                "ar": "مندوبنا عند باب بيتك",
+                "en": "Doorstep Pickup"
+              },
+              "desc": {
+                "ar": "سيارات المؤسسة المجهزة تصل أمام باب منزلك لاستلام الأغراض مجاناً وبكل احترام ورقي.",
+                "en": "Our courier collects your items directly from your home for free."
+              }
+            },
+            {
+              "id": "refurbish",
+              "title": {
+                "ar": "ورش الصيانة والترميم",
+                "en": "Refurbish & Restore"
+              },
+              "desc": {
+                "ar": "تدخل القطع ورش المؤسسة للتنظيف، الصيانة، وتغيير التالف لترجع بحالة ممتازة تليق بأهالينا.",
+                "en": "Workshops inspect, repair, and clean all items thoroughly."
+              }
+            },
+            {
+              "id": "deliver",
+              "title": {
+                "ar": "التسليم والتوثيق الميداني",
+                "en": "Documented Delivery"
+              },
+              "desc": {
+                "ar": "تُسلّم وتُفرش داخل منازل الأسر الأكثر استحقاقاً مع توثيق مصور يوضح فرحتهم والأثر المحقق.",
+                "en": "Furnished directly inside beneficiary homes with full reporting."
+              }
+            }
+          ]
+        },
+        "contact": {
+          "title": {
+            "ar": "ثقتكم هي المحرك الأساسي لكل خطوة خير",
+            "en": "Your trust drives every step of impact"
+          },
+          "lead": {
+            "ar": "سيارات مؤسسة اليسر تتحرك من قلب الميدان محملة بمساهماتكم، لتأخذ طريقها مباشرة للترميم قبل أن تذهب لأهالينا المتعففين المستحقين.",
+            "en": "Official Al-Yusr transport vehicles collect contributions daily, heading straight to our restoration workshops before delivery."
+          },
+          "items": [
+            {
+              "id": "badge",
+              "title": {
+                "ar": "مؤسسة اليسر الخيرية — المنصورة",
+                "en": "Al-Yusr Charity — Mansoura"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "bank",
+              "title": {
+                "ar": "للتبرع المادي ودعم نفقات النقل والصيانة (CIB):",
+                "en": "Financial Support (CIB Bank):"
+              },
+              "desc": {
+                "ar": "100043605733",
+                "en": "100043605733"
+              },
+              "extra": {
+                "ar": "باسم: مؤسسة اليسر للتنمية",
+                "en": "Account Name: Al-Yusr Foundation"
+              }
+            },
+            {
+              "id": "hq",
+              "title": {
+                "ar": "المقر الرئيسي:",
+                "en": "Headquarters:"
+              },
+              "desc": {
+                "ar": "المنصورة، تقسيم خطاب، بجوار وكالة المنصورة.",
+                "en": "Mansoura, Khattab District, next to Mansoura Agency."
+              }
+            }
+          ]
+        }
+      },
+      "cta": {
+        "title": {
+          "ar": "عندك مركون في بيتك؟ (أثاث · أجهزة · ملابس · أدوية · كتب)",
+          "en": "Have surplus items at home?"
+        },
+        "sub": {
+          "ar": "استلام مجاني من باب بيتك بكتابة كلمة «تبرع»",
+          "en": "Free doorstep pickup by texting 'Donate'"
+        }
+      }
+    },
+    "seo": {
+      "title": {
+        "ar": "حملة مركون | تبرع بالأثاث والأجهزة والملابس والأدوية والكتب — اليسر",
+        "en": "Markoon Campaign | Donate Furniture, Appliances, Clothes, Medicine & Books — Al-Yusr"
+      },
+      "description": {
+        "ar": "تبرع بما هو مركون في بيتك: أثاث وأجهزة كهربائية وملابس وأدوية وكتب. مندوب المؤسسة يصلك حتى باب المنزل لاستلام تبرعاتك وتوثيقها. اتصل 01097000137.",
+        "en": "Donate what is stored away at home: furniture, appliances, clothes, medicine and books. Our representative comes to your door to collect and document your donation. Call 01097000137."
+      },
+      "keywords": {
+        "ar": "حملة مركون، تبرع بالأثاث، تبرع بالأجهزة الكهربائية، تبرع بالملابس المستعملة، تبرع بالأدوية، تبرع بالكتب، مندوب لاستلام التبرعات",
+        "en": "Markoon campaign, donate furniture Egypt, donate used clothes, donate medicine, donate books, donation pickup"
+      },
+      "canonical": "https://elyusr.org/campaigns/markoon",
+      "noindex": false,
+      "nofollow": false
+    },
+    "faqs": [
+      {
+        "question_ar": "إيه يعني حملة مَرْكون وليه أشارك فيها؟",
+        "answer_ar": "بعد دراسة ميدانية وجدنا أن من كل 10 بيوت في 4 بيوت فيهم كنوز مركونة لو تم استغلالها بشكل صحيح هتبني حياة لأسرة كاملة. حملة مركون هي أول حملة مصرية منظمة لإعادة استخدام واستغلال كل المركون في منزلك (أثاث، أجهزة، ملابس، أدوية، كتب) لتغيير حياة أسر مستحقة من الفقر للراحة والأمان.",
+        "question_en": "What is the Markoun campaign and why participate?",
+        "answer_en": "Studies show 4 out of 10 homes contain idle treasures. Markoun is Egypt's first organized campaign to repurpose surplus items and rebuild lives."
+      },
+      {
+        "question_ar": "إزاي أتبرع بالمركون عندي ومين بيستلمه؟",
+        "answer_ar": "كل اللي عليك تعمله: ابعت كلمة «تبرع» في رسالة واتساب على 01097000137 أو اتصل بنا، وهيوصلك مندوبنا بسيارة المؤسسة المجهزة لحد باب منزلك ليستلم منك كل المركون بكل رقي وسهولة وبدون أي مجهود منك.",
+        "question_en": "How do I donate my items and who collects them?",
+        "answer_en": "Simply text 'Donate' via WhatsApp to 01097000137, and our representative will collect the items directly from your doorstep."
+      },
+      {
+        "question_ar": "هل الاستلام من باب البيت بيكلفني أي رسوم أو مصاريف؟",
+        "answer_ar": "الاستلام من باب منزلك والتوصيل لبيوت الأسر مجاني تماماً 100% وبدون أي مقابل على المتبرع أو الأسرة المستفيدة.",
+        "question_en": "Are there any pickup fees?",
+        "answer_en": "Pickup and delivery are 100% free with zero fees."
+      },
+      {
+        "question_ar": "هل تقبلون الأجهزة أو الأثاث اللي محتاج صيانة أو تنظيف؟",
+        "answer_ar": "نعم! مؤسسة اليسر تمتلك ورش صيانة وترميم متخصصة؛ سياراتنا تنقل المساهمات مباشرة للترميم والتصليح والتنظيف قبل تسليمها وفرشها داخل منازل أهالينا المستحقين.",
+        "question_en": "Do you accept items needing repair?",
+        "answer_en": "Yes! Al-Yusr has dedicated workshops that repair, clean, and restore items before delivering them."
+      },
+      {
+        "question_ar": "ما هي شروط التبرع بالأدوية الفائضة؟",
+        "answer_ar": "نستقبل كافة الأدوية الفائضة بشرط أن تكون داخل عبواتها الأصلية وسارية الصلاحية؛ حيث تخضع للمعاينة والفرز من صيادلة المؤسسة قبل صرفها مجاناً للمرضى.",
+        "question_en": "What are the rules for medicine donations?",
+        "answer_en": "Medications must be in original blister/packaging with valid expiry dates, inspected by pharmacists before dispensing."
+      },
+      {
+        "question_ar": "هل ممكن أتبرع بمبلغ مالي لو معنديش حاجة مركونة؟",
+        "answer_ar": "نعم بالتأكيد! لمن ليس لديه مركون ويرغب في المساهمة في نفقات صيانة وترميم ونقل الأجهزة والأثاث وشراء النواقص، متاح التبرع عبر حساب CIB رقم 100043605733 أو عبر نموذج التبرع الإلكتروني بالموقع.",
+        "question_en": "Can I donate money if I don't have surplus items?",
+        "answer_en": "Yes, financial donations supporting repair and transport costs are welcomed via CIB account 100043605733 or our online donation portal."
+      },
+      {
+        "question_ar": "هل يصل مندوب مَرْكون إلى كل مراكز الدقهلية؟",
+        "answer_ar": "تنطلق سيارات حملة مَرْكون من مقر مؤسسة اليسر الخيرية بالمنصورة وتغطي محافظة الدقهلية. أرسل كلمة «تبرع» على واتساب 01097000137 مع عنوانك ونوع المركون عندك، ويتم التنسيق معك على موعد استلام مجاني يناسبك.",
+        "question_en": "Does the Markoun courier reach all of Dakahlia?",
+        "answer_en": "Markoun pickup vans operate from Al-Yusr's headquarters in Mansoura and cover Dakahlia governorate. Text 'Donate' on WhatsApp to 01097000137 with your address and the type of items, and we will arrange a free pickup time that suits you."
+      },
+      {
+        "question_ar": "ماذا يحدث للملابس المستهلكة تماماً التي أتبرع بها؟",
+        "answer_ar": "لا شيء يُهدر؛ الملابس الصالحة تُفرز وتُنظّف وتُكوى ثم تُقدَّم للأسر بكرامة، أما الملابس المستهلكة تماماً فتتحول إلى مراتب قطن وتُستخدم في ترميم الأسِرّة ضمن حملة سِتر التابعة لمؤسسة اليسر.",
+        "question_en": "What happens to worn-out clothes I donate?",
+        "answer_en": "Nothing goes to waste: wearable garments are sorted, cleaned, ironed and handed to families with dignity, while fully worn-out clothes are turned into cotton mattresses and used to restore beds within Al-Yusr's Setr campaign."
+      },
+      {
+        "question_ar": "هل التبرع العيني لمؤسسة اليسر موثّق؟",
+        "answer_ar": "نعم؛ مؤسسة اليسر الخيرية للتنمية جمعية مشهرة برقم 2665 لسنة 2019 ومقرها الرئيسي بالمنصورة، ويقوم مندوبنا الرسمي بتوثيق استلام التبرع من باب منزلك، كما يُوثَّق التسليم والفرش داخل بيوت الأسر المستفيدة بالصور.",
+        "question_en": "Is in-kind donation to Al-Yusr documented?",
+        "answer_en": "Yes. Al-Yusr Charity for Development is a licensed NGO (No. 2665/2019) headquartered in Mansoura. Our official courier documents the pickup at your doorstep, and delivery inside beneficiary homes is documented with photos."
+      }
+    ],
+    "landing_slug": "markoun",
+    "extra": {
+      "landing_path": "/markoun",
+      "aliases": [
+        "markoun",
+        "markon"
+      ],
+      "seo_preset_extra": {
+        "impact_regions_ar": "المنصورة، طلخا، ومراكز الدقهلية الكبرى مع أسطول سيارات مجهز",
+        "impact_regions_en": "Mansoura, Talkha, and Dakahlia centers with dedicated pickup vehicles",
+        "impact_stats_ar": "أول حملة مصرية تُحيي أسر بالمركون في البيوت",
+        "impact_stats_en": "First Egyptian campaign reviving families with surplus household items",
+        "suggested_articles": [
+          {
+            "title_ar": "ماذا تفعل بالأثاث والأجهزة القديمة؟ تبرع بها لأسرة محتاجة",
+            "title_en": "What to do with old furniture and appliances? Donate them to a family in need",
+            "target_keyword_ar": "التبرع بالأثاث المستعمل",
+            "target_keyword_en": "donate used furniture"
+          },
+          {
+            "title_ar": "التبرع بالملابس المستعملة: كيف تصل بكرامة لمن يحتاجها؟",
+            "title_en": "Donating used clothes: how do they reach those in need with dignity?",
+            "target_keyword_ar": "التبرع بالملابس المستعملة",
+            "target_keyword_en": "donate used clothes"
+          },
+          {
+            "title_ar": "التبرع بالأدوية الفائضة: ما الذي يجب أن تعرفه؟",
+            "title_en": "Donating surplus medicine: what you should know",
+            "target_keyword_ar": "التبرع بالأدوية",
+            "target_keyword_en": "donate medicine"
+          }
+        ]
+      },
+      "donation_entity_id": "markoun",
+      "entity_type": "campaign",
+      "donation_type": "both",
+      "category_ar": "تبرع عيني ونقدي",
+      "category_en": "In-Kind & Cash",
+      "color": "#10b981",
+      "is_markoun": true,
+      "entity_image": "src/assets/markoun-furniture.jpg"
+    }
+  },
+  {
+    "slug": "arboun-kheir",
+    "name_ar": "مبادرة عربون خير",
+    "name_en": "Arboun Khair",
+    "description_ar": "مبادرة «عربون خير» بتجمع مجتمع الفريلانسرز والمستقلين عشان يستثمروا جزء بسيط من أرباح مشاريعهم في الآخرة. طهّر رزقك، تخلص من ضغط وقلق الشغل، وسيب أثر حقيقي يكفل يتيم، أو ييسر زواج، أو يبني صدقة جارية.",
+    "description_en": "Arboun Khair unites freelancers and remote professionals to invest a flexible fraction of their project earnings in lasting charity. Cleanse your income, alleviate work anxiety, and leave a verified footprint that supports orphans, brides, and clean water.",
+    "image": null,
+    "minimum_amount": "100.00",
+    "donation_available": true,
+    "is_active": true,
+    "sort_order": 6,
+    "page_content": {
+      "hero": {
+        "eyebrow": {
+          "ar": "مبادرة عربون خير — للفريلانسرز والمستقلين",
+          "en": "Arboun Khair — Freelancers & Remote Workers Initiative"
+        },
+        "title": {
+          "ar": "اتصدق النهاردة..",
+          "en": "Donate Today.."
+        },
+        "title2": {
+          "ar": "وخليه عربون لرزق بكرة!",
+          "en": "A Pledge for Tomorrow's Barakah!"
+        },
+        "lead": {
+          "ar": "مبادرة «عربون خير» بتجمع مجتمع الفريلانسرز والمستقلين عشان يستثمروا جزء بسيط من أرباح مشاريعهم في الآخرة. طهّر رزقك، تخلص من ضغط وقلق الشغل، وسيب أثر حقيقي يكفل يتيم، أو ييسر زواج، أو يبني صدقة جارية.",
+          "en": "Arboun Khair unites freelancers and remote professionals to invest a flexible fraction of their project earnings in lasting charity. Cleanse your income, alleviate work anxiety, and leave a verified footprint that supports orphans, brides, and clean water."
+        },
+        "donateLabel": {
+          "ar": "طلّع عربون خيرك الآن",
+          "en": "Pledge Share"
+        }
+      },
+      "hadith": {
+        "text": {
+          "ar": "ما نقصت صدقةٌ من مال",
+          "en": "Charity never decreases wealth."
+        },
+        "source": {
+          "ar": "رواه مسلم",
+          "en": "Sahih Muslim"
+        }
+      },
+      "stats": [],
+      "sections": {
+        "pillars": {
+          "title": {
+            "ar": "ليه تشارك في «عربون خير»؟",
+            "en": "Why Join Arboun Khair?"
+          },
+          "lead": {
+            "ar": "أثر الصدقة المباشر على راحة بالك، استقرار عملك الحر، وبركة رزقك اليوم وغداً.",
+            "en": "The direct impact of charity on your peace of mind, career stability, and barakah."
+          },
+          "items": [
+            {
+              "id": "pillar_peace",
+              "title": {
+                "ar": "علاج القلق وضغط الشغل",
+                "en": "Relieving Stress & Work Anxiety"
+              },
+              "desc": {
+                "ar": "الكلاينت مابيردش؟ التعديلات مابتخلصش؟ وخايف من فترات ركود السوق؟ الصدقة بتطمن القلب، بتشيل ضغط التفكير، وبتيسر المشاريع المعقدة وتفتح أبواب رزق غير متوقعة من حيث لا تحتسب.",
+                "en": "Client delays? Endless revisions? Market slowdown fears? Charity brings peace of mind, removes mental fatigue, and unlocks unexpected doors of provision."
+              },
+              "extra": {
+                "ar": "«داووا مرضاكم بالصدقة.. واستنزلوا الرزق بالعطاء والتيسير»",
+                "en": "«Bring down provision by giving with a clean, open heart»"
+              }
+            },
+            {
+              "id": "pillar_skill_zakat",
+              "title": {
+                "ar": "زكاة مهنتك وشكر النعمة",
+                "en": "Zakat on Professional Skill"
+              },
+              "desc": {
+                "ar": "مهارتك وسرعتك على اللابتوب وفهمك للأدوات الحديثة رزق ونعمة عظيمة. شكر النعمة دي إنك تطلع منها جزء لله، عشان ربنا يحفظ صحتك ووقتك وتركيزك ويديم عليك الشغف والتفوق.",
+                "en": "Your tech craft, speed, and digital intellect are divine gifts. Giving back expresses genuine gratitude, preserving your mental clarity, eyesight, and health."
+              },
+              "extra": {
+                "ar": "«لئن شكرتم لأزيدنكم» — شكر نعمة المهارة والتقنية يزيدك تفوقاً",
+                "en": "«If you are grateful, I will surely increase you in favor»"
+              }
+            },
+            {
+              "id": "pillar_eternal_roi",
+              "title": {
+                "ar": "استثمار مضمون لا ينقطع",
+                "en": "Guaranteed Eternal ROI"
+              },
+              "desc": {
+                "ar": "العميل بيستثمر في الدنيا بالبروجكت اللي معاك، استثمر أنت في الآخرة بجزء من أرباح نفس البروجكت لضمان رصيد حسنات دائم وأثر ينفعك ويستر أسر متعففة.",
+                "en": "Clients invest in transient milestones; you invest a fraction in eternity, securing ongoing deeds that shelter vulnerable families and build sustainable legacy."
+              },
+              "extra": {
+                "ar": "«ما نقص مال من صدقة» — أرباح حقيقية تدخرها ليوم لا ينفع فيه إلا العمل الصالح",
+                "en": "«Charity never diminishes wealth» — An eternal portfolio of good deeds"
+              }
+            }
+          ]
+        },
+        "pillar_details": {
+          "title": {
+            "ar": "شارات وأزرار ونقاط المحاور",
+            "en": "Pillar tags, buttons & bullets"
+          },
+          "lead": {
+            "ar": "العنوان = الشارة الصغيرة، الوصف = 3 نقاط مفصولة بـ « · »، الإضافي = نص زر المحور.",
+            "en": "Title = small tag, desc = 3 bullets separated by « · », extra = the pillar button label."
+          },
+          "items": [
+            {
+              "id": "pillar_peace",
+              "title": {
+                "ar": "السكينة والبركة",
+                "en": "Peace & Barakah"
+              },
+              "desc": {
+                "ar": "طرد وساوس الركود وتوقف طلبات العملاء المفاجئ · الاطمئنان القلبي والسكينة أثناء انتظار المستحقات والتحويلات · تيسير العقود المعقدة وتقليل طلبات التعديل المرهقة",
+                "en": "Eliminating fears of dry spells and sudden client drops · Inner peace and calmness while awaiting international payouts · Smoother client negotiations and fewer endless revision loops"
+              },
+              "extra": {
+                "ar": "احسب عربون مشروعك",
+                "en": "Calculate Your Share"
+              }
+            },
+            {
+              "id": "pillar_skill_zakat",
+              "title": {
+                "ar": "تطهير المال والمهارة",
+                "en": "Skill Zakat & Growth"
+              },
+              "desc": {
+                "ar": "تطهير أرباحك وتأمين مالك من أي عوائق أو نقص مفاجئ · حفظ العافية والتركيز وسلامة الظهر والعينين من إرهاق الشاشات · استمرار الشغف والتوفيق في اقتناص مشاريع أعلى قيمة ودخلاً",
+                "en": "Purifying earnings and safeguarding income from sudden setbacks · Protecting health, physical ergonomics, and vision from screen burnout · Sustaining drive and landing higher-tier global clients"
+              },
+              "extra": {
+                "ar": "اختر سهم التبرع",
+                "en": "Choose Share"
+              }
+            },
+            {
+              "id": "pillar_eternal_roi",
+              "title": {
+                "ar": "عائد استثماري أبدي (Eternal ROI)",
+                "en": "Guaranteed Eternal ROI"
+              },
+              "desc": {
+                "ar": "تحويل كل تسليم ميلستون إلى رصيد دائم من الحسنات الجارية · كفالة أيتام وتوفير مياه نظيفة وبناء أسقف تستمر سنين طويلة · ربط نجاحك التقني بقضايا مجتمعية نبيلة تترك أثراً لا يزول",
+                "en": "Turning every client milestone into perpetual ongoing charity · Sponsoring orphan schooling, clean water, and secure house roofs · Connecting your technical career with real-life humanitarian impact"
+              },
+              "extra": {
+                "ar": "تبرع الآن للمبادرة",
+                "en": "Donate Now"
+              }
+            }
+          ]
+        },
+        "video": {
+          "title": {
+            "ar": "اتصدق النهاردة.. وخليه عربون لبركة بكرة",
+            "en": ""
+          },
+          "lead": {
+            "ar": "عربون خير",
+            "en": ""
+          },
+          "items": []
+        },
+        "shares": {
+          "title": {
+            "ar": "اختر سهمك من أرباح مشروعك الأخير",
+            "en": "Choose Your Project Share"
+          },
+          "lead": {
+            "ar": "مفيش حد أدنى.. كل سهم مخصص لمصرف خيري حقيقي وموثق بالصور والفيديو.",
+            "en": "No minimum required. Each share directly funds verified field aid with reports."
+          },
+          "items": [
+            {
+              "id": "share_starter",
+              "title": {
+                "ar": "بركة الشغل",
+                "en": "Blessing"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "share_standard",
+              "title": {
+                "ar": "شائع بين المستقلين",
+                "en": "Popular"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "share_orphan_education",
+              "title": {
+                "ar": "أثر مستمر",
+                "en": "Education"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "share_bride",
+              "title": {
+                "ar": "أجهزة معمرة",
+                "en": "Appliances"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "share_jariyah",
+              "title": {
+                "ar": "أصل ثابت",
+                "en": "Asset"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "share_custom",
+              "title": {
+                "ar": "مفتوح بالكامل",
+                "en": "Custom"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "steps": {
+          "title": {
+            "ar": "كيف تنضم للمبادرة؟",
+            "en": "How to Join?"
+          },
+          "lead": {
+            "ar": "من أول ضغطة زرار لاستلام أرباحك وحتى وصول تقرير التوثيق الميداني.",
+            "en": "From withdrawing your client milestone to receiving your verified field report."
+          },
+          "items": [
+            {
+              "id": "step_withdraw",
+              "title": {
+                "ar": "الخطوة الأولى: قفّل البروجكت واستلم أرباحك",
+                "en": "Step 1: Withdraw Your Earnings"
+              },
+              "desc": {
+                "ar": "زرار الـ Withdraw أو استلام الحوالة البنكية هو البداية. أول ما فلوس مشروعك تنزل في حسابك البنكي أو فودافون كاش أو InstaPay، افتح صفحة عربون خير.",
+                "en": "Once your client milestone or withdrawal clears into your bank or wallet, open the Arboun Khair page."
+              }
+            },
+            {
+              "id": "step_pledge",
+              "title": {
+                "ar": "الخطوة الثانية: حدد عربون الخير",
+                "en": "Step 2: Set Your Contribution"
+              },
+              "desc": {
+                "ar": "اختار النسبة اللي تريحك من أرباح المشروع (حتى لو 1% أو 5%).. مفيش حد أدنى، الأهم هو النية والاستمرارية وربط نجاحك بالعطاء وشكر النعمة.",
+                "en": "Select a comfortable portion (1%, 5%, or any fixed sum). No minimum required — consistency and pure intent are what matter."
+              }
+            },
+            {
+              "id": "step_track",
+              "title": {
+                "ar": "الخطوة الثالثة: سيب أثرك وتابع تقريرك",
+                "en": "Step 3: Track Real Ground Impact"
+              },
+              "desc": {
+                "ar": "بضغطة زرار، تبرعك بيتحول فوراً لمشاريع تنموية حقيقية على الأرض (تيسير زواج، كفالة أيتام، أسقف ومياه)، وهيوصلك إيصال رسمي وتقارير موثقة بصور وفيديو.",
+                "en": "With one click, your donation is directed to verified grassroots aid (orphan education, brides, clean water) with official receipts and donor reports."
+              }
+            }
+          ]
+        },
+        "faq_intro": {
+          "title": {
+            "ar": "أسئلة شائعة حول مبادرة عربون خير",
+            "en": "Frequently Asked Questions"
+          },
+          "lead": {
+            "ar": "إجابات دقيقة ومباشرة عن زكاة العمل الحر، العملات، والتبرع والشارة.",
+            "en": "Precise answers about freelance zakt, currencies, and portfolio badges."
+          },
+          "items": []
+        },
+        "labels": {
+          "title": {
+            "ar": "شارات وأزرار متفرقة",
+            "en": "Misc badges & buttons"
+          },
+          "lead": {
+            "ar": "العنوان = النص الأساسي، الوصف = نص مرافق إن وُجد.",
+            "en": "Title = main text, desc = paired text when any."
+          },
+          "items": [
+            {
+              "id": "whatsapp",
+              "title": {
+                "ar": "واتساب مباشر",
+                "en": "WhatsApp Inquiries"
+              },
+              "desc": {
+                "ar": "تواصل عبر واتساب",
+                "en": "WhatsApp"
+              }
+            },
+            {
+              "id": "share_link",
+              "title": {
+                "ar": "مشاركة الحملة",
+                "en": "Share"
+              },
+              "desc": {
+                "ar": "تم نسخ رابط المبادرة للمشاركة ",
+                "en": "Initiative link copied "
+              }
+            },
+            {
+              "id": "pillars_badge",
+              "title": {
+                "ar": "محاور المبادرة الثلاثة",
+                "en": "Three Core Pillars"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "shares_badge",
+              "title": {
+                "ar": "أسهم تبرع مقترحة",
+                "en": "Suggested Contribution Shares"
+              },
+              "desc": {
+                "ar": "تبرع بهذا السهم",
+                "en": "Donate this share"
+              }
+            },
+            {
+              "id": "steps_badge",
+              "title": {
+                "ar": "3 خطوات بسيطة",
+                "en": "3 Simple Steps"
+              },
+              "desc": {
+                "ar": "خطوة",
+                "en": "Step"
+              }
+            },
+            {
+              "id": "related_title",
+              "title": {
+                "ar": "مبادرات وحملات اليسر ذات الصلة",
+                "en": "Related Al-Yusr Campaigns"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "mission_badge",
+              "title": {
+                "ar": "رسالة المبادرة",
+                "en": "Core Mission"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "sticky_bar",
+              "title": {
+                "ar": "خلي البروجكت الجاي بدايته بركة.. طـلّع عربون خيرك الآن",
+                "en": "Start your next client project with barakah — donate your pledge"
+              },
+              "desc": {
+                "ar": "تبرع بعربون مشروعك",
+                "en": "Pledge Now"
+              }
+            }
+          ]
+        }
+      },
+      "cta": {
+        "title": {
+          "ar": "«قفل بروجكتك الجاي.. استثمر في الآخرة»",
+          "en": "«Close your next deal.. Invest in the Hereafter»"
+        },
+        "sub": {
+          "ar": "عربون خير يبارك في رزقك ويفتح أبواب التوفيق لكل صفقة جديدة",
+          "en": "A pledge of goodness that sanctifies your income and blesses your work"
+        }
+      }
+    },
+    "seo": {
+      "title": {
+        "ar": "عربون خير | مبادرة الفريلانسرز للصدقة من أرباح المشاريع — اليسر",
+        "en": "Arboun Kheir | The Freelancers' Initiative to Give from Project Earnings — Al-Yusr"
+      },
+      "description": {
+        "ar": "اتصدق النهاردة وخليه عربون لرزق بكرة: مبادرة للفريلانسرز لإخراج جزء من أرباح كل مشروع لدعم الأيتام وتيسير الزواج والصدقات الجارية.",
+        "en": "Give today and make it a down payment for tomorrow's provision: an initiative for freelancers to give a part of each project's earnings to support orphans, marriages and ongoing charity."
+      },
+      "keywords": {
+        "ar": "عربون خير، صدقة للفريلانسر، زكاة المهنة، صدقة من أرباح المشروع، كفالة يتيم، صدقة جارية، تيسير الزواج",
+        "en": "Arboun Kheir, freelancer charity, professional zakat, give from project earnings, orphan sponsorship, sadaqah jariyah"
+      },
+      "canonical": "https://elyusr.org/campaigns/arboun-kheir",
+      "noindex": false,
+      "nofollow": false
+    },
+    "faqs": [
+      {
+        "question_ar": "إيه هي مبادرة عربون خير للفريلانسرز؟",
+        "answer_ar": "مبادرة مبتكرة تشجع الشباب المشتغلين في العمل الحر (الفريلانس) والعمل عن بُعد على استقطاع نسبة مرنة من أرباح كل مشروع يتم تسليمه (مثل 1% أو 5%)، وتوجيهها كصدقة لدعم الأسر المحتاجة، بهدف جلب البركة وعلاج قلق وضغط الشغل مع شارة رقمية للبورتفوليو.",
+        "question_en": "What is the Arboun Khair Freelancers Initiative?",
+        "answer_en": "An innovative initiative encouraging freelancers and remote professionals to dedicate a flexible portion of their project earnings (1% or 5%) to verified charity, inviting barakah and peace of mind."
+      },
+      {
+        "question_ar": "هل في حد أدنى للتبرع من أرباح المشاريع؟",
+        "answer_ar": "لا يوجد أي حد أدنى. يمكنك التبرع بأي مبلغ أو نسبة تراها مناسبة من أرباح مشروعك (مثل 1% أو 5% أو 50 جنيهاً). الهدف هو الاستمرارية وجعل الصدقة عادة تطمئن قلبك وترتبط بنجاحك المهني.",
+        "question_en": "Is there a minimum donation amount?",
+        "answer_en": "No minimum required. You can contribute whatever fits your project budget (e.g. 1%, 5%, or 50 EGP). Consistency and pure intent are what count."
+      },
+      {
+        "question_ar": "كيف يؤثر التبرع على عملي كفريلانسر؟",
+        "answer_ar": "إخراج الصدقات يُعد 'زكاة للمهنة' وسبباً مباشراً في استنزال البركة، تخفيف ضغوط العمل، تبديد الخوف من ركود السوق، وتيسير التعامل مع العملاء، تصديقاً لقول النبي ﷺ: «ما نقص مال من صدقة».",
+        "question_en": "How does donating benefit my career as a freelancer?",
+        "answer_en": "Charity cleanses earnings, alleviates burnout and work anxiety, and invites continuous professional opportunities."
+      },
+      {
+        "question_ar": "أين تذهب تبرعات مبادرة عربون خير؟",
+        "answer_ar": "يتم توجيه التبرعات لتنفيذ مشاريع حقيقية على الأرض تحت إشراف مؤسسة اليسر الخيرية (مشهرة برقم 2665 لسنة 2019)، وتشمل: تيسير زواج الفتيات اليتيمات بأجهزة معمرة، كفالة الأيتام والتعليم، الصدقات الجارية (أسقف ومياه)، والإغاثة الغذائية مع توثيق فوري.",
+        "question_en": "Where do Arboun Khair donations go?",
+        "answer_en": "Directly into verified grassroots projects by Al-Yusr Charity (License No. 2665 of 2019): orphan education, bride trousseau, insulated roofs, clean water connections, and food aid."
+      },
+      {
+        "question_ar": "هل يمكنني التبرع بعملات أجنبية إذا كنت أعمل مع عملاء من الخارج؟",
+        "answer_ar": "نعم بالتأكيد. إذا كنت تتلقى أرباحك بالدولار، اليورو، الريال السعودي، أو أي عملة أخرى، يمكنك تحويل تبرعك بكل سهولة عبر بوابات الدفع الإلكترونية الآمنة المتاحة على موقعنا بواسطة بطاقات Visa و Mastercard.",
+        "question_en": "Can I donate in foreign currencies if I work with international clients?",
+        "answer_en": "Yes. Our secure gateway supports international currencies and major cards effortlessly."
+      },
+      {
+        "question_ar": "هل عربون خير مناسب للفريلانسرز خارج مصر؟",
+        "answer_ar": "نعم. مبادرة عربون خير موجهة لكل مستقل أو عامل عن بُعد أينما كان، سواء يعمل من مصر أو من الخليج أو أوروبا أو مع عملاء دوليين. التبرع يتم أونلاين عبر بوابة دفع إلكترونية آمنة تقبل بطاقات Visa و Mastercard بأي عملة، ويصل تبرعك مباشرة إلى مشاريع مؤسسة اليسر الخيرية على الأرض في مصر، مع إيصال رسمي وتوثيق ميداني بالصور والفيديو.",
+        "question_en": "Is Arboun Khair suitable for freelancers outside Egypt?",
+        "answer_en": "Yes. Arboun Khair is open to any freelancer or remote worker anywhere, whether based in Egypt, the Gulf, Europe, or working with international clients. Donations are made online through a secure payment gateway that accepts Visa and Mastercard in any currency, and your contribution goes directly to Al-Yusr Charity's verified field projects in Egypt, with an official receipt and photo/video documentation."
+      },
+      {
+        "question_ar": "كيف أحصل على شارة «مستقل داعم»؟",
+        "answer_ar": "شارة «مستقل داعم» هي شارة رقمية تقدمها مؤسسة اليسر للفريلانسرز المشاركين في مبادرة عربون خير، لإضافتها إلى البورتفوليو أو الموقع الشخصي أو حسابات GitHub و Behance كأصل أخلاقي يميزك أمام عملائك. بعد إتمام تبرعك من أرباح مشروعك عبر صفحة عربون خير، تواصل معنا عبر واتساب على 01097000137 لاستلام الشارة.",
+        "question_en": "How do I get the 'Impact Freelancer' badge?",
+        "answer_en": "The 'Impact Freelancer' badge is a digital badge Al-Yusr Charity offers to freelancers taking part in Arboun Khair, to display on your portfolio, personal site, GitHub or Behance as a verified impact asset that sets you apart with clients. After completing your pledge from your project earnings on the Arboun Khair page, contact us on WhatsApp at 01097000137 to receive your badge."
+      },
+      {
+        "question_ar": "هل أحصل على إيصال رسمي وتقرير عن تبرعي في عربون خير؟",
+        "answer_ar": "نعم. كل تبرع في مبادرة عربون خير يصدر له إيصال رسمي من مؤسسة اليسر الخيرية (مشهرة برقم 2665 لسنة 2019 تحت إشراف وزارة التضامن الاجتماعي)، مع كود تتبع لتبرعك وتقارير توثيق ميداني بالصور والفيديو للمشروع الذي وُجِّه إليه تبرعك، سواء كان كفالة يتيم أو تيسير زواج أو صدقة جارية (أسقف ومياه).",
+        "question_en": "Do I get an official receipt and a report for my Arboun Khair donation?",
+        "answer_en": "Yes. Every Arboun Khair donation comes with an official receipt from Al-Yusr Charity (registered NGO No. 2665 of 2019 under the Ministry of Social Solidarity), a tracking code for your donation, and field documentation reports with photos and videos of the project your pledge supported, whether orphan sponsorship, bride support, or ongoing charity (roofs and clean water)."
+      }
+    ],
+    "landing_slug": "arboun",
+    "extra": {
+      "landing_path": "/arboun",
+      "aliases": [
+        "arboun",
+        "arboon"
+      ],
+      "seo_preset_extra": {
+        "impact_regions_ar": "الدقهلية، الشرقية، كفر الشيخ، الفيوم، والمنيا",
+        "impact_regions_en": "Dakahlia, Sharqia, Kafr El-Sheikh, Fayoum, and Minya",
+        "impact_stats_ar": "تحويل التبرعات الرقمية لمشاريع تنموية ملموسة وأصول ثابتة",
+        "impact_stats_en": "Transforming digital donations into real physical assets and impact",
+        "suggested_articles": [
+          {
+            "title_ar": "زكاة المهنة للفريلانسر: كيف تُبارك في رزقك وعملك الحر؟",
+            "title_en": "Professional Zakat for freelancers: blessing your remote work earnings",
+            "target_keyword_ar": "صدقة الفريلانسر",
+            "target_keyword_en": "freelancer charity"
+          },
+          {
+            "title_ar": "أثر الصدقة في تيسير المشاريع والتعامل مع العملاء",
+            "title_en": "The impact of charity on closing projects and easing client relations",
+            "target_keyword_ar": "بركة العمل الحر",
+            "target_keyword_en": "freelancing blessings"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "slug": "food",
+    "name_ar": "الغذاء الشهري",
+    "name_en": "Monthly food",
+    "description_ar": "برنامج الغذاء الشهري يضمن لأسر الأيتام والمتعففين ثلاثة أشياء كل شهر: لحوم من ذبائحنا الشهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام مطبوخة تصلح إطعاماً أو كفارة صيام أو كفارة يمين. كل ذلك يصل إلى باب البيت بكرامة وبتوثيق كامل.",
+    "description_en": "Our monthly food programme guarantees families three things every month: meat from our monthly slaughters, a 14 kg carton of local staples, and cooked meals that can be given as feeding, as a fasting expiation or as an oath expiation. All delivered to the door with dignity and full documentation.",
+    "image": null,
+    "minimum_amount": "75.00",
+    "donation_available": true,
+    "is_active": true,
+    "sort_order": 7,
+    "page_content": {
+      "hero": {
+        "eyebrow": {
+          "ar": "الغذاء الشهري · برنامج دائم طوال العام",
+          "en": "Monthly food · a year-round programme"
+        },
+        "title": {
+          "ar": "أطعِموا الطعام",
+          "en": "Feed the hungry"
+        },
+        "title2": {
+          "ar": "سُفرة تكفي أسرة شهراً كاملاً",
+          "en": "A table that lasts a family a whole month"
+        },
+        "lead": {
+          "ar": "برنامج الغذاء الشهري يضمن لأسر الأيتام والمتعففين ثلاثة أشياء كل شهر: لحوم من ذبائحنا الشهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام مطبوخة تصلح إطعاماً أو كفارة صيام أو كفارة يمين. كل ذلك يصل إلى باب البيت بكرامة وبتوثيق كامل.",
+          "en": "Our monthly food programme guarantees families three things every month: meat from our monthly slaughters, a 14 kg carton of local staples, and cooked meals that can be given as feeding, as a fasting expiation or as an oath expiation. All delivered to the door with dignity and full documentation."
+        },
+        "donateLabel": {
+          "ar": "أطعِم أسرة هذا الشهر",
+          "en": "Feed a family this month"
+        }
+      },
+      "hadith": {
+        "text": {
+          "ar": "يا أيها الناس، أفشوا السلام، وأطعِموا الطعام، وصِلوا الأرحام، وصلّوا بالليل والناس نيام، تدخلوا الجنة بسلام",
+          "en": "O people, spread peace, feed the hungry, keep the ties of kinship, and pray at night while people sleep, and you will enter Paradise in peace."
+        },
+        "source": {
+          "ar": "رواه الترمذي وقال: حسن صحيح، وابن ماجه",
+          "en": "al-Tirmidhi (who graded it hasan sahih) and Ibn Majah"
+        }
+      },
+      "stats": [],
+      "sections": {
+        "seo": {
+          "title": {
+            "ar": "الغذاء الشهري — لحوم الذبائح الشهرية وكرتونة ١٤ كيلو ووجبات الإطعام والكفارات",
+            "en": "Monthly Food — slaughter meat, a 14 kg carton and meals for feeding and expiations"
+          },
+          "lead": {
+            "ar": "برنامج دائم من مؤسسة اليسر يصل بالطعام إلى أسر الأيتام والمتعففين كل شهر: لحوم من ذبائح شهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات مطبوخة تُقدَّم إطعاماً أو كفارة صيام أو كفارة يمين، في الدقهلية والمنصورة وكافة محافظات مصر.",
+            "en": "A permanent Al-Yusr programme bringing food to orphan and needy families every month: meat from monthly slaughters, a 14 kg carton of local staples, and cooked meals offered as feeding, fasting expiation or oath expiation, across Dakahlia, Mansoura and all of Egypt."
+          },
+          "items": []
+        },
+        "trust": {
+          "title": {
+            "ar": "لماذا تثق بنا؟",
+            "en": "Why trust us"
+          },
+          "items": [
+            {
+              "id": "ngo",
+              "title": {
+                "ar": "مؤسسة مشهرة برقم 2665 لسنة 2019",
+                "en": "Registered NGO 2665/2019"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "docs",
+              "title": {
+                "ar": "ذبح بإشراف بيطري وتوثيق بالصور",
+                "en": "Vet-supervised slaughter and photo proof"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "areas",
+              "title": {
+                "ar": "توصيل لباب البيت في الدقهلية وكل مصر",
+                "en": "Doorstep delivery in Dakahlia and all Egypt"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "hadith2": {
+          "title": {
+            "ar": "خير الإسلام",
+            "en": "The best of Islam"
+          },
+          "items": [
+            {
+              "id": "best",
+              "title": {
+                "ar": "«سُئل رسول الله ﷺ: أيُّ الإسلامِ خيرٌ؟ قال: تُطعِمُ الطعامَ، وتقرأُ السلامَ على من عرفتَ ومن لم تعرِف»",
+                "en": "“The Messenger of Allah ﷺ was asked: which Islam is best? He said: to feed the hungry, and to greet those you know and those you do not.”"
+              },
+              "desc": {
+                "ar": "متفق عليه",
+                "en": "Agreed upon (Bukhari & Muslim)"
+              }
+            }
+          ]
+        },
+        "pillars": {
+          "title": {
+            "ar": "ثلاثة أركان لسُفرة الشهر",
+            "en": "Three parts of the month's table"
+          },
+          "lead": {
+            "ar": "لحم وكرتونة ووجبة: ما تحتاجه أسرة لتأكل بكرامة شهراً كاملاً.",
+            "en": "Meat, a carton and a meal: what a family needs to eat with dignity for a month."
+          },
+          "items": [
+            {
+              "id": "meat",
+              "title": {
+                "ar": "لحوم الذبائح الشهرية",
+                "en": "Monthly slaughter meat"
+              },
+              "extra": {
+                "ar": "ذبيحة كل شهر",
+                "en": "A slaughter every month"
+              },
+              "desc": {
+                "ar": "كل شهر نذبح في المزرعة الوقفية بإشراف بيطري، ونقطّع اللحم ونعبّئه كيلو لكل أسرة، ويصل طازجاً في يوم الذبح نفسه إلى بيوت لا يدخلها اللحم إلا في العيد.",
+                "en": "Every month we slaughter at the endowment farm under veterinary supervision, portion the meat into 1 kg packs, and deliver it fresh on the same day to homes that otherwise see meat only at Eid."
+              }
+            },
+            {
+              "id": "carton",
+              "title": {
+                "ar": "كرتونة ١٤ كيلو بلدي",
+                "en": "14 kg carton of local staples"
+              },
+              "extra": {
+                "ar": "مكونات بلدي تكفي شهراً",
+                "en": "Local staples for a month"
+              },
+              "desc": {
+                "ar": "أرز ومكرونة ودقيق وسكر وزيت وفول وعدس وسمنة بلدي وصلصة وشاي وملح: ١٤ كيلو من المكونات الأساسية التي تطبخ منها الأم سفرة كل يوم طوال الشهر.",
+                "en": "Rice, pasta, flour, sugar, oil, fava beans, lentils, local ghee, tomato paste, tea and salt: 14 kg of the staples a mother cooks from every day of the month."
+              }
+            },
+            {
+              "id": "meals",
+              "title": {
+                "ar": "وجبات الإطعام والكفارات",
+                "en": "Meals for feeding and expiations"
+              },
+              "extra": {
+                "ar": "إطعام · كفارة صيام · كفارة يمين",
+                "en": "Feeding · fasting expiation · oath expiation"
+              },
+              "desc": {
+                "ar": "وجبة مطبوخة كاملة من أرز ولحم أو دجاج وخضار وخبز، تُقدَّم إطعاماً للمساكين، أو تُنفَّذ بها كفارة الصيام وكفارة اليمين وفدية الصيام بالعدد الشرعي، ويصلك توثيقها.",
+                "en": "A full cooked meal of rice, meat or chicken, vegetables and bread, given as feeding for the poor, or used to carry out fasting and oath expiations and the fasting fidya in the required number, with documentation sent to you."
+              }
+            }
+          ]
+        },
+        "carton": {
+          "dynamic": true,
+          "extraLabel": {
+            "ar": "الوزن بالكيلو (رقم فقط، مثال 1.5)",
+            "en": "Weight in kg (number only, e.g. 1.5)"
+          },
+          "title": {
+            "ar": "ماذا في كرتونة الـ ١٤ كيلو؟",
+            "en": "What is in the 14 kg carton?"
+          },
+          "lead": {
+            "ar": "نختار مكونات بلدي من السوق المحلي بكميات واقعية تكفي أسرة من خمسة أفراد شهراً كاملاً، ونعبّئها في مخازن المؤسسة بالمنصورة.",
+            "en": "We choose local staples from the local market in realistic quantities for a family of five for a full month, and pack them at the foundation's warehouse in Mansoura."
+          },
+          "items": [
+            {
+              "id": "rice",
+              "title": {
+                "ar": "أرز",
+                "en": "Rice"
+              },
+              "desc": {
+                "ar": "٣ كيلو",
+                "en": "3 kg"
+              },
+              "extra": {
+                "ar": "3",
+                "en": "3"
+              }
+            },
+            {
+              "id": "pasta",
+              "title": {
+                "ar": "مكرونة",
+                "en": "Pasta"
+              },
+              "desc": {
+                "ar": "٢ كيلو",
+                "en": "2 kg"
+              },
+              "extra": {
+                "ar": "2",
+                "en": "2"
+              }
+            },
+            {
+              "id": "flour",
+              "title": {
+                "ar": "دقيق",
+                "en": "Flour"
+              },
+              "desc": {
+                "ar": "٢ كيلو",
+                "en": "2 kg"
+              },
+              "extra": {
+                "ar": "2",
+                "en": "2"
+              }
+            },
+            {
+              "id": "sugar",
+              "title": {
+                "ar": "سكر",
+                "en": "Sugar"
+              },
+              "desc": {
+                "ar": "٢ كيلو",
+                "en": "2 kg"
+              },
+              "extra": {
+                "ar": "2",
+                "en": "2"
+              }
+            },
+            {
+              "id": "oil",
+              "title": {
+                "ar": "زيت",
+                "en": "Oil"
+              },
+              "desc": {
+                "ar": "١٫٥ لتر",
+                "en": "1.5 L"
+              },
+              "extra": {
+                "ar": "1.5",
+                "en": "1.5"
+              }
+            },
+            {
+              "id": "fava",
+              "title": {
+                "ar": "فول",
+                "en": "Fava beans"
+              },
+              "desc": {
+                "ar": "١ كيلو",
+                "en": "1 kg"
+              },
+              "extra": {
+                "ar": "1",
+                "en": "1"
+              }
+            },
+            {
+              "id": "lentils",
+              "title": {
+                "ar": "عدس",
+                "en": "Lentils"
+              },
+              "desc": {
+                "ar": "١ كيلو",
+                "en": "1 kg"
+              },
+              "extra": {
+                "ar": "1",
+                "en": "1"
+              }
+            },
+            {
+              "id": "ghee",
+              "title": {
+                "ar": "سمنة بلدي",
+                "en": "Local ghee"
+              },
+              "desc": {
+                "ar": "نصف كيلو",
+                "en": "0.5 kg"
+              },
+              "extra": {
+                "ar": "0.5",
+                "en": "0.5"
+              }
+            },
+            {
+              "id": "sauce",
+              "title": {
+                "ar": "صلصة",
+                "en": "Tomato paste"
+              },
+              "desc": {
+                "ar": "نصف كيلو",
+                "en": "0.5 kg"
+              },
+              "extra": {
+                "ar": "0.5",
+                "en": "0.5"
+              }
+            },
+            {
+              "id": "tea",
+              "title": {
+                "ar": "شاي",
+                "en": "Tea"
+              },
+              "desc": {
+                "ar": "ربع كيلو",
+                "en": "0.25 kg"
+              },
+              "extra": {
+                "ar": "0.25",
+                "en": "0.25"
+              }
+            },
+            {
+              "id": "salt",
+              "title": {
+                "ar": "ملح",
+                "en": "Salt"
+              },
+              "desc": {
+                "ar": "ربع كيلو",
+                "en": "0.25 kg"
+              },
+              "extra": {
+                "ar": "0.25",
+                "en": "0.25"
+              }
+            }
+          ]
+        },
+        "meat": {
+          "title": {
+            "ar": "من الذبيحة إلى السُّفرة في يوم واحد",
+            "en": "From the slaughter to the table in one day"
+          },
+          "lead": {
+            "ar": "اللحم عندنا ليس صنفاً إضافياً؛ هو ما يفتقده أطفال هذه البيوت أكثر من أي شيء. لذلك نذبح كل شهر، لا في المواسم فقط.",
+            "en": "For us meat is not an extra; it is what the children of these homes miss most. So we slaughter every month, not only in the seasons."
+          },
+          "items": [
+            {
+              "id": "farm",
+              "title": {
+                "ar": "ذبح شرعي في المزرعة الوقفية",
+                "en": "Halal slaughter at the endowment farm"
+              },
+              "desc": {
+                "ar": "عجول وأغنام من مزرعتنا الوقفية بالدقهلية، تُذبح في بداية كل شهر بإشراف طبيب بيطري.",
+                "en": "Calves and sheep from our endowment farm in Dakahlia, slaughtered at the start of every month under a veterinarian's supervision."
+              }
+            },
+            {
+              "id": "pack",
+              "title": {
+                "ar": "تقطيع وتعبئة كيلو لكل أسرة",
+                "en": "Cut and packed, 1 kg per family"
+              },
+              "desc": {
+                "ar": "يُقطَّع اللحم ويُعبَّأ في أكياس صحية بوزن كيلو، كل كيس لأسرة.",
+                "en": "The meat is cut and packed in hygienic 1 kg bags, one bag per family."
+              }
+            },
+            {
+              "id": "deliver",
+              "title": {
+                "ar": "توزيع طازج في يوم الذبح",
+                "en": "Fresh delivery on slaughter day"
+              },
+              "desc": {
+                "ar": "يسلّم فريق الميدان اللحم في اليوم نفسه إلى باب البيت مع كرتونة الشهر.",
+                "en": "Our field team delivers the meat the same day to the door, together with the month's carton."
+              }
+            },
+            {
+              "id": "proof",
+              "title": {
+                "ar": "توثيق يصلك",
+                "en": "Documentation sent to you"
+              },
+              "desc": {
+                "ar": "صور الذبح والتوزيع تصلك على رقم تبرعك، مع الحفاظ على كرامة الأسر.",
+                "en": "Photos of the slaughter and distribution reach you on your donation number, with the families' dignity preserved."
+              }
+            }
+          ]
+        },
+        "meals": {
+          "title": {
+            "ar": "وجبة واحدة، ثلاث نيّات",
+            "en": "One meal, three intentions"
+          },
+          "lead": {
+            "ar": "الوجبة نفسها وجبة كاملة من أوسط ما نطعم أهلينا: أرز ولحم أو دجاج وخضار وخبز. أنت تختار النية، ونحن ننفّذ العدد الشرعي ونوثّقه لك.",
+            "en": "The same full meal, of the kind we feed our own families: rice, meat or chicken, vegetables and bread. You choose the intention; we carry out the required number and document it for you."
+          },
+          "items": [
+            {
+              "id": "feeding",
+              "title": {
+                "ar": "إطعام مسكين",
+                "en": "Feeding a poor person"
+              },
+              "extra": {
+                "ar": "صدقة بأي عدد من الوجبات",
+                "en": "A charity of any number of meals"
+              },
+              "desc": {
+                "ar": "وجبات مطبوخة ساخنة توزَّع على أسر الأيتام والمتعففين وكبار السن الذين يعيشون وحدهم، بأي عدد تختاره.",
+                "en": "Hot cooked meals for orphan and needy families and for elderly people living alone, in any number you choose."
+              }
+            },
+            {
+              "id": "kaffara_yameen",
+              "title": {
+                "ar": "كفارة اليمين",
+                "en": "Oath expiation"
+              },
+              "extra": {
+                "ar": "إطعام عشرة مساكين من أوسط ما تطعمون أهليكم (المائدة: ٨٩)",
+                "en": "Feeding ten poor people from the average of what you feed your families (Quran 5:89)"
+              },
+              "desc": {
+                "ar": "من حلف يميناً ثم حنث فيها فكفارته إطعام عشرة مساكين. نقدّم عشر وجبات كاملة لعشرة مساكين مختلفين وتصلك صور التسليم.",
+                "en": "Whoever swears an oath and then breaks it owes the feeding of ten poor people. We serve ten full meals to ten different poor people and send you the delivery photos."
+              }
+            },
+            {
+              "id": "kaffara_siyam",
+              "title": {
+                "ar": "كفارة الصيام",
+                "en": "Fasting expiation"
+              },
+              "extra": {
+                "ar": "إطعام ستين مسكيناً لمن لم يستطع صيام شهرين متتابعين (متفق عليه)",
+                "en": "Feeding sixty poor people for one unable to fast two consecutive months (agreed upon)"
+              },
+              "desc": {
+                "ar": "كفارة إفساد صوم رمضان بالجماع لمن عجز عن صيام شهرين متتابعين. نقدّم ستين وجبة كاملة لستين مسكيناً. أما من أفطر لكبر أو مرض لا يُرجى برؤه ففديته إطعام مسكين عن كل يوم.",
+                "en": "The expiation for breaking a Ramadan fast through intercourse, for one unable to fast two consecutive months. We serve sixty full meals to sixty poor people. For one who cannot fast due to old age or chronic illness, the fidya is one poor person fed per day."
+              }
+            }
+          ]
+        },
+        "sponsor": {
+          "title": {
+            "ar": "اكفل سُفرة أسرة",
+            "en": "Sponsor a family's table"
+          },
+          "lead": {
+            "ar": "كرتونة ١٤ كيلو وكيلو لحمة من ذبيحة الشهر، للأسرة نفسها كل شهر، وتقرير شهري يصلك.",
+            "en": "A 14 kg carton and 1 kg of meat from the month's slaughter, for the same family every month, with a monthly report sent to you."
+          },
+          "items": [
+            {
+              "id": "full",
+              "title": {
+                "ar": "شهر واحد",
+                "en": "One month"
+              },
+              "desc": {
+                "ar": "سُفرة شهر كاملة لأسرة من خمسة أفراد.",
+                "en": "A full month's table for a family of five."
+              }
+            },
+            {
+              "id": "full_3",
+              "title": {
+                "ar": "ثلاثة شهور",
+                "en": "Three months"
+              },
+              "desc": {
+                "ar": "نخصّص لك أسرة بعينها ونرسل لك ملفها مجهّل البيانات.",
+                "en": "We assign you a specific family and send its anonymised file."
+              }
+            },
+            {
+              "id": "full_year",
+              "title": {
+                "ar": "سنة كاملة",
+                "en": "A full year"
+              },
+              "desc": {
+                "ar": "اثنتا عشرة سُفرة لأسرة واحدة، وتقرير كل شهر بصور التسليم.",
+                "en": "Twelve months of food for one family, with a photo report every month."
+              }
+            }
+          ]
+        },
+        "steps": {
+          "title": {
+            "ar": "رحلة تبرعك",
+            "en": "Your donation's journey"
+          },
+          "items": [
+            {
+              "id": "receipt",
+              "title": {
+                "ar": "إيصال ورقم تتبع",
+                "en": "Receipt and tracking number"
+              },
+              "desc": {
+                "ar": "فور تبرعك يصلك إيصال رسمي برقم مرجعي تتابع به تبرعك.",
+                "en": "An official receipt with a reference number arrives as soon as you give."
+              }
+            },
+            {
+              "id": "family",
+              "title": {
+                "ar": "نخصّص أسرة مستحقة",
+                "en": "We assign a deserving family"
+              },
+              "desc": {
+                "ar": "من قائمة الانتظار المعتمدة بعد بحث اجتماعي ميداني في المنصورة والدقهلية.",
+                "en": "From the approved waiting list, after a field social study in Mansoura and Dakahlia."
+              }
+            },
+            {
+              "id": "prepare",
+              "title": {
+                "ar": "ذبح وتعبئة",
+                "en": "Slaughter and packing"
+              },
+              "desc": {
+                "ar": "نذبح في المزرعة الوقفية ونعبّئ الكرتونة ونطبخ الوجبات في مطبخ اليسر.",
+                "en": "We slaughter at the endowment farm, pack the carton and cook the meals in the Al-Yusr kitchen."
+              }
+            },
+            {
+              "id": "deliver",
+              "title": {
+                "ar": "تسليم وتوثيق",
+                "en": "Delivery and documentation"
+              },
+              "desc": {
+                "ar": "يسلّم فريق الميدان على باب البيت بكرامة، وتصلك الصور على رقم تبرعك.",
+                "en": "Our field team delivers to the door with dignity, and the photos reach you on your donation number."
+              }
+            }
+          ]
+        },
+        "areas": {
+          "title": {
+            "ar": "أين نُطعِم؟",
+            "en": "Where we feed"
+          },
+          "lead": {
+            "ar": "مقر المؤسسة في المنصورة، ويصل البرنامج إلى مراكز وقرى الدقهلية، ويمتد إلى كفر الشيخ والشرقية بحسب الحالات المعتمدة.",
+            "en": "The foundation is based in Mansoura; the programme reaches the districts and villages of Dakahlia, and extends to Kafr El Sheikh and Sharqia according to approved cases."
+          },
+          "items": []
+        },
+        "areas_now": {
+          "title": {
+            "ar": "نعمل فيها الآن",
+            "en": "Active now"
+          },
+          "items": [
+            {
+              "id": "mansoura",
+              "title": {
+                "ar": "المنصورة",
+                "en": "Mansoura"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "talkha",
+              "title": {
+                "ar": "طلخا",
+                "en": "Talkha"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "mitghamr",
+              "title": {
+                "ar": "ميت غمر",
+                "en": "Mit Ghamr"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "belqas",
+              "title": {
+                "ar": "بلقاس",
+                "en": "Belqas"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "sinbillawein",
+              "title": {
+                "ar": "السنبلاوين",
+                "en": "Sinbillawein"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "aga",
+              "title": {
+                "ar": "أجا",
+                "en": "Aga"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "areas_before": {
+          "title": {
+            "ar": "نصل إليها بحسب الحالات",
+            "en": "Reached case by case"
+          },
+          "items": [
+            {
+              "id": "kafr",
+              "title": {
+                "ar": "كفر الشيخ",
+                "en": "Kafr El Sheikh"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "sharqia",
+              "title": {
+                "ar": "الشرقية",
+                "en": "Sharqia"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            },
+            {
+              "id": "egypt",
+              "title": {
+                "ar": "باقي محافظات مصر",
+                "en": "Other governorates"
+              },
+              "desc": {
+                "ar": "",
+                "en": ""
+              }
+            }
+          ]
+        },
+        "gallery": {
+          "title": {
+            "ar": "من الميدان",
+            "en": "From the field"
+          },
+          "items": []
+        }
+      },
+      "cta": {
+        "title": {
+          "ar": "سُفرة واحدة منك تُطعِم أسرة شهراً كاملاً — تبرّع الآن",
+          "en": "One table from you feeds a family for a whole month — donate now"
+        },
+        "sub": {
+          "ar": "لحم وكرتونة ووجبة، تصل إلى باب البيت بكرامة، وتوثيقها يصل إليك.",
+          "en": "Meat, a carton and a meal, delivered to the door with dignity, and the proof delivered to you."
+        }
+      }
+    },
+    "seo": null,
+    "faqs": [
+      {
+        "question_ar": "ما الذي يشمله برنامج الغذاء الشهري؟",
+        "answer_ar": "ثلاثة أركان: لحوم من ذبائح شهرية تُذبح في المزرعة الوقفية ويُوزَّع منها كيلو لكل أسرة، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي (أرز ومكرونة ودقيق وسكر وزيت وفول وعدس وسمنة وصلصة وشاي وملح)، ووجبات إطعام مطبوخة تُقدَّم إطعاماً أو كفارة صيام أو كفارة يمين.",
+        "question_en": "What does the monthly food programme include?",
+        "answer_en": "Three parts: meat from monthly slaughters at the endowment farm, 1 kg per family; a 14 kg carton of local staples (rice, pasta, flour, sugar, oil, fava beans, lentils, ghee, tomato paste, tea and salt); and cooked meals offered as feeding, fasting expiation or oath expiation."
+      },
+      {
+        "question_ar": "ما محتويات كرتونة الـ ١٤ كيلو بالضبط؟",
+        "answer_ar": "أرز ٣ كيلو، مكرونة ٢ كيلو، دقيق ٢ كيلو، سكر ٢ كيلو، زيت ١٫٥ لتر، فول كيلو، عدس كيلو، سمنة بلدي نصف كيلو، صلصة نصف كيلو، شاي ربع كيلو، ملح ربع كيلو. الإجمالي ١٤ كيلو تكفي أسرة من خمسة أفراد شهراً كاملاً.",
+        "question_en": "What exactly is in the 14 kg carton?",
+        "answer_en": "3 kg rice, 2 kg pasta, 2 kg flour, 2 kg sugar, 1.5 L oil, 1 kg fava beans, 1 kg lentils, 0.5 kg local ghee, 0.5 kg tomato paste, 0.25 kg tea and 0.25 kg salt. A total of 14 kg, enough for a family of five for a full month."
+      },
+      {
+        "question_ar": "من أين تأتي اللحوم ومتى تُذبح؟",
+        "answer_ar": "من المزرعة الوقفية لمؤسسة اليسر بالدقهلية. نذبح في بداية كل شهر بإشراف طبيب بيطري، ونقطّع اللحم ونعبّئه كيلو لكل أسرة، ويُوزَّع طازجاً في يوم الذبح نفسه.",
+        "question_en": "Where does the meat come from and when is it slaughtered?",
+        "answer_en": "From Al-Yusr's endowment farm in Dakahlia. We slaughter at the start of every month under a veterinarian's supervision, portion the meat into 1 kg packs per family, and distribute it fresh the same day."
+      },
+      {
+        "question_ar": "ما الفرق بين الإطعام وكفارة الصيام وكفارة اليمين؟",
+        "answer_ar": "الإطعام صدقة بأي عدد من الوجبات. كفارة اليمين لمن حلف وحنث: إطعام عشرة مساكين من أوسط ما تطعمون أهليكم (المائدة: ٨٩)، وننفّذها بعشر وجبات كاملة لعشرة مساكين. كفارة الصيام لمن أفسد صوم رمضان بالجماع وعجز عن صيام شهرين متتابعين: إطعام ستين مسكيناً، وننفّذها بستين وجبة. أما من لا يستطيع الصوم لكبر أو مرض مزمن ففديته إطعام مسكين عن كل يوم. وفي الحالات الخاصة نرجو مراجعة دار الإفتاء أو أهل العلم، ونحن ننفّذ الإطعام ونوثّقه لك.",
+        "question_en": "What is the difference between feeding, fasting expiation and oath expiation?",
+        "answer_en": "Feeding is a charity of any number of meals. The oath expiation, for one who swears and breaks an oath, is feeding ten poor people from the average of what you feed your family (Quran 5:89); we carry it out with ten full meals for ten poor people. The fasting expiation, for one who broke a Ramadan fast through intercourse and cannot fast two consecutive months, is feeding sixty poor people; we carry it out with sixty meals. One who cannot fast due to old age or chronic illness owes a fidya of one poor person fed per day. For particular cases please consult Dar al-Ifta or a scholar; we carry out the feeding and document it for you."
+      },
+      {
+        "question_ar": "ما الوجبة التي تُقدَّم في الكفارة؟",
+        "answer_ar": "وجبة كاملة مطبوخة من أوسط ما نطعم أهلينا: أرز ولحم أو دجاج وخضار وخبز، تُقدَّم لمسكين واحد عن كل وجبة، ولا يُحسب المسكين الواحد مرتين في الكفارة نفسها.",
+        "question_en": "What meal is served for an expiation?",
+        "answer_en": "A full cooked meal of the kind we feed our own families: rice, meat or chicken, vegetables and bread, served to one poor person per meal, and no poor person is counted twice within the same expiation."
+      },
+      {
+        "question_ar": "كيف يتم اختيار الأسر المستحقة؟",
+        "answer_ar": "يزور فريق البحث الاجتماعي كل أسرة ويوثّق حالتها (الدخل، عدد الأفراد، الأيتام وكبار السن والمرضى)، ثم تعتمدها اللجنة المختصة وتدخل قائمة الانتظار. الأولوية لأسر الأيتام والأرامل وكبار السن الذين يعيشون وحدهم.",
+        "question_en": "How are eligible families chosen?",
+        "answer_en": "Our social research team visits each family and documents its situation (income, household size, orphans, elderly and sick members); the relevant committee then approves it for the waiting list. Priority goes to orphans' families, widows and elderly people living alone."
+      },
+      {
+        "question_ar": "هل أستطيع كفالة أسرة بعينها كل شهر؟",
+        "answer_ar": "نعم. كفالة السُّفرة لثلاثة شهور أو سنة تخصَّص لأسرة بعينها، ونرسل لك ملفها مجهّل البيانات حفاظاً على كرامتها، وتقريراً شهرياً بصور التسليم على واتساب أو البريد.",
+        "question_en": "Can I sponsor a specific family every month?",
+        "answer_en": "Yes. A three-month or full-year table sponsorship is assigned to a specific family; we send you its anonymised file, to protect its dignity, and a monthly report with delivery photos on WhatsApp or email."
+      },
+      {
+        "question_ar": "هل يجوز دفع زكاة المال في الغذاء الشهري؟",
+        "answer_ar": "نعم. اللحوم والكرتونة والوجبات تصل إلى الفقراء والمساكين، وهم من مصارف الزكاة الثمانية، ونصدر لك إيصال زكاة موثقاً. أما الكفارات فتُدفع من غير مال الزكاة.",
+        "question_en": "Can I pay Zakat through the monthly food programme?",
+        "answer_en": "Yes. The meat, carton and meals reach the poor and needy, who are among the eight categories of Zakat recipients, and we issue a verified Zakat receipt. Expiations, however, must be paid from money other than Zakat."
+      },
+      {
+        "question_ar": "كيف أتبرع من خارج مصر؟",
+        "answer_ar": "عبر صفحة التبرع بالبطاقة الائتمانية (فيزا/ماستركارد) من أي دولة، أو بالتحويل البنكي على الحسابات الرسمية للمؤسسة. ولأي استفسار راسلنا على واتساب +20 109 700 0137 ويصلك الإيصال والتوثيق على نفس الرقم.",
+        "question_en": "How can I donate from outside Egypt?",
+        "answer_en": "Through the donate page by credit card (Visa/Mastercard) from any country, or by bank transfer to the foundation's official accounts. For help, message us on WhatsApp at +20 109 700 0137; your receipt and documentation reach you on the same number."
+      }
+    ],
+    "landing_slug": "food",
+    "extra": {
+      "landing_path": "/food-box",
+      "aliases": [
+        "monthly-food",
+        "food-box"
+      ]
+    }
+  }
+]

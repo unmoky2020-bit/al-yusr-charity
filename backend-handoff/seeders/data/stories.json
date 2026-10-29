@@ -1,0 +1,166 @@
+[
+  {
+    "slug": "umm-soad-mansoura",
+    "title_ar": "أم سعاد — المنصورة",
+    "title_en": "Umm Soad — Mansoura",
+    "category_ar": "كرتونة العزومة",
+    "category_en": "Family Food Box",
+    "beneficiary_name": "أم سعاد",
+    "location_ar": "المنصورة",
+    "location_en": "Mansoura",
+    "description_ar": "أم سعاد أم لأربعة أطفال في المنصورة، كانت تعاني لتأمين الطعام لأسرتها. بعد حصولها على كرتونة العزومة من اليسر، استطاعت توفير الأكل لأكثر من شهر كامل.",
+    "description_en": "Umm Soad is a mother of four in Mansoura, struggling to provide food for her family. After receiving the food box from Al-Yusr, she managed to feed her family for over a full month.",
+    "cover_image": "src/assets/family-hope.jpg",
+    "sort_order": 1,
+    "status": "published",
+    "is_featured": true,
+    "extra": {
+      "quote_ar": "أول مرة من سنين تكفي العزومة شهر كامل، ربنا يكرمكم زي ما كرمتونا.",
+      "quote_en": "For the first time in years, the box lasts a full month. May God bless you as you blessed us.",
+      "pillar_slug": "food"
+    }
+  },
+  {
+    "slug": "umm-mohamed-bride",
+    "title_ar": "أم محمد — المنصورة",
+    "title_en": "Umm Mohamed — Mansoura",
+    "category_ar": "مستفيدة من جهاز العروسة اليتيمة",
+    "category_en": "Orphan-bride trousseau program",
+    "beneficiary_name": "أم محمد",
+    "location_ar": "المنصورة",
+    "location_en": "Mansoura",
+    "description_ar": "أم محمد يتيمة فقدت والدها وهي صغيرة، وكانت تحلم بجهاز يليق بها عند زواجها. قدّمت لها مؤسسة اليسر جهازاً كاملاً أسعدها وأسعد عائلتها.",
+    "description_en": "Umm Mohamed lost her father as a child and dreamed of a proper trousseau for her wedding. Al-Yusr provided her with a complete set that brought joy to her and her family.",
+    "cover_image": "src/assets/yusr-bride.png",
+    "sort_order": 2,
+    "status": "published",
+    "is_featured": true,
+    "extra": {
+      "quote_ar": "كنت بحلم بجهاز يستر بناتي.. اليُسر خلّتني عريسة ومعايا بيت كامل. ربنا يجزيكم خير.",
+      "quote_en": "I dreamt of a simple trousseau. Al-Yusr gave me a full home. May God reward you."
+    }
+  },
+  {
+    "slug": "ahmed-mit-ghamr",
+    "title_ar": "أحمد، 12 سنة — ميت غمر",
+    "title_en": "Ahmed, 12 — Mit Ghamr",
+    "category_ar": "تعليم",
+    "category_en": "Education",
+    "beneficiary_name": "أحمد، 12 سنة",
+    "location_ar": "ميت غمر",
+    "location_en": "Mit Ghamr",
+    "description_ar": "أحمد طفل موهوب كان على وشك ترك المدرسة بسبب ضائقة أسرته المالية. تكفّل اليسر بمصاريفه الدراسية، فأصبح الأول على فصله.",
+    "description_en": "Ahmed was a talented child about to drop out of school due to his family's financial hardship. Al-Yusr covered his education expenses and he became top of his class.",
+    "cover_image": "src/assets/program-education.jpg",
+    "sort_order": 3,
+    "status": "published",
+    "is_featured": false,
+    "extra": {
+      "quote_ar": "كنت هخرج من المدرسة، النهارده الأول على فصلي.",
+      "quote_en": "I was about to leave school. Today I'm top of my class.",
+      "pillar_slug": "education"
+    }
+  },
+  {
+    "slug": "khaled-belqas",
+    "title_ar": "خالد، 8 سنين — بلقاس",
+    "title_en": "Khaled, 8 — Belqas",
+    "category_ar": "شفاء ودواء",
+    "category_en": "Healing & Medicine",
+    "beneficiary_name": "خالد، 8 سنين",
+    "location_ar": "بلقاس",
+    "location_en": "Belqas",
+    "description_ar": "خالد طفل عمره 8 سنوات كان يعاني من مشكلة صحية تمنعه من اللعب. أجرى اليسر له عملية جراحية ناجحة وعاد يلعب مع أصدقائه.",
+    "description_en": "Khaled, 8 years old, suffered from a health condition that prevented him from playing. Al-Yusr arranged a successful surgery and he returned to playing with his friends.",
+    "cover_image": "src/assets/program-health.jpg",
+    "sort_order": 4,
+    "status": "published",
+    "is_featured": false,
+    "extra": {
+      "quote_ar": "العملية اتعملت وأنا دلوقتي بلعب كورة مع أصحابي.",
+      "quote_en": "The surgery was done; today I play football with my friends.",
+      "pillar_slug": "health"
+    }
+  },
+  {
+    "slug": "nour-sinbillawayn",
+    "title_ar": "نور — السنبلاوين",
+    "title_en": "Nour — Sinbillawayn",
+    "category_ar": "كفالة يتيم",
+    "category_en": "Orphan sponsorship",
+    "beneficiary_name": "نور",
+    "location_ar": "السنبلاوين",
+    "location_en": "Sinbillawayn",
+    "description_ar": "نور طفلة يتيمة في السنبلاوين تعيش مع والدتها. توفر لها مؤسسة اليسر كفالة شهرية منتظمة تعين الأسرة على متطلبات الحياة والدراسة.",
+    "description_en": "Nour is an orphan girl in Sinbillawayn living with her mother. Al-Yusr provides her with regular monthly sponsorship that supports her education and family needs.",
+    "cover_image": "src/assets/program-orphans.jpg",
+    "sort_order": 5,
+    "status": "published",
+    "is_featured": false,
+    "extra": {
+      "quote_ar": "كل شهر بحس إن في ناس فاكراني، مش لوحدي.",
+      "quote_en": "Every month I feel someone remembers me — I'm not alone."
+    }
+  },
+  {
+    "slug": "umm-mohamed-dikirnis",
+    "title_ar": "بيت أم محمد — دكرنس",
+    "title_en": "Umm Mohamed's home — Dikirnis",
+    "category_ar": "وصلة مياه",
+    "category_en": "Water connection",
+    "beneficiary_name": "بيت أم محمد",
+    "location_ar": "دكرنس",
+    "location_en": "Dikirnis",
+    "description_ar": "عائلة أم محمد في دكرنس كانت تعاني من غياب المياه الصالحة للشرب في منزلها. قامت المؤسسة بتوصيل خط مياه نقية إلى المنزل مباشرة.",
+    "description_en": "Umm Mohamed's family in Dikirnis suffered from a lack of clean drinking water. Al-Yusr installed a direct clean water connection to their home.",
+    "cover_image": "src/assets/hands-sprout.jpg",
+    "sort_order": 6,
+    "status": "published",
+    "is_featured": false,
+    "extra": {
+      "quote_ar": "ولادي بقوا يشربوا مياه نضيفة من غير ما يمشوا كيلومترات.",
+      "quote_en": "My kids now drink clean water without walking kilometers."
+    }
+  },
+  {
+    "slug": "ramadan-family-sherbin",
+    "title_ar": "عائلة رمضان — شربين",
+    "title_en": "Ramadan family — Sherbin",
+    "category_ar": "كيلو لحمة",
+    "category_en": "Kilo of Meat",
+    "beneficiary_name": "عائلة رمضان",
+    "location_ar": "شربين",
+    "location_en": "Sherbin",
+    "description_ar": "عائلة مستفيدة في شربين تم توفير السلال الغذائية ولحوم الأضاحي والصدقات لها دورياً من خلال قافلة الخير التابعة لمؤسسة اليسر.",
+    "description_en": "A beneficiary family in Sherbin received regular food baskets, Qurbani meat, and support through Al-Yusr convoy.",
+    "cover_image": "src/assets/program-food.jpg",
+    "sort_order": 7,
+    "status": "published",
+    "is_featured": false,
+    "extra": {
+      "quote_ar": "ولادي عرفوا طعم اللحمة في غير الأعياد.",
+      "quote_en": "My kids tasted meat outside of Eid.",
+      "pillar_slug": "food"
+    }
+  },
+  {
+    "slug": "khaled-donor-ramadan",
+    "title_ar": "خالد، 34 سنة",
+    "title_en": "Khaled, 34",
+    "category_ar": "متبرّع شهري — كرتونة رمضان",
+    "category_en": "Monthly donor — Ramadan box",
+    "beneficiary_name": "خالد، 34 سنة",
+    "location_ar": null,
+    "location_en": null,
+    "description_ar": "قصة ملهمة لمتبرع بدأ باستقطاع بسيط شهرياً، واستطاع متابعة أثر تبرعه بالصور والتوصيل المباشر للأسر الأكثر احتياجاً.",
+    "description_en": "An inspiring story of a monthly donor who tracked his impact through transparent photos and direct distribution to needy families.",
+    "cover_image": "src/assets/hero-child.jpg",
+    "sort_order": 8,
+    "status": "published",
+    "is_featured": false,
+    "extra": {
+      "quote_ar": "بدأت أتبرع بـ50 جنيه شهريًا.. اليوم بشوف صور الكرتونة بتوصل بيوت الناس. ده أحلى شعور.",
+      "quote_en": "I started donating 50 EGP/month. Today I see the boxes reaching real homes. The best feeling."
+    }
+  }
+]

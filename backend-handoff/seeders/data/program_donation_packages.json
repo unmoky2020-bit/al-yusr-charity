@@ -1,0 +1,407 @@
+[
+  {
+    "program_slug": "general-donation",
+    "key": "gen-50",
+    "name_ar": "سهم صدقة عامة 50 ج",
+    "name_en": "50 EGP Share",
+    "amount": "50.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "general-donation",
+    "key": "gen-100",
+    "name_ar": "سهم صدقة عامة 100 ج",
+    "name_en": "100 EGP Share",
+    "amount": "100.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "program_slug": "general-donation",
+    "key": "gen-250",
+    "name_ar": "سهم صدقة عامة 250 ج",
+    "name_en": "250 EGP Share",
+    "amount": "250.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "general-donation",
+    "key": "gen-500",
+    "name_ar": "سهم بركة عامة 500 ج",
+    "name_en": "500 EGP Share",
+    "amount": "500.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "inqadh",
+    "key": "inq-100",
+    "name_ar": "سهم إغاثة عاجلة 100 ج",
+    "name_en": "Emergency Share 100 EGP",
+    "amount": "100.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "inqadh",
+    "key": "inq-500",
+    "name_ar": "سهم إنقاذ حالة ميدانية (500 ج)",
+    "name_en": "Field Case Rescue Share",
+    "amount": "500.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "program_slug": "inqadh",
+    "key": "inq-2000",
+    "name_ar": "كفالة حالة طوارئ طبية كاملة (2000 ج)",
+    "name_en": "Full Medical Emergency Pack",
+    "amount": "2000.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "inqadh",
+    "key": "inq-5000",
+    "name_ar": "سهم تمويل حملة إغاثة ميدانية",
+    "name_en": "Field Relief Campaign Share",
+    "amount": "5000.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "orphans",
+    "key": "orph-part",
+    "name_ar": "سهم مساهمة كفالة يتيم (150 ج)",
+    "name_en": "Partial Sponsorship Share",
+    "amount": "150.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "orphans",
+    "key": "orph-full",
+    "name_ar": "كفالة يتيم شهرية شاملة (غذاء ودراسة)",
+    "name_en": "Full Monthly Sponsorship",
+    "amount": "600.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "program_slug": "orphans",
+    "key": "orph-clothes",
+    "name_ar": "سهم كسوة وحقيبة مدرسية ليتيم",
+    "name_en": "School Bag & Uniform Share",
+    "amount": "300.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "orphans",
+    "key": "orph-annual",
+    "name_ar": "كفالة يتيم سنوية متكاملة",
+    "name_en": "Annual Full Sponsorship",
+    "amount": "7200.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "monthly-sponsorship",
+    "key": "msp-200",
+    "name_ar": "سهم مساهمة شهرية (200 ج)",
+    "name_en": "Monthly Share (200 EGP)",
+    "amount": "200.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "monthly-sponsorship",
+    "key": "msp-500",
+    "name_ar": "كفالة فرد محتاج شهرياً (500 ج)",
+    "name_en": "Single Person Monthly Care",
+    "amount": "500.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "program_slug": "monthly-sponsorship",
+    "key": "msp-1000",
+    "name_ar": "كفالة أسرة صغيرة شهرياً (1000 ج)",
+    "name_en": "Small Family Monthly Care",
+    "amount": "1000.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "monthly-sponsorship",
+    "key": "msp-2000",
+    "name_ar": "كفالة أسرة كبيرة شهرية متكاملة",
+    "name_en": "Full Large Family Monthly Care",
+    "amount": "2000.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "mosques",
+    "key": "msq-carpet",
+    "name_ar": "سهم فرش وسجاد مسجد (متر واحد)",
+    "name_en": "Mosque Carpet Share (1 Meter)",
+    "amount": "250.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "program_slug": "mosques",
+    "key": "msq-cement",
+    "name_ar": "سهم مواد بناء وأسمنت (طن)",
+    "name_en": "Cement & Building Materials",
+    "amount": "500.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "mosques",
+    "key": "msq-meter",
+    "name_ar": "سهم متر مربع إنشائي في المسجد",
+    "name_en": "1 Sq Meter Construction Share",
+    "amount": "1000.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "mosques",
+    "key": "msq-minaret",
+    "name_ar": "سهم إعمار مئذنة ومصلى نساء",
+    "name_en": "Minaret & Prayer Hall Share",
+    "amount": "2500.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "water",
+    "key": "wtr-share",
+    "name_ar": "سهم مساهمة في تكلفة وصلة مياه",
+    "name_en": "Water Connection Share",
+    "amount": "300.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "water",
+    "key": "wtr-meter",
+    "name_ar": "سهم رسوم عداد المياه الرسمي والمواسير",
+    "name_en": "Official Water Meter Share",
+    "amount": "1000.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "water",
+    "key": "wtr-full",
+    "name_ar": "وصلة مياه منزلية كاملة شامل العداد والتركيب",
+    "name_en": "Full Home Tap Water Connection",
+    "amount": "3500.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "program_slug": "water",
+    "key": "wtr-station",
+    "name_ar": "سهم محطة معالجة وفلترة مياه قروية",
+    "name_en": "Village Water Filtration Unit",
+    "amount": "1500.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "monthly-meat",
+    "key": "mmt-kilo",
+    "name_ar": "سهم كيلو لحم طازج لأسرة محتاجة",
+    "name_en": "1 Kg Fresh Meat Share",
+    "amount": "200.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "monthly-meat",
+    "key": "mmt-family",
+    "name_ar": "سهم لحمة أسرة كاملة (3 كيلو)",
+    "name_en": "Family Meat Pack (3 Kg)",
+    "amount": "600.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "program_slug": "monthly-meat",
+    "key": "mmt-village",
+    "name_ar": "باقة لحوم لـ 10 أسر قروية",
+    "name_en": "10 Family Meat Package",
+    "amount": "2000.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "monthly-meat",
+    "key": "mmt-month",
+    "name_ar": "تمويل توزيع ذبائح شهري كامل",
+    "name_en": "Full Monthly Distribution",
+    "amount": "10000.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "quran",
+    "key": "qrn-student",
+    "name_ar": "سهم دعم طالب حفظ قرآن (100 ج)",
+    "name_en": "Quran Student Support Share",
+    "amount": "100.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "quran",
+    "key": "qrn-teacher",
+    "name_ar": "سهم راتب معلم تحفيظ شهري (500 ج)",
+    "name_en": "Quran Teacher Monthly Salary",
+    "amount": "500.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "program_slug": "quran",
+    "key": "qrn-circle",
+    "name_ar": "سهم تجهيز حلقة تحفيظ (أثاث + ألواح)",
+    "name_en": "Memorization Circle Setup",
+    "amount": "1500.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "quran",
+    "key": "qrn-center",
+    "name_ar": "رعاية مركز تحفيظ كامل لمدة شهر",
+    "name_en": "Full Center Monthly Patronage",
+    "amount": "5000.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "takrim",
+    "key": "tkr-fuel",
+    "name_ar": "سهم وقود وصيانة دورية للسيارة",
+    "name_en": "Van Fuel & Maintenance Share",
+    "amount": "100.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "is_popular": true
+    }
+  },
+  {
+    "program_slug": "takrim",
+    "key": "tkr-shroud",
+    "name_ar": "سهم كفن شرعي ومستلزمات الغسل",
+    "name_en": "Islamic Shroud & Washing Kit",
+    "amount": "250.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "takrim",
+    "key": "tkr-trip",
+    "name_ar": "كفالة رحلة نقل جثمان لمسافة بعيدة",
+    "name_en": "Long-Distance Transit Sponsorship",
+    "amount": "500.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "program_slug": "odhya",
+    "key": "odh-share-meat",
+    "name_ar": "سهم صدقة لحوم أضاحي طازجة",
+    "name_en": "Qurbani Fresh Meat Share",
+    "amount": "500.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "description_ar": "مساهمة في تكلفة ذبح وتوزيع لحوم الأضاحي للأسر المحتاجة"
+    }
+  },
+  {
+    "program_slug": "odhya",
+    "key": "odh-sheep",
+    "name_ar": "صك خروف بلدي فلاحي كامل",
+    "name_en": "Full Local Lamb Qurbani Voucher",
+    "amount": "6800.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "description_ar": "خروف بلدي صحيح مذبوح وفق الشريعة موزع على الأسر المستحقة",
+      "is_popular": true
+    }
+  },
+  {
+    "program_slug": "odhya",
+    "key": "odh-calf-share",
+    "name_ar": "صك سُبع عجل بقري بلدي فاخر",
+    "name_en": "One-Seventh Cattle Share (Baqari)",
+    "amount": "8500.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "description_ar": "سبع بقرة بلدية أصيلة — توزع اللحوم طازجة مبردة بضمان الجودة"
+    }
+  }
+]

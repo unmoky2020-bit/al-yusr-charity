@@ -62,6 +62,7 @@ import imgHandsSprout from "@/assets/hands-sprout.jpg";
 import { useSiteStats } from "@/hooks/useSiteStats";
 import { getLucideIcon } from "@/lib/lucide-icon";
 import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, resolveStorageUrl, contentApi, formatServerImageUrl, getApiToken } from "@/data/laravelApi";
+import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 
 /** Lightweight scroll-trigger reveal hook (IntersectionObserver — no JS deps). */
 const useReveal = () => {
@@ -1015,9 +1016,9 @@ const About = () => {
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><WhatsAppIcon className="h-5 w-5 text-secondary" /></div>
                   <div><div className="font-extrabold text-primary">WhatsApp</div><div className="text-sm text-muted-foreground">{isRTL ? "رد فوري — اضغط للمحادثة" : "Instant reply — tap to chat"}</div></div>
                 </a>
-                <a href="mailto:info@elyosrcharity.com" data-source="about" data-label="about-email" className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
+                <a href={`mailto:${FOUNDATION_EMAIL}`} data-source="about" data-label="about-email" className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><Mail className="h-5 w-5 text-secondary" /></div>
-                  <div><div className="font-extrabold text-primary">{isRTL ? "بريد" : "Email"}</div><div className="text-sm text-muted-foreground">info@elyosrcharity.com</div></div>
+                  <div><div className="font-extrabold text-primary">{isRTL ? "بريد" : "Email"}</div><div className="text-sm text-muted-foreground">{FOUNDATION_EMAIL}</div></div>
                 </a>
                 <div className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><MapPin className="h-5 w-5 text-secondary" /></div>

@@ -11,8 +11,11 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useLang } from "@/i18n/LangContext";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { getStoryById, upsertStory, deleteStory, type StoryCard } from "@/data/storiesApi";
+import { donationNodesApi } from "@/data/api/donationNodesApi";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
+import { casesApiV1, type LaravelCase } from "@/data/laravelApi";
 
 type Story = any;
 type Program = { id: string; slug: string; title_ar: string; title_en: string };
@@ -55,39 +58,45 @@ const Inner = () => {
 
   useEffect(() => {
     (async () => {
-      const { data: progs } = await (supabase.from("donation_nodes" as any) as any)
-        .select("id,slug,title_ar,title_en").eq("type", "program").order("sort_order");
-      setPrograms((progs || []) as Program[]);
+      // Program list for the "link to program" select (proposed GET /donation-nodes?type=program).
+      donationNodesApi.listAll({ type: "program" })
+        .then((nodes) => setPrograms(nodes.filter((n) => n.type === "program").map((n) => ({
+          id: String(n.id), slug: n.slug, title_ar: n.title_ar, title_en: n.title_en || "",
+        }))))
+        .catch(() => setPrograms([]));
 
       if (!isNew) {
-        const { data: row, error } = await (supabase.from("stories" as any) as any).select("*").eq("id", id).maybeSingle();
-        if (error || !row) {
-          toast({ title: t("القصة غير موجودة", "Story not found"), description: error?.message });
+        try {
+          const row = await getStoryById(String(id));
+          setData({ ...row, seo: row.seo || {} });
+        } catch (e) {
+          toast({ variant: "destructive", title: t("تعذر تحميل القصة", "Could not load story"), description: apiErrorMessage(e) });
           nav("/admin/stories", { replace: true });
           return;
         }
-        setData({ ...row, seo: row.seo || {} });
         setLoading(false);
         return;
       }
 
       if (fromCaseId) {
-        const { data: c } = await (supabase.from("cases" as any) as any).select("*").eq("id", fromCaseId).maybeSingle();
-        if (c) {
+        try {
+          const c: LaravelCase & Record<string, any> = await casesApiV1.get(fromCaseId);
           setData({
             ...blank(),
-            slug: slugify(`${c.beneficiary_name || c.title}-${c.ref_code || ""}`).slice(0, 60),
+            slug: slugify(`${c.beneficiary_name || c.title}-${c.code || ""}`).slice(0, 60),
             title_ar: c.title || "", title_en: "",
             role_ar: "حالة مكتملة", role_en: "Completed case",
             quote_ar: "", quote_en: "",
-            body_ar: c.story || "", body_en: "",
+            body_ar: c.story || c.description || "", body_en: "",
             beneficiary_name: c.beneficiary_name || "",
             location_ar: [c.city, c.governorate].filter(Boolean).join(" - "),
             location_en: "",
-            image_url: c.cover_image_url || "",
-            case_id: c.id,
+            image_url: c.cover_image_url || c.cover_image || "",
+            case_id: String(c.id),
             is_published: false, is_featured: false,
           });
+        } catch (e) {
+          toast({ variant: "destructive", title: t("تعذر تحميل الحالة", "Could not load case"), description: apiErrorMessage(e) });
         }
         setLoading(false);
         return;
@@ -112,7 +121,8 @@ const Inner = () => {
       return null;
     }
     setSaving(true);
-    const payload: any = {
+    const payload: Partial<StoryCard> & { slug: string } = {
+      ...(isNew ? {} : { id: String(id) }),
       slug: data.slug,
       title_ar: data.title_ar || "", title_en: data.title_en || "",
       role_ar: data.role_ar || "",   role_en: data.role_en || "",
@@ -126,24 +136,20 @@ const Inner = () => {
       case_id: data.case_id || null,
       is_published: data.is_published ?? false,
       is_featured: data.is_featured ?? false,
+      pending_review: data.pending_review ?? false,
       sort_order: data.sort_order ?? 0,
       seo: data.seo || {},
       ...(extra || {}),
     };
-    let row: any = null; let error: any = null;
-    if (isNew) {
-      const r = await (supabase.from("stories" as any) as any).insert(payload).select("*").maybeSingle();
-      row = r.data; error = r.error;
-    } else {
-      const r = await (supabase.from("stories" as any) as any).update(payload).eq("id", id).select("*").maybeSingle();
-      row = r.data; error = r.error;
-    }
+    // PUT /stories/{id} or POST /stories (Laravel)
+    const { error, story: row } = await upsertStory(payload);
     setSaving(false);
-    if (error) { toast({ title: t("فشل الحفظ", "Save failed"), description: error.message }); return null; }
+    if (error) { toast({ variant: "destructive", title: t("فشل الحفظ", "Save failed"), description: error }); return null; }
     toast({ title: t("تم الحفظ", "Saved") });
     if (isNew && row?.id) { nav(`/admin/stories/${row.id}`, { replace: true }); return row; }
-    setData({ ...row, seo: row?.seo || {} });
-    return row;
+    if (row) setData({ ...row, seo: row.seo || {} });
+    else setData((d: any) => ({ ...d, ...payload }));
+    return row ?? payload;
   };
 
   const publish = async () => { await save({ is_published: true, pending_review: false }); };
@@ -153,8 +159,8 @@ const Inner = () => {
   const remove = async () => {
     if (isNew) return;
     if (!confirm(t("حذف هذه القصة نهائيًا؟", "Delete this story permanently?"))) return;
-    const { error } = await (supabase.from("stories" as any) as any).delete().eq("id", id);
-    if (error) { toast({ title: t("فشل الحذف", "Delete failed"), description: error.message }); return; }
+    const { error } = await deleteStory(String(id), data.slug);
+    if (error) { toast({ variant: "destructive", title: t("فشل الحذف", "Delete failed"), description: error }); return; }
     toast({ title: t("تم الحذف", "Deleted") });
     nav("/admin/stories");
   };

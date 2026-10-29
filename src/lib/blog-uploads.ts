@@ -1,35 +1,24 @@
-import { apiFetch, formatServerImageUrl } from "@/data/laravelApi";
+import { describeWriteError } from "@/data/api/backendPending";
+import { uploadMedia, type MediaCollection } from "@/data/api/mediaApi";
 import { generateOg } from "./og-generator";
 
 const safeName = (s: string) =>
   s.toLowerCase().replace(/[^\w.-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "file";
 
 /**
- * Upload a media blob to Laravel /upload and return its public URL.
- * Falls back to a local data URL if upload fails.
+ * Upload an image to the media library (POST /media, collection "blog" or "og") and return its
+ * public URL. Throws on failure — never returns a temporary blob: URL that would be saved as the cover.
  */
-export async function uploadBlogMedia(file: Blob, suggestedName: string): Promise<string> {
+export async function uploadBlogMedia(file: Blob, suggestedName: string, collection: MediaCollection = "blog"): Promise<string> {
   const ext = suggestedName.includes(".") ? suggestedName.split(".").pop() : "jpg";
-  const fileName = `${Date.now()}-${safeName(suggestedName.replace(/\.[^.]+$/, ""))}.${ext}`;
-
+  const fileName = `${safeName(suggestedName.replace(/\.[^.]+$/, ""))}.${ext}`;
   try {
-    const formData = new FormData();
-    formData.append("file", file, fileName);
-    formData.append("collection", "blog-media");
-
-    const res = await apiFetch<{ url?: string; path?: string; data?: { url?: string } }>("/upload", {
-      method: "POST",
-      formData,
-    });
-
-    const url = (res as any)?.url || (res as any)?.data?.url || (res as any)?.path || null;
-    if (url) return formatServerImageUrl(url) || url;
+    const saved = await uploadMedia(file, fileName, collection);
+    if (!saved.url) throw new Error("لم يرجع السيرفر رابط الصورة");
+    return saved.url;
   } catch (e) {
-    if (import.meta.env.DEV) console.warn("uploadBlogMedia: Laravel upload failed", e);
+    throw new Error(describeWriteError(e, "POST /media"));
   }
-
-  // Fallback: return a blob object URL (works locally, not persisted after reload)
-  return URL.createObjectURL(file);
 }
 
 /** Generate an OG image (1200x630) for a post and upload it; returns its URL. */
@@ -44,5 +33,5 @@ export async function generateAndUploadOg(input: {
     url: `elyusr.org/blog/${input.slug}`,
   });
   const blob = await (await fetch(dataUrl)).blob();
-  return uploadBlogMedia(blob, `og-${input.slug}.jpg`);
+  return uploadBlogMedia(blob, `og-${input.slug}.jpg`, "og");
 }

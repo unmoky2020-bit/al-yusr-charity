@@ -6,11 +6,19 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useLang } from "@/i18n/LangContext";
+import { ChoiceSelect } from "@/components/admin/programs/FormKit";
+import { describeWriteError, isEndpointMissing, BACKEND_PENDING_AR } from "@/data/api/backendPending";
 import {
-  galleryApi,
-  formatServerImageUrl,
-  LaravelGalleryItem,
-} from "@/data/laravelApi";
+  listMedia,
+  uploadMedia,
+  deleteMedia,
+  MEDIA_COLLECTIONS,
+  MEDIA_COLLECTION_LABELS_AR,
+  MEDIA_ACCEPT,
+  MEDIA_MAX_BYTES,
+  type MediaCollection,
+  type MediaFile,
+} from "@/data/api/mediaApi";
 import {
   Search,
   Upload,
@@ -23,90 +31,75 @@ import {
   ExternalLink,
 } from "lucide-react";
 
+const formatSize = (bytes: number) =>
+  bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+
+/**
+ * Media library: files under the backend's media/{collection}/ folder (GET/POST/DELETE /media).
+ * The public photo gallery is managed separately in /admin/gallery.
+ */
 export default function AdminMediaLibrary() {
   const { lang } = useLang();
   const isAr = lang === "ar";
 
-  const [images, setImages] = useState<LaravelGalleryItem[]>([]);
+  const [files, setFiles] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [pendingBackend, setPendingBackend] = useState(false);
   const [search, setSearch] = useState("");
+  const [collection, setCollection] = useState<MediaCollection | "">("");
+  const [uploadTo, setUploadTo] = useState<MediaCollection>("blog");
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
-  const [deletingId, setDeletingId] = useState<number | string | null>(null);
+  const [deletingPath, setDeletingPath] = useState<string | null>(null);
 
-  const loadGallery = useCallback(async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
-      const items = await galleryApi.listAll();
-      if (Array.isArray(items)) {
-        setImages(items);
-      }
+      setFiles(await listMedia({ collection }));
+      setPendingBackend(false);
     } catch (err) {
-      console.warn("Failed to load gallery:", err);
-      toast.error(isAr ? "تعذر تحميل الصور من السيرفر" : "Failed to load images");
+      if (isEndpointMissing(err)) setPendingBackend(true);
+      else toast.error(describeWriteError(err));
     } finally {
       setLoading(false);
     }
-  }, [isAr]);
+  }, [collection]);
 
   useEffect(() => {
-    loadGallery();
-  }, [loadGallery]);
+    load();
+  }, [load]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return images;
-    return images.filter((img) => {
-      const tAr = (img.title_ar || "").toLowerCase();
-      const tEn = (img.title_en || "").toLowerCase();
-      const url = (img.image || img.external_url || "").toLowerCase();
-      const city = (img.city || "").toLowerCase();
-      const prog = (img.program || img.donation_program || "").toLowerCase();
-      return tAr.includes(q) || tEn.includes(q) || url.includes(q) || city.includes(q) || prog.includes(q);
-    });
-  }, [images, search]);
+    if (!q) return files;
+    return files.filter((f) => f.name.toLowerCase().includes(q) || f.path.toLowerCase().includes(q));
+  }, [files, search]);
 
-  const handleUpload = async (file: File) => {
-    if (!file) return;
-    const allowed = ["image/jpeg", "image/png", "image/webp", "image/svg+xml", "image/gif", "image/jpg"];
-    if (!allowed.includes(file.type)) {
-      toast.error(isAr ? "صيغة غير مدعومة (JPG, PNG, WebP, SVG فقط)" : "Unsupported format");
-      return;
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error(isAr ? "الحجم يتجاوز 10 ميجابايت" : "File exceeds 10MB");
+  const handleUpload = async (list: FileList) => {
+    const picked = Array.from(list);
+    const bad = picked.find((f) => !MEDIA_ACCEPT.includes(f.type) || f.size > MEDIA_MAX_BYTES);
+    if (bad) {
+      toast.error(
+        isAr
+          ? `«${bad.name}»: الصيغ المسموحة JPG و PNG و WebP و GIF و AVIF، والحد الأقصى 5 ميجابايت`
+          : `"${bad.name}": allowed JPG, PNG, WebP, GIF, AVIF up to 5 MB`,
+      );
       return;
     }
 
     setUploading(true);
+    let ok = 0;
     try {
-      // Duplicate detection by filename
-      const cleanName = file.name.toLowerCase().trim();
-      const duplicate = images.find((item) => {
-        const itemUrl = (item.image || item.external_url || "").toLowerCase();
-        const titleAr = (item.title_ar || "").toLowerCase();
-        const titleEn = (item.title_en || "").toLowerCase();
-        return itemUrl.endsWith(cleanName) || titleAr === cleanName || titleEn === cleanName;
-      });
-
-      if (duplicate && (duplicate.image || duplicate.external_url)) {
-        const existingUrl = duplicate.image || duplicate.external_url || "";
-        toast.info(
-          isAr
-            ? `\u26a0\ufe0f هذه الصورة موجودة مسبقاً في المكتبة: ${existingUrl}`
-            : `\u26a0\ufe0f This image already exists in the library: ${existingUrl}`,
-          { duration: 6000 }
-        );
-        return;
+      for (const f of picked) {
+        await uploadMedia(f, f.name, uploadTo);
+        ok++;
       }
-
-      await galleryApi.uploadImage(file, file.name.replace(/\.[^.]+$/, "") || "صورة مرفوعة");
-      toast.success(isAr ? "تم رفع الصورة وإضافتها للمكتبة بنجاح ✓" : "Image uploaded and added to library ✓");
-      await loadGallery();
-    } catch (err: any) {
-      toast.error(err.message || (isAr ? "فشل رفع الصورة للسيرفر" : "Failed to upload image"));
+      toast.success(isAr ? `تم رفع ${ok} صورة إلى «${MEDIA_COLLECTION_LABELS_AR[uploadTo]}»` : `Uploaded ${ok} image(s)`);
+    } catch (err) {
+      toast.error(describeWriteError(err, "POST /media"));
     } finally {
       setUploading(false);
+      if (ok) await load();
     }
   };
 
@@ -117,17 +110,17 @@ export default function AdminMediaLibrary() {
     toast.success(isAr ? "تم نسخ الرابط ✓" : "URL copied ✓");
   };
 
-  const handleDelete = async (img: LaravelGalleryItem) => {
-    if (!confirm(isAr ? "هل تريد حذف هذه الصورة نهائياً؟" : "Delete this image permanently?")) return;
-    setDeletingId(img.id);
+  const handleDelete = async (f: MediaFile) => {
+    if (!confirm(isAr ? "حذف الصورة نهائياً؟ أي مقال أو صفحة بتستخدم رابطها هتفقد الصورة." : "Delete this image permanently? Pages using its URL will lose it.")) return;
+    setDeletingPath(f.path);
     try {
-      await galleryApi.remove(String(img.id));
-      setImages((prev) => prev.filter((i) => i.id !== img.id));
+      await deleteMedia(f.path);
+      setFiles((prev) => prev.filter((x) => x.path !== f.path));
       toast.success(isAr ? "تم حذف الصورة" : "Image deleted");
-    } catch (err: any) {
-      toast.error(err.message || (isAr ? "فشل الحذف" : "Delete failed"));
+    } catch (err) {
+      toast.error(describeWriteError(err, "DELETE /media"));
     } finally {
-      setDeletingId(null);
+      setDeletingPath(null);
     }
   };
 
@@ -146,22 +139,23 @@ export default function AdminMediaLibrary() {
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
               {isAr
-                ? `${images.length} صورة محفوظة على السيرفر — ارفع صورة جديدة أو ابحث واختر من الموجود`
-                : `${images.length} images on server — upload new or search existing`}
+                ? "صور المقالات والصفحات وصور المشاركة — انسخ الرابط واستخدمه في أي مكان. معرض الصور العام له شاشة منفصلة."
+                : "Images for articles, pages and share cards — copy a URL to use it anywhere. The public gallery has its own screen."}
             </p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={loadGallery}
-              disabled={loading}
-              className="gap-1.5"
-            >
+            <Button variant="outline" size="sm" onClick={load} disabled={loading} className="gap-1.5">
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
               {isAr ? "تحديث" : "Refresh"}
             </Button>
-            <label className={`inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-4 py-2 transition shadow-sm ${uploading ? "opacity-60 pointer-events-none" : ""}`}>
+            <ChoiceSelect
+              value={uploadTo}
+              onChange={(v) => setUploadTo(v as MediaCollection)}
+              className="h-9 w-48"
+              ariaLabel={isAr ? "مجلد الرفع" : "Upload folder"}
+              options={MEDIA_COLLECTIONS.map((c) => ({ value: c, label: isAr ? `ارفع إلى: ${MEDIA_COLLECTION_LABELS_AR[c]}` : `Upload to: ${c}` }))}
+            />
+            <label className={`inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-4 py-2 transition shadow-sm ${uploading || pendingBackend ? "opacity-60 pointer-events-none" : ""}`}>
               {uploading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -170,17 +164,17 @@ export default function AdminMediaLibrary() {
               ) : (
                 <>
                   <Upload className="h-4 w-4" />
-                  {isAr ? "رفع صورة جديدة" : "Upload Image"}
+                  {isAr ? "رفع صور" : "Upload images"}
                 </>
               )}
               <input
                 type="file"
-                accept="image/*"
+                accept={MEDIA_ACCEPT.join(",")}
+                multiple
                 className="hidden"
-                disabled={uploading}
+                disabled={uploading || pendingBackend}
                 onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) handleUpload(f);
+                  if (e.target.files?.length) handleUpload(e.target.files);
                   e.target.value = "";
                 }}
               />
@@ -188,15 +182,36 @@ export default function AdminMediaLibrary() {
           </div>
         </div>
 
-        {/* Search */}
-        <div className="mb-5 relative">
-          <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={isAr ? "ابحث باسم الصورة أو مسارها أو البرنامج..." : "Search by title, URL or program..."}
-            className="ps-10"
-          />
+        {pendingBackend && (
+          <Card className="mb-5 border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+            {BACKEND_PENDING_AR}: <span dir="ltr" className="font-mono">GET/POST/DELETE /media</span>
+          </Card>
+        )}
+
+        {/* Filters */}
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row">
+          <div className="relative flex-1">
+            <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={isAr ? "ابحث باسم الملف..." : "Search by file name..."}
+              className="ps-10"
+            />
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {(["", ...MEDIA_COLLECTIONS] as const).map((c) => (
+              <Button
+                key={c || "all"}
+                type="button"
+                size="sm"
+                variant={collection === c ? "default" : "outline"}
+                onClick={() => setCollection(c)}
+              >
+                {c ? (isAr ? MEDIA_COLLECTION_LABELS_AR[c] : c) : isAr ? "الكل" : "All"}
+              </Button>
+            ))}
+          </div>
         </div>
 
         {/* Loading */}
@@ -210,14 +225,14 @@ export default function AdminMediaLibrary() {
         )}
 
         {/* Empty */}
-        {!loading && filtered.length === 0 && (
+        {!loading && !pendingBackend && filtered.length === 0 && (
           <Card className="flex flex-col items-center justify-center h-60 gap-3 text-center border-dashed">
             <ImageIcon className="h-10 w-10 text-muted-foreground/50" />
             <div>
               <p className="text-sm font-bold text-foreground">
                 {search
                   ? (isAr ? "لا توجد صور مطابقة للبحث" : "No images match your search")
-                  : (isAr ? "المكتبة فارغة" : "Library is empty")}
+                  : (isAr ? "لا توجد صور في هذا المجلد" : "No images in this folder")}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 {isAr ? "ارفع صورة جديدة لتظهر هنا" : "Upload an image to get started"}
@@ -229,41 +244,32 @@ export default function AdminMediaLibrary() {
         {/* Grid */}
         {!loading && filtered.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {filtered.map((img) => {
-              const imgUrl = img.image || img.external_url || "";
-              const displayUrl = formatServerImageUrl(imgUrl) || imgUrl;
-              const isDeleting = deletingId === img.id;
-
+            {filtered.map((f) => {
+              const isDeleting = deletingPath === f.path;
               return (
                 <Card
-                  key={img.id}
+                  key={f.path}
                   className="group relative overflow-hidden rounded-xl border border-border/80 hover:border-emerald-500/50 hover:shadow-md transition-all bg-card"
                 >
                   <div className="relative aspect-square w-full bg-muted overflow-hidden">
                     <img
-                      src={displayUrl}
-                      alt={img.title_ar || "Image"}
+                      src={f.url}
+                      alt={f.name}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src =
-                          "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Ccircle cx='9' cy='9' r='2'/%3E%3Cpath d='m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21'/%3E%3C/svg%3E";
-                      }}
                     />
                     {/* Hover actions */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                       <button
                         type="button"
-                        onClick={() => handleCopy(imgUrl)}
+                        onClick={() => handleCopy(f.url)}
                         className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/90 text-gray-800 hover:bg-white transition shadow-sm"
                         title={isAr ? "نسخ الرابط" : "Copy URL"}
                       >
-                        {copiedUrl === imgUrl
-                          ? <Check className="h-3.5 w-3.5 text-emerald-600" />
-                          : <Copy className="h-3.5 w-3.5" />}
+                        {copiedUrl === f.url ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
                       </button>
                       <a
-                        href={displayUrl}
+                        href={f.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/90 text-gray-800 hover:bg-white transition shadow-sm"
@@ -273,35 +279,28 @@ export default function AdminMediaLibrary() {
                       </a>
                       <button
                         type="button"
-                        onClick={() => handleDelete(img)}
+                        onClick={() => handleDelete(f)}
                         disabled={isDeleting}
                         className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/90 text-white hover:bg-red-600 transition shadow-sm disabled:opacity-50"
                         title={isAr ? "حذف" : "Delete"}
                       >
-                        {isDeleting
-                          ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                          : <Trash2 className="h-3.5 w-3.5" />}
+                        {isDeleting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
                       </button>
                     </div>
                   </div>
 
                   <div className="p-2 flex flex-col gap-0.5">
-                    <span className="text-[11px] font-bold text-foreground truncate" title={img.title_ar || ""}>
-                      {img.title_ar || img.title_en || `صورة #${img.id}`}
-                    </span>
                     <span
-                      className="text-[9.5px] font-mono text-muted-foreground truncate cursor-pointer hover:text-emerald-600 transition"
+                      className="text-[11px] font-bold text-foreground truncate cursor-pointer hover:text-emerald-600"
                       dir="ltr"
-                      title={imgUrl}
-                      onClick={() => handleCopy(imgUrl)}
+                      title={f.url}
+                      onClick={() => handleCopy(f.url)}
                     >
-                      {imgUrl.split("/").pop() || imgUrl}
+                      {f.name}
                     </span>
-                    {(img.city || img.program) && (
-                      <span className="text-[9.5px] text-muted-foreground/70 truncate">
-                        {img.city || img.program}
-                      </span>
-                    )}
+                    <span className="text-[9.5px] text-muted-foreground/80 truncate">
+                      {(isAr ? MEDIA_COLLECTION_LABELS_AR[f.collection as MediaCollection] : f.collection) || f.collection} · {formatSize(f.size)}
+                    </span>
                   </div>
                 </Card>
               );
@@ -309,11 +308,11 @@ export default function AdminMediaLibrary() {
           </div>
         )}
 
-        {!loading && images.length > 0 && (
+        {!loading && files.length > 0 && (
           <div className="mt-6 text-center text-xs text-muted-foreground">
             {isAr
-              ? `إجمالي: ${images.length} صورة${search ? ` — ${filtered.length} نتيجة` : ""}`
-              : `Total: ${images.length} images${search ? ` — ${filtered.length} matching` : ""}`}
+              ? `إجمالي: ${files.length} صورة${search ? ` — ${filtered.length} نتيجة` : ""}`
+              : `Total: ${files.length} images${search ? ` — ${filtered.length} matching` : ""}`}
           </div>
         )}
       </div>

@@ -1,0 +1,145 @@
+[
+  {
+    "slug": "odhya",
+    "name_ar": "صك الأضحية",
+    "name_en": "Sacrifice",
+    "description_ar": "كل ما يخص صك الأضحية في المنصورة والدقهلية: السعر، التوثيق، التوزيع.",
+    "description_en": "Everything about the sacrifice voucher in Mansoura & Dakahlia.",
+    "keyword_ar": "صك الأضحية",
+    "keyword_en": "Sacrifice voucher",
+    "sort_order": 1,
+    "is_active": true
+  },
+  {
+    "slug": "zakat",
+    "name_ar": "زكاة المال والفطر",
+    "name_en": "Zakat",
+    "description_ar": "أدلة شرعية وعملية لحساب زكاة المال وزكاة الفطر 2026.",
+    "description_en": "Practical Shariah guides for Zakat and Fitr 2026.",
+    "keyword_ar": "زكاة المال",
+    "keyword_en": "Zakat",
+    "sort_order": 2,
+    "is_active": true
+  },
+  {
+    "slug": "ramadan",
+    "name_ar": "رمضان وإفطار صائم",
+    "name_en": "Ramadan & Iftar",
+    "description_ar": "كرتونة رمضان، إفطار الصائمين، ومشاريع شهر الخير.",
+    "description_en": "Ramadan boxes, iftar meals, and the month's projects.",
+    "keyword_ar": "كرتونة رمضان",
+    "keyword_en": "Ramadan box",
+    "sort_order": 3,
+    "is_active": true
+  },
+  {
+    "slug": "orphans",
+    "name_ar": "كفالة يتيم",
+    "name_en": "Orphan Sponsorship",
+    "description_ar": "كفالة الأيتام في الدقهلية بمبلغ شهري ثابت.",
+    "description_en": "Sponsoring orphans in Dakahlia.",
+    "keyword_ar": "كفالة يتيم",
+    "keyword_en": "Orphan sponsorship",
+    "sort_order": 4,
+    "is_active": true
+  },
+  {
+    "slug": "health",
+    "name_ar": "صحة وعلاج",
+    "name_en": "Health",
+    "description_ar": "علاج، أدوية، قوافل طبية، وأطراف صناعية لذوي الهمم.",
+    "description_en": "Treatment, medication, medical convoys, and prosthetics.",
+    "keyword_ar": "علاج وأدوية",
+    "keyword_en": "Treatment",
+    "sort_order": 5,
+    "is_active": true
+  },
+  {
+    "slug": "food",
+    "name_ar": "غذاء ومطبخ",
+    "name_en": "Food & Kitchen",
+    "description_ar": "كرتونة العزومة، مطبخ اليسر، 1500 وجبة يوميًا.",
+    "description_en": "Family Box and Al-Yusr Kitchen — 1,500 daily meals.",
+    "keyword_ar": "كرتونة العزومة",
+    "keyword_en": "Family box",
+    "sort_order": 6,
+    "is_active": true
+  },
+  {
+    "slug": "education",
+    "name_ar": "تعليم ووقفية",
+    "name_en": "Education & Endowment",
+    "description_ar": "ادفع مصروفه، 354 طالب، ووقفية التعليم المستدامة.",
+    "description_en": "Pay His Tuition + sustainable education endowment.",
+    "keyword_ar": "كفالة تعليمية",
+    "keyword_en": "Education endowment",
+    "sort_order": 7,
+    "is_active": true
+  },
+  {
+    "slug": "shelter",
+    "name_ar": "ستر وتسقيف",
+    "name_en": "Shelter",
+    "description_ar": "ترميم وتسقيف بيوت الأشد فقرًا في قرى الدقهلية.",
+    "description_en": "Repair and roofing for the poorest Dakahlia homes.",
+    "keyword_ar": "ستر وتسقيف",
+    "keyword_en": "Shelter",
+    "sort_order": 8,
+    "is_active": true
+  },
+  {
+    "slug": "marriage",
+    "name_ar": "تيسير زواج",
+    "name_en": "Marriage Aid",
+    "description_ar": "جواز عروسة بكرامة للأيتام والمتعففين.",
+    "description_en": "Dignified bridal trousseau for orphans.",
+    "keyword_ar": "تيسير زواج",
+    "keyword_en": "Marriage aid",
+    "sort_order": 9,
+    "is_active": true
+  },
+  {
+    "slug": "water",
+    "name_ar": "سقيا الماء",
+    "name_en": "Water",
+    "description_ar": "وصلات مياه نظيفة لقرى الدقهلية المحرومة.",
+    "description_en": "Clean water connections for underserved villages.",
+    "keyword_ar": "وصلة مياه",
+    "keyword_en": "Water connection",
+    "sort_order": 10,
+    "is_active": true
+  },
+  {
+    "slug": "transparency",
+    "name_ar": "شفافية ومقارنات",
+    "name_en": "Transparency",
+    "description_ar": "تقارير الشفافية، الأرقام السنوية، ومقارنات مع المؤسسات.",
+    "description_en": "Annual transparency reports and NGO comparisons.",
+    "keyword_ar": "شفافية الجمعيات",
+    "keyword_en": "NGO transparency",
+    "sort_order": 11,
+    "is_active": true
+  },
+  {
+    "slug": "guides",
+    "name_ar": "أدلة ومؤشرات",
+    "name_en": "Guides",
+    "description_ar": "أدلة عملية للتبرع، اختيار الجمعية، وطرق الدفع الآمنة.",
+    "description_en": "Practical donation, NGO selection, and secure payment guides.",
+    "keyword_ar": "دليل التبرع",
+    "keyword_en": "Donation guide",
+    "sort_order": 12,
+    "is_active": true
+  },
+  {
+    "slug": "stories",
+    "name_ar": "قصص نجاح",
+    "name_en": "Success Stories",
+    "description_ar": "قصص حقيقية من قرى الدقهلية بعد تبرعك.",
+    "description_en": "Real stories from Dakahlia villages after your donation.",
+    "keyword_ar": "قصص نجاح",
+    "keyword_en": "Success stories",
+    "sort_order": 13,
+    "is_active": true
+  }
+]

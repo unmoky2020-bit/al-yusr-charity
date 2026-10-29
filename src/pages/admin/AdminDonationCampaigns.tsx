@@ -20,14 +20,16 @@ import {
   type LaravelDonationCampaignCategory,
   formatServerImageUrl,
 } from "@/data/laravelApi";
-
-const DEFAULT_CATEGORIES: Array<{ id: number; name_ar: string; name_en: string; slug: string }> = [
-  { id: 1, name_ar: "صدقات جارية", name_en: "Ongoing Charity", slug: "ongoing-charity" },
-  { id: 2, name_ar: "مواسم الخير", name_en: "Seasons of Goodness", slug: "seasons-of-goodness" },
-  { id: 3, name_ar: "استدامة وتبرع عيني", name_en: "Sustainability & In-Kind", slug: "sustainability-in-kind" },
-  { id: 4, name_ar: "تعليم وبناء الإنسان", name_en: "Education & Human Development", slug: "education-human-development" },
-  { id: 5, name_ar: "مشاريع الخير", name_en: "Goodness Projects", slug: "good" },
-];
+import {
+  donationCampaignsAdminApi,
+  findIgnoredCampaignFields,
+  CAMPAIGN_FIELD_LABELS_AR,
+  type CampaignPackage,
+} from "@/data/api/donationCampaignsAdminApi";
+import { BACKEND_PENDING_AR, describeWriteError } from "@/data/api/backendPending";
+import { CampaignPackagesManager } from "@/components/admin/campaigns/CampaignPackagesManager";
+import { sortPackages, type PackagePriceKey } from "@/components/admin/campaigns/packageHelpers";
+import { getCampaignPageMetaForCampaign } from "@/data/campaignPages";
 
 export default function AdminDonationCampaigns() {
   const { lang } = useLang();
@@ -56,8 +58,8 @@ export default function AdminDonationCampaigns() {
 
   // Donation Packages Dialog
   const [packagesCamp, setPackagesCamp] = useState<LaravelDonationCampaign | null>(null);
-  const [newPkg, setNewPkg] = useState({ name_ar: "سهم تبرع", amount: 100, is_active: true });
-  const [savingPkg, setSavingPkg] = useState(false);
+  const [packagesList, setPackagesList] = useState<CampaignPackage[]>([]);
+  const [packagesPriceKeys, setPackagesPriceKeys] = useState<PackagePriceKey[]>([]);
 
   const loadData = async () => {
     setLoading(true);
@@ -67,14 +69,14 @@ export default function AdminDonationCampaigns() {
         donationCampaignCategoriesApi.listAll().catch(() => [] as LaravelDonationCampaignCategory[]),
       ]);
 
-      const loadedCats = Array.isArray(catsRes) && catsRes.length > 0 ? catsRes : (DEFAULT_CATEGORIES as any);
-      setCategories(loadedCats);
+      // Only real categories from the backend (no invented ids that the backend would reject).
+      setCategories(Array.isArray(catsRes) ? catsRes : []);
 
       if (Array.isArray(campsRes)) {
         // Normalize: some API responses return category as nested object without category_id
         const normalized = campsRes.map((c) => ({
           ...c,
-          category_id: c.category_id ?? c.category?.id ?? null,
+          category_id: c.category_id ?? (c.category?.id != null ? Number(c.category.id) : null),
         }));
         setCampaigns(normalized);
       } else {
@@ -127,7 +129,7 @@ export default function AdminDonationCampaigns() {
       name_ar: "",
       name_en: "",
       slug: "",
-      category_id: categories[0]?.id ? Number(categories[0].id) : 1,
+      category_id: categories[0]?.id ? Number(categories[0].id) : null,
       subtitle_ar: "",
       subtitle_en: "",
       description_ar: "",
@@ -164,7 +166,7 @@ export default function AdminDonationCampaigns() {
         .filter(Boolean);
 
       const payload: Partial<LaravelDonationCampaign> = {
-        category_id: editing.category_id ? Number(editing.category_id) : 1,
+        ...(editing.category_id ? { category_id: Number(editing.category_id) } : {}),
         name_ar: editing.name_ar.trim(),
         name_en: editing.name_en?.trim() || editing.name_ar.trim(),
         slug: editing.slug?.trim() || editing.name_ar.trim().toLowerCase().replace(/\s+/g, "-"),
@@ -173,6 +175,7 @@ export default function AdminDonationCampaigns() {
         description_ar: editing.description_ar?.trim() || editing.name_ar.trim(),
         description_en: editing.description_en?.trim() || null,
         target_amount: Number(editing.target_amount || 0),
+        collected_amount: Number(editing.collected_amount || 0),
         minimum_amount: Number(editing.minimum_amount || 50),
         donation_available: editing.donation_available !== false,
         is_active: editing.is_active !== false,
@@ -181,18 +184,36 @@ export default function AdminDonationCampaigns() {
         benefits: parsedBenefits,
       };
 
+      let savedId: number | string | undefined = editing.id;
       if (editing.id && !String(editing.id).startsWith("static-")) {
-        await donationCampaignsApi.update(editing.id, payload as any);
-        toast({ title: isAr ? "تم تحديث الحملة بنجاح" : "Campaign updated successfully" });
+        await donationCampaignsApi.update(editing.id, payload);
       } else {
-        await donationCampaignsApi.create(payload as any);
-        toast({ title: isAr ? "تم إنشاء الحملة بنجاح في قاعدة البيانات" : "Campaign created successfully" });
+        const created = await donationCampaignsApi.create(payload);
+        savedId = created?.id;
       }
+      // 2xx is not enough: re-read and tell the admin which fields the backend dropped (subtitle / category / image).
+      let ignored: string[] = [];
+      if (savedId !== undefined && savedId !== null && savedId !== "") {
+        try {
+          const fresh = await donationCampaignsAdminApi.get(savedId, { fresh: true });
+          ignored = findIgnoredCampaignFields(payload as Record<string, unknown>, fresh as unknown as Record<string, unknown>);
+        } catch { /* best effort */ }
+      }
+      const okTitle = editing.id ? (isAr ? "تم تحديث الحملة" : "Campaign updated") : (isAr ? "تم إنشاء الحملة في قاعدة البيانات" : "Campaign created");
+      toast(
+        ignored.length
+          ? {
+              title: `${okTitle}${isAr ? "، لكن الباك إند تجاهل بعض الحقول" : ", but the backend ignored some fields"}`,
+              description: `${ignored.map((k) => CAMPAIGN_FIELD_LABELS_AR[k] || k).join("، ")} — ${BACKEND_PENDING_AR}`,
+              variant: "destructive",
+            }
+          : { title: okTitle },
+      );
 
       setEditing(null);
       await loadData();
     } catch (e: any) {
-      toast({ title: e.message || (isAr ? "فشل حفظ الحملة" : "Failed to save campaign"), variant: "destructive" });
+      toast({ title: isAr ? "فشل حفظ الحملة" : "Failed to save campaign", description: describeWriteError(e), variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -272,11 +293,14 @@ export default function AdminDonationCampaigns() {
     setSavingEditCat(true);
     try {
       const slug = editingCat.slug?.trim() || `camp-cat-${Date.now().toString(36)}`;
-      await donationCampaignCategoriesApi.update(editingCat.id, {
+      // PUT /donation-campaign-categories/{id} is PROPOSED (404 => "needs backend").
+      await donationCampaignsAdminApi.updateCategory(editingCat.id, {
         name_ar: editingCat.name_ar.trim(),
         name_en: editingCat.name_en?.trim() || editingCat.name_ar.trim(),
         slug,
-      } as any);
+        is_active: editingCat.is_active !== false,
+        sort_order: Number(editingCat.sort_order || 1),
+      });
       toast({ title: isAr ? "تم تحديث التصنيف بنجاح" : "Category updated" });
       setEditingCat(null);
       await loadData();
@@ -286,7 +310,7 @@ export default function AdminDonationCampaigns() {
       toast({
         title: isSlugError
           ? (isAr ? "هذا الـ Slug مستخدم بالفعل، غيّره وحفظ مرة ثانية" : "Slug already in use, try a different slug")
-          : (e?.message || (isAr ? "خطأ في التحديث" : "Error updating category")),
+          : describeWriteError(e, "PUT /donation-campaign-categories/{id}"),
         variant: "destructive",
       });
     } finally {
@@ -329,34 +353,21 @@ export default function AdminDonationCampaigns() {
 
   // Sync / Seed from static CAMPAIGNS_DATA into Backend DB — REMOVED
 
-  // Add Donation Package
-  const handleAddPackage = async () => {
-    if (!packagesCamp || !newPkg.name_ar.trim() || Number(newPkg.amount) <= 0) {
-      toast({ title: isAr ? "اكتب اسم الباقة والمبلغ" : "Fill package name and amount", variant: "destructive" });
-      return;
-    }
-    setSavingPkg(true);
-    try {
-      if (!String(packagesCamp.id).startsWith("static-")) {
-        await donationCampaignsApi.addPackage(packagesCamp.id, {
-          name_ar: newPkg.name_ar.trim(),
-          amount: Number(newPkg.amount),
-          is_active: newPkg.is_active,
-          sort_order: 1,
-        });
-        toast({ title: isAr ? "تمت إضافة باقة التبرع للحملة" : "Donation package added" });
-      } else {
-        toast({ title: isAr ? "احفظ الحملة أولاً في قاعدة البيانات لإضافة باقات إليها" : "Please save campaign to backend DB first" });
-      }
-      setPackagesCamp(null);
-      await loadData();
-    } catch (e: any) {
-      toast({ title: e.message || "Failed to add package", variant: "destructive" });
-    } finally {
-      setSavingPkg(false);
+  // Donation packages dialog: full management (add / edit / delete / reorder), live against the backend.
+  const openPackages = (camp: LaravelDonationCampaign) => {
+    setPackagesCamp(camp);
+    setPackagesList(sortPackages(camp.donation_packages as CampaignPackage[] | undefined));
+    setPackagesPriceKeys([]);
+    const meta = getCampaignPageMetaForCampaign(camp);
+    if (meta) {
+      void meta.load().then((d) => setPackagesPriceKeys(d.prices.map((p) => ({ id: p.id, label: p.label })))).catch(() => {});
     }
   };
 
+  const closePackages = () => {
+    setPackagesCamp(null);
+    void loadData();
+  };
 
   return (
     <AdminLayout>
@@ -622,7 +633,7 @@ export default function AdminDonationCampaigns() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => setPackagesCamp(camp)}
+                        onClick={() => openPackages(camp)}
                         className="h-8 px-2 text-xs gap-1 text-secondary hover:text-secondary-foreground hover:bg-secondary/20"
                         title={isAr ? "إدارة باقات الأسهم" : "Packages"}
                       >
@@ -707,9 +718,10 @@ export default function AdminDonationCampaigns() {
                   <Label>{isAr ? "التصنيف التابع له *" : "Category *"}</Label>
                   <select
                     value={editing.category_id ? String(editing.category_id) : ""}
-                    onChange={(e) => setEditing({ ...editing, category_id: Number(e.target.value) })}
+                    onChange={(e) => setEditing({ ...editing, category_id: e.target.value ? Number(e.target.value) : null })}
                     className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                   >
+                    <option value="">{categories.length ? (isAr ? "— بدون تصنيف —" : "— No category —") : (isAr ? "لا توجد تصنيفات في قاعدة البيانات" : "No categories in the database")}</option>
                     {categories.map((k) => (
                       <option key={String(k.id)} value={String(k.id)}>
                         {k.name_ar} ({k.slug})
@@ -938,12 +950,28 @@ export default function AdminDonationCampaigns() {
                           className="h-8 text-xs"
                         />
                       </div>
-                      <Input
-                        value={editingCat.slug || ""}
-                        onChange={(e) => setEditingCat({ ...editingCat, slug: e.target.value })}
-                        placeholder="slug"
-                        className="h-8 text-xs font-mono"
-                      />
+                      <div className="grid grid-cols-3 gap-2 items-center">
+                        <Input
+                          value={editingCat.slug || ""}
+                          onChange={(e) => setEditingCat({ ...editingCat, slug: e.target.value })}
+                          placeholder="slug"
+                          className="h-8 text-xs font-mono"
+                        />
+                        <Input
+                          type="number"
+                          value={editingCat.sort_order ?? ""}
+                          onChange={(e) => setEditingCat({ ...editingCat, sort_order: Number(e.target.value) })}
+                          placeholder={isAr ? "الترتيب" : "Order"}
+                          className="h-8 text-xs font-mono"
+                        />
+                        <label className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+                          <Switch
+                            checked={editingCat.is_active !== false}
+                            onCheckedChange={(v) => setEditingCat({ ...editingCat, is_active: v })}
+                          />
+                          {isAr ? "نشط" : "Active"}
+                        </label>
+                      </div>
                       <div className="flex items-center gap-2 justify-end">
                         <Button
                           size="sm"
@@ -1027,66 +1055,33 @@ export default function AdminDonationCampaigns() {
       </Dialog>
 
       {/* ── Dialog: Donation Packages ── */}
-      <Dialog open={!!packagesCamp} onOpenChange={(open) => !open && setPackagesCamp(null)}>
-        <DialogContent className="max-w-md">
+      <Dialog open={!!packagesCamp} onOpenChange={(open) => !open && closePackages()}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 font-bold text-lg">
               <Tag className="h-5 w-5 text-secondary" />
-              {isAr ? `باقات التبرع (الأسهم) — ${packagesCamp?.name_ar}` : "Donation Packages"}
+              {isAr ? `باقات التبرع (الأسهم) — ${packagesCamp?.name_ar}` : `Donation Packages — ${packagesCamp?.name_en || packagesCamp?.name_ar}`}
             </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              {isAr
+                ? "الأسعار هنا هي اللي بتظهر في صفحة الحملة وصفحة التبرع (مثلاً سعر كرتونة الغذاء). أي تعديل يُحفظ في قاعدة البيانات فوراً."
+                : "These amounts are the prices shown on the campaign and donate pages. Changes are saved immediately."}
+            </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-2 text-sm">
-            <p className="text-xs text-muted-foreground">
-              {isAr
-                ? "إضافة فئات تبرع محددة (مثل: سهم 100 ج، سهم 500 ج) لتسهيل اختيار المتبرع فور الدخول للحملة."
-                : "Add preset contribution tiers for this campaign."}
-            </p>
-
-            {packagesCamp?.donation_packages && packagesCamp.donation_packages.length > 0 && (
-              <div className="space-y-1.5">
-                <Label className="text-xs font-bold">{isAr ? "الباقات الحالية:" : "Existing Packages:"}</Label>
-                <div className="space-y-1">
-                  {packagesCamp.donation_packages.map((pkg, idx) => (
-                    <div key={idx} className="flex items-center justify-between bg-muted/50 p-2 rounded-lg text-xs">
-                      <span className="font-bold">{pkg.name_ar}</span>
-                      <span className="font-mono text-primary font-bold">{Number(pkg.amount).toLocaleString()} ج.م</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="rounded-xl border border-border p-3 space-y-3 bg-muted/20">
-              <Label className="font-bold">{isAr ? "إضافة باقة جديدة:" : "Add New Package:"}</Label>
-              <div>
-                <Label className="text-xs">{isAr ? "اسم الباقة (عربي)" : "Package Name"}</Label>
-                <Input
-                  value={newPkg.name_ar}
-                  onChange={(e) => setNewPkg({ ...newPkg, name_ar: e.target.value })}
-                  placeholder="باقة 100 جنيه"
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label className="text-xs">{isAr ? "المبلغ (ج.م)" : "Amount (EGP)"}</Label>
-                <Input
-                  type="number"
-                  value={newPkg.amount}
-                  onChange={(e) => setNewPkg({ ...newPkg, amount: Number(e.target.value) })}
-                  className="mt-1"
-                />
-              </div>
-            </div>
-          </div>
+          {packagesCamp && (
+            <CampaignPackagesManager
+              campaignId={packagesCamp.id}
+              packages={packagesList}
+              onChange={setPackagesList}
+              isAr={isAr}
+              priceKeys={packagesPriceKeys}
+            />
+          )}
 
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setPackagesCamp(null)}>
+            <Button variant="outline" onClick={closePackages}>
               {isAr ? "إغلاق" : "Close"}
-            </Button>
-            <Button onClick={handleAddPackage} disabled={savingPkg} className="gap-1.5 bg-secondary text-secondary-foreground">
-              {savingPkg && <Loader2 className="h-4 w-4 animate-spin" />}
-              {isAr ? "إضافة الباقة" : "Add Package"}
             </Button>
           </DialogFooter>
         </DialogContent>

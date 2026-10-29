@@ -1,1 +1,0 @@
-REVOKE EXECUTE ON FUNCTION public.recount_campaign_slots() FROM PUBLIC, anon, authenticated;

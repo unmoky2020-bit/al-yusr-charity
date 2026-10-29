@@ -1,0 +1,509 @@
+[
+  {
+    "slug": "ster",
+    "name_ar": "حملة ستر — موسم الشتاء",
+    "name_en": "Ster Campaign — Winter Season",
+    "period_ar": "أكتوبر — فبراير",
+    "period_en": "October — February",
+    "tagline_ar": "«من ستر مسلمًا ستره الله في الدنيا والآخرة»",
+    "tagline_en": "“Whoever shields a Muslim, Allah shields him in this life and the next.”",
+    "description_ar": "بنحمي أهالينا من البرد قبل ما يجي. لحاف فايبر، أسقف منازل، مراتب، كسوة شتاء، سراير، وبنية أساسية (باب وشباك) تحبس الريح وتدفّي البيت. كل تبرع يصل لمستحقه بالاسم والتوثيق.",
+    "description_en": "We shield our people from the cold before it arrives — fiber blankets, roofs, mattresses, winter clothes, beds, and basic infrastructure (doors & windows) that hold back the wind. Every donation reaches a named beneficiary, fully documented.",
+    "is_active": true,
+    "donation_available": true,
+    "sort_order": 1,
+    "extra": {
+      "icon": "Snowflake",
+      "badge_ar": "موسم الشتاء",
+      "badge_en": "Winter season",
+      "current_months": [
+        10,
+        11,
+        12,
+        1,
+        2
+      ],
+      "donate_url": "/donate?campaign=ster",
+      "items": [
+        {
+          "ar": "لحاف فايبر مقاوم للبرد",
+          "en": "Cold-resistant fiber blanket"
+        },
+        {
+          "ar": "كسوة شتاء كاملة للأطفال والكبار",
+          "en": "Full winter clothing — kids & adults"
+        },
+        {
+          "ar": "مراتب وسراير لمن لا يجد",
+          "en": "Mattresses and beds for those who lack them"
+        },
+        {
+          "ar": "إصلاح/تركيب أبواب وشبابيك",
+          "en": "Door & window repair or installation"
+        },
+        {
+          "ar": "إصلاح وتركيب أسقف منازل",
+          "en": "Roof repair and installation"
+        }
+      ],
+      "pricing": [
+        {
+          "label_ar": "لحاف فايبر",
+          "label_en": "Fiber blanket",
+          "amount": 350,
+          "tag_ar": "الأكثر طلباً",
+          "tag_en": "Most needed"
+        },
+        {
+          "label_ar": "كسوة شتاء فرد",
+          "label_en": "Winter outfit (1 person)",
+          "amount": 500
+        },
+        {
+          "label_ar": "مرتبة + سرير",
+          "label_en": "Mattress + bed",
+          "amount": 1800
+        },
+        {
+          "label_ar": "سقف بيت أسرة",
+          "label_en": "Roof for a family home",
+          "amount": 9500
+        }
+      ],
+      "meta_title_ar": "حملة ستر للشتاء | بطاطين وأسقف وكسوة شتاء — مؤسسة اليسر",
+      "meta_title_en": "Ster Winter Campaign | Blankets, Roofs & Winter Aid — Al-Yusr",
+      "meta_description_ar": "ساهم في حملة ستر الشتوية مع مؤسسة اليسر: بطاطين فايبر، كسوة شتاء، أسقف منازل، وأبواب وشبابيك للأسر الأولى بالرعاية في الدقهلية. توثيق كامل وتوصيل مجاني.",
+      "meta_description_en": "Support the Ster winter campaign by Al-Yusr Foundation: fiber blankets, winter clothing, home roofs, and door/window repair for vulnerable families in Dakahlia. Fully documented with free delivery.",
+      "keywords_ar": [
+        "حملة ستر",
+        "كسوة الشتاء",
+        "بطاطين للفقراء",
+        "أسقف منازل",
+        "تبرعات الشتاء",
+        "اليسر الدقهلية"
+      ],
+      "keywords_en": [
+        "winter campaign egypt",
+        "blankets donation",
+        "roof repair charity",
+        "ster yusr",
+        "dakahlia winter aid"
+      ]
+    }
+  },
+  {
+    "slug": "thill",
+    "name_ar": "حملة ظل — رحمة من الشمس",
+    "name_en": "Thill Campaign — Mercy from the Sun",
+    "period_ar": "يونيو — سبتمبر",
+    "period_en": "June — September",
+    "tagline_ar": "ظل ومياه ونفس بارد للي بيشتغل تحت الشمس",
+    "tagline_en": "Shade, water, and cool relief for those working under the sun",
+    "description_ar": "في عز الحر بنوصل وصلات مياه نظيفة للمنازل والقرى، وبنركّب أسقف تحمي من الشمس، وبنجدّد ونوزّع أجهزة مستعملة (مراوح وثلاجات)، وبنوزّع مياه ومشروبات باردة للعمال في الشوارع.",
+    "description_en": "At the peak of summer we install clean water lines for homes and whole villages, install sun-proof roofs, refurbish and distribute used appliances (fans, fridges), and hand out cold water and drinks to outdoor workers.",
+    "is_active": true,
+    "donation_available": true,
+    "sort_order": 2,
+    "extra": {
+      "icon": "Sun",
+      "badge_ar": "موسم الصيف",
+      "badge_en": "Summer season",
+      "current_months": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "donate_url": "/donate?campaign=thill",
+      "items": [
+        {
+          "ar": "وصلة مياه نظيفة لبيت",
+          "en": "Clean water connection for a home"
+        },
+        {
+          "ar": "خط مياه رئيسي لقرية",
+          "en": "Main water line for a village"
+        },
+        {
+          "ar": "سقف يحمي من الشمس",
+          "en": "A sun-proof roof"
+        },
+        {
+          "ar": "مروحة أو ثلاجة مجدَّدة",
+          "en": "Refurbished fan or fridge"
+        },
+        {
+          "ar": "مياه ومشروبات باردة للعمال",
+          "en": "Cold water & drinks for outdoor workers"
+        }
+      ],
+      "pricing": [
+        {
+          "label_ar": "وصلة مياه لبيت",
+          "label_en": "Water line for a home",
+          "amount": 1200,
+          "tag_ar": "الأكثر طلباً",
+          "tag_en": "Most needed"
+        },
+        {
+          "label_ar": "مروحة مجدّدة",
+          "label_en": "Refurbished fan",
+          "amount": 450
+        },
+        {
+          "label_ar": "ثلاجة مجدّدة",
+          "label_en": "Refurbished fridge",
+          "amount": 3500
+        },
+        {
+          "label_ar": "خط مياه لقرية",
+          "label_en": "Village water line",
+          "amount": 25000
+        }
+      ],
+      "meta_title_ar": "حملة ظل للصيف | مياه نظيفة ومراوح وأسقف — مؤسسة اليسر",
+      "meta_title_en": "Thill Summer Campaign | Water, Fans & Roofs — Al-Yusr",
+      "meta_description_ar": "احمِ أسرة من حرارة الصيف: وصلات مياه نظيفة، أسقف، تجديد أجهزة، ومشروبات باردة للعمال. حملة ظل من اليسر في الدقهلية وقرى مصر.",
+      "meta_description_en": "Shield a family from summer heat: clean water lines, roofs, refurbished appliances, and cold drinks for outdoor workers. Al-Yusr’s Thill campaign across Dakahlia.",
+      "keywords_ar": [
+        "حملة ظل",
+        "مياه نظيفة للقرى",
+        "تبرعات الصيف",
+        "تجديد أجهزة",
+        "اليسر الدقهلية"
+      ],
+      "keywords_en": [
+        "summer charity egypt",
+        "clean water donation",
+        "village water line",
+        "thill yusr"
+      ]
+    }
+  },
+  {
+    "slug": "ramadan",
+    "name_ar": "موسم رمضان — إحسان العطاء",
+    "name_en": "Ramadan Season — Excellence in Giving",
+    "period_ar": "شهر رمضان",
+    "period_en": "Ramadan",
+    "tagline_ar": "«أحسن العطاء» — كل المكونات بلدي وطازجة من شركات موثوقة",
+    "tagline_en": "“The best of giving” — local, fresh ingredients from trusted suppliers",
+    "description_ar": "موسم متكامل: كرتونة الخير 25 كجم، مشروع الإفطار اليومي، تيسير زواج عروسة من بناتنا اليتيمات كل يوم، أكثر من 3 طن ذبائح طازجة، مسابقات للقرآن بجوائز قيّمة، وزكاة المال والفطر للأسر المستحقة في العشر الأواخر. وفي ليلة العيد: صلاة العيد بمسجد الصديق بالمنصورة.",
+    "description_en": "A full season: 25kg Goodness box, the daily Iftar project, a wedding for an orphaned bride every day, 3+ tons of fresh meat, Quran contests with valuable prizes, and timely Zakat money & Fitr in the last ten nights — all topped with Eid prayer at Al-Siddiq Mosque, Mansoura.",
+    "is_active": false,
+    "donation_available": false,
+    "sort_order": 3,
+    "extra": {
+      "icon": "Moon",
+      "badge_ar": "شهر الخير",
+      "badge_en": "Holy Ramadan",
+      "current_months": [
+        3,
+        4
+      ],
+      "donate_url": "/donate?campaign=ramadan",
+      "items": [
+        {
+          "ar": "كرتونة الخير 25 كجم",
+          "en": "25kg Goodness food box",
+          "description_ar": "بقوليات، حبوب، جبنة، مكرونة، سكر، أرز، دقيق، صلصة، حلاوة، طحينة…",
+          "description_en": "Legumes, grains, dairy, pasta, sugar, rice, flour, sauce, tahini…"
+        },
+        {
+          "ar": "مشروع الإفطار اليومي",
+          "en": "Daily Iftar project",
+          "description_ar": "وجبات يومية للصائمين، مرافقي المرضى، والمسافرين على الطرق.",
+          "description_en": "Daily meals for fasters, hospital companions, travelers."
+        },
+        {
+          "ar": "تيسير الزواج",
+          "en": "Wedding facilitation",
+          "description_ar": "كل يوم عروسة من بناتنا الأيتام.",
+          "description_en": "An orphaned bride married every day of Ramadan."
+        },
+        {
+          "ar": "ذبائح رمضان",
+          "en": "Ramadan slaughter",
+          "description_ar": "+3 طن لحوم طازجة من مزارعنا.",
+          "description_en": "3+ tons of fresh meat from our farms."
+        },
+        {
+          "ar": "مسابقات القرآن",
+          "en": "Quran contests",
+          "description_ar": "جوائز قيّمة لحفظة كتاب الله.",
+          "description_en": "Valuable prizes for memorizers."
+        },
+        {
+          "ar": "زكاة المال والفطر",
+          "en": "Zakat Mal & Fitr",
+          "description_ar": "موصّلة للمستحقين في العشر الأواخر.",
+          "description_en": "Delivered to the deserving in the last 10 nights."
+        }
+      ],
+      "pricing": [
+        {
+          "label_ar": "كرتونة الخير 25 كجم",
+          "label_en": "25kg Goodness box",
+          "amount": 850,
+          "tag_ar": "الأكثر طلباً",
+          "tag_en": "Most needed"
+        },
+        {
+          "label_ar": "وجبة إفطار صائم",
+          "label_en": "Iftar meal",
+          "amount": 35
+        },
+        {
+          "label_ar": "زكاة الفطر فرد",
+          "label_en": "Zakat al-Fitr (1 person)",
+          "amount": 50
+        },
+        {
+          "label_ar": "تيسير زواج يتيمة",
+          "label_en": "Sponsor an orphan wedding",
+          "amount": 15000
+        }
+      ],
+      "meta_title_ar": "حملة رمضان | كرتونة الخير، إفطار، زكاة وتيسير زواج — اليسر",
+      "meta_title_en": "Ramadan Campaign | Food Box, Iftar, Zakat & Wedding Aid — Al-Yusr",
+      "meta_description_ar": "أحسن العطاء مع مؤسسة اليسر في رمضان: كرتونة 25 كجم، إفطار صائم، تيسير زواج اليتيمات، ذبائح طازجة، زكاة المال والفطر. توثيق كامل وتوصيل مجاني.",
+      "meta_description_en": "Excellence in giving with Al-Yusr this Ramadan: 25kg food box, Iftar meals, orphan weddings, fresh meat, Zakat money & Fitr. Fully documented with free delivery.",
+      "keywords_ar": [
+        "حملة رمضان",
+        "كرتونة رمضان",
+        "زكاة الفطر",
+        "إفطار صائم",
+        "تيسير زواج اليتيمات",
+        "اليسر الدقهلية"
+      ],
+      "keywords_en": [
+        "ramadan food box egypt",
+        "iftar donation",
+        "zakat al fitr",
+        "orphan wedding charity"
+      ]
+    }
+  },
+  {
+    "slug": "ashr",
+    "name_ar": "العشر الأوائل من ذي الحجة",
+    "name_en": "The First Ten Days of Dhul Hijjah",
+    "period_ar": "العشر الأوائل من ذي الحجة",
+    "period_en": "First 10 Days of Dhul Hijjah",
+    "tagline_ar": "أعمال صالحة في أحب أيام السنة إلى الله",
+    "tagline_en": "Best deeds in the days most beloved to Allah",
+    "description_ar": "عشرة أيام تكثيف للعمل الميداني: وجبات إفطار يومية للصائمين والمساكين، ذبح عجل كل يوم لتوزيع لحوم طازجة، تكثيف وصلات المياه وإصلاح أسقف منازل، إعادة إعمار وتأهيل مساجد، وصلاة العيد بمسجد الصديق بالمنصورة.",
+    "description_en": "Ten days of intensified field work: daily Iftar meals for fasters and the poor, a calf slaughtered every day, more water lines and roof fixes, mosque restoration, and Eid prayer at Al-Siddiq Mosque, Mansoura.",
+    "is_active": false,
+    "donation_available": false,
+    "sort_order": 4,
+    "extra": {
+      "icon": "Sparkles",
+      "badge_ar": "أحب الأيام إلى الله",
+      "badge_en": "Most beloved days",
+      "current_months": [
+        5
+      ],
+      "donate_url": "/donate?campaign=ashr",
+      "items": [
+        {
+          "ar": "وجبة إفطار يومية",
+          "en": "Daily Iftar meal"
+        },
+        {
+          "ar": "ذبح عجل يومي وتوزيع لحومه طازجة",
+          "en": "Daily calf slaughter — fresh meat distribution"
+        },
+        {
+          "ar": "وصلات مياه وأسقف منازل",
+          "en": "Water lines and home roofing"
+        },
+        {
+          "ar": "إعادة إعمار وتأهيل مساجد",
+          "en": "Mosque restoration & maintenance"
+        },
+        {
+          "ar": "صلاة العيد بمسجد الصديق",
+          "en": "Eid prayer at Al-Siddiq Mosque"
+        }
+      ],
+      "pricing": [
+        {
+          "label_ar": "وجبة إفطار صائم",
+          "label_en": "Iftar meal",
+          "amount": 35
+        },
+        {
+          "label_ar": "سهم ذبح يوم",
+          "label_en": "Day-slaughter share",
+          "amount": 1500,
+          "tag_ar": "الأكثر طلباً",
+          "tag_en": "Most needed"
+        },
+        {
+          "label_ar": "إعمار جزء من مسجد",
+          "label_en": "Mosque-restoration share",
+          "amount": 5000
+        }
+      ],
+      "meta_title_ar": "العشر الأوائل من ذي الحجة | إفطار وذبائح وإعمار مساجد — اليسر",
+      "meta_title_en": "First 10 Days of Dhul Hijjah | Iftar, Slaughter & Mosques — Al-Yusr",
+      "meta_description_ar": "أعمال صالحة في العشر الأوائل: إفطار يومي، ذبح عجل كل يوم، وصلات مياه، أسقف، وإعادة إعمار مساجد. تبرع الآن مع مؤسسة اليسر.",
+      "meta_description_en": "Best deeds in the First Ten Days: daily Iftar, daily calf slaughter, water lines, roofs, and mosque restoration. Donate now with Al-Yusr.",
+      "keywords_ar": [
+        "العشر من ذي الحجة",
+        "إعمار مساجد",
+        "ذبائح",
+        "إفطار يومي",
+        "اليسر الدقهلية"
+      ],
+      "keywords_en": [
+        "dhul hijjah charity",
+        "mosque restoration",
+        "daily iftar",
+        "yusr"
+      ]
+    }
+  },
+  {
+    "slug": "qurbani",
+    "name_ar": "موسم الأضاحي — تيسير الأضاحي بدون استغلال",
+    "name_en": "Qurbani Season — No Exploitation",
+    "period_ar": "موسم الأضاحي",
+    "period_en": "Qurbani Season",
+    "tagline_ar": "أضحيتك بسعر السوق… مقابل 5 كيلو للفقراء",
+    "tagline_en": "Your Qurbani at market price — for 5kg to the poor",
+    "description_ar": "بنشتغل طول العام في مزارع اليسر الوقفية: مواشي محصّنة بأفضل أعلاف لضمان أعلى تصفية وأقل دهون. المضحي يأخذ أضحيته بسعر السوق بدون ربح للمؤسسة، مقابل التبرع بـ 5 كيلو من الصك للفقراء. أكتر من 2 طن لحوم سنوياً للمستحقين.",
+    "description_en": "Year-round work at Al-Yusr endowment farms: vaccinated cattle, top feed for highest yield and lowest fat. You take your Qurbani at market price with zero markup, in exchange for donating 5kg from each share to the poor. 2+ tons distributed yearly.",
+    "is_active": false,
+    "donation_available": false,
+    "sort_order": 5,
+    "extra": {
+      "icon": "Beef",
+      "badge_ar": "تيسير الأضاحي",
+      "badge_en": "Qurbani made easy",
+      "current_months": [
+        5,
+        6
+      ],
+      "donate_url": "/qurbani",
+      "items": [
+        {
+          "ar": "صك أضحية كامل (سعر السوق)",
+          "en": "Full Qurbani share (market price)"
+        },
+        {
+          "ar": "تبرع بـ 5 كيلو للفقراء",
+          "en": "5kg donation back to the poor"
+        },
+        {
+          "ar": "أعلاف وتحصين طول السنة",
+          "en": "Year-round feed & vaccination"
+        },
+        {
+          "ar": "ذبح حلال وتوثيق صور وفيديو",
+          "en": "Halal slaughter with photo & video proof"
+        },
+        {
+          "ar": "توصيل مجاني لباب البيت",
+          "en": "Free doorstep delivery"
+        }
+      ],
+      "meta_title_ar": "حملة الأضاحي 2026 | تيسير الأضاحي بدون استغلال — مزارع اليسر",
+      "meta_title_en": "Qurbani 2026 | Market-Price Qurbani, No Exploitation — Al-Yusr",
+      "meta_description_ar": "احجز أضحيتك بسعر السوق من مزارع اليسر الوقفية: مواشي محصّنة، تصفية أعلى، توثيق كامل، وتوصيل مجاني. مقابل تبرعك بـ 5 كيلو للفقراء.",
+      "meta_description_en": "Book your Qurbani at market price from Al-Yusr endowment farms: vaccinated cattle, higher yield, full documentation, free delivery — for 5kg donated back to the poor.",
+      "keywords_ar": [
+        "أضحية",
+        "حملة الأضاحي",
+        "صك أضحية",
+        "مزارع اليسر",
+        "اليسر الدقهلية"
+      ],
+      "keywords_en": [
+        "qurbani 2026",
+        "udhiya egypt",
+        "qurbani share",
+        "yusr farms"
+      ]
+    }
+  },
+  {
+    "slug": "school",
+    "name_ar": "موسم العودة للمدارس — الجهل هو الفقر الأول",
+    "name_en": "Back-to-School — Ignorance is the First Poverty",
+    "period_ar": "أغسطس — سبتمبر",
+    "period_en": "August — September",
+    "tagline_ar": "علِّم طفل، تعلِّم جيل",
+    "tagline_en": "Educate a child, change a generation",
+    "description_ar": "بنجهّز كل طالب مستحق ليبدأ سنته الدراسية بكرامة: شنطة مدرسية، أدوات كاملة، زي مدرسي جديد، ودفع مصروفات دراسية لمن لا يستطيع.",
+    "description_en": "We prepare every needy student to start the school year with dignity: school bag, full supplies, a new uniform, and tuition fees paid for those who cannot afford them.",
+    "is_active": true,
+    "donation_available": true,
+    "sort_order": 6,
+    "extra": {
+      "icon": "GraduationCap",
+      "badge_ar": "العودة للمدارس",
+      "badge_en": "Back to school",
+      "current_months": [
+        8,
+        9
+      ],
+      "donate_url": "/donate?campaign=school",
+      "items": [
+        {
+          "ar": "شنطة مدرسية لكل طالب مستحق",
+          "en": "School bag for every needy student"
+        },
+        {
+          "ar": "طقم أدوات مدرسية كامل",
+          "en": "Full school supplies kit"
+        },
+        {
+          "ar": "زي مدرسي جديد",
+          "en": "Brand-new school uniform"
+        },
+        {
+          "ar": "دفع مصروفات دراسية",
+          "en": "Tuition fees coverage"
+        }
+      ],
+      "pricing": [
+        {
+          "label_ar": "شنطة + أدوات لطفل",
+          "label_en": "Bag + supplies (1 child)",
+          "amount": 450,
+          "tag_ar": "الأكثر طلباً",
+          "tag_en": "Most needed"
+        },
+        {
+          "label_ar": "زي مدرسي كامل",
+          "label_en": "Full school uniform",
+          "amount": 600
+        },
+        {
+          "label_ar": "مصروفات دراسية لسنة",
+          "label_en": "One year tuition",
+          "amount": 2500
+        }
+      ],
+      "meta_title_ar": "العودة للمدارس | شنط وأدوات وزي ومصروفات — مؤسسة اليسر",
+      "meta_title_en": "Back-to-School | Bags, Supplies, Uniforms & Tuition — Al-Yusr",
+      "meta_description_ar": "ساهم في تجهيز طالب مستحق: شنطة مدرسية، أدوات كاملة، زي جديد، ودفع مصروفات. موسم العودة للمدارس مع مؤسسة اليسر بالدقهلية.",
+      "meta_description_en": "Help equip a needy student: school bag, supplies, new uniform, and tuition. Back-to-school season with Al-Yusr in Dakahlia.",
+      "keywords_ar": [
+        "العودة للمدارس",
+        "شنطة مدرسية",
+        "كفالة طالب",
+        "مصروفات دراسية",
+        "اليسر الدقهلية"
+      ],
+      "keywords_en": [
+        "back to school egypt",
+        "school bag donation",
+        "tuition fees charity",
+        "yusr"
+      ]
+    }
+  }
+]

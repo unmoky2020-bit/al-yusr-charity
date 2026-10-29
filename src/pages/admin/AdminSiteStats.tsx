@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { supabase } from "@/integrations/supabase/client";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +18,7 @@ import {
 } from "lucide-react";
 import { compressImage } from "@/lib/image-compress";
 import { achievementsApi, homeNumbersApi, galleryApi, formatServerImageUrl } from "@/data/laravelApi";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 
 type Row = {
   id: string;
@@ -248,9 +248,12 @@ export default function AdminSiteStats() {
         await achievementsApi.update(row.id, { is_active: value });
       }
       toast.success(value ? (isAr ? "تم التفعيل" : "Activated") : (isAr ? "تم الإخفاء" : "Hidden"));
-    } catch {
-      await supabase.from("site_stats").update({ active: value }).eq("id", row.id).catch(() => {});
-      toast.success(value ? (isAr ? "تم التفعيل" : "Activated") : (isAr ? "تم الإخفاء" : "Hidden"));
+    } catch (err: unknown) {
+      // PUT /home-numbers/{id} {is_visible} or PUT /achievements/{id} {is_active} failed: revert the switch.
+      updateRow(idx, { active: !value });
+      toast.error(isAr ? "فشل تغيير الحالة" : "Failed to change status", {
+        description: apiErrorMessage(err),
+      });
     } finally {
       setSavingId(null);
     }

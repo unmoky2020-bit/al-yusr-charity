@@ -6,7 +6,8 @@ import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
-import { useAllBlogPosts } from "@/data/useBlogPosts";
+import { useBlogPosts } from "@/data/sources/blog";
+import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
 import { axes } from "@/data/blogTaxonomy";
 import { TagsRail } from "@/components/common/TagsRail";
 
@@ -113,7 +114,7 @@ const Blog = () => {
   const Arrow = lang === "ar" ? ArrowLeft : ArrowRight;
   const baseUrl = "https://elyusr.org";
   const readLabel = lang === "ar" ? "اقرأ المقال" : "Read article";
-  const { posts } = useAllBlogPosts();
+  const { posts, loading } = useBlogPosts();
   const [query, setQuery] = useState("");
   const cards = useMemo(
     () => posts.map((p) => ({ slug: p.slug, image: p.image, date: p.date, category: p.category[lang], title: p[lang].title, excerpt: p[lang].excerpt })),
@@ -184,7 +185,9 @@ const Blog = () => {
 
       <section className="pattern-programs pt-14 pb-28 sm:pb-36 md:pt-20 md:pb-44">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {filteredCards.length === 0 ? (
+          {loading ? (
+            <CardGridSkeleton count={7} />
+          ) : filteredCards.length === 0 ? (
             <div className="mx-auto max-w-md rounded-3xl border border-dashed border-border bg-card/50 p-10 text-center">
               <Search className="mx-auto h-8 w-8 text-muted-foreground" />
               <p className="mt-3 text-sm font-bold text-muted-foreground">

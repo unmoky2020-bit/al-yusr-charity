@@ -1,0 +1,239 @@
+[
+  {
+    "slug": "odhya",
+    "donate_key": "sector-odhya",
+    "title_ar": "صك الأضحية",
+    "title_en": "Udhiya voucher",
+    "summary_ar": "أضحية موثّقة، توزيع لحوم على المستحقين",
+    "summary_en": "Documented Udhiya — meat distributed to needy families",
+    "intro_ar": "صك أضحية مضمون يُذبح في موعده ويُوزَّع لحمه على الأسر المتعففة في الدقهلية وكفر الشيخ — موثّق بالصور والفيديو.",
+    "intro_en": "A guaranteed Udhiya voucher — slaughtered on time and distributed to needy families in Dakahlia & Kafr El Sheikh, documented with photos and video.",
+    "programs": [
+      {
+        "slug": "odhya",
+        "title_ar": "صك الأضحية",
+        "title_en": "Udhiya voucher",
+        "description_ar": "صك أضحية كامل عن المتبرع، يُوثَّق بالصور والفيديو.",
+        "description_en": "A full Udhiya voucher on behalf of the donor — photo & video documented.",
+        "href": "/qurbani"
+      }
+    ],
+    "is_active": true,
+    "sort_order": 1
+  },
+  {
+    "slug": "food",
+    "donate_key": "sector-food",
+    "title_ar": "الغذاء",
+    "title_en": "Food",
+    "summary_ar": "كرتونة، لحوم، وجبات ساخنة، خبز يومي",
+    "summary_en": "Food box, meat, hot meals, daily bread",
+    "intro_ar": "تبرع مباشر — من كرتونة الـ25 كيلو إلى مطبخ اليسر ومخبز اليسر بالدقهلية.",
+    "intro_en": "Direct giving — from the 25kg box to Al-Yusr kitchen and bakery in Dakahlia.",
+    "programs": [
+      {
+        "slug": "box",
+        "title_ar": "كرتونة 25 كيلو",
+        "title_en": "25kg food box",
+        "description_ar": "بقوليات ومعلبات وأساسيات شهرية لأسرة.",
+        "description_en": "Pantry staples for a family for a month."
+      },
+      {
+        "slug": "kitchen",
+        "title_ar": "مطبخ اليسر — وجبة ساخنة",
+        "title_en": "Al-Yusr kitchen — hot meal",
+        "description_ar": "وجبات يومية لمرافقي المرضى والصائمين.",
+        "description_en": "Daily hot meals for hospital companions and fasting people."
+      },
+      {
+        "slug": "bakery",
+        "title_ar": "مخبز اليسر — خبز يومي",
+        "title_en": "Al-Yusr bakery — daily bread",
+        "description_ar": "خبز ساخن مجاني للأسر المتعففة كل يوم.",
+        "description_en": "Free hot bread for needy families every day."
+      },
+      {
+        "slug": "qurbani",
+        "title_ar": "صك الأضحية",
+        "title_en": "Udhiya voucher",
+        "description_ar": "صك أضحية موثّق بالصور والفيديو يُوزَّع لحمها على الأسر المتعففة في الدقهلية وكفر الشيخ.",
+        "description_en": "A documented Udhiya voucher — meat distributed to needy families in Dakahlia & Kafr El Sheikh with photo & video proof.",
+        "href": "/qurbani"
+      },
+      {
+        "slug": "general",
+        "title_ar": "لحوم المزرعة الوقفية",
+        "title_en": "Endowment farm meat",
+        "description_ar": "أكثر من 2 طن لحوم سنويًا من المزرعة الوقفية للأسر المتعففة.",
+        "description_en": "2+ tons of meat yearly from our endowment farm.",
+        "href": "/farm"
+      }
+    ],
+    "is_active": true,
+    "sort_order": 2
+  },
+  {
+    "slug": "health",
+    "donate_key": "sector-health",
+    "title_ar": "الصحة",
+    "title_en": "Health",
+    "summary_ar": "علاج، عمليات، أطراف صناعية، قوافل طبية",
+    "summary_en": "Treatment, surgeries, prosthetics, medical convoys",
+    "intro_ar": "مجمع المنصورة الطبي ومركز الغسيل الكلوي بالمنزلة + قوافل ومشروع لن تمنعني.",
+    "intro_en": "Mansoura Medical Complex, Manzala dialysis center, mobile medical convoys & Prosthetics program.",
+    "programs": [
+      {
+        "slug": "treatment",
+        "title_ar": "سهم علاج وقوافل طبية",
+        "title_en": "Treatment & medical convoys",
+        "description_ar": "دواء وعمليات وقوافل بيطرية وبشرية.",
+        "description_en": "Medication, surgeries, vet & human convoys."
+      },
+      {
+        "slug": "prosthetics",
+        "title_ar": "لن تمنعني — أطراف وكراسي",
+        "title_en": "Won't Stop Me — prosthetics & wheelchairs",
+        "description_ar": "أطراف صناعية وكراسي متحركة وجلسات تأهيل.",
+        "description_en": "Prosthetics, wheelchairs and rehabilitation sessions."
+      }
+    ],
+    "is_active": true,
+    "sort_order": 3
+  },
+  {
+    "slug": "kafala",
+    "donate_key": "sector-kafala",
+    "title_ar": "التكافل",
+    "title_en": "Family Care",
+    "summary_ar": "كفالة أيتام، جواز عرايس",
+    "summary_en": "Orphan sponsorship, bride trousseau",
+    "intro_ar": "354 يتيمًا تحت الكفالة و9 عرائس جُهّزن في 2025.",
+    "intro_en": "354 sponsored orphans and 9 brides equipped in 2025.",
+    "programs": [
+      {
+        "slug": "orphans",
+        "title_ar": "كفالة يتيم",
+        "title_en": "Sponsor an orphan",
+        "description_ar": "كفالة شهرية شاملة تعليم وعلاج للأيتام.",
+        "description_en": "Monthly sponsorship covering schooling & care."
+      },
+      {
+        "slug": "bride",
+        "title_ar": "جواز عروسة",
+        "title_en": "Bride trousseau",
+        "description_ar": "أجهزة وأثاث ومفروشات لعروس يتيمة.",
+        "description_en": "Appliances, furniture and linens for an orphan bride."
+      }
+    ],
+    "is_active": true,
+    "sort_order": 4
+  },
+  {
+    "slug": "housing",
+    "donate_key": "sector-housing",
+    "title_ar": "الإسكان",
+    "title_en": "Housing",
+    "summary_ar": "تسقيف وترميم، مياه نظيفة، فرش بيوت",
+    "summary_en": "Roofing & repair, clean water, home essentials",
+    "intro_ar": "حملة ستر لتسقيف 70 منزلًا في 2025 ومشروع سقيا الماء بـ100 وصلة منزلية.",
+    "intro_en": "Sotra campaign roofed 70 homes in 2025 and our Water program delivered 100 home connections.",
+    "programs": [
+      {
+        "slug": "shelter",
+        "title_ar": "حملة ستر — تسقيف وترميم",
+        "title_en": "Sotra — roofing & repair",
+        "description_ar": "سقف وأبواب وشبابيك ومراتب ولحف.",
+        "description_en": "Roofs, doors, windows, mattresses and quilts."
+      },
+      {
+        "slug": "water",
+        "title_ar": "وصلة مياه نظيفة",
+        "title_en": "Clean water connection",
+        "description_ar": "خطوط مياه رئيسية ووصلات بيت في القرى.",
+        "description_en": "Main pipelines and home water taps for villages."
+      }
+    ],
+    "is_active": true,
+    "sort_order": 5
+  },
+  {
+    "slug": "education",
+    "donate_key": "sector-education",
+    "title_ar": "التعليم",
+    "title_en": "Education",
+    "summary_ar": "مصاريف، أدوات مدرسية، تعليم أيتام",
+    "summary_en": "Tuition, school supplies, orphan education",
+    "intro_ar": "ادفع مصروفه وابني مستقبله — كفالة تعليمية حتى الجامعة وحلقات تحفيظ القرآن.",
+    "intro_en": "Pay tuition, build a future — sponsorship up to university plus Quran circles.",
+    "programs": [
+      {
+        "slug": "education",
+        "title_ar": "ادفع مصروفه وابني مستقبله",
+        "title_en": "Pay tuition, build a future",
+        "description_ar": "مصاريف وكتب وأدوات حتى الجامعة.",
+        "description_en": "Tuition, books and supplies through university."
+      }
+    ],
+    "is_active": true,
+    "sort_order": 6
+  },
+  {
+    "slug": "tanmia",
+    "donate_key": "sector-tanmia",
+    "title_ar": "التنمية",
+    "title_en": "Development",
+    "summary_ar": "مشاريع صغيرة، حملة مَرْكون، حملات موسمية",
+    "summary_en": "Small projects, Markoun campaign, seasonal drives",
+    "intro_ar": "تمكين الأسر المنتجة وحملة مَرْكون لتجديد وتوزيع الأجهزة والأثاث.",
+    "intro_en": "Empowering productive families and the Markoun refurbish-and-deliver campaign.",
+    "programs": [
+      {
+        "slug": "markoun",
+        "title_ar": "حملة مَرْكون",
+        "title_en": "Markoun campaign",
+        "description_ar": "مرتبة، جهاز كهربائي بسيط، علاج شهري أو مرتب لأم معيلة.",
+        "description_en": "Mattress, basic appliance, monthly meds or stipend for a widowed mother.",
+        "href": "/markoun"
+      },
+      {
+        "slug": "farm",
+        "title_ar": "المزرعة الوقفية",
+        "title_en": "Endowment farm",
+        "description_ar": "ادعم تطوير المزرعة الوقفية: أعلاف، رعاية بيطرية، توسعة الحظائر — لإنتاج لحوم سنوية للأسر المتعففة.",
+        "description_en": "Support the endowment farm: feed, vet care and barn expansion — producing yearly meat for needy families.",
+        "href": "/farm"
+      },
+      {
+        "slug": "general",
+        "title_ar": "تبرع عام للتنمية",
+        "title_en": "General development donation",
+        "description_ar": "يوجَّه لأكثر حالات التنمية إلحاحًا.",
+        "description_en": "Directed to the most urgent development cases."
+      }
+    ],
+    "is_active": true,
+    "sort_order": 7
+  },
+  {
+    "slug": "zakat",
+    "donate_key": "sector-zakat",
+    "title_ar": "الزكاة",
+    "title_en": "Zakat",
+    "summary_ar": "زكاة المال على المصارف الشرعية",
+    "summary_en": "Zakat al-mal across the 8 legitimate channels",
+    "intro_ar": "احسب زكاة مالك وادفعها للمستحقين فقط في الدقهلية وكفر الشيخ — بإشراف لجنة شرعية.",
+    "intro_en": "Calculate and pay your Zakat to deserving recipients only in Dakahlia & Kafr El Sheikh — under a Sharia committee.",
+    "programs": [
+      {
+        "slug": "zakat",
+        "title_ar": "زكاة المال",
+        "title_en": "Zakat al-mal",
+        "description_ar": "تُصرف على المصارف الشرعية الثمانية.",
+        "description_en": "Spent on the 8 Sharia-approved channels.",
+        "href": "/zakat"
+      }
+    ],
+    "is_active": true,
+    "sort_order": 8
+  }
+]

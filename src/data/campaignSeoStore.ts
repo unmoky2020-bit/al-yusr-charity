@@ -1,6 +1,6 @@
 /**
  * Campaign SEO Store & Preset Data (from Official Campaign Landing Pages PDF)
- * Provides curated SEO metadata, SERP previews, and persistence fallback.
+ * Provides curated SEO metadata used as defaults for an empty SEO form. Not a storage layer.
  */
 
 export interface CampaignSeoData {
@@ -265,30 +265,16 @@ export function matchCampaignPresetKey(slugOrId?: string): string | null {
 }
 
 /**
- * Gets campaign SEO data from LocalStorage or Fallback Presets
+ * Hard-coded SEO preset for a campaign (from the official landing-pages PDF), or null.
+ * Used ONLY as the initial value of an empty SEO form in the dashboard; the saved SEO lives on the
+ * campaign record (`seo` column, PUT /donation-campaigns/{id}). Nothing is read from or written to
+ * localStorage any more (the old `alyusr_campaign_seo_*` keys are ignored).
  */
-export function getStoredCampaignSeo(campaignIdOrSlug: string | number): CampaignSeoData | null {
-  try {
-    const raw = localStorage.getItem(`alyusr_campaign_seo_${campaignIdOrSlug}`);
-    if (raw) {
-      return JSON.parse(raw);
-    }
-  } catch {}
-
-  const key = matchCampaignPresetKey(String(campaignIdOrSlug));
-  if (key && OFFICIAL_CAMPAIGN_SEO_PRESETS[key]) {
-    return OFFICIAL_CAMPAIGN_SEO_PRESETS[key];
-  }
-  return null;
+export function getCampaignSeoPreset(campaignIdOrSlug: string | number | null | undefined): CampaignSeoData | null {
+  const key = matchCampaignPresetKey(campaignIdOrSlug == null ? "" : String(campaignIdOrSlug));
+  return key && OFFICIAL_CAMPAIGN_SEO_PRESETS[key] ? { ...OFFICIAL_CAMPAIGN_SEO_PRESETS[key] } : null;
 }
 
-/**
- * Saves campaign SEO data to LocalStorage (overlay persistence until backend supports it)
- */
-export function saveStoredCampaignSeo(campaignIdOrSlug: string | number, data: Partial<CampaignSeoData>): void {
-  try {
-    const existing = getStoredCampaignSeo(campaignIdOrSlug) || ({} as CampaignSeoData);
-    const updated = { ...existing, ...data };
-    localStorage.setItem(`alyusr_campaign_seo_${campaignIdOrSlug}`, JSON.stringify(updated));
-  } catch {}
-}
+/** @deprecated kept for old imports: returns the hard-coded preset only (no localStorage). */
+export const getStoredCampaignSeo = (campaignIdOrSlug: string | number): CampaignSeoData | null =>
+  getCampaignSeoPreset(campaignIdOrSlug);

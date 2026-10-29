@@ -13,7 +13,8 @@ import yusrMeals from "@/assets/yusr-meals.jpg";
 import markounFurniture from "@/assets/markoun-poster-furniture.png";
 import markounClothes from "@/assets/markoun-poster-clothes.png";
 
-const DONATE = "/donate?program=shelter";
+import { campaignDonateHref } from "@/data/campaignPages/index";
+const DONATE = campaignDonateHref("setr");
 
 type Icon = LucideIcon;
 

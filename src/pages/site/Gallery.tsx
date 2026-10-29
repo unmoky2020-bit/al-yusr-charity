@@ -11,8 +11,9 @@ import { X, ChevronLeft, ChevronRight, Share2, Heart, Download } from "lucide-re
 import { track } from "@/lib/track";
 import { LazyImage } from "@/components/common/LazyImage";
 // FieldGalleryScroll removed — gallery archive appearance simplified per request.
-import { GALLERY_PROGRAMS, listPublishedGalleryImages, programLabel, type GalleryRow } from "@/data/galleryApi";
-import { GALLERY_STATIC_IMAGES, type GalleryImage } from "@/data/galleryImages";
+import { GALLERY_PROGRAMS } from "@/data/galleryApi";
+import { type GalleryImage } from "@/data/galleryImages";
+import { useGalleryImages } from "@/data/sources/gallery";
 import { responsiveImage } from "@/lib/image-srcset";
 
 const PAGE_SIZE = 8;
@@ -60,52 +61,10 @@ const Gallery = () => {
   const base = "https://elyusr.org";
   const [open, setOpen] = useState<number | null>(null);
   const [cat, setCat] = useState<string>("all");
-  const [dbImages, setDbImages] = useState<GalleryImage[] | null>(null);
   const [page, setPage] = useState(1);
 
-  // Live merged list: DB rows take priority; static images act as fallback/seed.
-  useEffect(() => {
-    let alive = true;
-    listPublishedGalleryImages()
-      .then((rows: GalleryRow[]) => {
-        if (!alive) return;
-        const mapped: GalleryImage[] = rows.map((r) => {
-          // Auto-build descriptive alt text: title + program + city.
-          // Falls back gracefully when fields are missing.
-          const progAr = r.program_slug ? programLabel(r.program_slug, "ar") : "";
-          const progEn = r.program_slug ? programLabel(r.program_slug, "en") : "";
-          const baseAr = r.title_ar || r.title_en || "صورة من ميدان مؤسسة اليسر";
-          const baseEn = r.title_en || r.title_ar || "Al-Yusr field photo";
-          const altAr = r.alt_ar || [baseAr, progAr, r.city].filter(Boolean).join(" — ");
-          const altEn = r.alt_en || [baseEn, progEn, r.city].filter(Boolean).join(" — ");
-          return {
-            id: r.id,
-            src: r.image_url || "/placeholder.svg",
-            alt: altEn,
-            altAr,
-            category: "campaigns",
-            programSlug: r.program_slug,
-            city: r.city || undefined,
-            donateProgram: r.donate_program || r.program_slug,
-          };
-        });
-        setDbImages(mapped);
-      })
-      .catch(() => setDbImages([]));
-    return () => { alive = false; };
-  }, []);
-
-  // Merge: DB items first, then static fallback if DB is empty.
-  const allImages: GalleryImage[] = useMemo(() => {
-    const validDbImages = (dbImages || []).filter((img) => img.src && img.src !== "/placeholder.svg");
-    const raw = (validDbImages.length === 0)
-      ? GALLERY_STATIC_IMAGES
-      : [...validDbImages, ...GALLERY_STATIC_IMAGES.filter((img) => !new Set(validDbImages.map((d) => d.id)).has(img.id))];
-    return raw.map((img) => ({
-      ...img,
-      src: img.src || "/placeholder.svg",
-    }));
-  }, [dbImages]);
+  // Live merged list (DB rows first, static images as fallback/seed) — resolved by the content source.
+  const { images: allImages } = useGalleryImages();
 
   // Build category chips from active program slugs found in current data, plus "all".
   const activeSlugs = useMemo(() => {

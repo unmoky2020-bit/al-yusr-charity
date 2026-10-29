@@ -14,10 +14,19 @@ const Inner = () => {
   const [form, setForm] = useState({ name: user!.name, email: user!.email, phone: user!.phone || "" });
   const [pwd, setPwd] = useState({ old: "", neu: "", confirm: "" });
 
-  const saveProfile = (e: React.FormEvent) => {
+  const [savingProfile, setSavingProfile] = useState(false);
+  const saveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile(user!.id, { name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim() });
-    toast({ title: lang === "ar" ? " تم تحديث البيانات" : " Profile updated" });
+    setSavingProfile(true);
+    try {
+      // PUT /profile — AuthContext shows the destructive toast on failure.
+      await updateProfile(user!.id, { name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim() });
+      toast({ title: lang === "ar" ? " تم تحديث البيانات" : " Profile updated" });
+    } catch {
+      /* error already shown */
+    } finally {
+      setSavingProfile(false);
+    }
   };
   const savePwd = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +55,7 @@ const Inner = () => {
               <Phone className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input type="tel" className="h-11 ps-9" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
             </div>
-            <Button type="submit" className="h-11 w-full bg-orange-grad font-extrabold text-accent-foreground"><Save className="h-4 w-4" /> {lang === "ar" ? "حفظ" : "Save"}</Button>
+            <Button type="submit" disabled={savingProfile} className="h-11 w-full bg-orange-grad font-extrabold text-accent-foreground"><Save className="h-4 w-4" /> {lang === "ar" ? "حفظ" : "Save"}</Button>
           </form>
         </div>
 

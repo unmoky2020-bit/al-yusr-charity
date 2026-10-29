@@ -17,7 +17,12 @@ import {
   Image as ImageIcon,
   RefreshCw,
 } from "lucide-react";
-import { galleryApi, formatServerImageUrl, LaravelGalleryItem } from "@/data/laravelApi";
+import { formatServerImageUrl } from "@/data/laravelApi";
+import { describeWriteError } from "@/data/api/backendPending";
+import { listMedia, uploadMedia, MEDIA_ACCEPT, MEDIA_MAX_BYTES } from "@/data/api/mediaApi";
+
+/** One media-library file, in the shape the grid below renders. */
+type PickerImage = { id: string; image: string; external_url?: string; title_ar: string; title_en?: string; city?: string; program?: string; donation_program?: string };
 import { toast } from "sonner";
 import { useLang } from "@/i18n/LangContext";
 
@@ -39,7 +44,7 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
   const { lang } = useLang();
   const isAr = lang === "ar";
 
-  const [images, setImages] = useState<LaravelGalleryItem[]>([]);
+  const [images, setImages] = useState<PickerImage[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [search, setSearch] = useState("");
@@ -49,13 +54,11 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
   const loadGallery = useCallback(async () => {
     setLoading(true);
     try {
-      const items = await galleryApi.listAll();
-      if (Array.isArray(items)) {
-        setImages(items);
-      }
+      // The media library (GET /media) — the same files as /admin/media.
+      const files = await listMedia();
+      setImages(files.map((f) => ({ id: f.path, image: f.url, title_ar: f.name, title_en: f.name, program: f.collection })));
     } catch (err) {
-      console.warn("Failed to load server gallery images:", err);
-      toast.error(isAr ? "تعذر تحميل مكتبة الصور من السيرفر" : "Failed to load media library");
+      toast.error(describeWriteError(err, "GET /media"));
     } finally {
       setLoading(false);
     }
@@ -82,47 +85,21 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
     });
   }, [images, search]);
 
-  // Handle direct file upload with duplicate checking
+  // Upload straight into the media library («عام» folder) and select it.
   const handleUpload = async (file: File) => {
     if (!file) return;
-    const allowed = ["image/jpeg", "image/png", "image/webp", "image/svg+xml", "image/gif", "image/jpg"];
-    if (!allowed.includes(file.type)) {
-      toast.error(isAr ? "صيغة غير مدعومة (JPG, PNG, WebP, SVG فقط)" : "Unsupported format");
+    if (!MEDIA_ACCEPT.includes(file.type) || file.size > MEDIA_MAX_BYTES) {
+      toast.error(isAr ? "الصيغ المسموحة JPG و PNG و WebP و GIF و AVIF، والحد الأقصى 5 ميجابايت" : "JPG, PNG, WebP, GIF or AVIF up to 5 MB");
       return;
     }
-
     setUploading(true);
     try {
-      // Duplicate detection
-      const cleanName = file.name.toLowerCase().trim();
-      const duplicate = images.find((item) => {
-        const itemUrl = (item.image || item.external_url || "").toLowerCase();
-        const titleAr = (item.title_ar || "").toLowerCase();
-        const titleEn = (item.title_en || "").toLowerCase();
-        return itemUrl.includes(cleanName) || titleAr === cleanName || titleEn === cleanName;
-      });
-
-      if (duplicate && (duplicate.image || duplicate.external_url)) {
-        const existingUrl = duplicate.image || duplicate.external_url || "";
-        setSelectedUrl(existingUrl);
-        toast.info(
-          isAr
-            ? `⚠️ هذه الصورة موجودة مسبقاً بالمكتبة:\n${existingUrl}`
-            : `⚠️ Image already exists in library:\n${existingUrl}`,
-          { duration: 5000 }
-        );
-        return;
-      }
-
-      // Upload file directly to /gallery without base64 conversion
-      const uploadedUrl = await galleryApi.uploadImage(file, file.name);
-      if (uploadedUrl) {
-        setSelectedUrl(uploadedUrl);
-        toast.success(isAr ? "تم رفع الصورة وإضافتها للمكتبة بنجاح" : "Image uploaded and added to library");
-        await loadGallery();
-      }
-    } catch (err: any) {
-      toast.error(err.message || (isAr ? "فشل رفع الصورة للسيرفر" : "Failed to upload image"));
+      const saved = await uploadMedia(file, file.name, "general");
+      setSelectedUrl(saved.url);
+      toast.success(isAr ? "تم رفع الصورة لمكتبة الوسائط" : "Uploaded to the media library");
+      await loadGallery();
+    } catch (err) {
+      toast.error(describeWriteError(err, "POST /media"));
     } finally {
       setUploading(false);
     }

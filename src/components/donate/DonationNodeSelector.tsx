@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import {
+  listDonationNodeChildren, getDonationNodeBySlug, getDonationNodeById, hasActiveChildren,
+} from "@/data/api/publicDonationNodesApi";
 import { useLang } from "@/i18n/LangContext";
 import { ChevronLeft, ChevronRight, Loader2, Lock } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,6 +24,18 @@ export type DonationNode = {
   direct_checkout: boolean;
   sort_order: number;
 };
+
+/**
+ * Static root sectors shown when the donation tree is not available from the API
+ * (content source "static", API error or empty response) — same list as before.
+ */
+const STATIC_ROOT_NODES: DonationNode[] = [
+  { id: "sec-food", parent_id: null, type: "sector", slug: "sector-food", title_ar: "الإطعام والكراتين الغذائية", title_en: "Food & Meals", description_ar: "كرتونة عزومة ووجبات مطبخ اليسر الساخنة", description_en: "Food boxes and hot meals", image_url: null, amount: 250, target_amount: 100000, collected_amount: 45000, active: true, direct_checkout: false, sort_order: 1 },
+  { id: "sec-water", parent_id: null, type: "sector", slug: "sector-water", title_ar: "سقيا الماء والوصلات", title_en: "Clean Water", description_ar: "توصيل خطوط مياه نقية للبيوت المحرومة", description_en: "Clean water connections", image_url: null, amount: 3500, target_amount: 50000, collected_amount: 25000, active: true, direct_checkout: false, sort_order: 2 },
+  { id: "sec-health", parent_id: null, type: "sector", slug: "sector-health", title_ar: "العلاج والعمليات الجراحية", title_en: "Health & Medicine", description_ar: "علاج شهري وجراحات عاجلة للمرضى", description_en: "Medical treatments and surgeries", image_url: null, amount: 500, target_amount: 75000, collected_amount: 30000, active: true, direct_checkout: false, sort_order: 3 },
+  { id: "sec-orphans", parent_id: null, type: "sector", slug: "sector-orphans", title_ar: "كفالة الأيتام وتيسير الزواج", title_en: "Orphans & Brides", description_ar: "كفالة شهرية وتجهيز يتيمات بالدقهلية", description_en: "Orphan sponsorships and brides", image_url: null, amount: 600, target_amount: 90000, collected_amount: 40000, active: true, direct_checkout: false, sort_order: 4 },
+  { id: "sec-zakat", parent_id: null, type: "sector", slug: "sector-zakat", title_ar: "زكاة المال والصدقات", title_en: "Zakat & Charity", description_ar: "مصارف الزكاة الشرعية الثمانية", description_en: "Zakat distribution", image_url: null, amount: 1000, target_amount: 200000, collected_amount: 120000, active: true, direct_checkout: true, sort_order: 5 },
+];
 
 type Props = {
   onLeafSelect: (node: DonationNode, breadcrumb: DonationNode[]) => void;
@@ -69,26 +83,12 @@ export const DonationNodeSelector = ({ onLeafSelect, selectedSlug, sectorSlug }:
     } else {
       setForceClosed(false);
     }
-    const q = supabase
-      .from("donation_nodes" as any)
-      .select("*")
-      .eq("active", true)
-      .order("sort_order", { ascending: true });
-    const filtered = currentParent
-      ? q.eq("parent_id", currentParent.id)
-      : q.is("parent_id", null);
-    (filtered as any).then(async ({ data }: { data: any }) => {
+    listDonationNodeChildren(currentParent ? currentParent.id : null).then((data) => {
       if (!alive) return;
-      let list = (Array.isArray(data) ? (data as unknown as DonationNode[]) : []);
+      let list: DonationNode[] = data;
       if (list.length === 0) {
         if (!currentParent) {
-          list = [
-            { id: "sec-food", parent_id: null, type: "sector", slug: "sector-food", title_ar: "الإطعام والكراتين الغذائية", title_en: "Food & Meals", description_ar: "كرتونة عزومة ووجبات مطبخ اليسر الساخنة", description_en: "Food boxes and hot meals", image_url: null, amount: 250, target_amount: 100000, collected_amount: 45000, active: true, direct_checkout: false, sort_order: 1 },
-            { id: "sec-water", parent_id: null, type: "sector", slug: "sector-water", title_ar: "سقيا الماء والوصلات", title_en: "Clean Water", description_ar: "توصيل خطوط مياه نقية للبيوت المحرومة", description_en: "Clean water connections", image_url: null, amount: 3500, target_amount: 50000, collected_amount: 25000, active: true, direct_checkout: false, sort_order: 2 },
-            { id: "sec-health", parent_id: null, type: "sector", slug: "sector-health", title_ar: "العلاج والعمليات الجراحية", title_en: "Health & Medicine", description_ar: "علاج شهري وجراحات عاجلة للمرضى", description_en: "Medical treatments and surgeries", image_url: null, amount: 500, target_amount: 75000, collected_amount: 30000, active: true, direct_checkout: false, sort_order: 3 },
-            { id: "sec-orphans", parent_id: null, type: "sector", slug: "sector-orphans", title_ar: "كفالة الأيتام وتيسير الزواج", title_en: "Orphans & Brides", description_ar: "كفالة شهرية وتجهيز يتيمات بالدقهلية", description_en: "Orphan sponsorships and brides", image_url: null, amount: 600, target_amount: 90000, collected_amount: 40000, active: true, direct_checkout: false, sort_order: 4 },
-            { id: "sec-zakat", parent_id: null, type: "sector", slug: "sector-zakat", title_ar: "زكاة المال والصدقات", title_en: "Zakat & Charity", description_ar: "مصارف الزكاة الشرعية الثمانية", description_en: "Zakat distribution", image_url: null, amount: 1000, target_amount: 200000, collected_amount: 120000, active: true, direct_checkout: true, sort_order: 5 },
-          ];
+          list = STATIC_ROOT_NODES;
         } else {
           list = [
             { id: `${currentParent.id}-gen`, parent_id: currentParent.id, type: "program", slug: `${currentParent.slug}-program`, title_ar: currentParent.title_ar, title_en: currentParent.title_en, description_ar: currentParent.description_ar, description_en: currentParent.description_en, image_url: null, amount: currentParent.amount, target_amount: currentParent.target_amount, collected_amount: currentParent.collected_amount, active: true, direct_checkout: true, sort_order: 1 },
@@ -112,13 +112,7 @@ export const DonationNodeSelector = ({ onLeafSelect, selectedSlug, sectorSlug }:
     if (lastJumpedSlug.current === selectedSlug) return;
     let alive = true;
     (async () => {
-      const { data: node } = await supabase
-        .from("donation_nodes" as any)
-        .select("*")
-        .eq("slug", selectedSlug)
-        .eq("active", true)
-        .maybeSingle();
-      const n = node as unknown as DonationNode | null;
+      const n: DonationNode | null = await getDonationNodeBySlug(selectedSlug);
       if (!alive || !n) return;
       lastJumpedSlug.current = selectedSlug;
       // Build breadcrumb by walking parent_id up to root.
@@ -127,23 +121,13 @@ export const DonationNodeSelector = ({ onLeafSelect, selectedSlug, sectorSlug }:
       // We only need to land on the parent level so the node itself shows
       // in the grid — so drop the leaf and keep its ancestors.
       while (cursor?.parent_id) {
-        const { data: parent } = await supabase
-          .from("donation_nodes" as any)
-          .select("*")
-          .eq("id", cursor.parent_id)
-          .maybeSingle();
-        const p = parent as unknown as DonationNode | null;
+        const p: DonationNode | null = await getDonationNodeById(cursor.parent_id);
         if (!p) break;
         chain.unshift(p);
         cursor = p;
       }
-      const { data: children } = await supabase
-        .from("donation_nodes" as any)
-        .select("id")
-        .eq("parent_id", n.id)
-        .eq("active", true)
-        .limit(1);
-      if (alive) setPath(children && children.length > 0 ? [...chain, n] : chain);
+      const hasKids = await hasActiveChildren(n.id);
+      if (alive) setPath(hasKids ? [...chain, n] : chain);
     })();
     return () => { alive = false; };
   }, [selectedSlug]);
@@ -161,13 +145,9 @@ export const DonationNodeSelector = ({ onLeafSelect, selectedSlug, sectorSlug }:
     }
     let alive = true;
     (async () => {
-      const { data: sector } = await supabase
-        .from("donation_nodes" as any)
-        .select("*")
-        .eq("slug", sectorSlug)
-        .eq("active", true)
-        .maybeSingle();
-      const s = sector as unknown as DonationNode | null;
+      // API first; when the tree is not available, jump into the matching static root sector.
+      const s: DonationNode | null =
+        (await getDonationNodeBySlug(sectorSlug)) ?? STATIC_ROOT_NODES.find((n) => n.slug === sectorSlug) ?? null;
       if (!alive || !s) return;
       lastJumpedSector.current = sectorSlug;
       lastJumpedSlug.current = null; // allow selectedSlug effect to re-evaluate later
@@ -190,13 +170,8 @@ export const DonationNodeSelector = ({ onLeafSelect, selectedSlug, sectorSlug }:
     }
     // Always show active alternatives first. Some program nodes can be closed
     // for direct checkout while still having valid donation options beneath.
-    const { data: children } = await supabase
-      .from("donation_nodes" as any)
-      .select("id")
-      .eq("parent_id", node.id)
-      .eq("active", true)
-      .limit(1);
-    if (children && children.length > 0) {
+    const hasKids = await hasActiveChildren(node.id);
+    if (hasKids) {
       setPath((p) => [...p, node]);
       return;
     }

@@ -48,6 +48,9 @@ import MARKOUN_DEFAULTS from "@/data/campaignPages/markoun";
 import type { LucideIcon } from "lucide-react";
 import { FAQSchema } from "@/components/common/Schemas";
 
+import { campaignDonateHref } from "@/data/campaignPages/index";
+
+const DONATE = campaignDonateHref("markoun");
 /** Presentation-only metadata (icons, tags) keyed by the editable item ids in `campaignPages/markoun.ts`. */
 const PILLAR_META: Record<string, { icon: LucideIcon; tagAr: string; tagEn: string }> = {
   furniture: { icon: Sofa, tagAr: "تأسيس منازل مستقرة", tagEn: "Home Furnishing" },
@@ -223,7 +226,7 @@ const MarkounLanding = () => {
                   size="lg"
                   className="w-full sm:w-auto flex-1 rounded-full bg-orange-grad px-5 sm:px-6 py-3 text-xs sm:text-sm font-black text-accent-foreground shadow-cta transition hover:opacity-95 text-center leading-normal h-auto min-h-[44px]"
                 >
-                  <Link to="/donate?program=markoun">
+                  <Link to={DONATE}>
                     <Heart className="h-4 w-4 shrink-0" />
                     <span>{isRTL ? "دعم نفقات الصيانة والنقل" : "Support Repair Fund"}</span>
                   </Link>
@@ -601,7 +604,7 @@ const MarkounLanding = () => {
               {isRTL ? "ابعت «تبرع»" : "Text 'Donate'"}
             </a>
             <Button asChild size="sm" variant="outline" className="hidden sm:inline-flex rounded-full border-white/30 bg-white/10 text-xs font-black text-primary-foreground hover:bg-white/20">
-              <Link to="/donate?program=markoun">
+              <Link to={DONATE}>
                 <Heart className="h-3.5 w-3.5 text-accent" />
                 {isRTL ? "تبرع مالي" : "Donate"}
               </Link>

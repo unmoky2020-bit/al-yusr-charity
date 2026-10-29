@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { CheckCircle2, AlertCircle, Heart, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { confirmNewsletter, unsubscribeNewsletter } from "@/data/api/newsletterTokenApi";
+import { ApiError } from "@/data/laravelApi";
 import { useLang } from "@/i18n/LangContext";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { track } from "@/lib/track";
 
-type Status = "loading" | "ok" | "error";
+/** "error" = invalid/expired link (4xx from the API); "unavailable" = network / server failure. */
+type Status = "loading" | "ok" | "error" | "unavailable";
 
 const NewsletterAction = ({ action }: { action: "confirm" | "unsubscribe" }) => {
   const { lang } = useLang();
@@ -21,11 +23,11 @@ const NewsletterAction = ({ action }: { action: "confirm" | "unsubscribe" }) => 
     if (!token) { setStatus("error"); return; }
     (async () => {
       try {
-        const { data, error } = await supabase.functions.invoke("newsletter-confirm", {
-          body: { token, action },
-        });
-        if (error || (data as any)?.error) throw error || new Error((data as any).error);
-        setEmail((data as any).email ?? "");
+        // Laravel POST /newsletter/confirm | /newsletter/unsubscribe — throws on any non-2xx.
+        const data = action === "confirm"
+          ? await confirmNewsletter(token)
+          : await unsubscribeNewsletter({ token });
+        setEmail(data.email ?? "");
         setStatus("ok");
         track(action === "confirm" ? "newsletter_confirmed" : "newsletter_unsubscribed", {
           payload: { source: "email_link" },
@@ -34,7 +36,8 @@ const NewsletterAction = ({ action }: { action: "confirm" | "unsubscribe" }) => 
         if (import.meta.env.DEV) {
           console.error(e);
         }
-        setStatus("error");
+        const code = e instanceof ApiError ? e.status : 0;
+        setStatus([400, 404, 410, 422].includes(code) ? "error" : "unavailable");
       }
     })();
   }, [token, action]);
@@ -98,6 +101,28 @@ const NewsletterAction = ({ action }: { action: "confirm" | "unsubscribe" }) => 
               <Link to="/" className="mt-5 inline-flex h-11 items-center gap-2 rounded-2xl border border-primary/15 bg-background px-5 text-sm font-extrabold text-primary hover:border-secondary">
                 {isRTL ? "الصفحة الرئيسية" : "Home"}
               </Link>
+            </>
+          )}
+          {status === "unavailable" && (
+            <>
+              <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-destructive/15 text-destructive">
+                <AlertCircle className="h-8 w-8" />
+              </div>
+              <h1 className="mt-4 text-2xl font-black text-primary">
+                {isRTL ? "تعذّر إتمام العملية" : "Something went wrong"}
+              </h1>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {isRTL
+                  ? "الخدمة غير متاحة حاليًا. لم يتم تنفيذ طلبك — جرّب فتح الرابط مرة أخرى بعد قليل."
+                  : "The service is unavailable right now. Your request was not completed — please open the link again later."}
+              </p>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="mt-5 inline-flex h-11 items-center gap-2 rounded-2xl border border-primary/15 bg-background px-5 text-sm font-extrabold text-primary hover:border-secondary"
+              >
+                {isRTL ? "إعادة المحاولة" : "Try again"}
+              </button>
             </>
           )}
         </div>

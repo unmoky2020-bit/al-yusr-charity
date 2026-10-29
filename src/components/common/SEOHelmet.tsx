@@ -24,7 +24,10 @@ const HIGH_VOLUME_KEYWORDS = [
 
 export const SEOHelmet = ({ title, description, path = "/", image, ogType = "website", keywords }: Props) => {
   const { lang } = useLang();
-  const url = absoluteSiteUrl(path);
+  // Arabic is the default URL; English is the same path with ?lang=en (LangContext reads it).
+  const arUrl = absoluteSiteUrl(path);
+  const enUrl = `${arUrl}${arUrl.includes("?") ? "&" : "?"}lang=en`;
+  const url = lang === "en" ? enUrl : arUrl;
 
   // Clamp to Google's preferred limits to avoid SEO warnings.
   const clamp = (s: string, max: number) => {
@@ -49,7 +52,6 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
 
   const ogImage = toAbsolute(image);
   const brandIcon = absoluteSiteUrl("/icons/icon-512.png");
-  const hreflangAr = absoluteSiteUrl(path);
 
   return (
     <Helmet>
@@ -59,9 +61,10 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
       <meta name="keywords" content={safeKeywords} />
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       <link rel="canonical" href={url} />
-      <link rel="alternate" hrefLang="ar-EG" href={hreflangAr} />
-      <link rel="alternate" hrefLang="ar" href={hreflangAr} />
-      <link rel="alternate" hrefLang="x-default" href={hreflangAr} />
+      <link rel="alternate" hrefLang="ar-EG" href={arUrl} />
+      <link rel="alternate" hrefLang="ar" href={arUrl} />
+      <link rel="alternate" hrefLang="en" href={enUrl} />
+      <link rel="alternate" hrefLang="x-default" href={arUrl} />
 
       {/* OpenGraph Meta Tags */}
       <meta property="og:title" content={safeTitle} />
@@ -70,6 +73,7 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
       <meta property="og:type" content={ogType} />
       <meta property="og:site_name" content={lang === "ar" ? "اليسر" : "Al-Yusr Charity Foundation"} />
       <meta property="og:locale" content={lang === "ar" ? "ar_EG" : "en_US"} />
+      <meta property="og:locale:alternate" content={lang === "ar" ? "en_US" : "ar_EG"} />
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:secure_url" content={ogImage} />
       <meta property="og:image:alt" content={safeTitle} />

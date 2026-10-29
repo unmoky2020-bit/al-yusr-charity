@@ -26,9 +26,9 @@ import { toast } from "@/hooks/use-toast";
 import { DonationReceipt } from "@/components/common/DonationReceipt";
 import {
   DONATION_STATUS_TRANSITIONS,
-  updateDonationStatus,
   type DonationStatus,
 } from "@/data/casesApi";
+import { donationsAdminApi } from "@/data/api/donationsAdminApi";
 import { donationsApiV1 } from "@/data/laravelApi";
 
 const STATUS_CONFIG: Record<
@@ -207,9 +207,16 @@ export default function AdminDonationDetail() {
 
   const transition = async (next: DonationStatus) => {
     if (!row) return;
+    const online = !!row.is_gateway;
+    if (next === "paid" && online &&
+      !window.confirm(isAr
+        ? "ده دفع أونلاين — بيتأكد لوحده من بوابة الدفع. علّمه «مدفوع» يدوي بس لو اتأكدت من وصول المبلغ في حساب كاشير. متأكد؟"
+        : "Online payment — the gateway confirms it. Mark it paid only if you verified the money in the gateway account. Continue?")) {
+      return;
+    }
     setUpdating(true);
     try {
-      await updateDonationStatus(row.id, next);
+      await donationsAdminApi.setStatus(row.id, next, { confirmGateway: next === "paid" && online });
       toast({
         title: isAr ? "تم تحديث حالة التبرع" : "Status updated successfully",
         description: isAr ? `أصبحت الحالة: ${STATUS_CONFIG[next]?.labelAr || next}` : `Status is now: ${next}`,

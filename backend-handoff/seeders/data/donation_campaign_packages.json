@@ -1,0 +1,582 @@
+[
+  {
+    "donation_campaign_slug": "sitr",
+    "key": "share",
+    "name_ar": "سهم حملة سِتر",
+    "name_en": "Setr campaign share",
+    "amount": "500.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "يشترك في الحملة ويوزَّع على أنشطتها",
+        "en": "Joins the campaign and is spread across its activities"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "sitr",
+    "key": "blanket",
+    "name_ar": "لحاف فايبر حراري",
+    "name_en": "Thermal fibre blanket",
+    "amount": "450.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "sitr",
+    "key": "clothes",
+    "name_ar": "كسوة شتاء لطفل",
+    "name_en": "Winter clothes for a child",
+    "amount": "700.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "sitr",
+    "key": "window",
+    "name_ar": "شباك",
+    "name_en": "Window",
+    "amount": "750.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "sitr",
+    "key": "door",
+    "name_ar": "باب",
+    "name_en": "Door",
+    "amount": "2200.00",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "sitr",
+    "key": "bed",
+    "name_ar": "سرير ومرتبة",
+    "name_en": "Bed and mattress",
+    "amount": "3200.00",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "sitr",
+    "key": "roof_bitumen",
+    "name_ar": "بيتومين",
+    "name_en": "Bitumen",
+    "amount": "6500.00",
+    "sort_order": 7,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "sitr",
+    "key": "roof_wood",
+    "name_ar": "خشب",
+    "name_en": "Wood",
+    "amount": "17000.00",
+    "sort_order": 8,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "sitr",
+    "key": "full",
+    "name_ar": "الكفالة الشتوية الشاملة لأسرة",
+    "name_en": "Full winter sponsorship for a family",
+    "amount": "10000.00",
+    "sort_order": 9,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "سقف وشباك وكسوة شتاء ومرتبة وسرير",
+        "en": "Roof, window, winter clothes, mattress and bed"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "zell",
+    "key": "roof_share",
+    "name_ar": "سهم في سقف",
+    "name_en": "Roof share",
+    "amount": "500.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "zell",
+    "key": "roof_full",
+    "name_ar": "سقف منزل متكامل",
+    "name_en": "Complete roof",
+    "amount": "16000.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "سقف منزل متكامل ومعزول",
+        "en": "Complete insulated roof"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "zell",
+    "key": "water_share",
+    "name_ar": "سهم في وصلة مياه",
+    "name_en": "Water share",
+    "amount": "500.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "zell",
+    "key": "water_full",
+    "name_ar": "وصلة مياه كاملة",
+    "name_en": "Full connection",
+    "amount": "7500.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "وصلة مياه منزلية كاملة",
+        "en": "Full home water connection"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "zell",
+    "key": "fan",
+    "name_ar": "مروحة سقف أو حائط",
+    "name_en": "Ceiling or wall fan",
+    "amount": "950.00",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "مروحة سقف أو حائط",
+        "en": "Ceiling or wall fan"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "athar",
+    "key": "bag",
+    "name_ar": "حقيبة مدرسية وأدوات متكاملة",
+    "name_en": "School bag with full supplies",
+    "amount": "450.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "athar",
+    "key": "uniform",
+    "name_ar": "زي مدرسي وحذاء جديد",
+    "name_en": "New uniform and shoes",
+    "amount": "550.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "athar",
+    "key": "tuition",
+    "name_ar": "سداد المصروفات الدراسية للعام",
+    "name_en": "Annual tuition fees",
+    "amount": "850.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "athar",
+    "key": "full",
+    "name_ar": "كفالة تعليمية شاملة لطالب",
+    "name_en": "Full student sponsorship",
+    "amount": "1850.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "شنطة + زي + مصروفات",
+        "en": "Bag + uniform + fees"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "athar",
+    "key": "nursery_share",
+    "name_ar": "سهم في دور التحفيظ والحضانات",
+    "name_en": "Quran pre-school share",
+    "amount": "500.00",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "صدقة جارية",
+        "en": "Ongoing charity"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "athar",
+    "key": "classroom",
+    "name_ar": "كفالة فصل دراسي كامل",
+    "name_en": "A full classroom",
+    "amount": "18000.00",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "10 طلاب",
+        "en": "10 students"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "athar",
+    "key": "dedicate_student",
+    "name_ar": "كفالة طالب للعام",
+    "name_en": "A student for the year",
+    "amount": "1850.00",
+    "sort_order": 7,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "athar",
+    "key": "dedicate_nursery",
+    "name_ar": "سهم في دار تحفيظ",
+    "name_en": "A Quran nursery share",
+    "amount": "500.00",
+    "sort_order": 8,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "ramadan",
+    "key": "iftar",
+    "name_ar": "وجبة إفطار صائم ساخنة",
+    "name_en": "Hot iftar meal",
+    "amount": "95.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "مطبخ اليسر",
+        "en": "Daily iftar"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "ramadan",
+    "key": "fitr",
+    "name_ar": "زكاة الفطر عن فرد",
+    "name_en": "Zakat al-Fitr per person",
+    "amount": "75.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "مصارف شرعية",
+        "en": "Zakat"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "ramadan",
+    "key": "meat",
+    "name_ar": "سهم لحوم بلدي (1 كجم)",
+    "name_en": "Farm meat share (1 kg)",
+    "amount": "420.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "من مزارعنا",
+        "en": "Our farms"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "ramadan",
+    "key": "eid_clothes",
+    "name_ar": "كسوة عيد لطفل يتيم وعلبة كعك",
+    "name_en": "Orphan Eid outfit + cookies",
+    "amount": "650.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "فرحة العيد",
+        "en": "Eid joy"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "ramadan",
+    "key": "box",
+    "name_ar": "كرتونة رمضان الكبرى (25 كجم)",
+    "name_en": "Ramadan box (25 kg)",
+    "amount": "950.00",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "تكفي أسرة الشهر",
+        "en": "A family's month"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "ramadan",
+    "key": "bride",
+    "name_ar": "سهم تيسير زواج عروسة يتيمة",
+    "name_en": "Orphan bride share",
+    "amount": "1500.00",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "الفرحة فرحتين",
+        "en": "Double joy"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "arboun-kheir",
+    "key": "share_starter",
+    "name_ar": "عربون خير سهم بسيط (مشروع صغير)",
+    "name_en": "Starter Project Share",
+    "amount": "150.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "سهم سريع يفتح أبواب البركة لوجبة ساخنة أو مساهمة دواء لأسرة متعففة",
+        "en": ""
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "arboun-kheir",
+    "key": "share_standard",
+    "name_ar": "عربون خير (مشروع متوسط 1%)",
+    "name_en": "Standard Share (1%)",
+    "amount": "450.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "اقتطاع رمزي 1% من قيمة المشروع يكفل شنطة مدرسية وزي متكامل لطفل",
+        "en": ""
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "arboun-kheir",
+    "key": "share_orphan_education",
+    "name_ar": "سهم كفالة يتيم ودعم تعليم",
+    "name_en": "Orphan Education Share",
+    "amount": "750.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "كفالة تعليمية ومصروفات مدرسية لمنع تسرب طفل يتيم من التعليم",
+        "en": ""
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "arboun-kheir",
+    "key": "share_bride",
+    "name_ar": "سهم تيسير زواج عروسة يتيمة",
+    "name_en": "Bride Support Share",
+    "amount": "1500.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "مساهمة في جهاز منزلي أساسي (بوتاجاز أو غسالة) لحفظ كرامة عروسة",
+        "en": ""
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "arboun-kheir",
+    "key": "share_jariyah",
+    "name_ar": "سهم صدقة جارية (سقف / مياه)",
+    "name_en": "Sadaqah Jariyah Share",
+    "amount": "2500.00",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "سهم في بناء سقف خشبي معزول أو وصلة مياه نقية تدوم 10 سنوات",
+        "en": ""
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "arboun-kheir",
+    "key": "share_custom",
+    "name_ar": "أي نسبة أو قيمة تختارها",
+    "name_en": "Custom Amount",
+    "amount": "100.00",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "حدد أي مبلغ يناسب أرباح مشروعك الحالي عبر بوابة الدفع الآمنة",
+        "en": ""
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "food",
+    "key": "meat_share",
+    "name_ar": "سهم لحوم الذبائح الشهرية",
+    "name_en": "Monthly slaughter meat share",
+    "amount": "350.00",
+    "sort_order": 1,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "يشترك في ذبيحة الشهر ويوزَّع لحمها على الأسر",
+        "en": "Joins the month's slaughter; the meat goes to families"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "food",
+    "key": "meat_kg",
+    "name_ar": "كيلو لحمة بلدي لأسرة",
+    "name_en": "1 kg of local meat for a family",
+    "amount": "450.00",
+    "sort_order": 2,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "food",
+    "key": "carton",
+    "name_ar": "كرتونة غذاء ١٤ كيلو",
+    "name_en": "14 kg food carton",
+    "amount": "700.00",
+    "sort_order": 3,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "مكونات بلدي تكفي أسرة شهراً",
+        "en": "Local staples that last a family a month"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "food",
+    "key": "full",
+    "name_ar": "سُفرة الشهر: كرتونة + لحمة",
+    "name_en": "Month's table: carton + meat",
+    "amount": "1100.00",
+    "sort_order": 4,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "كرتونة ١٤ كيلو وكيلو لحمة من ذبيحة الشهر",
+        "en": "A 14 kg carton plus 1 kg of meat from the month's slaughter"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "food",
+    "key": "full_3",
+    "name_ar": "كفالة سُفرة ٣ شهور",
+    "name_en": "3-month table sponsorship",
+    "amount": "3300.00",
+    "sort_order": 5,
+    "is_active": true,
+    "extra": {}
+  },
+  {
+    "donation_campaign_slug": "food",
+    "key": "full_year",
+    "name_ar": "كفالة سُفرة سنة كاملة",
+    "name_en": "Full-year table sponsorship",
+    "amount": "13200.00",
+    "sort_order": 6,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "أسرة واحدة، اثنتا عشرة سُفرة",
+        "en": "One family, twelve months of food"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "food",
+    "key": "meal",
+    "name_ar": "وجبة إطعام مطبوخة",
+    "name_en": "A cooked meal",
+    "amount": "75.00",
+    "sort_order": 7,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "أرز ولحم أو دجاج وخضار وخبز",
+        "en": "Rice, meat or chicken, vegetables and bread"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "food",
+    "key": "kaffara_yameen",
+    "name_ar": "كفارة يمين: إطعام عشرة مساكين",
+    "name_en": "Oath expiation: feeding ten poor people",
+    "amount": "750.00",
+    "sort_order": 8,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "عشر وجبات كاملة لعشرة مساكين",
+        "en": "Ten full meals for ten poor people"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "food",
+    "key": "kaffara_siyam",
+    "name_ar": "كفارة صيام: إطعام ستين مسكيناً",
+    "name_en": "Fasting expiation: feeding sixty poor people",
+    "amount": "4500.00",
+    "sort_order": 9,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "ستون وجبة كاملة لستين مسكيناً",
+        "en": "Sixty full meals for sixty poor people"
+      }
+    }
+  },
+  {
+    "donation_campaign_slug": "food",
+    "key": "fidya",
+    "name_ar": "فدية صيام عن يوم",
+    "name_en": "Fasting fidya for one day",
+    "amount": "75.00",
+    "sort_order": 10,
+    "is_active": true,
+    "extra": {
+      "note": {
+        "ar": "إطعام مسكين عن كل يوم لمن لا يستطيع الصوم",
+        "en": "One poor person fed for each day missed"
+      }
+    }
+  }
+]

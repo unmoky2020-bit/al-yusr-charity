@@ -12,7 +12,8 @@ import yusrDistribution from "@/assets/yusr-distribution-1.jpg";
 import yusrMeals from "@/assets/yusr-meals.jpg";
 import posterWater from "@/assets/poster-water.png";
 
-const DONATE = "/donate?program=dhill";
+import { campaignDonateHref } from "@/data/campaignPages/index";
+const DONATE = campaignDonateHref("dhill");
 
 /**
  * The three kinds of shade the campaign builds. Content (labels, descriptions, amounts) comes from

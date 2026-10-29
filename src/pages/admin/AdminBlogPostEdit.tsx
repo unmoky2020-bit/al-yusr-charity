@@ -11,13 +11,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RequireAuth } from "@/auth/RequireAuth";
 import { useLang } from "@/i18n/LangContext";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
   type DbBlogPost, dbToBlogPost,
-  updatePost, updatePostStatus, updatePostMedia,
+  updatePost, updatePostStatus, updatePostMedia, deletePost,
   fetchAllRowsAdmin,
 } from "@/data/blogApi";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { uploadBlogMedia, generateAndUploadOg } from "@/lib/blog-uploads";
 import { auditPost, downloadJson, downloadPdf, downloadCsv } from "@/lib/seo-report";
 import {
@@ -412,7 +412,8 @@ const Inner = () => {
     if (!row || !draft) return;
     setSaving(true);
     try {
-      await updatePost(row.id, {
+      // PATCH /content/{id} (or POST /content the first time a static article is saved)
+      const savedId = await updatePost(row.id, {
         slug: draft.slug.toLowerCase().replace(/\s+/g, "-"),
         category_ar: draft.category_ar, category_en: draft.category_en || draft.category_ar,
         focus_keyword: draft.focus_keyword || null,
@@ -426,17 +427,31 @@ const Inner = () => {
         og_image_url: draft.og_image_url || null,
         seo_score: score?.score ?? 0,
       });
-      if (mode === "publish") await updatePostStatus(row.id, "published");
-      if (mode === "unpublish") await updatePostStatus(row.id, "draft");
+      if (mode === "publish") await updatePostStatus(savedId, "published");
+      if (mode === "unpublish") await updatePostStatus(savedId, "draft");
       if (mode === "schedule") {
         if (!draft.scheduled_at) { toast({ title: isRTL ? "اختر موعد النشر" : "Pick a schedule time", variant: "destructive" }); setSaving(false); return; }
-        await updatePostStatus(row.id, "scheduled", new Date(draft.scheduled_at).toISOString());
+        await updatePostStatus(savedId, "scheduled", new Date(draft.scheduled_at).toISOString());
       }
       try { localStorage.removeItem(draftKey(row.slug)); } catch {}
       toast({ title: isRTL ? " تم الحفظ" : " Saved" });
       await load();
-    } catch (e: any) {
-      toast({ title: e.message, variant: "destructive" });
+    } catch (e: unknown) {
+      toast({ title: isRTL ? "فشل الحفظ على الخادم" : "Save failed", description: apiErrorMessage(e), variant: "destructive" });
+    } finally { setSaving(false); }
+  };
+
+  const removePost = async () => {
+    if (!row) return;
+    if (!confirm(isRTL ? "حذف هذا المقال نهائيًا من قاعدة البيانات؟" : "Delete this article permanently?")) return;
+    setSaving(true);
+    try {
+      await deletePost(row.id); // DELETE /content/{id}
+      try { localStorage.removeItem(draftKey(row.slug)); } catch { /* local draft cleanup only */ }
+      toast({ title: isRTL ? "تم حذف المقال" : "Article deleted" });
+      nav("/admin/blog-seo");
+    } catch (e: unknown) {
+      toast({ title: isRTL ? "فشل الحذف" : "Delete failed", description: apiErrorMessage(e), variant: "destructive" });
     } finally { setSaving(false); }
   };
 
@@ -939,6 +954,11 @@ const Inner = () => {
               {row.status === "published" && (
                 <Button variant="outline" onClick={() => save("unpublish")} disabled={saving}>
                   {isRTL ? "حول لمسودّة" : "Unpublish"}
+                </Button>
+              )}
+              {row.id.startsWith("laravel-") && (
+                <Button variant="outline" onClick={removePost} disabled={saving} className="border-destructive/40 text-destructive hover:bg-destructive/10">
+                  {isRTL ? "حذف المقال" : "Delete article"}
                 </Button>
               )}
               <div className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground">

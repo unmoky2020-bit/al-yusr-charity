@@ -19,7 +19,12 @@ import { FAQ_AR, FAQ_EN } from "@/data/qurbaniFaq";
 import { SERVICE_PAGES } from "@/data/servicePagesConfig";
 import { GEO_GOVERNORATES } from "@/data/geoPages";
 
-import { articlesApi, faqsApi, programsApiV1, storiesApi, unifiedContentApi, LaravelArticle, LaravelFaq } from "@/data/laravelApi";
+import { articlesApi, programsApiV1, storiesApi, galleryApi } from "@/data/laravelApi";
+import { fetchFaqsAdmin, createFaq, updateFaq, deleteFaq, type FaqItem } from "@/data/faqsApi";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
+
+/** FAQ rows from Laravel `/faqs` are shown here with id `LARAVEL_FAQ:<id>` and saved back to `/faqs/{id}`. */
+const FAQ_ID_PREFIX = "LARAVEL_FAQ:";
 
 const TYPE_ICON: Record<ContentType, typeof BookOpen> = { article: BookOpen, program: FileText, faq: HelpCircle, page: FileEdit };
 
@@ -27,7 +32,8 @@ const Inner = () => {
   const { lang } = useLang();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { items, upsert, remove, setStatus } = useContentStore();
+  // Laravel /content documents (all types). Writes go to POST/PATCH/DELETE /content.
+  const { items, upsert, remove, setStatus, error: contentError } = useContentStore();
   // DB-only blog rows (no static seed) — keeps counts in sync with /admin/blog-seo.
   const { rows: blogRows } = useAllBlogRowsAdmin();
   const blogPosts = useMemo<BlogPost[]>(() => blogRows.map(dbToBlogPost), [blogRows]);
@@ -45,14 +51,14 @@ const Inner = () => {
     staleTime: 30_000,
   });
 
-  // Laravel FAQs
-  const { data: laravelFaqs = [] } = useQuery({
+  // Laravel FAQs (GET /faqs)
+  const { data: laravelFaqs = [], refetch: refetchFaqs } = useQuery({
     queryKey: ["admin-content", "laravel-faqs"],
     queryFn: async () => {
       try {
-        return await faqsApi.listAll();
+        return await fetchFaqsAdmin();
       } catch {
-        return [];
+        return [] as FaqItem[];
       }
     },
     staleTime: 30_000,
@@ -111,38 +117,7 @@ const Inner = () => {
     staleTime: 30_000,
   });
 
-  // Live FAQs aggregated from unifiedContentApi
-  const { data: faqRows = [] } = useQuery({
-    queryKey: ["admin-content", "faqs"],
-    queryFn: async () => {
-      try {
-        const unifiedFaqs = await unifiedContentApi.listByType("faq");
-        if (Array.isArray(unifiedFaqs) && unifiedFaqs.length > 0) {
-          return unifiedFaqs.map((f) => ({
-            id: f.id,
-            slug: f.slug || `faq-${f.id}`,
-            parent_id: null,
-            title_ar: f.title_ar,
-            title_en: f.title_en || f.title_ar,
-            metadata: {
-              faq: [
-                {
-                  question_ar: f.title_ar,
-                  question_en: f.title_en || f.title_ar,
-                  answer_ar: f.content_ar,
-                  answer_en: f.content_en || f.content_ar,
-                },
-              ],
-            },
-            updated_at: f.updated_at || f.created_at || "",
-          }));
-        }
-      } catch {}
-
-      return [];
-    },
-    staleTime: 30_000,
-  });
+  // (FAQ-type /content documents are part of useContentStore() above.)
   const [filter, setFilter] = useState<"all" | ContentType>("all");
   const [statusF, setStatusF] = useState<"all" | "published" | "draft">("all");
   const [q, setQ] = useState("");
@@ -206,34 +181,11 @@ const Inner = () => {
 
   const faqDocs = useMemo<ContentDoc[]>(() => {
     const out: ContentDoc[] = [];
-    (Array.isArray(faqRows) ? faqRows : []).forEach((n: any) => {
-      const meta = (n.metadata || {}) as any;
-      const faqs = Array.isArray(meta.faq) ? meta.faq : Array.isArray(meta.faqs) ? meta.faqs : [];
-      faqs.forEach((q: any, idx: number) => {
-        const qAr = q?.q_ar || q?.question_ar || q?.question || "";
-        const qEn = q?.q_en || q?.question_en || q?.question || "";
-        const aAr = q?.a_ar || q?.answer_ar || q?.answer || "";
-        const aEn = q?.a_en || q?.answer_en || q?.answer || "";
-        if (!qAr && !qEn) return;
-        out.push({
-          id: `FAQ:${n.id}:${idx}`,
-          type: "faq" as ContentType,
-          slug: `${n.slug}#faq-${idx}`,
-          status: "published",
-          author: "—",
-          updatedAt: (n.updated_at || "").slice(0, 10),
-          title: { ar: qAr || qEn, en: qEn || qAr },
-          excerpt: { ar: aAr, en: aEn },
-          body: { ar: aAr, en: aEn },
-          tags: [n.title_ar || n.slug],
-        });
-      });
-    });
 
-    // Laravel FAQs from API
-    (Array.isArray(laravelFaqs) ? laravelFaqs : []).forEach((f: LaravelFaq) => {
+    // Laravel FAQs from API (GET /faqs)
+    (Array.isArray(laravelFaqs) ? laravelFaqs : []).forEach((f: FaqItem) => {
       out.push({
-        id: `LARAVEL_FAQ:${f.id}`,
+        id: `${FAQ_ID_PREFIX}${f.id}`,
         type: "faq" as ContentType,
         slug: `faqs/${f.id}`,
         status: f.is_active !== false ? "published" : "draft",
@@ -317,7 +269,7 @@ const Inner = () => {
     });
 
     return out;
-  }, [faqRows]);
+  }, [laravelFaqs]);
 
   // Merge: blog (read-only) + local items, blog wins on slug collision.
   const merged = useMemo<ContentDoc[]>(() => {
@@ -337,7 +289,7 @@ const Inner = () => {
     if (id.startsWith("FAQ-STATIC:qurbani")) return "qurbani";
     if (id.startsWith("FAQ-STATIC:svc")) return "services";
     if (id.startsWith("FAQ-STATIC:geo")) return "geo";
-    if (id.startsWith("FAQ:")) return "db";
+    if (id.startsWith(FAQ_ID_PREFIX) || id.startsWith("CONTENT:")) return "db";
     return "other";
   };
   const sourceLabel = (src: string) => {
@@ -377,12 +329,38 @@ const Inner = () => {
     articles: merged.filter((i) => i.type === "article").length,
   };
 
-  const onSave = (doc: ContentDoc) => {
-    upsert({ ...doc, updatedAt: new Date().toISOString().slice(0, 10), author: doc.author || user?.name || "—" });
-    setEditing(null); setShowAdd(false);
-    toast({ title: lang === "ar" ? " تم الحفظ" : " Saved", description: doc.title[lang] });
+  const failToast = (title: string, e: unknown) =>
+    toast({ variant: "destructive", title, description: apiErrorMessage(e) });
+
+  const onSave = async (doc: ContentDoc) => {
+    try {
+      if (doc.id.startsWith(FAQ_ID_PREFIX)) {
+        // Existing FAQ → PUT /faqs/{id}
+        await updateFaq(doc.id.slice(FAQ_ID_PREFIX.length), {
+          question_ar: doc.title.ar, question_en: doc.title.en,
+          answer_ar: doc.body?.ar || doc.excerpt?.ar || "", answer_en: doc.body?.en || doc.excerpt?.en || "",
+          is_active: doc.status === "published",
+        });
+        void refetchFaqs();
+      } else if (doc.type === "faq" && !doc.id.startsWith("CONTENT:")) {
+        // New FAQ → POST /faqs
+        await createFaq({
+          question_ar: doc.title.ar, question_en: doc.title.en,
+          answer_ar: doc.body?.ar || doc.excerpt?.ar || "", answer_en: doc.body?.en || doc.excerpt?.en || "",
+          is_active: doc.status === "published",
+        });
+        void refetchFaqs();
+      } else {
+        // Content document → POST /content or PATCH /content/{id}
+        await upsert({ ...doc, updatedAt: new Date().toISOString().slice(0, 10), author: doc.author || user?.name || "—" });
+      }
+      setEditing(null); setShowAdd(false);
+      toast({ title: lang === "ar" ? " تم الحفظ" : " Saved", description: doc.title[lang] });
+    } catch (e) {
+      failToast(lang === "ar" ? "فشل الحفظ على الخادم" : "Save failed", e);
+    }
   };
-  const onDelete = (id: string) => {
+  const onDelete = async (id: string) => {
     if (id.startsWith("FAQ-STATIC:")) {
       toast({ title: lang === "ar" ? "هذا السؤال ثابت في الكود ولا يُحذف من اللوحة" : "Static FAQ — managed in code" });
       return;
@@ -393,21 +371,25 @@ const Inner = () => {
       return;
     }
     if (id.startsWith("NODE:")) {
-      navigate(`/admin/projects/${id.slice(5)}`);
+      navigate(`/admin/programs/${id.slice(5)}`);
       return;
     }
     if (id.startsWith("STORY:")) {
       navigate(`/admin/stories`);
       return;
     }
-    if (id.startsWith("FAQ:")) {
-      const nodeId = id.split(":")[1];
-      navigate(`/admin/projects/${nodeId}`);
-      return;
-    }
     if (!confirm(lang === "ar" ? "تأكيد حذف هذا العنصر؟" : "Confirm delete?")) return;
-    remove(id);
-    toast({ title: lang === "ar" ? " تم الحذف" : " Deleted" });
+    try {
+      if (id.startsWith(FAQ_ID_PREFIX)) {
+        await deleteFaq(id.slice(FAQ_ID_PREFIX.length)); // DELETE /faqs/{id}
+        void refetchFaqs();
+      } else {
+        await remove(id); // DELETE /content/{id}
+      }
+      toast({ title: lang === "ar" ? " تم الحذف" : " Deleted" });
+    } catch (e) {
+      failToast(lang === "ar" ? "فشل الحذف" : "Delete failed", e);
+    }
   };
 
   const onEdit = (it: ContentDoc) => {
@@ -416,18 +398,27 @@ const Inner = () => {
       return;
     }
     if (it.id.startsWith("BLOG:")) { navigate("/admin/blog-seo"); return; }
-    if (it.id.startsWith("NODE:")) { navigate(`/admin/projects/${it.id.slice(5)}`); return; }
+    if (it.id.startsWith("NODE:")) { navigate(`/admin/programs/${it.id.slice(5)}`); return; }
     if (it.id.startsWith("STORY:")) { navigate(`/admin/stories`); return; }
-    if (it.id.startsWith("FAQ:")) { navigate(`/admin/projects/${it.id.split(":")[1]}`); return; }
     setEditing(it);
   };
-  const onToggleStatus = (it: ContentDoc) => {
+  const onToggleStatus = async (it: ContentDoc) => {
     if (it.id.startsWith("BLOG:")) { navigate("/admin/blog-seo"); return; }
-    if (it.id.startsWith("NODE:") || it.id.startsWith("STORY:") || it.id.startsWith("FAQ:")) {
+    if (it.id.startsWith("NODE:") || it.id.startsWith("STORY:") || it.id.startsWith("FAQ-STATIC:")) {
       onEdit(it);
       return;
     }
-    setStatus(it.id, it.status === "published" ? "draft" : "published");
+    const next = it.status === "published" ? "draft" : "published";
+    try {
+      if (it.id.startsWith(FAQ_ID_PREFIX)) {
+        await updateFaq(it.id.slice(FAQ_ID_PREFIX.length), { is_active: next === "published" });
+        void refetchFaqs();
+      } else {
+        await setStatus(it.id, next); // PATCH /content/{id}
+      }
+    } catch (e) {
+      failToast(lang === "ar" ? "فشل تغيير الحالة" : "Status change failed", e);
+    }
   };
 
   return (
@@ -444,6 +435,12 @@ const Inner = () => {
           </div>
           <ArrowLeft className={`h-4 w-4 text-accent transition-transform ${lang === "ar" ? "group-hover:-translate-x-1" : "rotate-180 group-hover:translate-x-1"}`} />
         </Link>
+
+        {contentError && (
+          <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-3 text-sm font-bold text-destructive">
+            {lang === "ar" ? "تعذر تحميل مستندات المحتوى من الخادم: " : "Could not load content documents: "}{contentError}
+          </div>
+        )}
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard accent label={lang === "ar" ? "إجمالي" : "Total"} value={counts.total} />
@@ -543,7 +540,6 @@ const Inner = () => {
                       {it.id.startsWith("BLOG:") && <span className="ms-1 text-[9px] opacity-70">{lang === "ar" ? "(محرر السيو)" : "(SEO editor)"}</span>}
                       {it.id.startsWith("NODE:") && <span className="ms-1 text-[9px] opacity-70">{lang === "ar" ? "(صفحة البرنامج)" : "(Project page)"}</span>}
                       {it.id.startsWith("STORY:") && <span className="ms-1 text-[9px] opacity-70">{lang === "ar" ? "(القصص)" : "(Stories)"}</span>}
-                      {it.id.startsWith("FAQ:") && <span className="ms-1 text-[9px] opacity-70">{lang === "ar" ? "(FAQ البرنامج)" : "(Program FAQ)"}</span>}
                     </button>
                     <button onClick={() => onToggleStatus(it)}
                       className="inline-flex items-center gap-1 rounded-lg bg-muted px-2 py-1.5 text-xs font-extrabold hover:bg-primary/10 hover:text-primary">
@@ -560,8 +556,8 @@ const Inner = () => {
 
         <div className="text-[11px] text-muted-foreground">
           {lang === "ar"
-            ? "كل المحتوى الظاهر هنا قادم من قاعدة بيانات Lovable Cloud الحقيقية (مقالات، قصص، برامج، أسئلة شائعة)."
-            : "All content shown here comes from the live Lovable Cloud database (articles, stories, programs, FAQs)."}
+            ? "المحتوى هنا قادم من الباك إند (Laravel: ‎/content و‎/faqs و‎/stories و‎/programs) بالإضافة لأسئلة ثابتة من كود الموقع (للعرض فقط)."
+            : "Content here comes from the Laravel backend (/content, /faqs, /stories, /programs) plus read-only static FAQs from the site code."}
         </div>
       </div>
 
@@ -594,11 +590,20 @@ const ContentEditor = ({
   const updI18n = (k: "title" | "excerpt" | "body", lng: "ar" | "en", v: string) =>
     setForm({ ...form, [k]: { ...(form[k] || { ar: "", en: "" }), [lng]: v } });
 
-  const onImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [uploadingImg, setUploadingImg] = useState(false);
+  const onImg = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]; if (!f) return;
-    const r = new FileReader();
-    r.onload = () => upd("image", String(r.result));
-    r.readAsDataURL(f);
+    setUploadingImg(true);
+    try {
+      // Upload to Laravel storage (POST /gallery) and keep only the returned URL.
+      const url = await galleryApi.uploadImage(f, form.title.ar || "content");
+      upd("image", url);
+    } catch (err) {
+      toast({ variant: "destructive", title: lang === "ar" ? "فشل رفع الصورة" : "Upload failed", description: apiErrorMessage(err) });
+    } finally {
+      setUploadingImg(false);
+      e.target.value = "";
+    }
   };
 
   const addTag = () => {
@@ -656,7 +661,8 @@ const ContentEditor = ({
             <Label>{lang === "ar" ? "صورة الغلاف" : "Cover image"}</Label>
             <div className="flex items-center gap-3">
               {form.image ? <LazyImage src={form.image} alt="" wrapperClassName="h-16 w-24 rounded-lg" /> : <div className="grid h-16 w-24 place-items-center rounded-lg bg-muted text-muted-foreground"><ImageIcon className="h-5 w-5" /></div>}
-              <input type="file" accept="image/*" onChange={onImg} className="text-xs" />
+              <input type="file" accept="image/*" onChange={onImg} className="text-xs" disabled={uploadingImg} />
+              {uploadingImg && <span className="text-[11px] text-muted-foreground">{lang === "ar" ? "جارٍ الرفع…" : "Uploading…"}</span>}
               {form.image && <button type="button" onClick={() => upd("image", undefined)} className="text-xs text-destructive">{lang === "ar" ? "إزالة" : "Remove"}</button>}
             </div>
           </div>

@@ -7,6 +7,7 @@ import { BrandPromise } from "@/components/sections/BrandPromise";
 import { AboutTeaser } from "@/components/sections/AboutTeaser";
 import { WorkAxes } from "@/components/sections/WorkAxes";
 import { CampaignsScroll } from "@/components/sections/CampaignsScroll";
+import { UrgentCasesCarousel } from "@/components/sections/UrgentCasesCarousel";
 import { BrandValues } from "@/components/sections/BrandValues";
 import { ProximityGrid } from "@/components/sections/ProximityGrid";
 import { Donate } from "@/components/sections/Donate";
@@ -48,6 +49,7 @@ const Index = () => {
           </div>
 
           <CampaignsScroll />
+          <UrgentCasesCarousel />
           <BrandValues />
           <EgyptImpactMap />
           <ProximityGrid />

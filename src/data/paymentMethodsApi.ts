@@ -116,7 +116,9 @@ export const DEFAULT_PAYMENT_METHODS: PaymentMethodRow[] = [
   },
 ];
 
-const STORAGE_KEY = "alyusr_payment_methods";
+/** Rows from DEFAULT_PAYMENT_METHODS (id "pm-…") exist only in the frontend, not in the database. */
+const isDefaultRow = (id: string) => id.startsWith("pm-");
+const NOT_IN_DB_MSG = "هذه طريقة دفع افتراضية من كود الموقع وغير محفوظة في قاعدة البيانات — أضفها من الباك إند أولًا";
 
 function mapLaravelPaymentMethod(m: any): PaymentMethodRow {
   const details = m.details || {};
@@ -162,26 +164,20 @@ function mapLaravelPaymentMethod(m: any): PaymentMethodRow {
   };
 }
 
+/**
+ * GET /payment-methods. Falls back to DEFAULT_PAYMENT_METHODS (ids "pm-…") only when the API
+ * returns nothing, so the public donate page keeps working; those rows cannot be edited.
+ */
 export async function listAllPaymentMethods(): Promise<PaymentMethodRow[]> {
   try {
     const { paymentMethodsApi } = await import("@/data/laravelApi");
     const liveList = await paymentMethodsApi.listAll();
     if (Array.isArray(liveList) && liveList.length > 0) {
-      const mapped = liveList.map(mapLaravelPaymentMethod);
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(mapped)); } catch {}
-      return mapped;
+      return liveList.map(mapLaravelPaymentMethod);
     }
   } catch (err) {
     console.warn("Could not fetch payment methods from Laravel API:", err);
   }
-
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch {}
   return [...DEFAULT_PAYMENT_METHODS];
 }
 
@@ -190,8 +186,10 @@ export async function listActivePaymentMethods(): Promise<PaymentMethodRow[]> {
   return all.filter((x) => x.active);
 }
 
+/** PUT /payment-methods/{id}. Throws on failure (no local copy). Returns the refreshed list. */
 export async function updatePaymentMethod(id: string, patch: Partial<PaymentMethodRow>) {
-  try {
+  if (isDefaultRow(id)) throw new Error(NOT_IN_DB_MSG);
+  {
     const { paymentMethodsApi } = await import("@/data/laravelApi");
     const payload: Record<string, unknown> = {};
     if (patch.label_ar) payload.name_ar = patch.label_ar;
@@ -214,19 +212,11 @@ export async function updatePaymentMethod(id: string, patch: Partial<PaymentMeth
       }
     }
 
-    if (Object.keys(payload).length > 0 && !id.startsWith("pm-")) {
+    if (Object.keys(payload).length > 0) {
       await paymentMethodsApi.update(id, payload as any);
     }
-  } catch (err) {
-    console.warn("Could not update payment method on Laravel API:", err);
   }
-
-  const all = await listAllPaymentMethods();
-  const next = all.map((m) => (m.id === id ? { ...m, ...patch } : m));
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-  } catch {}
-  return next;
+  return listAllPaymentMethods();
 }
 
 export async function setPaymentMethodActive(id: string, active: boolean) {
@@ -254,15 +244,10 @@ export async function createPaymentMethod(row: Omit<PaymentMethodRow, "id">): Pr
   return mapLaravelPaymentMethod(data);
 }
 
+/** DELETE /payment-methods/{id}. Throws on failure. */
 export async function deletePaymentMethod(id: string): Promise<boolean> {
-  if (!id.startsWith("pm-")) {
-    const { paymentMethodsApi } = await import("@/data/laravelApi");
-    await paymentMethodsApi.remove(id);
-  }
-  const all = await listAllPaymentMethods();
-  const next = all.filter((x) => x.id !== id);
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-  } catch {}
+  if (isDefaultRow(id)) throw new Error(NOT_IN_DB_MSG);
+  const { paymentMethodsApi } = await import("@/data/laravelApi");
+  await paymentMethodsApi.remove(id);
   return true;
 }

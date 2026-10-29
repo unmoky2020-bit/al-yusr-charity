@@ -27,7 +27,9 @@ import {
   ArrowDown,
   ChevronRight,
   ChevronLeft,
+  HelpCircle,
 } from "lucide-react";
+import { EntityFaqManager } from "@/components/admin/faq/EntityFaqManager";
 import { axesApi, LaravelAxis, galleryApi, formatServerImageUrl } from "@/data/laravelApi";
 import imgFood from "@/assets/axis-food.jpg";
 import imgHealth from "@/assets/axis-health.jpg";
@@ -223,6 +225,7 @@ export const AdminAxisDetail: React.FC = () => {
     { id: "stats", label: isRTL ? "أرقام التأثير" : "Impact Stats", icon: BarChart3, count: statEntries.length },
     { id: "features", label: isRTL ? "الخدمات والنقاط" : "Services & Points", icon: CheckCircle2, count: (axis.features_ar || []).length },
     { id: "media", label: isRTL ? "الصورة والوسائط" : "Media & Image", icon: ImageIcon, count: null },
+    { id: "faq", label: isRTL ? "الأسئلة الشائعة" : "FAQ", icon: HelpCircle, count: null },
   ];
 
   const currentTabIndex = TABS.findIndex((t) => t.id === activeTab);
@@ -298,7 +301,7 @@ export const AdminAxisDetail: React.FC = () => {
           <Tabs value={activeTab} onValueChange={setActiveTab} dir={isRTL ? "rtl" : "ltr"} className="w-full">
             {/* شريط التبويبات المتناسق بعرض كامل ومضبوط */}
             <div className="w-full overflow-x-auto pb-1 mb-4 scrollbar-none">
-              <TabsList className="grid grid-cols-4 w-full min-w-[500px] sm:min-w-0 h-12 bg-muted/60 p-1.5 text-xs font-bold rounded-2xl border border-border/60 gap-1.5">
+              <TabsList className="grid grid-cols-5 w-full min-w-[620px] sm:min-w-0 h-12 bg-muted/60 p-1.5 text-xs font-bold rounded-2xl border border-border/60 gap-1.5">
                 {TABS.map((tab) => (
                   <TabsTrigger
                     key={tab.id}
@@ -790,6 +793,21 @@ export const AdminAxisDetail: React.FC = () => {
                   <span>{isRTL ? "حفظ التغييرات" : "Save Changes"}</span>
                 </Button>
               </div>
+            </TabsContent>
+
+            {/* 5. الأسئلة الشائعة: تصنيف أسئلة مربوط بالمحور (faq_category_id) */}
+            <TabsContent value="faq" className="space-y-4 pt-4" dir="rtl">
+              <EntityFaqManager
+                kind="axis"
+                saved={!!axis.id}
+                linkedCategoryId={axis.faq_category_id}
+                slug={axis.slug}
+                nameAr={axis.name_ar}
+                onLink={async (faq_category_id) => {
+                  await axesApi.update(axis.id, { ...axis, faq_category_id });
+                  setAxis((a) => (a ? { ...a, faq_category_id } : a));
+                }}
+              />
             </TabsContent>
           </Tabs>
         </div>

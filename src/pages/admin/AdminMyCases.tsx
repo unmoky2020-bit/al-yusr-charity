@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { RequireAuth } from "@/auth/RequireAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { khabiaRequestsApi, delegateCasesApi, type KhabiaPatch } from "@/data/api/khabiaRequestsApi";
+import { apiErrorMessage, isEndpointMissing, FEATURE_PENDING_MSG } from "@/data/api/adminApiHelpers";
 import { toast } from "@/hooks/use-toast";
 import { compressImage } from "@/lib/image-compress";
-import { addCaseUpdate, uploadCaseMediaFile, STATUS_LABELS, type CaseStatus } from "@/data/casesApi";
+import { getCaseStatusLabel } from "@/data/casesApi";
 import { logActivity } from "@/lib/activityLog";
 
 type Khabia = {
@@ -24,7 +25,7 @@ type Khabia = {
 };
 
 type AidCase = {
-  id: string; ref_code: string; title: string; status: CaseStatus;
+  id: string; ref_code: string; title: string; status: string;
   beneficiary_name: string; city: string | null; area: string | null;
   governorate: string; scheduled_visit_at: string | null;
   delegate_notes: string | null; cover_image_url: string | null;
@@ -50,6 +51,7 @@ const Inner = () => {
   const [rows, setRows] = useState<Khabia[]>([]);
   const [aid, setAid] = useState<AidCase[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadErrors, setLoadErrors] = useState<{ khabia?: string; aid?: string }>({});
   const [draft, setDraft] = useState<Record<string, { scheduled_at?: string; amount?: string; notes?: string }>>({});
   const [aidDraft, setAidDraft] = useState<Record<string, { scheduled_at?: string; note?: string }>>({});
   const [savingId, setSavingId] = useState<string | null>(null);
@@ -59,27 +61,20 @@ const Inner = () => {
   const reload = async () => {
     if (!user?.id) return;
     setLoading(true);
-    try {
-      const q: any = supabase.from("khabia_requests" as any);
-      const { data, error } = await q
-        .select("id,ref_code,full_name,phone,city,address,status,scheduled_at,delivered_at,collected_at,amount_collected,notes,delivery_proof_url,collection_proof_url,assigned_delegate_id")
-        .eq("assigned_delegate_id", user.id)
-        .order("scheduled_at", { ascending: true, nullsFirst: false });
-      if (error) throw error;
-      setRows(Array.isArray(data) ? (data as unknown as Khabia[]) : []);
-
-      const { data: aidRows, error: aidErr } = await supabase
-        .from("cases")
-        .select("id,ref_code,title,status,beneficiary_name,city,governorate,cover_image_url,scheduled_visit_at,delegate_notes,area" as any)
-        .eq("assigned_delegate_id", user.id)
-        .order("scheduled_visit_at", { ascending: true, nullsFirst: false });
-      if (aidErr) throw aidErr;
-      setAid(Array.isArray(aidRows) ? (aidRows as unknown as AidCase[]) : []);
-    } catch (e) {
-      setRows([]);
-      setAid([]);
-    }
-    finally { setLoading(false); }
+    const errMsg = (e: unknown) => (isEndpointMissing(e) ? FEATURE_PENDING_MSG : apiErrorMessage(e));
+    const byDate = (a: string | null, b: string | null) =>
+      (a ? new Date(a).getTime() : Number.MAX_SAFE_INTEGER) - (b ? new Date(b).getTime() : Number.MAX_SAFE_INTEGER);
+    const [kRes, cRes] = await Promise.allSettled([
+      khabiaRequestsApi.list({ assigned_delegate_id: "me" }),
+      delegateCasesApi.list("me"),
+    ]);
+    const errors: { khabia?: string; aid?: string } = {};
+    if (kRes.status === "fulfilled") setRows([...kRes.value].sort((a, b) => byDate(a.scheduled_at, b.scheduled_at)));
+    else { setRows([]); errors.khabia = errMsg(kRes.reason); }
+    if (cRes.status === "fulfilled") setAid([...cRes.value].sort((a, b) => byDate(a.scheduled_visit_at, b.scheduled_visit_at)));
+    else { setAid([]); errors.aid = errMsg(cRes.reason); }
+    setLoadErrors(errors);
+    setLoading(false);
   };
   useEffect(() => { void reload(); /* eslint-disable-next-line */ }, [user?.id]);
 
@@ -96,8 +91,7 @@ const Inner = () => {
   const saveAction = async (id: string, patch: Record<string, unknown>, successMsg: string) => {
     setSavingId(id);
     try {
-      const { error } = await supabase.from("khabia_requests").update(patch as any).eq("id", id);
-      if (error) throw error;
+      await khabiaRequestsApi.update(id, patch as KhabiaPatch);
       const target = rows.find((r) => r.id === id);
       void logActivity({
         action: "khabia.update",
@@ -108,21 +102,17 @@ const Inner = () => {
       });
       toast({ title: successMsg });
       void reload();
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    } catch (e) { toast({ title: isAr ? "فشل الحفظ" : "Save failed", description: apiErrorMessage(e), variant: "destructive" }); }
     finally { setSavingId(null); }
   };
 
-  /** Compress + upload proof image to private bucket. Returns a signed URL for staff viewing. */
+  /** Compress + upload proof image; the backend stores it and updates the request (status / proof url). */
   const uploadProof = async (file: File, khabiaId: string, kind: "delivery" | "collection") => {
     if (!user?.id) throw new Error("Not signed in");
     const compressed = await compressImage(file, { maxEdge: 1400, quality: 0.78 });
     const ext = (compressed.type.split("/")[1] || "webp").replace("jpeg", "jpg");
-    const path = `${user.id}/${khabiaId}/${kind}-${Date.now()}.${ext}`;
-    const { error: upErr } = await supabase.storage.from("khabia-proofs")
-      .upload(path, compressed, { contentType: compressed.type || "image/webp", upsert: true });
-    if (upErr) throw upErr;
-    // Store the storage path; we'll resolve a signed URL on display
-    return path;
+    const updated = await khabiaRequestsApi.uploadProof(khabiaId, kind, compressed, `${kind}-${Date.now()}.${ext}`);
+    return (kind === "delivery" ? updated.delivery_proof_url : updated.collection_proof_url) ?? "";
   };
 
   const onProofFile = async (khabiaId: string, kind: "delivery" | "collection", file: File | null) => {
@@ -130,11 +120,6 @@ const Inner = () => {
     setUploadingId(khabiaId);
     try {
       const path = await uploadProof(file, khabiaId, kind);
-      const patch = kind === "delivery"
-        ? { delivery_proof_url: path, status: "delivered", delivered_at: new Date().toISOString() }
-        : { collection_proof_url: path };
-      const { error } = await supabase.from("khabia_requests").update(patch as any).eq("id", khabiaId);
-      if (error) throw error;
       const target = rows.find((r) => r.id === khabiaId);
       void logActivity({
         action: kind === "delivery" ? "khabia.proof_delivery" : "khabia.proof_collection",
@@ -145,24 +130,18 @@ const Inner = () => {
       });
       toast({ title: isAr ? " تم رفع صورة الإثبات" : " Proof uploaded" });
       void reload();
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    } catch (e) { toast({ title: isAr ? "فشل رفع صورة الإثبات" : "Proof upload failed", description: apiErrorMessage(e), variant: "destructive" }); }
     finally { setUploadingId(null); }
   };
 
-  const [proofUrls, setProofUrls] = useState<Record<string, string>>({});
-  useEffect(() => {
-    // Resolve signed URLs for any proof paths so the delegate can review what they uploaded
-    const paths = rows.flatMap(r => [r.delivery_proof_url, r.collection_proof_url].filter(Boolean) as string[]);
-    if (!paths.length) { setProofUrls({}); return; }
-    void (async () => {
-      const next: Record<string, string> = {};
-      for (const p of paths) {
-        if (p.startsWith("http")) { next[p] = p; continue; }
-        const { data } = await supabase.storage.from("khabia-proofs").createSignedUrl(p, 60 * 60);
-        if (data?.signedUrl) next[p] = data.signedUrl;
-      }
-      setProofUrls(next);
-    })();
+  // Proof URLs come back from the backend ready to display (public or temporary signed URLs).
+  const proofUrls = useMemo(() => {
+    const next: Record<string, string> = {};
+    for (const r of rows) {
+      if (r.delivery_proof_url) next[r.delivery_proof_url] = r.delivery_proof_url;
+      if (r.collection_proof_url) next[r.collection_proof_url] = r.collection_proof_url;
+    }
+    return next;
   }, [rows]);
 
   /** Aid delivery — post a case_update with optional photo as proof. */
@@ -173,17 +152,12 @@ const Inner = () => {
     }
     setUploadingId(caseId);
     try {
-      let img: string | null = null;
-      if (file) {
-        const compressed = await compressImage(file, { maxEdge: 1400, quality: 0.78 });
-        const { url } = await uploadCaseMediaFile(compressed, caseId);
-        img = url;
-      }
-      await addCaseUpdate(caseId, body.trim() || (isAr ? "تم تسليم المساعدة" : "Aid delivered"), img);
+      const compressed = file ? await compressImage(file, { maxEdge: 1400, quality: 0.78 }) : null;
+      await delegateCasesApi.postUpdate(caseId, body.trim() || (isAr ? "تم تسليم المساعدة" : "Aid delivered"), compressed);
       toast({ title: isAr ? " تم تسجيل التسليم" : " Delivery logged" });
       setAidDraft({ ...aidDraft, [caseId]: { ...aidDraft[caseId], note: "" } });
       void reload();
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    } catch (e) { toast({ title: isAr ? "فشل تسجيل التسليم" : "Logging failed", description: apiErrorMessage(e), variant: "destructive" }); }
     finally { setUploadingId(null); }
   };
 
@@ -219,14 +193,14 @@ const Inner = () => {
           <div className="grid place-items-center py-16"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
         ) : tab === "khabia" && rows.length === 0 ? (
           <div className="rounded-2xl bg-card p-10 text-center shadow-soft">
-            <p className="text-sm text-muted-foreground">
-              {isAr ? "لا توجد طلبات خبيئة مخصصة لك حاليًا." : "No Khabia tasks assigned to you yet."}
+            <p className={`text-sm ${loadErrors.khabia ? "font-bold text-destructive" : "text-muted-foreground"}`}>
+              {loadErrors.khabia ?? (isAr ? "لا توجد طلبات خبيئة مخصصة لك حاليًا." : "No Khabia tasks assigned to you yet.")}
             </p>
           </div>
         ) : tab === "aid" && aid.length === 0 ? (
           <div className="rounded-2xl bg-card p-10 text-center shadow-soft">
-            <p className="text-sm text-muted-foreground">
-              {isAr ? "لا توجد حالات مخصصة لك للتسليم." : "No aid cases assigned to you."}
+            <p className={`text-sm ${loadErrors.aid ? "font-bold text-destructive" : "text-muted-foreground"}`}>
+              {loadErrors.aid ?? (isAr ? "لا توجد حالات مخصصة لك للتسليم." : "No aid cases assigned to you.")}
             </p>
           </div>
         ) : tab === "khabia" ? (
@@ -366,7 +340,7 @@ const Inner = () => {
           <div className="grid gap-3 lg:grid-cols-2">
             {aid.map((c) => {
               const ad = aidDraft[c.id] ?? {};
-              const st = STATUS_LABELS[c.status];
+              const st = getCaseStatusLabel(c.status);
               return (
                 <article key={c.id} className="space-y-3 overflow-hidden rounded-2xl bg-card shadow-soft">
                   {c.cover_image_url && <img src={c.cover_image_url} alt="" loading="lazy" className="h-28 w-full object-cover" />}

@@ -101,6 +101,7 @@ export const Navbar = () => {
     { to: "/markoun",            ar: "حملة مَرْكون (الأثاث والأجهزة)", en: "Markoun in-kind" },
     { to: "/arboun",             ar: "مبادرة عربون خير (المستقلين)",   en: "Arboun Freelancers" },
     { to: "/farm",               ar: "المزارع الوقفية",  en: "Endowment Farm" },
+    { to: "/trust",              ar: "الشفافية",        en: "Transparency" },
     { to: "/about#achievements", ar: "إنجازاتنا",       en: "Our achievements" },
     { to: "/gallery",            ar: "معرض الصور",      en: "Gallery" },
     { to: "/donate/track",       ar: "تتبع تبرعك",      en: "Track donation" },

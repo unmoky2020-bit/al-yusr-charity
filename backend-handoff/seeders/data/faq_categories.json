@@ -1,0 +1,212 @@
+[
+  {
+    "slug": "home",
+    "name_ar": "الصفحة الرئيسية",
+    "name_en": "Home Page",
+    "is_active": true,
+    "sort_order": 1,
+    "extra": {
+      "description_ar": "الأسئلة الأكثر شيوعاً حول مؤسسة اليسر وأثر التبرعات المباشر وطرق الدفع.",
+      "description_en": "Most common questions about Al-Yusr foundation and direct donation impact.",
+      "icon": "Home"
+    }
+  },
+  {
+    "slug": "about",
+    "name_ar": "صفحة من نحن",
+    "name_en": "About Us",
+    "is_active": true,
+    "sort_order": 2,
+    "extra": {
+      "description_ar": "الترخيص الرسمي، المقرات، الإعفاء الضريبي، التطوع والتحقق الميداني.",
+      "description_en": "Official registration, headquarters, tax exemption, volunteering, and verification.",
+      "icon": "Building2"
+    }
+  },
+  {
+    "slug": "programs",
+    "name_ar": "صفحة البرامج والمشاريع",
+    "name_en": "Programs & Projects",
+    "is_active": true,
+    "sort_order": 3,
+    "extra": {
+      "description_ar": "مسارات البرامج، الفرق بين البرامج والحالات، سقيا الماء، وتخصيص التبرعات.",
+      "description_en": "Program paths, differences with cases, clean water, and donation allocations.",
+      "icon": "Compass"
+    }
+  },
+  {
+    "slug": "contact",
+    "name_ar": "صفحة تواصل معنا",
+    "name_en": "Contact Us",
+    "is_active": true,
+    "sort_order": 4,
+    "extra": {
+      "description_ar": "مواعيد العمل، وسائل التواصل، المندوبين، والمقرات الرسمية.",
+      "description_en": "Working hours, communication channels, delegates, and office locations.",
+      "icon": "PhoneCall"
+    }
+  },
+  {
+    "slug": "campaigns",
+    "name_ar": "صفحة كل الحملات",
+    "name_en": "All Campaigns",
+    "is_active": true,
+    "sort_order": 5,
+    "extra": {
+      "description_ar": "أسئلة شائعة حول جميع حملات ومبادرات مؤسسة اليسر الخيرية في مصر.",
+      "description_en": "Common questions about all Al-Yusr charitable campaigns and initiatives.",
+      "icon": "Target"
+    }
+  },
+  {
+    "slug": "markoun",
+    "name_ar": "صفحة حملة مَرْكون",
+    "name_en": "Markoun Campaign",
+    "is_active": true,
+    "sort_order": 6,
+    "extra": {
+      "description_ar": "التبرع بالأثاث، الأجهزة، الملابس، والمستلزمات الفائضة مع استلام مجاني.",
+      "description_en": "Donating stored furniture, appliances, and clothes with free doorstep pickup.",
+      "icon": "Package"
+    }
+  },
+  {
+    "slug": "qurbani",
+    "name_ar": "صفحة صكوك الأضاحي",
+    "name_en": "Qurbani Shares",
+    "is_active": true,
+    "sort_order": 7,
+    "extra": {
+      "description_ar": "شروط الصكوك، الأسعار، الذبح الشرعي، وتوزيع اللحوم الطازجة بالقرى.",
+      "description_en": "Sacrifice share prices, Islamic rulings, fresh meat distribution.",
+      "icon": "Flame"
+    }
+  },
+  {
+    "slug": "zakat",
+    "name_ar": "صفحة الزكاة والصدقات",
+    "name_en": "Zakat & Charity",
+    "is_active": true,
+    "sort_order": 8,
+    "extra": {
+      "description_ar": "حساب نصاب الزكاة، مصارفها الشرعية، وحساب الزكاة المنفصل 100%.",
+      "description_en": "Calculating Zakat Nisab, legitimate beneficiaries, and 100% dedicated fund.",
+      "icon": "Coins"
+    }
+  },
+  {
+    "slug": "trust",
+    "name_ar": "صفحة الشفافية والتقارير",
+    "name_en": "Trust & Transparency",
+    "is_active": true,
+    "sort_order": 9,
+    "extra": {
+      "description_ar": "توثيق التبرعات بالصور، التتبع بالرقم المرجعي، ومطابقة المعايير.",
+      "description_en": "Photo documentation, tracking by ref code, and governance reports.",
+      "icon": "ShieldCheck"
+    }
+  },
+  {
+    "slug": "campaign-zell",
+    "name_ar": "حملة ظل — أسقف ووصلات مياه",
+    "name_en": "Zell Campaign",
+    "is_active": true,
+    "sort_order": 10,
+    "extra": {
+      "description_ar": "أسقف المنازل، وصلات ومحطات المياه النقية، والأبواب والشبابيك للأسر المستحقة.",
+      "description_en": "Roofs, clean water connections, and doors/windows for families in need.",
+      "icon": "Sun"
+    }
+  },
+  {
+    "slug": "campaign-sitr",
+    "name_ar": "حملة ستر — دفء الشتاء",
+    "name_en": "Sitr Campaign",
+    "is_active": true,
+    "sort_order": 11,
+    "extra": {
+      "description_ar": "أسقف وأبواب وشبابيك، أسرة ومراتب وألحفة فايبر وكسوة شتوية للأسر.",
+      "description_en": "Roofs, doors, windows, beds, mattresses, and winter warm clothing.",
+      "icon": "Shield"
+    }
+  },
+  {
+    "slug": "campaign-markoon",
+    "name_ar": "حملة مركون — التبرع العيني",
+    "name_en": "Markoon Campaign",
+    "is_active": true,
+    "sort_order": 12,
+    "extra": {
+      "description_ar": "أول حملة مصرية تجمع الأثاث والأجهزة والملابس والأدوية والكتب من البيوت.",
+      "description_en": "Donating furniture, appliances, used clothes, and medicine with home pickup.",
+      "icon": "Archive"
+    }
+  },
+  {
+    "slug": "campaign-ramadan",
+    "name_ar": "موسم الخير — رمضان المبارك",
+    "name_en": "Ramadan Season",
+    "is_active": true,
+    "sort_order": 13,
+    "extra": {
+      "description_ar": "كرتونة الخير 25 كجم، مطبخ اليسر لإفطار الصائمين، ذبائح المزارع الوقفية، وزكاة الفطر.",
+      "description_en": "Ramadan 25kg food boxes, hot iftar meals, sacrifices, and Zakat.",
+      "icon": "Moon"
+    }
+  },
+  {
+    "slug": "campaign-athar",
+    "name_ar": "حملة أثر — دعم التعليم والطلاب",
+    "name_en": "Athar Campaign",
+    "is_active": true,
+    "sort_order": 14,
+    "extra": {
+      "description_ar": "الحقيبة والزي المدرسي، سداد المصروفات، مبادرة استدامة للكتب، وحضانات القرآن.",
+      "description_en": "School bags, uniforms, tuition fees, Istidama book recycling, and nurseries.",
+      "icon": "GraduationCap"
+    }
+  },
+  {
+    "slug": "campaign-arboun-kheir",
+    "name_ar": "عربون خير — مبادرة الفريلانسرز",
+    "name_en": "Arboun Kheir",
+    "is_active": true,
+    "sort_order": 15,
+    "extra": {
+      "description_ar": "مبادرة للشباب الفريلانسرز لاستقطاع نسبة مرنة من أرباح المشاريع كزكاة للمهنة وبركة للرزق.",
+      "description_en": "Freelancers initiative donating a flexible percentage from project profits.",
+      "icon": "Laptop"
+    }
+  },
+  {
+    "slug": "volunteer",
+    "name_ar": "التطوع",
+    "name_en": "Volunteering",
+    "is_active": true,
+    "sort_order": 100,
+    "extra": {
+      "synthesized": true
+    }
+  },
+  {
+    "slug": "services",
+    "name_ar": "الخدمات",
+    "name_en": "Services",
+    "is_active": true,
+    "sort_order": 101,
+    "extra": {
+      "synthesized": true
+    }
+  },
+  {
+    "slug": "general",
+    "name_ar": "أسئلة عامة",
+    "name_en": "General",
+    "is_active": true,
+    "sort_order": 102,
+    "extra": {
+      "synthesized": true
+    }
+  }
+]

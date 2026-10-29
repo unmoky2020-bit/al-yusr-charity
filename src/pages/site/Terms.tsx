@@ -7,6 +7,7 @@ import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useLang } from "@/i18n/LangContext";
+import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 
 const UPDATED_AR = "28 أكتوبر 2026";
 const UPDATED_EN = "28 October 2026";
@@ -448,9 +449,9 @@ const Terms = () => {
                   className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-border px-5 text-sm font-bold text-primary transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <Phone className="h-4 w-4" /> <span dir="ltr">+20 109 700 0137</span>
                 </a>
-                <a href="mailto:info@elyosrcharity.com" data-source="terms" data-label="email"
+                <a href={`mailto:${FOUNDATION_EMAIL}`} data-source="terms" data-label="email"
                   className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-border px-5 text-sm font-bold text-primary transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                  <Mail className="h-4 w-4" /> info@elyosrcharity.com
+                  <Mail className="h-4 w-4" /> {FOUNDATION_EMAIL}
                 </a>
               </div>
             </section>

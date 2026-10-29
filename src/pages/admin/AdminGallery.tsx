@@ -29,6 +29,7 @@ import {
   upsertGalleryImage,
   deduplicateGalleryImages,
 } from "@/data/galleryApi";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { useLang } from "@/i18n/LangContext";
 
 /* ─── Form state ───────────────────────────────────────────────────────────── */
@@ -189,8 +190,8 @@ const AdminGallery = () => {
     try {
       const data = await listAllGalleryImages();
       setRows(data);
-    } catch {
-      toast.error(isRTL ? "تعذّر تحميل الصور" : "Failed to load images");
+    } catch (e) {
+      toast.error(isRTL ? "تعذّر تحميل الصور" : "Failed to load images", { description: apiErrorMessage(e) });
     } finally {
       setLoading(false);
     }
@@ -333,8 +334,7 @@ const AdminGallery = () => {
       setDialogOpen(false);
       await reload();
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
-      toast.error((isRTL ? "فشل الحفظ: " : "Save failed: ") + msg);
+      toast.error((isRTL ? "فشل الحفظ: " : "Save failed: ") + apiErrorMessage(e));
     } finally {
       setSaving(false);
     }
@@ -347,8 +347,8 @@ const AdminGallery = () => {
       await deleteGalleryImage(r);
       toast.success(isRTL ? "تم الحذف" : "Deleted");
       setRows((rs) => rs.filter((x) => x.id !== r.id));
-    } catch {
-      toast.error(isRTL ? "فشل الحذف" : "Delete failed");
+    } catch (e) {
+      toast.error(isRTL ? "فشل الحذف" : "Delete failed", { description: apiErrorMessage(e) });
     }
   };
 
@@ -356,18 +356,22 @@ const AdminGallery = () => {
     try {
       await toggleGalleryPublished(r.id, !r.is_published);
       setRows((rs) => rs.map((x) => (x.id === r.id ? { ...x, is_published: !r.is_published } : x)));
-    } catch { toast.error(isRTL ? "فشل التحديث" : "Update failed"); }
+    } catch (e) { toast.error(isRTL ? "فشل التحديث" : "Update failed", { description: apiErrorMessage(e) }); }
   };
 
   const toggleFeat = async (r: GalleryRow) => {
     try {
       await toggleGalleryFeatured(r.id, !r.is_featured);
       setRows((rs) => rs.map((x) => (x.id === r.id ? { ...x, is_featured: !r.is_featured } : x)));
-    } catch { toast.error(isRTL ? "فشل التحديث" : "Update failed"); }
+    } catch (e) { toast.error(isRTL ? "فشل التحديث" : "Update failed", { description: apiErrorMessage(e) }); }
   };
 
   const move = async (r: GalleryRow, dir: -1 | 1) => {
-    await moveGalleryImage(filtered, r.id, dir);
+    try {
+      await moveGalleryImage(filtered, r.id, dir);
+    } catch (e) {
+      toast.error(isRTL ? "فشل حفظ الترتيب" : "Failed to save order", { description: apiErrorMessage(e) });
+    }
     await reload();
   };
 

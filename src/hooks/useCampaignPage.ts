@@ -6,7 +6,7 @@ import { getCampaignPageMeta } from "@/data/campaignPages/index";
 import { campaignPagesApi } from "@/data/campaignPages/api";
 import { mergeCampaignContent, type CampaignPageContent, type L } from "@/data/campaignPages/types";
 
-type Pkg = { name_ar: string; name_en?: string; amount: number; is_active?: boolean; sort_order?: number };
+type Pkg = { key?: string | null; name_ar: string; name_en?: string; amount: number; is_active?: boolean; sort_order?: number };
 
 const normalise = (v: string) =>
   v.replace(/[ً-ْـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي")
@@ -84,7 +84,8 @@ export function useCampaignPage(slug: string, defaults: CampaignPageContent) {
     const merged = mergeCampaignContent(defaults, data?.content ?? null);
     if (!packages?.length) return merged;
     return { ...merged, prices: merged.prices.map((pr) => {
-      const pkg = findPackage(packages, pr.label);
+      // Stable `key` (= the page price id) wins; Arabic-name matching stays as the fallback until every package has a key.
+      const pkg = packages.find((p) => p.is_active !== false && !!p.key && p.key === pr.id) || findPackage(packages, pr.label);
       return pkg ? { ...pr, amount: pkg.amount } : pr;
     }) };
   }, [defaults, data, packages]);

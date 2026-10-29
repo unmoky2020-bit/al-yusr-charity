@@ -8,8 +8,8 @@ import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema, ArticleSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
-import { getPost } from "@/data/blog";
-import { useAllBlogPosts } from "@/data/useBlogPosts";
+import { findBlogPost, useBlogPosts } from "@/data/sources/blog";
+import { DetailPageSkeleton } from "@/components/common/ContentSkeletons";
 import { fetchPostBySlug } from "@/data/blogApi";
 import type { BlogPost as BlogPostType } from "@/data/blog";
 import { linkifyParagraph } from "@/data/internalLinks";
@@ -20,8 +20,8 @@ const BlogPost = () => {
   const { lang, t } = useLang();
   const [search] = useSearchParams();
   const isPreview = search.get("preview") === "1";
-  const { posts, loading } = useAllBlogPosts();
-  const fromPublic = slug ? (posts.find((p) => p.slug === slug) ?? getPost(slug)) : undefined;
+  const { posts, loading } = useBlogPosts();
+  const fromPublic = findBlogPost(posts, slug);
 
   // Preview mode: fetch the row directly (could be draft/scheduled).
   const [previewPost, setPreviewPost] = useState<BlogPostType | null>(null);
@@ -34,10 +34,10 @@ const BlogPost = () => {
   }, [isPreview, slug, fromPublic]);
 
   const post = fromPublic || previewPost || undefined;
-  if (!post) {
-    if (loading || (isPreview && previewLoading)) return null;
-    return <Navigate to="/404" replace />;
+  if (loading || (!post && isPreview && previewLoading)) {
+    return <PageLayout><DetailPageSkeleton /></PageLayout>;
   }
+  if (!post) return <Navigate to="/404" replace />;
 
   const c = post[lang];
   const Arrow = lang === "ar" ? ArrowLeft : ArrowRight;

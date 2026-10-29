@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLang } from "@/i18n/LangContext";
 import { RequireAuth } from "@/auth/RequireAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { khabiaRequestsApi, delegatesApi, delegateCasesApi } from "@/data/api/khabiaRequestsApi";
+import { apiErrorMessage, isEndpointMissing, FEATURE_PENDING_MSG } from "@/data/api/adminApiHelpers";
 import { toast } from "@/hooks/use-toast";
 
 type Delegate = { id: string; full_name: string; phone: string | null; city: string | null };
@@ -25,72 +26,58 @@ const Inner = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
   const [savingId, setSavingId] = useState<string | null>(null);
-  const [proofUrls, setProofUrls] = useState<Record<string, string>>({});
+  const [loadErrors, setLoadErrors] = useState<string[]>([]);
   const [preview, setPreview] = useState<{ url: string; title: string } | null>(null);
   const [scheduleDraft, setScheduleDraft] = useState<Record<string, string>>({});
 
   const reload = async () => {
     setLoading(true);
-    try {
-      const { data: roleRows } = await supabase.from("user_roles").select("user_id").eq("role", "delegate");
-      const ids = (roleRows ?? []).map((r) => r.user_id);
-      let profs: Delegate[] = [];
-      if (ids.length) {
-        const { data } = await supabase.from("profiles").select("id, full_name, phone, city").in("id", ids);
-        profs = (data ?? []) as Delegate[];
-      }
-      setDelegates(profs);
-
-      const q: any = supabase.from("khabia_requests" as any);
-      const { data: kh } = await q.select("id,ref_code,full_name,phone,city,status,scheduled_at,assigned_delegate_id,amount_collected,delivery_proof_url,collection_proof_url")
-        .order("created_at", { ascending: false }).limit(500);
-      setKhabia((kh ?? []) as KhRow[]);
-
-      const { data: cs } = await supabase.from("cases")
-        .select("id,ref_code,title,status,assigned_delegate_id,city,governorate" as any)
-        .not("assigned_delegate_id", "is", null).limit(500);
-      setCases((cs ?? []) as unknown as CaseRow[]);
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
-    finally { setLoading(false); }
+    const errors: string[] = [];
+    const describe = (label: string, e: unknown) =>
+      `${label}: ${isEndpointMissing(e) ? FEATURE_PENDING_MSG : apiErrorMessage(e)}`;
+    const [dRes, kRes, cRes] = await Promise.allSettled([
+      delegatesApi.list(),
+      khabiaRequestsApi.list(),
+      delegateCasesApi.list("any"),
+    ]);
+    if (dRes.status === "fulfilled") setDelegates(dRes.value);
+    else { setDelegates([]); errors.push(describe(isAr ? "المندوبون" : "Delegates", dRes.reason)); }
+    if (kRes.status === "fulfilled") setKhabia(kRes.value);
+    else { setKhabia([]); errors.push(describe(isAr ? "طلبات الخبيئة" : "Khabia requests", kRes.reason)); }
+    if (cRes.status === "fulfilled") setCases(cRes.value);
+    else { setCases([]); errors.push(describe(isAr ? "الحالات المعيّنة" : "Assigned cases", cRes.reason)); }
+    setLoadErrors(errors);
+    setLoading(false);
   };
-  useEffect(() => { void reload(); }, []);
+  useEffect(() => { void reload(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
 
-  // Resolve signed URLs for any proof storage paths
-  useEffect(() => {
-    const paths = khabia.flatMap((k) => [k.delivery_proof_url, k.collection_proof_url].filter(Boolean) as string[]);
-    if (!paths.length) { setProofUrls({}); return; }
-    void (async () => {
-      const next: Record<string, string> = {};
-      for (const p of paths) {
-        if (p.startsWith("http")) { next[p] = p; continue; }
-        const { data } = await supabase.storage.from("khabia-proofs").createSignedUrl(p, 60 * 60);
-        if (data?.signedUrl) next[p] = data.signedUrl;
-      }
-      setProofUrls(next);
-    })();
+  // Proof URLs are returned by the backend as ready-to-use (public or temporary signed) URLs.
+  const proofUrls = useMemo(() => {
+    const next: Record<string, string> = {};
+    for (const k of khabia) {
+      if (k.delivery_proof_url) next[k.delivery_proof_url] = k.delivery_proof_url;
+      if (k.collection_proof_url) next[k.collection_proof_url] = k.collection_proof_url;
+    }
+    return next;
   }, [khabia]);
 
   const scheduleVisit = async (rowId: string, iso: string) => {
     setSavingId(rowId);
     try {
-      const { error } = await supabase.from("khabia_requests")
-        .update({ scheduled_at: iso ? new Date(iso).toISOString() : null, status: iso ? "scheduled" : "pending" } as any)
-        .eq("id", rowId);
-      if (error) throw error;
+      await khabiaRequestsApi.update(rowId, { scheduled_at: iso ? new Date(iso).toISOString() : null, status: iso ? "scheduled" : "pending" });
       toast({ title: isAr ? " تم جدولة الزيارة" : " Visit scheduled" });
       void reload();
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    } catch (e) { toast({ title: isAr ? "فشل جدولة الزيارة" : "Scheduling failed", description: apiErrorMessage(e), variant: "destructive" }); }
     finally { setSavingId(null); }
   };
 
   const assignKhabia = async (rowId: string, delegateId: string | null) => {
     setSavingId(rowId);
     try {
-      const { error } = await supabase.from("khabia_requests").update({ assigned_delegate_id: delegateId } as any).eq("id", rowId);
-      if (error) throw error;
+      await khabiaRequestsApi.update(rowId, { assigned_delegate_id: delegateId });
       toast({ title: isAr ? " تم تعيين المندوب" : " Assigned" });
       void reload();
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    } catch (e) { toast({ title: isAr ? "فشل تعيين المندوب" : "Assignment failed", description: apiErrorMessage(e), variant: "destructive" }); }
     finally { setSavingId(null); }
   };
 
@@ -133,6 +120,12 @@ const Inner = () => {
             <RefreshCw className="me-1 h-3 w-3" /> {isAr ? "تحديث" : "Refresh"}
           </Button>
         </div>
+
+        {!loading && loadErrors.length > 0 && (
+          <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-3 text-xs font-bold text-destructive">
+            {loadErrors.map((m) => <p key={m}>{m}</p>)}
+          </div>
+        )}
 
         {/* Unassigned Khabia — quick assignment */}
         <section className="rounded-2xl bg-card p-4 shadow-soft">

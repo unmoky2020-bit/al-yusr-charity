@@ -6,11 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import {
   getCampaignById, listApplications, setCampaignStatus, deleteCampaign,
-  upsertCampaign, setApplicationStatus, type Campaign, type Application, type CampaignStatus, type ApplicationStatus,
+  upsertCampaign, setApplicationStatus,
+  type Campaign as BaseCampaign, type Application as BaseApplication, type CampaignStatus as BaseCampaignStatus,
 } from "@/data/campaignsApi";
+import { adminNotificationsApi } from "@/data/api/adminNotificationsApi";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
+
+// Laravel volunteer-campaign / application statuses used by this screen.
+type CampaignStatus = BaseCampaignStatus | "cancelled";
+type ApplicationStatus = "pending" | "approved" | "rejected" | "attended" | "noshow";
+type Campaign = Omit<BaseCampaign, "status"> & { status: CampaignStatus };
+type Application = Omit<BaseApplication, "status"> & { status: ApplicationStatus };
 import { logActivity } from "@/lib/activityLog";
 import { uploadImage } from "@/data/laravelApi";
 
@@ -100,9 +108,14 @@ export default function AdminCampaignDetail() {
     try {
       const r = await getCampaignById(id);
       if (!r) { toast({ title: isAr ? "غير موجود" : "Not found", variant: "destructive" }); nav("/admin/campaigns"); return; }
-      setRow(r);
-      const appsList = await listApplications(id);
-      setApps(Array.isArray(appsList) ? appsList : []);
+      setRow(r as Campaign);
+      try {
+        const appsList = await listApplications(id);
+        setApps((Array.isArray(appsList) ? appsList : []) as unknown as Application[]);
+      } catch (e) {
+        setApps([]);
+        toast({ title: isAr ? "تعذر تحميل طلبات التطوع" : "Could not load applications", description: apiErrorMessage(e), variant: "destructive" });
+      }
       setForm({
         title_ar: r.title_ar || "", title_en: r.title_en || "",
         description_ar: r.description_ar || "", description_en: r.description_en || "",
@@ -112,7 +125,7 @@ export default function AdminCampaignDetail() {
         cover_image_url: r.cover_image_url || "",
         required_skills: (r.required_skills || []).join(", "),
       });
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    } catch (e) { toast({ title: isAr ? "تعذر تحميل الحملة" : "Could not load campaign", description: apiErrorMessage(e), variant: "destructive" }); }
     finally { setLoading(false); }
   };
   useEffect(() => { void reload(); /* eslint-disable-next-line */ }, [id]);
@@ -144,28 +157,28 @@ export default function AdminCampaignDetail() {
       if (id !== "new" && row?.id) {
         payload.id = row.id;
       }
-      const saved = await upsertCampaign(payload);
+      const savedId = await upsertCampaign(payload);
       toast({ title: isAr ? "تم الحفظ" : "Saved" });
-      if (id === "new" && saved?.id) {
-        nav(`/admin/campaigns/${saved.id}`);
+      if (id === "new" && savedId) {
+        nav(`/admin/campaigns/${savedId}`);
       } else {
         void reload();
       }
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    } catch (e) { toast({ title: isAr ? "فشل حفظ الحملة" : "Save failed", description: apiErrorMessage(e), variant: "destructive" }); }
     finally { setSaving(false); }
   };
 
   const changeStatus = async (next: CampaignStatus) => {
     if (!row) return;
     try { await setCampaignStatus(row.id, next); toast({ title: isAr ? "تم التحديث" : "Updated" }); void reload(); }
-    catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    catch (e) { toast({ title: apiErrorMessage(e), variant: "destructive" }); }
   };
 
   const remove = async () => {
     if (!row) return;
     if (!confirm(isAr ? "حذف الحملة؟" : "Delete campaign?")) return;
     try { await deleteCampaign(row.id); toast({ title: isAr ? "تم الحذف" : "Deleted" }); nav("/admin/campaigns"); }
-    catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    catch (e) { toast({ title: apiErrorMessage(e), variant: "destructive" }); }
   };
 
   const setAppStatus = async (a: Application, next: ApplicationStatus) => {
@@ -176,7 +189,7 @@ export default function AdminCampaignDetail() {
         summary: `${a.full_name}: ${a.status} → ${next}`, details: { campaign_id: row?.id } });
       void reload();
     }
-    catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    catch (e) { toast({ title: apiErrorMessage(e), variant: "destructive" }); }
   };
 
   const saveAssignment = async (a: Application) => {
@@ -186,7 +199,7 @@ export default function AdminCampaignDetail() {
       void logActivity({ action: "application.assignment", entityType: "application", entityId: a.id,
         summary: `${a.full_name} → role:${editRole || "-"} shift:${editShift || "-"}` });
       setEditing(null); void reload();
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    } catch (e) { toast({ title: apiErrorMessage(e), variant: "destructive" }); }
   };
 
   const openNotify = (a: Application) => {
@@ -201,14 +214,18 @@ export default function AdminCampaignDetail() {
   const sendNotify = async () => {
     const a = notifyOpen;
     if (!a || !a.volunteer_id || !notifyText.trim()) return;
-    const { error } = await supabase.from("notifications").insert({
-      user_id: a.volunteer_id, type: "info",
-      title_ar: `حملة: ${row?.title_ar ?? ""}`,
-      title_en: `Campaign: ${row?.title_en ?? ""}`,
-      message_ar: notifyText, message_en: notifyText,
-      link: "/admin/my-tasks", entity_type: "application", entity_id: a.id,
-    });
-    if (error) { toast({ title: error.message, variant: "destructive" }); return; }
+    try {
+      await adminNotificationsApi.send({
+        user_ids: [a.volunteer_id], type: "info",
+        title_ar: `حملة: ${row?.title_ar ?? ""}`,
+        title_en: `Campaign: ${row?.title_en ?? ""}`,
+        message_ar: notifyText, message_en: notifyText,
+        link: "/admin/my-tasks", entity_type: "application", entity_id: a.id,
+      });
+    } catch (e) {
+      toast({ title: isAr ? "فشل إرسال الإشعار" : "Notification failed", description: apiErrorMessage(e), variant: "destructive" });
+      return;
+    }
     toast({ title: isAr ? "تم إرسال الإشعار" : "Notification sent" });
     setNotifyOpen(null); setNotifyText("");
   };
@@ -250,16 +267,19 @@ export default function AdminCampaignDetail() {
     const targets = safeApps.filter(a => a.volunteer_id && (a.status === "approved" || a.status === "attended"));
     if (targets.length === 0) { toast({ title: isAr ? "لا يوجد متطوعون مقبولون مسجّلون" : "No registered approved volunteers" }); return; }
     setBusy(true);
-    const { error } = await supabase.from("notifications").insert(
-      targets.map(a => ({
-        user_id: a.volunteer_id!, type: "info",
+    try {
+      await adminNotificationsApi.send({
+        user_ids: targets.map(a => a.volunteer_id!), type: "info",
         title_ar: `📣 ${row?.title_ar ?? ""}`, title_en: `📣 ${row?.title_en ?? ""}`,
         message_ar: broadcast, message_en: broadcast,
-        link: "/admin/my-tasks", entity_type: "application", entity_id: a.id,
-      }))
-    );
-    setBusy(false);
-    if (error) { toast({ title: error.message, variant: "destructive" }); return; }
+        link: "/admin/my-tasks", entity_type: "volunteer_campaign", entity_id: row?.id ?? null,
+      });
+    } catch (e) {
+      toast({ title: isAr ? "فشل إرسال الإشعارات" : "Broadcast failed", description: apiErrorMessage(e), variant: "destructive" });
+      return;
+    } finally {
+      setBusy(false);
+    }
     setBroadcast("");
     toast({ title: isAr ? `تم الإرسال إلى ${targets.length} متطوع` : `Sent to ${targets.length} volunteers` });
   };
@@ -269,8 +289,16 @@ export default function AdminCampaignDetail() {
     if (targets.length === 0) return;
     if (!confirm(isAr ? `تطبيق "${APP_STATUSES.find(s=>s.v===next)?.ar}" على ${targets.length} طلب؟` : `Apply to ${targets.length}?`)) return;
     setBusy(true);
-    for (const a of targets) { try { await setApplicationStatus(a.id, next); } catch {} }
-    setBusy(false); toast({ title: isAr ? "تم" : "Done" }); void reload();
+    let failed = 0;
+    let lastErr: unknown = null;
+    for (const a of targets) { try { await setApplicationStatus(a.id, next); } catch (e) { failed++; lastErr = e; } }
+    setBusy(false);
+    if (failed) {
+      toast({ title: isAr ? `فشل تحديث ${failed} من ${targets.length} طلب` : `${failed} of ${targets.length} failed`, description: apiErrorMessage(lastErr), variant: "destructive" });
+    } else {
+      toast({ title: isAr ? "تم" : "Done" });
+    }
+    void reload();
   };
 
   const exportCsv = () => {

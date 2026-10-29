@@ -1,4 +1,5 @@
 import { apiFetch, API_BASE_URL, invalidateApiCache } from "./laravelApi";
+import { apiErrorMessage, fetchList, unwrapItem, unwrapList } from "./api/adminApiHelpers";
 
 export interface FaqCategory {
   id: number;
@@ -1106,6 +1107,8 @@ export async function fetchFaqs(options?: {
   try {
     const params: Record<string, string | number> = {};
     if (categoryId) params.faq_category_id = categoryId;
+    // One category: filtered by the server (the client-side filter below stays as a safety net).
+    if (categorySlug && categorySlug !== "all") params.category = categorySlug;
     if (search) params.search = search;
 
     const res = await apiFetch<{ data: FaqItem[] }>("/faqs", {
@@ -1118,24 +1121,8 @@ export async function fetchFaqs(options?: {
 
       // Filter by category slug if requested
       if (categorySlug && categorySlug !== "all") {
-        const filtered = items.filter((f) => {
-          const catSlug = f.category?.slug?.toLowerCase();
-          const catName = f.category?.name_ar || "";
-          return (
-            catSlug === categorySlug.toLowerCase() ||
-            (categorySlug === "home" && (catSlug === "home" || catName.includes("رئيس"))) ||
-            (categorySlug === "about" && (catSlug === "about" || catName.includes("نحن"))) ||
-            (categorySlug === "programs" && (catSlug === "programs" || catName.includes("برامج"))) ||
-            (categorySlug === "contact" && (catSlug === "contact" || catName.includes("تواصل"))) ||
-            (categorySlug === "markoun" && (catSlug === "markoun" || catName.includes("مركون"))) ||
-            (categorySlug === "qurbani" && (catSlug === "qurbani" || catName.includes("أضاحي") || catName.includes("صكوك"))) ||
-            (categorySlug === "zakat" && (catSlug === "zakat" || catName.includes("زكاة"))) ||
-            (categorySlug === "volunteer" && (catSlug === "volunteer" || catName.includes("تطوع"))) ||
-            (categorySlug === "trust" && (catSlug === "trust" || catName.includes("شفافية"))) ||
-            (categorySlug === "services" && (catSlug === "services" || catName.includes("خدمات"))) ||
-            (categorySlug === "general" && (catSlug === "general" || catSlug === "donations" || catName.includes("تبرع")))
-          );
-        });
+        const wanted = categorySlug.toLowerCase();
+        const filtered = items.filter((f) => f.category?.slug?.toLowerCase() === wanted);
 
         if (filtered.length > 0) {
           return filtered;
@@ -1172,6 +1159,19 @@ export async function fetchFaqs(options?: {
   return result;
 }
 
+/**
+ * Admin list: GET /faqs (+ /faq-categories) with NO static fallback.
+ * Throws on failure so the admin screen shows a real error instead of uneditable demo rows.
+ */
+export async function fetchFaqsAdmin(): Promise<FaqItem[]> {
+  return fetchList<FaqItem>("/faqs", { per_page: 500 });
+}
+
+/** Admin categories: GET /faq-categories, throws on failure (no fake ids). */
+export async function fetchFaqCategoriesAdmin(): Promise<FaqCategory[]> {
+  return fetchList<FaqCategory>("/faq-categories", { per_page: 200 });
+}
+
 /** Create new FAQ item on backend */
 export async function createFaq(data: {
   faq_category_id?: number | null;
@@ -1182,13 +1182,13 @@ export async function createFaq(data: {
   sort_order?: number;
   is_active?: boolean;
 }): Promise<FaqItem> {
-  const res = await apiFetch<{ data: FaqItem }>("/faqs", {
+  const res = await apiFetch<unknown>("/faqs", {
     method: "POST",
     body: data,
   });
   invalidateApiCache("/faqs");
   invalidateApiCache("/faq-categories");
-  return res.data;
+  return unwrapItem<FaqItem>(res);
 }
 
 /** Update existing FAQ item on backend */
@@ -1204,17 +1204,23 @@ export async function updateFaq(
     is_active: boolean;
   }>
 ): Promise<FaqItem> {
-  const res = await apiFetch<{ data: FaqItem }>(`/faqs/${id}`, {
+  if (String(id).startsWith("static-")) {
+    throw new Error("هذا سؤال ثابت من كود الموقع وغير محفوظ في قاعدة البيانات");
+  }
+  const res = await apiFetch<unknown>(`/faqs/${id}`, {
     method: "PUT",
     body: data,
   });
   invalidateApiCache("/faqs");
   invalidateApiCache("/faq-categories");
-  return res.data;
+  return unwrapItem<FaqItem>(res);
 }
 
 /** Delete an FAQ item from backend */
 export async function deleteFaq(id: number | string): Promise<boolean> {
+  if (String(id).startsWith("static-")) {
+    throw new Error("هذا سؤال ثابت من كود الموقع وغير محفوظ في قاعدة البيانات");
+  }
   await apiFetch(`/faqs/${id}`, {
     method: "DELETE",
   });
@@ -1231,12 +1237,12 @@ export async function createFaqCategory(data: {
   sort_order?: number;
   is_active?: boolean;
 }): Promise<FaqCategory> {
-  const res = await apiFetch<{ data: FaqCategory }>("/faq-categories", {
+  const res = await apiFetch<unknown>("/faq-categories", {
     method: "POST",
     body: data,
   });
   invalidateApiCache("/faq-categories");
-  return res.data;
+  return unwrapItem<FaqCategory>(res);
 }
 
 /**
@@ -1245,18 +1251,16 @@ export async function createFaqCategory(data: {
  */
 export async function seedDefaultFaqsToBackend(
   onProgress?: (message: string, current: number, total: number) => void
-): Promise<{ categoriesCreated: number; faqsCreated: number }> {
+): Promise<{ categoriesCreated: number; faqsCreated: number; failed: number; lastError?: string }> {
   let categoriesCreated = 0;
   let faqsCreated = 0;
+  let failed = 0;
+  let lastError: string | undefined;
 
-  // 1. Fetch existing categories
-  let existingCats: FaqCategory[] = [];
-  try {
-    const catRes = await apiFetch<{ data: FaqCategory[] }>("/faq-categories");
-    existingCats = catRes?.data || [];
-  } catch {
-    existingCats = [];
-  }
+  // 1. Fetch existing categories (a failure aborts: seeding blindly would create duplicates)
+  const existingCats: FaqCategory[] = unwrapList<FaqCategory>(
+    await apiFetch<unknown>("/faq-categories", { useCache: false, params: { per_page: 200 } }),
+  );
 
   const categoryMap = new Map<string, number>();
   existingCats.forEach((c) => {
@@ -1285,19 +1289,16 @@ export async function seedDefaultFaqsToBackend(
           categoriesCreated++;
         }
       } catch (err) {
-        console.warn(`Category ${pageCat.slug} might already exist or error:`, err);
+        failed++;
+        lastError = apiErrorMessage(err);
       }
     }
   }
 
-  // 3. Fetch existing FAQs to avoid exact duplicates
-  let existingFaqs: FaqItem[] = [];
-  try {
-    const faqRes = await apiFetch<{ data: FaqItem[] }>("/faqs");
-    existingFaqs = faqRes?.data || [];
-  } catch {
-    existingFaqs = [];
-  }
+  // 3. Fetch existing FAQs to avoid exact duplicates (a failure aborts)
+  const existingFaqs: FaqItem[] = unwrapList<FaqItem>(
+    await apiFetch<unknown>("/faqs", { useCache: false, params: { per_page: 500 } }),
+  );
 
   const existingQuestions = new Set(
     existingFaqs.map((f) => f.question_ar.trim().toLowerCase())
@@ -1326,14 +1327,15 @@ export async function seedDefaultFaqsToBackend(
       });
       faqsCreated++;
     } catch (err) {
-      console.warn(`Could not create FAQ: ${item.question_ar}`, err);
+      failed++;
+      lastError = apiErrorMessage(err);
     }
   }
 
   invalidateApiCache("/faqs");
   invalidateApiCache("/faq-categories");
 
-  return { categoriesCreated, faqsCreated };
+  return { categoriesCreated, faqsCreated, failed, lastError };
 }
 
 /**

@@ -387,8 +387,10 @@ export const CampaignsScroll = () => {
             <div className="flex flex-col items-center justify-center gap-1.5 sm:gap-2.5 w-full max-w-7xl px-2 sm:px-4 lg:px-8 shrink-0 my-auto">
               <Header isRTL={isRTL} title={headerTitle} subtitle={headerSubtitle} />
 
+              {/* Card height never exceeds the room left in the pinned viewport (padding + header + dots + skip),
+                  so the skip button stays on screen on short laptop screens (e.g. 1366x768). */}
               <div
-                className="relative flex h-[clamp(395px,57svh,500px)] sm:h-[clamp(450px,61svh,560px)] md:h-[clamp(480px,64svh,620px)] w-full items-center justify-center shrink-0 overflow-visible"
+                className="relative flex h-[clamp(340px,min(57svh,calc(100svh_-_215px)),500px)] sm:h-[clamp(360px,min(61svh,calc(100svh_-_230px)),560px)] md:h-[clamp(380px,min(64svh,calc(100svh_-_255px)),620px)] w-full items-center justify-center shrink-0 overflow-visible"
                 role="region"
                 aria-roledescription={isRTL ? "بطاقات حملات متراكمة" : "stacked campaign cards"}
                 aria-label={isRTL ? "بطاقات اليسر — مرّر عموديًا أو استخدم الأسهم للتنقل" : "Al-Yusr cards — scroll vertically or use arrows to navigate"}

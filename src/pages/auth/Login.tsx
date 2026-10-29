@@ -9,7 +9,6 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import { lovable } from "@/integrations/lovable";
 
 const REMEMBER_KEY = "alyusr.login.remember.v1";
 
@@ -62,7 +61,7 @@ const Login = () => {
     return "/dashboard"; // donors → donor dashboard
   };
 
-  // After Supabase confirms the session AND profile/roles loaded, navigate.
+  // After the Laravel session is confirmed AND profile/roles loaded, navigate.
   useEffect(() => {
     if (session && user) {
       nav(safeNext(params.get("next"), roleLanding()), { replace: true });
@@ -110,18 +109,9 @@ const Login = () => {
     }, 500);
   };
 
-  const social = async (provider: "google" | "facebook") => {
-    if (provider === "facebook") {
-      toast({ title: lang === "ar" ? "تسجيل الدخول بـ Facebook غير متاح حاليًا" : "Facebook sign-in is not available", description: lang === "ar" ? "نوفّر حاليًا الدخول عبر Google أو البريد الإلكتروني." : "Please use Google or email sign-in.", variant: "destructive", });
-      return;
-    }
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      toast({ title: lang === "ar" ? "تعذّر الدخول بـ Google" : "Google sign-in failed", description: result.error.message, variant: "destructive", });
-    }
-  };
+  // Social login (Google/Facebook) removed: it relied on Supabase + Lovable auth and always failed.
+  // Proposed Laravel Socialite flow (GET /auth/{provider}/redirect → /auth/{provider}/callback) is
+  // documented in backend-handoff/01-replace-supabase-public.md; re-add the buttons once it exists.
 
   return (
     <PageLayout>
@@ -212,31 +202,6 @@ const Login = () => {
               >
                 <XIcon className="h-3 w-3" />
                 {lang === "ar" ? "مسح البيانات" : "Clear saved"}
-              </button>
-            </div>
-
-            {/* Divider + Social */}
-            <div className="mt-6 flex items-center gap-3 text-xs font-bold text-muted-foreground">
-              <div className="h-px flex-1 bg-border" />
-              {lang === "ar" ? "أو" : "OR"}
-              <div className="h-px flex-1 bg-border" />
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-2.5">
-              <button
-                type="button"
-                onClick={() => social("google")}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-border bg-card px-3 py-2.5 text-xs font-extrabold text-primary transition hover:border-secondary hover:bg-secondary/5"
-              >
-                <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden className="shrink-0"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.3 0 10.1-2 13.7-5.3l-6.3-5.3C29.3 35 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.6 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.7l6.3 5.3c4.4-4 7.1-9.9 7.1-16 0-1.3-.1-2.3-.4-3.5z"/></svg>
-                <span>Google</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => social("facebook")}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-border bg-card px-3 py-2.5 text-xs font-extrabold text-primary transition hover:border-secondary hover:bg-secondary/5"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2" aria-hidden className="shrink-0"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.27h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
-                <span>Facebook</span>
               </button>
             </div>
 

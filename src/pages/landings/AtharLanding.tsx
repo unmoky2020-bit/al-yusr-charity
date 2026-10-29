@@ -12,7 +12,8 @@ import classroom from "@/assets/brand-poster-classroom.jpg";
 import yusrDistribution from "@/assets/yusr-distribution-1.jpg";
 import axisEdu from "@/assets/axis-education.jpg";
 
-const DONATE = "/donate?program=education";
+import { campaignDonateHref } from "@/data/campaignPages/index";
+const DONATE = campaignDonateHref("athar");
 
 /** Price ids rendered by the kit builder, in display order (content: `src/data/campaignPages/athar.ts`). */
 const KIT_IDS = ["bag", "uniform", "tuition"] as const;

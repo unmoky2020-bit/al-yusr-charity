@@ -1,5 +1,3 @@
-import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
 import logoImg from "@/assets/logo-circle.png";
 
 export interface ReceiptItem {
@@ -160,6 +158,8 @@ async function loadLogoDataUrl(url: string): Promise<string> {
  * توليد وتنزيل إيصال PDF فائق الرقي والجمال مطابق تماماً لإيصال المعاينة بهوية مؤسسة اليسر الرسمية
  */
 export async function downloadReceiptPdf(data: ReceiptData): Promise<void> {
+  // ~180 KB (gzip) of PDF tooling: loaded only when a donor actually downloads a receipt.
+  const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import("html2canvas"), import("jspdf")]);
   // 1. انتظار الخطوط بأمان
   if (typeof document !== "undefined" && document.fonts) {
     try {

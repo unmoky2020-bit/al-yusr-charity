@@ -1,1 +1,0 @@
-ALTER TABLE public.cases ADD COLUMN IF NOT EXISTS area text;

@@ -22,6 +22,7 @@ import {
   type StoryCard,
 } from "@/data/storiesApi";
 import { casesApi, type LaravelCase } from "@/data/laravelApi";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 
 type CompletedCase = {
   id: string; ref_code: string; title: string;
@@ -41,6 +42,7 @@ export default function AdminStories() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "published" | "draft" | "featured" | "review">("all");
   const [syncing, setSyncing] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   // Case picker
   const [casePickerOpen, setCasePickerOpen] = useState(false);
@@ -53,9 +55,15 @@ export default function AdminStories() {
 
   const reload = async () => {
     setLoading(true);
-    const data = await listAllStories();
-    setItems(data);
-    setLoading(false);
+    setLoadError(null);
+    try {
+      setItems(await listAllStories());
+    } catch (e) {
+      setItems([]);
+      setLoadError(apiErrorMessage(e, "تعذر تحميل القصص"));
+    } finally {
+      setLoading(false);
+    }
   };
   useEffect(() => { void reload(); }, []);
 
@@ -97,13 +105,21 @@ export default function AdminStories() {
       return;
     }
     try {
+      let ok = 0;
+      let lastError = "";
       for (const s of toInsert) {
-        await upsertStory(s);
+        // Static ids ("static-N") are never sent: upsertStory creates a new Laravel record.
+        const res = await upsertStory({ ...s, image_url: null });
+        if (res.error) lastError = res.error; else ok++;
       }
-      toast({ title: tr(lang, `تمت إضافة ${toInsert.length} قصة بنجاح`, `Added ${toInsert.length} stories successfully`) });
+      if (lastError) {
+        toast({ variant: "destructive", title: tr(lang, `تمت إضافة ${ok} من ${toInsert.length} قصة`, `Added ${ok} of ${toInsert.length}`), description: lastError });
+      } else {
+        toast({ title: tr(lang, `تمت إضافة ${toInsert.length} قصة بنجاح`, `Added ${toInsert.length} stories successfully`) });
+      }
       reload();
     } catch (err: unknown) {
-      toast({ title: tr(lang, "فشل المزامنة", "Sync failed"), description: err instanceof Error ? err.message : String(err) });
+      toast({ variant: "destructive", title: tr(lang, "فشل المزامنة", "Sync failed"), description: apiErrorMessage(err) });
     } finally {
       setSyncing(false);
     }
@@ -113,21 +129,21 @@ export default function AdminStories() {
   const togglePublish = async (s: StoryCard) => {
     const next = !s.is_published;
     const { error } = await toggleStoryField(s.id, s.slug, "is_published", next);
-    if (error) { toast({ title: tr(lang, "فشل التحديث", "Update failed"), description: error }); return; }
+    if (error) { toast({ variant: "destructive", title: tr(lang, "فشل التحديث", "Update failed"), description: error }); return; }
     toast({ title: next ? tr(lang, "تم النشر", "Published") : tr(lang, "تم سحب النشر", "Unpublished") });
     reload();
   };
 
   const submitForReview = async (s: StoryCard) => {
     const { error } = await toggleStoryField(s.id, s.slug, "pending_review", true);
-    if (error) { toast({ title: tr(lang, "فشل الإرسال", "Submit failed"), description: error }); return; }
+    if (error) { toast({ variant: "destructive", title: tr(lang, "فشل الإرسال", "Submit failed"), description: error }); return; }
     toast({ title: tr(lang, "تم الإرسال للمراجعة", "Submitted for review") });
     reload();
   };
 
   const toggleFeatured = async (s: StoryCard) => {
     const { error } = await toggleStoryField(s.id, s.slug, "is_featured", !s.is_featured);
-    if (error) { toast({ title: tr(lang, "فشل التحديث", "Update failed"), description: error }); return; }
+    if (error) { toast({ variant: "destructive", title: tr(lang, "فشل التحديث", "Update failed"), description: error }); return; }
     reload();
   };
 
@@ -139,7 +155,7 @@ export default function AdminStories() {
     const { error } = await deleteStory(deleteTarget.id, deleteTarget.slug);
     setDeleting(false);
     setDeleteTarget(null);
-    if (error) { toast({ title: tr(lang, "فشل الحذف", "Delete failed"), description: error }); return; }
+    if (error) { toast({ variant: "destructive", title: tr(lang, "فشل الحذف", "Delete failed"), description: error }); return; }
     toast({ title: tr(lang, "تم الحذف", "Deleted") });
     reload();
   };
@@ -232,6 +248,7 @@ export default function AdminStories() {
           <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
         ) : filtered.length === 0 ? (
           <div className="rounded-2xl bg-card p-10 text-center shadow-soft">
+            {loadError && <p className="mb-2 text-sm font-bold text-destructive">{loadError}</p>}
             <p className="text-sm text-muted-foreground">
               {tr(lang, "لا توجد قصص بعد. ابدأ بإضافة أول قصة، أو وثّق قصة من حالة مكتملة.", "No stories yet. Add the first one, or document a story from a completed case.")}
             </p>

@@ -34,6 +34,7 @@ import {
 } from "@/data/kashierGateway";
 import { paymentGatewaysApi } from "@/data/laravelApi";
 import { logActivity } from "@/lib/activityLog";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 
 const Inner = () => {
   const { lang } = useLang();
@@ -60,8 +61,8 @@ const Inner = () => {
       setRows(await listAllPaymentMethods());
       setDraft({});
     } catch (e: any) {
-      setLoadError(e?.message || "Failed to load");
-      toast({ title: "Error", description: e?.message, variant: "destructive" });
+      setLoadError(apiErrorMessage(e, "تعذر تحميل طرق الدفع"));
+      toast({ title: isAr ? "تعذر تحميل طرق الدفع" : "Load failed", description: apiErrorMessage(e), variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -110,7 +111,7 @@ const Inner = () => {
       });
       toast({ title: isAr ? "تم التحديث" : "Updated" });
     } catch (e: any) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      toast({ title: isAr ? "فشل الحفظ على الخادم" : "Save failed", description: apiErrorMessage(e), variant: "destructive" });
     } finally {
       setBusy(null);
     }
@@ -137,7 +138,7 @@ const Inner = () => {
       });
       toast({ title: isAr ? "تم الحفظ" : "Saved" });
     } catch (e: any) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      toast({ title: isAr ? "فشل الحفظ على الخادم" : "Save failed", description: apiErrorMessage(e), variant: "destructive" });
     } finally {
       setBusy(null);
     }

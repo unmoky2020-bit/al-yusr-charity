@@ -30,6 +30,9 @@ export interface ServicePageConfig {
   extra?: ReactNode;
 }
 
+/** Services that also have a dedicated landing page: Google should index that page, not both. */
+const SERVICE_CANONICAL: Record<string, string> = { markoun: "/markoun" };
+
 export const ServicePage = ({ config }: { config: ServicePageConfig }) => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
@@ -44,7 +47,7 @@ export const ServicePage = ({ config }: { config: ServicePageConfig }) => {
 
   return (
     <PageLayout>
-      <SEOHelmet title={title} description={description} path={path} image={config.hero} />
+      <SEOHelmet title={title} description={description} path={SERVICE_CANONICAL[config.slug] ?? path} image={config.hero} />
       <SiteSchemas />
       <BreadcrumbSchema
         items={[

@@ -17,8 +17,6 @@ import {
   getCaseImageUrl,
   type Urgency, type CaseMediaRow, type JourneyStepRow,
 } from "@/data/casesApi";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 const PAGE_SIZE = 9;
 
@@ -67,7 +65,6 @@ const CaseDetail = () => {
   const [journey, setJourney] = useState<Awaited<ReturnType<typeof listCaseJourney>>>([]);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const mountedRef = useRef(false);
   const lightboxFigRef = useRef<HTMLDivElement | null>(null);
   const lightboxDialogRef = useRef<HTMLDivElement | null>(null);
   const lightboxOpenerRef = useRef<HTMLElement | null>(null);
@@ -75,12 +72,10 @@ const CaseDetail = () => {
   useEffect(() => {
     if (!ref) return;
     setLoading(true);
-    let caseId: string | null = null;
-    const channels: ReturnType<typeof supabase.channel>[] = [];
+    let onVisible: (() => void) | null = null;
     getCaseByRef(ref).then(async (row) => {
       setC(row);
       if (!row) return;
-      caseId = row.id;
       const [u, m, j] = await Promise.all([
         listCaseUpdates(row.id).catch(() => []),
         listCaseMedia(row.id).catch(() => []),
@@ -88,7 +83,8 @@ const CaseDetail = () => {
       ]);
       setUpdates(u); setMedia(m); setJourney(j);
 
-      // Realtime: refresh on any change to this case's updates / media / journey
+      // Refresh updates / media / journey when the visitor comes back to the tab
+      // (replaces the old Supabase realtime channel).
       const reload = async () => {
         const [u2, m2, j2] = await Promise.all([
           listCaseUpdates(row.id).catch(() => []),
@@ -97,30 +93,11 @@ const CaseDetail = () => {
         ]);
         setUpdates(u2); setMedia(m2); setJourney(j2);
       };
-      const notify = (msg: string) => { if (mountedRef.current) toast.success(msg); };
-      const ch = supabase
-        .channel(`case-public-${row.id}`)
-        .on("postgres_changes", { event: "INSERT", schema: "public", table: "case_updates", filter: `case_id=eq.${row.id}` }, async () => {
-          await reload(); notify(isRTL ? "تحديث جديد للحالة" : "New case update");
-        })
-        .on("postgres_changes", { event: "INSERT", schema: "public", table: "case_media",   filter: `case_id=eq.${row.id}` }, async () => {
-          await reload(); notify(isRTL ? "تم إضافة وسائط جديدة" : "New media added");
-        })
-        .on("postgres_changes", { event: "INSERT", schema: "public", table: "donation_journey_steps", filter: `case_id=eq.${row.id}` }, async () => {
-          await reload(); notify(isRTL ? "خطوة جديدة في الرحلة" : "New journey step");
-        })
-        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "case_updates", filter: `case_id=eq.${row.id}` }, reload)
-        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "case_media",   filter: `case_id=eq.${row.id}` }, reload)
-        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "donation_journey_steps", filter: `case_id=eq.${row.id}` }, reload)
-        .on("postgres_changes", { event: "DELETE", schema: "public", table: "case_media",   filter: `case_id=eq.${row.id}` }, reload)
-        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "cases", filter: `id=eq.${row.id}` }, async () => {
-          const r = await getCaseByRef(ref).catch(() => null); if (r) setC(r);
-        })
-        .subscribe();
-      channels.push(ch);
-    }).finally(() => { setLoading(false); setTimeout(() => { mountedRef.current = true; }, 800); });
-    return () => { channels.forEach((ch) => { try { supabase.removeChannel(ch); } catch { /* noop */ } }); };
-  }, [ref, isRTL]);
+      onVisible = () => { if (document.visibilityState === "visible") void reload(); };
+      document.addEventListener("visibilitychange", onVisible);
+    }).finally(() => { setLoading(false); });
+    return () => { if (onVisible) document.removeEventListener("visibilitychange", onVisible); };
+  }, [ref]);
 
   const lightbox = lightboxIdx !== null ? media[lightboxIdx] ?? null : null;
   const closeLightbox = useCallback(() => {
@@ -332,8 +309,23 @@ const CaseDetail = () => {
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-primary-foreground/85">
             <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" /> {c.city ?? c.governorate}</span>
             <span className="inline-flex items-center gap-1"><User className="h-4 w-4" /> {c.beneficiary_name}</span>
-            {c.deadline && <span className="inline-flex items-center gap-1"><Calendar className="h-4 w-4" /> {c.deadline}</span>}
+            {c.deadline && <span className="inline-flex items-center gap-1"><Calendar className="h-4 w-4" /> {isRTL ? "آخر موعد: " : "Deadline: "}{c.deadline}</span>}
           </div>
+          {/* What this case belongs to: a program, a project or a donation campaign. */}
+          {(() => {
+            const link = c.program_slug
+              ? { to: `/programs/${c.program_slug}`, ar: `ضمن برنامج: ${c.program_name ?? ""}`, en: `Part of program: ${c.program_name ?? ""}` }
+              : c.project_slug
+                ? { to: `/donate?project=${encodeURIComponent(c.project_slug)}`, ar: `ضمن مشروع: ${c.project_name ?? ""}`, en: `Part of project: ${c.project_name ?? ""}` }
+                : c.donation_campaign_slug
+                  ? { to: `/donate?campaign=${encodeURIComponent(c.donation_campaign_slug)}`, ar: `ضمن حملة: ${c.donation_campaign_name ?? ""}`, en: `Part of campaign: ${c.donation_campaign_name ?? ""}` }
+                  : null;
+            return link ? (
+              <Link to={link.to} className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-extrabold hover:bg-white/25">
+                {isRTL ? link.ar : link.en}
+              </Link>
+            ) : null;
+          })()}
         </div>
       </section>
 

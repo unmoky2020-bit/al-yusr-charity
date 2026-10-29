@@ -7,11 +7,43 @@ import type { CampaignPageContent, L } from "@/data/campaignPages/types";
 /**
  * Panels for editing a campaign landing page's content. Each panel is a plain controlled
  * component so the donation-campaign screen can mount them as its own top-level tabs
- * (الهيرو / الحديث / الأرقام / الأقسام / الختام) next to the backend-driven tabs.
+ * (الهيرو / الحديث / الأرقام / one tab per section / الختام) next to the backend-driven tabs.
  * Prices are NOT edited here: the landing page reads them from the campaign's donation packages.
  * FAQ and SEO are NOT here either: the screen already has tabs for them.
  */
 type PanelProps = { value: CampaignPageContent; onChange: (next: CampaignPageContent) => void; isAr: boolean };
+
+/**
+ * Section keys that belong to another tab of the screen instead of a tab of their own:
+ *   seo      → «السيو والـ Meta» (page title / description the landing uses when the meta is empty)
+ *   hadith*  → «الحديث» (a second hadith next to the main one)
+ *   faq_*    → «الأسئلة الشائعة» (the intro above the FAQ list)
+ */
+export const sectionHomeTab = (key: string): "seo" | "hadith" | "faqs" | null =>
+  key === "seo" ? "seo" : /^hadith/.test(key) ? "hadith" : /^faq_/.test(key) ? "faqs" : null;
+
+export type SectionTab = { id: string; keys: string[]; label: L };
+
+/**
+ * The section tabs of one landing page, in content order. Keys of one family share a tab:
+ * `areas_now` / `areas_before` go with `areas`, `pillar_details` with `pillars`.
+ */
+export function campaignSectionTabs(content: CampaignPageContent): SectionTab[] {
+  const keys = Object.keys(content.sections).filter((k) => !sectionHomeTab(k));
+  const parentOf = (k: string) =>
+    keys.find((g) => g !== k && (k.startsWith(`${g}_`) || (g.endsWith("s") && k.startsWith(`${g.slice(0, -1)}_`))));
+  const tabs: SectionTab[] = [];
+  for (const k of keys) {
+    const parent = parentOf(k);
+    if (parent) continue;
+    tabs.push({ id: k, keys: [k, ...keys.filter((c) => parentOf(c) === k)], label: content.sections[k].title });
+  }
+  return tabs;
+}
+
+/** Keys of the sections that live in the given screen tab (see sectionHomeTab). */
+export const sectionKeysFor = (content: CampaignPageContent, tab: "seo" | "hadith" | "faqs"): string[] =>
+  Object.keys(content.sections).filter((k) => sectionHomeTab(k) === tab);
 
 const usePatch = ({ value, onChange }: PanelProps) => (fn: (f: CampaignPageContent) => void) => {
   const next = structuredClone(value);
@@ -92,11 +124,13 @@ export const StatsPanel = (p: PanelProps) => {
   );
 };
 
-export const SectionsPanel = (p: PanelProps) => {
+/** Edits the given section keys (all sections when `keys` is omitted). */
+export const SectionsPanel = (p: PanelProps & { keys?: string[] }) => {
   const patch = usePatch(p); const { value, isAr } = p;
+  const keys = (p.keys ?? Object.keys(value.sections)).filter((k) => value.sections[k]);
   return (
     <div className="space-y-4">
-      {Object.keys(value.sections).map((key) => {
+      {keys.map((key) => {
         const sec = value.sections[key];
         const dynamic = !!sec.dynamic;
         const extraLabel = sec.extraLabel ? (isAr ? sec.extraLabel.ar : sec.extraLabel.en) : (isAr ? "نص إضافي" : "Extra");

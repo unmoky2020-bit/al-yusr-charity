@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Users, Search, Plus, Trash2, Pencil, CheckCircle2, XCircle,
   Loader2, ExternalLink, ShieldCheck, Tag, FolderKanban, BookOpen,
@@ -9,9 +9,10 @@ import {
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { ChoiceSelect } from "@/components/admin/programs/FormKit";
+import { UrgentCasesSettingsCard } from "@/components/admin/UrgentCasesSettingsCard";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -25,47 +26,8 @@ import {
   type LaravelProgram,
   type LaravelProject,
   type LaravelDonationCampaign,
-  formatServerImageUrl,
 } from "@/data/laravelApi";
 
-const DEFAULT_CASES_SEED: Partial<LaravelCase>[] = [
-  {
-    code: "CASE-001",
-    title: "إجراء جراحة قلب عاجلة للطفل يوسف",
-    beneficiary_name: "يوسف م. ع.",
-    governorate: "الدقهلية",
-    city: "المنصورة",
-    target_amount: 35000,
-    priority: "high",
-    status: "approved",
-    description: "طفل يبلغ من العمر 7 سنوات بحاجة لعملية جراحية عاجلة في القلب بمستشفى المنصورة الجامعي.",
-    cover_image: "/images/cases/case-heart-child.jpg",
-  },
-  {
-    code: "CASE-002",
-    title: "تيسير زواج فتاة يتيمة الأبوين بالمنزلة",
-    beneficiary_name: "أمل ح. س.",
-    governorate: "الدقهلية",
-    city: "المنزلة",
-    target_amount: 18000,
-    priority: "high",
-    status: "approved",
-    description: "توفير الأجهزة الكهربائية الأساسية (غسالة، ثلاجة، بوتاجاز) لإتمام زواج فتاة يتيمة.",
-    cover_image: "/images/cases/case-bride.png",
-  },
-  {
-    code: "CASE-003",
-    title: "كفالة طالب علم متفوق بالجامعة",
-    beneficiary_name: "محمد أحمد",
-    governorate: "القاهرة",
-    city: "مدينة نصر",
-    target_amount: 8000,
-    priority: "low",
-    status: "pending_review",
-    description: "كفالة دراسية ومصاريف كتب ورعاية تعليمية لطالب متفوق بالفرقة الثالثة.",
-    cover_image: "/images/cases/case-education.jpg",
-  },
-];
 
 const STATUS_OPTIONS: Array<{ v: string; ar: string; en: string; cls: string }> = [
   { v: "all", ar: "جميع الحالات", en: "All Cases", cls: "bg-muted text-muted-foreground" },
@@ -77,6 +39,7 @@ const STATUS_OPTIONS: Array<{ v: string; ar: string; en: string; cls: string }> 
 ];
 
 export default function AdminCases() {
+  const navigate = useNavigate();
   const { lang } = useLang();
   const isAr = lang === "ar";
 
@@ -100,10 +63,6 @@ export default function AdminCases() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [relationFilter, setRelationFilter] = useState<string>("all");
   const [catFilter, setCatFilter] = useState<string>("all");
-
-  // Create / Edit Case Dialog
-  const [editing, setEditing] = useState<Partial<LaravelCase> & { relationType?: "none" | "program" | "project" | "campaign" } | null>(null);
-  const [saving, setSaving] = useState(false);
 
   // Category management state
   const [showManageCats, setShowManageCats] = useState(false);
@@ -129,24 +88,19 @@ export default function AdminCases() {
       setProjects(Array.isArray(projsRes) ? projsRes : []);
       setCampaigns(Array.isArray(campsRes) ? campsRes : []);
 
-      const loadedCats = Array.isArray(catsRes) && catsRes.length > 0 ? catsRes : [
-        { id: 1, name_ar: "علاج وجراحة", name_en: "Treatment", slug: "treatment" },
-        { id: 2, name_ar: "تيسير زواج", name_en: "Marriage", slug: "bride" },
-        { id: 3, name_ar: "تعليم وكفالات", name_en: "Education", slug: "education" },
-        { id: 4, name_ar: "إسكان وتسقيف", name_en: "Housing", slug: "housing" },
-      ];
-      setCategories(loadedCats);
+      // Backend categories only; test rows ("The category field is required.") stay hidden.
+      setCategories((Array.isArray(catsRes) ? catsRes : []).filter((k) => !/required|field is/i.test(`${k.name_ar} ${k.slug}`)));
 
       if (Array.isArray(casesRes) && casesRes.length > 0) {
         setCases(casesRes);
       } else {
-        setCases(DEFAULT_CASES_SEED as LaravelCase[]);
+        setCases([]);
       }
 
       if (statsRes && typeof statsRes.total === "number") {
         setStats(statsRes);
       } else {
-        const loadedList = Array.isArray(casesRes) && casesRes.length > 0 ? casesRes : (DEFAULT_CASES_SEED as LaravelCase[]);
+        const loadedList = Array.isArray(casesRes) ? casesRes : [];
         setStats({
           total: loadedList.length,
           pending_review: loadedList.filter((c) => c.status === "pending_review" || c.status === "pending").length,
@@ -193,84 +147,9 @@ export default function AdminCases() {
     });
   }, [cases, search, statusFilter, catFilter, relationFilter]);
 
-  // Open Create Case
-  const openNew = () => {
-    setEditing({
-      code: `CASE-${Date.now().toString().slice(-4)}`,
-      title: "",
-      beneficiary_name: "",
-      governorate: "الدقهلية",
-      city: "المنصورة",
-      age: null,
-      target_amount: 15000,
-      priority: "medium",
-      status: "pending_review",
-      description: "",
-      category_id: categories[0]?.id ? Number(categories[0].id) : 1,
-      relationType: "none",
-      program_id: null,
-      project_id: null,
-      donation_campaign_id: null,
-    });
-  };
-
-  // Open Edit Case
-  const openEdit = (c: LaravelCase) => {
-    let relType: "none" | "program" | "project" | "campaign" = "none";
-    if (c.program_id || c.program) relType = "program";
-    else if (c.project_id || c.project) relType = "project";
-    else if (c.donation_campaign_id || c.donation_campaign) relType = "campaign";
-
-    setEditing({
-      ...c,
-      relationType: relType,
-      category_id: c.category_id || (c.category_data ? c.category_data.id : categories[0]?.id),
-    });
-  };
-
-  // Save Case (Create or Update)
-  const handleSaveCase = async () => {
-    if (!editing || !editing.title?.trim() || !editing.beneficiary_name?.trim()) {
-      toast({ title: isAr ? "يرجى ملء عنوان الحالة واسم المستفيد" : "Please fill case title and beneficiary name", variant: "destructive" });
-      return;
-    }
-
-    setSaving(true);
-    try {
-      const payload: Record<string, any> = {
-        code: editing.code?.trim() || `CASE-${Date.now().toString().slice(-4)}`,
-        title: editing.title.trim(),
-        beneficiary_name: editing.beneficiary_name.trim(),
-        governorate: editing.governorate?.trim() || "الدقهلية",
-        city: editing.city?.trim() || null,
-        age: editing.age ? Number(editing.age) : null,
-        target_amount: Number(editing.target_amount || 0),
-        priority: editing.priority || "medium",
-        description: editing.description?.trim() || editing.title.trim(),
-        status: editing.status || "pending_review",
-        category_id: editing.category_id ? Number(editing.category_id) : 1,
-        program_id: editing.relationType === "program" && editing.program_id ? Number(editing.program_id) : null,
-        project_id: editing.relationType === "project" && editing.project_id ? Number(editing.project_id) : null,
-        donation_campaign_id: editing.relationType === "campaign" && editing.donation_campaign_id ? Number(editing.donation_campaign_id) : null,
-        cover_image: editing.cover_image?.trim() || null,
-      };
-
-      if (editing.id && !String(editing.id).startsWith("static-")) {
-        await casesApiV1.update(editing.id, payload as any);
-        toast({ title: isAr ? "تم تحديث الحالة بنجاح" : "Case updated successfully" });
-      } else {
-        await casesApiV1.create(payload as any);
-        toast({ title: isAr ? "تمت إضافة الحالة بنجاح في قاعدة البيانات" : "Case created successfully" });
-      }
-
-      setEditing(null);
-      await loadData();
-    } catch (e: any) {
-      toast({ title: e.message || "Failed to save case", variant: "destructive" });
-    } finally {
-      setSaving(false);
-    }
-  };
+  // Create / edit happen on the full case page (/admin/cases/new, /admin/cases/:id).
+  const openNew = () => navigate("/admin/cases/new");
+  const openEdit = (c: LaravelCase) => navigate(`/admin/cases/${c.id}`);
 
   // Quick Change Status
   const handleSetStatus = async (id: number | string, newStatus: string) => {
@@ -441,6 +320,9 @@ export default function AdminCases() {
           <StatCard label={isAr ? "مرفوضة" : "Rejected"} value={stats.rejected} />
         </div>
 
+        {/* Homepage «حالات عاجلة» carousel */}
+        <UrgentCasesSettingsCard cases={cases} />
+
         {/* Filters Box */}
         <div className="rounded-2xl border border-border/70 bg-card p-4 shadow-soft space-y-3">
           <div className="flex flex-col gap-3 md:flex-row md:items-center">
@@ -498,18 +380,8 @@ export default function AdminCases() {
 
             <div className="ms-auto flex items-center gap-1.5">
               <span className="font-bold text-muted-foreground">{isAr ? "التصنيف:" : "Category:"}</span>
-              <select
-                value={catFilter}
-                onChange={(e) => setCatFilter(e.target.value)}
-                className="h-8 rounded-lg border border-input bg-background px-2.5 text-xs"
-              >
-                <option value="all">{isAr ? "جميع التصنيفات" : "All Categories"}</option>
-                {categories.map((k) => (
-                  <option key={String(k.id)} value={String(k.id)}>
-                    {k.name_ar}
-                  </option>
-                ))}
-              </select>
+              <ChoiceSelect value={catFilter} onChange={setCatFilter} className="h-8 w-48 text-xs"
+                options={[{ value: "all", label: isAr ? "جميع التصنيفات" : "All Categories" }, ...categories.map((k) => ({ value: String(k.id), label: k.name_ar }))]} />
             </div>
           </div>
         </div>
@@ -695,257 +567,6 @@ export default function AdminCases() {
           </div>
         )}
       </div>
-
-      {/* ── Dialog: Create / Edit Case ── */}
-      <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-xl font-bold">
-              <Users className="h-5 w-5 text-primary" />
-              {editing?.id && !String(editing.id).startsWith("static-")
-                ? (isAr ? "تعديل بيانات الحالة" : "Edit Case")
-                : (isAr ? "إضافة حالة إنسانية جديدة" : "New Case")}
-            </DialogTitle>
-          </DialogHeader>
-
-          {editing && (
-            <div className="space-y-4 py-2 text-sm">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <Label>{isAr ? "كود الحالة (Code) *" : "Case Code *"}</Label>
-                  <Input
-                    value={editing.code || ""}
-                    onChange={(e) => setEditing({ ...editing, code: e.target.value })}
-                    placeholder="CASE-001"
-                    className="mt-1 font-mono text-xs"
-                  />
-                </div>
-                <div>
-                  <Label>{isAr ? "عنوان الحالة *" : "Case Title *"}</Label>
-                  <Input
-                    value={editing.title || ""}
-                    onChange={(e) => setEditing({ ...editing, title: e.target.value })}
-                    placeholder="مثال: إجراء جراحة قلب عاجلة للطفل يوسف"
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <Label>{isAr ? "اسم المستفيد *" : "Beneficiary Name *"}</Label>
-                  <Input
-                    value={editing.beneficiary_name || ""}
-                    onChange={(e) => setEditing({ ...editing, beneficiary_name: e.target.value })}
-                    placeholder="محمد أحمد / يوسف م. ع."
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label>{isAr ? "العمر" : "Age"}</Label>
-                  <Input
-                    type="number"
-                    value={editing.age || ""}
-                    onChange={(e) => setEditing({ ...editing, age: e.target.value ? Number(e.target.value) : null })}
-                    placeholder="7"
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-
-              {/* Entity Linkage: Program, Project, Campaign, or General */}
-              <div className="rounded-xl border border-border p-3.5 bg-muted/20 space-y-3">
-                <Label className="font-bold text-xs text-foreground">
-                  {isAr ? "ارتباط الحالة (برنامج خيري أو مشروع تنموي أو حملة تبرع):" : "Case Linkage:"}
-                </Label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {[
-                    { id: "none", label: isAr ? "حالة عامة" : "General" },
-                    { id: "program", label: isAr ? "برنامج خيري" : "Program" },
-                    { id: "project", label: isAr ? "مشروع تنموي" : "Project" },
-                    { id: "campaign", label: isAr ? "حملة تبرع" : "Campaign" },
-                  ].map((r) => (
-                    <label
-                      key={r.id}
-                      className={`flex items-center justify-center p-2 rounded-lg border text-xs cursor-pointer font-bold transition ${
-                        editing.relationType === r.id
-                          ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                          : "border-border bg-card text-muted-foreground hover:bg-muted"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="relType"
-                        className="sr-only"
-                        checked={editing.relationType === r.id}
-                        onChange={() => setEditing({ ...editing, relationType: r.id as any })}
-                      />
-                      <span>{r.label}</span>
-                    </label>
-                  ))}
-                </div>
-
-                {editing.relationType === "program" && (
-                  <div>
-                    <Label className="text-xs">{isAr ? "اختر البرنامج التابع له:" : "Select Program:"}</Label>
-                    <select
-                      value={editing.program_id ? String(editing.program_id) : ""}
-                      onChange={(e) => setEditing({ ...editing, program_id: Number(e.target.value) })}
-                      className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    >
-                      <option value="">{isAr ? "اختر برنامجاً..." : "Select..."}</option>
-                      {programs.map((p) => (
-                        <option key={String(p.id)} value={String(p.id)}>
-                          {p.name_ar || p.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {editing.relationType === "project" && (
-                  <div>
-                    <Label className="text-xs">{isAr ? "اختر المشروع التابع له:" : "Select Project:"}</Label>
-                    <select
-                      value={editing.project_id ? String(editing.project_id) : ""}
-                      onChange={(e) => setEditing({ ...editing, project_id: Number(e.target.value) })}
-                      className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    >
-                      <option value="">{isAr ? "اختر مشروعاً..." : "Select..."}</option>
-                      {projects.map((p) => (
-                        <option key={String(p.id)} value={String(p.id)}>
-                          {p.name_ar || p.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {editing.relationType === "campaign" && (
-                  <div>
-                    <Label className="text-xs">{isAr ? "اختر الحملة التابعة لها:" : "Select Campaign:"}</Label>
-                    <select
-                      value={editing.donation_campaign_id ? String(editing.donation_campaign_id) : ""}
-                      onChange={(e) => setEditing({ ...editing, donation_campaign_id: Number(e.target.value) })}
-                      className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    >
-                      <option value="">{isAr ? "اختر حملة..." : "Select..."}</option>
-                      {campaigns.map((c) => (
-                        <option key={String(c.id)} value={String(c.id)}>
-                          {c.name_ar || c.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <Label>{isAr ? "المحافظة" : "Governorate"}</Label>
-                  <Input
-                    value={editing.governorate || "الدقهلية"}
-                    onChange={(e) => setEditing({ ...editing, governorate: e.target.value })}
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label>{isAr ? "المدينة / المركز" : "City"}</Label>
-                  <Input
-                    value={editing.city || ""}
-                    onChange={(e) => setEditing({ ...editing, city: e.target.value })}
-                    placeholder="المنصورة"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label>{isAr ? "التصنيف" : "Category"}</Label>
-                  <select
-                    value={editing.category_id ? String(editing.category_id) : ""}
-                    onChange={(e) => setEditing({ ...editing, category_id: Number(e.target.value) })}
-                    className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  >
-                    {categories.map((k) => (
-                      <option key={String(k.id)} value={String(k.id)}>
-                        {k.name_ar}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <Label>{isAr ? "المبلغ المستهدف (ج.م) *" : "Target Amount *"}</Label>
-                  <Input
-                    type="number"
-                    value={editing.target_amount ?? 15000}
-                    onChange={(e) => setEditing({ ...editing, target_amount: Number(e.target.value) })}
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label>{isAr ? "درجة الأولوية" : "Priority"}</Label>
-                  <select
-                    value={editing.priority || "medium"}
-                    onChange={(e) => setEditing({ ...editing, priority: e.target.value as any })}
-                    className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  >
-                    <option value="high">{isAr ? "عاجلة / عالية" : "High"}</option>
-                    <option value="medium">{isAr ? "متوسطة" : "Medium"}</option>
-                    <option value="low">{isAr ? "عادية / منخفضة" : "Low"}</option>
-                  </select>
-                </div>
-                <div>
-                  <Label>{isAr ? "حالة الحالة" : "Status"}</Label>
-                  <select
-                    value={editing.status || "pending_review"}
-                    onChange={(e) => setEditing({ ...editing, status: e.target.value as any })}
-                    className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  >
-                    <option value="pending_review">{isAr ? "قيد المراجعة" : "Pending Review"}</option>
-                    <option value="approved">{isAr ? "معتمدة ونشطة" : "Approved"}</option>
-                    <option value="completed">{isAr ? "مكتملة التمويل" : "Completed"}</option>
-                    <option value="closed">{isAr ? "مغلقة" : "Closed"}</option>
-                    <option value="rejected">{isAr ? "مرفوضة" : "Rejected"}</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <Label>{isAr ? "تفاصيل وقصة الحالة" : "Description / Story"}</Label>
-                <Textarea
-                  value={editing.description || ""}
-                  onChange={(e) => setEditing({ ...editing, description: e.target.value })}
-                  placeholder="اكتب التقرير الاجتماعي وتفاصيل الاحتياج والمستندات الطبية..."
-                  rows={3}
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label>{isAr ? "رابط الصورة (URL)" : "Cover Image URL"}</Label>
-                <Input
-                  value={editing.cover_image || ""}
-                  onChange={(e) => setEditing({ ...editing, cover_image: e.target.value })}
-                  placeholder="https://..."
-                  className="mt-1"
-                />
-              </div>
-            </div>
-          )}
-
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setEditing(null)}>
-              {isAr ? "إلغاء" : "Cancel"}
-            </Button>
-            <Button onClick={handleSaveCase} disabled={saving} className="gap-1.5 bg-primary text-primary-foreground">
-              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              {isAr ? "حفظ الحالة" : "Save Case"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* ── Dialog: إدارة تصنيفات الحالات ── */}
       <Dialog

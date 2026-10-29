@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Beef, Sun, Snowflake, Moon, Sparkles, ArrowLeft, ArrowRight, GraduationCap, Star, Heart, Lock } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
-import { isSeasonEnabled, type SeasonSlug } from "@/data/seasons";
+import { isSeasonEnabled, useSeasons, type SeasonSlug } from "@/data/seasons";
 import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
 import imgShelter from "@/assets/poster-water.png";
 import imgWater from "@/assets/poster-water.png";
@@ -16,6 +16,8 @@ import imgSchool from "@/assets/poster-education.png";
  * unified `pattern-hero-soft` background to match the WorkAxes section.
  */
 export const HomeSeasons = () => {
+  // Subscribes to /seasons in api mode so isSeasonEnabled() below re-renders when data arrives (no-op when static).
+  useSeasons();
   const { lang } = useLang();
   const isRTL = lang === "ar";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;

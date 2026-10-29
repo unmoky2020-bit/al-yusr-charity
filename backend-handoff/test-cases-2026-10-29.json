@@ -1,0 +1,136 @@
+{
+ "created_at": "2026-10-29T07:31:05.544Z",
+ "note": "test cases — delete with: node testCases.js --delete",
+ "cases": [
+  {
+   "id": 30,
+   "code": "CAS-GEN-001",
+   "entity": "general"
+  },
+  {
+   "id": 31,
+   "code": "CAS-GEN-002",
+   "entity": "general"
+  },
+  {
+   "id": 32,
+   "code": "CAS-ORP-201",
+   "entity": "orphans"
+  },
+  {
+   "id": 33,
+   "code": "CAS-ORP-202",
+   "entity": "orphans"
+  },
+  {
+   "id": 34,
+   "code": "CAS-ORP-203",
+   "entity": "orphans"
+  },
+  {
+   "id": 35,
+   "code": "PRJ-WTR-111",
+   "entity": "water"
+  },
+  {
+   "id": 36,
+   "code": "PRJ-WTR-112",
+   "entity": "water"
+  },
+  {
+   "id": 37,
+   "code": "PRJ-WQF-801",
+   "entity": "waqf"
+  },
+  {
+   "id": 38,
+   "code": "CAS-MED-501",
+   "entity": "medical"
+  },
+  {
+   "id": 39,
+   "code": "CAS-MED-502",
+   "entity": "medical"
+  },
+  {
+   "id": 40,
+   "code": "CMP-MRK-01",
+   "entity": "markoun"
+  },
+  {
+   "id": 41,
+   "code": "CMP-MRK-02",
+   "entity": "markoun"
+  },
+  {
+   "id": 42,
+   "code": "CMP-DHL-201",
+   "entity": "dhill"
+  },
+  {
+   "id": 43,
+   "code": "CMP-DHL-202",
+   "entity": "dhill"
+  },
+  {
+   "id": 44,
+   "code": "CMP-DHL-203",
+   "entity": "dhill"
+  },
+  {
+   "id": 45,
+   "code": "CMP-STR-001",
+   "entity": "shelter"
+  },
+  {
+   "id": 46,
+   "code": "CMP-STR-002",
+   "entity": "shelter"
+  },
+  {
+   "id": 47,
+   "code": "CMP-STR-003",
+   "entity": "shelter"
+  },
+  {
+   "id": 48,
+   "code": "CMP-ATH-001",
+   "entity": "athar"
+  },
+  {
+   "id": 49,
+   "code": "CMP-ATH-002",
+   "entity": "athar"
+  },
+  {
+   "id": 50,
+   "code": "CMP-ATH-003",
+   "entity": "athar"
+  },
+  {
+   "id": 51,
+   "code": "CMP-RMD-101",
+   "entity": "ramadan"
+  },
+  {
+   "id": 52,
+   "code": "CMP-RMD-102",
+   "entity": "ramadan"
+  },
+  {
+   "id": 53,
+   "code": "CMP-RMD-103",
+   "entity": "ramadan"
+  },
+  {
+   "id": 54,
+   "code": "CMP-ODH-301",
+   "entity": "odhya"
+  },
+  {
+   "id": 55,
+   "code": "CMP-ODH-302",
+   "entity": "odhya"
+  }
+ ]
+}

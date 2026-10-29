@@ -26,6 +26,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
@@ -33,7 +34,7 @@ import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs } from "@/data/faqsApi";
-import { programs } from "@/data/programs";
+import { usePrograms } from "@/data/sources/programs";
 import { BrideTrousseau } from "@/components/sections/BrideTrousseau";
 import { HomeSeasons } from "@/components/sections/HomeSeasons";
 import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
@@ -59,6 +60,7 @@ const Projects = () => {
   const { lang, t } = useLang();
   const isRTL = lang === "ar";
   const reduce = useReducedMotion();
+  const { programs } = usePrograms();
   // Selected governorate tag — filters the GEO section so the page isn't
   // overwhelmed by 11+ huge cards. Defaults to Dakahlia (our home turf).
   const [activeGeo, setActiveGeo] = useState<string>(
@@ -866,6 +868,11 @@ const Projects = () => {
 
       {/* Bride trousseau campaign */}
       <BrideTrousseau />
+
+      {/* Field cases across all programs (live from the backend; hidden when there are none) */}
+      <LinkedCasesSection filter={{ linkedTo: "program" }} showOwner isRTL={isRTL} className="bg-muted/30"
+        title={isRTL ? "حالات بتتجمع لها التبرعات في برامجنا" : "Cases our programs are funding"}
+        subtitle={isRTL ? "اختار حالة بعينها وتابع تحديثاتها بالصور لحد ما تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
     </PageLayout>
   );
 };

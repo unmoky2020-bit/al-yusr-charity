@@ -1,0 +1,32 @@
+[
+ {
+  "kind": "case",
+  "id": 24,
+  "code": "CASE-29013"
+ },
+ {
+  "kind": "case",
+  "id": 25,
+  "code": "CASE-70423"
+ },
+ {
+  "kind": "case",
+  "id": 26,
+  "code": "CASE-27320"
+ },
+ {
+  "kind": "case",
+  "id": 27,
+  "code": "CASE-84373"
+ },
+ {
+  "kind": "case",
+  "id": 28,
+  "code": "CASE-92759"
+ },
+ {
+  "kind": "case",
+  "id": 29,
+  "code": "CASE-51988"
+ }
+]

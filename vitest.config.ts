@@ -9,6 +9,8 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    // Tests assume the default static content source, whatever the local .env says.
+    env: { VITE_CONTENT_SOURCE: "static" },
   },
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") },

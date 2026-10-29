@@ -4,12 +4,13 @@ import { Helmet } from "react-helmet-async";
 import { ArrowLeft, ArrowRight, Heart, Loader2, ShieldCheck, Camera, Truck, CheckCircle2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
-import { supabase } from "@/integrations/supabase/client";
-import { getProgram } from "@/data/programs";
+import { getDonationNodeBySlug, listDonationNodeChildren } from "@/data/api/publicDonationNodesApi";
+import { usePrograms } from "@/data/sources/programs";
 import { track } from "@/lib/track";
 import { RelatedContentLinks } from "@/components/common/RelatedContentLinks";
 import { FieldConvoysGallery } from "@/components/sections/FieldConvoysGallery";
@@ -32,6 +33,8 @@ const ProgramOptionDetail = () => {
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   // Auto-redirect alias parent slugs to canonical (keeps option path intact)
   const ALIAS_OF: Record<string, string> = { satr: "shelter", food: "box" };
+  // Static by default; reads /programs when VITE_CONTENT_SOURCE is "api"/"auto". Called before the alias return (rules of hooks).
+  const { programs } = usePrograms();
   if (slug && ALIAS_OF[slug]) {
     return <Navigate to={`/programs/${ALIAS_OF[slug]}/${option || ""}`} replace />;
   }
@@ -39,22 +42,21 @@ const ProgramOptionDetail = () => {
   const [parent, setParent] = useState<Node | null>(null);
   const [siblings, setSiblings] = useState<Node[]>([]);
   const [loading, setLoading] = useState(true);
-  const program = slug ? getProgram(slug) : undefined;
+  const program = slug ? programs.find((p) => p.slug === slug) : undefined;
 
   useEffect(() => {
     if (!slug || !option) return;
     let alive = true;
     (async () => {
       setLoading(true);
-      const { data: p } = await supabase.from("donation_nodes")
-        .select("*").eq("slug", slug).eq("active", true).maybeSingle();
+      // Laravel GET /donation-nodes (proposed). null/[] while the content source is "static"
+      // or on API error → the page redirects to the program page (no option data).
+      const p = await getDonationNodeBySlug(slug);
       if (!p || !alive) { setLoading(false); return; }
-      const { data: child } = await supabase.from("donation_nodes")
-        .select("*").eq("parent_id", (p as any).id).eq("slug", option).eq("active", true).maybeSingle();
-      const { data: sibs } = await supabase.from("donation_nodes")
-        .select("*").eq("parent_id", (p as any).id).eq("active", true).order("sort_order");
+      const sibs = await listDonationNodeChildren(p.id);
+      const child = sibs.find((n) => n.slug === option) ?? null;
       if (!alive) return;
-      setParent(p as any); setNode((child as any) || null); setSiblings((sibs as any) || []);
+      setParent(p); setNode(child); setSiblings(sibs);
       setLoading(false);
       if (child) {
         track("option_view", { fbEvent: "ViewContent", payload: { program: slug, option, source: "option-detail" } });
@@ -329,6 +331,10 @@ const ProgramOptionDetail = () => {
         ctaLabel={{ ar: "تبرع الآن", en: "Donate now" }}
         waText={isRTL ? `السلام عليكم، عايز أعرف تفاصيل ${title}.` : `Hi, I'd like details on ${title}.`}
       />
+      {program?.apiId && (
+        <LinkedCasesSection filter={{ programId: program.apiId }} isRTL={isRTL}
+          title={isRTL ? `حالات ضمن ${program.ar.name}` : `Cases in ${program.en.name}`} />
+      )}
     </PageLayout>
   );
 };

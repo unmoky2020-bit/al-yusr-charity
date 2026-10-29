@@ -11,7 +11,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { DAKAHLIA_CITIES, getCity, DISTRICTS_BY_CITY } from "@/data/dakahliaCities";
-import { getProgram, programs } from "@/data/programs";
+import { usePrograms } from "@/data/sources/programs";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 
 /**
@@ -27,7 +27,8 @@ const CityProgram = () => {
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
   const cityObj = getCity(city);
-  const prog = getProgram(program);
+  const { programs } = usePrograms();
+  const prog = programs.find((p) => p.slug === program);
   if (!cityObj || !prog) return <Navigate to="/programs" replace />;
 
   const cName = isRTL ? cityObj.ar : cityObj.en;

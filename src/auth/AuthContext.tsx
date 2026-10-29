@@ -1,5 +1,9 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
+import { resetNotifications } from "@/data/notifications/notificationsStore";
 import { authApi, getApiToken, clearApiToken, LaravelUser } from "@/data/laravelApi";
+import { profileApi, volunteerAdminApi } from "@/data/api/profileApi";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
+import { toast } from "@/hooks/use-toast";
 import { Permission, inferPermissions } from "./permissions";
 import { buildUserFromLaravel } from "./userBuilder";
 
@@ -41,9 +45,11 @@ type Ctx = {
   registerEditor: (data: { name: string; email: string; password: string; phone?: string; city?: string; bio?: string }) => Promise<LoginResult>;
   updateProfile: (id: string, patch: Partial<User>) => Promise<void>;
   changePassword: (id: string, oldPwd: string, newPwd: string) => Promise<LoginResult>;
-  setVolunteerStatus: (id: string, status: VolunteerStatus, assignedProgram?: string) => void;
+  /** PUT /volunteers/{id} {status, program_slug?}. Rejects on failure. */
+  setVolunteerStatus: (id: string, status: VolunteerStatus, assignedProgram?: string) => Promise<void>;
   setUserRoles: (id: string, roles: Role[]) => void;
-  setUserPermissions: (id: string, perms: Permission[]) => void;
+  /** PUT /volunteers/{id} {permissions}. Rejects on failure. */
+  setUserPermissions: (id: string, perms: Permission[]) => Promise<void>;
   removeUser: (id: string) => void;
   hasRole: (role: Role) => boolean;
   hasPermission: (perm: Permission) => boolean;
@@ -123,6 +129,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     authApi.logout().catch(() => {});
     clearApiToken();
+    resetNotifications();
     setUser(null);
     setSession(null);
   };
@@ -187,8 +194,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  /** PUT /profile — the local user is updated only after the server accepted the change. */
   const updateProfile: Ctx["updateProfile"] = async (_id, patch) => {
-    setUser((prev) => (prev ? { ...prev, ...patch } : prev));
+    try {
+      const saved = await profileApi.update({
+        name: patch.name,
+        email: patch.email,
+        phone: patch.phone,
+        bio: patch.bio,
+        city: patch.city,
+      });
+      const next = saved && (saved.id || saved.email) ? buildUserFromLaravel(saved as LaravelUser) : null;
+      setUser((prev) => (prev ? (next ? { ...prev, ...next } : { ...prev, ...patch }) : prev));
+      setSession((prev) => (prev ? { ...prev, user: next ? { ...prev.user, ...next } : { ...prev.user, ...patch } } : prev));
+    } catch (err) {
+      // Some callers do not await: surface the failure here as well, then reject.
+      toast({ variant: "destructive", title: "فشل حفظ الملف الشخصي", description: apiErrorMessage(err) });
+      throw err;
+    }
   };
 
   const changePassword: Ctx["changePassword"] = async (_id, oldPwd, newPwd) => {
@@ -204,9 +227,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const setVolunteerStatus: Ctx["setVolunteerStatus"] = () => {};
+  const setVolunteerStatus: Ctx["setVolunteerStatus"] = async (id, status, assignedProgram) => {
+    await volunteerAdminApi.update(id, {
+      status,
+      ...(assignedProgram !== undefined ? { program_slug: assignedProgram } : {}),
+    });
+  };
   const setUserRoles: Ctx["setUserRoles"] = () => {};
-  const setUserPermissions: Ctx["setUserPermissions"] = () => {};
+  const setUserPermissions: Ctx["setUserPermissions"] = async (id, perms) => {
+    await volunteerAdminApi.update(id, { permissions: perms });
+  };
   const removeUser: Ctx["removeUser"] = () => {};
 
   const hasRole = (role: Role) => {

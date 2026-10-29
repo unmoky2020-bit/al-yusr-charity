@@ -5,11 +5,11 @@ import { Input } from "@/components/ui/input";
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
 import {
-  listCaseMediaAdmin, uploadCaseMediaFile, createCaseMediaRow,
+  listCaseMediaAdmin, createCaseMediaRow,
   updateCaseMedia, deleteCaseMedia, reorderCaseMedia,
   type CaseMediaRow, type CaseMediaKind,
 } from "@/data/casesApi";
-import { supabase } from "@/integrations/supabase/client";
+import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { compressImage } from "@/lib/image-compress";
 
 const KINDS: { v: CaseMediaKind; ar: string; en: string }[] = [
@@ -31,21 +31,15 @@ export function CaseMediaManager({ caseId }: { caseId: string }) {
   const fileInput = useRef<HTMLInputElement | null>(null);
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
 
+  const showError = (e: unknown, title: string) =>
+    toast({ title, description: apiErrorMessage(e), variant: "destructive" });
+
   const reload = async () => {
     try { setRows(await listCaseMediaAdmin(caseId)); }
-    catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    catch (e) { showError(e, isAr ? "تعذّر تحميل وسائط الحالة" : "Couldn't load case media"); }
     finally { setLoading(false); }
   };
   useEffect(() => { void reload(); /* eslint-disable-next-line */ }, [caseId]);
-
-  // Realtime: keep admin grid in sync with /cases/:id changes.
-  useEffect(() => {
-    const ch = supabase.channel(`admin-case-media-${caseId}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "case_media", filter: `case_id=eq.${caseId}` }, reload)
-      .subscribe();
-    return () => { try { supabase.removeChannel(ch); } catch { /* noop */ } };
-    // eslint-disable-next-line
-  }, [caseId]);
 
   const onPickFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -59,15 +53,18 @@ export function CaseMediaManager({ caseId }: { caseId: string }) {
         arr.map(async (f) => f.type.startsWith("image/") ? await compressImage(f, { maxEdge: 1600, quality: 0.8 }) : f)
       );
       let done = 0;
+      // Laravel POST /cases/{id}/media (multipart): stores the file and creates the row in one request.
       await Promise.all(prepared.map(async (f, i) => {
-        const { url } = await uploadCaseMediaFile(f, caseId);
-        await createCaseMediaRow({ case_id: caseId, url, kind: "other", is_public: true, sort_order: baseOrder + i });
+        await createCaseMediaRow({ case_id: caseId, file: f, kind: "other", is_public: true, sort_order: baseOrder + i });
         done += 1;
         setProgress({ done, total: arr.length });
       }));
       toast({ title: isAr ? ` تم رفع ${arr.length} ملف` : `✅ Uploaded ${arr.length} files` });
       await reload();
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    } catch (e) {
+      showError(e, isAr ? "فشل رفع الوسائط" : "Upload failed");
+      void reload();
+    }
     finally { setUploading(false); setProgress(null); if (fileInput.current) fileInput.current.value = ""; }
   };
 
@@ -77,14 +74,14 @@ export function CaseMediaManager({ caseId }: { caseId: string }) {
     const next = rows.slice();
     [next[idx], next[j]] = [next[j], next[idx]];
     setRows(next);
-    try { await reorderCaseMedia(next); }
-    catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); void reload(); }
+    try { await reorderCaseMedia(next, caseId); }
+    catch (e) { showError(e, isAr ? "تعذّر حفظ الترتيب" : "Couldn't save the order"); void reload(); }
   };
 
   const remove = async (m: CaseMediaRow) => {
     if (!confirm(isAr ? "حذف هذه الوسائط نهائيًا؟" : "Delete this media permanently?")) return;
     try { await deleteCaseMedia(m.id, m.url); toast({ title: isAr ? "تم الحذف" : "Deleted" }); await reload(); }
-    catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+    catch (e) { showError(e, isAr ? "تعذّر حذف الوسائط" : "Couldn't delete media"); }
   };
 
   return (
@@ -127,7 +124,7 @@ export function CaseMediaManager({ caseId }: { caseId: string }) {
                   ? <video src={m.url} controls preload="metadata" className="h-full w-full object-cover" />
                   : <img src={m.url} alt={m.caption_ar || m.caption_en || ""} loading="lazy" className="h-full w-full object-cover" />}
               </div>
-              <MediaRowEditor row={m} index={i} total={rows.length} onMove={move} onRemove={remove} />
+              <MediaRowEditor row={m} index={i} total={rows.length} onMove={move} onRemove={remove} onSaved={reload} />
             </li>
           ))}
         </ul>
@@ -137,11 +134,12 @@ export function CaseMediaManager({ caseId }: { caseId: string }) {
 }
 
 function MediaRowEditor({
-  row, index, total, onMove, onRemove,
+  row, index, total, onMove, onRemove, onSaved,
 }: {
   row: CaseMediaRow; index: number; total: number;
   onMove: (i: number, dir: -1 | 1) => void;
   onRemove: (m: CaseMediaRow) => void;
+  onSaved: () => void | Promise<void>;
 }) {
   const { lang } = useLang();
   const isAr = lang === "ar";
@@ -169,7 +167,10 @@ function MediaRowEditor({
         is_public: draft.is_public,
       });
       toast({ title: isAr ? " تم الحفظ" : " Saved" });
-    } catch (e) { toast({ title: (e as Error).message, variant: "destructive" }); }
+      await onSaved();
+    } catch (e) {
+      toast({ title: isAr ? "تعذّر حفظ التعديلات" : "Couldn't save changes", description: apiErrorMessage(e), variant: "destructive" });
+    }
     finally { setSaving(false); }
   };
 

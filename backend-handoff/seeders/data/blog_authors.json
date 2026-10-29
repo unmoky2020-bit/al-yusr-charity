@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "alyusr-team",
+    "name_ar": "فريق تحرير اليسر",
+    "name_en": "Al-Yusr Editorial Team",
+    "role_ar": "فريق المحتوى الميداني",
+    "role_en": "Field Content Team",
+    "bio_ar": "فريق متخصص من اليسر بيوثق رحلة كل تبرع من المنصورة لقرى الدقهلية، بصور وفيديوهات وقصص حقيقية من الميدان.",
+    "bio_en": "A specialized Al-Yusr team documenting every donation's journey from Mansoura to Dakahlia villages with real photos, videos, and stories.",
+    "avatar": null,
+    "twitter": null,
+    "linkedin": null
+  },
+  {
+    "slug": "shariah-desk",
+    "name_ar": "مكتب الاستشارات الشرعية",
+    "name_en": "Shariah Desk",
+    "role_ar": "إفتاء وتأصيل شرعي",
+    "role_en": "Fatwa & Sharia Review",
+    "bio_ar": "مكتب مراجعة شرعية في اليسر بيغطي مقالات الزكاة والأضحية والوقف، بإشراف علماء معتمدين.",
+    "bio_en": "Al-Yusr's Shariah review desk covering Zakat, Sacrifice, and Endowment articles under certified scholars.",
+    "avatar": null,
+    "twitter": null,
+    "linkedin": null
+  }
+]

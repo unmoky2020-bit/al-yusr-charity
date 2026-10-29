@@ -2,9 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, Search, X, Check, Plus, Minus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import {
-  DONATION_ENTITIES,
-} from "@/data/donationEntities";
+import { useDonationEntities } from "@/data/sources/donationEntities";
 
 export type DonationItemState = {
   id: string;
@@ -37,6 +35,7 @@ export function DonationEntityItem({
   item, index, totalItems, error, lang, onUpdate, onRemove,
 }: Props) {
   const isAR = lang === "ar";
+  const { entities } = useDonationEntities();
 
   // ── Entity Dropdown State ──
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -48,8 +47,8 @@ export function DonationEntityItem({
   const [triggerRect, setTriggerRect] = useState<DOMRect | null>(null);
 
   const selectedEntity = useMemo(
-    () => DONATION_ENTITIES.find((e) => e.id === item.entityId) || DONATION_ENTITIES[0],
-    [item.entityId]
+    () => entities.find((e) => e.id === item.entityId) || entities[0],
+    [item.entityId, entities]
   );
 
   const typeLabel = TYPE_LABEL[selectedEntity.entityType] || TYPE_LABEL.program;
@@ -96,15 +95,15 @@ export function DonationEntityItem({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return DONATION_ENTITIES;
-    return DONATION_ENTITIES.filter(
+    if (!q) return entities;
+    return entities.filter(
       (e) => e.ar.includes(q) || e.en.toLowerCase().includes(q) || e.taglineAr.includes(q)
     );
-  }, [query]);
+  }, [query, entities]);
 
   // ── Entity Selection ──
   const selectEntity = (id: string) => {
-    const next = DONATION_ENTITIES.find((e) => e.id === id) || DONATION_ENTITIES[0];
+    const next = entities.find((e) => e.id === id) || entities[0];
     const defMode = next.isMarkoun ? "in_kind" : "general";
     onUpdate({
       ...item,

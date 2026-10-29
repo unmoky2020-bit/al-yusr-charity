@@ -1,0 +1,904 @@
+[
+  {
+    "donation_entity_id": "general",
+    "frontend_entity_type": "program",
+    "target_table": "programs",
+    "target_slug": "general-donation",
+    "note": null,
+    "name_ar": "تبرع عام",
+    "name_en": "General Donation",
+    "tagline_ar": "صدقة عامة توجه للأشد احتياجاً والأكثر إلحاحاً",
+    "tagline_en": "General charity directed to the most urgent needs",
+    "image": "src/assets/program-food-new.jpg",
+    "donation_type": "cash",
+    "category_ar": "صدقة عامة",
+    "category_en": "General Charity",
+    "price_from": 50,
+    "color": "#10b981",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "gen-50",
+        "name_ar": "سهم صدقة عامة 50 ج",
+        "name_en": "50 EGP Share",
+        "amount": 50,
+        "popular": false
+      },
+      {
+        "key": "gen-100",
+        "name_ar": "سهم صدقة عامة 100 ج",
+        "name_en": "100 EGP Share",
+        "amount": 100,
+        "popular": true
+      },
+      {
+        "key": "gen-250",
+        "name_ar": "سهم صدقة عامة 250 ج",
+        "name_en": "250 EGP Share",
+        "amount": 250,
+        "popular": false
+      },
+      {
+        "key": "gen-500",
+        "name_ar": "سهم بركة عامة 500 ج",
+        "name_en": "500 EGP Share",
+        "amount": 500,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (programs)",
+    "demo_cases_count": 2
+  },
+  {
+    "donation_entity_id": "inqadh",
+    "frontend_entity_type": "program",
+    "target_table": "programs",
+    "target_slug": "inqadh",
+    "note": "غير موجود في الباك حالياً",
+    "name_ar": "إنقاذ — حالات الطوارئ العاجلة",
+    "name_en": "Inqadh — Emergency Relief",
+    "tagline_ar": "استجابة فورية للحالات الإنسانية العاجلة التي لا تحتمل التأخير",
+    "tagline_en": "Immediate response for urgent humanitarian cases that cannot wait",
+    "image": "src/assets/program-health.png",
+    "donation_type": "cash",
+    "category_ar": "إغاثة عاجلة",
+    "category_en": "Emergency Aid",
+    "price_from": 100,
+    "color": "#ef4444",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "inq-100",
+        "name_ar": "سهم إغاثة عاجلة 100 ج",
+        "name_en": "Emergency Share 100 EGP",
+        "amount": 100,
+        "popular": false
+      },
+      {
+        "key": "inq-500",
+        "name_ar": "سهم إنقاذ حالة ميدانية (500 ج)",
+        "name_en": "Field Case Rescue Share",
+        "amount": 500,
+        "popular": true
+      },
+      {
+        "key": "inq-2000",
+        "name_ar": "كفالة حالة طوارئ طبية كاملة (2000 ج)",
+        "name_en": "Full Medical Emergency Pack",
+        "amount": 2000,
+        "popular": false
+      },
+      {
+        "key": "inq-5000",
+        "name_ar": "سهم تمويل حملة إغاثة ميدانية",
+        "name_en": "Field Relief Campaign Share",
+        "amount": 5000,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (programs)",
+    "demo_cases_count": 3
+  },
+  {
+    "donation_entity_id": "orphans",
+    "frontend_entity_type": "program",
+    "target_table": "programs",
+    "target_slug": "orphans",
+    "note": null,
+    "name_ar": "كفالة الأيتام",
+    "name_en": "Orphan Sponsorship",
+    "tagline_ar": "كن رفيق النبي ﷺ في الجنة بكفالة يتيم شاملة غذاءً ودراسةً",
+    "tagline_en": "Companion of the Prophet in Jannah through complete orphan care",
+    "image": "src/assets/program-orphans.jpg",
+    "donation_type": "cash",
+    "category_ar": "رعاية وتكافل",
+    "category_en": "Orphan Care",
+    "price_from": 150,
+    "color": "#3b82f6",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "orph-part",
+        "name_ar": "سهم مساهمة كفالة يتيم (150 ج)",
+        "name_en": "Partial Sponsorship Share",
+        "amount": 150,
+        "popular": false
+      },
+      {
+        "key": "orph-full",
+        "name_ar": "كفالة يتيم شهرية شاملة (غذاء ودراسة)",
+        "name_en": "Full Monthly Sponsorship",
+        "amount": 600,
+        "popular": true
+      },
+      {
+        "key": "orph-clothes",
+        "name_ar": "سهم كسوة وحقيبة مدرسية ليتيم",
+        "name_en": "School Bag & Uniform Share",
+        "amount": 300,
+        "popular": false
+      },
+      {
+        "key": "orph-annual",
+        "name_ar": "كفالة يتيم سنوية متكاملة",
+        "name_en": "Annual Full Sponsorship",
+        "amount": 7200,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (programs)",
+    "demo_cases_count": 3
+  },
+  {
+    "donation_entity_id": "monthly-sponsorship",
+    "frontend_entity_type": "program",
+    "target_table": "programs",
+    "target_slug": "monthly-sponsorship",
+    "note": "غير موجود في الباك حالياً",
+    "name_ar": "كفالة شهرية — رعاية أسرية مستدامة",
+    "name_en": "Monthly Sponsorship — Sustainable Family Care",
+    "tagline_ar": "كفالة منتظمة للأسر المحتاجة توفر الغذاء والدواء والستر بشكل شهري",
+    "tagline_en": "Regular monthly support covering food, medicine and essentials for needy families",
+    "image": "src/assets/program-food-new.jpg",
+    "donation_type": "cash",
+    "category_ar": "كفالة شهرية",
+    "category_en": "Monthly Sponsorship",
+    "price_from": 200,
+    "color": "#0ea5e9",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "msp-200",
+        "name_ar": "سهم مساهمة شهرية (200 ج)",
+        "name_en": "Monthly Share (200 EGP)",
+        "amount": 200,
+        "popular": false
+      },
+      {
+        "key": "msp-500",
+        "name_ar": "كفالة فرد محتاج شهرياً (500 ج)",
+        "name_en": "Single Person Monthly Care",
+        "amount": 500,
+        "popular": true
+      },
+      {
+        "key": "msp-1000",
+        "name_ar": "كفالة أسرة صغيرة شهرياً (1000 ج)",
+        "name_en": "Small Family Monthly Care",
+        "amount": 1000,
+        "popular": false
+      },
+      {
+        "key": "msp-2000",
+        "name_ar": "كفالة أسرة كبيرة شهرية متكاملة",
+        "name_en": "Full Large Family Monthly Care",
+        "amount": 2000,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (programs)",
+    "demo_cases_count": 2
+  },
+  {
+    "donation_entity_id": "mosques",
+    "frontend_entity_type": "program",
+    "target_table": "programs",
+    "target_slug": "mosques",
+    "note": "غير موجود في الباك حالياً؛ له أيضاً صفحة خدمة /services/mosques",
+    "name_ar": "إعمار مساجد — بناء بيوت الله",
+    "name_en": "Mosque Building & Renovation",
+    "tagline_ar": "من بنى لله مسجداً بنى الله له بيتاً في الجنة",
+    "tagline_en": "Whoever builds a mosque for Allah, Allah builds a home for them in Jannah",
+    "image": "src/assets/brand-poster-frame.jpg",
+    "donation_type": "cash",
+    "category_ar": "بيوت الله",
+    "category_en": "Mosques",
+    "price_from": 250,
+    "color": "#6366f1",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "msq-carpet",
+        "name_ar": "سهم فرش وسجاد مسجد (متر واحد)",
+        "name_en": "Mosque Carpet Share (1 Meter)",
+        "amount": 250,
+        "popular": true
+      },
+      {
+        "key": "msq-cement",
+        "name_ar": "سهم مواد بناء وأسمنت (طن)",
+        "name_en": "Cement & Building Materials",
+        "amount": 500,
+        "popular": false
+      },
+      {
+        "key": "msq-meter",
+        "name_ar": "سهم متر مربع إنشائي في المسجد",
+        "name_en": "1 Sq Meter Construction Share",
+        "amount": 1000,
+        "popular": false
+      },
+      {
+        "key": "msq-minaret",
+        "name_ar": "سهم إعمار مئذنة ومصلى نساء",
+        "name_en": "Minaret & Prayer Hall Share",
+        "amount": 2500,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (programs)",
+    "demo_cases_count": 3
+  },
+  {
+    "donation_entity_id": "water",
+    "frontend_entity_type": "program",
+    "target_table": "programs",
+    "target_slug": "water",
+    "note": null,
+    "name_ar": "وصلة المياة — مياه نقية لكل بيت",
+    "name_en": "Clean Water Connections",
+    "tagline_ar": "أفضل الصدقة سقي الماء — إيصال المياه النقية لبيوت المحرومين",
+    "tagline_en": "The best charity is giving water — connecting clean tap water to homes",
+    "image": "src/assets/program-water-new.jpg",
+    "donation_type": "cash",
+    "category_ar": "سقيا الماء",
+    "category_en": "Clean Water",
+    "price_from": 300,
+    "color": "#38bdf8",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "wtr-share",
+        "name_ar": "سهم مساهمة في تكلفة وصلة مياه",
+        "name_en": "Water Connection Share",
+        "amount": 300,
+        "popular": false
+      },
+      {
+        "key": "wtr-meter",
+        "name_ar": "سهم رسوم عداد المياه الرسمي والمواسير",
+        "name_en": "Official Water Meter Share",
+        "amount": 1000,
+        "popular": false
+      },
+      {
+        "key": "wtr-full",
+        "name_ar": "وصلة مياه منزلية كاملة شامل العداد والتركيب",
+        "name_en": "Full Home Tap Water Connection",
+        "amount": 3500,
+        "popular": true
+      },
+      {
+        "key": "wtr-station",
+        "name_ar": "سهم محطة معالجة وفلترة مياه قروية",
+        "name_en": "Village Water Filtration Unit",
+        "amount": 1500,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (programs)",
+    "demo_cases_count": 2
+  },
+  {
+    "donation_entity_id": "monthly-meat",
+    "frontend_entity_type": "program",
+    "target_table": "programs",
+    "target_slug": "monthly-meat",
+    "note": "غير موجود في الباك حالياً",
+    "name_ar": "ذبائح شهرية — لحوم طازجة لكل أسرة",
+    "name_en": "Monthly Meat Distribution",
+    "tagline_ar": "توزيع لحوم طازجة شهرياً للأسر المحتاجة التي لا تقدر على شراء اللحم",
+    "tagline_en": "Monthly fresh meat distribution for families who cannot afford meat",
+    "image": "src/assets/program-food-new.jpg",
+    "donation_type": "cash",
+    "category_ar": "إطعام وغذاء",
+    "category_en": "Food & Nutrition",
+    "price_from": 200,
+    "color": "#f97316",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "mmt-kilo",
+        "name_ar": "سهم كيلو لحم طازج لأسرة محتاجة",
+        "name_en": "1 Kg Fresh Meat Share",
+        "amount": 200,
+        "popular": false
+      },
+      {
+        "key": "mmt-family",
+        "name_ar": "سهم لحمة أسرة كاملة (3 كيلو)",
+        "name_en": "Family Meat Pack (3 Kg)",
+        "amount": 600,
+        "popular": true
+      },
+      {
+        "key": "mmt-village",
+        "name_ar": "باقة لحوم لـ 10 أسر قروية",
+        "name_en": "10 Family Meat Package",
+        "amount": 2000,
+        "popular": false
+      },
+      {
+        "key": "mmt-month",
+        "name_ar": "تمويل توزيع ذبائح شهري كامل",
+        "name_en": "Full Monthly Distribution",
+        "amount": 10000,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (programs)",
+    "demo_cases_count": 2
+  },
+  {
+    "donation_entity_id": "quran",
+    "frontend_entity_type": "program",
+    "target_table": "programs",
+    "target_slug": "quran",
+    "note": "غير موجود في الباك حالياً",
+    "name_ar": "تحفيظ القرآن الكريم",
+    "name_en": "Quran Memorization Centers",
+    "tagline_ar": "رعاية حلقات التحفيظ ودعم المعلمين والطلاب لحفظ كتاب الله",
+    "tagline_en": "Supporting Quran memorization circles, teachers and students",
+    "image": "src/assets/poster-education.png",
+    "donation_type": "cash",
+    "category_ar": "تعليم قرآني",
+    "category_en": "Quran Education",
+    "price_from": 100,
+    "color": "#8b5cf6",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "qrn-student",
+        "name_ar": "سهم دعم طالب حفظ قرآن (100 ج)",
+        "name_en": "Quran Student Support Share",
+        "amount": 100,
+        "popular": false
+      },
+      {
+        "key": "qrn-teacher",
+        "name_ar": "سهم راتب معلم تحفيظ شهري (500 ج)",
+        "name_en": "Quran Teacher Monthly Salary",
+        "amount": 500,
+        "popular": true
+      },
+      {
+        "key": "qrn-circle",
+        "name_ar": "سهم تجهيز حلقة تحفيظ (أثاث + ألواح)",
+        "name_en": "Memorization Circle Setup",
+        "amount": 1500,
+        "popular": false
+      },
+      {
+        "key": "qrn-center",
+        "name_ar": "رعاية مركز تحفيظ كامل لمدة شهر",
+        "name_en": "Full Center Monthly Patronage",
+        "amount": 5000,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (programs)",
+    "demo_cases_count": 2
+  },
+  {
+    "donation_entity_id": "takrim",
+    "frontend_entity_type": "program",
+    "target_table": "programs",
+    "target_slug": "takrim",
+    "note": "غير موجود في الباك حالياً",
+    "name_ar": "سيارات تكريم الإنسان",
+    "name_en": "Takrim Mortuary Vans",
+    "tagline_ar": "نقل الموتى وتكريم الإنسان مجاناً لوجه الله لغير القادرين",
+    "tagline_en": "Free dignified mortuary transport for underprivileged families",
+    "image": "src/assets/takrim-van.jpg",
+    "donation_type": "cash",
+    "category_ar": "خدمة مجتمعية",
+    "category_en": "Community Service",
+    "price_from": 100,
+    "color": "#64748b",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "tkr-fuel",
+        "name_ar": "سهم وقود وصيانة دورية للسيارة",
+        "name_en": "Van Fuel & Maintenance Share",
+        "amount": 100,
+        "popular": true
+      },
+      {
+        "key": "tkr-shroud",
+        "name_ar": "سهم كفن شرعي ومستلزمات الغسل",
+        "name_en": "Islamic Shroud & Washing Kit",
+        "amount": 250,
+        "popular": false
+      },
+      {
+        "key": "tkr-trip",
+        "name_ar": "كفالة رحلة نقل جثمان لمسافة بعيدة",
+        "name_en": "Long-Distance Transit Sponsorship",
+        "amount": 500,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (programs)",
+    "demo_cases_count": 2
+  },
+  {
+    "donation_entity_id": "waqf",
+    "frontend_entity_type": "project",
+    "target_table": "projects",
+    "target_slug": "waqf",
+    "note": "غير موجود في الباك حالياً",
+    "name_ar": "المزرعة الوقفية — وقف إنتاجي",
+    "name_en": "Waqf Farm — Productive Endowment",
+    "tagline_ar": "صدقة جارية مستدامة تدر أثراً وتمويلاً خيرياً دائماً",
+    "tagline_en": "Sustainable productive endowment generating perpetual charity",
+    "image": "src/assets/farm-hero.jpg",
+    "donation_type": "cash",
+    "category_ar": "وقف إنتاجي",
+    "category_en": "Productive Waqf",
+    "price_from": 500,
+    "color": "#84cc16",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "wqf-palm",
+        "name_ar": "سهم نخلة مثمرة صدقة جارية",
+        "name_en": "Productive Date Palm Share",
+        "amount": 500,
+        "popular": true
+      },
+      {
+        "key": "wqf-irr",
+        "name_ar": "سهم شبكة ري حديثة بالطاقة الشمسية",
+        "name_en": "Modern Solar Irrigation Share",
+        "amount": 1000,
+        "popular": false
+      },
+      {
+        "key": "wqf-feddan",
+        "name_ar": "سهم استصلاح وزراعة ربع فدان وقفي",
+        "name_en": "Quarter Feddan Reclamation",
+        "amount": 2500,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (projects)",
+    "demo_cases_count": 1
+  },
+  {
+    "donation_entity_id": "medical",
+    "frontend_entity_type": "project",
+    "target_table": "projects",
+    "target_slug": "medical",
+    "note": "غير موجود في الباك حالياً",
+    "name_ar": "المجمعات الطبية — رعاية صحية شاملة",
+    "name_en": "Medical Complexes — Comprehensive Healthcare",
+    "tagline_ar": "كشوفات طبية وأدوية شهرية وعمليات وأطراف صناعية لغير القادرين",
+    "tagline_en": "Medical checkups, monthly medicines, surgeries and prosthetics for the poor",
+    "image": "src/assets/Prosthetics.jpg",
+    "donation_type": "cash",
+    "category_ar": "رعاية صحية",
+    "category_en": "Healthcare",
+    "price_from": 200,
+    "color": "#10b981",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "med-presc",
+        "name_ar": "سهم روشتة علاج ودواء شهري",
+        "name_en": "Monthly Prescription Share",
+        "amount": 200,
+        "popular": true
+      },
+      {
+        "key": "med-tests",
+        "name_ar": "سهم تحاليل وأشعة تشخيصية",
+        "name_en": "Lab & Diagnostics Share",
+        "amount": 400,
+        "popular": false
+      },
+      {
+        "key": "med-surg",
+        "name_ar": "سهم مساهمة في عملية جراحية",
+        "name_en": "Surgery Contribution Share",
+        "amount": 1000,
+        "popular": false
+      },
+      {
+        "key": "med-chair",
+        "name_ar": "كرسي متحرك طبي قياسي كامل",
+        "name_en": "Standard Medical Wheelchair",
+        "amount": 2500,
+        "popular": false
+      },
+      {
+        "key": "med-prosth",
+        "name_ar": "سهم مساهمة في تركيب طرف صناعي",
+        "name_en": "Prosthetic Limb Share",
+        "amount": 3000,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (projects)",
+    "demo_cases_count": 2
+  },
+  {
+    "donation_entity_id": "markoun",
+    "frontend_entity_type": "campaign",
+    "target_table": "donation_campaigns",
+    "target_slug": "markoon",
+    "note": null,
+    "name_ar": "حملة مَرْكُون — كنزك المركون حياة لغيرك",
+    "name_en": "Markoun — In-Kind Donation Campaign",
+    "tagline_ar": "تبرع بأثاثك وأجهزتك القديمة وملابسك وكتبك لنوزعها على المحتاجين",
+    "tagline_en": "Donate unused furniture, appliances, clothes and books to families in need",
+    "image": "src/assets/markoun-furniture.jpg",
+    "donation_type": "both",
+    "category_ar": "تبرع عيني ونقدي",
+    "category_en": "In-Kind & Cash",
+    "price_from": 100,
+    "color": "#10b981",
+    "is_seasonal": false,
+    "is_markoun": true,
+    "shares": [
+      {
+        "key": "mrk-furniture",
+        "name_ar": "سهم أثاث منزلي (نقل، صيانة، وتأثيث منازل الأسر المستحقة)",
+        "name_en": "Home Furniture Share (Pickup, Refurbish & Deliver)",
+        "amount": 250,
+        "popular": true
+      },
+      {
+        "key": "mrk-appliances",
+        "name_ar": "سهم أجهزة كهربائية (ثلاجة، غسالة، بوتاجاز)",
+        "name_en": "Home Electrical Appliances Share",
+        "amount": 200,
+        "popular": true
+      },
+      {
+        "key": "mrk-clothes",
+        "name_ar": "سهم ملابس (فرز، غسيل، وتوزيع كسوة الأسر والأيتام)",
+        "name_en": "Clothing Collection & Distribution Share",
+        "amount": 150,
+        "popular": false
+      },
+      {
+        "key": "mrk-books",
+        "name_ar": "سهم كتب ومستلزمات دراسية للأطفال والطلاب",
+        "name_en": "Books & Study Material Share",
+        "amount": 100,
+        "popular": false
+      },
+      {
+        "key": "mrk-scrap",
+        "name_ar": "سهم خردة ومعادن (إعادة تدوير لصالح الأسر المحتاجة)",
+        "name_en": "Recyclable Scrap Share",
+        "amount": 100,
+        "popular": false
+      },
+      {
+        "key": "mrk-medicine",
+        "name_ar": "سهم أدوية ومستلزمات طبية فائضة صالحة",
+        "name_en": "Unused Prescriptions & Medical Supplies Share",
+        "amount": 100,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "NOT seeded (campaign packages come from the landing-page prices)",
+    "demo_cases_count": 2
+  },
+  {
+    "donation_entity_id": "dhill",
+    "frontend_entity_type": "campaign",
+    "target_table": "donation_campaigns",
+    "target_slug": "zell",
+    "note": null,
+    "name_ar": "حملة ظل — بنية تحتية ومياه للمحرومين",
+    "name_en": "Dhill — Infrastructure & Water Campaign",
+    "tagline_ar": "وصلات مياه وأسقف وخطوط مياه وسقيا ماء وبنية أساسية للأسر المحرومة",
+    "tagline_en": "Water connections, roofing, pipe networks and basic infrastructure for deprived families",
+    "image": "src/assets/program-water-new.jpg",
+    "donation_type": "cash",
+    "category_ar": "حملة بنية تحتية",
+    "category_en": "Infrastructure Campaign",
+    "price_from": 300,
+    "color": "#0284c7",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "dhl-water-conn",
+        "name_ar": "سهم وصلات مياه (توصيل شبكة مياه وعداد لكل بيت)",
+        "name_en": "Home Water Connection Share",
+        "amount": 3500,
+        "popular": true
+      },
+      {
+        "key": "dhl-roof",
+        "name_ar": "سهم أسقف منازل (إصلاح وعزل سقف منزل كامل)",
+        "name_en": "Home Roof Repair Share",
+        "amount": 4500,
+        "popular": true
+      },
+      {
+        "key": "dhl-pipe",
+        "name_ar": "سهم خطوط مياه (مد شبكات مواسير للقرى المحرومة)",
+        "name_en": "Main Water Pipe Extension Share",
+        "amount": 500,
+        "popular": false
+      },
+      {
+        "key": "dhl-suqya",
+        "name_ar": "سهم سقيا ماء (توفير مياه شرب نقية ومبردات للقرى)",
+        "name_en": "Suqya Water Provision Share",
+        "amount": 300,
+        "popular": false
+      },
+      {
+        "key": "dhl-door",
+        "name_ar": "سهم بنية أساسية (باب وشباك حديد لحماية المنزل)",
+        "name_en": "Basic Infrastructure (Door & Window) Share",
+        "amount": 1500,
+        "popular": false
+      },
+      {
+        "key": "dhl-vent",
+        "name_ar": "سهم وسائل تهوية (مراوح وشبابيك تهوية صحية)",
+        "name_en": "Home Ventilation Share",
+        "amount": 800,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "NOT seeded (campaign packages come from the landing-page prices)",
+    "demo_cases_count": 3
+  },
+  {
+    "donation_entity_id": "shelter",
+    "frontend_entity_type": "campaign",
+    "target_table": "donation_campaigns",
+    "target_slug": "sitr",
+    "note": "entity id = shelter، صفحة الهبوط = /setr",
+    "name_ar": "حملة ستر — تسقيف وأثاث ومراتب وإيواء",
+    "name_en": "Sitr — Roofing, Bedding & Shelter Campaign",
+    "tagline_ar": "أسقف منازل وتوفير مراتب ولحاف وأثاث منزلي للأسر الأكثر حرماناً",
+    "tagline_en": "Roofing, mattresses, blankets and basic furniture for destitute families",
+    "image": "src/assets/brand-poster-frame.jpg",
+    "donation_type": "cash",
+    "category_ar": "إيواء ومأوى",
+    "category_en": "Shelter Campaign",
+    "price_from": 200,
+    "color": "#fbbf24",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "shl-roof",
+        "name_ar": "سهم تسقيف وإصلاح سقف غرفة كاملة",
+        "name_en": "Full Room Roof Repair Share",
+        "amount": 4500,
+        "popular": true
+      },
+      {
+        "key": "shl-mattress",
+        "name_ar": "سهم مرتبة لأسرة تنام على الأرض",
+        "name_en": "Foam Mattress Share",
+        "amount": 350,
+        "popular": false
+      },
+      {
+        "key": "shl-blanket",
+        "name_ar": "سهم لحاف شتوي دافئ دبل",
+        "name_en": "Double Winter Duvet Share",
+        "amount": 250,
+        "popular": false
+      },
+      {
+        "key": "shl-furniture",
+        "name_ar": "سهم أثاث منزلي بسيط (طاولة وكراسي ودولاب)",
+        "name_en": "Basic Home Furniture Share",
+        "amount": 1500,
+        "popular": false
+      },
+      {
+        "key": "shl-full",
+        "name_ar": "باقة ستر كاملة (سقف + مرتبتين + لحافين + أثاث أساسي)",
+        "name_en": "Complete Sitr Package",
+        "amount": 7500,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "NOT seeded (campaign packages come from the landing-page prices)",
+    "demo_cases_count": 3
+  },
+  {
+    "donation_entity_id": "athar",
+    "frontend_entity_type": "campaign",
+    "target_table": "donation_campaigns",
+    "target_slug": "athar",
+    "note": null,
+    "name_ar": "حملة أثر — كفالة تعليمية للطلاب المحتاجين",
+    "name_en": "Athar — Education Sponsorship Campaign",
+    "tagline_ar": "زي مدرسي وشنطة وأدوات مدرسية ومصاريف دراسية للطلاب العاجزين",
+    "tagline_en": "School uniforms, bags, stationery and tuition fees for students in need",
+    "image": "src/assets/poster-education.png",
+    "donation_type": "cash",
+    "category_ar": "تعليم وبناء",
+    "category_en": "Education Support",
+    "price_from": 100,
+    "color": "#818cf8",
+    "is_seasonal": false,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "ath-uniform",
+        "name_ar": "سهم زي مدرسي وحذاء جديد لطالب",
+        "name_en": "School Uniform & Shoes Share",
+        "amount": 350,
+        "popular": true
+      },
+      {
+        "key": "ath-bag",
+        "name_ar": "سهم شنطة مدرسية بالأدوات والكشاكيل",
+        "name_en": "School Bag & Full Stationery Kit",
+        "amount": 250,
+        "popular": false
+      },
+      {
+        "key": "ath-tuition",
+        "name_ar": "سهم مساهمة في المصاريف الدراسية الشهرية",
+        "name_en": "Monthly School Tuition Share",
+        "amount": 150,
+        "popular": false
+      },
+      {
+        "key": "ath-annual",
+        "name_ar": "كفالة طالب دراسية كاملة لعام دراسي",
+        "name_en": "Full Academic Year Student Sponsorship",
+        "amount": 1500,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "NOT seeded (campaign packages come from the landing-page prices)",
+    "demo_cases_count": 3
+  },
+  {
+    "donation_entity_id": "ramadan",
+    "frontend_entity_type": "campaign",
+    "target_table": "donation_campaigns",
+    "target_slug": "ramadan",
+    "note": null,
+    "name_ar": "موسم رمضان — إفطار وخير وزكاة",
+    "name_en": "Ramadan Season — Iftar, Food Baskets & Zakat",
+    "tagline_ar": "من فطّر صائماً كان له مثل أجره — إفطار وكرتونة الخير وزكاة الفطر وتيسير زواج",
+    "tagline_en": "Whoever feeds a fasting person earns a matching reward — join our Ramadan giving",
+    "image": "src/assets/yusr-ramadan-box.png",
+    "donation_type": "cash",
+    "category_ar": "موسم رمضان",
+    "category_en": "Ramadan Season",
+    "price_from": 40,
+    "color": "#f59e0b",
+    "is_seasonal": true,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "rmd-iftar",
+        "name_ar": "حملة إفطار صائم — وجبة إفطار ساخنة",
+        "name_en": "Hot Iftar Meal Campaign",
+        "amount": 60,
+        "popular": true
+      },
+      {
+        "key": "rmd-box",
+        "name_ar": "كرتونة الخير الرمضانية — سلة غذائية لأسرة",
+        "name_en": "Ramadan Food Basket — Family Package",
+        "amount": 400,
+        "popular": false
+      },
+      {
+        "key": "rmd-bride",
+        "name_ar": "تيسير زواج — جهاز عروسة يتيمة",
+        "name_en": "Marriage Facilitation — Orphan Bride's Trousseau",
+        "amount": 2500,
+        "popular": false
+      },
+      {
+        "key": "rmd-meat",
+        "name_ar": "ذبائح رمضان — لحوم طازجة للأسر الفقيرة",
+        "name_en": "Ramadan Sacrificial Meat Share",
+        "amount": 500,
+        "popular": false
+      },
+      {
+        "key": "rmd-zakat-mal",
+        "name_ar": "زكاة المال — صرف في مصارفها الشرعية الثمانية",
+        "name_en": "Zakat Al-Mal — Distributed to All 8 Recipients",
+        "amount": 100,
+        "popular": false
+      },
+      {
+        "key": "rmd-zakat-fitr",
+        "name_ar": "زكاة الفطر — الواجبة عن كل فرد",
+        "name_en": "Zakat Al-Fitr / Fidyah",
+        "amount": 40,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "NOT seeded (campaign packages come from the landing-page prices)",
+    "demo_cases_count": 3
+  },
+  {
+    "donation_entity_id": "odhya",
+    "frontend_entity_type": "campaign",
+    "target_table": "programs",
+    "target_slug": "odhya",
+    "note": "entityType=campaign في الفرونت لكنه program (id 35) في الباك",
+    "name_ar": "موسم الأضاحي — صك الأضحية",
+    "name_en": "Qurbani Season — Certified Sacrificial Shares",
+    "tagline_ar": "الوحيدون في مصر بضمان جودة اللحم والتوزيع الموثق لمستحقيه",
+    "tagline_en": "The only ones in Egypt guaranteeing meat quality & verified distribution",
+    "image": "src/assets/poster-odhya.png",
+    "donation_type": "cash",
+    "category_ar": "موسم الأضاحي",
+    "category_en": "Qurbani Season",
+    "price_from": 500,
+    "color": "#ea580c",
+    "is_seasonal": true,
+    "is_markoun": false,
+    "shares": [
+      {
+        "key": "odh-share-meat",
+        "name_ar": "سهم صدقة لحوم أضاحي طازجة",
+        "name_en": "Qurbani Fresh Meat Share",
+        "amount": 500,
+        "popular": false
+      },
+      {
+        "key": "odh-sheep",
+        "name_ar": "صك خروف بلدي فلاحي كامل",
+        "name_en": "Full Local Lamb Qurbani Voucher",
+        "amount": 6800,
+        "popular": true
+      },
+      {
+        "key": "odh-calf-share",
+        "name_ar": "صك سُبع عجل بقري بلدي فاخر",
+        "name_en": "One-Seventh Cattle Share (Baqari)",
+        "amount": 8500,
+        "popular": false
+      }
+    ],
+    "shares_seeded_into": "donation_packages (programs)",
+    "demo_cases_count": 2
+  }
+]
