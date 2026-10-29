@@ -5,6 +5,7 @@
  * Authentication: Laravel Sanctum Bearer Token stored in localStorage (`alyusr_api_token`).
  * Performance: In-memory cache + Request deduplication + Fast SWR (Stale-While-Revalidate).
  */
+import { SUGGESTED_ACTIVITIES, SUGGESTED_WHY_US } from "@/data/aboutSuggestions";
 
 // Single source of truth for the backend domain — never hardcode elsewhere
 const BACKEND_BASE: string =
@@ -2238,6 +2239,8 @@ export interface AboutUsProgramItem {
   description_ar?: string | null;
   description_en?: string | null;
   icon?: string | null;
+  /** Page on the site the card opens (e.g. /programs/orphans); defaults to /programs. */
+  href?: string | null;
 }
 
 export interface AboutUsTrustItem {
@@ -2252,7 +2255,15 @@ export interface AboutUsWhyUsItem {
   title_ar: string;
   title_en?: string | null;
   description_ar: string;
+  description_en?: string | null;
   icon?: string | null;
+}
+
+/** Heading of the «إنجازات» section — stored with the stats section so it changes every year. */
+export interface AboutUsAchievementsMeta {
+  year?: string | number | null;
+  title_ar?: string | null;
+  title_en?: string | null;
 }
 
 export interface AboutUsValueItem {
@@ -2311,6 +2322,7 @@ export interface AboutUsData {
   id?: number;
   hero: AboutUsHero;
   stats: AboutUsStatItem[];
+  achievements: AboutUsAchievementsMeta;
   programs: AboutUsProgramItem[];
   trust: AboutUsTrustItem[];
   why_us: AboutUsWhyUsItem[];
@@ -2347,33 +2359,16 @@ export const ABOUT_US_DEFAULT_DATA: AboutUsData = {
     { number: "354", label_ar: "طالب مساعدات تعليمية", title_ar: "طالب مساعدات تعليمية", label_en: "Students Supported", title_en: "Students Supported" },
     { number: "365", label_ar: "يوم عطاء بدون توقف", title_ar: "يوم عطاء بدون توقف", label_en: "Days of Giving", title_en: "Days of Giving" },
   ],
-  programs: [
-    { title_ar: "حملة جاز (سقيا وأسقها)", title_en: "Water Projects", description_ar: "توفير المياه النظيفة للأسر", icon: "Droplets" },
-    { title_ar: "حملة دفء الشتاء", title_en: "Winter Warmth", description_ar: "توفير الأغطية والملابس", icon: "Home" },
-    { title_ar: "باب الجنة (كفالة اليتيم)", title_en: "Orphan Sponsorship", description_ar: "رعاية ودعم الأيتام", icon: "Heart" },
-    { title_ar: "مبادرة عروس خير", title_en: "Brides Support", description_ar: "تيسير زواج الفتيات اليتيمات", icon: "Sparkles" },
-    { title_ar: "غذاء شهري (كراتين وسلال)", title_en: "Food Boxes", description_ar: "كراتين غذائية شهرية", icon: "Utensils" },
-    { title_ar: "كفالات ومساعدات شهرية", title_en: "Monthly Aid", description_ar: "مساعدات مالية دورية", icon: "HandCoins" },
-    { title_ar: "صكوك الأضاحي ومزارع الوقف", title_en: "Sacrifice Bonds", description_ar: "توزيع اللحوم وصكوك الأضحية", icon: "Beef" },
-    { title_ar: "زكاة المال والصدقات", title_en: "Zakat & Charity", description_ar: "مصارف الزكاة الشرعية", icon: "HandHeart" },
-    { title_ar: "مساعدات طبية طارئة وقوافل", title_en: "Medical Convoys", description_ar: "علاج وقوافل طبية مجانية", icon: "HeartPulse" },
-    { title_ar: "دور وحلقات تحفيظ القرآن", title_en: "Quran Circles", description_ar: "دعم مكاتب وحلقات التحفيظ", icon: "BookOpen" },
-    { title_ar: "حملة مزرعون", title_en: "Farming Campaign", description_ar: "مشروعات تنموية زراعية", icon: "Sprout" },
-    { title_ar: "تيسير زواج الفتيات اليتيمات", title_en: "Orphan Brides", description_ar: "أجهزة كهربائية وإعانة زواج", icon: "Gift" },
-  ],
+  achievements: {},
+  programs: SUGGESTED_ACTIVITIES,
   trust: [
     { title_ar: "ترخيص وزارة التضامن", title_en: "Ministry License", description_ar: "إشهار المؤسسة برقم 2665 لسنة 2019.", icon: "BadgeCheck" },
     { title_ar: "مراجعة محاسبية مستقلة", title_en: "Independent Audit", description_ar: "تقارير مالية سنوية معتمدة وإيصالات رسمية.", icon: "ShieldCheck" },
     { title_ar: "تغطية شاملة في مصر", title_en: "Egypt Coverage", description_ar: "مقر رئيسي بالمنصورة وقوافل خيرية في محافظات مصر.", icon: "Globe2" },
   ],
-  why_us: [
-    { title_ar: "الحضور بنفسك", description_ar: "يمكنك الحضور ومتابعة التبرع بنفسك والتأكد من تنفيذ العمل.", icon: "Eye" },
-    { title_ar: "التوثيق الفوري", description_ar: "نوثق التبرعات بالصور والفيديو وإشعار رسمي يوضح الأثر المحقق في نفس اليوم.", icon: "Camera" },
-    { title_ar: "تطوع عائلتك", description_ar: "أفراد عائلتك يمكنهم التطوع معنا ويكونون جزءًا من فرقنا والمبادرات.", icon: "Users" },
-    { title_ar: "الكيان والحسابات الرسمية", description_ar: "كيان مشهر رسميًا بوزارة التضامن الاجتماعي مع حسابات بنكية رسمية.", icon: "Building2" },
-  ],
+  why_us: SUGGESTED_WHY_US,
   values: [
-    { title_ar: "التمكين", title_en: "Empowerment", description_ar: "بناء الإنسان: تعليم وعلاج وفرص أفضل.", icon: "Target" },
+    { title_ar: "التمكين", title_en: "Empowerment", description_ar: "بناء الإنسان بالتعليم والعلاج بدل الإحسان اللحظي.", description_en: "Building people through education and healthcare, not one-off relief.", icon: "Target" },
     { title_ar: "الإحسان", title_en: "Benevolence", description_ar: "نسعى لباب البيت بكرامة.", icon: "Heart" },
     { title_ar: "الأمانة", title_en: "Honesty", description_ar: "كل تبرع موثق بالصور والفيديو.", icon: "ShieldCheck" },
     { title_ar: "القوة", title_en: "Strength", description_ar: "برامج تنموية متجددة ومستمرة.", icon: "Sparkles" },
@@ -2513,6 +2508,10 @@ function normalizeAboutUsData(raw: any): AboutUsData {
     label_en: s.label_en || s.title_en || "",
   }));
 
+  const achievements: AboutUsAchievementsMeta = statsRaw && !Array.isArray(statsRaw)
+    ? { year: statsRaw.year ?? null, title_ar: statsRaw.achievements_title_ar ?? null, title_en: statsRaw.achievements_title_en ?? null }
+    : {};
+
   const programsRaw = unwrapSection(src.programs);
   const normalizedPrograms = Array.isArray(programsRaw)
     ? programsRaw
@@ -2538,6 +2537,7 @@ function normalizeAboutUsData(raw: any): AboutUsData {
     hero: normalizedHero,
     story: normalizedStory,
     stats: normalizedStats,
+    achievements,
     programs: normalizedPrograms,
     trust: normalizedTrust,
     why_us: normalizedWhyUs,
@@ -2621,7 +2621,7 @@ export const aboutUsApi = {
   async updateHero(content: Partial<AboutUsHero>) {
     return this.updateSection("hero", content);
   },
-  async updateStats(content: { year?: number; items: AboutUsStatItem[] }) {
+  async updateStats(content: { year?: number; achievements_title_ar?: string | null; achievements_title_en?: string | null; items: AboutUsStatItem[] }) {
     return this.updateSection("stats", content);
   },
   async updatePrograms(content: { title_ar?: string; title_en?: string; items: AboutUsProgramItem[] }) {

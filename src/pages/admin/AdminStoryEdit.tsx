@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, ExternalLink, Loader2, Save, Eye, EyeOff, Star, StarOff, Send, Trash2, Image as ImageIcon, Wand2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, Loader2, Save, Eye, EyeOff, Star, StarOff, Send, Trash2, Wand2 } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { RequireAuth } from "@/auth/RequireAuth";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import { programsApiV1 } from "@/data/laravelApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { casesApiV1, type LaravelCase } from "@/data/laravelApi";
 import { publicUrls } from "@/lib/publicUrls";
+import { ImageUrlField } from "@/components/admin/programs/FormKit";
 
 type Story = any;
 type Program = { id: string; slug: string; title_ar: string; title_en: string };
@@ -257,13 +258,14 @@ const Inner = () => {
                 <div><Label>Location (EN)</Label>
                   <Input dir="ltr" value={data.location_en || ""} onChange={(e) => upd("location_en", e.target.value)} />
                 </div>
-                <div className="sm:col-span-2"><Label>{t("رابط صورة الغلاف", "Cover image URL")}</Label>
-                  <Input value={data.image_url || ""} onChange={(e) => upd("image_url", e.target.value)} placeholder="https://…" />
-                  {data.image_url ? (
-                    <img src={data.image_url} alt="" className="mt-2 h-40 w-full rounded-lg object-cover" />
-                  ) : (
-                    <div className="mt-2 flex h-40 items-center justify-center rounded-lg border border-dashed border-border text-muted-foreground"><ImageIcon className="h-8 w-8" /></div>
-                  )}
+                <div className="sm:col-span-2">
+                  <ImageUrlField
+                    label={t("صورة القصة", "Story image")}
+                    hint={t("ارفع صورة من جهازك أو اختار من مكتبة الوسائط أو الصق رابط — بتظهر في الرئيسية وصفحة القصة.", "Upload from your device, pick from the media library, or paste a link.")}
+                    value={data.image_url || ""}
+                    onChange={(v) => upd("image_url", v)}
+                    collection="general"
+                  />
                 </div>
               </div>
             </TabsContent>

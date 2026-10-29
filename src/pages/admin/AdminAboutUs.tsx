@@ -46,6 +46,24 @@ import {
   formatServerImageUrl,
 } from "@/data/laravelApi";
 import { compressImage } from "@/lib/image-compress";
+import { ChoiceSelect } from "@/components/admin/programs/FormKit";
+import { getAllLucideIconNames, getLucideIcon } from "@/lib/lucide-icon";
+import { SUGGESTED_ACTIVITIES, SUGGESTED_WHY_US } from "@/data/aboutSuggestions";
+
+const ICON_OPTIONS = getAllLucideIconNames().map((name) => {
+  const I = getLucideIcon(name);
+  return { value: name, label: <span className="inline-flex items-center gap-2"><I className="h-4 w-4" />{name}</span> };
+});
+
+/** Icon of a card (lucide name), shown with its glyph. */
+function IconPick({ value, onChange }: { value?: string | null; onChange: (v: string) => void }) {
+  return (
+    <div className="space-y-1">
+      <label className="text-xs font-bold text-foreground">الأيقونة</label>
+      <ChoiceSelect value={value || ""} onChange={onChange} options={ICON_OPTIONS} placeholder="اختار أيقونة" className="h-9 text-xs" ariaLabel="الأيقونة" />
+    </div>
+  );
+}
 import aboutHero from "@/assets/about-hero-classroom.jpg";
 
 // Cleaned of legacy local storage caching to ensure 100% synchronization with Laravel API
@@ -62,7 +80,7 @@ interface TabDef {
 const TABS: TabDef[] = [
   { id: "hero", ar: "الهيرو والتعريف", en: "Hero & Identity", icon: Sparkles },
   { id: "stats", ar: "الأرقام والإحصائيات", en: "Stats & Numbers", icon: BarChart3 },
-  { id: "programs", ar: "البرامج والمبادرات", en: "Programs", icon: Layers },
+  { id: "programs", ar: "الأنشطة الدائمة", en: "Ongoing activities", icon: Layers },
   { id: "trust", ar: "الاعتمادات والموثوقية", en: "Trust & Licenses", icon: ShieldCheck },
   { id: "why-us", ar: "لماذا تثق بنا", en: "Why Trust Us", icon: HeartHandshake },
   { id: "values", ar: "قيمنا المؤسسية", en: "Our Values", icon: Heart },
@@ -202,7 +220,9 @@ export default function AdminAboutUs() {
         });
       } else if (section === "stats") {
         await aboutUsApi.updateStats({
-          year: new Date().getFullYear(),
+          year: Number(data.achievements?.year) || new Date().getFullYear(),
+          achievements_title_ar: data.achievements?.title_ar || null,
+          achievements_title_en: data.achievements?.title_en || null,
           items: data.stats.map((s) => ({
             number: s.number,
             suffix: s.suffix || (typeof s.number === "string" && s.number.endsWith("+") ? "+" : ""),
@@ -212,8 +232,8 @@ export default function AdminAboutUs() {
         });
       } else if (section === "programs") {
         await aboutUsApi.updatePrograms({
-          title_ar: isRTL ? "برامجنا ومبادراتنا" : "Our Programs & Initiatives",
-          title_en: "Our Programs & Initiatives",
+          title_ar: "أنشطتنا الدائمة",
+          title_en: "Our Ongoing Activities",
           items: data.programs,
         });
       } else if (section === "trust") {
@@ -713,6 +733,31 @@ export default function AdminAboutUs() {
               </Button>
             </div>
 
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 rounded-2xl border border-secondary/40 bg-secondary/5 p-4">
+              <div className="sm:col-span-3">
+                <h4 className="text-sm font-extrabold text-foreground">عنوان قسم «الإنجازات» في صفحة من نحن</h4>
+                <p className="text-xs text-muted-foreground">
+                  غيّر السنة كل سنة. لو سبت العنوان فاضي هيظهر «إنجازات السنة». كروت الأرقام نفسها بتتعدل من{" "}
+                  <a href="/admin/site-stats" className="font-bold text-primary underline">إحصائيات الموقع ← الإنجازات</a>.
+                </p>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-foreground">السنة</label>
+                <Input type="number" min={2019} max={2100} dir="ltr" value={data.achievements?.year ?? ""} className="rounded-xl text-xs font-bold"
+                  onChange={(e) => { const v = e.target.value; setData((prev) => ({ ...prev, achievements: { ...prev.achievements, year: v } })); }} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-foreground">العنوان (عربي) — اختياري</label>
+                <Input value={data.achievements?.title_ar || ""} placeholder={`إنجازات ${data.achievements?.year || new Date().getFullYear()}`} className="rounded-xl text-xs font-bold"
+                  onChange={(e) => { const v = e.target.value; setData((prev) => ({ ...prev, achievements: { ...prev.achievements, title_ar: v } })); }} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-foreground">Title (EN) — optional</label>
+                <Input dir="ltr" value={data.achievements?.title_en || ""} placeholder={`${data.achievements?.year || new Date().getFullYear()} Achievements`} className="rounded-xl text-xs font-bold"
+                  onChange={(e) => { const v = e.target.value; setData((prev) => ({ ...prev, achievements: { ...prev.achievements, title_en: v } })); }} />
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {Array.isArray(data.stats) &&
                 data.stats.map((stat, idx) => (
@@ -811,27 +856,42 @@ export default function AdminAboutUs() {
           <div className="space-y-5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-muted/40 p-4 rounded-2xl border border-border/70">
               <div>
-                <h3 className="text-sm font-extrabold text-foreground">{isRTL ? "البرامج والمبادرات" : "Charity Programs & Initiatives"}</h3>
-                <p className="text-xs text-muted-foreground">{isRTL ? "قائمة المبادرات المستمرة التي تديرها المؤسسة" : "List of ongoing initiatives managed by the foundation"}</p>
+                <h3 className="text-sm font-extrabold text-foreground">{isRTL ? "أنشطتنا الدائمة" : "Ongoing activities"}</h3>
+                <p className="text-xs text-muted-foreground">{isRTL ? "الكروت اللي في قسم «أنشطتنا الدائمة» بصفحة من نحن — كل كارت بيفتح الصفحة اللي في «الرابط»." : "Cards of the «Our ongoing activities» section; each opens its link."}</p>
               </div>
+              <div className="flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setData((prev) => ({ ...prev, programs: SUGGESTED_ACTIVITIES.map((a) => ({ ...a })) }));
+                  toast.info("اتحمّلت 15 نشاط مقترح — راجعها وبعدين اضغط حفظ.");
+                }}
+                className="gap-1.5 rounded-xl text-xs font-bold"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>استخدام الأنشطة المقترحة (15)</span>
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => {
                   const newProg: AboutUsProgramItem = {
-                    title_ar: "برنامج جديد",
-                    title_en: "New Program",
-                    description_ar: "وصف البرنامج",
-                    description_en: "Program description",
+                    title_ar: "",
+                    title_en: "",
+                    description_ar: "",
+                    description_en: "",
                     icon: "Heart",
+                    href: "/programs",
                   };
                   setData((prev) => ({ ...prev, programs: [...(Array.isArray(prev.programs) ? prev.programs : []), newProg] }));
                 }}
                 className="gap-1.5 rounded-xl text-xs font-bold"
               >
                 <Plus className="h-4 w-4" />
-                <span>{isRTL ? "إضافة برنامج جديد" : "Add Program"}</span>
+                <span>{isRTL ? "إضافة نشاط" : "Add activity"}</span>
               </Button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -853,7 +913,7 @@ export default function AdminAboutUs() {
 
                     <div className="grid grid-cols-2 gap-2.5">
                       <div className="space-y-1">
-                        <label className="text-xs font-bold text-foreground">{isRTL ? "اسم البرنامج (عربي)" : "Program Name (Ar)"}</label>
+                        <label className="text-xs font-bold text-foreground">{isRTL ? "اسم النشاط (عربي)" : "Activity name (Ar)"}</label>
                         <Input
                           value={prog.title_ar}
                           onChange={(e) => {
@@ -868,7 +928,7 @@ export default function AdminAboutUs() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-xs font-bold text-foreground">{isRTL ? "اسم البرنامج (إنجليزي)" : "Program Name (En)"}</label>
+                        <label className="text-xs font-bold text-foreground">{isRTL ? "اسم النشاط (إنجليزي)" : "Activity name (En)"}</label>
                         <Input
                           value={prog.title_en || ""}
                           onChange={(e) => {
@@ -880,6 +940,34 @@ export default function AdminAboutUs() {
                             });
                           }}
                           className="rounded-xl text-xs font-bold"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <IconPick
+                        value={prog.icon}
+                        onChange={(v) => setData((prev) => {
+                          const copy = [...prev.programs];
+                          copy[idx] = { ...copy[idx], icon: v };
+                          return { ...prev, programs: copy };
+                        })}
+                      />
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-foreground">الرابط (صفحة في الموقع)</label>
+                        <Input
+                          dir="ltr"
+                          value={prog.href || ""}
+                          placeholder="/programs/orphans"
+                          onChange={(e) => {
+                            const val = e.target.value.trim();
+                            setData((prev) => {
+                              const copy = [...prev.programs];
+                              copy[idx] = { ...copy[idx], href: val };
+                              return { ...prev, programs: copy };
+                            });
+                          }}
+                          className="rounded-xl font-mono text-xs"
                         />
                       </div>
                     </div>
@@ -1056,10 +1144,10 @@ export default function AdminAboutUs() {
                 size="sm"
                 onClick={() => {
                   const newItem: AboutUsWhyUsItem = {
-                    title_ar: "سبب جديد",
-                    title_en: "New Reason",
-                    description_ar: "التفاصيل",
-                    description_en: "Details",
+                    title_ar: "",
+                    title_en: "",
+                    description_ar: "",
+                    description_en: "",
                     icon: "CheckCircle2",
                   };
                   setData((prev) => ({ ...prev, why_us: [...(Array.isArray(prev.why_us) ? prev.why_us : []), newItem] }));
@@ -1068,6 +1156,18 @@ export default function AdminAboutUs() {
               >
                 <Plus className="h-4 w-4" />
                 <span>{isRTL ? "إضافة سبب جديد" : "Add Reason"}</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setData((prev) => ({ ...prev, why_us: SUGGESTED_WHY_US.map((w) => ({ ...w })) }));
+                  toast.info("اتحمّلت الأسباب المقترحة — راجعها وبعدين اضغط حفظ.");
+                }}
+                className="gap-1.5 rounded-xl text-xs font-bold"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>استخدام المحتوى المقترح</span>
               </Button>
             </div>
 
@@ -1087,6 +1187,17 @@ export default function AdminAboutUs() {
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
+
+                    <div className="w-1/2 pe-1">
+                      <IconPick
+                        value={item.icon}
+                        onChange={(v) => setData((prev) => {
+                          const copy = [...prev.why_us];
+                          copy[idx] = { ...copy[idx], icon: v };
+                          return { ...prev, why_us: copy };
+                        })}
+                      />
+                    </div>
 
                     <div className="grid grid-cols-2 gap-2.5">
                       <div className="space-y-1">

@@ -61,7 +61,7 @@ import axisEducation from "@/assets/axis-education.jpg";
 import imgHandsSprout from "@/assets/hands-sprout.jpg";
 import { useSiteStats } from "@/hooks/useSiteStats";
 import { getLucideIcon } from "@/lib/lucide-icon";
-import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, resolveStorageUrl, contentApi, formatServerImageUrl, getApiToken } from "@/data/laravelApi";
+import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, type AboutUsAchievementsMeta, resolveStorageUrl, contentApi, formatServerImageUrl, getApiToken } from "@/data/laravelApi";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
@@ -128,14 +128,14 @@ const About = () => {
   // Map values from API (aboutData.values) — falls back to static defaults if API is empty
   const STATIC_VALUE_ICONS = [Sparkles, HeartHandshake, ShieldCheck, Award, BadgeCheck];
   const defaultValuesAr = [
-    { title: "التمكين", desc: "بناء الإنسان: تعليم وعلاج وفرص أفضل." },
+    { title: "التمكين", desc: "بناء الإنسان بالتعليم والعلاج بدل الإحسان اللحظي." },
     { title: "الإحسان", desc: "نسعى لباب البيت بكرامة." },
     { title: "الأمانة", desc: "كل تبرع موثق بالصور والفيديو." },
     { title: "القوة", desc: "برامج تنموية متجددة ومستمرة." },
     { title: "الثقة", desc: "كيان مشهر رسميًا بوزارة التضامن." },
   ];
   const defaultValuesEn = [
-    { title: "Empowerment", desc: "Human development: education, health, and sustainable self-reliance." },
+    { title: "Empowerment", desc: "Building people through education and healthcare, not one-off relief." },
     { title: "Excellence (Ihsan)", desc: "Serving with dignity at the doorstep, honoring each family." },
     { title: "Honesty & Integrity", desc: "Transparent accounting, photo and video documentation." },
     { title: "Strength", desc: "Sustainable long-term developmental programs across Egypt." },
@@ -290,28 +290,14 @@ const About = () => {
         ];
   }, [aboutData.trust, isRTL]);
 
-  // Ordered as a donor's journey: official entity → proof → in person → family
+  // «لماذا تثق بنا؟» — edited in the dashboard (من نحن ← لماذا تثق بنا), in the order saved there.
   const trustSteps = useMemo<TrustStep[]>(() => {
-    if (Array.isArray(aboutData.why_us) && aboutData.why_us.length > 0) {
-      return aboutData.why_us.map((c: any, i: number) => ({
-        icon: getLucideIcon(c.icon) || [BadgeCheck, Camera, Users, HandHeart][i % 4],
-        title: isRTL ? (c.title_ar || c.titleAr || "") : (c.title_en || c.titleEn || c.title_ar || ""),
-        desc: isRTL ? (c.description_ar || c.descAr || "") : (c.description_en || c.descEn || c.description_ar || ""),
-      }));
-    }
-    return isRTL
-      ? [
-          { icon: BadgeCheck, title: "كيان رسمي وحسابات معلنة", desc: `بتتبرع لمؤسسة مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي، على حساب بنكي رسمي${bankText ? ` (${bankText})` : ""}.` },
-          { icon: Camera, title: "التوثيق الفوري", desc: "بنوثق إيصال تبرعك بالفيديو والصور وإشعار رسمي يوضح الأثر في حياة الأسرة، مع الحفاظ على كرامتهم." },
-          { icon: Users, title: "الحضور بنفسك", desc: "تقدر توصّل تبرعك بإيدك: بنبعتلك حد من فريقنا يتحرك معاك للمستحق أو لتنفيذ العمل (وصلة مياه، سقف منزل)." },
-          { icon: HandHeart, title: "عيلتك جزء من الفريق", desc: "أولادك وعائلتك ممكن يتطوعوا معانا في قوافل الإطعام والزيارات الميدانية ويشوفوا الأثر بعينهم." },
-        ]
-      : [
-          { icon: BadgeCheck, title: "A licensed entity, public accounts", desc: `You give to an NGO registered under No. 2665/2019 with the Ministry of Social Solidarity, through an official bank account${bankText ? ` (${bankText})` : ""}.` },
-          { icon: Camera, title: "Immediate proof", desc: "We document the delivery of your gift with photo, video and an official notice, while preserving the family's dignity." },
-          { icon: Users, title: "Come in person", desc: "Deliver it by hand: a team member goes with you to the family or to the work itself (a water tap, a new roof)." },
-          { icon: HandHeart, title: "Your family joins in", desc: "Your children and family can volunteer on our food convoys and field visits and see the impact themselves." },
-        ];
+    const items = Array.isArray(aboutData.why_us) && aboutData.why_us.length > 0 ? aboutData.why_us : ABOUT_US_DEFAULT_DATA.why_us;
+    return items.map((c, i) => ({
+      icon: c.icon ? getLucideIcon(c.icon) : [BadgeCheck, Camera, Users, HandHeart][i % 4],
+      title: isRTL ? c.title_ar || "" : c.title_en || c.title_ar || "",
+      desc: isRTL ? c.description_ar || "" : c.description_en || c.description_ar || "",
+    }));
   }, [aboutData.why_us, isRTL]);
 
   const { data: rawAboutFaqs } = useQuery({
@@ -750,7 +736,7 @@ const About = () => {
         </section>
 
         {/* 2025 ACHIEVEMENTS (2 cards per row on mobile) */}
-        <AchievementsSection isRTL={isRTL} />
+        <AchievementsSection isRTL={isRTL} meta={aboutData.achievements} />
 
         {/* TESTIMONIAL / SLOGAN */}
         <section className="bg-primary text-primary-foreground py-16 md:py-20">
@@ -784,29 +770,16 @@ const About = () => {
             </div>
             <div className="mt-10 grid gap-3.5 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3">
               {(() => {
-                const staticActivities = [
-                  { I: Droplets, ar: "حملة ظِلّ (سقيا وأسقف)", en: "Dhill (Water & Roofs)", href: "/dhill" },
-                  { I: Home, ar: "حملة سِتْر (دفء الشتاء)", en: "Setr (Winter Aid)", href: "/setr" },
-                  { I: Baby, ar: "باب الجنة (كفالة الأيتام)", en: "Bab Al-Jannah (Orphans)", href: "/programs/orphans" },
-                  { I: Sparkles, ar: "مبادرة عربون خير (المستقلين)", en: "Arboun Khair (Freelancers)", href: "/arboun" },
-                  { I: HandCoins, ar: "كفالات ومساعدات شهرية", en: "Monthly Family Stipends", href: "/programs" },
-                  { I: Utensils, ar: "الغذاء الشهري (لحوم وكرتونة ووجبات)", en: "Monthly Food Programme", href: "/food-box" },
-                  { I: Beef, ar: "صكوك الأضاحي ومزارع الوقف", en: "Qurbani & Farms", href: "/qurbani" },
-                  { I: Heart, ar: "زكاة المال والصدقات", en: "Zakat & General Charity", href: "/zakat" },
-                  { I: HeartPulse, ar: "مساعدات طبية طارئة وقوافل", en: "Urgent Medical Convoys", href: "/programs/health" },
-                  { I: HandHeart, ar: "تيسير زواج الفتيات اليتيمات", en: "Orphan Bride Marriage Aid", href: "/programs" },
-                  { I: Home, ar: "حملة مَرْكُون (أثاث وأجهزة)", en: "Markoun In-Kind Reuse", href: "/markoun" },
-                  { I: BookOpen, ar: "دور وحلقات تحفيظ القرآن", en: "Quran Learning Centers", href: "/programs/education" },
-                ];
-                const hasApiPrograms = Array.isArray(aboutData.programs) && aboutData.programs.length > 0;
-                const items = hasApiPrograms
-                  ? aboutData.programs.map((p) => ({
-                      I: getLucideIcon(p.icon) || Layers,
-                      ar: p.title_ar,
-                      en: p.title_en || p.title_ar,
-                      href: "/programs",
-                    }))
-                  : staticActivities;
+                // Edited in the dashboard (من نحن ← الأنشطة الدائمة); the default list covers an unreachable API.
+                const source = Array.isArray(aboutData.programs) && aboutData.programs.length > 0 ? aboutData.programs : ABOUT_US_DEFAULT_DATA.programs;
+                const items = source.map((p) => ({
+                  I: getLucideIcon(p.icon) || Layers,
+                  ar: p.title_ar,
+                  en: p.title_en || p.title_ar,
+                  dAr: p.description_ar || "",
+                  dEn: p.description_en || p.description_ar || "",
+                  href: p.href && p.href.startsWith("/") ? p.href : "/programs",
+                }));
 
                 return items.map((a, i) => (
                   <Link
@@ -818,7 +791,12 @@ const About = () => {
                     <div className="grid h-10 w-10 sm:h-11 sm:w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary">
                       <a.I className="h-5 w-5 text-secondary" />
                     </div>
-                    <span className="text-xs sm:text-sm font-extrabold text-primary truncate">{isRTL ? a.ar : a.en}</span>
+                    <span className="min-w-0">
+                      <span className="block text-xs sm:text-sm font-extrabold text-primary truncate">{isRTL ? a.ar : a.en}</span>
+                      {(isRTL ? a.dAr : a.dEn) && (
+                        <span className="mt-0.5 hidden sm:block text-[11px] leading-snug text-muted-foreground line-clamp-2">{isRTL ? a.dAr : a.dEn}</span>
+                      )}
+                    </span>
                   </Link>
                 ));
               })()}
@@ -1090,7 +1068,11 @@ const FALLBACK_ACHIEVEMENTS = [
   { n: "365", ar: "يوم عطاء بدون توقف", en: "Days of non-stop giving" },
 ];
 
-const AchievementsSection = ({ isRTL }: { isRTL: boolean }) => {
+const AchievementsSection = ({ isRTL, meta }: { isRTL: boolean; meta?: AboutUsAchievementsMeta }) => {
+  const year = meta?.year ? String(meta.year) : "";
+  const title = isRTL
+    ? meta?.title_ar || (year ? `إنجازات ${year}` : "إنجازاتنا")
+    : meta?.title_en || (year ? `${year} Achievements` : "Our Achievements");
   const { data, loading } = useSiteStats("achievements");
   const stats = !loading && data.length > 0 ? data : FALLBACK_ACHIEVEMENTS;
   return (
@@ -1101,7 +1083,7 @@ const AchievementsSection = ({ isRTL }: { isRTL: boolean }) => {
             <BadgeCheck className="h-3.5 w-3.5" /> {isRTL ? "إنجازات موثقة بالأرقام" : "Documented Figures"}
           </span>
           <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-4xl">
-            {isRTL ? "إنجازات 2025" : "2025 Achievements"}
+            {title}
           </h2>
           <p data-reveal className="reveal-up mt-3 text-muted-foreground text-sm sm:text-base">
             {isRTL ? "أرقام حقيقية موثّقة من الميدان — وكل سنة الأثر بيكبر في كل أنحاء مصر." : "Real, documented field achievements expanding across Egypt."}
