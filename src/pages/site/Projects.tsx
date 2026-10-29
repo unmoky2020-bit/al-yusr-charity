@@ -35,6 +35,7 @@ import { useLang } from "@/i18n/LangContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs } from "@/data/faqsApi";
 import { usePrograms } from "@/data/sources/programs";
+import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
 import { BrideTrousseau } from "@/components/sections/BrideTrousseau";
 import { HomeSeasons } from "@/components/sections/HomeSeasons";
 import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
@@ -45,9 +46,6 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { GEO_GOVERNORATES } from "@/data/geoPages";
 import { DAKAHLIA_CITIES } from "@/data/dakahliaCities";
 import { TagsRail } from "@/components/common/TagsRail";
-import imgFood from "@/assets/axis-food.jpg";
-import imgHealth from "@/assets/axis-health.jpg";
-import imgEdu from "@/assets/axis-education.jpg";
 // Accordion imports kept for other uses
 import {
   Accordion,
@@ -60,7 +58,8 @@ const Projects = () => {
   const { lang, t } = useLang();
   const isRTL = lang === "ar";
   const reduce = useReducedMotion();
-  const { programs } = usePrograms();
+  // Published backend programs (static copy only when the API is unreachable).
+  const { programs, isLoading: programsLoading } = usePrograms();
   // Selected governorate tag — filters the GEO section so the page isn't
   // overwhelmed by 11+ huge cards. Defaults to Dakahlia (our home turf).
   const [activeGeo, setActiveGeo] = useState<string>(
@@ -79,13 +78,6 @@ const Projects = () => {
       : "Hello, I'd like to learn which Al-Yusr program is best for donation or support."
   );
   const waHref = `https://wa.me/201097000137?text=${waMsg}`;
-  const pillars = [
-    { icon: UtensilsCrossed, title: isRTL ? "غذاء" : "Food", text: isRTL ? "كرتونة العزومة، كيلو لحمة، وتوزيعات موسمية تحفظ كرامة البيت." : "Food boxes, meat support, and seasonal distributions delivered with dignity.", to: "/programs/box" },
-    { icon: Stethoscope, title: isRTL ? "علاج" : "Healthcare", text: isRTL ? "مساندة علاجية للحالات الأشد احتياجًا عبر بحث ميداني وتوجيه آمن للتبرع." : "Medical support for the most vulnerable cases through verified field assessment.", to: "/cases?cat=medication" },
-    { icon: GraduationCap, title: isRTL ? "تعليم" : "Education", text: isRTL ? "مصاريف، أدوات، وزي مدرسي عشان طفل يكمل طريقه." : "Tuition, supplies, and uniforms so children can continue their path.", to: "/programs/education" },
-    { icon: Droplets, title: isRTL ? "مياه" : "Water", text: isRTL ? "وصلات مياه وسهم صدقة جارية يغيّر يوم الأسرة كل يوم." : "Water connections and lasting charity shares that change daily life.", to: "/programs/water" },
-    { icon: Home, title: isRTL ? "سكن" : "Shelter", text: isRTL ? "تجهيز بيوت، ستر أسر، ومساندة عرائس لبداية آمنة." : "Home support, family shelter, and bride preparation for safer starts.", to: "/programs/bride" },
-  ];
   const highlights = [
     isRTL ? "بحث اجتماعي قبل الصرف" : "Social assessment before spending",
     isRTL ? "تسليم بكرامة لباب البيت" : "Dignified doorstep delivery",
@@ -100,61 +92,6 @@ const Projects = () => {
   const axisDuration = isMobile ? 0.5 : 0.65;
   const axisOffsetY = isMobile ? 18 : 36;
 
-  // 3 strategic pillars — same card design used in the homepage WorkAxes section.
-  // Reused here so the /programs page leads with our flagship axes before the full list.
-  const axesPillars = [
-    {
-      img: imgFood,
-      number: "01",
-      anchorId: "axis-food",
-      donateSlug: "box",
-      href: "/axes/food",
-      tag: isRTL ? "محور الإطعام" : "Food pillar",
-      title: isRTL ? "الغذاء" : "Food",
-      desc: isRTL
-        ? "أمان غذائي لكل أسرة مستحقة عبر مزارعنا الوقفية ومطابخ اليسر الدائمة."
-        : "Food security for every family in need through our endowment farms and permanent Al-Yusr kitchens.",
-      bullets: isRTL
-        ? ["كرتونة الغذاء الشهرية + كيلو لحمة بلدي", "مطبخ يومي بآلاف الوجبات الساخنة", "أكثر من 5 طن لحوم سنويًا من مزارعنا الوقفية"]
-        : ["Monthly food box + 1 kg of farm meat", "Daily kitchen with thousands of hot meals", "Over 5 tons of meat per year from our endowment farms"],
-      accent: "bg-secondary text-secondary-foreground",
-      focus: "center 40%",
-    },
-    {
-      img: imgHealth,
-      number: "02",
-      anchorId: "axis-health",
-      donateSlug: "treatment",
-      href: "/axes/health",
-      tag: isRTL ? "محور الصحة" : "Health pillar",
-      title: isRTL ? "الصحة" : "Health",
-      desc: isRTL
-        ? "بناء إنسان منتج ومستقر عبر القوافل والمجمعات الطبية ومركز الغسيل الكلوي."
-        : "Building a stable, productive person through medical caravans, clinics, and our dialysis center.",
-      bullets: isRTL
-        ? ["عمليات وعلاج للحالات العاجلة", "قوافل علاجية في القرى النائية", "أطراف صناعية وكراسي ذوي الهمم"]
-        : ["Surgeries & urgent treatment", "Caravans in remote villages", "Prosthetics & wheelchairs"],
-      accent: "bg-accent text-accent-foreground",
-      focus: "center 45%",
-    },
-    {
-      img: imgEdu,
-      number: "03",
-      anchorId: "axis-education",
-      donateSlug: "education",
-      href: "/axes/education",
-      tag: isRTL ? "محور التعليم" : "Education pillar",
-      title: isRTL ? "التعليم" : "Education",
-      desc: isRTL
-        ? "محاربة الفقر الأول بالعلم وتأمين مستقبل الأجيال داخل مجمّعنا التعليمي."
-        : "Fighting the first poverty with knowledge and securing future generations inside our educational complex.",
-      bullets: isRTL
-        ? ["كفالة تعليمية لـ 354 طالبًا", "دروس ومتابعة داخل المجمّع", "حقائب وأدوات لكل عام دراسي"]
-        : ["Education sponsorship for 354 students", "Tutoring inside our complex", "Backpacks & tools each year"],
-      accent: "bg-primary text-primary-foreground",
-      focus: "center 35%",
-    },
-  ];
   const axesStickyOffsets = [
     "top-[84px] md:top-[96px]",
     "top-[100px] md:top-[116px]",
@@ -528,6 +465,8 @@ const Projects = () => {
                 : "Pick the cause that matches your intention — every program is field-verified with transparent pricing."}
             </p>
           </div>
+          {programsLoading && <CardGridSkeleton count={4} />}
+          {!programsLoading && (
           <StickyStack className="mx-auto max-w-5xl overflow-x-clip" gap="mb-6 md:mb-8">
             {programs.map((p, idx) => {
               // Static (JIT-safe) sticky offsets that cascade so each card peeks under the next.
@@ -589,6 +528,7 @@ const Projects = () => {
               );
             })}
           </StickyStack>
+          )}
         </div>
 
         <div className="container mx-auto mt-12 max-w-3xl px-4">

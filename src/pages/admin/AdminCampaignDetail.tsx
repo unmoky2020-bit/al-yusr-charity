@@ -21,6 +21,7 @@ type Campaign = Omit<BaseCampaign, "status"> & { status: CampaignStatus };
 type Application = Omit<BaseApplication, "status"> & { status: ApplicationStatus };
 import { logActivity } from "@/lib/activityLog";
 import { uploadImage } from "@/data/laravelApi";
+import { publicUrls } from "@/lib/publicUrls";
 
 const CAMPAIGN_STATUSES: { v: CampaignStatus; ar: string; en: string; tone: string }[] = [
   { v: "draft",     ar: "مسودة",   en: "Draft",     tone: "bg-muted text-muted-foreground" },
@@ -341,7 +342,7 @@ export default function AdminCampaignDetail() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
-            <a href={`/campaigns/${row.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-md bg-secondary/20 px-3 py-1.5 text-xs font-extrabold text-primary hover:bg-secondary/30">
+            <a href={publicUrls.volunteerCampaign(row.slug)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-md bg-secondary/20 px-3 py-1.5 text-xs font-extrabold text-primary hover:bg-secondary/30">
               <ExternalLink className="h-3.5 w-3.5" />{isAr ? "معاينة عامة" : "Public preview"}
             </a>
             <Button onClick={save} disabled={saving} className="bg-orange-grad text-accent-foreground">

@@ -34,6 +34,7 @@ import { axesApi, LaravelAxis, galleryApi, formatServerImageUrl } from "@/data/l
 import imgFood from "@/assets/axis-food.jpg";
 import imgHealth from "@/assets/axis-health.jpg";
 import imgEdu from "@/assets/axis-education.jpg";
+import { publicUrls } from "@/lib/publicUrls";
 
 const DEFAULT_AXES_IMAGES: Record<string, string> = {
   food: imgFood,
@@ -275,7 +276,7 @@ export const AdminAxisDetail: React.FC = () => {
 
             <div className="flex flex-wrap items-center gap-2.5">
               <a
-                href={`/axes/${axis.slug}`}
+                href={publicUrls.axis(axis.slug)}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-muted/40 hover:bg-muted text-xs font-bold text-foreground transition"

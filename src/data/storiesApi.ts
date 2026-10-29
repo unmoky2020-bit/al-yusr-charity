@@ -32,7 +32,9 @@ export type StoryCard = {
   location_ar?: string | null;
   location_en?: string | null;
   image_url: string | null;
-  program_node_id?: string | null;
+  /** Program the story belongs to (backend program id) and its public slug/name for the page link. */
+  program_id?: string | null;
+  program?: { slug: string; name_ar: string; name_en: string } | null;
   pillar_slug?: string | null;
   case_id?: string | null;
   is_published: boolean;
@@ -200,7 +202,8 @@ export const STATIC_STORIES: StoryCard[] = [
 type LaravelStoryExtended = LaravelStory & {
   quote_ar?: string | null;
   quote_en?: string | null;
-  program_node_id?: number | string | null;
+  program_id?: number | string | null;
+  program?: { slug?: string; name_ar?: string; name_en?: string | null } | null;
   pillar_slug?: string | null;
   case_id?: number | string | null;
   pending_review?: boolean | number | null;
@@ -225,7 +228,8 @@ function mapLaravelStory(raw: LaravelStory): StoryCard {
     location_ar: s.location_ar || null,
     location_en: s.location_en || null,
     image_url: s.cover_image_url || s.cover_image || null,
-    program_node_id: s.program_node_id != null ? String(s.program_node_id) : null,
+    program_id: s.program_id != null ? String(s.program_id) : null,
+    program: s.program?.slug ? { slug: s.program.slug, name_ar: s.program.name_ar || "", name_en: s.program.name_en || "" } : null,
     pillar_slug: s.pillar_slug || null,
     case_id: s.case_id != null ? String(s.case_id) : null,
     is_published: s.status === "published",
@@ -242,7 +246,7 @@ function mapLaravelStory(raw: LaravelStory): StoryCard {
  * StoryCard → Laravel `/stories` body. Columns that exist today (Postman): slug, title_ar/en,
  * category_ar/en, beneficiary_name, location_ar/en, description_ar/en, cover_image, sort_order,
  * status, is_featured. NEW columns (see backend-handoff/02-replace-supabase-admin.md):
- * quote_ar/en, cover_image_url, program_node_id, pillar_slug, case_id, pending_review, seo.
+ * quote_ar/en, cover_image_url, program_id (live), pillar_slug, case_id, pending_review, seo.
  */
 function toLaravelPayload(story: Partial<StoryCard>): Record<string, unknown> {
   const p: Record<string, unknown> = {};
@@ -260,7 +264,7 @@ function toLaravelPayload(story: Partial<StoryCard>): Record<string, unknown> {
   if (story.location_en !== undefined) p.location_en = story.location_en;
   // Plain URL string (uploaded via the gallery/media picker). `cover_image` is reserved for multipart files.
   if (story.image_url !== undefined) p.cover_image_url = story.image_url && !story.image_url.startsWith("blob:") ? story.image_url : null;
-  if (story.program_node_id !== undefined) p.program_node_id = story.program_node_id || null;
+  if (story.program_id !== undefined) p.program_id = story.program_id ? Number(story.program_id) : null;
   if (story.pillar_slug !== undefined) p.pillar_slug = story.pillar_slug || null;
   if (story.case_id !== undefined) p.case_id = story.case_id || null;
   if (story.is_published !== undefined) p.status = story.is_published ? "published" : "draft";

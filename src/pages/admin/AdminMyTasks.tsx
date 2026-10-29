@@ -8,6 +8,7 @@ import { RequireAuth } from "@/auth/RequireAuth";
 import { toast } from "@/hooks/use-toast";
 import { volunteerApplicationsApi, type VolunteerApplication } from "@/data/api/volunteerApplicationsApi";
 import { apiErrorMessage, isEndpointMissing, FEATURE_PENDING_MSG } from "@/data/api/adminApiHelpers";
+import { publicUrls } from "@/lib/publicUrls";
 
 type Joined = VolunteerApplication;
 
@@ -204,7 +205,7 @@ const Inner = () => {
 
                 <div className="flex shrink-0 flex-col items-end gap-1.5">
                   {c && (
-                    <Link to={`/campaigns/${c.slug}`} className="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-xs font-extrabold text-primary-foreground hover:bg-primary/90">
+                    <Link to={publicUrls.volunteerCampaign(c.slug)} className="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-xs font-extrabold text-primary-foreground hover:bg-primary/90">
                       <ExternalLink className="h-3 w-3" /> {lang === "ar" ? "تفاصيل" : "Details"}
                     </Link>
                   )}

@@ -25,6 +25,7 @@ import { uploadBlogMedia, generateAndUploadOg } from "@/lib/blog-uploads";
 import { auditPost, downloadJson, downloadPdf } from "@/lib/seo-report";
 import { lintArticleSchema, type SchemaIssue } from "@/lib/lint-jsonld";
 import { toast } from "@/hooks/use-toast";
+import { publicUrls } from "@/lib/publicUrls";
 
 type Row = {
   post: BlogPost;
@@ -527,12 +528,12 @@ const Inner = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align={isRTL ? "start" : "end"} className="text-xs">
                           <DropdownMenuItem asChild>
-                            <Link to={`/blog/${r.post.slug}${r.db && r.db.status !== "published" ? "?preview=1" : ""}`} target="_blank" className="gap-2 font-bold">
+                            <Link to={publicUrls.blog(r.post.slug, !!r.db && r.db.status !== "published")} target="_blank" className="gap-2 font-bold">
                               <Eye className="h-3.5 w-3.5" /> {isRTL ? "معاينة" : "Preview"}
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
-                            <Link to={`/blog/${r.post.slug}`} target="_blank" className="gap-2 font-bold">
+                            <Link to={publicUrls.blog(r.post.slug)} target="_blank" className="gap-2 font-bold">
                               <ExternalLink className="h-3.5 w-3.5" /> {isRTL ? "افتح المنشور" : "Open live"}
                             </Link>
                           </DropdownMenuItem>

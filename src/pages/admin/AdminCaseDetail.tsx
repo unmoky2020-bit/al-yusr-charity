@@ -21,13 +21,13 @@ import {
 } from "@/data/casesApi";
 import { CaseMediaManager } from "@/components/admin/CaseMediaManager";
 import { CaseShareBox } from "@/components/admin/cases/CaseShareBox";
-import { caseShareUrl } from "@/components/admin/cases/caseShareUrl";
 import { CaseSeoPanel } from "@/components/admin/cases/CaseSeoPanel";
 import { compressImage } from "@/lib/image-compress";
 import { ChoiceSelect, Field, ImageUrlField, SectionCard } from "@/components/admin/programs/FormKit";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { DAKAHLIA_CITIES } from "@/data/dakahliaCities";
 import { axesApi, programsApiV1, projectsApi, donationCampaignsApi, type LaravelAxis, type LaravelProgram, type LaravelProject, type LaravelDonationCampaign } from "@/data/laravelApi";
+import { publicUrls } from "@/lib/publicUrls";
 
 type CaseRow = NonNullable<Awaited<ReturnType<typeof getCaseById>>>;
 type Relation = "none" | "program" | "project" | "campaign";
@@ -571,7 +571,7 @@ export default function AdminCaseDetail() {
           </div>
           <div className="flex flex-wrap gap-2">
             {!isNew && code && (
-              <a href={caseShareUrl(code)} target="_blank" rel="noreferrer"
+              <a href={publicUrls.case(code)} target="_blank" rel="noreferrer"
                 className="inline-flex items-center gap-1 rounded-md bg-secondary/20 px-3 py-1.5 text-xs font-extrabold text-primary hover:bg-secondary/30">
                 <ExternalLink className="h-3.5 w-3.5" />{isPublic ? "الصفحة العامة" : "معاينة (غير منشورة)"}
               </a>

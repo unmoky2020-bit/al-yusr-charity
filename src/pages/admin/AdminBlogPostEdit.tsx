@@ -24,6 +24,7 @@ import {
   scoreDraft, buildSuggestions, suggestRelated, countInternalLinks,
   type Suggestion, type RelatedSuggestion,
 } from "@/lib/blog-optimize";
+import { publicUrls } from "@/lib/publicUrls";
 
 type EditState = {
   slug: string;
@@ -604,7 +605,7 @@ const Inner = () => {
 
   const sc = score!;
   const ringTone = sc.score >= 85 ? "stroke-secondary" : sc.score >= 60 ? "stroke-accent" : "stroke-destructive";
-  const previewHref = `/blog/${draft.slug}${row.status !== "published" ? "?preview=1" : ""}`;
+  const previewHref = publicUrls.blog(draft.slug, row.status !== "published");
   const auditedPost = dbToBlogPost({
     ...row,
     slug: draft.slug || row.slug,
@@ -647,7 +648,7 @@ const Inner = () => {
             <Link to={previewHref} target="_blank" className="inline-flex h-8 items-center gap-1 rounded-md border border-border bg-muted/50 px-2 text-xs font-bold hover:bg-muted">
               <Eye className="h-3.5 w-3.5" /> {isRTL ? "معاينة" : "Preview"}
             </Link>
-            <Link to={`/blog/${draft.slug}`} target="_blank" className="inline-flex h-8 items-center gap-1 rounded-md border border-border bg-muted/50 px-2 text-xs font-bold hover:bg-muted">
+            <Link to={publicUrls.blog(draft.slug)} target="_blank" className="inline-flex h-8 items-center gap-1 rounded-md border border-border bg-muted/50 px-2 text-xs font-bold hover:bg-muted">
               <ExternalLink className="h-3.5 w-3.5" /> {isRTL ? "افتح" : "Live"}
             </Link>
             <Button size="sm" variant="outline" onClick={() => downloadPdf(auditPost(auditedPost))}><FileDown className="h-3.5 w-3.5" /><span className="hidden sm:inline"> PDF</span></Button>

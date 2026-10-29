@@ -13,6 +13,7 @@ import { toast } from "@/hooks/use-toast";
 import { compressImage } from "@/lib/image-compress";
 import { getCaseStatusLabel } from "@/data/casesApi";
 import { logActivity } from "@/lib/activityLog";
+import { publicUrls } from "@/lib/publicUrls";
 
 type Khabia = {
   id: string; ref_code: string; full_name: string; phone: string;
@@ -374,7 +375,7 @@ const Inner = () => {
                           className="h-7 bg-muted text-[11px]">
                           <MessageSquarePlus className="me-1 h-3 w-3" /> {isAr ? "تسجيل بدون صورة" : "Log only"}
                         </Button>
-                        <Link to={`/cases/${c.ref_code}`} target="_blank" rel="noreferrer"
+                        <Link to={publicUrls.case(c.ref_code)} target="_blank" rel="noreferrer"
                           className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-[11px] font-bold hover:bg-muted/70">
                           <ExternalLink className="h-3 w-3" /> {isAr ? "صفحة الحالة" : "Public page"}
                         </Link>

@@ -21,6 +21,7 @@ import {
 } from "@/data/laravelApi";
 import { apiErrorMessageAr, programsAdminApi } from "@/data/api/programsAdminApi";
 import { PackagesEditor } from "@/components/admin/programs/PackagesEditor";
+import { publicUrls } from "@/lib/publicUrls";
 
 export default function AdminPrograms() {
   const { lang } = useLang();
@@ -318,7 +319,7 @@ export default function AdminPrograms() {
 
                     <div className="absolute top-2.5 end-2.5">
                       <Link
-                        to={`/programs/${prog.slug}`}
+                        to={publicUrls.program(prog.slug)}
                         target="_blank"
                         className="flex h-7 w-7 items-center justify-center rounded-lg bg-background/80 text-foreground backdrop-blur hover:bg-background shadow-sm"
                         title={isAr ? "معاينة صفحة البرنامج" : "Preview"}

@@ -6,6 +6,7 @@
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/" />
   </url>
   <url>
@@ -14,6 +15,7 @@
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani" />
   </url>
   <url>
@@ -22,6 +24,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/donate" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/donate?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/donate" />
   </url>
   <url>
@@ -30,6 +33,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs" />
   </url>
   <url>
@@ -38,6 +42,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/zakat" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/zakat?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/zakat" />
   </url>
   <url>
@@ -46,6 +51,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog" />
   </url>
   <url>
@@ -54,6 +60,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/about" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/about?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/about" />
   </url>
   <url>
@@ -62,6 +69,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/contact" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/contact?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/contact" />
   </url>
   <url>
@@ -70,6 +78,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/stories" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/stories?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/stories" />
   </url>
   <url>
@@ -78,6 +87,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/projects" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/projects?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/projects" />
   </url>
   <url>
@@ -86,6 +96,7 @@
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/cases" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/cases?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/cases" />
   </url>
   <url>
@@ -94,6 +105,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/gallery" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/gallery?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/gallery" />
   </url>
   <url>
@@ -102,6 +114,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services-map" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services-map?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services-map" />
   </url>
   <url>
@@ -110,6 +123,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/campaigns" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/campaigns?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/campaigns" />
   </url>
   <url>
@@ -118,6 +132,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dhill" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dhill?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dhill" />
   </url>
   <url>
@@ -126,6 +141,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/setr" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/setr?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/setr" />
   </url>
   <url>
@@ -134,6 +150,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/athar" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/athar?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/athar" />
   </url>
   <url>
@@ -142,6 +159,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/ramadan" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/ramadan?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/ramadan" />
   </url>
   <url>
@@ -150,6 +168,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/markoun" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/markoun?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/markoun" />
   </url>
   <url>
@@ -158,6 +177,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/arboun" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/arboun?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/arboun" />
   </url>
   <url>
@@ -166,6 +186,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/food-box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/food-box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/food-box" />
   </url>
   <url>
@@ -174,6 +195,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/khabia" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/khabia?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/khabia" />
   </url>
   <url>
@@ -182,6 +204,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani-guarantee" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani-guarantee?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani-guarantee" />
   </url>
   <url>
@@ -190,6 +213,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/farm" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/farm?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/farm" />
   </url>
   <url>
@@ -198,6 +222,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/trust" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/trust?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/trust" />
   </url>
   <url>
@@ -206,6 +231,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/faqs" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/faqs?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/faqs" />
   </url>
   <url>
@@ -214,6 +240,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/volunteer" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/volunteer?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/volunteer" />
   </url>
   <url>
@@ -222,6 +249,7 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/privacy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/privacy?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/privacy" />
   </url>
   <url>
@@ -230,6 +258,7 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/terms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/terms?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/terms" />
   </url>
   <url>
@@ -238,6 +267,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services/mosques" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services/mosques?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services/mosques" />
   </url>
   <url>
@@ -246,6 +276,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services/wells" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services/wells?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services/wells" />
   </url>
   <url>
@@ -254,6 +285,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services/farm" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services/farm?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services/farm" />
   </url>
   <url>
@@ -262,6 +294,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services/housing" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services/housing?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services/housing" />
   </url>
   <url>
@@ -270,6 +303,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services/ster" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services/ster?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services/ster" />
   </url>
   <url>
@@ -278,6 +312,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services/markoun" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services/markoun?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services/markoun" />
   </url>
   <url>
@@ -286,6 +321,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services/treatment" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services/treatment?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services/treatment" />
   </url>
   <url>
@@ -294,6 +330,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services/orphans" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services/orphans?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services/orphans" />
   </url>
   <url>
@@ -302,6 +339,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services/marriage" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services/marriage?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services/marriage" />
   </url>
   <url>
@@ -310,23 +348,62 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/services/food-box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/services/food-box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/services/food-box" />
   </url>
   <url>
-    <loc>https://elyusr.org/programs/odhya</loc>
+    <loc>https://elyusr.org/programs/prosthetics</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/odhya" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/odhya" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/prosthetics" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs/prosthetics?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/prosthetics" />
   </url>
   <url>
-    <loc>https://elyusr.org/programs/zakat</loc>
+    <loc>https://elyusr.org/programs/kitchen</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/zakat" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/zakat" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/kitchen" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs/kitchen?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/kitchen" />
+  </url>
+  <url>
+    <loc>https://elyusr.org/programs/treatment</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/treatment" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs/treatment?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/treatment" />
+  </url>
+  <url>
+    <loc>https://elyusr.org/programs/quran</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/quran" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs/quran?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/quran" />
+  </url>
+  <url>
+    <loc>https://elyusr.org/programs/monthly-sponsorship</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/monthly-sponsorship" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs/monthly-sponsorship?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/monthly-sponsorship" />
+  </url>
+  <url>
+    <loc>https://elyusr.org/programs/inqadh</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/inqadh" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs/inqadh?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/inqadh" />
   </url>
   <url>
     <loc>https://elyusr.org/programs/orphans</loc>
@@ -334,23 +411,8 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/orphans" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs/orphans?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/orphans" />
-  </url>
-  <url>
-    <loc>https://elyusr.org/programs/box</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/box" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/box" />
-  </url>
-  <url>
-    <loc>https://elyusr.org/programs/water</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/water" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/water" />
   </url>
   <url>
     <loc>https://elyusr.org/programs/bride</loc>
@@ -358,6 +420,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/bride" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs/bride?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/bride" />
   </url>
   <url>
@@ -366,55 +429,17 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/education" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs/education?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/education" />
   </url>
   <url>
-    <loc>https://elyusr.org/programs/treatment</loc>
+    <loc>https://elyusr.org/programs/zakat</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/treatment" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/treatment" />
-  </url>
-  <url>
-    <loc>https://elyusr.org/programs/shelter</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/shelter" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/shelter" />
-  </url>
-  <url>
-    <loc>https://elyusr.org/programs/markoun</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/markoun" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/markoun" />
-  </url>
-  <url>
-    <loc>https://elyusr.org/programs/kitchen</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/kitchen" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/kitchen" />
-  </url>
-  <url>
-    <loc>https://elyusr.org/programs/prosthetics</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/prosthetics" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/prosthetics" />
-  </url>
-  <url>
-    <loc>https://elyusr.org/programs/arboun</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/arboun" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/arboun" />
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/programs/zakat" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/programs/zakat?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/programs/zakat" />
   </url>
   <url>
     <loc>https://elyusr.org/blog/shade-campaign-sqya-2026</loc>
@@ -422,6 +447,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/shade-campaign-sqya-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/shade-campaign-sqya-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/shade-campaign-sqya-2026" />
   </url>
   <url>
@@ -430,6 +456,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/markoun-furniture-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/markoun-furniture-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/markoun-furniture-2026" />
   </url>
   <url>
@@ -438,6 +465,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/aid-prayer-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/aid-prayer-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/aid-prayer-2026" />
   </url>
   <url>
@@ -446,6 +474,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/udhiyah-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/udhiyah-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/udhiyah-2026" />
   </url>
   <url>
@@ -454,6 +483,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/qurbani-mansoura-2026-guarantees" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/qurbani-mansoura-2026-guarantees?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/qurbani-mansoura-2026-guarantees" />
   </url>
   <url>
@@ -462,6 +492,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/alyusr-convoy-feb-2026-dakahlia-kafr-elsheikh" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/alyusr-convoy-feb-2026-dakahlia-kafr-elsheikh?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/alyusr-convoy-feb-2026-dakahlia-kafr-elsheikh" />
   </url>
   <url>
@@ -470,6 +501,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/qurbani-2026-field-proof-dakahlia" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/qurbani-2026-field-proof-dakahlia?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/qurbani-2026-field-proof-dakahlia" />
   </url>
   <url>
@@ -478,6 +510,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/odhya-2026-mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/odhya-2026-mansoura?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/odhya-2026-mansoura" />
   </url>
   <url>
@@ -486,6 +519,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/zakat-mal-2026-calculator" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/zakat-mal-2026-calculator?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/zakat-mal-2026-calculator" />
   </url>
   <url>
@@ -494,6 +528,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/zakat-fitr-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/zakat-fitr-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/zakat-fitr-2026" />
   </url>
   <url>
@@ -502,6 +537,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/kafala-yatim-mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/kafala-yatim-mansoura?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/kafala-yatim-mansoura" />
   </url>
   <url>
@@ -510,6 +546,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/afdal-moassasa-khairya-mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/afdal-moassasa-khairya-mansoura?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/afdal-moassasa-khairya-mansoura" />
   </url>
   <url>
@@ -518,6 +555,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/shafafiya-tawtheeq-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/shafafiya-tawtheeq-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/shafafiya-tawtheeq-2026" />
   </url>
   <url>
@@ -526,6 +564,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/matbakh-alyusr-1500-meals" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/matbakh-alyusr-1500-meals?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/matbakh-alyusr-1500-meals" />
   </url>
   <url>
@@ -534,6 +573,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/qoum-tebbi-dakahlia" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/qoum-tebbi-dakahlia?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/qoum-tebbi-dakahlia" />
   </url>
   <url>
@@ -542,6 +582,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/atraf-sinaiya-mosh-hatwaqafny" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/atraf-sinaiya-mosh-hatwaqafny?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/atraf-sinaiya-mosh-hatwaqafny" />
   </url>
   <url>
@@ -550,6 +591,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/setr-tasqeef-bayt-amen" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/setr-tasqeef-bayt-amen?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/setr-tasqeef-bayt-amen" />
   </url>
   <url>
@@ -558,6 +600,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/tayseer-zawag-jawaz-3aroosa" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/tayseer-zawag-jawaz-3aroosa?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/tayseer-zawag-jawaz-3aroosa" />
   </url>
   <url>
@@ -566,6 +609,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/ramadan-2026-prep" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/ramadan-2026-prep?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/ramadan-2026-prep" />
   </url>
   <url>
@@ -574,6 +618,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/iftar-saiim-20-genih" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/iftar-saiim-20-genih?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/iftar-saiim-20-genih" />
   </url>
   <url>
@@ -582,6 +627,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/waqf-taleem-354-talib" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/waqf-taleem-354-talib?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/waqf-taleem-354-talib" />
   </url>
   <url>
@@ -590,6 +636,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/seqaya-maa-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/seqaya-maa-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/seqaya-maa-2026" />
   </url>
   <url>
@@ -598,6 +645,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/3elaj-wa-adwiya-2025" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/3elaj-wa-adwiya-2025?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/3elaj-wa-adwiya-2025" />
   </url>
   <url>
@@ -606,6 +654,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/compare-aleysr-vs-others" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/compare-aleysr-vs-others?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/compare-aleysr-vs-others" />
   </url>
   <url>
@@ -614,6 +663,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/campaign-success-cases" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/campaign-success-cases?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/campaign-success-cases" />
   </url>
   <url>
@@ -622,6 +672,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/akherqarar-altabarroa-online" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/akherqarar-altabarroa-online?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/akherqarar-altabarroa-online" />
   </url>
   <url>
@@ -630,6 +681,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/afdal-jamiya-khairya-dakahlia-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/afdal-jamiya-khairya-dakahlia-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/afdal-jamiya-khairya-dakahlia-2026" />
   </url>
   <url>
@@ -638,6 +690,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/tabarro-shahri-mansoura-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/tabarro-shahri-mansoura-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/tabarro-shahri-mansoura-2026" />
   </url>
   <url>
@@ -646,6 +699,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/kafala-yatim-shahriya-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/kafala-yatim-shahriya-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/kafala-yatim-shahriya-2026" />
   </url>
   <url>
@@ -654,6 +708,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/hamla-3elaj-amrad-mozmena-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/hamla-3elaj-amrad-mozmena-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/hamla-3elaj-amrad-mozmena-2026" />
   </url>
   <url>
@@ -662,6 +717,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/sotrah-banat-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/sotrah-banat-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/sotrah-banat-2026" />
   </url>
   <url>
@@ -670,6 +726,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/sala-ghedayia-shahriya-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/sala-ghedayia-shahriya-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/sala-ghedayia-shahriya-2026" />
   </url>
   <url>
@@ -678,6 +735,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/meyaah-naqya-aabaar-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/meyaah-naqya-aabaar-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/meyaah-naqya-aabaar-2026" />
   </url>
   <url>
@@ -686,6 +744,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/ramadan-2026-iftar-saiim" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/ramadan-2026-iftar-saiim?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/ramadan-2026-iftar-saiim" />
   </url>
   <url>
@@ -694,6 +753,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/shafafiya-tabaroaat-2026-takarir" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/shafafiya-tabaroaat-2026-takarir?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/shafafiya-tabaroaat-2026-takarir" />
   </url>
   <url>
@@ -702,6 +762,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/3aml-tatawwu3-mansoura-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/3aml-tatawwu3-mansoura-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/3aml-tatawwu3-mansoura-2026" />
   </url>
   <url>
@@ -710,6 +771,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/khabia-jam3-tabarro3at-mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/khabia-jam3-tabarro3at-mansoura?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/khabia-jam3-tabarro3at-mansoura" />
   </url>
   <url>
@@ -718,6 +780,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/tabarro3-malabes-shetwiya-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/tabarro3-malabes-shetwiya-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/tabarro3-malabes-shetwiya-2026" />
   </url>
   <url>
@@ -726,6 +789,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/daleel-mosa3edat-fokara-mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/daleel-mosa3edat-fokara-mansoura?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/daleel-mosa3edat-fokara-mansoura" />
   </url>
   <url>
@@ -734,6 +798,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/farq-zakat-vs-sadaqa-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/farq-zakat-vs-sadaqa-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/farq-zakat-vs-sadaqa-2026" />
   </url>
   <url>
@@ -742,6 +807,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/shahadat-tabarro3-rasmiya-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/shahadat-tabarro3-rasmiya-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/shahadat-tabarro3-rasmiya-2026" />
   </url>
   <url>
@@ -750,6 +816,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/qura-mansoura-mahroma-tabarro3" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/qura-mansoura-mahroma-tabarro3?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/qura-mansoura-mahroma-tabarro3" />
   </url>
   <url>
@@ -758,6 +825,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/how-to-zakat-mal-online-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/how-to-zakat-mal-online-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/how-to-zakat-mal-online-2026" />
   </url>
   <url>
@@ -766,6 +834,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/hala-3agela-tabarro3-saree3-mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/hala-3agela-tabarro3-saree3-mansoura?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/hala-3agela-tabarro3-saree3-mansoura" />
   </url>
   <url>
@@ -774,6 +843,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/tabarro3-amwal-companies-mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/tabarro3-amwal-companies-mansoura?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/tabarro3-amwal-companies-mansoura" />
   </url>
   <url>
@@ -782,6 +852,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/akbar-akhta2-tabarro3-online-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/akbar-akhta2-tabarro3-online-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/akbar-akhta2-tabarro3-online-2026" />
   </url>
   <url>
@@ -790,6 +861,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/dalil-sak-odhya-dakahlia-2026-13-yom" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/dalil-sak-odhya-dakahlia-2026-13-yom?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/dalil-sak-odhya-dakahlia-2026-13-yom" />
   </url>
   <url>
@@ -798,6 +870,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/markoun-campaign-dakahlia-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/markoun-campaign-dakahlia-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/markoun-campaign-dakahlia-2026" />
   </url>
   <url>
@@ -806,6 +879,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/markoun-donate-used-items-dakahlia" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/markoun-donate-used-items-dakahlia?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/markoun-donate-used-items-dakahlia" />
   </url>
   <url>
@@ -814,6 +888,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/markoun-dignity-from-stored-items" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/markoun-dignity-from-stored-items?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/markoun-dignity-from-stored-items" />
   </url>
   <url>
@@ -822,6 +897,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/importance-of-zakat" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/importance-of-zakat?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/importance-of-zakat" />
   </url>
   <url>
@@ -830,6 +906,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/stories/khaled-donor-ramadan" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/stories/khaled-donor-ramadan?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/stories/khaled-donor-ramadan" />
   </url>
   <url>
@@ -838,6 +915,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/stories/ramadan-family-sherbin" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/stories/ramadan-family-sherbin?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/stories/ramadan-family-sherbin" />
   </url>
   <url>
@@ -846,6 +924,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/stories/umm-mohamed-dikirnis" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/stories/umm-mohamed-dikirnis?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/stories/umm-mohamed-dikirnis" />
   </url>
   <url>
@@ -854,6 +933,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/stories/nour-sinbillawayn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/stories/nour-sinbillawayn?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/stories/nour-sinbillawayn" />
   </url>
   <url>
@@ -862,6 +942,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/stories/khaled-belqas" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/stories/khaled-belqas?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/stories/khaled-belqas" />
   </url>
   <url>
@@ -870,6 +951,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/stories/ahmed-mit-ghamr" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/stories/ahmed-mit-ghamr?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/stories/ahmed-mit-ghamr" />
   </url>
   <url>
@@ -878,6 +960,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/stories/umm-mohamed-bride" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/stories/umm-mohamed-bride?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/stories/umm-mohamed-bride" />
   </url>
   <url>
@@ -886,15 +969,8 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/stories/umm-soad-mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/stories/umm-soad-mansoura?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/stories/umm-soad-mansoura" />
-  </url>
-  <url>
-    <loc>https://elyusr.org/cases/CASE-4224</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/cases/CASE-4224" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/cases/CASE-4224" />
   </url>
   <url>
     <loc>https://elyusr.org/geo/dakahlia/odhya</loc>
@@ -902,6 +978,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/odhya" />
   </url>
   <url>
@@ -910,6 +987,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/box" />
   </url>
   <url>
@@ -918,6 +996,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/water" />
   </url>
   <url>
@@ -926,6 +1005,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/zakat" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/zakat?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/zakat" />
   </url>
   <url>
@@ -934,6 +1014,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/education" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/education?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/education" />
   </url>
   <url>
@@ -942,6 +1023,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/bride" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/bride?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/bride" />
   </url>
   <url>
@@ -950,6 +1032,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/shelter" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/shelter?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/shelter" />
   </url>
   <url>
@@ -958,6 +1041,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/orphans" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/orphans?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/orphans" />
   </url>
   <url>
@@ -966,6 +1050,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/treatment" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/treatment?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/treatment" />
   </url>
   <url>
@@ -974,6 +1059,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/prosthetics" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/prosthetics?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/prosthetics" />
   </url>
   <url>
@@ -982,6 +1068,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/kitchen" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/kitchen?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/kitchen" />
   </url>
   <url>
@@ -990,6 +1077,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/dakahlia/markoun" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/dakahlia/markoun?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/dakahlia/markoun" />
   </url>
   <url>
@@ -998,6 +1086,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/odhya" />
   </url>
   <url>
@@ -1006,6 +1095,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/box" />
   </url>
   <url>
@@ -1014,6 +1104,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/water" />
   </url>
   <url>
@@ -1022,6 +1113,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/zakat" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/zakat?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/zakat" />
   </url>
   <url>
@@ -1030,6 +1122,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/education" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/education?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/education" />
   </url>
   <url>
@@ -1038,6 +1131,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/bride" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/bride?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/bride" />
   </url>
   <url>
@@ -1046,6 +1140,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/shelter" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/shelter?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/shelter" />
   </url>
   <url>
@@ -1054,6 +1149,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/orphans" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/orphans?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/orphans" />
   </url>
   <url>
@@ -1062,6 +1158,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/treatment" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/treatment?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/treatment" />
   </url>
   <url>
@@ -1070,6 +1167,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/prosthetics" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/prosthetics?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/prosthetics" />
   </url>
   <url>
@@ -1078,6 +1176,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/sharqia/kitchen" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/sharqia/kitchen?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/sharqia/kitchen" />
   </url>
   <url>
@@ -1086,6 +1185,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/odhya" />
   </url>
   <url>
@@ -1094,6 +1194,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/box" />
   </url>
   <url>
@@ -1102,6 +1203,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/water" />
   </url>
   <url>
@@ -1110,6 +1212,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/zakat" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/zakat?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/zakat" />
   </url>
   <url>
@@ -1118,6 +1221,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/education" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/education?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/education" />
   </url>
   <url>
@@ -1126,6 +1230,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/bride" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/bride?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/bride" />
   </url>
   <url>
@@ -1134,6 +1239,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/shelter" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/shelter?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/shelter" />
   </url>
   <url>
@@ -1142,6 +1248,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/orphans" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/orphans?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/orphans" />
   </url>
   <url>
@@ -1150,6 +1257,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/treatment" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/treatment?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/treatment" />
   </url>
   <url>
@@ -1158,6 +1266,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/prosthetics" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/prosthetics?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/prosthetics" />
   </url>
   <url>
@@ -1166,6 +1275,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/kafr-el-sheikh/kitchen" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/kafr-el-sheikh/kitchen?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/kafr-el-sheikh/kitchen" />
   </url>
   <url>
@@ -1174,6 +1284,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/odhya" />
   </url>
   <url>
@@ -1182,6 +1293,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/box" />
   </url>
   <url>
@@ -1190,6 +1302,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/water" />
   </url>
   <url>
@@ -1198,6 +1311,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/zakat" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/zakat?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/zakat" />
   </url>
   <url>
@@ -1206,6 +1320,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/education" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/education?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/education" />
   </url>
   <url>
@@ -1214,6 +1329,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/bride" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/bride?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/bride" />
   </url>
   <url>
@@ -1222,6 +1338,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/shelter" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/shelter?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/shelter" />
   </url>
   <url>
@@ -1230,6 +1347,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/orphans" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/orphans?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/orphans" />
   </url>
   <url>
@@ -1238,6 +1356,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/treatment" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/treatment?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/treatment" />
   </url>
   <url>
@@ -1246,6 +1365,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/prosthetics" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/prosthetics?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/prosthetics" />
   </url>
   <url>
@@ -1254,6 +1374,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/fayoum/kitchen" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/fayoum/kitchen?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/fayoum/kitchen" />
   </url>
   <url>
@@ -1262,6 +1383,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/odhya" />
   </url>
   <url>
@@ -1270,6 +1392,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/box" />
   </url>
   <url>
@@ -1278,6 +1401,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/water" />
   </url>
   <url>
@@ -1286,6 +1410,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/zakat" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/zakat?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/zakat" />
   </url>
   <url>
@@ -1294,6 +1419,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/education" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/education?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/education" />
   </url>
   <url>
@@ -1302,6 +1428,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/bride" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/bride?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/bride" />
   </url>
   <url>
@@ -1310,6 +1437,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/shelter" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/shelter?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/shelter" />
   </url>
   <url>
@@ -1318,6 +1446,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/orphans" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/orphans?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/orphans" />
   </url>
   <url>
@@ -1326,6 +1455,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/treatment" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/treatment?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/treatment" />
   </url>
   <url>
@@ -1334,6 +1464,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/prosthetics" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/prosthetics?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/prosthetics" />
   </url>
   <url>
@@ -1342,6 +1473,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/minya/kitchen" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/minya/kitchen?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/minya/kitchen" />
   </url>
   <url>
@@ -1350,6 +1482,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/odhya" />
   </url>
   <url>
@@ -1358,6 +1491,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/box" />
   </url>
   <url>
@@ -1366,6 +1500,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/water" />
   </url>
   <url>
@@ -1374,6 +1509,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/zakat" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/zakat?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/zakat" />
   </url>
   <url>
@@ -1382,6 +1518,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/education" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/education?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/education" />
   </url>
   <url>
@@ -1390,6 +1527,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/bride" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/bride?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/bride" />
   </url>
   <url>
@@ -1398,6 +1536,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/shelter" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/shelter?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/shelter" />
   </url>
   <url>
@@ -1406,6 +1545,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/orphans" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/orphans?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/orphans" />
   </url>
   <url>
@@ -1414,6 +1554,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/treatment" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/treatment?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/treatment" />
   </url>
   <url>
@@ -1422,6 +1563,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/prosthetics" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/prosthetics?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/prosthetics" />
   </url>
   <url>
@@ -1430,6 +1572,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/geo/cairo/kitchen" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/geo/cairo/kitchen?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/geo/cairo/kitchen" />
   </url>
   <url>
@@ -1438,6 +1581,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/mansoura?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/mansoura" />
   </url>
   <url>
@@ -1446,6 +1590,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/mit-ghamr" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/mit-ghamr?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/mit-ghamr" />
   </url>
   <url>
@@ -1454,6 +1599,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/belqas" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/belqas?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/belqas" />
   </url>
   <url>
@@ -1462,6 +1608,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/dikirnis" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/dikirnis?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/dikirnis" />
   </url>
   <url>
@@ -1470,6 +1617,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/sherbin" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/sherbin?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/sherbin" />
   </url>
   <url>
@@ -1478,6 +1626,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/aga" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/aga?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/aga" />
   </url>
   <url>
@@ -1486,6 +1635,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/sinbillawayn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/sinbillawayn?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/sinbillawayn" />
   </url>
   <url>
@@ -1494,6 +1644,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/matareya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/matareya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/matareya" />
   </url>
   <url>
@@ -1502,6 +1653,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/talkha" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/talkha?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/talkha" />
   </url>
   <url>
@@ -1510,6 +1662,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/nabaroh" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/nabaroh?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/nabaroh" />
   </url>
   <url>
@@ -1518,6 +1671,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/gamalia" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/gamalia?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/gamalia" />
   </url>
   <url>
@@ -1526,6 +1680,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/mit-salsil" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/mit-salsil?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/mit-salsil" />
   </url>
   <url>
@@ -1534,6 +1689,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/bani-ubaid" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/bani-ubaid?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/bani-ubaid" />
   </url>
   <url>
@@ -1542,6 +1698,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/qurbani/manzala" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/qurbani/manzala?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/qurbani/manzala" />
   </url>
   <url>
@@ -1550,6 +1707,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/donate/mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/donate/mansoura?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/donate/mansoura" />
   </url>
   <url>
@@ -1558,6 +1716,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/mansoura/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/mansoura/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/mansoura/odhya" />
   </url>
   <url>
@@ -1566,6 +1725,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/mansoura/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/mansoura/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/mansoura/box" />
   </url>
   <url>
@@ -1574,6 +1734,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/mansoura/education" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/mansoura/education?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/mansoura/education" />
   </url>
   <url>
@@ -1582,6 +1743,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/mit-ghamr/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/mit-ghamr/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/mit-ghamr/odhya" />
   </url>
   <url>
@@ -1590,6 +1752,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/mit-ghamr/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/mit-ghamr/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/mit-ghamr/box" />
   </url>
   <url>
@@ -1598,6 +1761,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/mit-ghamr/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/mit-ghamr/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/mit-ghamr/water" />
   </url>
   <url>
@@ -1606,6 +1770,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/belqas/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/belqas/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/belqas/odhya" />
   </url>
   <url>
@@ -1614,6 +1779,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/belqas/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/belqas/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/belqas/box" />
   </url>
   <url>
@@ -1622,6 +1788,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/belqas/bride" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/belqas/bride?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/belqas/bride" />
   </url>
   <url>
@@ -1630,6 +1797,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/dikirnis/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/dikirnis/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/dikirnis/odhya" />
   </url>
   <url>
@@ -1638,6 +1806,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/dikirnis/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/dikirnis/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/dikirnis/box" />
   </url>
   <url>
@@ -1646,6 +1815,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/dikirnis/education" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/dikirnis/education?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/dikirnis/education" />
   </url>
   <url>
@@ -1654,6 +1824,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/sherbin/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/sherbin/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/sherbin/odhya" />
   </url>
   <url>
@@ -1662,6 +1833,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/sherbin/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/sherbin/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/sherbin/water" />
   </url>
   <url>
@@ -1670,6 +1842,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/aga/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/aga/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/aga/odhya" />
   </url>
   <url>
@@ -1678,6 +1851,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/aga/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/aga/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/aga/box" />
   </url>
   <url>
@@ -1686,6 +1860,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/sinbillawayn/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/sinbillawayn/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/sinbillawayn/odhya" />
   </url>
   <url>
@@ -1694,6 +1869,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/sinbillawayn/zakat" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/sinbillawayn/zakat?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/sinbillawayn/zakat" />
   </url>
   <url>
@@ -1702,6 +1878,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/sinbillawayn/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/sinbillawayn/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/sinbillawayn/box" />
   </url>
   <url>
@@ -1710,6 +1887,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/matareya/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/matareya/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/matareya/odhya" />
   </url>
   <url>
@@ -1718,6 +1896,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/matareya/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/matareya/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/matareya/water" />
   </url>
   <url>
@@ -1726,6 +1905,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/talkha/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/talkha/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/talkha/odhya" />
   </url>
   <url>
@@ -1734,6 +1914,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/talkha/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/talkha/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/talkha/box" />
   </url>
   <url>
@@ -1742,6 +1923,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/nabaroh/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/nabaroh/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/nabaroh/odhya" />
   </url>
   <url>
@@ -1750,6 +1932,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/nabaroh/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/nabaroh/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/nabaroh/box" />
   </url>
   <url>
@@ -1758,6 +1941,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/gamalia/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/gamalia/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/gamalia/odhya" />
   </url>
   <url>
@@ -1766,6 +1950,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/gamalia/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/gamalia/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/gamalia/box" />
   </url>
   <url>
@@ -1774,6 +1959,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/mit-salsil/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/mit-salsil/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/mit-salsil/odhya" />
   </url>
   <url>
@@ -1782,6 +1968,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/mit-salsil/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/mit-salsil/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/mit-salsil/water" />
   </url>
   <url>
@@ -1790,6 +1977,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/bani-ubaid/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/bani-ubaid/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/bani-ubaid/odhya" />
   </url>
   <url>
@@ -1798,6 +1986,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/bani-ubaid/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/bani-ubaid/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/bani-ubaid/box" />
   </url>
   <url>
@@ -1806,6 +1995,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/manzala/odhya" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/manzala/odhya?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/manzala/odhya" />
   </url>
   <url>
@@ -1814,6 +2004,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/manzala/box" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/manzala/box?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/manzala/box" />
   </url>
   <url>
@@ -1822,6 +2013,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/dakahlia/manzala/water" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/dakahlia/manzala/water?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/dakahlia/manzala/water" />
   </url>
 </urlset>

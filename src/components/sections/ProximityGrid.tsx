@@ -9,7 +9,12 @@ import {
 } from "lucide-react";
 import logoCircle from "@/assets/logo-circle.png";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
+import { usePrograms } from "@/data/sources/programs";
 
+/**
+ * Where each door leads. A "/programs/<slug>" target is used only while that program is published on the
+ * backend; otherwise the door opens the donation form (see hrefOf), so no link lands on a closed program.
+ */
 const ITEM_HREF: Record<string, string> = {
   "صدقة جارية": "/donate",       "Ongoing Sadaqah": "/donate",
   "زكاة المال": "/zakat",         "Zakat": "/zakat",
@@ -24,6 +29,8 @@ const ITEM_HREF: Record<string, string> = {
   "جهاز عروس": "/programs/bride", "Bride Trousseau": "/programs/bride",
   "كرتونة الخير": "/programs/box", "Aid Carton": "/programs/box",
 };
+
+const PROGRAM_LINK = /^\/programs\/([^/]+)$/;
 
 // Classic brand-unified card style — no per-card color
 const ITEMS_AR = [
@@ -67,6 +74,13 @@ export const ProximityGrid = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
   const items = isRTL ? ITEMS_AR : ITEMS_EN;
+  const { programs } = usePrograms();
+  const live = new Set(programs.map((p) => p.slug));
+  const hrefOf = (label: string) => {
+    const href = ITEM_HREF[label] || "/donate";
+    const slug = href.match(PROGRAM_LINK)?.[1];
+    return slug && !live.has(slug) ? "/donate" : href;
+  };
 
   const innerItems = items.slice(0, 6);
   const outerItems = items.slice(6, 12);
@@ -227,7 +241,7 @@ export const ProximityGrid = () => {
               const angleDeg = (360 / 6) * i - 90;
               const { x, y } = polarToPercent(angleDeg, innerRadius);
               const Icon = it.icon;
-              const href = ITEM_HREF[it.label] || "/donate";
+              const href = hrefOf(it.label);
               return (
                 <Link
                   key={it.label}
@@ -253,7 +267,7 @@ export const ProximityGrid = () => {
               const angleDeg = (360 / 6) * i - 90 + 30;
               const { x, y } = polarToPercent(angleDeg, outerRadius);
               const Icon = it.icon;
-              const href = ITEM_HREF[it.label] || "/donate";
+              const href = hrefOf(it.label);
               return (
                 <Link
                   key={it.label}

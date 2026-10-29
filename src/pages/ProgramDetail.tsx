@@ -35,7 +35,6 @@ import { useLang } from "@/i18n/LangContext";
 import { usePrograms } from "@/data/sources/programs";
 import { track } from "@/lib/track";
 import { BrideTrousseau } from "@/components/sections/BrideTrousseau";
-import { getDonationNodeBySlug, getDonationNodeById, listDonationNodeChildren } from "@/data/api/publicDonationNodesApi";
 import { RelatedContentLinks } from "@/components/common/RelatedContentLinks";
 import { FieldConvoysGallery } from "@/components/sections/FieldConvoysGallery";
 import { StickyQurbaniCTA } from "@/components/common/StickyQurbaniCTA";
@@ -45,10 +44,12 @@ import { useProgramFaqs } from "@/data/programFaqs";
 import { DetailPageSkeleton } from "@/components/common/ContentSkeletons";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { programSeo } from "@/data/programSeo";
+import { ProgramUnavailable } from "@/components/programs/ProgramUnavailable";
 
 type SubOption = {
   id: string;
   slug: string;
+  packageId: number;
   title_ar: string;
   title_en: string;
   description_ar: string | null;
@@ -63,45 +64,9 @@ const ProgramDetail = () => {
   const { lang, t } = useLang();
   const ALIAS_OF: Record<string, string> = { satr: "shelter", food: "box" };
   const aliasRedirect = slug && ALIAS_OF[slug] ? ALIAS_OF[slug] : undefined;
-  // Static by default; reads /programs when VITE_CONTENT_SOURCE is "api"/"auto" (same shape, static fallback per slug).
+  // Published backend programs (static only when the API is unreachable); see src/data/sources/programs.ts.
   const { programs, isLoading: programsLoading } = usePrograms();
   const program = slug ? programs.find((p) => p.slug === slug) : undefined;
-  const [subOptions, setSubOptions] = useState<SubOption[]>([]);
-  // Parent sector slug — used so "donate to whole program" routes through
-  // the sector view (where the donor can pick any sub-program with any
-  // amount) instead of forcing the program node itself, which may be a
-  // fixed-amount direct_checkout (e.g. odhya).
-  const [parentSectorSlug, setParentSectorSlug] = useState<string>("");
-
-  // Load child donation_nodes by matching the program slug → its children
-  useEffect(() => {
-    if (!slug) return;
-    let alive = true;
-    (async () => {
-      // Laravel GET /donation-nodes (proposed). Returns null/[] while the content source is
-      // "static" or on API error, so the page keeps its static content (no sub-options).
-      const parent = await getDonationNodeBySlug(slug);
-      if (!parent || !alive) return;
-      const kids = await listDonationNodeChildren(parent.id);
-      if (alive) {
-        setSubOptions(kids.map((k) => ({
-          id: k.id, slug: k.slug, title_ar: k.title_ar, title_en: k.title_en,
-          description_ar: k.description_ar, description_en: k.description_en,
-          amount: k.amount, image_url: k.image_url, sort_order: k.sort_order,
-        })));
-      }
-      // Resolve the sector slug above this program (if any) so the
-      // "donate whole program" CTA can land the donor in sector context.
-      if (parent.parent_id) {
-        const sector = await getDonationNodeById(parent.parent_id);
-        if (alive && sector && sector.type === "sector") {
-          setParentSectorSlug(sector.slug);
-        }
-      }
-    })();
-    return () => { alive = false; };
-  }, [slug]);
-
   const reduce = useReducedMotion();
   const isRTL = lang === "ar";
   // Program FAQ: own questions -> linked FAQ category -> "programs" category (see src/data/programFaqs.ts).
@@ -126,7 +91,7 @@ const ProgramDetail = () => {
 
   if (aliasRedirect) return <Navigate to={`/programs/${aliasRedirect}`} replace />;
   if (programsLoading) return <PageLayout><DetailPageSkeleton /></PageLayout>;
-  if (!program) return <Navigate to="/404" replace />;
+  if (!program) return <ProgramUnavailable />;
 
   const content = program[lang];
   const seo = programSeo(program, lang);
@@ -140,9 +105,14 @@ const ProgramDetail = () => {
   const baseUrl = "https://elyusr.org";
   const url = `${baseUrl}/programs/${program.slug}`;
   const related = programs.filter((p) => p.slug !== program.slug).slice(0, 3);
-  const safeSubOptions = Array.isArray(subOptions) ? subOptions : [];
-  const wholeProgramOption = safeSubOptions.find((o) => o && (o.slug === `${program.slug}-whole` || o.slug.endsWith("-whole")));
-  const displaySubOptions = safeSubOptions.filter((o) => o && o.id !== wholeProgramOption?.id);
+  // Donation options = the program's shares from the dashboard (program → «باقات التبرع»).
+  const subOptions: SubOption[] = (program.packages ?? []).map((pk, i) => ({
+    id: String(pk.id), slug: pk.slug, packageId: pk.id,
+    title_ar: pk.nameAr, title_en: pk.nameEn, description_ar: null, description_en: null,
+    amount: pk.amount || null, image_url: null, sort_order: i,
+  }));
+  const safeSubOptions = subOptions;
+  const displaySubOptions = subOptions;
 
   // Section TOC for in-page nav
   const toc = [
@@ -265,7 +235,7 @@ const ProgramDetail = () => {
               price: o.amount ?? undefined,
               priceCurrency: o.amount ? "EGP" : undefined,
               availability: "https://schema.org/InStock",
-              url: `${baseUrl}/donate?program=${program.slug}&node=${o.slug}`,
+              url: `${baseUrl}/donate?program=${program.slug}&package=${o.packageId}`,
               itemOffered: {
                 "@type": "Service",
                 name: isRTL ? o.title_ar : (o.title_en || o.title_ar),
@@ -370,13 +340,18 @@ const ProgramDetail = () => {
 
           <div className="relative mx-auto w-full max-w-md md:max-w-full">
             <div className="absolute -inset-4 rounded-[2.5rem] bg-secondary/25 blur-3xl" />
-            <img decoding="async"
-              src={hero.image}
-              alt={hero.title}
-              fetchpriority="high"
-              className="relative w-full max-h-[360px] sm:max-h-[400px] md:max-h-[440px] lg:max-h-[460px] rounded-[2rem] object-cover object-top shadow-card md:rounded-[2.5rem]"
-              loading="eager"
-            />
+            {/* The whole picture, centred: a blurred copy fills the frame instead of cropping the image. */}
+            <div className="relative aspect-[4/3] max-h-[460px] w-full overflow-hidden rounded-[2rem] bg-primary/30 shadow-card md:rounded-[2.5rem]">
+              <img src={hero.image} alt="" aria-hidden decoding="async"
+                className="absolute inset-0 h-full w-full scale-110 object-cover opacity-60 blur-2xl" />
+              <img decoding="async"
+                src={hero.image}
+                alt={hero.title}
+                fetchpriority="high"
+                className="relative h-full w-full object-contain"
+                loading="eager"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -436,7 +411,7 @@ const ProgramDetail = () => {
         </div>
       </section>
 
-      {/* Donation options (children of this program from donation_nodes) */}
+      {/* Donation options = the program's shares (backend donation_packages) */}
       {subOptions.length > 0 && (
         <section
           id="options"
@@ -484,10 +459,10 @@ const ProgramDetail = () => {
                     <div className="flex flex-wrap gap-2">
                       <Button asChild size="sm" className="flex-1 bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
                         <Link
-                          to={`/donate?program=${program.slug}${o.amount ? `&amount=${o.amount}` : ""}&node=${o.slug}`}
+                          to={`/donate?program=${program.slug}&package=${o.packageId}`}
                           data-source={`program-${program.slug}-options`}
                           data-label={`option-${o.slug}-donate`}
-                          onClick={() => trackCta(`option-${o.slug}-donate`, `/donate?program=${program.slug}&node=${o.slug}`, "InitiateCheckout")}
+                          onClick={() => trackCta(`option-${o.slug}-donate`, `/donate?program=${program.slug}&package=${o.packageId}`, "InitiateCheckout")}
                         >
                           <Heart className="h-4 w-4" />
                           {isRTL ? "تبرع" : "Donate"}
@@ -522,11 +497,7 @@ const ProgramDetail = () => {
               <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
                 <Link
                   to={
-                    wholeProgramOption
-                      ? `/donate?program=${program.slug}&node=${wholeProgramOption.slug}`
-                      : parentSectorSlug
-                      ? `/donate?sector=${parentSectorSlug}&program=${program.slug}`
-                      : `/donate?program=${program.slug}`
+                    `/donate?program=${program.slug}`
                   }
                   data-source={`program-${program.slug}-options`}
                   data-label="donate-whole-program"

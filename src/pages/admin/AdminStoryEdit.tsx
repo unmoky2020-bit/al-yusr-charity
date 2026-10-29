@@ -13,9 +13,10 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
 import { getStoryById, upsertStory, deleteStory, type StoryCard } from "@/data/storiesApi";
-import { donationNodesApi } from "@/data/api/donationNodesApi";
+import { programsApiV1 } from "@/data/laravelApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { casesApiV1, type LaravelCase } from "@/data/laravelApi";
+import { publicUrls } from "@/lib/publicUrls";
 
 type Story = any;
 type Program = { id: string; slug: string; title_ar: string; title_en: string };
@@ -37,7 +38,7 @@ const blank = (): Story => ({
   slug: "", title_ar: "", title_en: "", role_ar: "", role_en: "",
   quote_ar: "", quote_en: "", body_ar: "", body_en: "",
   beneficiary_name: "", location_ar: "", location_en: "",
-  image_url: "", program_node_id: null, pillar_slug: null, case_id: null,
+  image_url: "", program_id: null, pillar_slug: null, case_id: null,
   is_published: false, is_featured: false, sort_order: 0, seo: {},
 });
 
@@ -58,10 +59,10 @@ const Inner = () => {
 
   useEffect(() => {
     (async () => {
-      // Program list for the "link to program" select (proposed GET /donation-nodes?type=program).
-      donationNodesApi.listAll({ type: "program" })
-        .then((nodes) => setPrograms(nodes.filter((n) => n.type === "program").map((n) => ({
-          id: String(n.id), slug: n.slug, title_ar: n.title_ar, title_en: n.title_en || "",
+      // Programs for the "link to program" select (GET /programs, stored as stories.program_id).
+      programsApiV1.listAll()
+        .then((rows) => setPrograms(rows.map((p) => ({
+          id: String(p.id), slug: String(p.slug ?? ""), title_ar: String(p.name_ar || p.name || ""), title_en: String(p.name_en || ""),
         }))))
         .catch(() => setPrograms([]));
 
@@ -131,7 +132,7 @@ const Inner = () => {
       beneficiary_name: data.beneficiary_name || null,
       location_ar: data.location_ar || null, location_en: data.location_en || null,
       image_url: data.image_url || null,
-      program_node_id: data.program_node_id || null,
+      program_id: data.program_id || null,
       pillar_slug: data.pillar_slug || null,
       case_id: data.case_id || null,
       is_published: data.is_published ?? false,
@@ -180,7 +181,7 @@ const Inner = () => {
             </Button>
             {!isNew && data.slug && (
               <Button asChild variant="ghost" size="sm">
-                <a href={`/stories/${data.slug}`} target="_blank" rel="noreferrer">
+                <a href={publicUrls.story(data.slug)} target="_blank" rel="noreferrer">
                   {t("معاينة", "Preview")} <ExternalLink className="ms-1 h-3.5 w-3.5" />
                 </a>
               </Button>
@@ -287,7 +288,7 @@ const Inner = () => {
             <TabsContent value="links" className="space-y-3 pt-3">
               <div className="space-y-3 rounded-2xl bg-card p-4 shadow-soft">
                 <div><Label>{t("اربط ببرنامج", "Link to program")}</Label>
-                  <Select value={data.program_node_id || "__none__"} onValueChange={(v) => upd("program_node_id", v === "__none__" ? null : v)}>
+                  <Select value={data.program_id || "__none__"} onValueChange={(v) => upd("program_id", v === "__none__" ? null : v)}>
                     <SelectTrigger dir={isAr ? "rtl" : "ltr"}><SelectValue placeholder={t("بدون", "None")} /></SelectTrigger>
                     <SelectContent dir={isAr ? "rtl" : "ltr"}>
                       <SelectItem value="__none__">{t("بدون", "None")}</SelectItem>

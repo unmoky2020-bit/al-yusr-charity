@@ -78,7 +78,6 @@ const AdminUsers = lazy(() => import("./pages/admin/AdminUsers.tsx"));
 const AdminProfile = lazy(() => import("./pages/admin/AdminProfile.tsx"));
 const AdminNewsletter = lazy(() => import("./pages/admin/AdminNewsletter.tsx"));
 const AdminNewsletterCampaigns = lazy(() => import("./pages/admin/AdminNewsletterCampaigns.tsx"));
-const AdminDonationNodes = lazy(() => import("./pages/admin/AdminDonationNodes.tsx"));
 const AdminPaymentTransactions = lazy(() => import("./pages/admin/AdminPaymentTransactions.tsx"));
 const AdminAdCampaigns = lazy(() => import("./pages/admin/AdminAdCampaigns.tsx"));
 const AdminCampaignResults = lazy(() => import("./pages/admin/AdminCampaignResults.tsx"));
@@ -293,7 +292,6 @@ const App = () => (
                   <Route path="/admin/profile" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminProfile /></RequireAuth>} />
                   <Route path="/admin/newsletter" element={<RequireAuth roles={["admin"]}><AdminNewsletter /></RequireAuth>} />
                   <Route path="/admin/newsletter/campaigns" element={<RequireAuth roles={["admin"]}><AdminNewsletterCampaigns /></RequireAuth>} />
-                  <Route path="/admin/donation-nodes" element={<RequireAuth roles={["admin"]}><AdminDonationNodes /></RequireAuth>} />
                   <Route path="/admin/transactions" element={<RequireAuth roles={["admin", "caseworker"]}><AdminPaymentTransactions /></RequireAuth>} />
                   <Route path="/admin/ad-campaigns" element={<RequireAuth roles={["admin", "editor"]}><AdminAdCampaigns /></RequireAuth>} />
                   <Route path="/admin/campaign-results" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignResults /></RequireAuth>} />

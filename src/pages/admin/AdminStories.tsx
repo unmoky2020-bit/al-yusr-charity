@@ -23,6 +23,7 @@ import {
 } from "@/data/storiesApi";
 import { casesApi, type LaravelCase } from "@/data/laravelApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
+import { publicUrls } from "@/lib/publicUrls";
 
 type CompletedCase = {
   id: string; ref_code: string; title: string;
@@ -292,7 +293,7 @@ export default function AdminStories() {
 
                     <div className="flex items-center justify-between border-t border-border pt-2 text-[11px]">
                       <span className="font-mono text-muted-foreground">/{s.slug}</span>
-                      <Link to={`/stories/${s.slug}`} target="_blank" rel="noreferrer" className="flex items-center gap-1 font-bold text-accent hover:underline">
+                      <Link to={publicUrls.story(s.slug)} target="_blank" rel="noreferrer" className="flex items-center gap-1 font-bold text-accent hover:underline">
                         {tr(lang, "معاينة", "Preview")} <ExternalLink className="h-3 w-3" />
                       </Link>
                     </div>

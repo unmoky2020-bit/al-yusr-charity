@@ -112,42 +112,6 @@ function urlEntry(e: Entry): string {
   ].filter(Boolean).join("\n");
 }
 
-async function fetchNodes(): Promise<Entry[]> {
-  try {
-    // Laravel `GET /donation-nodes` (proposed in backend-handoff/01-replace-supabase-public.md).
-    // Until it exists this returns [] — the same as the old Supabase source, whose project no longer responds.
-    const full = (await laravelList("/donation-nodes")).filter((r: any) => r && (r.active ?? r.is_active ?? true));
-    const byId = new Map<string, any>();
-    full.forEach((r: any) => byId.set(r.id, r));
-    // Exclude alias programs (they 301-redirect to canonical) and hidden items
-    const ALIAS_OF: Record<string, string> = { satr: "shelter", food: "box" };
-    const isAlias = (n: any) => {
-      const canonical = (n.metadata || {}).canonical_slug || ALIAS_OF[n.slug];
-      return !!(canonical && canonical !== n.slug);
-    };
-    const aliasIds = new Set((full || []).filter(isAlias).map((n: any) => n.id));
-    const entries: Entry[] = [];
-    (full || []).forEach((n: any) => {
-      const meta = (n.metadata || {}) as any;
-      if (meta.noindex || meta.hidden_from_public) return;
-      if (aliasIds.has(n.id)) return;
-      if (n.parent_id && aliasIds.has(n.parent_id)) return;
-      const lastmod = (n.updated_at || "").slice(0, 10) || today;
-      if (!n.parent_id) {
-        entries.push({ path: `/programs/${n.slug}`, lastmod, changefreq: "weekly", priority: "0.85" });
-      } else {
-        const parent = byId.get(n.parent_id);
-        if (parent) {
-          entries.push({ path: `/programs/${parent.slug}/${n.slug}`, lastmod, changefreq: "weekly", priority: "0.7" });
-        }
-      }
-    });
-    return entries;
-  } catch (e) {
-    console.warn("[sitemap] could not fetch donation_nodes:", (e as Error).message);
-    return [];
-  }
-}
 
 async function fetchBlogPosts(): Promise<Entry[]> {
   const map = new Map<string, Entry>();
@@ -231,6 +195,7 @@ async function fetchCases(): Promise<Entry[]> {
 
 // Program pages (/programs/:slug) — the site's main donation pages. Listed inline (importing
 // src/data/programs.ts pulls Vite image imports); the live /programs list adds any new published ones.
+// Used only when the API is unreachable at build time (offline build).
 const STATIC_PROGRAM_SLUGS = [
   "odhya", "zakat", "orphans", "box", "water", "bride", "education",
   "treatment", "shelter", "markoun", "kitchen", "prosthetics", "arboun",
@@ -241,7 +206,9 @@ async function fetchPrograms(): Promise<Entry[]> {
     (p: any) => p && p.status === "published" && p.is_active !== false && !p.hide_from_audience && /^[a-z0-9-]+$/.test(String(p.slug || "")),
   );
   const lastmodOf = new Map<string, string>(live.map((p: any) => [p.slug, String(p.updated_at || "").slice(0, 10)]));
-  const slugs = new Set<string>([...STATIC_PROGRAM_SLUGS, ...live.map((p: any) => String(p.slug))]);
+  // Published backend programs only: an inactive program's page is "unavailable" (noindex), so it must
+  // not be in the sitemap. The static list is a fallback for an offline build.
+  const slugs = new Set<string>(live.length ? live.map((p: any) => String(p.slug)) : STATIC_PROGRAM_SLUGS);
   return [...slugs].map((slug) => ({
     path: `/programs/${slug}`,
     lastmod: lastmodOf.get(slug) || today,
@@ -259,8 +226,8 @@ const STATIC_BLOG_SLUGS: { slug: string; date: string }[] = [
 ];
 
 (async () => {
-  const [nodes, blog, stories, cases, programPages] = await Promise.all([
-    fetchNodes(), fetchBlogPosts(), fetchStories(), fetchCases(), fetchPrograms(),
+  const [blog, stories, cases, programPages] = await Promise.all([
+    fetchBlogPosts(), fetchStories(), fetchCases(), fetchPrograms(),
   ]);
   const blogSlugs = new Set(blog.map((b) => b.path));
   const staticBlog: Entry[] = STATIC_BLOG_SLUGS
@@ -293,8 +260,7 @@ const STATIC_BLOG_SLUGS: { slug: string; date: string }[] = [
       priority: "0.8",
     })),
   );
-  const nodePaths = new Set(nodes.map((n) => n.path));
-  const dyn = [...nodes, ...programPages.filter((p) => !nodePaths.has(p.path)), ...blog, ...staticBlog, ...stories, ...cases, ...geo, ...cities, ...donateCities, ...cityPrograms];
+  const dyn = [...programPages, ...blog, ...staticBlog, ...stories, ...cases, ...geo, ...cities, ...donateCities, ...cityPrograms];
   const all = [...staticEntries, ...serviceEntries, ...dyn];
   const xml = [
     `<?xml version="1.0" encoding="UTF-8"?>`,

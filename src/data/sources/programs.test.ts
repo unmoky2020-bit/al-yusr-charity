@@ -72,12 +72,11 @@ describe("programs source", () => {
     expect(resolvePrograms([API_PROGRAM_ORPHANS], "static")).toBe(programs);
   });
 
-  it("api mode: replaces published slugs, keeps static for unpublished/missing, appends new ones", () => {
+  it("api mode: exactly the published backend programs — no static additions, inactive ones dropped", () => {
     const list = resolvePrograms([API_PROGRAM_ORPHANS, API_PROGRAM_ZAKAT_INACTIVE, API_PROGRAM_URL_SLUG], "api");
-    expect(list.slice(0, programs.length).map((p) => p.slug)).toEqual(programs.map((p) => p.slug));
-    expect(list.find((p) => p.slug === "zakat")).toBe(getProgram("zakat"));
+    expect(list.map((p) => p.slug).sort()).toEqual(["food-box", "orphans"]);
+    expect(list.find((p) => p.slug === "zakat")).toBeUndefined();
     expect(list.find((p) => p.slug === "orphans")!.priceFrom).toBe(300);
-    expect(list[list.length - 1].slug).toBe("food-box");
     expect(programSlugOf({ slug: "general-donation" })).toBe("general");
   });
 

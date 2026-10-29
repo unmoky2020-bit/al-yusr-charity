@@ -1,9 +1,10 @@
 /**
  * Programs content source.
- *   static: `programs` / `getProgram` from src/data/programs.ts (unchanged).
- *   api:    GET /programs (list) — each record mapped to `ProgramContent`; a slug the API does not publish
- *           keeps its static copy, and any missing field on an API record falls back to the static program
- *           with the same slug.
+ *   static: `programs` / `getProgram` from src/data/programs.ts — also the offline fallback when the API
+ *           cannot be reached.
+ *   api:    GET /programs — exactly the public (active, not hidden) backend programs, in sort_order, every
+ *           field from the record. A program that is missing or inactive on the backend is not listed and its
+ *           page shows «البرنامج غير متاح حالياً»; static copies never add programs or fill backend fields.
  */
 import { programs as STATIC_PROGRAMS, type ProgramContent } from "@/data/programs";
 import { CONTENT_SOURCE, type ContentSource } from "@/lib/contentSource";
@@ -12,7 +13,6 @@ import {
   fetchPublicList,
   image,
   isPublicRecord,
-  mergeByKey,
   num,
   paragraphs,
   pick,
@@ -125,6 +125,18 @@ export function mapApiProgram(raw: ApiRecord, fallback?: ProgramContent): Progra
   const apiId = num(r.id);
   if (apiId) out.apiId = apiId;
 
+  const packages = (Array.isArray(r.donation_packages) ? (r.donation_packages as ApiRecord[]) : [])
+    .filter((p) => p && p.is_active !== false && num(p.id))
+    .sort((a, b) => (num(a.sort_order) ?? 0) - (num(b.sort_order) ?? 0))
+    .map((p) => ({
+      id: num(p.id) as number,
+      slug: pick(p.key) ?? String(p.id),
+      nameAr: pick(p.name_ar, p.name) ?? "",
+      nameEn: pick(p.name_en, p.name_ar, p.name) ?? "",
+      amount: num(p.amount) ?? 0,
+    }));
+  if (packages.length) out.packages = packages;
+
   // FAQ category linked in the dashboard (programs.faq_category_id → resource `faq_category`).
   const linkedFaq = r.faq_category;
   const faqCategory = linkedFaq && typeof linkedFaq === "object" ? pick((linkedFaq as ApiRecord).slug) : undefined;
@@ -132,17 +144,16 @@ export function mapApiProgram(raw: ApiRecord, fallback?: ProgramContent): Progra
   return out;
 }
 
-/** Final programs list from raw /programs records (pure; used by the hook and the tests). */
+/**
+ * Final programs list from raw /programs records (pure; used by the hook and the tests).
+ * Static only for the static source or when the API answered nothing at all (offline / empty database).
+ */
 export function resolvePrograms(records: ApiRecord[] | undefined, source: ContentSource = CONTENT_SOURCE): ProgramContent[] {
   if (source === "static" || !records || !records.length) return STATIC_PROGRAMS;
-  const bySlug = new Map(STATIC_PROGRAMS.map((p) => [p.slug, p]));
-  const withSlug = records.filter((r) => programSlugOf(r));
-  const hidden = new Set(withSlug.filter((r) => !isPublicRecord(r)).map(programSlugOf));
-  const mapped = withSlug
-    .filter(isPublicRecord)
+  return records
+    .filter((r) => programSlugOf(r) && isPublicRecord(r))
     .sort((a, b) => (num(a.sort_order) ?? 0) - (num(b.sort_order) ?? 0))
-    .map((r) => mapApiProgram(r, bySlug.get(programSlugOf(r))));
-  return mergeByKey(STATIC_PROGRAMS, mapped, (p) => p.slug, hidden);
+    .map((r) => mapApiProgram(r));
 }
 
 export async function fetchProgramRecords(): Promise<ApiRecord[]> {

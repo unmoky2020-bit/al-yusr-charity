@@ -59,8 +59,19 @@ export type ProgramContent = {
   seo?: { ar: { title?: string; description?: string }; en: { title?: string; description?: string } };
   /** Backend id (API mode) — used to load the program's cases. */
   apiId?: number;
+  /** The program's shares (backend donation_packages, active, in order) — its "donation options". */
+  packages?: ProgramPackage[];
   /** FAQ category linked in the dashboard (program → «الأسئلة الشائعة» tab, stored on the faq page section). */
   faqCategory?: string;
+};
+
+export type ProgramPackage = {
+  id: number;
+  /** Stable URL part: the package key when set, else its id. */
+  slug: string;
+  nameAr: string;
+  nameEn: string;
+  amount: number;
 };
 
 export const programs: ProgramContent[] = [

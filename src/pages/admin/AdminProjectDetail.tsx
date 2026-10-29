@@ -32,6 +32,7 @@ import {
   PROPOSED_PROJECT_KEYS,
   type ProjectForm,
 } from "@/components/admin/programs/projectForm";
+import { publicUrls } from "@/lib/publicUrls";
 
 const triggerCls = "rounded-xl px-3 py-2 text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs";
 
@@ -259,6 +260,11 @@ export default function AdminProjectDetail() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            {!isNew && form.slug && (
+              <Button asChild variant="outline" size="sm" className="gap-1 font-bold">
+                <Link to={publicUrls.project(form.slug)} target="_blank" rel="noreferrer"><Eye className="h-3.5 w-3.5" /> معاينة بالموقع</Link>
+              </Button>
+            )}
             <Button onClick={save} disabled={saving} className="bg-orange-grad font-extrabold text-accent-foreground" size="sm">
               {saving ? <Loader2 className="me-1 h-4 w-4 animate-spin" /> : <Save className="me-1 h-4 w-4" />} حفظ
             </Button>

@@ -16,12 +16,6 @@ export const BACKEND_PENDING_AR = "يحتاج تفعيل من الباك إند"
  * `partial`: the screen works, only the listed parts are missing.
  */
 export const PENDING_ADMIN_SCREENS: Record<string, { partial: boolean; missing: string[] }> = {
-  "/admin/newsletter": { partial: true, missing: ["حملات النشرة البريدية: /newsletter-campaigns (محتاجة جدول جديد)"] },
-  "/admin/newsletter/campaigns": { partial: false, missing: ["/newsletter-campaigns (عرض، إنشاء، تعديل، إرسال)"] },
-  "/admin/transactions": { partial: false, missing: ["معاملات الدفع: /payment-transactions — بيانات الدفع موجودة حالياً في شاشة التبرعات"] },
-  "/admin/donation-nodes": { partial: false, missing: ["شجرة التبرع: /donation-nodes (محتاجة جدول جديد)"] },
-  "/admin/services": { partial: false, missing: ["الخدمات: /services و /service-categories — الجدول الحالي ناقصه أعمدة الصفحة (المقدمة، الأرقام، المميزات، الباقات، الأسئلة) وموديل Service مش موجود؛ محتاج migration"] },
-  "/admin/campaigns": { partial: true, missing: ["حالة «حضر» و«لم يحضر» للمتطوع: محتاجة قيم جديدة في عمود status بجدول volunteer_campaign_applications (migration)"] },
 };
 
 /** The pending entry for a pathname (exact match, then the closest parent like /admin/cases/12). */

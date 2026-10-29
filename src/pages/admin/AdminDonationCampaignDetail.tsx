@@ -55,6 +55,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { HeroPanel, HadithPanel, StatsPanel, SectionsPanel, CtaPanel, campaignSectionTabs, sectionKeysFor } from "@/components/admin/CampaignPageContentEditor";
 import { getCampaignPageMetaForCampaign, mergeCampaignContent, type CampaignPageContent } from "@/data/campaignPages";
 import { campaignPagesApi, contentFromCampaign, seoColumnFromForm, toCampaignColumns } from "@/data/campaignPages/api";
+import { publicUrls } from "@/lib/publicUrls";
 
 const EMPTY_SEO: CampaignSeoData = {
   meta_title_ar: "",
@@ -444,7 +445,7 @@ export default function AdminDonationCampaignDetail() {
   const target = Number(campaign.target_amount || 0);
   const collected = Number(campaign.collected_amount || 0);
   const pct = target > 0 ? Math.min(100, Math.round((collected / target) * 100)) : 0;
-  const previewHref = `/campaigns/${campaign.slug || ""}`;
+  const previewHref = publicUrls.donationCampaign(campaign);
 
   return (
     <AdminLayout

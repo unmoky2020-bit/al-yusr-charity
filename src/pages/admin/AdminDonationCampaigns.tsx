@@ -30,6 +30,7 @@ import { BACKEND_PENDING_AR, describeWriteError } from "@/data/api/backendPendin
 import { CampaignPackagesManager } from "@/components/admin/campaigns/CampaignPackagesManager";
 import { sortPackages, type PackagePriceKey } from "@/components/admin/campaigns/packageHelpers";
 import { getCampaignPageMetaForCampaign } from "@/data/campaignPages";
+import { publicUrls } from "@/lib/publicUrls";
 
 export default function AdminDonationCampaigns() {
   const { lang } = useLang();
@@ -563,7 +564,7 @@ export default function AdminDonationCampaigns() {
 
                     <div className="absolute top-2.5 end-2.5">
                       <Link
-                        to={`/campaigns/${camp.slug}`}
+                        to={publicUrls.donationCampaign(camp)}
                         target="_blank"
                         className="flex h-7 w-7 items-center justify-center rounded-lg bg-background/80 text-foreground backdrop-blur hover:bg-background shadow-sm"
                         title={isAr ? "معاينة الحملة" : "Preview"}

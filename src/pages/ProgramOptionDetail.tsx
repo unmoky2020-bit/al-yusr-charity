@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowLeft, ArrowRight, Heart, Loader2, ShieldCheck, Camera, Truck, CheckCircle2, Sparkles } from "lucide-react";
@@ -9,7 +9,6 @@ import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
-import { getDonationNodeBySlug, listDonationNodeChildren } from "@/data/api/publicDonationNodesApi";
 import { usePrograms } from "@/data/sources/programs";
 import { track } from "@/lib/track";
 import { RelatedContentLinks } from "@/components/common/RelatedContentLinks";
@@ -34,38 +33,26 @@ const ProgramOptionDetail = () => {
   // Auto-redirect alias parent slugs to canonical (keeps option path intact)
   const ALIAS_OF: Record<string, string> = { satr: "shelter", food: "box" };
   // Static by default; reads /programs when VITE_CONTENT_SOURCE is "api"/"auto". Called before the alias return (rules of hooks).
-  const { programs } = usePrograms();
+  // An option is one of the program's shares (backend donation_packages): /programs/{slug}/{key or id}.
+  const { programs, isLoading } = usePrograms();
+  const program = slug ? programs.find((p) => p.slug === slug) : undefined;
+  const siblings: Node[] = (program?.packages ?? []).map((pk) => ({
+    id: String(pk.id), slug: pk.slug, type: "option", parent_id: null,
+    title_ar: pk.nameAr, title_en: pk.nameEn, description_ar: null, description_en: null,
+    image_url: null, amount: pk.amount || null, target_amount: null, collected_amount: 0, active: true, metadata: null,
+  }));
+  const node = siblings.find((n) => n.slug === option || n.id === option) ?? null;
+  const parent: Node | null = null;
+
+  useEffect(() => {
+    if (node) track("option_view", { fbEvent: "ViewContent", payload: { program: slug, option, source: "option-detail" } });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [node?.id]);
+
   if (slug && ALIAS_OF[slug]) {
     return <Navigate to={`/programs/${ALIAS_OF[slug]}/${option || ""}`} replace />;
   }
-  const [node, setNode] = useState<Node | null>(null);
-  const [parent, setParent] = useState<Node | null>(null);
-  const [siblings, setSiblings] = useState<Node[]>([]);
-  const [loading, setLoading] = useState(true);
-  const program = slug ? programs.find((p) => p.slug === slug) : undefined;
-
-  useEffect(() => {
-    if (!slug || !option) return;
-    let alive = true;
-    (async () => {
-      setLoading(true);
-      // Laravel GET /donation-nodes (proposed). null/[] while the content source is "static"
-      // or on API error → the page redirects to the program page (no option data).
-      const p = await getDonationNodeBySlug(slug);
-      if (!p || !alive) { setLoading(false); return; }
-      const sibs = await listDonationNodeChildren(p.id);
-      const child = sibs.find((n) => n.slug === option) ?? null;
-      if (!alive) return;
-      setParent(p); setNode(child); setSiblings(sibs);
-      setLoading(false);
-      if (child) {
-        track("option_view", { fbEvent: "ViewContent", payload: { program: slug, option, source: "option-detail" } });
-      }
-    })();
-    return () => { alive = false; };
-  }, [slug, option]);
-
-  if (loading) {
+  if (isLoading && !node) {
     return <PageLayout><div className="container mx-auto grid place-items-center py-24"><Loader2 className="h-7 w-7 animate-spin text-primary" /></div></PageLayout>;
   }
   if (!node) return <Navigate to={`/programs/${slug || ""}`} replace />;
@@ -91,7 +78,7 @@ const ProgramOptionDetail = () => {
     const [q, ...rest] = l.split("|"); return { q: (q || "").trim(), a: rest.join("|").trim() };
   }).filter((x: any) => x.q && x.a);
 
-  const donateHref = `/donate?program=${slug}&node=${option}${node.amount ? `&amount=${node.amount}` : ""}`;
+  const donateHref = `/donate?program=${slug}&package=${node.id}`;
 
   // Schema
   const baseSchema: any = {
@@ -285,7 +272,7 @@ const ProgramOptionDetail = () => {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {siblings.filter((s) => s.id !== node.id).map((s) => {
                 const stitle = isRTL ? s.title_ar : (s.title_en || s.title_ar);
-                const sDonate = `/donate?program=${slug}&node=${s.slug}${s.amount ? `&amount=${s.amount}` : ""}`;
+                const sDonate = `/donate?program=${slug}&package=${s.id}`;
                 return (
                   <div key={s.id} className="group flex flex-col justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-1 hover:shadow-card">
                     <div>

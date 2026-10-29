@@ -10,7 +10,6 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { getStoryBySlug, listPublishedStories, type StoryCard } from "@/data/storiesApi";
-import { getDonationNodeById } from "@/data/api/publicDonationNodesApi";
 import { toast } from "@/hooks/use-toast";
 
 export default function StoryDetail() {
@@ -32,11 +31,8 @@ export default function StoryDetail() {
       if (cancelled) return;
       setStory(data || null);
 
-      if (data?.program_node_id) {
-        // Laravel GET /donation-nodes/{id} (proposed); null in "static" mode or on error.
-        const p = await getDonationNodeById(String(data.program_node_id));
-        if (!cancelled) setProgram(p ? { slug: p.slug, title_ar: p.title_ar, title_en: p.title_en } : null);
-      }
+      // The program the story belongs to comes with the story (stories.program_id → `program`).
+      setProgram(data?.program ? { slug: data.program.slug, title_ar: data.program.name_ar, title_en: data.program.name_en } : null);
 
       // Fetch related stories (excluding current)
       const all = await listPublishedStories();

@@ -40,6 +40,7 @@ import {
   type ProgramForm,
   type TopSectionForm,
 } from "@/components/admin/programs/programForm";
+import { publicUrls } from "@/lib/publicUrls";
 
 const triggerCls = "rounded-xl px-3 py-2 text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs";
 
@@ -262,7 +263,7 @@ export default function AdminProgramDetail() {
           <div className="flex flex-wrap items-center gap-2.5">
             {!isNew && form.slug && (
               <Button asChild variant="ghost" size="sm" className="gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
-                <Link to={`/programs/${form.slug}`} target="_blank"><ExternalLink className="h-3.5 w-3.5" /> معاينة بالموقع</Link>
+                <Link to={publicUrls.program(form.slug)} target="_blank"><ExternalLink className="h-3.5 w-3.5" /> معاينة بالموقع</Link>
               </Button>
             )}
             {!isNew && (
