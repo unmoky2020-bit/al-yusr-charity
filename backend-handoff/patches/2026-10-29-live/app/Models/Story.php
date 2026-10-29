@@ -14,6 +14,8 @@ class Story extends Model
         'slug',
         'title_ar',
         'title_en',
+        'quote_ar',
+        'quote_en',
         'category_ar',
         'category_en',
         'beneficiary_name',

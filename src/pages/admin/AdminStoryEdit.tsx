@@ -270,11 +270,13 @@ const Inner = () => {
 
             <TabsContent value="content" className="space-y-3 pt-3">
               <div className="space-y-3 rounded-2xl bg-card p-4 shadow-soft">
-                <div><Label>{t("اقتباس قصير (عربي)", "Short quote (AR)")}</Label>
-                  <Textarea rows={2} dir="rtl" value={data.quote_ar || ""} onChange={(e) => upd("quote_ar", e.target.value)} />
+                <div><Label>{t("القصة القصيرة (عربي) — بتظهر في الرئيسية في «أثرنا في حياة أسرة»", "Short story (AR) — shown on the home page")}</Label>
+                  <Textarea rows={2} maxLength={300} dir="rtl" value={data.quote_ar || ""} onChange={(e) => upd("quote_ar", e.target.value)}
+                    placeholder={t("سطرين: إزاي اتغيرت حياة الأسرة بتبرعكم", "Two lines: how the family's life changed")} />
+                  <p className="mt-1 text-[11px] text-muted-foreground">{(data.quote_ar || "").length}/300 — {t("الأفضل سطرين تقريباً (حوالي 150 حرف)", "About two lines (~150 characters) reads best")}</p>
                 </div>
-                <div><Label>Short quote (EN)</Label>
-                  <Textarea rows={2} dir="ltr" value={data.quote_en || ""} onChange={(e) => upd("quote_en", e.target.value)} />
+                <div><Label>Short story (EN)</Label>
+                  <Textarea rows={2} maxLength={300} dir="ltr" value={data.quote_en || ""} onChange={(e) => upd("quote_en", e.target.value)} />
                 </div>
                 <div><Label>{t("نص القصة الكامل (عربي)", "Full story body (AR)")}</Label>
                   <Textarea rows={10} dir="rtl" value={data.body_ar || ""} onChange={(e) => upd("body_ar", e.target.value)} />

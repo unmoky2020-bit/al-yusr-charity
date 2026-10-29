@@ -15,6 +15,8 @@ class StoreStoryRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'quote_ar' => ['sometimes', 'nullable', 'string', 'max:300'],
+            'quote_en' => ['sometimes', 'nullable', 'string', 'max:300'],
             'program_id' => ['sometimes', 'nullable', 'integer', 'exists:programs,id'],
             'slug' => ['required','string','max:255','unique:stories,slug'],
             'title_ar' => ['required','string','max:255'],

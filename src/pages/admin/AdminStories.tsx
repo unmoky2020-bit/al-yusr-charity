@@ -196,7 +196,7 @@ export default function AdminStories() {
             </h1>
             <p className="mt-0.5 text-xs text-muted-foreground">
               {tr(lang,
-                "أنشئ قصص الأثر، اربطها ببرنامج أو محور، وتحكّم بظهورها في قسم «شهادات الميدان» بالصفحة الرئيسية.",
+                "أنشئ قصص الأثر، اربطها ببرنامج أو محور، وتحكّم بظهورها في قسم «أثرنا في حياة أسرة» بالصفحة الرئيسية (القصص المميزة بتظهر هناك بالتناوب: الصورة، والقصة القصيرة، واسم الشخص).",
                 "Create impact stories, link to a program or pillar, and control visibility in the homepage Testimonials section."
               )}
             </p>

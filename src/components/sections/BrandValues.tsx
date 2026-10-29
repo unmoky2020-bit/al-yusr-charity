@@ -1,31 +1,28 @@
-import { Sparkles, HeartHandshake, ShieldCheck, BadgeCheck, Sprout, Heart } from "lucide-react";
+import { Sparkles, HeartHandshake, ShieldCheck, Workflow, Heart, ArrowDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLang } from "@/i18n/LangContext";
 
 /**
- * Al-Yusr brand values — extracted from official brand identity book.
- * Five core values: Empowerment, Mercy, Transparency, Responsibility, Sustainability.
+ * Al-Yusr's working principle: three pillars (strength of work, excellence in giving, trust in
+ * delivery) that together lead to the result — the slogan «نصل بصدقتك لمن يستحق».
  * Visual treatment matches the brand book: deep green ground + lime leaf shapes + warm orange highlight.
  */
 export const BrandValues = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
 
-  const values = isRTL
+  const pillars = isRTL
     ? [
-        { I: Sparkles, t: "التمكين", d: "ندعم الأسر لتعتمد على نفسها لا على الإحسان وحده." },
-        { I: HeartHandshake, t: "الرحمة", d: "نسلّم الخير بكرامة، نحفظ ماء الوجه قبل الكرتونة." },
-        { I: ShieldCheck, t: "الشفافية", d: "كل تبرع موثّق بالصور والفيديو وتقرير مفتوح." },
-        { I: BadgeCheck, t: "المسؤولية", d: "أمانة شرعية وقانونية لكل قرش — مرخّصة 2665/2019." },
-        { I: Sprout, t: "الاستدامة", d: "برامج تنموية، مش مجرد إغاثة لحظية." },
+        { I: Workflow, t: "قوة العمل", d: "نظام قوي يعمل لتحقيق أقصى استفادة للمتبرع." },
+        { I: HeartHandshake, t: "إحسان العطاء", d: "الصدقة لله قبل الفقير." },
+        { I: ShieldCheck, t: "أمانة التوصيل", d: "صدقتك أمانة نتعامل معها بكل شفافية." },
       ]
     : [
-        { I: Sparkles, t: "Empowerment", d: "We help families stand on their own — beyond one-off aid." },
-        { I: HeartHandshake, t: "Mercy", d: "Doorstep delivery — dignity before the box." },
-        { I: ShieldCheck, t: "Transparency", d: "Every donation documented with photo, video and open report." },
-        { I: BadgeCheck, t: "Responsibility", d: "Trust over every penny — Licensed NGO 2665/2019." },
-        { I: Sprout, t: "Sustainability", d: "Development programs, not just one-time relief." },
+        { I: Workflow, t: "Strength of work", d: "A strong system that makes every donation go as far as it can." },
+        { I: HeartHandshake, t: "Excellence in giving", d: "Charity is given to God before it reaches the needy." },
+        { I: ShieldCheck, t: "Trust in delivery", d: "Your donation is a trust we handle with full transparency." },
       ];
+  const slogan = isRTL ? "نصل بصدقتك لمن يستحق" : "We bring your charity to those who deserve it";
 
   return (
     <section id="why-alyusr" className="relative overflow-hidden bg-[hsl(152_70%_8%)] text-primary-foreground py-10 md:py-14">
@@ -51,40 +48,52 @@ export const BrandValues = () => {
         <div className="mx-auto max-w-xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary/30 bg-secondary/15 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-secondary">
             <Sparkles className="h-3 w-3" />
-            {isRTL ? "لماذا اليسر؟" : "Why Al-Yusr?"}
+            {isRTL ? "مبدأ نعمل به" : "The principle we work by"}
           </span>
           <h2 className="mt-2 text-xl font-black leading-tight md:text-3xl">
-            {isRTL ? "قــوة · أمانــة · إحســان" : "Strength · Trust · Charity"}
+            {isRTL ? "قوة · إحسان · أمانة" : "Strength · Excellence · Trust"}
           </h2>
           <p className="mx-auto mt-1.5 max-w-lg text-[12px] leading-relaxed text-primary-foreground/85 md:text-sm">
             {isRTL
-              ? "خمس قيم بنشتغل بيها كل يوم — صدقتك توصل بأمانة، موثّقة، وبكرامة محفوظة."
-              : "Five values we live by — your gift arrives with trust, documented, and dignity intact."}
+              ? "تلات مبادئ بنشتغل بيها كل يوم، ونتيجتها واحدة."
+              : "Three principles we work by every day, with one result."}
           </p>
         </div>
 
-        <ul className="mx-auto mt-5 grid max-w-7xl grid-cols-2 gap-2.5 md:mt-7 md:gap-3 lg:grid-cols-5">
-          {values.map((v, i) => {
-            const isLastOdd = values.length % 2 === 1 && i === values.length - 1;
-            return (
-              <li
-                key={v.t}
-                className={`group relative flex flex-col items-center gap-2 overflow-hidden rounded-2xl border border-primary-foreground/15 bg-[hsl(152_55%_14%)]/80 p-3.5 text-center shadow-[inset_0_1px_0_hsl(0_0%_100%/0.06),0_8px_24px_-14px_hsl(0_0%_0%/0.5)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-secondary/45 hover:bg-[hsl(152_55%_16%)]/85 hover:shadow-[inset_0_1px_0_hsl(0_0%_100%/0.08),0_12px_28px_-12px_hsl(0_0%_0%/0.55)] md:items-start md:p-4 md:text-start lg:col-span-1 ${
-                  isLastOdd ? "col-span-2 lg:col-span-1" : ""
-                }`}
-                style={{ animationDelay: `${i * 80}ms` }}
-              >
-                {/* soft top accent line */}
-                <span aria-hidden className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent" />
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-secondary/20 text-secondary ring-1 ring-secondary/30 transition group-hover:bg-secondary group-hover:text-secondary-foreground group-hover:ring-secondary/60 md:h-11 md:w-11">
-                  <v.I className="h-[18px] w-[18px]" />
-                </div>
-                <h3 className="text-[13px] font-black tracking-tight text-primary-foreground md:text-sm">{v.t}</h3>
-                <p className="text-[11px] leading-relaxed text-primary-foreground/80 md:text-xs">{v.d}</p>
-              </li>
-            );
-          })}
+        <ul className="mx-auto mt-6 grid max-w-5xl grid-cols-1 gap-3 sm:grid-cols-3 md:mt-8 md:gap-4">
+          {pillars.map((v, i) => (
+            <li
+              key={v.t}
+              className="group relative flex flex-col items-center gap-2 overflow-hidden rounded-2xl border border-primary-foreground/15 bg-[hsl(152_55%_14%)]/80 p-4 text-center shadow-[inset_0_1px_0_hsl(0_0%_100%/0.06),0_8px_24px_-14px_hsl(0_0%_0%/0.5)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-secondary/45 hover:bg-[hsl(152_55%_16%)]/85 md:p-5"
+              style={{ animationDelay: `${i * 80}ms` }}
+            >
+              <span aria-hidden className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent" />
+              <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary/20 text-secondary ring-1 ring-secondary/30 transition group-hover:bg-secondary group-hover:text-secondary-foreground md:h-12 md:w-12">
+                <v.I className="h-5 w-5" />
+              </div>
+              <h3 className="text-base font-black tracking-tight text-primary-foreground md:text-lg">{v.t}</h3>
+              <p className="text-[13px] leading-relaxed text-primary-foreground/85 md:text-sm">{v.d}</p>
+            </li>
+          ))}
         </ul>
+
+        {/* The three pillars meet in one result: the slogan */}
+        <div aria-hidden className="mx-auto hidden h-14 max-w-5xl sm:block">
+          <svg viewBox="0 0 300 56" preserveAspectRatio="none" className="h-full w-full text-secondary/70">
+            <path d="M50 0 C50 30 150 26 150 52 M150 0 L150 52 M250 0 C250 30 150 26 150 52" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" />
+          </svg>
+        </div>
+        <div aria-hidden className="mx-auto mt-3 flex justify-center text-secondary sm:hidden">
+          <ArrowDown className="h-6 w-6" />
+        </div>
+        <div className="mx-auto mt-1 flex max-w-xl flex-col items-center text-center">
+          <span className="text-[10px] font-extrabold uppercase tracking-wider text-primary-foreground/70">
+            {isRTL ? "نتيجة مبادئنا" : "What our principles add up to"}
+          </span>
+          <p className="mt-2 rounded-2xl bg-secondary px-6 py-3 text-lg font-black text-secondary-foreground shadow-cta md:text-2xl">
+            {slogan}
+          </p>
+        </div>
 
         <div className="mx-auto mt-6 grid max-w-2xl grid-cols-2 gap-2.5 md:mt-8 md:gap-3">
           <Link

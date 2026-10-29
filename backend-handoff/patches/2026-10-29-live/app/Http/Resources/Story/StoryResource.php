@@ -16,6 +16,8 @@ class StoryResource extends JsonResource
             'program' => $this->program ? ['id' => $this->program->id, 'slug' => $this->program->slug, 'name_ar' => $this->program->name_ar ?: $this->program->name, 'name_en' => $this->program->name_en] : null,
             'title_ar' => $this->title_ar,
             'title_en' => $this->title_en,
+            'quote_ar' => $this->quote_ar,
+            'quote_en' => $this->quote_en,
             'category_ar' => $this->category_ar,
             'category_en' => $this->category_en,
             'beneficiary_name' => $this->beneficiary_name,

@@ -1,29 +1,34 @@
 import { useEffect, useState } from "react";
-import { Quote, ChevronLeft, ChevronRight, Star, ArrowLeft, ArrowRight } from "lucide-react";
+import { Quote, ChevronLeft, ChevronRight, ArrowLeft, ArrowRight } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 import { listFeaturedStories, STATIC_STORIES, type StoryCard } from "@/data/storiesApi";
 import { Link } from "react-router-dom";
 
-// Static fallback shown immediately — replaced once async resolves
-const INITIAL_ITEMS = STATIC_STORIES.filter((s) => s.is_featured && s.is_published);
+/** Used only when the API is unreachable. */
+const OFFLINE_ITEMS = STATIC_STORIES.filter((s) => s.is_featured && s.is_published);
 
+/**
+ * «أثرنا في حياة أسرة» — rotating short stories from the dashboard («قصص الأثر»): the photo, a story
+ * of about two lines and the person's name. The stories marked «مميزة» are shown (else the latest),
+ * so the section changes whenever the team adds or features a new one.
+ */
 export const Testimonial = () => {
   const { lang } = useLang();
   const isAR = lang === "ar";
-  const [items, setItems] = useState<StoryCard[]>(INITIAL_ITEMS);
+  const [items, setItems] = useState<StoryCard[]>([]);
   const [i, setI] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
 
     const loadStories = async () => {
       try {
-        const stories = await listFeaturedStories(5);
+        const stories = await listFeaturedStories(6);
         if (cancelled) return;
-        if (stories.length > 0) setItems(stories);
+        setItems(stories.length > 0 ? stories : OFFLINE_ITEMS);
       } catch {
-        // keep initial static fallback
+        if (!cancelled) setItems(OFFLINE_ITEMS);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -47,33 +52,40 @@ export const Testimonial = () => {
   const Arrow = isAR ? ArrowLeft : ArrowRight;
 
   const it = items[i];
-  if (!it) return null;
+  if (!it && !loading) return null;
 
-  const title  = isAR ? it.title_ar  : (it.title_en  || it.title_ar);
-  const role   = isAR ? it.role_ar   : (it.role_en   || it.role_ar);
-  const quote  = isAR ? it.quote_ar  : (it.quote_en  || it.quote_ar);
+  const name = it ? (it.beneficiary_name || (isAR ? it.title_ar : it.title_en || it.title_ar)) : "";
+  const role = it ? (isAR ? it.role_ar : it.role_en || it.role_ar) : "";
+  const story = it ? (isAR ? it.quote_ar : it.quote_en || it.quote_ar) : "";
 
   return (
     <section className="relative overflow-hidden bg-muted/40 pattern-hero-soft py-16 md:py-24">
       <div className="container relative mx-auto px-4">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-block rounded-full bg-secondary/15 px-4 py-1 text-[11px] font-extrabold text-primary">
-            {isAR ? "شهادات الميدان" : "Field testimonials"}
+            {isAR ? "قصص الأثر" : "Impact stories"}
           </span>
           <h2 className="mt-3 text-2xl font-black leading-[1.3] text-primary md:text-4xl">
-            {isAR ? "قصص حقيقية... تغيير حقيقي" : "Real stories… real change"}
+            {isAR ? "أثرنا في حياة أسرة" : "Our impact on a family's life"}
           </h2>
         </div>
 
         <div className="mx-auto mt-10 max-w-4xl">
           <div className="relative overflow-hidden rounded-3xl bg-card p-5 shadow-card ring-1 ring-border md:p-10">
-            <div key={i} className="animate-fade-in-up flex flex-col items-center gap-6 md:flex-row md:items-start">
-              {/* Avatar / image */}
+            {!it ? (
+              <div className="flex animate-pulse flex-col items-center gap-6 md:flex-row" aria-busy="true">
+                <div className="h-24 w-24 shrink-0 rounded-full bg-muted md:h-32 md:w-32" />
+                <div className="w-full flex-1 space-y-3">
+                  <div className="h-4 w-full rounded bg-muted" /><div className="h-4 w-4/5 rounded bg-muted" /><div className="h-4 w-1/3 rounded bg-muted" />
+                </div>
+              </div>
+            ) : (
+            <div key={i} className="animate-fade-in-up flex flex-col items-center gap-6 md:flex-row md:items-center">
               <div className="relative shrink-0">
                 {it.image_url ? (
                   <img
                     src={it.image_url}
-                    alt={title}
+                    alt={name}
                     width={160} height={160}
                     loading="lazy" decoding="async"
                     className="h-24 w-24 rounded-full object-cover ring-4 ring-secondary/40 md:h-32 md:w-32"
@@ -83,26 +95,15 @@ export const Testimonial = () => {
                     <Quote className="h-8 w-8 text-secondary" />
                   </div>
                 )}
-                <span className="absolute -bottom-1 end-1 grid h-7 w-7 place-items-center rounded-full bg-secondary text-secondary-foreground shadow">
-                  <Quote className="h-3.5 w-3.5" />
-                </span>
               </div>
 
-              {/* Content */}
               <div className="flex-1 text-center md:text-start">
-                <div className="flex items-center justify-center gap-0.5 md:justify-start">
-                  {Array.from({ length: 5 }).map((_, k) => (
-                    <Star key={k} className="h-4 w-4 fill-secondary text-secondary" />
-                  ))}
-                </div>
-                <p className="mt-3 text-base leading-relaxed text-foreground md:text-xl">
-                  &ldquo;{quote}&rdquo;
-                </p>
+                {/* A short story — about two lines; the full one is on its page */}
+                <p className="line-clamp-3 text-base leading-relaxed text-foreground md:text-xl">{story}</p>
                 <div className="mt-4">
-                  <div className="font-extrabold text-primary">{title}</div>
+                  <div className="font-extrabold text-primary">{name}</div>
                   {role && <div className="text-xs text-muted-foreground md:text-sm">{role}</div>}
                 </div>
-                {/* Link to full story */}
                 <Link
                   to={`/stories/${it.slug}`}
                   className="mt-3 inline-flex items-center gap-1 text-xs font-extrabold text-accent hover:underline"
@@ -111,6 +112,7 @@ export const Testimonial = () => {
                 </Link>
               </div>
             </div>
+            )}
           </div>
 
           {/* Controls */}

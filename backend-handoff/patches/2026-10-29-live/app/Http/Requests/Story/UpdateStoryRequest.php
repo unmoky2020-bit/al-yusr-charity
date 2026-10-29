@@ -17,6 +17,8 @@ class UpdateStoryRequest extends FormRequest
         $storyId = $this->route('story')?->id ?? $this->route('story');
 
         return [
+            'quote_ar' => ['sometimes', 'nullable', 'string', 'max:300'],
+            'quote_en' => ['sometimes', 'nullable', 'string', 'max:300'],
             'program_id' => ['sometimes', 'nullable', 'integer', 'exists:programs,id'],
             'slug' => [
                 'sometimes',
