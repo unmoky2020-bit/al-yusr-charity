@@ -97,8 +97,6 @@ export const translations = {
       ],
     },
     contact: {
-      bankLabel: "الحساب البنكي CIB",
-      bank: "100043605733",
       reg: "مشهرة برقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي",
       facebook: "Elyosr.Charity",
     },
@@ -242,8 +240,6 @@ export const translations = {
       ],
     },
     contact: {
-      bankLabel: "CIB Bank Account",
-      bank: "100043605733",
       reg: "Licensed NGO No. 2665/2019 — Ministry of Social Solidarity",
       facebook: "Elyosr.Charity",
     },

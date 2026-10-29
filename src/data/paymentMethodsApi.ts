@@ -222,9 +222,15 @@ export const paymentMethodsApi = {
   async get(id: number | string): Promise<PaymentMethod> {
     return normalize(await fetchItem<Record<string, unknown>>(`/payment-methods/${id}`));
   },
-  /** Partial update; returns the server's record and its message (e.g. «بانتظار الموافقة» for editors). */
+  /**
+   * Update; returns the server's record and its message (e.g. «بانتظار الموافقة» for editors).
+   * The current API requires name_ar / name_en / slug / type on every PUT, so the stored values are
+   * re-sent unchanged with the patch (slug and type are never taken from the patch).
+   */
   async update(id: number | string, patch: PaymentMethodPatch): Promise<{ method: PaymentMethod | null; message?: string }> {
-    const res = await apiFetch<{ data?: Record<string, unknown>; message?: string }>(`/payment-methods/${id}`, { method: "PUT", body: patch });
+    const current = await paymentMethodsApi.get(id);
+    const body = { name_ar: current.name_ar, name_en: current.name_en, ...patch, slug: current.slug, type: current.type };
+    const res = await apiFetch<{ data?: Record<string, unknown>; message?: string }>(`/payment-methods/${id}`, { method: "PUT", body });
     done();
     const data = (res as { data?: Record<string, unknown> })?.data;
     return { method: data && "id" in data ? normalize(data) : null, message: (res as { message?: string })?.message };
