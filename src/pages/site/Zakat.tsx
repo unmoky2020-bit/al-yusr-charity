@@ -16,6 +16,7 @@ import { Check } from "lucide-react";
 import imgFood from "@/assets/axis-food.jpg";
 import imgHealth from "@/assets/axis-health.jpg";
 import imgEdu from "@/assets/axis-education.jpg";
+import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
 /** Approximate gold price per gram in EGP — used only as a default for the nisab calculator.
  * Users can override the value before calculating. */
@@ -29,6 +30,8 @@ const FITR_PER_PERSON_DEFAULT = 50; // EGP — common Egyptian darul-iftaa minim
 const Zakat = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
+  const bankAccounts = useBankAccounts();
+  const bankText = bankAccounts[0] ? bankAccountLabel(bankAccounts[0]) : "";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   const base = "https://elyusr.org";
 
@@ -587,7 +590,7 @@ const Zakat = () => {
             ))}
           </div>
           <p className="mx-auto mt-6 max-w-2xl text-center text-xs text-muted-foreground">
-            {isRTL ? "مؤسسة مشهرة برقم 2665/2019 تحت رقابة وزارة التضامن الاجتماعي. حساب CIB: 100043605733." : "Licensed NGO 2665/2019 under the Ministry of Social Solidarity. CIB account: 100043605733."}
+            {isRTL ? `مؤسسة مشهرة برقم 2665/2019 تحت رقابة وزارة التضامن الاجتماعي.${bankText ? ` حساب ${bankText}.` : ""}` : `Licensed NGO 2665/2019 under the Ministry of Social Solidarity.${bankText ? ` Account ${bankText}.` : ""}`}
           </p>
         </div>
       </section>

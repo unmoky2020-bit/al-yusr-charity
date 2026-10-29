@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs } from "@/data/faqsApi";
 import { LocalFAQ } from "@/components/common/LocalFAQ";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
+import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
 /* ─── Inquiry options ─────────────────────────────────────────── */
 const INQUIRY_OPTIONS = [
@@ -110,6 +111,8 @@ function FieldGroup({ label, children }: { label: string; children: React.ReactN
 const Contact = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
+  // The official account from the dashboard's payment methods (hidden when none is active).
+  const bankAccount = useBankAccounts()[0];
   const base = "https://elyusr.org";
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "", section: "general" });
   const [sending, setSending] = useState(false);
@@ -124,9 +127,10 @@ const Contact = () => {
 
   const handleCopyBank = () => {
     try {
-      navigator.clipboard.writeText("100043605733");
+      if (!bankAccount) return;
+      navigator.clipboard.writeText(bankAccount.value);
       setCopiedBank(true);
-      toast({ title: isRTL ? "تم نسخ رقم الحساب البنكي (CIB)" : "CIB account number copied" });
+      toast({ title: isRTL ? "تم نسخ رقم الحساب البنكي" : "Bank account number copied" });
       setTimeout(() => setCopiedBank(false), 2000);
     } catch {}
   };
@@ -447,16 +451,17 @@ const Contact = () => {
                       </span>
                     </a>
 
-                    {/* Bank CIB */}
+                    {/* Official bank account (from the dashboard) */}
+                    {bankAccount && (
                     <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5 transition hover:border-secondary/40 hover:bg-card">
                       <div className="flex items-center gap-2.5 min-w-0">
                         <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
                           <Building2 className="h-4 w-4" />
                         </span>
                         <div className="min-w-0">
-                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "حساب CIB الرسمي" : "Official CIB Account"}</div>
+                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "الحساب البنكي الرسمي" : "Official bank account"} {bankAccountLabel(bankAccount).split(":")[0]}</div>
                           <span dir="ltr" className="text-xs sm:text-sm font-black font-mono tracking-wider text-foreground">
-                            100043605733
+                            {bankAccount.value}
                           </span>
                         </div>
                       </div>
@@ -471,6 +476,7 @@ const Contact = () => {
                         <span>{copiedBank ? (isRTL ? "تم" : "Done") : (isRTL ? "نسخ" : "Copy")}</span>
                       </Button>
                     </div>
+                    )}
 
                     {/* Hours */}
                     <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5">

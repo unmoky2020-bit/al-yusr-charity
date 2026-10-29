@@ -38,6 +38,21 @@ export const BankMisrLogo = ({ className = "h-6 sm:h-7" }: { className?: string 
   </div>
 );
 
+export const CibLogo = ({ className = "h-6 sm:h-7" }: { className?: string }) => (
+  <div className={`inline-flex items-center justify-center shrink-0 ${className}`}>
+    <img src="/images/payments/cib.svg" alt="CIB" className="h-full w-auto max-h-full object-contain" loading="lazy" />
+  </div>
+);
+
+/** Any other bank: a neutral bank mark (never another bank's logo). */
+export const GenericBankLogo = ({ className = "h-6 sm:h-7" }: { className?: string }) => (
+  <div className={`inline-flex items-center justify-center shrink-0 text-primary ${className}`} aria-label="Bank">
+    <svg viewBox="0 0 24 24" className="h-full w-auto" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3 10 12 4l9 6" /><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8" /><path d="M3 20h18" />
+    </svg>
+  </div>
+);
+
 /**
  * أيقونة موحدة فردية أنيقة للبطاقات البنكية بدلاً من تكديس 3 شعارات
  */
@@ -121,8 +136,15 @@ export const PaymentBrandIcon = ({
   if (k.includes("fawry") || p.includes("fawry")) {
     return <FawryLogo className={className} />;
   }
-  if (k.includes("bank") || k.includes("misr") || k.includes("cib") || k.includes("adib")) {
+  // Banks: the logo of the account's bank (keys like "bank_cib"); never Banque Misr for another bank.
+  if (k.includes("cib") || p.includes("cib")) {
+    return <CibLogo className={className} />;
+  }
+  if (k.includes("misr")) {
     return <BankMisrLogo className={className} />;
+  }
+  if (k.includes("bank")) {
+    return <GenericBankLogo className={className} />;
   }
   if (k.includes("delegate") || k.includes("pickup") || k.includes("mandoub")) {
     return <DelegateLogo className={className} showText={showText} />;

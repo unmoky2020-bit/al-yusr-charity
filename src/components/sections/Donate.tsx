@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Heart, Loader2, Lock, ShieldCheck } from "lucide-react";
@@ -8,14 +8,16 @@ import { trackDonationStarted } from "@/lib/track";
 import { createDonation, GENERAL_PROGRAM_ID } from "@/data/casesApi";
 import { donationsStore } from "@/data/donationsStore";
 import { KashierCheckoutModal } from "@/components/donate/KashierCheckoutModal";
+import { usePaymentOptions } from "@/data/paymentOptions";
 
 type MethodId = "card_kashier" | "vodafone_cash" | "instapay" | "bank_transfer";
 
+/** How each method looks here; which ones are offered comes from the dashboard (usePaymentOptions). */
 const METHODS: { id: MethodId; ar: string; en: string; noteAr: string; noteEn: string; logo: string; manual: boolean }[] = [
   { id: "card_kashier", ar: "بطاقة بنكية أو محفظة", en: "Card or mobile wallet", noteAr: "دفع فوري عبر كاشير", noteEn: "Instant via Kashier", logo: "/images/payments/kashier.svg", manual: false },
   { id: "instapay", ar: "إنستاباي", en: "InstaPay", noteAr: "تحويل لحظي", noteEn: "Instant transfer", logo: "/images/payments/instapay.png", manual: true },
   { id: "vodafone_cash", ar: "فودافون كاش", en: "Vodafone Cash", noteAr: "تحويل للمحفظة", noteEn: "Wallet transfer", logo: "/images/payments/vodafone.svg", manual: true },
-  { id: "bank_transfer", ar: "تحويل بنكي CIB", en: "CIB bank transfer", noteAr: "حساب المؤسسة الرسمي", noteEn: "Official account", logo: "/images/payments/bank-card.svg", manual: true },
+  { id: "bank_transfer", ar: "تحويل بنكي", en: "Bank transfer", noteAr: "حساب المؤسسة الرسمي", noteEn: "Official account", logo: "/images/payments/cib.svg", manual: true },
 ];
 
 const PRESETS = [100, 250, 500, 1000];
@@ -36,6 +38,13 @@ export const Donate = () => {
   const [amount, setAmount] = useState<number>(500);
   const [custom, setCustom] = useState("");
   const [method, setMethod] = useState<MethodId>("card_kashier");
+  // Only the methods active in the dashboard («طرق الدفع»); a hidden method disappears here too.
+  const { options } = usePaymentOptions();
+  const offered = METHODS.filter((m) => options.some((o) => o.id === m.id));
+  useEffect(() => {
+    if (!offered.some((m) => m.id === method) && offered[0]) setMethod(offered[0].id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options]);
   const [processing, setProcessing] = useState(false);
   /** Name optional (empty = «فاعل خير»); phone required so the team can confirm the donation. */
   const [donorName, setDonorName] = useState("");
@@ -43,7 +52,7 @@ export const Donate = () => {
   const [checkout, setCheckout] = useState<{ open: boolean; orderId: string; sessionUrl?: string }>({ open: false, orderId: "" });
   const idemKey = useRef(`quick-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
 
-  const selected = METHODS.find((m) => m.id === method)!;
+  const selected = offered.find((m) => m.id === method) ?? offered[0] ?? METHODS[0];
   const valid = amount >= MIN_AMOUNT;
   const phoneOk = /^(\+?\d{8,15}|01\d{9})$/.test(donorPhone.replace(/[\s-]/g, ""));
   const fmt = (n: number) => n.toLocaleString(isAr ? "ar-EG" : "en-US");
@@ -178,7 +187,7 @@ export const Donate = () => {
             <fieldset className="mt-7">
               <legend className="text-sm font-black text-primary">{isAr ? "٢. طريقة الدفع" : "2. Payment method"}</legend>
               <div role="radiogroup" className="mt-3 grid gap-2.5 sm:grid-cols-2">
-                {METHODS.map((m) => {
+                {offered.map((m) => {
                   const on = method === m.id;
                   return (
                     <button

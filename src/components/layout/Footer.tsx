@@ -10,10 +10,13 @@ import { newsletterApi } from "@/data/laravelApi";
 import { track } from "@/lib/track";
 import ctaHourglass from "@/assets/cta-hourglass-banner.jpg";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
+import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
 export const Footer = () => {
   const { t, lang } = useLang();
   const isRTL = lang === "ar";
+  const bankAccounts = useBankAccounts();
+  const bankText = bankAccounts[0] ? bankAccountLabel(bankAccounts[0]) : "";
   const { pathname } = useLocation();
   const [email, setEmail] = useState("");
   const [subscribing, setSubscribing] = useState(false);
@@ -329,10 +332,12 @@ export const Footer = () => {
                 <Mail className="hidden h-4 w-4 shrink-0 text-secondary sm:inline-block" aria-hidden />
                 <a href={`mailto:${FOUNDATION_EMAIL}`} className="text-primary-foreground/80 hover:text-secondary">{FOUNDATION_EMAIL}</a>
               </li>
-              <li className="flex items-start justify-center gap-2 sm:justify-start">
-                <Building2 className="mt-0.5 hidden h-4 w-4 shrink-0 text-secondary sm:inline-block" aria-hidden />
-                <span dir="ltr" className="text-primary-foreground/80">{t.contact.bankLabel}: <span className="font-bold text-secondary">{t.contact.bank}</span></span>
-              </li>
+              {bankAccounts.map((acc) => (
+                <li key={acc.value} className="flex items-start justify-center gap-2 sm:justify-start">
+                  <Building2 className="mt-0.5 hidden h-4 w-4 shrink-0 text-secondary sm:inline-block" aria-hidden />
+                  <span dir="ltr" className="text-primary-foreground/80">{isRTL ? "الحساب البنكي" : "Bank account"} {bankAccountLabel(acc).split(":")[0]}: <span className="font-bold text-secondary">{acc.value}</span></span>
+                </li>
+              ))}
             </ul>
 
             <div className="mt-4 flex justify-center sm:justify-start gap-2.5">

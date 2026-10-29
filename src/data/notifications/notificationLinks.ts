@@ -21,6 +21,8 @@ export const NOTIFICATION_TYPES: Record<string, NotificationTypeInfo> = {
     labelAr: "تبرعات مدفوعة",
     link: (d) => (d.donation_id ? `/admin/donations/${d.donation_id}` : "/admin/donations"),
   },
+  // Wallet numbers / bank accounts donors pay to were changed (anti-fraud alert).
+  payout_details_changed: { category: "system", labelAr: "حسابات الاستلام", link: () => "/admin/payment-methods" },
   new_user: { category: "user", labelAr: "مستخدمين", link: () => "/admin/users" },
   program_target_reached: {
     category: "program",

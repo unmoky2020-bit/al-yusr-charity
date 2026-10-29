@@ -39,7 +39,8 @@ import {
 } from "@/components/donate/DonationEntityItem";
 import { PaymobCheckoutModal } from "@/components/donate/PaymobCheckoutModal";
 import { KashierCheckoutModal } from "@/components/donate/KashierCheckoutModal";
-import { getGatewaySettings, type GatewayProvider } from "@/data/kashierGateway";
+import { getGatewaySettings } from "@/data/kashierGateway";
+import { usePaymentOptions, type PaymentOption, type PayoutDestination } from "@/data/paymentOptions";
 
 type StaticMethod = {
   id: string;
@@ -49,9 +50,8 @@ type StaticMethod = {
   subtitleEn: string;
   icon: any;
   badge?: { ar: string; en: string; color: string };
-  accountAr?: string;
-  accountEn?: string;
-  accountValue?: string;
+  /** Where the donor sends money (wallet numbers, IPA addresses, bank accounts) — from the dashboard. */
+  destinations?: PayoutDestination[];
   instructions_ar?: string;
   instructions_en?: string;
   isManual: boolean;
@@ -59,86 +59,39 @@ type StaticMethod = {
   isDelegate?: boolean;
 };
 
-function getAvailableStaticMethods(activeGateway: GatewayProvider = "kashier"): StaticMethod[] {
-  const methods: StaticMethod[] = [
-    {
-      id: "vodafone_cash",
-      ar: "فودافون كاش",
-      en: "Vodafone Cash",
-      subtitleAr: "تحويل فوري للمحفظة",
-      subtitleEn: "Instant Wallet Transfer",
-      icon: Smartphone,
-      badge: { ar: "محفظة إلكترونية", en: "Mobile Wallet", color: "emerald" },
-      accountAr: "رقم التحويل:",
-      accountEn: "Transfer to:",
-      accountValue: "01097000137",
-      instructions_ar: "حوّل المبلغ المطلوب على الرقم الموضح، ثم أرسل إيصال التحويل أو اكتب رقم محفظتك للتأكيد.",
-      instructions_en: "Transfer the amount to the number shown, then share the receipt or your wallet number.",
-      isManual: true,
-    },
-    {
-      id: "instapay",
-      ar: "إنستاباي (InstaPay)",
-      en: "InstaPay",
-      subtitleAr: "تحويل لحظي (IPA)",
-      subtitleEn: "Instant IPA Transfer",
-      icon: QrCode,
-      badge: { ar: "تحويل فوري ⚡", en: "Instant Transfer", color: "indigo" },
-      accountAr: "معرّف التحويل (IPA):",
-      accountEn: "InstaPay IPA:",
-      accountValue: "elyusr@cib",
-      instructions_ar: "افتح تطبيق InstaPay وأدخل المعرّف الموضح لإتمام التحويل المباشر في ثوانٍ.",
-      instructions_en: "Open InstaPay and enter the IPA shown to complete instant transfer.",
-      isManual: true,
-    },
-    {
-      id: "bank_transfer",
-      ar: "البنك التجاري الدولي CIB",
-      en: "CIB Bank",
-      subtitleAr: "تحويل بنكي مباشر",
-      subtitleEn: "Direct Bank Transfer",
-      icon: Landmark,
-      badge: { ar: "تحويل بنكي", en: "Bank Transfer", color: "slate" },
-      accountAr: "رقم الحساب:",
-      accountEn: "Account Number:",
-      accountValue: "100043605733",
-      instructions_ar: "حوّل إلى حساب مؤسسة اليسر بالبنك التجاري الدولي (CIB)، وأرسل صورة إشعار التحويل للتأكيد.",
-      instructions_en: "Transfer to Al-Yusr account at CIB, and send the transfer receipt.",
-      isManual: true,
-    },
-  ];
+/**
+ * How each payment option looks in the form. WHAT is offered (which methods, which numbers and
+ * accounts) comes only from the dashboard («طرق الدفع», GET /payment-methods/active).
+ */
+const METHOD_LOOK: Record<string, Omit<StaticMethod, "id" | "ar" | "en" | "isManual" | "destinations">> = {
+  vodafone_cash: { subtitleAr: "تحويل فوري للمحفظة", subtitleEn: "Instant Wallet Transfer", icon: Smartphone, badge: { ar: "محفظة إلكترونية", en: "Mobile Wallet", color: "emerald" },
+    instructions_ar: "حوّل المبلغ على الرقم الموضح، ثم أرسل إيصال التحويل أو اكتب رقم محفظتك للتأكيد.", instructions_en: "Transfer to the number shown, then share the receipt or your wallet number." },
+  orange_cash: { subtitleAr: "تحويل فوري للمحفظة", subtitleEn: "Instant Wallet Transfer", icon: Smartphone, badge: { ar: "محفظة إلكترونية", en: "Mobile Wallet", color: "emerald" },
+    instructions_ar: "حوّل المبلغ على الرقم الموضح، ثم أرسل إيصال التحويل للتأكيد.", instructions_en: "Transfer to the number shown, then share the receipt." },
+  instapay: { subtitleAr: "تحويل لحظي (IPA)", subtitleEn: "Instant IPA Transfer", icon: QrCode, badge: { ar: "تحويل فوري", en: "Instant Transfer", color: "indigo" },
+    instructions_ar: "افتح تطبيق InstaPay وأدخل العنوان الموضح لإتمام التحويل في ثوانٍ.", instructions_en: "Open InstaPay and enter the address shown." },
+  bank_transfer: { subtitleAr: "تحويل بنكي مباشر", subtitleEn: "Direct Bank Transfer", icon: Landmark, badge: { ar: "تحويل بنكي", en: "Bank Transfer", color: "slate" },
+    instructions_ar: "حوّل إلى حساب المؤسسة الموضح، وأرسل صورة إشعار التحويل للتأكيد.", instructions_en: "Transfer to the account shown and send the receipt." },
+  card_kashier: { subtitleAr: "كاشير (فيزا / ماستركارد / ميزة)", subtitleEn: "Kashier (Visa / Mastercard / Meeza)", icon: CreditCard, isGateway: true,
+    instructions_ar: "ستفتح نافذة الدفع المشفرة المعتمدة عبر بوابة كاشير (3D-Secure) لإتمام التبرع بأمان.", instructions_en: "Secure encrypted online payment via the Kashier gateway." },
+  delegate_pickup: { subtitleAr: "استلام منزلي مجاني", subtitleEn: "Free Doorstep Pickup", icon: Truck, badge: { ar: "استلام منزلي مجاني", en: "Free Home Pickup", color: "emerald" }, isDelegate: true,
+    instructions_ar: "سيتواصل معك مندوبنا هاتفياً لتحديد الميعاد الأنسب واستلام التبرع بإيصال معتمد.", instructions_en: "Our delegate will call you to arrange a time and collect the donation with an official receipt." },
+};
 
-  methods.push({
-    id: "card_kashier",
-    ar: "بطاقة بنكية",
-    en: "Bank Card",
-    subtitleAr: "كاشير (فيزا / ماستركارد / ميزة)",
-    subtitleEn: "Kashier (Visa / Mastercard / Meeza)",
-    icon: CreditCard,
-    isManual: false,
-    isGateway: true,
-    instructions_ar: "ستفتح نافذة الدفع المشفرة المعتمدة عبر بوابة كاشير (Kashier 3D-Secure) لإتمام التبرع بأمان تام.",
-    instructions_en: "Secure encrypted online payment via Kashier gateway.",
-  });
-
-  methods.push({
-    id: "delegate_pickup",
-    ar: "مندوب اليسر",
-    en: "Al-Yusr Delegate",
-    subtitleAr: "استلام منزلي مجاني",
-    subtitleEn: "Free Doorstep Pickup",
-    icon: Truck,
-    badge: { ar: "استلام منزلي مجاني", en: "Free Home Pickup", color: "emerald" },
-    isManual: false,
-    isDelegate: true,
-    instructions_ar: "سيتواصل معك مندوبنا الرسمي هاتفياً لتحديد الميعاد الأنسب واستلام التبرع من منزلك بإيصال معتمد.",
-    instructions_en: "Our delegate will contact you to arrange a suitable time and collect your donation with an official receipt.",
-  });
-
-  return methods;
+/** A dashboard payment option as the form shows it (its own description wins over the default text). */
+function toFormMethod(o: PaymentOption): StaticMethod {
+  const look = METHOD_LOOK[o.id] ?? { subtitleAr: "", subtitleEn: "", icon: Landmark };
+  return {
+    id: o.id,
+    ar: o.nameAr,
+    en: o.nameEn,
+    ...look,
+    instructions_ar: o.descriptionAr || look.instructions_ar,
+    instructions_en: o.descriptionEn || look.instructions_en,
+    isManual: o.kind === "wallet" || o.kind === "instant" || o.kind === "bank",
+    destinations: o.destinations,
+  };
 }
-
-const STATIC_METHODS: StaticMethod[] = getAvailableStaticMethods("kashier");
 
 const badgeClasses: Record<string, string> = {
   emerald: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
@@ -287,10 +240,7 @@ const DonatePage = () => {
   };
 
   // Honour ?method= from the home quick-donate so the visitor doesn't pick twice
-  const [method, setMethod] = useState<string>(() => {
-    const m = params.get("method");
-    return m && STATIC_METHODS.some((s) => s.id === m) ? m : "vodafone_cash";
-  });
+  const [method, setMethod] = useState<string>(() => params.get("method") || "");
 
   // Donor details arrive via router state (never the URL, so they stay out of history and analytics).
   const prefill = (useLocation().state as { donor?: { name?: string; phone?: string; email?: string } } | null)?.donor;
@@ -421,10 +371,12 @@ const DonatePage = () => {
   const baseUrl = "https://elyusr.org";
 
   const gatewaySettings = useMemo(() => getGatewaySettings(), []);
-  const availableMethods = useMemo(
-    () => getAvailableStaticMethods(gatewaySettings.activeGateway),
-    [gatewaySettings]
-  );
+  const { options: paymentOptions } = usePaymentOptions();
+  const availableMethods = useMemo(() => paymentOptions.map(toFormMethod), [paymentOptions]);
+  // A method that is hidden in the dashboard (or unknown) falls back to the first offered one.
+  useEffect(() => {
+    if (!availableMethods.some((m) => m.id === method)) setMethod(availableMethods[0]?.id ?? "");
+  }, [availableMethods, method]);
 
   const selectedMethod   = useMemo(() => availableMethods.find((m) => m.id === method) ?? availableMethods[0], [method, availableMethods]);
   const isVodafoneWallet = method.includes("vodafone");
@@ -1132,7 +1084,7 @@ const DonatePage = () => {
 
                           {/* Standardized Logo Box */}
                           <div className="flex h-8 min-w-[48px] px-1.5 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-card border border-border/80 shadow-2xs overflow-hidden">
-                            <PaymentBrandIcon methodKey={m.id} className="h-5 w-auto max-w-full object-contain" />
+                            <PaymentBrandIcon methodKey={m.destinations?.[0]?.bankCode ? `bank_${m.destinations[0].bankCode}` : m.id} className="h-5 w-auto max-w-full object-contain" />
                           </div>
 
                           {/* Title & Concise Subtitle */}
@@ -1156,7 +1108,7 @@ const DonatePage = () => {
                   <div className="flex flex-wrap items-center justify-between gap-2.5 pb-2.5 sm:pb-3 border-b border-border/50">
                     <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                       <div className="flex h-10 sm:h-11 min-w-[60px] sm:min-w-[70px] px-2 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-card border border-border/80 shadow-2xs overflow-hidden">
-                        <PaymentBrandIcon methodKey={selectedMethod.id} className="h-6 sm:h-7 w-auto max-w-full object-contain" />
+                        <PaymentBrandIcon methodKey={selectedMethod.destinations?.[0]?.bankCode ? `bank_${selectedMethod.destinations[0].bankCode}` : selectedMethod.id} className="h-6 sm:h-7 w-auto max-w-full object-contain" />
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
@@ -1182,27 +1134,38 @@ const DonatePage = () => {
                     </span>
                   </div>
 
-                  {/* Account details with Copy (Full width) */}
-                  {selectedMethod.accountValue && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-xl bg-card border border-border/80 p-2.5 sm:p-3 shadow-2xs">
-                      <div className="min-w-0 flex items-center gap-2.5">
-                        <span className="text-xs font-bold text-muted-foreground whitespace-nowrap">
-                          {lang === "ar" ? selectedMethod.accountAr : selectedMethod.accountEn}
-                        </span>
-                        <span className="font-mono text-base sm:text-lg font-black text-primary select-all tracking-wider" dir="ltr">
-                          {selectedMethod.accountValue}
-                        </span>
-                      </div>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => copy(selectedMethod.accountValue!)}
-                        className="h-7.5 sm:h-8 px-3 text-xs font-black text-slate-950 bg-secondary hover:bg-secondary/80 transition-all rounded-lg shrink-0 w-fit self-end sm:self-auto cursor-pointer shadow-2xs"
-                      >
-                        <Copy className="h-3.5 w-3.5 me-1.5 text-slate-950" />
-                        {lang === "ar" ? "نسخ الرقم" : "Copy"}
-                      </Button>
+                  {/* Where to send the money — every destination set in the dashboard, each with Copy */}
+                  {(selectedMethod.destinations?.length ?? 0) > 0 && (
+                    <div className="space-y-2">
+                      {selectedMethod.destinations!.map((d) => (
+                        <div key={d.value} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-xl bg-card border border-border/80 p-2.5 sm:p-3 shadow-2xs">
+                          <div className="min-w-0 flex items-center gap-2.5">
+                            {d.bankCode && <PaymentBrandIcon methodKey={`bank_${d.bankCode}`} className="h-6 w-auto shrink-0" />}
+                            <div className="min-w-0">
+                              {d.bankName && <div className="text-xs font-black text-primary">{d.bankName}{d.accountName ? ` — ${d.accountName}` : ""}</div>}
+                              <div className="flex flex-wrap items-center gap-2">
+                                <span className="text-xs font-bold text-muted-foreground whitespace-nowrap">{lang === "ar" ? d.labelAr : d.labelEn}:</span>
+                                <span className="font-mono text-base sm:text-lg font-black text-primary select-all tracking-wider" dir="ltr">{d.value}</span>
+                              </div>
+                              {(d.iban || d.swift) && (
+                                <div className="mt-0.5 text-[11px] font-mono text-muted-foreground" dir="ltr">
+                                  {d.iban && <>IBAN: {d.iban} </>}{d.swift && <>· SWIFT: {d.swift}</>}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => copy(d.value)}
+                            className="h-7.5 sm:h-8 px-3 text-xs font-black text-slate-950 bg-secondary hover:bg-secondary/80 transition-all rounded-lg shrink-0 w-fit self-end sm:self-auto cursor-pointer shadow-2xs"
+                          >
+                            <Copy className="h-3.5 w-3.5 me-1.5 text-slate-950" />
+                            {lang === "ar" ? "نسخ" : "Copy"}
+                          </Button>
+                        </div>
+                      ))}
                     </div>
                   )}
 

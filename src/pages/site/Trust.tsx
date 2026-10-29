@@ -21,13 +21,14 @@ import markounWardrobe from "@/assets/markoun-poster-clothes.png";
 import qurbaniMeatTrays from "@/assets/qurbani-meat-trays.jpg";
 import takrimVan from "@/assets/takrim-van.jpg";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
+import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
+import { usePaymentOptions } from "@/data/paymentOptions";
 
 const BASE = "https://elyusr.org";
 const PHONE = "+20 109 700 0137";
 const WA_NUMBER = "201097000137";
 const EMAIL = FOUNDATION_EMAIL;
 const LICENSE = "2665/2019";
-const BANK_ACCOUNT = "100043605733";
 
 /** Section heading used by every block on the page. */
 function SectionHead({ badge, Icon, title, sub }: { badge: string; Icon: typeof ShieldCheck; title: string; sub?: string }) {
@@ -45,6 +46,12 @@ function SectionHead({ badge, Icon, title, sub }: { badge: string; Icon: typeof 
 const Trust = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
+  const bankAccounts = useBankAccounts();
+  const bankText = bankAccounts[0] ? bankAccountLabel(bankAccounts[0]) : "";
+  // Transfer apps offered right now (wallets / InstaPay active in the dashboard).
+  const { options: payOptions } = usePaymentOptions();
+  const transferApps = payOptions.filter((o) => o.kind === "wallet" || o.kind === "instant");
+  const walletNames = { ar: transferApps.map((o) => o.nameAr).join(" و"), en: transferApps.map((o) => o.nameEn).join(" & ") };
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   const wa = (text: string) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
   // Impact numbers: the same live figures as the homepage (dashboard → أرقام الصفحة الرئيسية).
@@ -115,14 +122,14 @@ const Trust = () => {
   const payments = isRTL
     ? [
         { I: CreditCard, t: "بطاقات ومحافظ إلكترونية", d: "عبر بوابة كاشير المرخّصة — الدفع بيتم في صفحة البوابة نفسها ومش بنشوف بيانات البطاقة." },
-        { I: Phone, t: "إنستاباي وفودافون كاش", d: "حوّل وابعت صورة الإيصال، ونأكد التبرع ونبعتلك رقم التتبع." },
-        { I: Landmark, t: "تحويل بنكي (CIB)", d: `حساب رقم ${BANK_ACCOUNT} — وتحويل دولي SWIFT عند الطلب.` },
+        ...(walletNames.ar ? [{ I: Phone, t: walletNames.ar, d: "حوّل وابعت صورة الإيصال، ونأكد التبرع ونبعتلك رقم التتبع." }] : []),
+        ...(bankText ? [{ I: Landmark, t: "تحويل بنكي", d: `حساب ${bankText} — وتحويل دولي SWIFT عند الطلب.` }] : []),
         { I: EyeOff, t: "تبرّع باسم «فاعل خير»", d: "تقدر تخفي اسمك من الظهور العام، وبياناتك بتفضل محمية حسب سياسة الخصوصية." },
       ]
     : [
         { I: CreditCard, t: "Cards & e-wallets", d: "Through the licensed Kashier gateway — you pay on the gateway's own page and we never see card details." },
-        { I: Phone, t: "InstaPay & Vodafone Cash", d: "Transfer and send the receipt; we confirm and send your tracking number." },
-        { I: Landmark, t: "Bank transfer (CIB)", d: `Account ${BANK_ACCOUNT} — international SWIFT on request.` },
+        ...(walletNames.en ? [{ I: Phone, t: walletNames.en, d: "Transfer and send the receipt; we confirm and send your tracking number." }] : []),
+        ...(bankText ? [{ I: Landmark, t: "Bank transfer", d: `Account ${bankText} — international SWIFT on request.` }] : []),
         { I: EyeOff, t: "Give anonymously", d: "Hide your name publicly; your details stay protected under our privacy policy." },
       ];
 

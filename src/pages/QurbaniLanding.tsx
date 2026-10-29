@@ -18,6 +18,7 @@ import iconVet from "@/assets/program-health.png";
 import iconCam from "@/assets/qurbani-meat-quality.png";
 import iconTruck from "@/assets/brand-truck.jpg";
 import iconReceipt from "@/assets/brand-card.jpg";
+import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
 const EID = new Date("2026-05-27T05:00:00+02:00").getTime();
 const useDays = () => {
@@ -32,6 +33,8 @@ const useDays = () => {
 const QurbaniLanding = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const bankAccounts = useBankAccounts();
+  const bankText = bankAccounts[0] ? bankAccountLabel(bankAccounts[0]) : "";
   const days = useDays();
   const faq = isAr ? FAQ_AR : FAQ_EN;
 
@@ -167,7 +170,7 @@ const QurbaniLanding = () => {
           <div className="mx-auto mt-6 max-w-3xl rounded-[2rem] bg-secondary p-5 text-center text-secondary-foreground shadow-cta">
             <div className="space-y-1.5 text-sm font-extrabold md:text-base">
               <div>{isAr ? "أرقامنا:" : "Phones:"} <span className="font-mono">01097000137</span> – {isAr ? "يمكنك طلب مندوب يصل لمنزلك" : "Home pickup available"}</div>
-              <div>{isAr ? "الحساب البنكي" : "Bank account"} <span className="font-mono">CIB: 100043605733</span></div>
+              {bankText && <div>{isAr ? "الحساب البنكي" : "Bank account"} <span className="font-mono">{bankText}</span></div>}
               <div>{isAr ? "العنوان: المنصورة، تقسيم خطاب، بجوار وكالة المنصورة" : "Address: Mansoura, Khattab District, next to Mansoura Agency"}</div>
             </div>
             <div className="mt-4 flex flex-wrap justify-center gap-2">

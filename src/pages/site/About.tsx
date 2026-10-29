@@ -63,6 +63,7 @@ import { useSiteStats } from "@/hooks/useSiteStats";
 import { getLucideIcon } from "@/lib/lucide-icon";
 import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, resolveStorageUrl, contentApi, formatServerImageUrl, getApiToken } from "@/data/laravelApi";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
+import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
 /** Lightweight scroll-trigger reveal hook (IntersectionObserver — no JS deps). */
 const useReveal = () => {
@@ -104,6 +105,8 @@ const useReveal = () => {
 const About = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
+  const bankAccounts = useBankAccounts();
+  const bankText = bankAccounts[0] ? bankAccountLabel(bankAccounts[0]) : "";
   const base = "https://elyusr.org";
   const root = useReveal();
 
@@ -298,13 +301,13 @@ const About = () => {
     }
     return isRTL
       ? [
-          { icon: BadgeCheck, title: "كيان رسمي وحسابات معلنة", desc: "بتتبرع لمؤسسة مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي، على حساب بنكي رسمي (CIB: 100043605733)." },
+          { icon: BadgeCheck, title: "كيان رسمي وحسابات معلنة", desc: `بتتبرع لمؤسسة مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي، على حساب بنكي رسمي${bankText ? ` (${bankText})` : ""}.` },
           { icon: Camera, title: "التوثيق الفوري", desc: "بنوثق إيصال تبرعك بالفيديو والصور وإشعار رسمي يوضح الأثر في حياة الأسرة، مع الحفاظ على كرامتهم." },
           { icon: Users, title: "الحضور بنفسك", desc: "تقدر توصّل تبرعك بإيدك: بنبعتلك حد من فريقنا يتحرك معاك للمستحق أو لتنفيذ العمل (وصلة مياه، سقف منزل)." },
           { icon: HandHeart, title: "عيلتك جزء من الفريق", desc: "أولادك وعائلتك ممكن يتطوعوا معانا في قوافل الإطعام والزيارات الميدانية ويشوفوا الأثر بعينهم." },
         ]
       : [
-          { icon: BadgeCheck, title: "A licensed entity, public accounts", desc: "You give to an NGO registered under No. 2665/2019 with the Ministry of Social Solidarity, through an official bank account (CIB: 100043605733)." },
+          { icon: BadgeCheck, title: "A licensed entity, public accounts", desc: `You give to an NGO registered under No. 2665/2019 with the Ministry of Social Solidarity, through an official bank account${bankText ? ` (${bankText})` : ""}.` },
           { icon: Camera, title: "Immediate proof", desc: "We document the delivery of your gift with photo, video and an official notice, while preserving the family's dignity." },
           { icon: Users, title: "Come in person", desc: "Deliver it by hand: a team member goes with you to the family or to the work itself (a water tap, a new roof)." },
           { icon: HandHeart, title: "Your family joins in", desc: "Your children and family can volunteer on our food convoys and field visits and see the impact themselves." },
@@ -539,11 +542,11 @@ const About = () => {
                   ? `إشهار رقم ${aboutData.story?.registration_number || "2665 لسنة 2019"} — وزارة التضامن الاجتماعي`
                   : `License #${aboutData.story?.registration_number || "2665 / 2019"} — Ministry of Social Solidarity`}
               </span>
-              <span className="rounded-full bg-card px-3.5 py-1.5 border border-border shadow-xs text-primary font-black">
-                {isRTL
-                  ? `حساب ${aboutData.story?.bank_name || "CIB: 100043605733"}`
-                  : `Account ${aboutData.story?.bank_name || "CIB: 100043605733"}`}
-              </span>
+              {(bankText || aboutData.story?.bank_name) && (
+                <span className="rounded-full bg-card px-3.5 py-1.5 border border-border shadow-xs text-primary font-black">
+                  {isRTL ? `حساب ${bankText || aboutData.story?.bank_name}` : `Account ${bankText || aboutData.story?.bank_name}`}
+                </span>
+              )}
             </div>
 
             {/* Mission & Goal Cards — from API story data */}
@@ -1024,10 +1027,12 @@ const About = () => {
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><MapPin className="h-5 w-5 text-secondary" /></div>
                   <div><div className="font-extrabold text-primary">{isRTL ? "العنوان" : "Address"}</div><div className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{isRTL ? "المنصورة، تقسيم خطاب، بجوار وكالة المنصورة — الدقهلية، مصر" : "Mansoura, Khattab District, next to Mansoura Agency — Dakahlia, Egypt"}</div></div>
                 </div>
-                <div className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
+                {bankAccounts[0] && (
+<div className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><Building2 className="h-5 w-5 text-secondary" /></div>
-                  <div><div className="font-extrabold text-primary">{isRTL ? "حساب CIB الرسمي" : "Official CIB Account"}</div><div dir="ltr" className="text-sm font-black text-secondary font-mono">100043605733</div></div>
+                  <div><div className="font-extrabold text-primary">{isRTL ? "الحساب البنكي الرسمي" : "Official bank account"}</div><div dir="ltr" className="text-sm font-black text-secondary font-mono">{bankText}</div></div>
                 </div>
+                )}
                 <div className="flex flex-wrap gap-2 pt-1">
                   <a href="https://facebook.com/Elyosr.Charity" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-extrabold text-primary transition hover:border-secondary/60 hover:text-secondary"><Facebook className="h-3.5 w-3.5" /> Facebook</a>
                   <a href="https://instagram.com/elyosr.charity" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-extrabold text-primary transition hover:border-secondary/60 hover:text-secondary"><Instagram className="h-3.5 w-3.5" /> Instagram</a>

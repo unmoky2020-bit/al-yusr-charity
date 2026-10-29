@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Api\V1\PaymentMethod;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentMethod\StorePaymentMethodRequest;
 use App\Http\Requests\PaymentMethod\UpdatePaymentMethodRequest;
+use App\Notifications\PayoutDetailsChangedNotification;
+use App\Services\ActivityLogService;
+use App\Support\NotifyAdmins;
+use App\Support\PaymentDetailsRules;
 use App\Http\Resources\PaymentMethodResource;
 use App\Models\PaymentMethod;
 
@@ -41,6 +45,9 @@ class PaymentMethodController extends Controller
             $request->validated()
         );
 
+        // A new method with payout details is a new place donors send money: logged and alerted.
+        $this->audit($request, $paymentMethod, ['name_ar' => null, 'is_active' => null, 'details' => []]);
+
         return new PaymentMethodResource($paymentMethod);
     }
 
@@ -53,14 +60,43 @@ class PaymentMethodController extends Controller
         UpdatePaymentMethodRequest $request,
         PaymentMethod $paymentMethod
     ) {
-        $paymentMethod->update(
-            $request->validated()
-        );
+        $before = $paymentMethod->only(['name_ar', 'is_active', 'details']);
+        $paymentMethod->update($request->validated());
+        $this->audit($request, $paymentMethod, $before);
 
         return new PaymentMethodResource(
             $paymentMethod->fresh()
         );
-        
+    }
+
+    /**
+     * Every change is logged; a change to where donors send money (numbers / accounts / IPA) also
+     * alerts every super-admin, so a misused dashboard account cannot redirect donations silently.
+     */
+    private function audit(\Illuminate\Http\Request $request, PaymentMethod $method, array $before): void
+    {
+        $after = $method->only(['name_ar', 'is_active', 'details']);
+        if ($before == $after) {
+            return;
+        }
+
+        $payout = fn ($d) => array_intersect_key(is_array($d) ? $d : [], array_flip(PaymentDetailsRules::PAYOUT_KEYS));
+        $payoutChanged = $payout($before['details'] ?? null) != $payout($after['details'] ?? null);
+
+        app(ActivityLogService::class)->custom(
+            $payoutChanged ? 'payment_payout_changed' : 'payment_method_updated',
+            $method,
+            ($payoutChanged ? 'تغيير حسابات استلام التبرعات: ' : 'تعديل طريقة دفع: ') . $method->name_ar,
+            ['before' => $before, 'after' => $after]
+        );
+
+        if ($payoutChanged) {
+            NotifyAdmins::send(new PayoutDetailsChangedNotification(
+                (int) $method->id,
+                (string) $method->name_ar,
+                (string) ($request->user()?->name ?? 'مستخدم')
+            ));
+        }
     }
     
     // active

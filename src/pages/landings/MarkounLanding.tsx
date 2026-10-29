@@ -49,6 +49,7 @@ import type { LucideIcon } from "lucide-react";
 import { FAQSchema } from "@/components/common/Schemas";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
+import { useBankAccounts } from "@/data/paymentOptions";
 
 const DONATE = campaignDonateHref("markoun");
 /** Presentation-only metadata (icons, tags) keyed by the editable item ids in `campaignPages/markoun.ts`. */
@@ -75,7 +76,9 @@ const MarkounLanding = () => {
   const steps = section("steps")?.items ?? [];
   const sloganText = t(section("slogan")?.items?.[0]?.title) || t(section("slogan")?.title);
   const contactItem = (id: string) => section("contact")?.items.find((i) => i.id === id);
-  const bankNumber = t(contactItem("bank")?.desc) || "100043605733";
+  // The dashboard's active bank account first (single source), else the page's own text.
+  const bankAccounts = useBankAccounts();
+  const bankNumber = bankAccounts[0]?.value || t(contactItem("bank")?.desc) || "";
   const base = "https://elyusr.org";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   const [copiedBank, setCopiedBank] = useState(false);
