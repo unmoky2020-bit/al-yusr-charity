@@ -18,7 +18,11 @@ class StoryController extends Controller
             ->latest('sort_order')
             ->latest();
 
-        if ($request->filled('status')) {
+        // Visitors only ever get published stories (drafts stay in the dashboard).
+        // Staff: ?status=<value> filters, "all" or nothing = every status.
+        if (! \App\Support\Viewer::isStaff($request)) {
+            $query->where('status', 'published');
+        } elseif ($request->filled('status') && $request->status !== 'all') {
             $query->where('status', $request->status);
         }
 

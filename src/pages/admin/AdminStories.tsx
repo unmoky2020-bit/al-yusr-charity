@@ -98,7 +98,15 @@ export default function AdminStories() {
   /* ── Sync defaults ───────────────────────────────────────────────────── */
   const syncFromSite = async () => {
     setSyncing(true);
-    const existing = new Set(items.map((s) => s.slug));
+    // Compare with the server's list right now (not the screen's), so an existing story is never re-sent.
+    let existing: Set<string>;
+    try {
+      existing = new Set((await listAllStories()).map((s) => s.slug));
+    } catch (err: unknown) {
+      setSyncing(false);
+      toast({ variant: "destructive", title: tr(lang, "تعذر قراءة القصص الحالية", "Could not read current stories"), description: apiErrorMessage(err) });
+      return;
+    }
     const toInsert = STATIC_STORIES.filter((s) => !existing.has(s.slug));
     if (toInsert.length === 0) {
       setSyncing(false);

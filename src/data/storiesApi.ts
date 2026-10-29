@@ -323,7 +323,8 @@ export async function getStoryBySlug(slug: string): Promise<StoryCard | null> {
 
 /** List ALL stories for admin (including drafts). Throws on failure; [] when the DB has none. */
 export async function listAllStories(): Promise<StoryCard[]> {
-  const rows = await fetchList<LaravelStory>("/stories", { per_page: 200, status: "all" });
+  // No status filter = every status (the API treats "status" as an exact value; "all" matched nothing).
+  const rows = await fetchList<LaravelStory>("/stories", { per_page: 100 });
   return rows.map(mapLaravelStory).sort((a, b) => a.sort_order - b.sort_order);
 }
 
