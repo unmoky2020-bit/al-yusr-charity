@@ -52,3 +52,6 @@ scripts/check-server.mjs
 # Postman collections can carry real keys and tokens
 *.postman_collection.json
 *.postman_environment.json
+
+# Backups that hold beneficiary data — never commit
+backend-handoff/deleted-cases-backup-*.json
