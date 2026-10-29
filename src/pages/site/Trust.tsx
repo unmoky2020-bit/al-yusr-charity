@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
-  ShieldCheck, Eye, FileCheck2, Camera, Users, HandHeart, BadgeCheck, Heart, MessageCircle, Download, ArrowLeft,
+  FileCheck2, Camera, Users, HandHeart, BadgeCheck, Heart, MessageCircle, Download, ArrowLeft,
   ArrowRight, MousePointerClick, Search, Lock, CreditCard, Landmark, MapPin, Phone, Mail, CalendarCheck, EyeOff,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -30,15 +30,12 @@ const WA_NUMBER = "201097000137";
 const EMAIL = FOUNDATION_EMAIL;
 const LICENSE = "2665/2019";
 
-/** Section heading used by every block on the page. */
-function SectionHead({ badge, Icon, title, sub }: { badge: string; Icon: typeof ShieldCheck; title: string; sub?: string }) {
+/** Section heading used by every block on the page: the title, and its one-line context beside it. */
+function SectionHead({ title, sub }: { title: string; sub?: string }) {
   return (
-    <div className="mx-auto max-w-2xl text-center">
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-secondary">
-        <Icon className="h-3.5 w-3.5" /> {badge}
-      </span>
-      <h2 className="mt-3 text-2xl font-black text-primary md:text-4xl">{title}</h2>
-      {sub && <p className="mt-3 text-muted-foreground md:text-lg">{sub}</p>}
+    <div className="grid gap-3 border-b border-border pb-6 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-end md:gap-10">
+      <h2 className="text-balance text-3xl font-black leading-tight text-primary md:text-4xl">{title}</h2>
+      {sub && <p className="max-w-md leading-relaxed text-foreground/75 md:text-lg">{sub}</p>}
     </div>
   );
 }
@@ -101,7 +98,7 @@ const Trust = () => {
 
   const allocation = [
     { ar: "البرامج الميدانية", en: "Field programs", pct: 88, color: "bg-secondary" },
-    { ar: "اللوجستيات والتشغيل", en: "Logistics & operations", pct: 8, color: "bg-accent" },
+    { ar: "اللوجستيات والتشغيل", en: "Logistics & operations", pct: 8, color: "bg-primary/45" },
     { ar: "الإدارة والمتابعة", en: "Administration & follow-up", pct: 4, color: "bg-primary" },
   ];
 
@@ -152,10 +149,10 @@ const Trust = () => {
       ];
 
   const gallery = [
+    { src: qurbaniMeatTrays, alt: isRTL ? "صكوك أضحية موثّقة ومعبّأة" : "Documented & packed Qurbani shares" },
     { src: markounSalary, alt: isRTL ? "تسليم مرتب شهري لأسرة متعففة" : "Monthly stipend hand-off to a family" },
     { src: posterMedBottle, alt: isRTL ? "تجهيز أدوية مزمنة شهرية" : "Monthly chronic medication" },
     { src: markounWardrobe, alt: isRTL ? "تجهيز دولاب لطفلة في حملة مركون" : "Wardrobe set up for a child — Markoun" },
-    { src: qurbaniMeatTrays, alt: isRTL ? "صكوك أضحية موثّقة ومعبّأة" : "Documented & packed Qurbani shares" },
     { src: takrimVan, alt: isRTL ? "سيارة تكريم الإنسان" : "Honour-the-Human van" },
     { src: trustTransparency, alt: isRTL ? "قافلة توزيع ميدانية" : "Field distribution convoy" },
   ];
@@ -233,214 +230,223 @@ const Trust = () => {
         })}</script>
       </Helmet>
 
-      {/* ══════════ HERO ══════════ */}
-      <section className="relative flex min-h-[50vh] items-center overflow-hidden bg-primary sm:min-h-[55vh]">
-        <div className="absolute inset-0">
-          <img src={trustHero} alt="" aria-hidden className="h-full w-full object-cover opacity-40" />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary/95" />
-          <div className="pointer-events-none absolute -top-24 -start-24 h-96 w-96 rounded-full bg-secondary/15 blur-3xl" />
-        </div>
-        <div className="container relative z-10 mx-auto max-w-[1440px] px-4 py-14 sm:px-6 sm:py-20 lg:px-10">
+      {/* ══════════ HERO + the four promises as a ledger at its foot ══════════ */}
+      <section className="relative overflow-hidden bg-primary text-primary-foreground">
+        <img src={trustHero} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover opacity-35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/75 to-primary" aria-hidden />
+        <div className="container relative z-10 mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-14">
           <div className="text-primary-foreground/80">
             <Breadcrumbs items={[{ name: isRTL ? "الرئيسية" : "Home", href: "/" }, { name: isRTL ? "الشفافية" : "Trust" }]} />
           </div>
-          <div className="mx-auto mt-6 max-w-4xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary/20 px-4 py-1.5 text-xs font-black text-secondary">
-              <ShieldCheck className="h-4 w-4" /> {isRTL ? "ثقتك أمانة.. وشفافيتنا هي الضمان" : "Your trust is a trust — transparency is our guarantee"}
-            </span>
-            <h1 className="mt-5 text-3xl font-black leading-tight text-white sm:text-5xl md:text-6xl">
+          <div className="mt-10 max-w-3xl md:mt-14">
+            <h1 className="text-balance text-4xl font-black leading-[1.15] text-white sm:text-5xl md:text-6xl">
               {isRTL ? "الشفافية في مؤسسة اليسر الخيرية" : "Transparency at Al-Yusr Charity Foundation"}
             </h1>
-            <p className="mx-auto mt-5 max-w-3xl text-sm leading-relaxed text-white/90 sm:text-base md:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg">
               {isRTL
                 ? "بنفتح أبوابنا لك علشان تتأكد بنفسك من وصول كل جنيه لمستحقه — ترخيص رسمي، رقم تتبع لكل تبرع، صور وفيديو، وزيارات ميدانية."
                 : "We open our doors so you can verify every pound reached the right family — official license, a tracking number per donation, photos, video and field visits."}
             </p>
             {/* Short factual answer for AI / voice search (speakable target) */}
-            <p className="ai-answer mx-auto mt-3 max-w-3xl text-sm text-white/75">
+            <p className="ai-answer mt-3 max-w-2xl text-sm leading-relaxed text-white/75">
               {isRTL
                 ? `اليسر مؤسسة أهلية مصرية مشهرة بوزارة التضامن الاجتماعي برقم ${LICENSE}، تعمل في كل محافظات مصر منذ 2019؛ 88% من التبرعات للبرامج الميدانية، ولكل تبرع رقم تتبع وتوثيق بالصور.`
                 : `Al-Yusr is an Egyptian NGO registered with the Ministry of Social Solidarity (No. ${LICENSE}), working across Egypt since 2019; 88% of donations fund field programs, and every gift has a tracking number and photo proof.`}
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
                 <Link to="/donate"><Heart className="h-5 w-5" />{isRTL ? "تبرع بثقة" : "Donate with confidence"}</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-white/30 bg-black/20 text-white backdrop-blur-md hover:bg-black/30">
+              <Button asChild size="lg" variant="outline" className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white">
                 <Link to="/donate/track"><Search className="h-5 w-5" />{isRTL ? "تتبع تبرعك" : "Track your donation"}</Link>
               </Button>
             </div>
           </div>
+
+          <ul className="mt-14 grid gap-x-8 border-t border-white/20 sm:grid-cols-2 lg:grid-cols-4">
+            {promises.map((p) => (
+              <li key={p.t} className="flex items-start gap-3 border-b border-white/10 py-6 last:border-b-0 sm:[&:nth-last-child(-n+2)]:border-b-0 lg:border-b-0">
+                <p.I className="mt-0.5 h-5 w-5 shrink-0 text-secondary" aria-hidden />
+                <div>
+                  <h2 className="text-sm font-black text-white">{p.t}</h2>
+                  <p className="mt-1 text-xs leading-relaxed text-white/75">{p.d}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* ══════════ Trust promises strip ══════════ */}
-      <section className="border-b border-border/70 bg-card shadow-xs">
-        <div className="container mx-auto grid max-w-[1440px] gap-3 px-4 py-6 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-10">
-          {promises.map((p) => (
-            <div key={p.t} className="flex items-start gap-3 rounded-2xl p-2">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><p.I className="h-5 w-5" /></span>
-              <div>
-                <h3 className="text-sm font-black text-primary">{p.t}</h3>
-                <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{p.d}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ══════════ Live impact numbers ══════════ */}
-      <section className="bg-background py-14 md:py-20">
-        <div className="container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-          <SectionHead Icon={BadgeCheck} badge={isRTL ? "أثر موثّق" : "Documented impact"}
+      {/* ══════════ Live impact numbers — one ledger, not four cards ══════════ */}
+      <section className="bg-background py-16 md:py-24">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6">
+          <SectionHead
             title={isRTL ? "أرقامنا على أرض الواقع" : "Our impact in numbers"}
             sub={isRTL ? "كل رقم بيقابله ملف توثيق وصور ميدانية." : "Every number is backed by a documentation file and field photos."} />
-          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+          <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4">
             {statsLoading
-              ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-28 rounded-3xl" />)
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="bg-card px-4 py-8"><Skeleton className="mx-auto h-10 w-24" /><Skeleton className="mx-auto mt-3 h-4 w-28" /></div>
+                ))
               : stats.slice(0, 4).map((s) => (
-                  <div key={s.id} className="rounded-3xl border border-border bg-card p-5 text-center shadow-soft">
-                    <div className="font-mono text-2xl font-black text-secondary md:text-3xl">
-                      {s.value_text ?? (s.value_number ?? 0).toLocaleString(isRTL ? "ar-EG" : "en-US")}
-                      {(isRTL ? s.suffix_ar : s.suffix_en) ? ` ${isRTL ? s.suffix_ar : s.suffix_en}` : ""}
-                    </div>
-                    <div className="mt-1 text-xs font-extrabold text-foreground/85 md:text-sm">{isRTL ? s.label_ar : s.label_en}</div>
+                  <div key={s.id} className="flex flex-col-reverse items-center bg-card px-4 py-8 text-center">
+                    <dt className="mt-2 text-sm font-bold text-foreground/75">{isRTL ? s.label_ar : s.label_en}</dt>
+                    <dd className="font-mono text-3xl font-black tabular-nums text-primary md:text-5xl">
+                      {s.value_text ?? (s.value_number ?? 0).toLocaleString("en-US")}
+                      {(isRTL ? s.suffix_ar : s.suffix_en) ? <span className="ms-1 text-xl md:text-2xl">{isRTL ? s.suffix_ar : s.suffix_en}</span> : null}
+                    </dd>
                   </div>
                 ))}
-          </div>
+          </dl>
         </div>
       </section>
 
       {/* ══════════ Verify yourself ══════════ */}
-      <section className="bg-muted/30 py-14 md:py-20">
-        <div className="container mx-auto grid max-w-[1440px] gap-10 px-4 sm:px-6 md:grid-cols-2 md:items-center lg:px-10">
-          <div className="relative">
-            <div className="absolute -inset-4 rounded-[2rem] bg-secondary/15 blur-2xl" aria-hidden />
-            <img src={trustTransparency} loading="lazy"
-              alt={isRTL ? "أبواب اليسر مفتوحة لتتأكد بنفسك من وصول كل تبرع" : "Al-Yusr's doors are open — verify every donation yourself"}
-              className="relative aspect-[4/3] w-full rounded-3xl border-4 border-secondary/30 object-cover shadow-card" />
-          </div>
+      <section className="bg-muted/40 py-16 md:py-24">
+        <div className="container mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:items-center md:gap-14">
+          <img src={trustTransparency} loading="lazy"
+            alt={isRTL ? "أبواب اليسر مفتوحة لتتأكد بنفسك من وصول كل تبرع" : "Al-Yusr's doors are open — verify every donation yourself"}
+            className="aspect-[4/3] w-full rounded-2xl object-cover shadow-card md:aspect-[4/5]" />
           <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-secondary">
-              <Eye className="h-3.5 w-3.5" /> {isRTL ? "اتأكد بنفسك" : "See for yourself"}
-            </span>
-            <h2 className="mt-3 text-2xl font-black text-primary md:text-4xl">{isRTL ? "إحنا مش بنطلب منك تثق فينا — بنوريك بنفسك" : "We don't ask for your trust — we show you"}</h2>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <h2 className="text-balance text-3xl font-black leading-tight text-primary md:text-4xl">
+              {isRTL ? "إحنا مش بنطلب منك تثق فينا — بنوريك بنفسك" : "We don't ask for your trust — we show you"}
+            </h2>
+            <ul className="mt-8 divide-y divide-border border-y border-border">
               {pillars.map((p) => (
-                <div key={p.t} className="rounded-2xl border border-border bg-card p-4 shadow-soft">
-                  <div className="grid h-10 w-10 place-items-center rounded-xl bg-secondary/15 text-primary"><p.I className="h-5 w-5" /></div>
-                  <h3 className="mt-2 font-black text-primary">{p.t}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{p.d}</p>
-                </div>
+                <li key={p.t} className="flex items-start gap-4 py-5">
+                  <p.I className="mt-1 h-6 w-6 shrink-0 text-primary" aria-hidden />
+                  <div>
+                    <h3 className="text-lg font-black text-primary">{p.t}</h3>
+                    <p className="mt-1 leading-relaxed text-foreground/75">{p.d}</p>
+                  </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* ══════════ How it works ══════════ */}
-      <section className="bg-background py-14 md:py-20">
-        <div className="container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-          <SectionHead Icon={Eye} badge={isRTL ? "كيف تتم العملية" : "How it works"}
-            title={isRTL ? "من تبرعك حتى وصول الأثر — 4 خطوات شفافة" : "From your donation to verified impact — 4 transparent steps"} />
-          <ol className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+      {/* ══════════ How it works — a path, the order matters ══════════ */}
+      <section className="bg-background py-16 md:py-24">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6">
+          <SectionHead title={isRTL ? "من تبرعك حتى وصول الأثر — 4 خطوات شفافة" : "From your donation to verified impact — 4 transparent steps"} />
+          <ol className="relative mt-12 grid gap-10 md:grid-cols-4 md:gap-8">
+            <span aria-hidden className="absolute bottom-5 start-5 top-5 w-px bg-border md:bottom-auto md:end-5 md:start-5 md:top-5 md:h-px md:w-auto" />
             {steps.map((s, i) => (
-              <li key={s.t} className="relative rounded-3xl border border-border bg-card p-5 shadow-soft">
-                <span className="absolute -top-3 start-5 grid h-7 w-7 place-items-center rounded-full bg-secondary text-[12px] font-black text-primary shadow-soft">{i + 1}</span>
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary/15 text-primary"><s.I className="h-6 w-6" /></div>
-                <h3 className="mt-3 font-black text-primary">{s.t}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
+              <li key={s.t} className="relative ps-16 md:ps-0">
+                <span className="absolute start-0 top-0 grid h-10 w-10 place-items-center rounded-full bg-primary font-mono text-base font-black tabular-nums text-primary-foreground ring-8 ring-background md:static">
+                  {i + 1}
+                </span>
+                <h3 className="text-lg font-black text-primary md:mt-5">{s.t}</h3>
+                <p className="mt-2 leading-relaxed text-foreground/75">{s.d}</p>
               </li>
             ))}
           </ol>
         </div>
       </section>
 
-      {/* ══════════ Where every pound goes ══════════ */}
-      <section className="bg-muted/30 py-14 md:py-20">
-        <div className="container mx-auto max-w-5xl px-4">
-          <SectionHead Icon={Eye} badge={isRTL ? "خطة الإنفاق" : "Spending plan"}
-            title={isRTL ? "فين بيروح كل جنيه؟" : "Where does every pound go?"}
-            sub={isRTL ? "88% من تبرعاتك بتروح مباشرة للبرامج الميدانية." : "88% of your donations go directly to field programs."} />
-          <div className="mt-10 grid gap-5 rounded-3xl border border-border bg-card p-6 shadow-soft md:p-8">
-            {allocation.map((a) => (
-              <div key={a.en}>
-                <div className="mb-1.5 flex items-center justify-between text-sm font-extrabold text-primary">
-                  <span>{isRTL ? a.ar : a.en}</span>
-                  <span className="font-mono text-secondary">{a.pct}%</span>
-                </div>
-                <div className="h-3 w-full overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={a.pct} aria-valuemin={0} aria-valuemax={100} aria-label={isRTL ? a.ar : a.en}>
-                  <div className={`${a.color} h-full rounded-full`} style={{ width: `${a.pct}%` }} />
-                </div>
+      {/* ══════════ Where every pound goes — one bar that adds up to 100% ══════════ */}
+      <section className="bg-muted/40 py-16 md:py-24">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6">
+          <SectionHead title={isRTL ? "فين بيروح كل جنيه؟" : "Where does every pound go?"} />
+          <div className="mt-10 grid gap-8 md:grid-cols-[auto_minmax(0,1fr)] md:items-center md:gap-14">
+            <div>
+              <div className="font-mono text-7xl font-black leading-none tabular-nums text-primary md:text-8xl" dir="ltr">88%</div>
+              <p className="mt-3 max-w-[16rem] font-bold text-foreground/80">
+                {isRTL ? "من تبرعاتك بتروح مباشرة للبرامج الميدانية." : "of your donations go directly to field programs."}
+              </p>
+            </div>
+            <div>
+              <div className="flex h-6 w-full overflow-hidden rounded-full bg-muted" role="img"
+                aria-label={allocation.map((a) => `${isRTL ? a.ar : a.en} ${a.pct}%`).join("، ")}>
+                {allocation.map((a) => <div key={a.en} className={a.color} style={{ width: `${a.pct}%` }} />)}
               </div>
-            ))}
+              <ul className="mt-6 grid gap-4 sm:grid-cols-3">
+                {allocation.map((a) => (
+                  <li key={a.en} className="flex items-start gap-3">
+                    <span className={`mt-1.5 h-3 w-3 shrink-0 rounded-full ${a.color}`} aria-hidden />
+                    <div>
+                      <div className="font-mono text-2xl font-black tabular-nums text-primary" dir="ltr">{a.pct}%</div>
+                      <div className="text-sm font-bold text-foreground/75">{isRTL ? a.ar : a.en}</div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ══════════ Official documents ══════════ */}
-      <section className="bg-background py-14 md:py-20">
-        <div className="container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-          <SectionHead Icon={FileCheck2} badge={isRTL ? "وثائق رسمية" : "Official documents"}
+      {/* ══════════ Official documents — a register ══════════ */}
+      <section className="bg-background py-16 md:py-24">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6">
+          <SectionHead
             title={isRTL ? "وثائقنا الرسمية" : "Our official documents"}
             sub={isRTL ? "كل وثيقة متاحة للتحقق، واطلب نسختك على واتساب." : "Every document is available for verification — request a copy on WhatsApp."} />
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
+          <ul className="mt-10 divide-y divide-border rounded-2xl border border-border bg-card">
             {docs.map((d) => (
-              <div key={d.t} className="flex items-start gap-4 rounded-2xl border border-border bg-card p-5 shadow-soft">
-                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><BadgeCheck className="h-6 w-6" /></div>
-                <div className="flex-1">
+              <li key={d.t} className="grid gap-3 p-5 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center sm:gap-5 md:px-7">
+                <FileCheck2 className="hidden h-7 w-7 text-primary sm:block" aria-hidden />
+                <div>
                   <h3 className="font-black text-primary">{d.t}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{d.d}</p>
-                  <a href={wa(isRTL ? `عايز نسخة من: ${d.t}` : `I'd like a copy of: ${d.t}`)} target="_blank" rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-extrabold text-accent hover:text-secondary">
-                    <Download className="h-4 w-4" />{isRTL ? "اطلب نسخة" : "Request a copy"} <Arrow className="h-3.5 w-3.5" />
-                  </a>
+                  <p className="mt-0.5 text-sm leading-relaxed text-foreground/75">{d.d}</p>
                 </div>
-              </div>
+                <a href={wa(isRTL ? `عايز نسخة من: ${d.t}` : `I'd like a copy of: ${d.t}`)} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex min-h-[44px] items-center gap-1.5 justify-self-start rounded-xl border border-border px-4 text-sm font-extrabold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:justify-self-end">
+                  <Download className="h-4 w-4" />{isRTL ? "اطلب نسخة" : "Request a copy"}
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
       {/* ══════════ Secure payment & donor privacy ══════════ */}
-      <section className="bg-primary py-14 text-primary-foreground md:py-20">
-        <div className="container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3.5 py-1 text-xs font-black text-secondary">
-              <Lock className="h-3.5 w-3.5" /> {isRTL ? "دفع آمن وخصوصية" : "Secure payment & privacy"}
-            </span>
-            <h2 className="mt-3 text-2xl font-black md:text-4xl">{isRTL ? "طرق تبرع آمنة وبياناتك في أمان" : "Safe ways to give — your data stays safe"}</h2>
+      <section className="bg-primary py-16 text-primary-foreground md:py-24">
+        <div className="container mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-14">
+          <div>
+            <Lock className="h-8 w-8 text-secondary" aria-hidden />
+            <h2 className="mt-4 text-balance text-3xl font-black leading-tight md:text-4xl">{isRTL ? "طرق تبرع آمنة وبياناتك في أمان" : "Safe ways to give — your data stays safe"}</h2>
+            <p className="mt-4 text-primary-foreground/80">
+              {isRTL ? "تفاصيل حماية بياناتك في " : "How we protect your data: "}
+              <Link to="/privacy" className="font-extrabold text-secondary underline decoration-secondary/50 underline-offset-4 hover:decoration-secondary">{isRTL ? "سياسة الخصوصية" : "Privacy Policy"}</Link>
+            </p>
           </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="divide-y divide-white/15 border-y border-white/15">
             {payments.map((p) => (
-              <div key={p.t} className="rounded-3xl border border-white/15 bg-white/5 p-5 backdrop-blur-sm">
-                <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary/20 text-secondary"><p.I className="h-5 w-5" /></div>
-                <h3 className="mt-3 font-black">{p.t}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-primary-foreground/80">{p.d}</p>
-              </div>
+              <li key={p.t} className="flex items-start gap-4 py-5">
+                <p.I className="mt-0.5 h-5 w-5 shrink-0 text-secondary" aria-hidden />
+                <div>
+                  <h3 className="font-black text-white">{p.t}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-primary-foreground/80">{p.d}</p>
+                </div>
+              </li>
             ))}
-          </div>
-          <p className="mt-6 text-center text-sm text-primary-foreground/80">
-            {isRTL ? "تفاصيل حماية بياناتك في " : "How we protect your data: "}
-            <Link to="/privacy" className="font-extrabold text-secondary underline-offset-4 hover:underline">{isRTL ? "سياسة الخصوصية" : "Privacy Policy"}</Link>
-          </p>
+          </ul>
         </div>
       </section>
 
       {/* ══════════ Where we work ══════════ */}
-      <section className="bg-background py-14 md:py-20">
-        <div className="container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-          <SectionHead Icon={MapPin} badge={isRTL ? "نطاق العمل" : "Where we work"}
+      <section className="bg-background py-16 md:py-24">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6">
+          <SectionHead
             title={isRTL ? "بنوصل لكل محافظات مصر" : "We reach every governorate in Egypt"}
             sub={isRTL ? "أي حالة بتتقبل بعد بحث ميداني من فريقنا، في أي مكان في مصر." : "Every case is accepted after a field assessment by our team, anywhere in Egypt."} />
-          <ul className="mx-auto mt-10 grid max-w-5xl gap-3 text-sm font-semibold text-foreground/85 md:grid-cols-2">
-            {regions.map((x) => (
-              <li key={x} className="flex items-start gap-2 rounded-2xl border border-border bg-card px-4 py-3 shadow-soft">
-                <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />{x}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <dl className="mt-10 grid gap-x-12 md:grid-cols-2">
+            {regions.map((x) => {
+              const [place, ...rest] = x.split(" — ");
+              return (
+                <div key={x} className="flex items-start gap-3 border-b border-border py-4">
+                  <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
+                  <div>
+                    <dt className="font-black text-primary">{place}</dt>
+                    {rest.length > 0 && <dd className="mt-0.5 text-sm leading-relaxed text-foreground/75">{rest.join(" — ")}</dd>}
+                  </div>
+                </div>
+              );
+            })}
+          </dl>
+          <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild variant="outline"><Link to="/cases">{isRTL ? "الحالات الموثّقة" : "Verified cases"}</Link></Button>
             <Button asChild variant="outline"><Link to="/about#achievements">{isRTL ? "إنجازاتنا" : "Our achievements"}</Link></Button>
             <Button asChild variant="outline"><Link to="/services-map">{isRTL ? "خريطة الخدمات" : "Services map"}</Link></Button>
@@ -448,21 +454,21 @@ const Trust = () => {
         </div>
       </section>
 
-      {/* ══════════ Proof gallery ══════════ */}
-      <section className="bg-muted/30 py-14 md:py-20">
-        <div className="container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-          <SectionHead Icon={Camera} badge={isRTL ? "نماذج توثيق" : "Documentation samples"}
+      {/* ══════════ Proof gallery — one lead photo, the rest around it ══════════ */}
+      <section className="bg-muted/40 py-16 md:py-24">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6">
+          <SectionHead
             title={isRTL ? "صور حقيقية من قوافلنا الميدانية" : "Real photos from our field convoys"}
             sub={isRTL ? "كل تبرع يصاحبه دليل بصري يوصلك مع رقم المتابعة." : "Every donation comes with visual proof, sent with your tracking reference."} />
-          <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3">
-            {gallery.map((g) => (
-              <figure key={g.alt} className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
-                <img src={g.src} alt={g.alt} loading="lazy" className="aspect-square w-full object-cover transition duration-500 hover:scale-105" />
-                <figcaption className="p-2 text-center text-[11px] font-bold text-muted-foreground">{g.alt}</figcaption>
+          <div className="mt-10 grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[190px] md:grid-cols-3 md:auto-rows-[210px] [&>*:last-child]:col-span-2 md:[&>*:last-child]:col-span-1">
+            {gallery.map((g, i) => (
+              <figure key={g.alt} className={`group relative overflow-hidden rounded-2xl bg-muted ${i === 0 ? "col-span-2 row-span-2" : ""}`}>
+                <img src={g.src} alt={g.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none" />
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-3 pb-2.5 pt-8 text-xs font-bold text-white">{g.alt}</figcaption>
               </figure>
             ))}
           </div>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild variant="outline"><Link to="/gallery">{isRTL ? "معرض الصور الكامل" : "Full gallery"}</Link></Button>
             <Button asChild variant="outline"><Link to="/stories">{isRTL ? "قصص الأثر" : "Impact stories"}</Link></Button>
           </div>
@@ -480,9 +486,9 @@ const Trust = () => {
       />
 
       {/* ══════════ Legal identity & contact ══════════ */}
-      <section className="bg-background pb-14 md:pb-20">
+      <section className="bg-background py-16 md:py-20">
         <div className="container mx-auto max-w-5xl px-4">
-          <div className="grid gap-4 rounded-3xl border border-border bg-card p-6 shadow-soft md:grid-cols-2 md:p-8">
+          <div className="grid gap-8 rounded-2xl border border-border bg-card p-6 md:grid-cols-2 md:p-8">
             <div>
               <h2 className="text-xl font-black text-primary md:text-2xl">{isRTL ? "البيانات القانونية" : "Legal identity"}</h2>
               <ul className="mt-4 space-y-2.5 text-sm text-foreground/85">
@@ -498,7 +504,7 @@ const Trust = () => {
                 <li><a href={`tel:+${WA_NUMBER}`} className="inline-flex items-center gap-2 hover:text-secondary"><Phone className="h-4 w-4 text-secondary" /><span dir="ltr">{PHONE}</span></a></li>
                 <li><a href={wa(isRTL ? "السلام عليكم، عايز أسأل عن تبرع." : "Hi, I have a question about a donation.")} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-secondary"><MessageCircle className="h-4 w-4 text-secondary" />{isRTL ? "واتساب" : "WhatsApp"}</a></li>
                 <li><a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-2 hover:text-secondary"><Mail className="h-4 w-4 text-secondary" />{EMAIL}</a></li>
-                <li><Link to="/contact" className="inline-flex items-center gap-2 font-extrabold text-accent hover:text-secondary">{isRTL ? "كل وسائل التواصل" : "All contact options"} <Arrow className="h-3.5 w-3.5" /></Link></li>
+                <li><Link to="/contact" className="inline-flex items-center gap-2 font-extrabold text-primary underline decoration-secondary decoration-2 underline-offset-4">{isRTL ? "كل وسائل التواصل" : "All contact options"} <Arrow className="h-3.5 w-3.5" /></Link></li>
               </ul>
             </div>
           </div>
