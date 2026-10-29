@@ -47,6 +47,8 @@ $completionPercentage = $targetAmount > 0
             'name_ar' => $this->name_ar,
             'name_en' => $this->name_en,
             'slug' => $this->slug,
+            'faq_category_id' => $this->faq_category_id,
+            'faq_category' => $this->faqCategory ? ['id' => $this->faqCategory->id, 'slug' => $this->faqCategory->slug, 'name_ar' => $this->faqCategory->name_ar] : null,
 
             'subtitle_ar' => $this->subtitle_ar,
             'subtitle_en' => $this->subtitle_en,
@@ -58,9 +60,16 @@ $completionPercentage = $targetAmount > 0
                 ? (preg_match('#^https?://#', $this->image) ? $this->image : Storage::disk('public')->url($this->image))
                 : null,
             'landing_slug' => $this->landing_slug,
-            'page_content' => $this->page_content,
-            'seo' => $this->seo,
-            'faqs' => $this->faqs,
+            // Landing-page content is large: lists (index) send it only with ?include=content;
+            // a single campaign (show / by-slug) always has it.
+            $this->mergeWhen(
+                $request->route()?->getActionMethod() !== 'index' || str_contains((string) $request->query('include'), 'content'),
+                fn () => [
+                    'page_content' => $this->page_content,
+                    'seo' => $this->seo,
+                    'faqs' => $this->faqs,
+                ]
+            ),
                 
                 'target_amount' => $this->target_amount,
 'collected_amount' => number_format($collectedAmount, 2, '.', ''),

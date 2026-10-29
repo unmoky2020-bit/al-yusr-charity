@@ -14,6 +14,8 @@ class ProjectResource extends JsonResource
             'name' => $this->name,
             'name_en' => $this->name_en,
             'slug' => $this->slug,
+            'faq_category_id' => $this->faq_category_id,
+            'faq_category' => $this->faqCategory ? ['id' => $this->faqCategory->id, 'slug' => $this->faqCategory->slug, 'name_ar' => $this->faqCategory->name_ar] : null,
             'description' => $this->description,
             'short_description' => $this->short_description,
             'short_description_en' => $this->short_description_en,

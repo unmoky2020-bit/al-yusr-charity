@@ -15,6 +15,7 @@ class CaseResource extends JsonResource
 
         $data = [
             'id' => $this->id,
+            'axis_id' => $this->axis_id,
             'code' => $this->code,
             'title' => $this->title,
 

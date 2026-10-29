@@ -47,7 +47,7 @@ class SeasonController extends Controller
         }
 
         return SeasonResource::collection(
-            $query->paginate(10)
+            $query->paginate(\App\Support\PerPage::from(request(), 10))
         );
     }
 

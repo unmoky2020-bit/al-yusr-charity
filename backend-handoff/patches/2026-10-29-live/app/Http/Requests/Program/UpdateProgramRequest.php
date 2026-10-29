@@ -17,6 +17,7 @@ class UpdateProgramRequest extends FormRequest
         $programId = $this->route('program')?->id ?? $this->route('program');
 
         return [
+            'faq_category_id' => ['sometimes', 'nullable', 'integer', 'exists:faq_categories,id'],
             'axis_id' => 'sometimes|nullable|exists:axes,id',
             'season_ids' => 'sometimes|nullable|array',
             'season_ids.*' => 'integer|exists:seasons,id',

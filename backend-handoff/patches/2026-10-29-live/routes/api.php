@@ -85,6 +85,15 @@ Route::prefix('v1')->group(function () {
     Route::get('donations/track/{transactionReference}', [DonationController::class, 'track'])
         ->middleware('throttle:30,1');
 
+    // Service pages (public reads; ?all=1 for staff)
+    Route::get('services', [\App\Http\Controllers\Api\V1\Service\ServiceController::class, 'index']);
+    Route::get('service-categories', [\App\Http\Controllers\Api\V1\Service\ServiceController::class, 'categories']);
+    Route::get('services/{slug}', [\App\Http\Controllers\Api\V1\Service\ServiceController::class, 'show']);
+
+    // SEO / social preview data for one public page (used by elyusr.org/seo.php)
+    Route::get('seo/page', \App\Http\Controllers\Api\V1\Seo\SeoPageController::class)
+        ->middleware('throttle:240,1');
+
     Route::post('paymob/callback', [PaymobController::class, 'callback']);
 
     Route::post('kashier/webhook', [KashierController::class, 'webhook']);
@@ -666,16 +675,39 @@ Route::patch(
 
         Route::get('donations', [DonationController::class, 'index'])
             ->middleware('permission:donations.view');
+        Route::get('donations/stats', \App\Http\Controllers\Api\V1\Donation\DonationStatsController::class)
+            ->middleware('permission:donations.view');
         Route::post('donations', [DonationController::class, 'store'])
             ->middleware('permission:donations.create');
         Route::get('donations/{donation}', [DonationController::class, 'show'])
             ->middleware('permission:donations.view');
+        // Status changes by the team (allowed transitions only, logged) — PUT ignores status.
+        Route::patch('donations/{donation}/status', \App\Http\Controllers\Api\V1\Donation\DonationStatusController::class)
+            ->middleware('permission:donations.update');
         Route::put('donations/{donation}', [DonationController::class, 'update'])
             ->middleware('permission:donations.update');
         Route::patch('donations/{donation}', [DonationController::class, 'update'])
             ->middleware('permission:donations.update');
         Route::delete('donations/{donation}', [DonationController::class, 'destroy'])
             ->middleware('permission:donations.delete');
+
+        // Service pages (staff writes)
+        Route::post('services/reorder', [\App\Http\Controllers\Api\V1\Service\ServiceController::class, 'reorder'])
+            ->middleware('permission:content.update');
+        Route::post('services', [\App\Http\Controllers\Api\V1\Service\ServiceController::class, 'store'])
+            ->middleware('permission:content.create');
+        Route::put('services/{slug}', [\App\Http\Controllers\Api\V1\Service\ServiceController::class, 'update'])
+            ->middleware('permission:content.update');
+        Route::delete('services/{slug}', [\App\Http\Controllers\Api\V1\Service\ServiceController::class, 'destroy'])
+            ->middleware('permission:content.delete');
+
+        // Online payment attempts = gateway donations (no separate table)
+        Route::get('payment-transactions', [\App\Http\Controllers\Api\V1\Donation\PaymentTransactionController::class, 'index'])
+            ->middleware('permission:donations.view');
+        Route::patch('payment-transactions/{donation}', [\App\Http\Controllers\Api\V1\Donation\PaymentTransactionController::class, 'update'])
+            ->middleware('permission:donations.update');
+        Route::post('payment-transactions/{donation}/retry', [\App\Http\Controllers\Api\V1\Donation\PaymentTransactionController::class, 'retry'])
+            ->middleware('permission:donations.update');
 
         /*
         |--------------------------------------------------------------------------
@@ -1040,6 +1072,22 @@ Route::patch(
             ->middleware(['permission:newsletter.update', 'editor.approval']);
         Route::delete('newsletter/{newsletter_subscriber}', [NewsletterSubscriberController::class, 'destroy'])
             ->middleware(['permission:newsletter.delete', 'editor.approval']);
+
+        // Newsletter campaigns (compose → test → send to confirmed subscribers)
+        Route::get('newsletter-campaigns', [\App\Http\Controllers\Api\V1\Newsletter\NewsletterCampaignController::class, 'index'])
+            ->middleware('permission:newsletter.view');
+        Route::post('newsletter-campaigns', [\App\Http\Controllers\Api\V1\Newsletter\NewsletterCampaignController::class, 'store'])
+            ->middleware('permission:newsletter.create');
+        Route::get('newsletter-campaigns/{newsletterCampaign}', [\App\Http\Controllers\Api\V1\Newsletter\NewsletterCampaignController::class, 'show'])
+            ->middleware('permission:newsletter.view');
+        Route::put('newsletter-campaigns/{newsletterCampaign}', [\App\Http\Controllers\Api\V1\Newsletter\NewsletterCampaignController::class, 'update'])
+            ->middleware('permission:newsletter.update');
+        Route::delete('newsletter-campaigns/{newsletterCampaign}', [\App\Http\Controllers\Api\V1\Newsletter\NewsletterCampaignController::class, 'destroy'])
+            ->middleware('permission:newsletter.delete');
+        Route::post('newsletter-campaigns/{newsletterCampaign}/send-test', [\App\Http\Controllers\Api\V1\Newsletter\NewsletterCampaignController::class, 'sendTest'])
+            ->middleware(['permission:newsletter.update', 'throttle:10,1']);
+        Route::post('newsletter-campaigns/{newsletterCampaign}/send', [\App\Http\Controllers\Api\V1\Newsletter\NewsletterCampaignController::class, 'send'])
+            ->middleware(['permission:newsletter.update', 'throttle:3,1']);
 
         /*
         |--------------------------------------------------------------------------

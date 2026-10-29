@@ -14,6 +14,7 @@ class StoreProgramRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'faq_category_id' => ['sometimes', 'nullable', 'integer', 'exists:faq_categories,id'],
             'axis_id' => 'nullable|exists:axes,id',
             'season_ids' => 'nullable|array',
             'season_ids.*' => 'integer|exists:seasons,id',

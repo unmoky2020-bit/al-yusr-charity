@@ -24,6 +24,8 @@ class ProgramResource extends JsonResource
             */
             'id' => $this->id,
             'slug' => $this->slug,
+            'faq_category_id' => $this->faq_category_id,
+            'faq_category' => $this->faqCategory ? ['id' => $this->faqCategory->id, 'slug' => $this->faqCategory->slug, 'name_ar' => $this->faqCategory->name_ar] : null,
             'hero_h1_ar' => $this->hero_h1_ar,
             'hero_h1_en' => $this->hero_h1_en,
             'hero_h3_ar' => $this->hero_h3_ar,

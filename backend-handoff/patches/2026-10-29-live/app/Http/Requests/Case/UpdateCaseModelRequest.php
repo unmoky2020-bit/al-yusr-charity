@@ -40,6 +40,14 @@ class UpdateCaseModelRequest extends FormRequest
                 'exists:case_categories,id',
             ],
 
+            // المحور
+            'axis_id' => [
+                'sometimes',
+                'nullable',
+                'integer',
+                'exists:axes,id',
+            ],
+
             // البرنامج
             'program_id' => [
                 'sometimes',

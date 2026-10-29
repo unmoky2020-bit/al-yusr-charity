@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DonationCampaign extends Model
 {
+    /** Every response shows its linked FAQ category: load it with the record (one query per list). */
+    protected $with = ['faqCategory'];
+
     protected $fillable = [
+        'faq_category_id',
         'category_id',
         'name_ar',
         'name_en',
@@ -79,5 +83,11 @@ class DonationCampaign extends Model
             CaseModel::class,
             'donation_campaign_id'
         );
+    }
+
+    /** The FAQ category whose questions this page shows. */
+    public function faqCategory()
+    {
+        return $this->belongsTo(FaqCategory::class, 'faq_category_id');
     }
 }

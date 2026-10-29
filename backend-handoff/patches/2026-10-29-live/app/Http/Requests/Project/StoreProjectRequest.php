@@ -15,6 +15,7 @@ class StoreProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'faq_category_id' => ['sometimes', 'nullable', 'integer', 'exists:faq_categories,id'],
             'name' => 'required|string|max:255',
             'name_en' => 'nullable|string|max:255',
             'slug' => [

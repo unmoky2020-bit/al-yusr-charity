@@ -18,12 +18,12 @@ class NewDonationNotification extends AppNotification
 
     protected function title(): string
     {
-        return 'تبرع جديد';
+        return 'تبرع جديد بانتظار تأكيدك';
     }
 
     protected function message(): string
     {
-        return "تبرع جديد من {$this->donorName} بقيمة {$this->amount} جنيه";
+        return "{$this->donorName} سجّل تبرع بـ {$this->amount} جنيه بطريقة دفع يدوية — أكّد الاستلام";
     }
 
     protected function url(): ?string
@@ -33,7 +33,7 @@ class NewDonationNotification extends AppNotification
 
     protected function severity(): string
     {
-        return 'success';
+        return 'warning';
     }
 
     protected function extra(): array

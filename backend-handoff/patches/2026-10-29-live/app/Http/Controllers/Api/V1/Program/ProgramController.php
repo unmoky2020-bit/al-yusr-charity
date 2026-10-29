@@ -70,7 +70,7 @@ public function index(Request $request)
         });
     }
 
-    return ProgramResource::collection($query->paginate(10));
+    return ProgramResource::collection($query->paginate(\App\Support\PerPage::from(request(), 10)));
 }
      //////////////////////////////////////////////
     //                   Store 

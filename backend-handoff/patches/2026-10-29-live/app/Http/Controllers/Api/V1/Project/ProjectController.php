@@ -15,7 +15,7 @@ class ProjectController extends Controller
     {
 
          return ProjectResource::collection(
-        Project::with(['donationPackages', 'cases'])->latest()->paginate(10)
+        Project::with(['donationPackages', 'cases'])->latest()->paginate(\App\Support\PerPage::from(request(), 10))
     );
     }
 

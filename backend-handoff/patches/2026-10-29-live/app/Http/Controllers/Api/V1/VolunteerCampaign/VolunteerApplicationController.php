@@ -22,10 +22,11 @@ use Illuminate\Support\Facades\DB;
  */
 class VolunteerApplicationController extends Controller
 {
-    /** Frontend words that map onto the stored enum. */
-    private const STATUS_ALIASES = ['cancelled' => 'withdrawn'];
+    /** Other spellings that map onto the stored enum. */
+    private const STATUS_ALIASES = ['cancelled' => 'withdrawn', 'waitlisted' => 'waitlist', 'no_show' => 'noshow'];
 
-    private const STATUSES = ['invited', 'pending', 'approved', 'rejected', 'withdrawn'];
+    /** waitlist = قائمة انتظار, attended = حضر, noshow = لم يحضر (after the field day). */
+    private const STATUSES = ['invited', 'pending', 'approved', 'rejected', 'withdrawn', 'waitlist', 'attended', 'noshow'];
 
     public function apply(Request $request, VolunteerCampaign $volunteerCampaign)
     {
