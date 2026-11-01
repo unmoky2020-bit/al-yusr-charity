@@ -21,6 +21,8 @@ export const CAMPAIGN_PAGES: CampaignPageMeta[] = [
   { slug: "ramadan", path: "/ramadan", name: l("موسم الخير (رمضان)", "Ramadan season"), load: () => import("./ramadan").then((m) => m.default), apiSlugs: ["ramadan", "ramadan-season"], apiIds: [20], nameKey: "رمضان" },
   { slug: "markoun", path: "/markoun", name: l("حملة مَرْكون", "Markoun campaign"), load: () => import("./markoun").then((m) => m.default), apiSlugs: ["markoon", "markoun", "markon"], apiIds: [19], nameKey: "مركون" },
   { slug: "arboun", path: "/arboun", name: l("مبادرة عربون خير", "Arboun Khair"), load: () => import("./arboun").then((m) => m.default), apiSlugs: ["arboun-kheir", "arboun", "arboon"], apiIds: [22], nameKey: "عربون" },
+  // No backend campaign yet: create one in the dashboard with slug «ten-days» (or a name containing «العشر»).
+  { slug: "ashr", path: "/ten-days", name: l("العشر الأوائل من ذي الحجة", "First ten days of Dhul Hijjah"), load: () => import("./ashr").then((m) => m.default), apiSlugs: ["ten-days", "ashr", "al-ashr", "dhul-hijjah"], apiIds: [], nameKey: "العشر" },
   { slug: "food", path: "/food-box", name: l("الغذاء الشهري", "Monthly food"), load: () => import("./food").then((m) => m.default), apiSlugs: ["food", "monthly-food", "food-box"], apiIds: [23], nameKey: "غذاء" },
 ];
 

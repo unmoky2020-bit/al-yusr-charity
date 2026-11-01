@@ -1207,3 +1207,50 @@ img, video, svg, canvas {
 [dir="ltr"] .food-seg { transform-origin: left; }
 @keyframes food-seg-in { from { transform: scaleX(0); } to { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .food-tag, .food-card, .food-seg { animation: none; } }
+
+/* ── Water project: interactive tap (src/components/campaigns/WaterTap.tsx) ── */
+.wtap-handle { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .5s cubic-bezier(.3,1.4,.5,1); }
+.wtap-open .wtap-handle { transform: rotate(-70deg); }
+.wtap-stream { transform-box: fill-box; transform-origin: 50% 0; transform: scaleY(0); transition: transform .45s ease-out; }
+.wtap-open .wtap-stream { transform: scaleY(1); animation: wtap-flow .5s linear infinite alternate; }
+.wtap-fill { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); transition: transform 2.4s ease-in-out .35s; }
+.wtap-open .wtap-fill { transform: scaleY(1); }
+.wtap-splash { opacity: 0; }
+.wtap-open .wtap-splash { animation: wtap-splash .6s ease-out .5s infinite; }
+.wtap-drip { animation: wtap-drip 2.6s ease-in infinite; }
+.wtap-open .wtap-drip { display: none; }
+.wtap-happy { opacity: 0; transition: opacity .4s ease 1.2s; }
+.wtap-sad { opacity: 1; transition: opacity .3s ease 1s; }
+.wtap-open .wtap-happy { opacity: 1; }
+.wtap-open .wtap-sad { opacity: 0; }
+.wtap-card { animation: wtap-card .45s ease-out both; }
+.wtap-card:nth-child(2) { animation-delay: .08s; }
+.wtap-card:nth-child(3) { animation-delay: .16s; }
+@keyframes wtap-flow { from { opacity: .85; } to { opacity: 1; } }
+@keyframes wtap-splash { 0% { opacity: 0; transform: translateY(4px); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(-6px); } }
+@keyframes wtap-drip { 0%, 60% { opacity: 0; transform: translateY(0); } 70% { opacity: 1; } 100% { opacity: 0; transform: translateY(70px); } }
+@keyframes wtap-card { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .wtap-handle, .wtap-stream, .wtap-fill, .wtap-happy, .wtap-sad { transition: none; }
+  .wtap-open .wtap-stream, .wtap-open .wtap-splash, .wtap-drip, .wtap-card { animation: none; }
+}
+
+/* ── Digital tasbih (src/pages/site/Misbaha.tsx): short, transform/opacity-only motion ── */
+.misbaha-ring { transition: transform 120ms ease-out; -webkit-user-select: none; user-select: none; }
+.misbaha-ring:active { transform: scale(0.985); }
+.misbaha-ring::after { content: ""; position: absolute; inset: 0; border-radius: 9999px; pointer-events: none; box-shadow: 0 0 0 0 hsl(var(--secondary) / 0); transition: box-shadow 500ms ease-out; }
+.misbaha-done::after { box-shadow: 0 0 0 10px hsl(var(--secondary) / 0.18), 0 0 60px 10px hsl(var(--secondary) / 0.25); }
+.misbaha-bead { transition: fill 200ms ease-out; }
+.misbaha-bead-new { transform-box: fill-box; transform-origin: center; animation: misbaha-pop 260ms ease-out; }
+.misbaha-tap { background: radial-gradient(circle, hsl(var(--secondary) / 0.35), transparent 70%); opacity: 0; animation: misbaha-ripple 380ms ease-out; }
+.misbaha-toast { opacity: 0; transform: translateY(6px); transition: opacity 220ms ease-out, transform 220ms ease-out; }
+.misbaha-toast.is-on { opacity: 1; transform: none; }
+.misbaha-fade { animation: misbaha-fade 260ms ease-out; }
+@keyframes misbaha-pop { from { transform: scale(1.6); } to { transform: scale(1); } }
+@keyframes misbaha-ripple { from { opacity: 1; transform: scale(0.85); } to { opacity: 0; transform: scale(1.25); } }
+@keyframes misbaha-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .misbaha-ring, .misbaha-ring::after, .misbaha-bead, .misbaha-toast { transition: none; }
+  .misbaha-ring:active { transform: none; }
+  .misbaha-bead-new, .misbaha-tap, .misbaha-fade { animation: none; }
+}

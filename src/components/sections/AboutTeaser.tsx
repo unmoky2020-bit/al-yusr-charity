@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ShieldCheck, Sprout } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
 
 /**
- * Home → About bridge. A short origin story with a three-stop timeline
- * (grassroots → licensed → today) that draws itself once when scrolled into view.
+ * Home → About bridge. A short, formal origin story with a three-stop timeline
+ * (a team for good → official registration → the journey continues) that draws itself once in view.
  */
 export const AboutTeaser = () => {
   const { lang } = useLang();
@@ -34,30 +34,33 @@ export const AboutTeaser = () => {
     return () => io.disconnect();
   }, []);
 
+  /** Two dated milestones, then a mark (not a number) for the journey that continues. */
   const stops = isRTL
     ? [
-        { y: "2000", t: "عمل تطوعي في القرى", d: "سنين من الخير المباشر قبل أي ترخيص." },
-        { y: "2019", t: "إشهار رسمي 2665", d: "كيان منظم تحت وزارة التضامن الاجتماعي." },
-        { y: "2025", t: "385 وصلة مياه", d: "و122 سقف و3000+ كرتونة شهرية." },
+        { y: "2000", t: "البداية: فريق للخير", d: "فريق اجتمع على خدمة الأسر المستحقة، وبنى خبرته في الميدان." },
+        { y: "2019", t: "الإشهار الرسمي", d: "مؤسسة مشهرة برقم 2665 بوزارة التضامن الاجتماعي." },
+        { y: null, t: "والمسيرة مستمرة", d: "المؤسسة بتتوسع وبتدوم بانضمامك لينا أو بتبرعك." },
       ]
     : [
-        { y: "2000", t: "Village volunteering", d: "Years of direct giving before any license." },
-        { y: "2019", t: "Licensed NGO 2665", d: "Registered with the Ministry of Social Solidarity." },
-        { y: "2025", t: "385 water taps", d: "Plus 122 roofs and 3,000+ monthly food boxes." },
+        { y: "2000", t: "The start: a team for good", d: "A team that came together to serve families in need and built its field experience." },
+        { y: "2019", t: "Official registration", d: "Registered foundation No. 2665 with the Ministry of Social Solidarity." },
+        { y: null, t: "And the journey continues", d: "The foundation grows and lasts as you join us or give." },
       ];
 
   return (
     <section id="about-teaser" className="pattern-why relative overflow-hidden py-16 text-primary-foreground md:py-24">
       <div className="container relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 md:grid-cols-12 lg:gap-16 lg:px-8">
         <div className="text-center md:col-span-5 md:text-start">
-          <p className="text-sm font-black text-secondary">{isRTL ? "من نحن" : "Who we are"}</p>
+          <p className="inline-flex items-center gap-1.5 text-sm font-black text-secondary">
+            <ShieldCheck className="h-4 w-4" /> {isRTL ? "من نحن" : "Who we are"}
+          </p>
           <h2 className="mt-2 text-3xl font-black leading-[1.3] md:text-4xl">
-            {isRTL ? "مش بداية جديدة. أكتر من 20 سنة في الميدان" : "Not a new start. 20+ years in the field"}
+            {isRTL ? "بدأنا فريقًا للخير، وكبرنا مؤسسة مشهرة" : "We began as a team for good and grew into a registered foundation"}
           </h2>
           <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-primary-foreground/85 md:mx-0">
             {isRTL
-              ? "اليسر بدأت بناس بتلف على البيوت في قرى الدقهلية، وبقت مؤسسة مشهرة عشان الخير يكبر بنظام وأمانة. اعرف مين إحنا وإزاي بنضمن إن تبرعك يوصل."
-              : "Al-Yusr began with people knocking on doors in Dakahlia's villages, and became a licensed foundation so the good could grow with order and accountability."}
+              ? "اليسر بدأت فريق اجتمع على عمل الخير وخدمة الأسر المستحقة. ومع اتساع العمل اتأسست مؤسسة مشهرة رسميًا من وزارة التضامن الاجتماعي برقم 2665 لسنة 2019، علشان الخير يكبر بنظام وحوكمة وشفافية. والمسيرة لسه مستمرة."
+              : "Al-Yusr began as a team that came together to do good and serve families in need. As the work grew, it became a foundation officially registered with the Ministry of Social Solidarity (No. 2665, 2019), so the good could grow with order, governance and transparency. The journey continues."}
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-x-6 md:justify-start">
             <Link
@@ -84,14 +87,34 @@ export const AboutTeaser = () => {
           <ol className="relative grid grid-cols-3 gap-3 sm:gap-6">
             <span aria-hidden className="absolute end-[16.666%] start-[16.666%] top-[11px] h-[2px] bg-primary-foreground/15" />
             <span aria-hidden className="about-teaser-line absolute end-[16.666%] start-[16.666%] top-[11px] h-[2px] bg-secondary ltr:origin-left rtl:origin-right" />
+            {/* the line keeps going past the last stop: the journey is not over */}
+            <span
+              aria-hidden
+              className="about-teaser-stop absolute top-[11px] h-0"
+              style={{ insetInlineEnd: "-4%", width: "20%", borderTop: "2px dashed hsl(var(--secondary) / 0.65)", transitionDelay: "820ms" }}
+            />
             {stops.map((s, i) => (
-              <li key={s.y} className="about-teaser-stop relative text-center" style={{ transitionDelay: `${120 + i * 220}ms` }}>
+              <li key={s.t} className="about-teaser-stop relative text-center" style={{ transitionDelay: `${120 + i * 220}ms` }}>
                 <span aria-hidden className="relative mx-auto block h-6 w-6 rounded-full border-2 border-secondary bg-[hsl(152_65%_11%)]">
                   <span className="about-teaser-dot absolute inset-[4px] rounded-full bg-secondary" style={{ transitionDelay: `${120 + i * 220}ms` }} />
                 </span>
-                <div className="mt-4 font-mono text-3xl font-black tabular-nums text-secondary sm:text-5xl" dir="ltr">{s.y}</div>
+                {s.y ? (
+                  <div className="mt-4 font-mono text-3xl font-black tabular-nums text-secondary sm:text-5xl" dir="ltr">{s.y}</div>
+                ) : (
+                  <div className="mt-4 flex justify-center">
+                    <span className="relative grid h-9 w-9 place-items-center rounded-full bg-secondary text-secondary-foreground shadow-[0_0_0_6px_hsl(var(--secondary)/0.15)] sm:h-12 sm:w-12">
+                      <Sprout className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </span>
+                  </div>
+                )}
                 <div className="mt-2 text-sm font-black sm:text-base">{s.t}</div>
-                <p className="mt-1 hidden text-sm leading-relaxed text-primary-foreground/75 sm:block">{s.d}</p>
+                <p className="mt-1 text-xs leading-relaxed text-primary-foreground/75 sm:text-sm">{s.d}</p>
+                {!s.y && (
+                  <div className="mt-2 flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs font-black sm:text-sm">
+                    <Link to="/volunteer" className="text-secondary underline decoration-secondary/50 underline-offset-4 hover:decoration-secondary">{isRTL ? "انضم لينا" : "Join us"}</Link>
+                    <Link to="/donate" className="text-secondary underline decoration-secondary/50 underline-offset-4 hover:decoration-secondary">{isRTL ? "تبرّع" : "Give"}</Link>
+                  </div>
+                )}
               </li>
             ))}
           </ol>

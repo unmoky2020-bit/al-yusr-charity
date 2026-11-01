@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Heart, Loader2, Lock, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Copy, Heart, Loader2, Lock, ShieldCheck } from "lucide-react";
+import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useLang } from "@/i18n/LangContext";
 import { useToast } from "@/hooks/use-toast";
 import { trackDonationStarted } from "@/lib/track";
 import { createDonation, GENERAL_PROGRAM_ID } from "@/data/casesApi";
 import { donationsStore } from "@/data/donationsStore";
 import { KashierCheckoutModal } from "@/components/donate/KashierCheckoutModal";
-import { usePaymentOptions } from "@/data/paymentOptions";
+import { usePaymentOptions, type PayoutDestination } from "@/data/paymentOptions";
 
 type MethodId = "card_kashier" | "vodafone_cash" | "instapay" | "bank_transfer";
 
@@ -28,6 +29,57 @@ const MIN_AMOUNT = 10;
  * (no intermediate form); manual transfers continue to /donate where the
  * account details and receipt upload live.
  */
+/** Copy a value to the clipboard (with a fallback for older browsers). */
+async function copyText(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch {
+      return false;
+    }
+  }
+}
+
+/** One copyable line: label, value (LTR) and a copy button that confirms in place. */
+const CopyRow = ({ label, value, isAr }: { label: string; value: string; isAr: boolean }) => {
+  const [copied, setCopied] = useState(false);
+  const onCopy = async () => {
+    if (await copyText(value)) {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    }
+  };
+  return (
+    <div className="flex items-center gap-3 rounded-xl border border-border bg-background px-3 py-2.5">
+      <div className="min-w-0 flex-1">
+        <p className="text-[11px] font-bold text-muted-foreground">{label}</p>
+        <p className="truncate font-mono text-base font-black text-primary sm:text-lg" dir="ltr">{value}</p>
+      </div>
+      <button
+        type="button"
+        onClick={onCopy}
+        aria-label={isAr ? `نسخ ${label}` : `Copy ${label}`}
+        className={`inline-flex h-10 shrink-0 items-center gap-1.5 rounded-lg px-3 text-xs font-black transition-colors ${copied ? "bg-primary text-primary-foreground" : "bg-secondary/20 text-primary hover:bg-secondary/35"}`}
+      >
+        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+        {copied ? (isAr ? "اتنسخ" : "Copied") : (isAr ? "نسخ" : "Copy")}
+      </button>
+    </div>
+  );
+};
+
 export const Donate = () => {
   const { t, lang } = useLang();
   const isAr = lang === "ar";
@@ -53,6 +105,8 @@ export const Donate = () => {
   const idemKey = useRef(`quick-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
 
   const selected = offered.find((m) => m.id === method) ?? offered[0] ?? METHODS[0];
+  /** Where to send a manual transfer (numbers / IPA / bank accounts come only from the dashboard). */
+  const destinations: PayoutDestination[] = options.find((o) => o.id === selected.id)?.destinations ?? [];
   const valid = amount >= MIN_AMOUNT;
   const phoneOk = /^(\+?\d{8,15}|01\d{9})$/.test(donorPhone.replace(/[\s-]/g, ""));
   const fmt = (n: number) => n.toLocaleString(isAr ? "ar-EG" : "en-US");
@@ -70,8 +124,11 @@ export const Donate = () => {
     trackDonationStarted({ amount, method, source: "home-quick" });
 
     if (selected.manual) {
-      const params = new URLSearchParams({ amount: String(amount), method, utm_source: "home", utm_medium: "quick_donate" });
-      navigate(`/donate?${params.toString()}`);
+      // The transfer details are shown right here; the donor sends the transfer receipt on WhatsApp.
+      const msg = isAr
+        ? `السلام عليكم، حوّلت ${fmt(amount)} جنيه تبرع عام عن طريق ${selected.ar}، ومرفق صورة التحويل.`
+        : `Hello, I transferred ${amount} EGP as a general donation via ${selected.en}. The transfer receipt is attached.`;
+      window.open(`https://wa.me/201097000137?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
       return;
     }
 
@@ -126,7 +183,7 @@ export const Donate = () => {
     : !selected.manual && !phoneOk
       ? (isAr ? "اكتب رقم موبايلك للمتابعة" : "Enter your mobile number to continue")
     : selected.manual
-      ? (isAr ? `متابعة التحويل بـ ${fmt(amount)} جنيه` : `Continue with ${fmt(amount)} EGP`)
+      ? (isAr ? "حوّلت؟ ابعت صورة التحويل على واتساب" : "Transferred? Send the receipt on WhatsApp")
       : (isAr ? `ادفع ${fmt(amount)} جنيه الآن` : `Pay ${fmt(amount)} EGP now`);
 
   return (
@@ -214,7 +271,42 @@ export const Donate = () => {
               </div>
             </fieldset>
 
-            {/* 3. Donor (card payments; manual methods collect it on /donate) */}
+            {/* 3. Manual transfer: the details to copy, right here */}
+            {selected.manual && (
+              <fieldset className="mt-7">
+                <legend className="text-sm font-black text-primary">{isAr ? "٣. حوّل على" : "3. Transfer to"}</legend>
+                <div className="mt-3 space-y-2.5 rounded-2xl bg-muted/40 p-3 sm:p-4">
+                  {destinations.length > 0 ? (
+                    destinations.map((d, i) => (
+                      <div key={`${d.value}-${i}`} className="space-y-2">
+                        {(d.bankName || d.accountName) && (
+                          <p className="text-xs font-bold text-muted-foreground">{[d.bankName, d.accountName].filter(Boolean).join(" · ")}</p>
+                        )}
+                        <CopyRow label={isAr ? d.labelAr : d.labelEn} value={d.value} isAr={isAr} />
+                        {d.iban && <CopyRow label="IBAN" value={d.iban} isAr={isAr} />}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm font-bold text-muted-foreground">
+                      {isAr ? "بيانات التحويل مش متاحة دلوقتي. كلمنا على واتساب ونبعتها لك." : "Transfer details are not available right now. Message us on WhatsApp."}
+                    </p>
+                  )}
+                  <CopyRow label={isAr ? "المبلغ" : "Amount"} value={String(amount)} isAr={isAr} />
+                  <ol className="list-inside list-decimal space-y-1 pt-1 text-xs font-bold leading-relaxed text-muted-foreground">
+                    <li>{isAr ? "انسخ الرقم وحوّل المبلغ من تطبيقك." : "Copy the number and transfer the amount from your app."}</li>
+                    <li>{isAr ? "ابعت لنا صورة التحويل على واتساب علشان نأكد تبرعك ونبعت لك الإيصال." : "Send us the receipt on WhatsApp so we confirm your donation and send a receipt."}</li>
+                  </ol>
+                </div>
+                <p className="mt-2 text-center text-xs text-muted-foreground">
+                  {isAr ? "عايز تسجّل بياناتك وتختار برنامج معيّن؟ " : "Want to register your details or pick a programme? "}
+                  <Link to={`/donate?${new URLSearchParams({ amount: String(amount), method, utm_source: "home", utm_medium: "quick_donate" }).toString()}`} className="font-bold text-primary underline underline-offset-2 hover:text-accent">
+                    {isAr ? "كمّل في صفحة التبرع" : "Continue on the donation page"}
+                  </Link>
+                </p>
+              </fieldset>
+            )}
+
+            {/* 3. Donor (card payments) */}
             {!selected.manual && (
               <fieldset className="mt-7">
                 <legend className="text-sm font-black text-primary">{isAr ? "٣. بياناتك" : "3. Your details"}</legend>
@@ -259,7 +351,7 @@ export const Donate = () => {
               disabled={!valid || processing || (!selected.manual && !phoneOk)}
               className="mt-7 inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-orange-grad text-base font-black text-accent-foreground shadow-cta transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {processing ? <Loader2 className="h-5 w-5 animate-spin" /> : selected.manual ? <Arrow className="h-5 w-5" /> : <Lock className="h-5 w-5" />}
+              {processing ? <Loader2 className="h-5 w-5 animate-spin" /> : selected.manual ? <WhatsAppIcon className="h-5 w-5" /> : <Lock className="h-5 w-5" />}
               {processing ? (isAr ? "جارٍ فتح بوابة الدفع..." : "Opening secure checkout...") : ctaLabel}
             </button>
 

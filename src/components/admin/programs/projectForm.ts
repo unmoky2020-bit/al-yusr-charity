@@ -27,7 +27,7 @@ export const EXISTING_PROJECT_KEYS = [
 
 export const PROPOSED_PROJECT_KEYS: string[] = [
   "description_en", "content_ar", "content_en", "benefits_ar", "benefits_en",
-  "donation_available", "hide_from_audience",
+  "donation_available", "hide_from_audience", "page_content",
   ...SEO_KEYS,
 ];
 

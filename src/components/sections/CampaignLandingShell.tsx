@@ -50,6 +50,8 @@ export type LandingProps = {
   finalCtaClassName?: string;
   /** Optional decoration rendered at the top of the closing CTA. */
   finalCtaDecor?: ReactNode;
+  /** Parent breadcrumb (defaults to the campaigns hub); project landings point at /projects. */
+  crumbParent?: { ar: string; en: string; href: string };
 };
 
 export const CampaignLandingShell = (p: LandingProps) => {
@@ -176,7 +178,9 @@ export const CampaignLandingShell = (p: LandingProps) => {
           <div className="mb-4 flex justify-center md:justify-start overflow-x-auto max-w-full">
             <Breadcrumbs items={[
               { name: isAr ? "الرئيسية" : "Home", href: "/" },
-              { name: isAr ? "الحملات" : "Campaigns", href: "/campaigns" },
+              p.crumbParent
+                ? { name: isAr ? p.crumbParent.ar : p.crumbParent.en, href: p.crumbParent.href }
+                : { name: isAr ? "الحملات" : "Campaigns", href: "/campaigns" },
               { name: cleanCrumbTitle },
             ]} />
           </div>

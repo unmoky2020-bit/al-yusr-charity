@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Package, Heart, HandCoins, Baby, Utensils, Beef, Droplets, Check, Minus, Plus } from "lucide-react";
 import { CampaignLandingShell } from "@/components/sections/CampaignLandingShell";
 import { amountHref, waHref, fmtNum, CampaignCrumbs, HeroActions, BentoGallery, useAfterLoad } from "@/components/campaigns/shared";
-import { Crescent, Lantern, Star8, StarBand, NightSky } from "@/components/campaigns/RamadanDecor";
+import { Crescent, Lantern, Star8, NightSky } from "@/components/campaigns/RamadanDecor";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import RAMADAN_DEFAULTS from "@/data/campaignPages/ramadan";
 import yusrRamadanBox from "@/assets/yusr-ramadan-box.png";
@@ -99,7 +99,6 @@ const RamadanHero = () => {
           </div>
         </div>
       </div>
-      <StarBand />
     </section>
   );
 };
@@ -175,7 +174,6 @@ const RamadanMain = () => {
           </ol>
         </div>
       </section>
-      <StarBand className="-mt-px" />
 
       {/* Moon timeline */}
       <section className="ramadan-cream py-16 md:py-24">
@@ -283,7 +281,6 @@ const RamadanMain = () => {
           </ul>
         </div>
       </section>
-      <StarBand className="-mt-px" />
 
       <section className="bg-background py-16 md:py-20">
         <div className="container mx-auto max-w-6xl px-4">

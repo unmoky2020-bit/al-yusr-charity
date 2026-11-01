@@ -406,7 +406,7 @@ export const programs: ProgramContent[] = [
     image: Prosthetics,
     priceFrom: 1000,
     ar: {
-      name: "لن تمنعني — أطراف وكراسي متحركة",
+      name: "تحدّي الإعاقة — أطراف صناعية وكراسي متحركة",
       tagline: "إعاقة جسد لا تعني نهاية حلم — أطراف صناعية وكراسي متحركة",
       desc: "دعم ذوي الهمم بالأطراف الصناعية والكراسي المتحركة وإعادة دمجهم في المجتمع بشكل كامل.",
       benefits: [
@@ -416,12 +416,12 @@ export const programs: ProgramContent[] = [
         "ربط مع فرص عمل مناسبة",
       ],
       longContent: [
-        "مشروع «لن تمنعني» بيوفّر للأشخاص ذوي الإعاقة الأطراف الصناعية والكراسي والأجهزة اللي ترجّعهم لحياتهم الطبيعية.",
+        "مشروع «تحدّي الإعاقة» بيوفّر للأشخاص ذوي الإعاقة الأطراف الصناعية والكراسي والأجهزة اللي ترجّعهم لحياتهم الطبيعية.",
         "بنشتغل على إعادة الدمج المجتمعي وربطهم بفرص عمل تحفظ كرامتهم وتمنحهم استقلال مادي.",
       ],
     },
     en: {
-      name: "Won't Stop Me — Prosthetics & Wheelchairs",
+      name: "Overcoming Disability — Prosthetics & Wheelchairs",
       tagline: "A disabled body is not the end of a dream — prosthetics and wheelchairs",
       desc: "Support people of determination with custom prosthetics, wheelchairs, and full reintegration into society.",
       benefits: [
@@ -431,7 +431,7 @@ export const programs: ProgramContent[] = [
         "Linkage to suitable employment",
       ],
       longContent: [
-        "“Won't Stop Me” provides people with disabilities the prosthetics, wheelchairs, and devices that return them to normal life.",
+        "“Overcoming Disability” provides people with disabilities the prosthetics, wheelchairs, and devices that return them to normal life.",
         "We focus on social reintegration and connecting them with employment that preserves dignity and grants financial independence.",
       ],
     },

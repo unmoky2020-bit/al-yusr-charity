@@ -46,6 +46,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { GEO_GOVERNORATES } from "@/data/geoPages";
 import { DAKAHLIA_CITIES } from "@/data/dakahliaCities";
 import { TagsRail } from "@/components/common/TagsRail";
+import { programHref } from "@/data/programLandings";
 // Accordion imports kept for other uses
 import {
   Accordion,
@@ -481,7 +482,7 @@ const Projects = () => {
               return (
                 <StickyStackItem key={p.slug} index={idx} top={offset}>
                   <Link
-                    to={`/programs/${p.slug}`}
+                    to={programHref(p.slug)}
                     data-source="projects"
                     data-label={`project-${p.slug}`}
                     className={`group relative isolate mx-auto flex w-full max-w-5xl transform-gpu flex-col overflow-hidden rounded-[28px] border border-primary/10 bg-gradient-to-b from-card to-card/95 shadow-card ring-1 ring-primary/5 transition-colors duration-300 [backface-visibility:hidden] hover:border-secondary/50 md:items-stretch ${reverse ? "md:flex-row-reverse" : "md:flex-row"}`}

@@ -33,6 +33,9 @@ import {
   type ProjectForm,
 } from "@/components/admin/programs/projectForm";
 import { publicUrls } from "@/lib/publicUrls";
+import { getProjectPageMeta, parsePageContent, projectPageColumn } from "@/data/projectPages";
+import { mergeCampaignContent, type CampaignPageContent } from "@/data/campaignPages/types";
+import { CtaPanel, HadithPanel, HeroPanel, SectionsPanel, StatsPanel } from "@/components/admin/CampaignPageContentEditor";
 
 const triggerCls = "rounded-xl px-3 py-2 text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs";
 
@@ -51,6 +54,25 @@ export default function AdminProjectDetail() {
   const [saving, setSaving] = useState(false);
   const [toggling, setToggling] = useState<InstantKey | null>(null);
   const [notSaved, setNotSaved] = useState<string[]>([]);
+
+  // Landing-page content (only for projects that have their own page, e.g. waqf → /farm).
+  // Saved on the project as `page_content` (proposed column, backend-handoff/04-programs-projects.md).
+  const pageMeta = getProjectPageMeta(record?.slug ?? null);
+  const [pageContent, setPageContent] = useState<CampaignPageContent | null>(null);
+  const [pageDefaults, setPageDefaults] = useState<CampaignPageContent | null>(null);
+  const [origPageJson, setOrigPageJson] = useState("");
+  useEffect(() => {
+    let alive = true;
+    if (!pageMeta) { setPageContent(null); setPageDefaults(null); setOrigPageJson(""); return; }
+    void pageMeta.load().then((defs) => {
+      if (!alive) return;
+      const merged = mergeCampaignContent(defs, parsePageContent((record as Record<string, unknown> | null)?.page_content));
+      setPageDefaults(defs);
+      setPageContent(merged);
+      setOrigPageJson(JSON.stringify(projectPageColumn(merged)));
+    });
+    return () => { alive = false; };
+  }, [pageMeta, record]);
 
   const applyRecord = useCallback((p: AdminProjectRecord) => {
     const f = projectFormFromRecord(p);
@@ -115,7 +137,11 @@ export default function AdminProjectDetail() {
   const set = <K extends keyof ProjectForm>(key: K, val: ProjectForm[K]) => setForm((f) => ({ ...f, [key]: val }));
   const setSeo = (p: Partial<SeoFormState>) => setForm((f) => ({ ...f, seo: { ...f.seo, ...p } }));
 
-  const diff = useMemo(() => diffPayload(projectPayload(form), projectPayload(origForm)), [form, origForm]);
+  const diff = useMemo(() => {
+    const base = diffPayload(projectPayload(form), projectPayload(origForm));
+    if (pageContent && JSON.stringify(projectPageColumn(pageContent)) !== origPageJson) base.page_content = projectPageColumn(pageContent);
+    return base;
+  }, [form, origForm, pageContent, origPageJson]);
   const dirty = Object.keys(diff).length > 0;
 
   const save = async () => {
@@ -303,6 +329,7 @@ export default function AdminProjectDetail() {
             <TabsTrigger value="geo" className={triggerCls}>الموقع الجغرافي</TabsTrigger>
             <TabsTrigger value="ai" className={triggerCls}>الأسئلة الشائعة والـ AI</TabsTrigger>
             <TabsTrigger value="visibility" className={triggerCls}>الظهور</TabsTrigger>
+            {pageMeta && pageContent && <TabsTrigger value="page" className={triggerCls}>محتوى صفحة {pageMeta.name.ar}</TabsTrigger>}
           </TabsList>
 
           <TabsContent value="basic" className="space-y-4" dir="rtl">
@@ -361,6 +388,27 @@ export default function AdminProjectDetail() {
               <PackagesEditor kind="projects" ownerId={record ? record.id : null} />
             </SectionCard>
           </TabsContent>
+
+          {pageMeta && pageContent && (
+            <TabsContent value="page" className="space-y-4" dir="rtl">
+              <SectionCard icon={<Sparkles className="h-4 w-4 text-primary" />} title={`محتوى صفحة ${pageMeta.name.ar}`} actions={pendingBadge(["page_content"])}
+                description={`النصوص اللي بتظهر في ${pageMeta.path}. الصورة الرئيسية = صورة الغلاف، والأسهم = باقات المساهمة، والأسئلة = تبويب الأسئلة الشائعة.`}>
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="outline" size="sm" asChild><a href={pageMeta.path} target="_blank" rel="noopener noreferrer" className="gap-1"><Eye className="h-3.5 w-3.5" /> عرض الصفحة</a></Button>
+                  {pageDefaults && (
+                    <Button variant="ghost" size="sm" className="gap-1" onClick={() => { if (window.confirm("ترجيع كل نصوص الصفحة للنسخة الأصلية؟ (التغيير بيتحفظ لما تدوس حفظ)")) setPageContent(pageDefaults); }}>
+                      <RefreshCw className="h-3.5 w-3.5" /> ترجيع النصوص الأصلية
+                    </Button>
+                  )}
+                </div>
+              </SectionCard>
+              <HeroPanel value={pageContent} onChange={setPageContent} isAr />
+              <StatsPanel value={pageContent} onChange={setPageContent} isAr />
+              <SectionsPanel value={pageContent} onChange={setPageContent} isAr />
+              <HadithPanel value={pageContent} onChange={setPageContent} isAr />
+              <CtaPanel value={pageContent} onChange={setPageContent} isAr />
+            </TabsContent>
+          )}
 
           <TabsContent value="seo" className="space-y-4" dir="rtl">
             <SeoFields value={form.seo} onChange={setSeo} badge={pendingBadge(["meta_title_ar"])} previewImage={form.cover_image}

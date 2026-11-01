@@ -747,12 +747,12 @@ export default function AdminAboutUs() {
                   onChange={(e) => { const v = e.target.value; setData((prev) => ({ ...prev, achievements: { ...prev.achievements, year: v } })); }} />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">العنوان (عربي) — اختياري</label>
-                <Input value={data.achievements?.title_ar || ""} placeholder={`إنجازات ${data.achievements?.year || new Date().getFullYear()}`} className="rounded-xl text-xs font-bold"
+                <label className="text-xs font-bold text-foreground">السطر تحت الأرقام (عربي) — اختياري</label>
+                <Input value={data.achievements?.title_ar || ""} placeholder={`إحصائيات عام ${data.achievements?.year || new Date().getFullYear()} — موثّقة بالميدان في المنصورة والدقهلية ومصر`} className="rounded-xl text-xs font-bold"
                   onChange={(e) => { const v = e.target.value; setData((prev) => ({ ...prev, achievements: { ...prev.achievements, title_ar: v } })); }} />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">Title (EN) — optional</label>
+                <label className="text-xs font-bold text-foreground">Line under the numbers (EN) — optional</label>
                 <Input dir="ltr" value={data.achievements?.title_en || ""} placeholder={`${data.achievements?.year || new Date().getFullYear()} Achievements`} className="rounded-xl text-xs font-bold"
                   onChange={(e) => { const v = e.target.value; setData((prev) => ({ ...prev, achievements: { ...prev.achievements, title_en: v } })); }} />
               </div>

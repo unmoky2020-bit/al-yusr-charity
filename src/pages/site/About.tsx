@@ -59,9 +59,11 @@ import axisFood from "@/assets/axis-food.jpg";
 import axisHealth from "@/assets/axis-health.jpg";
 import axisEducation from "@/assets/axis-education.jpg";
 import imgHandsSprout from "@/assets/hands-sprout.jpg";
+import imgJourneyMain from "@/assets/field/convoy-2026-day-distribution.jpg";
+import imgJourneyTeam from "@/assets/contact-hero-volunteers.jpg";
 import { useSiteStats } from "@/hooks/useSiteStats";
 import { getLucideIcon } from "@/lib/lucide-icon";
-import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, type AboutUsAchievementsMeta, resolveStorageUrl, contentApi, formatServerImageUrl, getApiToken } from "@/data/laravelApi";
+import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, type AboutUsAchievementsMeta, resolveStorageUrl, getApiToken } from "@/data/laravelApi";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
@@ -102,6 +104,22 @@ const useReveal = () => {
   return ref;
 };
 
+/** Icon for an achievement card from its title (the dashboard has no icon field for these). */
+const STAT_ICON_RULES: [RegExp, string][] = [
+  [/رمضان|ramadan|إفطار|iftar/i, "Moon"],
+  [/كرتون|غذائ|food|box|وجب|meal/i, "Package"],
+  [/لحم|لحوم|ذبيح|meat|اضحي|أضحي|qurbani/i, "Beef"],
+  [/سقف|منزل|بيت|roof|home|house/i, "Home"],
+  // education before water: «تعليمية» contains the letters of «مية»
+  [/طالب|تعليم|مدرس|student|educat|school/i, "GraduationCap"],
+  [/مياه|مية|ماء|water|tap/i, "Droplets"],
+  [/عروس|زواج|bride|marri/i, "Heart"],
+  [/يتيم|orphan|كفال/i, "HandHeart"],
+  [/علاج|طبي|عملي|مريض|medic|health|surg/i, "Stethoscope"],
+  [/أطراف|اطراف|prosthe|كرسي/i, "Accessibility"],
+];
+const statIconFor = (title: string) => STAT_ICON_RULES.find(([re]) => re.test(title))?.[1] ?? "Sparkles";
+
 const About = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
@@ -114,12 +132,6 @@ const About = () => {
   const { data: aboutDataLive, isLoading: loading } = useQuery({
     queryKey: ["about-us-content"],
     queryFn: () => aboutUsApi.getAboutUs(),
-    staleTime: isAdmin ? 0 : 30_000,
-  });
-
-  const { data: homeContent } = useQuery({
-    queryKey: ["homepage-content"],
-    queryFn: () => contentApi.homepage(),
     staleTime: isAdmin ? 0 : 30_000,
   });
 
@@ -160,7 +172,7 @@ const About = () => {
   // Timeline is not in the API yet — keep static until backend adds it
   const timeline = isRTL
     ? [
-        { y: "2000–2019", t: "أكثر من 20 عاماً من العمل الميداني", d: "تطوع وعمل خيري شعبي مباشر في قرى ومحافظات مصر قبل التأسيس الرسمي." },
+        { y: "2000–2019", t: "البداية: فريق اجتمع على عمل الخير", d: "فريق جمعه هدف واحد: خدمة الأسر المستحقة. وعلى مدار السنين بنى خبرته في الميدان قبل التأسيس الرسمي." },
         { y: "2019", t: "تأسيس وإشهار مؤسسة اليسر", d: "في آخر شهرين من 2019 — إشهار رسمي رقم 2665 من وزارة التضامن الاجتماعي." },
         { y: "2020", t: "إطلاق محاور الغذاء والتعليم والصحة", d: "بناء الإنسان محوراً مركزياً لكل المبادرات والقوافل الميدانية." },
         { y: "2022", t: "حملة سِتْر للشتاء", d: "أسقف عازلة، ألحفة فايبر، ملابس شتوية، وأبواب وشبابيك لبيوت أهالينا." },
@@ -168,7 +180,7 @@ const About = () => {
         { y: "2025", t: "إنجازات قياسية في كافة المحافظات", d: "1400 كرتونة رمضان، 3000+ كرتونة شهرية، 385 وصلة مياه، 122 سقف، و4 طن لحوم." },
       ]
     : [
-        { y: "2000–2019", t: "Over 20 Years of Grassroots Charity", d: "Direct field aid and voluntary work across Egypt prior to official incorporation." },
+        { y: "2000–2019", t: "The start: a team for good", d: "A team united by one aim, serving families in need, which built its field experience over the years before official incorporation." },
         { y: "2019", t: "Incorporation of Al-Yusr", d: "Officially registered NGO (#2665 / 2019) with the Ministry of Social Solidarity." },
         { y: "2020", t: "Food, Health & Education Pillars", d: "Placing human development at the heart of all programs." },
         { y: "2022", t: "Winter Setr Campaign", d: "Insulated roofs, thermal comforters, warm clothing, doors & windows." },
@@ -199,7 +211,7 @@ const About = () => {
           value_text: isNaN(rawNum) ? String(s.number || "") : null,
           suffix_ar: s.suffix || (typeof s.number === "string" && s.number.includes("+") ? "+" : ""),
           suffix_en: s.suffix || (typeof s.number === "string" && s.number.includes("+") ? "+" : ""),
-          icon_name: (s as any).icon || (idx === 0 ? "Utensils" : idx === 1 ? "Utensils" : idx === 2 ? "Home" : "Droplets"),
+          icon_name: (s as any).icon || statIconFor(`${s.title_ar || s.label_ar || ""} ${s.title_en || s.label_en || ""}`),
           image_url: null,
           link_url: null,
         };
@@ -484,7 +496,9 @@ const About = () => {
                 })}
               </div>
               <div className="mt-3 text-center text-[11px] font-bold text-primary-foreground/75 sm:text-xs">
-                {isRTL ? `${statsYear ? `إحصائيات عام ${statsYear}` : "إحصائيات"} — موثّقة بالميدان في المنصورة والدقهلية ومصر` : `${statsYear ? `${statsYear} impact` : "Impact"} — verified across Egypt`}
+                {isRTL
+                  ? (aboutData.achievements?.title_ar || `${statsYear ? `إحصائيات عام ${statsYear}` : "إحصائيات"} — موثّقة بالميدان في المنصورة والدقهلية ومصر`)
+                  : (aboutData.achievements?.title_en || `${statsYear ? `${statsYear} impact` : "Impact"} — verified across Egypt`)}
               </div>
             </div>
 
@@ -843,7 +857,7 @@ const About = () => {
                 {isRTL ? "رحلتنا وتاريخنا" : "Our Journey & Milestones"}
               </h2>
               <p data-reveal className="reveal-up mt-3 text-sm text-muted-foreground md:text-base">
-                {isRTL ? "من العمل الميداني البسيط وحتى أوسع مظلة خيرية معتمدة بالدقهلية." : "From humble field relief to a premier registered foundation in Dakahlia."}
+                {isRTL ? "من فريق اجتمع على عمل الخير إلى مؤسسة مشهرة رسميًا، والمسيرة مستمرة." : "From a team that came together to do good to an officially registered foundation, and the journey continues."}
               </p>
             </div>
 
@@ -905,9 +919,7 @@ const About = () => {
                   {/* Big poster — col-span-3 */}
                   <div className="col-span-3 h-full min-h-0 overflow-hidden rounded-[1.25rem] sm:rounded-[1.5rem] border-2 border-secondary/40 shadow-card bg-muted group">
                     <img
-                      src={(homeContent?.section2_main_image ? formatServerImageUrl(homeContent.section2_main_image) : null)
-                        || (aboutData.hero.image ? resolveStorageUrl(aboutData.hero.image) : null)
-                        || axisFood}
+                      src={imgJourneyMain}
                       alt={isRTL ? "توثيق ميداني لمسيرة مؤسسة اليسر" : "Al-Yusr field documentation"}
                       className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"
@@ -920,28 +932,24 @@ const About = () => {
                     {/* Top image */}
                     <div className="relative flex-[1.4] min-h-0 overflow-hidden rounded-[1rem] sm:rounded-[1.25rem] border-2 border-accent/40 shadow-soft bg-muted group">
                       <img
-                        src={(homeContent?.section2_left_top_image ? formatServerImageUrl(homeContent.section2_left_top_image) : null)
-                          || axisHealth}
-                        alt={isRTL ? "قوافل اليسر الخيرية" : "Al-Yusr aid convoys"}
+                        src={imgJourneyTeam}
+                        alt={isRTL ? "فريق مؤسسة اليسر" : "The Al-Yusr team"}
                         className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"
                         onError={(e) => { (e.currentTarget as HTMLImageElement).src = axisHealth; }}
                       />
                     </div>
 
-                    {/* Bottom CTA card */}
-                    <Link
-                      to="/donate"
-                      className="group relative flex flex-1 min-h-0 w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.25rem] bg-gradient-to-br from-[#fb923c] to-[#ea580c] px-3 py-2 sm:px-4 sm:py-3 text-center text-white shadow-cta hover:shadow-lg transition-shadow duration-300"
-                    >
-                      <div className="inline-flex items-center justify-center gap-1.5 text-[11px] sm:text-xs font-black text-white/95 transition-transform duration-200 group-hover:scale-105">
-                        <Heart className="h-4 w-4 shrink-0" />
-                        <span>{isRTL ? "كن جزءاً من مسيرتنا" : "Be Part of Our Story"}</span>
+                    {/* Bottom card: informational (the About page introduces us; it does not send to a programme) */}
+                    <div className="relative flex flex-1 min-h-0 w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.25rem] bg-gradient-to-br from-[#0c492c] to-[#062c19] px-3 py-2 sm:px-4 sm:py-3 text-center text-white shadow-soft ring-1 ring-secondary/30">
+                      <div className="inline-flex items-center justify-center gap-1.5 text-[11px] sm:text-xs font-black text-secondary">
+                        <Sprout className="h-4 w-4 shrink-0" />
+                        <span>{isRTL ? "والمسيرة مستمرة" : "The journey continues"}</span>
                       </div>
-                      <p className="mt-1 sm:mt-1.5 text-[10.5px] sm:text-[11.5px] font-bold leading-normal text-white/95 px-1">
-                        {isRTL ? "تبرعك يكتب فصلاً جديداً من الأمل" : "Your donation writes a new chapter"}
+                      <p className="mt-1 sm:mt-1.5 text-[10.5px] sm:text-[11.5px] font-bold leading-normal text-white/90 px-1">
+                        {isRTL ? "من فريق للخير إلى مؤسسة مشهرة" : "From a team for good to a registered foundation"}
                       </p>
-                    </Link>
+                    </div>
                   </div>
                 </div>
 

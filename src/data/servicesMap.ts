@@ -67,11 +67,11 @@ export const DONATE_SECTORS: Sector[] = [
     title_en: "Health",
     summary_ar: "علاج، عمليات، أطراف صناعية، قوافل طبية",
     summary_en: "Treatment, surgeries, prosthetics, medical convoys",
-    intro_ar: "مجمع المنصورة الطبي ومركز الغسيل الكلوي بالمنزلة + قوافل ومشروع لن تمنعني.",
+    intro_ar: "مجمع المنصورة الطبي ومركز الغسيل الكلوي بالمنزلة + قوافل ومشروع تحدّي الإعاقة.",
     intro_en: "Mansoura Medical Complex, Manzala dialysis center, mobile medical convoys & Prosthetics program.",
     programs: [
       { slug: "treatment", title_ar: "سهم علاج وقوافل طبية", title_en: "Treatment & medical convoys", desc_ar: "دواء وعمليات وقوافل بيطرية وبشرية.", desc_en: "Medication, surgeries, vet & human convoys." },
-      { slug: "prosthetics", title_ar: "لن تمنعني — أطراف وكراسي", title_en: "Won't Stop Me — prosthetics & wheelchairs", desc_ar: "أطراف صناعية وكراسي متحركة وجلسات تأهيل.", desc_en: "Prosthetics, wheelchairs and rehabilitation sessions." },
+      { slug: "prosthetics", title_ar: "تحدّي الإعاقة — أطراف صناعية وكراسي", title_en: "Overcoming Disability — prosthetics & wheelchairs", desc_ar: "أطراف صناعية وكراسي متحركة وجلسات تأهيل.", desc_en: "Prosthetics, wheelchairs and rehabilitation sessions." },
     ],
   },
   {
@@ -315,10 +315,10 @@ export const SERVICES_AXES_AR: Axis[] = [
       },
       {
         id: "disabilities",
-        title: "مشروع \"لن تمنعني\" — ذوو الهمم",
+        title: "تحدّي الإعاقة — أطراف صناعية ودعم ذوي الهمم",
         intro: "دعم ذوي الإعاقة بالأطراف الصناعية والكراسي المتحركة ودمجهم في المجتمع.",
         href: "/programs/prosthetics",
-        cta_ar: "ادعم لن تمنعني",
+        cta_ar: "ادعم تحدّي الإعاقة",
         cta_en: "Support Prosthetics",
         items: [
           { t: "أطراف صناعية وأجهزة تعويضية" },

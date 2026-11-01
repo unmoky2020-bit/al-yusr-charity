@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import { DONATION_ENTITIES, type DonationEntity, type DonationShare } from "@/data/donationEntities";
 import { fetchPublicList, image, isActiveRecord, num, pick, useSourced, type ApiRecord } from "./_shared";
 import { mapApiEntity, mapApiPackage, useDonationEntities } from "./donationEntities";
+import { parsePageContent } from "@/data/projectPages";
 
 const STATIC_PROJECT_ENTITIES = DONATION_ENTITIES.filter((e) => e.entityType === "project");
 
@@ -93,6 +94,8 @@ export interface ProjectDetail extends ProjectCard {
   target: number;
   collected: number;
   faqCategorySlug?: string;
+  /** Landing-page content override saved from the dashboard (`page_content`, proposed column). */
+  pageContent?: Record<string, unknown> | null;
 }
 
 /** Pure mapper (exported for tests): the active project with this slug, or null. */
@@ -112,6 +115,7 @@ export function mapProjectDetail(list: ApiRecord[], slug: string): ProjectDetail
     target: num(r.target_amount) ?? 0,
     collected: num(r.collected_amount) ?? 0,
     ...(faq ? { faqCategorySlug: faq } : {}),
+    pageContent: parsePageContent(r.page_content),
   };
 }
 

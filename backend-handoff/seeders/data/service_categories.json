@@ -79,7 +79,7 @@
     "title_en": "Health",
     "summary_ar": "علاج، عمليات، أطراف صناعية، قوافل طبية",
     "summary_en": "Treatment, surgeries, prosthetics, medical convoys",
-    "intro_ar": "مجمع المنصورة الطبي ومركز الغسيل الكلوي بالمنزلة + قوافل ومشروع لن تمنعني.",
+    "intro_ar": "مجمع المنصورة الطبي ومركز الغسيل الكلوي بالمنزلة + قوافل ومشروع تحدّي الإعاقة.",
     "intro_en": "Mansoura Medical Complex, Manzala dialysis center, mobile medical convoys & Prosthetics program.",
     "programs": [
       {
@@ -91,8 +91,8 @@
       },
       {
         "slug": "prosthetics",
-        "title_ar": "لن تمنعني — أطراف وكراسي",
-        "title_en": "Won't Stop Me — prosthetics & wheelchairs",
+        "title_ar": "تحدّي الإعاقة — أطراف صناعية وكراسي",
+        "title_en": "Overcoming Disability — prosthetics & wheelchairs",
         "description_ar": "أطراف صناعية وكراسي متحركة وجلسات تأهيل.",
         "description_en": "Prosthetics, wheelchairs and rehabilitation sessions."
       }

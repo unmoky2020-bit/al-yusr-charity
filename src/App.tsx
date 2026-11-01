@@ -1,6 +1,6 @@
 import { useEffect, lazy, Suspense, useRef } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useLocation, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigationType, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -120,6 +120,12 @@ const SetrLanding = lazy(() => import("./pages/landings/SetrLanding.tsx"));
 const AtharLanding = lazy(() => import("./pages/landings/AtharLanding.tsx"));
 const RamadanLanding = lazy(() => import("./pages/landings/RamadanLanding.tsx"));
 const ArbounLanding = lazy(() => import("./pages/landings/ArbounLanding.tsx"));
+const TakrimLanding = lazy(() => import("./pages/landings/TakrimLanding.tsx"));
+const WaterLanding = lazy(() => import("./pages/landings/WaterLanding.tsx"));
+const NurseriesLanding = lazy(() => import("./pages/landings/NurseriesLanding.tsx"));
+const MedicalLanding = lazy(() => import("./pages/landings/MedicalLanding.tsx"));
+const AshrLanding = lazy(() => import("./pages/landings/AshrLanding.tsx"));
+const Misbaha = lazy(() => import("./pages/site/Misbaha.tsx"));
 const CampaignsPage = lazy(() => import("./pages/site/CampaignsPage.tsx"));
 const FaqCenter = lazy(() => import("./pages/site/FaqCenter.tsx"));
 const AdminFaqs = lazy(() => import("./pages/admin/AdminFaqs.tsx"));
@@ -127,19 +133,80 @@ import { RequireAuth } from "./auth/RequireAuth";
 
 const queryClient = new QueryClient();
 
+/* ── Scroll memory ──────────────────────────────────────────────────────────
+ * Every history entry remembers where the visitor was on the page (sessionStorage, per tab).
+ * Back / Forward (POP) returns to that spot, also after a full reload or coming back from
+ * another site. A new navigation (link click) starts at the top, or at the #hash target. */
+const SCROLL_KEY = (key: string) => `yusr-scroll:${key}`;
+const readScroll = (key: string): number | null => {
+  try { const v = sessionStorage.getItem(SCROLL_KEY(key)); return v === null ? null : Number(v) || 0; } catch { return null; }
+};
+const writeScroll = (key: string, y: number) => {
+  try { sessionStorage.setItem(SCROLL_KEY(key), String(Math.round(y))); } catch { void 0; }
+};
+/** Pages render lazily and fetch their data, so the target may not exist yet: keep trying until the
+ *  page is tall enough (max ~4 s), and stop as soon as the visitor scrolls on their own. */
+const restoreScroll = (y: number) => {
+  let cancelled = false;
+  const stop = () => { cancelled = true; };
+  const events = ["wheel", "touchstart", "keydown", "mousedown"] as const;
+  events.forEach((e) => window.addEventListener(e, stop, { once: true, passive: true }));
+  const started = performance.now();
+  const attempt = () => {
+    if (cancelled) return;
+    const maxY = document.documentElement.scrollHeight - window.innerHeight;
+    window.scrollTo(0, Math.min(y, Math.max(0, maxY)));
+    const reached = Math.abs(window.scrollY - y) < 4;
+    if (!reached && performance.now() - started < 4000) setTimeout(attempt, 60);
+    else events.forEach((e) => window.removeEventListener(e, stop));
+  };
+  requestAnimationFrame(attempt);
+};
+const initialLoadRestores = () => {
+  try {
+    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    return nav?.type === "reload" || nav?.type === "back_forward";
+  } catch { return false; }
+};
+
 const RouteTracker = () => {
   const loc = useLocation();
+  const navType = useNavigationType();
   const didInitScroll = useRef(false);
+  const currentKey = useRef(loc.key);
   useEffect(() => {
     bindAnchorClickTracker();
     try { if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual"; } catch { void 0; }
+    // Remember the position of the current entry while the visitor scrolls.
+    let raf = 0;
+    // While a navigation is in flight the history entry has already changed but this component has
+    // not caught up yet; the old page shrinking fires scroll events then, which must not be saved.
+    const settled = () => {
+      const k = (window.history.state as { key?: string } | null)?.key;
+      return !k || k === currentKey.current;
+    };
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => { raf = 0; if (settled()) writeScroll(currentKey.current, window.scrollY); });
+    };
+    const onHide = () => { if (settled()) writeScroll(currentKey.current, window.scrollY); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("pagehide", onHide);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pagehide", onHide);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
   useEffect(() => {
-    // Only reset scroll on real SPA navigation. On the first hydrated render,
-    // don't force scrollY back to 0; fast mobile users may already be scrolling.
+    currentKey.current = loc.key;
     if (typeof window !== "undefined") {
-      const shouldAdjustScroll = didInitScroll.current || Boolean(loc.hash);
-      if (shouldAdjustScroll && loc.hash) {
+      const isFirst = !didInitScroll.current;
+      const saved = readScroll(loc.key);
+      if (navType === "POP" && saved !== null && (!isFirst || initialLoadRestores())) {
+        // Back / Forward / reload: return to where the visitor was.
+        restoreScroll(saved);
+      } else if (loc.hash) {
         // Defer hash scroll so the new page renders first, then jump (no smooth).
         const id = loc.hash.slice(1);
         requestAnimationFrame(() => {
@@ -147,7 +214,8 @@ const RouteTracker = () => {
           if (el) el.scrollIntoView({ behavior: "auto", block: "start" });
           else window.scrollTo(0, 0);
         });
-      } else if (shouldAdjustScroll) {
+      } else if (!isFirst) {
+        // A new page: start at the top. (Not on the very first render: fast mobile users may already be scrolling.)
         window.scrollTo(0, 0);
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
@@ -158,7 +226,7 @@ const RouteTracker = () => {
       fbEvent: "PageView",
       payload: { path: loc.pathname, search: loc.search },
     });
-  }, [loc.pathname, loc.search, loc.hash]);
+  }, [loc.key]); // eslint-disable-line react-hooks/exhaustive-deps
   return null;
 };
 
@@ -225,6 +293,14 @@ const App = () => (
                   <Route path="/education-campaign" element={<AtharLanding />} />
                   <Route path="/ramadan" element={<RamadanLanding />} />
                   <Route path="/arboun" element={<ArbounLanding />} />
+                  <Route path="/takrim" element={<TakrimLanding />} />
+                  <Route path="/water" element={<WaterLanding />} />
+                  <Route path="/nurseries" element={<NurseriesLanding />} />
+                  <Route path="/medical" element={<MedicalLanding />} />
+                  <Route path="/ten-days" element={<AshrLanding />} />
+                  <Route path="/ashr" element={<Navigate to="/ten-days" replace />} />
+                  <Route path="/misbaha" element={<Misbaha />} />
+                  <Route path="/tasbih" element={<Navigate to="/misbaha" replace />} />
                   <Route path="/freelancers" element={<ArbounLanding />} />
                   <Route path="/donate/track/:ref" element={<DonationTracking />} />
                   <Route path="/donate/track" element={<DonationTracking />} />

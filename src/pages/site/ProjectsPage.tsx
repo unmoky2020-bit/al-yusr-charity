@@ -20,6 +20,8 @@ import {
   Compass,
   FileCheck2,
   Target,
+  BookOpen,
+  Stethoscope,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
@@ -28,9 +30,11 @@ import { useLang } from "@/i18n/LangContext";
 import { useProjectCards, type ProjectCard } from "@/data/sources/projects";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { PROJECT_KINDS } from "@/components/campaigns/ProjectKind";
 
 // ── Images ──
-import familyImg from "@/assets/family-hope.jpg";
+import heroImg from "@/assets/hands-sprout.jpg";
+import nurseriesImg from "@/assets/program-education.jpg";
 
 /** Look of a project card (icon + colours + optional landing page), by project slug. Text, image and
  *  prices come from the backend (dashboard → المشاريع); a project without an entry gets DEFAULT_THEME. */
@@ -39,6 +43,8 @@ interface ProjectTheme {
   bgGradient: string;
   accentColor: string;
   landingUrl?: string;
+  /** Donation link when the project has no backend record of its own. */
+  donateUrl?: string;
 }
 
 const DEFAULT_THEME: ProjectTheme = { icon: Building2, bgGradient: "from-slate-950 via-slate-950/85 to-transparent", accentColor: "#0f766e" };
@@ -47,9 +53,10 @@ const PROJECT_THEMES: Record<string, ProjectTheme> = {
   mosques: { icon: Landmark, bgGradient: "from-indigo-950 via-slate-950/85 to-transparent", accentColor: "#6366f1" },
   waqf: { icon: Leaf, bgGradient: "from-emerald-950 via-slate-950/85 to-transparent", accentColor: "#10b981", landingUrl: "/farm" },
   shelter: { icon: Home, bgGradient: "from-amber-950 via-slate-950/85 to-transparent", accentColor: "#f59e0b", landingUrl: "/setr" },
-  water: { icon: Droplets, bgGradient: "from-sky-950 via-slate-950/85 to-transparent", accentColor: "#0284c7" },
+  water: { icon: Droplets, bgGradient: "from-sky-950 via-slate-950/85 to-transparent", accentColor: "#0284c7", landingUrl: "/water" },
   bride: { icon: Heart, bgGradient: "from-pink-950 via-slate-950/85 to-transparent", accentColor: "#ec4899" },
-  takrim: { icon: Truck, bgGradient: "from-slate-950 via-slate-950/85 to-transparent", accentColor: "#64748b" },
+  medical: { icon: Stethoscope, bgGradient: "from-emerald-950 via-slate-950/85 to-transparent", accentColor: "#10b981", landingUrl: "/medical" },
+  takrim: { icon: Truck, bgGradient: "from-slate-950 via-slate-950/85 to-transparent", accentColor: "#64748b", landingUrl: "/takrim" },
 };
 
 type ProjectItem = ProjectCard & ProjectTheme;
@@ -58,7 +65,23 @@ const toItem = (p: ProjectCard): ProjectItem => ({ ...p, ...(PROJECT_THEMES[p.sl
 
 /** Details: the campaign landing page when the project has one, else its own page. */
 const detailsHref = (p: ProjectItem) => p.landingUrl ?? `/projects/${p.slug}`;
-const donateHref = (p: ProjectItem) => `/donate?project=${encodeURIComponent(p.slug)}`;
+const donateHref = (p: ProjectItem) => p.donateUrl ?? `/donate?project=${encodeURIComponent(p.slug)}`;
+
+/**
+ * Projects that have a landing page on the site but no record in the dashboard yet.
+ * Shown after the backend projects, and only while the backend has no project with the same slug
+ * (once it is created in المشاريع, the backend card replaces this one automatically).
+ */
+const CODE_PROJECTS: ProjectItem[] = [
+  {
+    id: 0, slug: "nurseries", ar: "حضانات اليسر ودور تحفيظ القرآن", en: "Al-Yusr nurseries & Qur'an houses",
+    descAr: "حضانات تعليمية للأطفال من ٤ لـ ٦ سنين، ودور تحفيظ قرآن من ٤ لـ ١٦ سنة، بمناهج متخصصة بنبنيها ونشرف عليها، ومسابقات قرآن.",
+    descEn: "Learning nurseries for ages 4–6 and Qur'an houses for ages 4–16, with curricula we build and supervise, and Qur'an competitions.",
+    image: nurseriesImg, priceFrom: 0, sharesCount: 0, casesCount: 0,
+    icon: BookOpen, bgGradient: "from-emerald-950 via-slate-950/85 to-transparent", accentColor: "#0f766e",
+    landingUrl: "/nurseries", donateUrl: "/donate?type=project",
+  },
+];
 
 const pct = (raised: number, target: number) => Math.min(100, Math.round((raised / (target || 1)) * 100));
 
@@ -83,7 +106,8 @@ const ProjectsPage = () => {
   const Arrow = isAR ? ArrowLeft : ArrowRight;
 
   const { projects: cards, isLoading } = useProjectCards();
-  const PROJECTS = cards.map(toItem);
+  const backendSlugs = new Set(cards.map((c) => c.slug));
+  const PROJECTS = [...cards.map(toItem), ...(cards.length ? CODE_PROJECTS.filter((p) => !backendSlugs.has(p.slug)) : [])];
   const totalShares = cards.reduce((n, p) => n + p.sharesCount, 0);
 
   const waMsg = encodeURIComponent(
@@ -103,12 +127,12 @@ const ProjectsPage = () => {
       <SEOHelmet
         title={
           isAR
-            ? "مشاريع اليسر التنموية | بناء مساجد، وقف إنتاجي، مياه، ستر، تيسير زواج"
+            ? "مشاريع اليسر | مساجد، وقف، سقيا ماء، غسل وتكفين ونقل موتى، حضانات وتحفيظ قرآن"
             : "Al-Yusr Development Projects | Mosques, Waqf, Water, Shelter, Marriage Aid"
         }
         description={
           isAR
-            ? "مشاريع إنشائية وتنموية لمؤسسة اليسر: بناء المساجد، المزرعة الوقفية، سقيا الماء، تسقيف المنازل، تيسير زواج اليتيمات، سيارات تكريم الإنسان."
+            ? "مشاريع مؤسسة اليسر: بناء المساجد، المزرعة الوقفية، سقيا الماء، غسل وتكفين ونقل الموتى في المنصورة، حضانات اليسر ودور تحفيظ القرآن، تسقيف المنازل وتيسير الزواج."
             : "Al-Yusr development projects: mosque construction, Waqf farm, clean water, home roofing, marriage aid, and mortuary vans."
         }
         path="/projects"
@@ -126,13 +150,13 @@ const ProjectsPage = () => {
         {/* Background Image with increased visibility as requested */}
         <div className="absolute inset-0">
           <img
-            src={familyImg}
+            src={heroImg}
             alt=""
             aria-hidden
-            className="h-full w-full object-cover opacity-45 transition-opacity duration-700"
+            className="h-full w-full object-cover opacity-60"
           />
           {/* Subtle balanced gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/75 via-primary/65 to-primary/95" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/95" />
           <div className="absolute -top-24 -start-24 h-96 w-96 rounded-full bg-secondary/15 blur-3xl pointer-events-none" />
           <div className="absolute -bottom-24 -end-24 h-96 w-96 rounded-full bg-secondary/10 blur-3xl pointer-events-none" />
         </div>
@@ -140,7 +164,7 @@ const ProjectsPage = () => {
         <div className="relative z-10 container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-16 sm:py-24 text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary/20 px-4 py-1.5 text-xs font-black text-secondary mb-5 shadow-xs backdrop-blur-xs">
             <Building2 className="h-4 w-4" />
-            {isAR ? "مشاريع تنموية وإنشائية مستدامة" : "Sustainable Development & Construction"}
+            {isAR ? "أصول بتفضل تنتج خير" : "Assets that keep producing good"}
           </span>
 
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight tracking-tight drop-shadow-sm">
@@ -149,8 +173,8 @@ const ProjectsPage = () => {
 
           <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg text-white/90 max-w-3xl mx-auto leading-relaxed drop-shadow-xs">
             {isAR
-              ? "مشاريع ذات أثر يمتد لعقود — بناء مساجد، مزارع وقفية، مياه شرب نظيفة، تسقيف منازل وتيسير زواج. أصل وقفي مستمر وصدقة جارية لا تنقطع."
-              : "Enduring impact across generations — mosques, endowment farms, clean water, roofing, marriage aid. Perpetual charity with lasting social return."}
+              ? "هدفنا إن الخير ما يخلصش بانتهاء التبرع. كل مشروع أصل بيفضل يشتغل سنين: يا إما بيدخّل موارد بتتصرف على أنشطة المؤسسة، يا إما بيسيب أثر بيغيّر حياة الناس، وفي الحالتين أجره صدقة جارية ليك ما دام قايم."
+              : "Our aim is good that does not end when the donation does. Each project is an asset that keeps working for years: it either earns income for the foundation's work or leaves an impact that changes lives, and either way its reward is ongoing charity for you."}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3.5 justify-center items-center">
@@ -229,7 +253,7 @@ const ProjectsPage = () => {
             </p>
           </div>
 
-          {/* ── 1. Featured Large Card (Project #1: Mosque Construction) ── */}
+          {/* ── 1. Featured project: photo and content side by side, photo fully visible ── */}
           {isLoading && PROJECTS.length === 0 && <ProjectsGridSkeleton />}
           {PROJECTS.length > 0 && (() => {
             const proj = PROJECTS[0];
@@ -237,120 +261,77 @@ const ProjectsPage = () => {
             const Icon = proj.icon;
 
             return (
-              <ScrollReveal delay={0}>
-                <article className="group relative mb-8 sm:mb-10 overflow-hidden rounded-3xl border border-indigo-900/30 bg-slate-950 shadow-xl hover:shadow-2xl transition-all duration-500">
-                  {/* Full Background Photo */}
-                  <div className="absolute inset-0">
+              <ScrollReveal>
+                <article className="group mb-8 grid overflow-hidden rounded-[2rem] border border-border/70 bg-primary text-primary-foreground shadow-card transition-shadow duration-500 hover:shadow-2xl sm:mb-10 lg:grid-cols-2">
+                  <Link to={detailsHref(proj)} className="relative block aspect-[16/10] overflow-hidden lg:aspect-auto lg:min-h-[440px]" aria-label={isAR ? `تفاصيل ${proj.ar}` : `${proj.en} details`}>
                     <img
                       src={proj.image}
                       alt={isAR ? proj.ar : proj.en}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-40 sm:opacity-50"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                       loading="eager"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-transparent" />
-                  </div>
-
-                  {/* Watermark 01 */}
-                  <div className="absolute end-8 top-6 text-[100px] lg:text-[140px] font-black text-white/[0.04] leading-none select-none hidden md:block pointer-events-none">
-                    01
-                  </div>
-
-                  <div className="relative z-10 p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-[380px] sm:min-h-[420px]">
-                    {/* Top Row: Category + Price */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/20 px-3.5 py-1 text-xs font-black text-indigo-300">
-                          <Icon className="h-3.5 w-3.5" />
-                          {isAR ? "صدقة جارية" : "Ongoing charity"}
-                        </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-secondary/20 border border-secondary/40 px-3 py-1 text-xs font-black text-secondary">
-                          <Sparkles className="h-3 w-3" />
-                          {isAR ? "المشروع الرائد لهذا الشهر" : "Featured Spotlight"}
-                        </span>
-                      </div>
-
-                      <span className="rounded-full bg-secondary text-slate-950 font-black px-3.5 py-1 text-xs shadow-md">
-                        {isAR ? `الأسهم تبدأ من ${proj.priceFrom} ج.م` : `From ${proj.priceFrom} EGP`}
+                    <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+                    <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-black text-slate-950 shadow-md">
+                      <Sparkles className="h-3.5 w-3.5" /> {isAR ? "المشروع الرائد لهذا الشهر" : "Featured this month"}
+                    </span>
+                    {proj.priceFrom > 0 && (
+                      <span className="absolute bottom-4 start-4 rounded-full bg-black/55 px-3.5 py-1.5 text-xs font-black text-white backdrop-blur-md">
+                        {isAR ? `الأسهم تبدأ من ${proj.priceFrom} ج.م` : `Shares from ${proj.priceFrom} EGP`}
                       </span>
+                    )}
+                  </Link>
+
+                  <div className="flex flex-col justify-center gap-5 p-6 sm:p-8 lg:p-10">
+                    <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-secondary/40 bg-secondary/15 px-3 py-1 text-xs font-black text-secondary">
+                      <Icon className="h-3.5 w-3.5" /> {isAR ? "صدقة جارية" : "Ongoing charity"}
+                    </span>
+                    <div>
+                      <h3 className="text-2xl font-black leading-tight sm:text-4xl">{isAR ? proj.ar : proj.en}</h3>
+                      <p className="mt-3 text-sm leading-loose text-primary-foreground/85 sm:text-base">{isAR ? proj.descAr : proj.descEn}</p>
                     </div>
 
-                    {/* Middle: Content */}
-                    <div className="max-w-2xl my-auto">
-                      <h3 className="text-2xl sm:text-4xl font-black text-white leading-tight mb-3">
-                        {isAR ? proj.ar : proj.en}
-                      </h3>
-                      <p className="text-sm sm:text-base text-white/85 leading-relaxed mb-5">
-                        {isAR ? proj.descAr : proj.descEn}
-                      </p>
-
-                      {/* Active Case Mini Highlight */}
-                      {activeCase && (
-                        <div className="rounded-2xl bg-white/5 backdrop-blur-md border border-white/15 p-3.5 sm:p-4 mb-4">
-                          <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-white/90 mb-2">
-                            <span className="flex items-center gap-1.5 text-amber-300">
-                              <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-                              {isAR ? "حالة ميدانية نشطة:" : "Active Field Case:"}
-                            </span>
-                            <span className="text-[11px] text-white/70">
-                              {[activeCase.city, activeCase.governorate].filter(Boolean).join(" · ")}
-                            </span>
-                          </div>
-                          <p className="text-xs sm:text-sm font-semibold text-white/95 line-clamp-1 mb-2.5">
-                            {isAR ? activeCase.titleAr : activeCase.titleEn}
-                          </p>
-                          {/* Mini Progress */}
-                          <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-                            <div
-                              className="bg-secondary h-full rounded-full transition-all duration-700"
-                              style={{
-                                width: `${pct(activeCase.raised, activeCase.target)}%`,
-                              }}
-                            />
-                          </div>
-                          <div className="flex justify-between items-center text-[10.5px] font-bold text-white/70 mt-1.5">
-                            <span>
-                              {isAR
-                                ? `تم جمع ${activeCase.raised.toLocaleString()} من ${activeCase.target.toLocaleString()} ج.م`
-                                : `Collected ${activeCase.raised.toLocaleString()} of ${activeCase.target.toLocaleString()} EGP`}
-                            </span>
-                            <span className="text-secondary font-black">
-                              {Math.round((activeCase.raised / (activeCase.target || 1)) * 100)}%
-                            </span>
-                          </div>
+                    {activeCase && (
+                      <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
+                        <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-xs font-bold">
+                          <span className="flex items-center gap-1.5 text-amber-300">
+                            <span className="h-2 w-2 animate-pulse rounded-full bg-amber-400" />
+                            {isAR ? "حالة ميدانية نشطة" : "Active field case"}
+                          </span>
+                          <span className="text-[11px] text-white/70">{[activeCase.city, activeCase.governorate].filter(Boolean).join(" · ")}</span>
                         </div>
-                      )}
+                        <p className="mb-2.5 line-clamp-1 text-sm font-semibold">{isAR ? activeCase.titleAr : activeCase.titleEn}</p>
+                        <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+                          <div className="h-full rounded-full bg-secondary transition-all duration-700" style={{ width: `${pct(activeCase.raised, activeCase.target)}%` }} />
+                        </div>
+                        <div className="mt-1.5 flex items-center justify-between text-[11px] font-bold text-white/70">
+                          <span>
+                            {isAR
+                              ? `تم جمع ${activeCase.raised.toLocaleString()} من ${activeCase.target.toLocaleString()} ج.م`
+                              : `Collected ${activeCase.raised.toLocaleString()} of ${activeCase.target.toLocaleString()} EGP`}
+                          </span>
+                          <span className="font-black text-secondary">{pct(activeCase.raised, activeCase.target)}%</span>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-primary-foreground/80">
+                      <span className="flex items-center gap-1"><Target className="h-4 w-4 text-secondary" />{proj.sharesCount} {isAR ? "أسهم تبرع متاحة" : "shares available"}</span>
+                      {proj.casesCount > 0 && <span className="flex items-center gap-1"><Heart className="h-4 w-4 text-rose-300" />{proj.casesCount} {isAR ? "حالات مرتبطة" : "linked cases"}</span>}
                     </div>
 
-                    {/* Bottom Actions */}
-                    <div className="mt-4 pt-5 border-t border-white/15 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-                      <div className="flex items-center gap-4 text-xs font-bold text-white/80">
-                        <span className="flex items-center gap-1">
-                          <Target className="h-4 w-4 text-secondary" />
-                          {proj.sharesCount} {isAR ? "أسهم تبرع متاحة" : "Available Shares"}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Heart className="h-4 w-4 text-rose-400" />
-                          {proj.casesCount} {isAR ? "حالات مرتبطة بالمشروع" : "Linked cases"}
-                        </span>
-                      </div>
-
-                      <div className="flex flex-col gap-2.5 sm:flex-row">
-                        <Link
-                          to={detailsHref(proj)}
-                          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/20"
-                        >
-                          <ExternalLink className="h-4 w-4 text-secondary" />
-                          {isAR ? "تفاصيل المشروع" : "Project details"}
-                        </Link>
-                        <Link
-                          to={donateHref(proj)}
-                          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-secondary px-7 py-3 text-sm font-black text-slate-950 shadow-lg shadow-secondary/30 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
-                        >
-                          {isAR ? `تبرع في ${proj.ar} الآن` : `Donate to ${proj.en} now`}
-                          <Arrow className="h-4 w-4" />
-                        </Link>
-                      </div>
+                    <div className="flex flex-col gap-2.5 sm:flex-row">
+                      <Link
+                        to={donateHref(proj)}
+                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-secondary px-7 py-3 text-sm font-black text-slate-950 shadow-lg shadow-secondary/25 transition-all hover:scale-[1.02] hover:bg-secondary/90 active:scale-[0.98]"
+                      >
+                        {isAR ? "تبرع الآن" : "Donate now"} <Arrow className="h-4 w-4" />
+                      </Link>
+                      <Link
+                        to={detailsHref(proj)}
+                        className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold transition hover:bg-white/20"
+                      >
+                        <ExternalLink className="h-4 w-4 text-secondary" /> {isAR ? "تفاصيل المشروع" : "Project details"}
+                      </Link>
                     </div>
                   </div>
                 </article>
@@ -358,77 +339,113 @@ const ProjectsPage = () => {
             );
           })()}
 
-          {/* ── 2. Remaining 5 Cards (Taller, cleaner, image-first) ── */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {/* ── 2. The other projects: photo on top, readable content below ── */}
+          <div className="grid grid-cols-1 gap-6 sm:gap-7 md:grid-cols-2 lg:grid-cols-3">
             {PROJECTS.slice(1).map((proj, i) => {
               const Icon = proj.icon;
-
               return (
-                <ScrollReveal key={proj.slug} delay={i * 0.06}>
-                  <article className="group relative overflow-hidden rounded-3xl border border-border/60 bg-slate-950 shadow-md hover:shadow-2xl hover:border-secondary/40 transition-all duration-500 flex flex-col justify-between min-h-[460px] sm:min-h-[500px]">
-                    {/* Full-bleed background image */}
-                    <div className="absolute inset-0">
+                <ScrollReveal key={proj.slug}>
+                  <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-secondary/50 hover:shadow-card">
+                    <Link to={detailsHref(proj)} className="relative block aspect-[16/10] overflow-hidden" aria-label={isAR ? `تفاصيل ${proj.ar}` : `${proj.en} details`}>
                       <img
                         src={proj.image}
                         alt={isAR ? proj.ar : proj.en}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                         loading="lazy"
                       />
-                      {/* Lighter gradient so more of the photo shows — only darkens the very bottom */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-black/10" />
-                    </div>
-
-                    {/* Top Row: Tag badge + price — subtle so image breathes */}
-                    <div className="relative z-10 p-4 flex items-center justify-between gap-2">
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/35 backdrop-blur-md px-2.5 py-0.5 text-[11px] font-semibold text-white/90 shadow-xs">
-                        <Icon className="h-3 w-3 text-secondary" />
-                        {isAR ? "صدقة جارية" : "Ongoing charity"}
-                      </span>
-
-                      <span className="rounded-full bg-secondary text-slate-950 font-black px-2.5 py-0.5 text-[11px] shadow-md">
-                        {isAR ? `من ${proj.priceFrom} ج.م` : `From ${proj.priceFrom} EGP`}
-                      </span>
-                    </div>
-
-                    {/* Bottom Area: Compact title + short desc + buttons */}
-                    <div className="relative z-10 p-4 sm:p-5 flex flex-col justify-end">
-                      <div className="flex items-center gap-1.5 mb-1.5">
-                        <span
-                          className="h-6 w-6 rounded-lg grid place-items-center text-white shrink-0"
-                          style={{ backgroundColor: proj.accentColor }}
-                        >
-                          <Icon className="h-3.5 w-3.5" />
+                      <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+                      {proj.priceFrom > 0 && (
+                        <span className="absolute end-3 top-3 rounded-full bg-secondary px-3 py-1 text-xs font-black text-slate-950 shadow-md">
+                          {isAR ? `من ${proj.priceFrom} ج.م` : `From ${proj.priceFrom} EGP`}
                         </span>
-                        <h3 className="text-base sm:text-lg font-black text-white leading-tight drop-shadow-sm line-clamp-1">
-                          {isAR ? proj.ar : proj.en}
-                        </h3>
-                      </div>
+                      )}
+                      <span
+                        className="absolute bottom-3 start-3 grid h-10 w-10 place-items-center rounded-xl text-white shadow-lg ring-2 ring-white/70"
+                        style={{ backgroundColor: proj.accentColor }}
+                      >
+                        <Icon className="h-5 w-5" />
+                      </span>
+                    </Link>
 
-                      <p className="text-[11.5px] sm:text-xs text-white/75 leading-relaxed line-clamp-2 mb-3.5 drop-shadow-xs">
-                        {isAR ? proj.descAr : proj.descEn}
-                      </p>
-
-                      {/* Actions */}
-                      <div className="flex items-center gap-2.5 pt-3 border-t border-white/10">
+                    <div className="flex flex-1 flex-col p-5">
+                      <p className="text-[11px] font-black text-secondary">{isAR ? "صدقة جارية" : "Ongoing charity"}</p>
+                      <h3 className="mt-1 text-lg font-black leading-snug text-primary sm:text-xl">
+                        <Link to={detailsHref(proj)} className="transition-colors hover:text-secondary">{isAR ? proj.ar : proj.en}</Link>
+                      </h3>
+                      <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{isAR ? proj.descAr : proj.descEn}</p>
+                      {(proj.sharesCount > 0 || proj.casesCount > 0) && (
+                        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs font-bold text-muted-foreground">
+                          {proj.sharesCount > 0 && <span className="flex items-center gap-1"><Target className="h-3.5 w-3.5 text-secondary" />{proj.sharesCount} {isAR ? "أسهم" : "shares"}</span>}
+                          {proj.casesCount > 0 && <span className="flex items-center gap-1"><Heart className="h-3.5 w-3.5 text-rose-500" />{proj.casesCount} {isAR ? "حالات" : "cases"}</span>}
+                        </div>
+                      )}
+                      <div className="mt-auto flex items-center gap-2.5 pt-5">
                         <Link
                           to={donateHref(proj)}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-secondary px-4 py-2.5 text-xs sm:text-sm font-black text-slate-950 shadow-lg shadow-secondary/25 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98]"
+                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-sm font-black text-primary-foreground transition hover:bg-primary/90"
                         >
-                          {isAR ? "تبرع الآن" : "Donate Now"}
-                          <Arrow className="h-3.5 w-3.5" />
+                          {isAR ? "تبرع الآن" : "Donate now"} <Arrow className="h-4 w-4" />
                         </Link>
-
                         <Link
                           to={detailsHref(proj)}
-                          className="inline-flex items-center justify-center gap-1 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-3.5 py-2.5 text-xs font-bold text-white transition hover:bg-white/20 hover:border-white/40 shrink-0"
+                          className="inline-flex shrink-0 items-center justify-center gap-1 rounded-xl border border-border px-4 py-2.5 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10"
                         >
-                          <ExternalLink className="h-3.5 w-3.5 text-secondary" />
-                          {isAR ? "تفاصيل" : "Details"}
+                          {isAR ? "التفاصيل" : "Details"}
                         </Link>
                       </div>
                     </div>
                   </article>
                 </ScrollReveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ Two kinds of projects + featured project landings ══════════ */}
+      <section id="project-kinds" className="scroll-mt-24 border-t border-border/60 bg-background py-12 sm:py-16">
+        <div className="container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-2xl font-black leading-tight text-primary sm:text-4xl">
+              {isAR ? "مشاريعنا نوعين، والاتنين خير مستمر" : "Two kinds of projects, both lasting good"}
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {isAR
+                ? "فيه مشاريع خدمية بتدخّل موارد بتتصرف على أنشطة المؤسسة، وفيه مشاريع هدفها الأثر في المجتمع. وأحيانًا المشروع الواحد بيجمع الاتنين."
+                : "Some projects provide services whose income funds the foundation's work; others exist for their impact on the community. Some do both."}
+            </p>
+          </div>
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            {(["service", "impact"] as const).map((k) => {
+              const kind = PROJECT_KINDS[k];
+              const KIcon = kind.icon;
+              return (
+                <div key={k} className="rounded-3xl border border-border/80 bg-card p-6 shadow-xs sm:p-7">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary text-primary-foreground"><KIcon className="h-6 w-6" /></span>
+                  <h3 className="mt-4 text-lg font-black text-primary sm:text-xl">{isAR ? kind.ar : kind.en}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{isAR ? kind.descAr : kind.descEn}</p>
+                  <p className="mt-3 text-xs font-bold text-secondary">{isAR ? kind.examplesAr : kind.examplesEn}</p>
+                </div>
+              );
+            })}
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { href: "/takrim", icon: Truck, ar: "تكريم الإنسان", en: "Takrim", subAr: "غسل وتكفين ونقل الموتى في المنصورة، والقاهرة قريبًا", subEn: "Funeral washing, shrouding and transport in Mansoura, Cairo next" },
+              { href: "/water", icon: Droplets, ar: "سقيا الماء", en: "Clean water", subAr: "افتح الحنفية وشوف إزاي المية النظيفة بتغيّر حياة بيت", subEn: "Open the tap and see how clean water changes a home" },
+              { href: "/nurseries", icon: BookOpen, ar: "حضانات اليسر ودور التحفيظ", en: "Nurseries & Qur'an houses", subAr: "حضانات من ٤ لـ ٦ سنين ودور تحفيظ من ٤ لـ ١٦ سنة", subEn: "Nurseries for ages 4–6, Qur'an houses for ages 4–16" },
+              { href: "/medical", icon: Stethoscope, ar: "المساعدات الطبية", en: "Medical aid", subAr: "روشتات وعمليات وأشعة وتحاليل وأطراف صناعية", subEn: "Prescriptions, surgery, scans, tests and prosthetics" },
+            ].map((l) => {
+              const LIcon = l.icon;
+              return (
+                <Link key={l.href} to={l.href} className="group flex items-center gap-3 rounded-2xl border border-border/70 bg-muted/30 p-4 transition hover:border-secondary/60 hover:bg-secondary/10">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary text-slate-950"><LIcon className="h-5 w-5" /></span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-black text-primary group-hover:text-secondary">{isAR ? l.ar : l.en}</span>
+                    <span className="mt-0.5 block text-xs text-muted-foreground">{isAR ? l.subAr : l.subEn}</span>
+                  </span>
+                  <Arrow className="h-4 w-4 shrink-0 text-muted-foreground group-hover:text-secondary" />
+                </Link>
               );
             })}
           </div>
@@ -597,7 +614,7 @@ const ProjectsPage = () => {
                               {isAR ? proj.ar : proj.en}
                             </p>
                             <p className="text-[11px] text-muted-foreground mt-0.5">
-                              {isAR ? `يبدأ من ${proj.priceFrom} ج.م` : `Starts at ${proj.priceFrom} EGP`}
+                              {proj.priceFrom > 0 ? (isAR ? `يبدأ من ${proj.priceFrom} ج.م` : `Starts at ${proj.priceFrom} EGP`) : (isAR ? "تبرع بأي مبلغ" : "Any amount")}
                               {proj.sharesCount ? ` · ${proj.sharesCount} ${isAR ? "أسهم متاحة" : "shares"}` : ""}
                             </p>
                           </div>

@@ -49,6 +49,16 @@ async function fetchPackages(apiId?: number, apiSlugs?: string[]): Promise<Pkg[]
       if (Array.isArray(list)) return list.map((p) => ({ ...p, amount: Number(p.amount) }));
     } catch { /* try the next identifier */ }
   }
+  // A campaign created later in the dashboard has no id in the page registry: find it by its slug.
+  for (const s of apiSlugs || []) {
+    try {
+      const res = await apiFetch<{ data?: { donation_packages?: Pkg[] } } & { donation_packages?: Pkg[] }>(`/donation-campaigns/by-slug/${encodeURIComponent(s)}`, { method: "GET", ttlMs: 60_000, useCache: true, skipAuthClear: true });
+      const list = (res as { data?: { donation_packages?: Pkg[] } }).data?.donation_packages ?? (res as { donation_packages?: Pkg[] }).donation_packages;
+      if (Array.isArray(list)) return list.map((p) => ({ ...p, amount: Number(p.amount) }));
+    } catch (e) {
+      if ((e as { status?: number } | null)?.status === 404) continue;
+    }
+  }
   return [];
 }
 

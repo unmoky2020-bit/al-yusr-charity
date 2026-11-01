@@ -304,6 +304,12 @@ export const Footer = () => {
               <li><Link to="/setr" {...prefetchHandlers("/setr")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة سِتْر (الشتاء)" : "Setr (Winter)"}</Link></li>
               <li><Link to="/markoun" {...prefetchHandlers("/markoun")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة مَرْكُون (الأجهزة)" : "Markoun In-Kind"}</Link></li>
               <li><Link to="/arboun" {...prefetchHandlers("/arboun")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "مبادرة عربون خير" : "Arboun Khair"}</Link></li>
+              <li><Link to="/takrim" {...prefetchHandlers("/takrim")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "تكريم الإنسان (غسل ونقل الموتى)" : "Takrim (funeral service)"}</Link></li>
+              <li><Link to="/water" {...prefetchHandlers("/water")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "سقيا الماء" : "Clean water"}</Link></li>
+              <li><Link to="/medical" {...prefetchHandlers("/medical")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المساعدات الطبية" : "Medical aid"}</Link></li>
+              <li><Link to="/ten-days" {...prefetchHandlers("/ten-days")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "صدقات العشر الأوائل" : "The ten days"}</Link></li>
+              <li><Link to="/misbaha" {...prefetchHandlers("/misbaha")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المسبحة الإلكترونية" : "Digital tasbih"}</Link></li>
+              <li><Link to="/nurseries" {...prefetchHandlers("/nurseries")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حضانات اليسر ودور التحفيظ" : "Nurseries & Qur'an houses"}</Link></li>
               <li><Link to="/athar" {...prefetchHandlers("/athar")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة أَثَر التعليمية" : "Athar Education"}</Link></li>
               <li><Link to="/ramadan" {...prefetchHandlers("/ramadan")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "موسم رمضان المبارك" : "Ramadan Season"}</Link></li>
               <li><Link to="/food-box" {...prefetchHandlers("/food-box")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الغذاء الشهري" : "Monthly Food"}</Link></li>

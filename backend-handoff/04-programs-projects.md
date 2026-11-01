@@ -431,6 +431,26 @@ protected $casts = [
 
 - `PUT /projects/{id}` لازم يرجّع `{ "data": ProjectResource }` كامل (مش `{message}` بس).
 
+### 5.2.1 عمود `page_content` لصفحات المشاريع [جديد — 1 نوفمبر 2026]
+
+بعض المشاريع ليها صفحة هبوط خاصة في الموقع، وأولها مشروع `waqf` وصفحته `/farm`. نصوص الصفحة دي (الهيرو، والأرقام، والأقسام، والحديث، والختام) بقت بتتعدّل من لوحة التحكم:
+**المشاريع ← المزرعة الوقفية ← تبويب «محتوى صفحة المزرعة الوقفية»**.
+
+الواجهة بتبعت النصوص في `PUT /projects/{id}` كحقل اسمه `page_content`، وده **نفس شكل** `donation_campaigns.page_content` بالظبط (موجود ومتنفّذ على الحملات). يعني نفس الـ cast ونفس الـ validation.
+
+| العمود | النوع | ملاحظات |
+|---|---|---|
+| `page_content` | `json nullable` | `$casts = ['page_content' => 'array']`، و`fillable`، ويرجع في `ProjectResource` (العام والأدمن). `null` معناه «استخدم النصوص الافتراضية اللي في الكود» |
+
+القواعد:
+- `'page_content' => ['sometimes', 'nullable', 'array']`.
+- الحقل **لازم يرجع في `GET /projects`** (القائمة العامة)، لأن صفحة `/farm` بتقراه من نفس القائمة اللي بتقرا منها `/projects`. لو حجمه تقيل على القائمة، يرجع مع `?include=content` زي الحملات، وقولولنا علشان نضيف الباراميتر.
+- الأسعار مش جوه `page_content`. الصفحة بتعرض **باقات المشروع** (`donation_packages`)، والأسئلة الشائعة من **تصنيف الأسئلة المربوط** (`faq_category_id`)، والصورة الرئيسية = `cover_image`.
+
+لحد ما العمود يتعمل: الحفظ بيكمّل عادي لباقي الحقول، والشاشة بتظهر «الخادم تجاهل: page_content»، والصفحة بتعرض النصوص الافتراضية. مفيش حاجة بتبوظ.
+
+ملفات الواجهة: `src/data/projectPages/` (الشكل والنصوص الافتراضية)، `src/hooks/useProjectPage.ts` (القراءة)، `src/pages/admin/AdminProjectDetail.tsx` (التعديل).
+
 ### 5.3 الأخطاء اللي اتصلحت في شاشة المشاريع
 
 | المشكلة القديمة | الحل |
@@ -457,4 +477,5 @@ protected $casts = [
 - [ ] نفس الثلاثة للمشاريع `/projects/{id}/donation-packages/...`.
 - [ ] Migration أعمدة المشاريع الجديدة (القسم 5.2) + fillable + casts + Resource.
 - [ ] `PUT /projects/{id}` يرجّع الـ record كامل.
+- [ ] عمود `projects.page_content` (json) زي الحملات، ويرجع في `GET /projects` (القسم 5.2.1).
 - [ ] أقسام الصفحة: `settings` ترجع `{}` بدل `[]`، واعتماد أشكال `donor_testimonials` و`faq` و`related_programs` المقترحة.

@@ -889,6 +889,11 @@ export const AdminHomepageContent = () => {
         {/* ── TAB 2: SECTION 2 (BRAND PROMISE) ── */}
         {activeTab === "section2" && (
           <div className="space-y-6">
+            <p className="rounded-xl border border-border bg-muted/40 px-4 py-2.5 text-xs font-bold text-muted-foreground">
+              {isRTL
+                ? "القسم ده (خيرك يوصل وأجرك يستمر) بيظهر في الصفحة الرئيسية بس. صوره ونصوصه مش مربوطة بصفحة من نحن، وصفحة من نحن ليها محتواها الخاص."
+                : "This section shows on the home page only. Its images and texts are not shared with the About page."}
+            </p>
             {/* Row 1: Section 2 Arabic & English Text Content */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="rounded-2xl border border-border bg-card p-5 space-y-4 shadow-xs">

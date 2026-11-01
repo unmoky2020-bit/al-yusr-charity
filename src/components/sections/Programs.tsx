@@ -16,6 +16,7 @@ import { programs, type ProgramContent } from "@/data/programs";
 import { track } from "@/lib/track";
 import { LazyImage } from "@/components/common/LazyImage";
 import { Skeleton } from "@/components/ui/skeleton";
+import { programHref } from "@/data/programLandings";
 
 /** WhatsApp number used by the org (digits only, E.164-friendly). */
 const WA_NUMBER = "201097000137";
@@ -441,7 +442,7 @@ export const Programs = () => {
                         } ${i === selectedIdx ? "scale-100" : "scale-93"}`}
                       >
                         <Link
-                          to={`/programs/${p.slug}`}
+                          to={programHref(p.slug)}
                           data-source="programs-card" data-label={`image-${p.slug}`}
                           onClick={() => onCta("card_learn_more", p.slug)}
                           className="relative block overflow-hidden"
@@ -547,7 +548,7 @@ export const Programs = () => {
                           </div>
 
                           <Link
-                            to={`/programs/${p.slug}`}
+                            to={programHref(p.slug)}
                             data-source="programs-card" data-label={`learn-${p.slug}`}
                             onClick={() => onCta("card_learn_more", p.slug)}
                             className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-accent transition hover:gap-2.5"
