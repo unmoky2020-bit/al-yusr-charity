@@ -185,6 +185,19 @@ export const CampaignsScroll = () => {
   }, []);
   const getScrollRange = useCallback(() => rangeRef.current || measureRange(), [measureRange]);
 
+  /** True while the section fully covers the screen (the cards are pinned). */
+  const isInPinnedRange = useCallback(() => {
+    const s = sectionRef.current;
+    if (!s || typeof window === "undefined") return false;
+    const rect = s.getBoundingClientRect();
+    const pinH = pinRef.current?.offsetHeight || window.innerHeight;
+    return rect.top <= 2 && rect.bottom >= pinH - 2;
+  }, []);
+  const isTouchDevice = useMemo(
+    () => typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(hover: none) and (pointer: coarse)").matches,
+    [],
+  );
+
   const releaseLock = useCallback(() => {
     if (settleTimerRef.current) window.clearTimeout(settleTimerRef.current);
     settleTimerRef.current = null;
@@ -223,7 +236,7 @@ export const CampaignsScroll = () => {
     // leaving the fully-pinned range, where sticky and fixed sit at the same place, so it is seamless.
     // Touch devices only (desktop sticky is smooth); disabled for good if fixed lands anywhere else.
     const pinAtMount = pinRef.current;
-    let fixedPin = typeof window.matchMedia === "function" && window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    let fixedPin = isTouchDevice;
     let isFixed = false;
     let verified = false;
     const updatePin = () => {
@@ -264,10 +277,15 @@ export const CampaignsScroll = () => {
         return;
       }
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(compute);
+      // Re-checked in the frame: a programmatic scroll may have started since (e.g. touch paging).
+      raf = requestAnimationFrame(() => { if (!isProgrammaticScrollRef.current) compute(); });
     };
     // The visitor takes over (touch / wheel) → stop waiting for the programmatic scroll.
-    const onUserInput = () => { if (isProgrammaticScrollRef.current) releaseLock(); };
+    const onUserInput = (e: Event) => {
+      if (!isProgrammaticScrollRef.current) return;
+      if (e.type === "touchstart" && isTouchDevice && isInPinnedRange()) return; // touch paging takes over
+      releaseLock();
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     const onResize = () => { measureRange(); onScroll(); };
     window.addEventListener("resize", onResize, { passive: true });
@@ -285,7 +303,7 @@ export const CampaignsScroll = () => {
       if (settleTimerRef.current) window.clearTimeout(settleTimerRef.current);
       ro?.disconnect();
     };
-  }, [enableScrollTrigger, reduce, totalSlides, getScrollRange, measureRange, releaseLock]);
+  }, [enableScrollTrigger, reduce, totalSlides, getScrollRange, measureRange, releaseLock, isTouchDevice, isInPinnedRange]);
 
   // On desktop show 5 cards (radius 2), on mobile 3 (radius 1)
   const renderRadius = isNarrow ? 1 : 2;
@@ -331,6 +349,93 @@ export const CampaignsScroll = () => {
 
     if (focus) requestAnimationFrame(() => cardRefs.current[clamped]?.focus({ preventScroll: true }));
   }, [totalSlides, getScrollRange, releaseLock]);
+
+  // ── Touch paging: one swipe = one card ──
+  // On phones a single flick scrolled far enough (with iOS momentum) to run through every card at
+  // once. Inside the fully-pinned range a vertical swipe now moves exactly one card (smooth
+  // programmatic scroll to that card); a swipe past the last / before the first card leaves the
+  // section; momentum or a drag that carries the page into the section settles on the first (from
+  // above) or last (from below) card instead of running through them. Taps and horizontal swipes
+  // are untouched. Touch devices only; desktop wheel/trackpad keep the continuous scroll.
+  const scrollToSlideRef = useRef(scrollToSlide);
+  scrollToSlideRef.current = scrollToSlide;
+  useEffect(() => {
+    if (!enableScrollTrigger || reduce || !isTouchDevice || typeof window === "undefined") return;
+    type Gesture = { x: number; y: number; decided: boolean; vertical: boolean };
+    let gesture: Gesture | null = null;
+    let touching = false;
+    let wasIn = isInPinnedRange();
+    let lastY = window.scrollY;
+    const go = (index: number) => scrollToSlideRef.current(index, false);
+    const leave = (dir: 1 | -1) => {
+      const s = sectionRef.current;
+      if (!s) return;
+      const pinH = pinRef.current?.offsetHeight || window.innerHeight;
+      const docTop = s.getBoundingClientRect().top + window.scrollY;
+      const top = dir > 0 ? docTop + getScrollRange() + pinH * 0.6 : docTop - pinH * 0.6;
+      try { window.scrollTo({ top: Math.max(0, top), behavior: "smooth" }); } catch { window.scrollTo(0, Math.max(0, top)); }
+    };
+    const point = (e: TouchEvent, changed = false) => (changed ? e.changedTouches : e.touches)[0];
+    const onStart = (e: TouchEvent) => {
+      touching = true;
+      if (e.touches.length !== 1 || !isInPinnedRange()) { gesture = null; return; }
+      const t = point(e);
+      gesture = { x: t.clientX, y: t.clientY, decided: false, vertical: false };
+    };
+    const onMove = (e: TouchEvent) => {
+      if (!gesture || e.touches.length !== 1) return;
+      const t = point(e);
+      const dx = t.clientX - gesture.x;
+      const dy = t.clientY - gesture.y;
+      if (!gesture.decided) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        gesture.decided = true;
+        gesture.vertical = Math.abs(dy) > Math.abs(dx);
+      }
+      // Vertical swipe inside the pinned section: no native scroll (and no momentum) — we page instead.
+      if (gesture.vertical && e.cancelable) e.preventDefault();
+    };
+    const onEnd = (e: TouchEvent) => {
+      touching = e.touches.length > 0;
+      const g = gesture;
+      gesture = null;
+      if (g?.vertical) {
+        const t = point(e, true);
+        const dy = t ? t.clientY - g.y : 0;
+        if (Math.abs(dy) < 24) { go(activeIndexRef.current); return; } // too short: stay on this card
+        const target = activeIndexRef.current + (dy < 0 ? 1 : -1); // finger up → next card
+        if (target < 0) leave(-1);
+        else if (target >= totalSlides) leave(1);
+        else go(target);
+        return;
+      }
+      // A drag that started outside the section and was released inside it: settle on a card.
+      if (!g && !touching && isInPinnedRange() && !isProgrammaticScrollRef.current) go(activeIndexRef.current);
+    };
+    const onScroll = () => {
+      const now = isInPinnedRange();
+      if (now && !wasIn && !touching && !isProgrammaticScrollRef.current) {
+        // Momentum carried the page into the section: stop on the first card (coming from above)
+        // or the last one (coming from below) instead of running through all of them.
+        const fromAbove = window.scrollY >= lastY; // moving down → entered from above
+        go(fromAbove ? 0 : totalSlides - 1);
+      }
+      wasIn = now;
+      lastY = window.scrollY;
+    };
+    window.addEventListener("touchstart", onStart, { passive: true });
+    window.addEventListener("touchmove", onMove, { passive: false });
+    window.addEventListener("touchend", onEnd, { passive: true });
+    window.addEventListener("touchcancel", onEnd, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", onStart);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", onEnd);
+      window.removeEventListener("touchcancel", onEnd);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [enableScrollTrigger, reduce, isTouchDevice, totalSlides, getScrollRange, isInPinnedRange]);
 
   const getCurrentSlide = useCallback(() => {
     const s = sectionRef.current;
