@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, useMemo } from "react";
+import { memo, useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Heart, Sparkles, HeartHandshake } from "lucide-react";
 import { useReducedMotion } from "motion/react";
@@ -19,6 +19,22 @@ export const clampSlide = (index: number, total: number) => {
 export const progressToSlide = (progress: number, total: number) => {
   const safeProgress = Math.max(0, Math.min(1, progress));
   return Math.round(safeProgress * Math.max(1, total - 1));
+};
+
+/**
+ * Slide for a scroll progress (0–1) over `total` equal zones, with hysteresis: near the border between
+ * the current slide's zone and a neighbour (within `margin` of a zone), the current slide is kept.
+ * Stops the active card from flickering back and forth when iOS momentum / rubber-banding wobbles the
+ * scroll position around a zone edge.
+ */
+export const slideForProgress = (progress: number, total: number, current: number, margin = 0.12) => {
+  if (total <= 1) return 0;
+  const raw = Math.max(0, Math.min(1, progress)) * total; // position in "zones"
+  const next = Math.min(total - 1, Math.floor(raw));
+  if (next === current) return current;
+  // Distance (in zones) from the edge of the current zone.
+  const beyond = next > current ? raw - (current + 1) : current - raw;
+  return Math.abs(next - current) === 1 && beyond < margin ? current : next;
 };
 
 export const scrollTopForSlide = (sectionTop: number, scrollRange: number, index: number, total: number) => {
@@ -93,7 +109,7 @@ export const CampaignsScroll = () => {
   const isRTL = lang === "ar";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   const { settings } = useCampaignsSettings();
-  const items = getVisibleCampaignPrograms(settings);
+  const items = useMemo(() => getVisibleCampaignPrograms(settings), [settings]);
   const showFinalCta = settings.showFinalCta;
   const totalSlides = items.length + (showFinalCta ? 1 : 0);
   const reduce = useReducedMotion();
@@ -134,6 +150,9 @@ export const CampaignsScroll = () => {
     : "Pick a campaign and start your impact in minutes.");
 
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  /** The sticky (pinned) viewport. Its height is 100svh, which iOS Safari keeps constant while the
+   *  address bar shows/hides — unlike window.innerHeight, which changes mid-scroll. */
+  const pinRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
   const swipeRef = useRef<{ x: number; y: number; slide: number; pointerId: number } | null>(null);
 
@@ -147,45 +166,77 @@ export const CampaignsScroll = () => {
   const enableScrollTrigger = settings.enableScrollTrigger !== false;
 
   const isProgrammaticScrollRef = useRef(false);
-  const programmaticTimerRef = useRef<number | null>(null);
+  const settleTimerRef = useRef<number | null>(null);
+  const lockStartRef = useRef(0);
+  /** Recomputes the active slide from the real scroll position (set by the scroll effect). */
+  const syncFromScrollRef = useRef<() => void>(() => {});
+
+  /** Scroll distance while pinned: track height − pinned viewport height. Both are svh-based, so the
+   *  value does not change when the iOS toolbar collapses or expands. */
+  const getScrollRange = useCallback(() => {
+    const s = sectionRef.current;
+    if (!s || typeof window === "undefined") return 1;
+    const pinH = pinRef.current?.offsetHeight || window.innerHeight;
+    return Math.max(1, s.offsetHeight - pinH);
+  }, []);
+
+  const releaseLock = useCallback(() => {
+    if (settleTimerRef.current) window.clearTimeout(settleTimerRef.current);
+    settleTimerRef.current = null;
+    if (!isProgrammaticScrollRef.current) return;
+    isProgrammaticScrollRef.current = false;
+    syncFromScrollRef.current();
+  }, []);
 
   useEffect(() => {
     if (!enableScrollTrigger || reduce || typeof window === "undefined") return;
     let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        if (isProgrammaticScrollRef.current) return;
-        const s = sectionRef.current;
-        if (!s) return;
-        const rect = s.getBoundingClientRect();
-        const scrollRange = Math.max(1, s.offsetHeight - window.innerHeight);
-        const scrolled = -rect.top;
-        if (scrolled <= 0) {
-          if (activeIndexRef.current !== 0) {
-            activeIndexRef.current = 0;
-            setActiveIndex(0);
-          }
-          return;
+    const compute = () => {
+      const s = sectionRef.current;
+      if (!s) return;
+      const scrolled = -s.getBoundingClientRect().top;
+      if (scrolled <= 0) {
+        if (activeIndexRef.current !== 0) {
+          activeIndexRef.current = 0;
+          setActiveIndex(0);
         }
-        const progress = Math.max(0, Math.min(1, scrolled / scrollRange));
-        // Evenly distributed slide zones so every card gets equal scroll time
-        const next = Math.min(totalSlides - 1, Math.floor(progress * totalSlides));
-        if (activeIndexRef.current !== next) {
-          activeIndexRef.current = next;
-          setActiveIndex(next);
-        }
-      });
+        return;
+      }
+      const next = slideForProgress(scrolled / getScrollRange(), totalSlides, activeIndexRef.current);
+      if (activeIndexRef.current !== next) {
+        activeIndexRef.current = next;
+        setActiveIndex(next);
+      }
     };
+    syncFromScrollRef.current = compute;
+    const onScroll = () => {
+      if (isProgrammaticScrollRef.current) {
+        // A programmatic (smooth) scroll is running: wait until it has really stopped — iOS can
+        // take well over a second for long distances — instead of a fixed timeout.
+        if (settleTimerRef.current) window.clearTimeout(settleTimerRef.current);
+        settleTimerRef.current = window.setTimeout(releaseLock, 140);
+        if (performance.now() - lockStartRef.current > 3000) releaseLock();
+        return;
+      }
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(compute);
+    };
+    // The visitor takes over (touch / wheel) → stop waiting for the programmatic scroll.
+    const onUserInput = () => { if (isProgrammaticScrollRef.current) releaseLock(); };
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
-    onScroll();
+    window.addEventListener("touchstart", onUserInput, { passive: true });
+    window.addEventListener("wheel", onUserInput, { passive: true });
+    compute();
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      window.removeEventListener("touchstart", onUserInput);
+      window.removeEventListener("wheel", onUserInput);
+      if (settleTimerRef.current) window.clearTimeout(settleTimerRef.current);
     };
-  }, [enableScrollTrigger, reduce, totalSlides]);
+  }, [enableScrollTrigger, reduce, totalSlides, getScrollRange, releaseLock]);
 
   // On desktop show 5 cards (radius 2), on mobile 3 (radius 1)
   const renderRadius = isNarrow ? 1 : 2;
@@ -204,43 +255,38 @@ export const CampaignsScroll = () => {
     renderEntries.push({ key: `slide-${virtual}`, offset, kind, realIndex });
   }
 
-  const getScrollRange = useCallback(() => {
-    const s = sectionRef.current;
-    if (!s || typeof window === "undefined") return 0;
-    return Math.max(1, s.offsetHeight - window.innerHeight);
-  }, []);
-
   const scrollToSlide = useCallback((index: number, focus = true, behavior: ScrollBehavior = "smooth") => {
     const s = sectionRef.current;
     if (!s || typeof window === "undefined") return;
     const clamped = clampSlide(index, totalSlides);
 
-    // Lock onScroll listener during programmatic navigation
+    // Ignore scroll-derived updates until this programmatic scroll has settled (see onScroll).
     isProgrammaticScrollRef.current = true;
-    if (programmaticTimerRef.current) window.clearTimeout(programmaticTimerRef.current);
-    programmaticTimerRef.current = window.setTimeout(() => {
-      isProgrammaticScrollRef.current = false;
-    }, 800);
+    lockStartRef.current = performance.now();
+    if (settleTimerRef.current) window.clearTimeout(settleTimerRef.current);
+    // Released by the first quiet period after the last scroll event; this also covers the case
+    // where no scroll event fires at all (already at the target).
+    settleTimerRef.current = window.setTimeout(releaseLock, 250);
 
     setActiveIndex(clamped);
     activeIndexRef.current = clamped;
 
-    const scrollRange = Math.max(1, s.offsetHeight - window.innerHeight);
+    const scrollRange = getScrollRange();
     const docTop = s.getBoundingClientRect().top + window.scrollY;
     // Scroll directly to the midpoint of the slide's active zone
     const targetProgress = (clamped + 0.5) / totalSlides;
     const top = docTop + scrollRange * Math.min(1, targetProgress);
     try {
       window.scrollTo({ top, behavior });
-    } catch { }
+    } catch { /* older browsers: no smooth scrolling */ }
 
     if (focus) requestAnimationFrame(() => cardRefs.current[clamped]?.focus({ preventScroll: true }));
-  }, [totalSlides]);
+  }, [totalSlides, getScrollRange, releaseLock]);
 
   const getCurrentSlide = useCallback(() => {
     const s = sectionRef.current;
     if (!s || typeof window === "undefined") return 0;
-    const progress = Math.max(0, Math.min(1, (window.scrollY - s.offsetTop) / getScrollRange()));
+    const progress = Math.max(0, Math.min(1, -s.getBoundingClientRect().top / getScrollRange()));
     return Math.min(totalSlides - 1, Math.floor(progress * totalSlides));
   }, [getScrollRange, totalSlides]);
 
@@ -381,8 +427,8 @@ export const CampaignsScroll = () => {
           scrollSpeed={settings.scrollSpeed}
         />
       ) : (
-        <div ref={sectionRef} className="relative" style={{ height: `${heightVh}vh` }}>
-          <div className="sticky top-0 flex h-[100svh] max-h-[100svh] flex-col items-center justify-center overflow-visible pt-20 pb-0 sm:pt-20 sm:pb-2 md:pt-24 md:pb-4 px-2 sm:px-4 lg:px-8">
+        <div ref={sectionRef} className="cs-track relative" style={{ ["--cs-n" as string]: heightVh / 100 }}>
+          <div ref={pinRef} className="cs-pin sticky top-0 flex flex-col items-center justify-center overflow-visible pt-20 pb-0 sm:pt-20 sm:pb-2 md:pt-24 md:pb-4 px-2 sm:px-4 lg:px-8">
             {/* Unified vertical group — balanced spacing between Header, Cards, and Indicator */}
             <div className="flex flex-col items-center justify-center gap-1.5 sm:gap-2.5 w-full max-w-7xl px-2 sm:px-4 lg:px-8 shrink-0 my-auto">
               <Header isRTL={isRTL} title={headerTitle} subtitle={headerSubtitle} />
@@ -456,7 +502,7 @@ export const CampaignsScroll = () => {
                         scrollToSlide(target);
                       }}
                       aria-label={isRTL ? "البطاقة التالية" : "Previous slide"}
-                      className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-2xl backdrop-blur-md transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
+                      className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-xl transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
                     >
                       <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
                     </button>
@@ -471,7 +517,7 @@ export const CampaignsScroll = () => {
                         scrollToSlide(target);
                       }}
                       aria-label={isRTL ? "البطاقة السابقة" : "Next slide"}
-                      className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-2xl backdrop-blur-md transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
+                      className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-xl transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
                     >
                       <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
                     </button>
@@ -700,20 +746,43 @@ const AutoplayCampaigns = ({
   const pausedRef = useRef(false);
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
   const swipeRef = useRef<{ x: number; y: number; pointerId: number } | null>(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  /** Off-screen → no autoplay (no re-render of image cards while the visitor scrolls elsewhere). */
+  const visibleRef = useRef(false);
+  /** Autoplay waits until this time: set while the page scrolls and after any touch on the carousel,
+   *  so a card never moves under the visitor's finger or competes with their scrolling. */
+  const holdUntilRef = useRef(0);
+  const hold = (ms: number) => { holdUntilRef.current = Math.max(holdUntilRef.current, performance.now() + ms); };
 
   // Interval in ms: baseline 3800ms
   const intervalMs = Math.round(3800 + (scrollSpeed - 2) * 200);
 
   useEffect(() => {
+    const el = rootRef.current;
+    let io: IntersectionObserver | null = null;
+    if (el && typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(([e]) => { visibleRef.current = e.isIntersecting && e.intersectionRatio > 0.35; }, { threshold: [0, 0.35, 0.6] });
+      io.observe(el);
+    } else {
+      visibleRef.current = true;
+    }
+    const onScroll = () => { holdUntilRef.current = Math.max(holdUntilRef.current, performance.now() + 1200); };
+    window.addEventListener("scroll", onScroll, { passive: true });
     const timer = setInterval(() => {
-      if (!pausedRef.current) {
-        setActiveIndex((prev) => (prev + 1) % totalSlides);
-      }
+      if (pausedRef.current || !visibleRef.current || document.hidden) return;
+      if (performance.now() < holdUntilRef.current) return;
+      setActiveIndex((prev) => (prev + 1) % totalSlides);
     }, intervalMs);
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      io?.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [totalSlides, intervalMs]);
 
   const go = useCallback((next: number) => {
+    // A manual move restarts the wait, so autoplay does not jump right after the visitor's choice.
+    holdUntilRef.current = performance.now() + 6000;
     setActiveIndex(((next % totalSlides) + totalSlides) % totalSlides);
   }, [totalSlides]);
 
@@ -737,6 +806,7 @@ const AutoplayCampaigns = ({
   }
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "mouse") hold(6000);
     if (event.pointerType === "mouse" && event.button !== 0) return;
     const target = event.target as HTMLElement;
     if (target.closest("a,button,input,textarea,select")) return;
@@ -781,8 +851,10 @@ const AutoplayCampaigns = ({
 
   return (
     <div
+      ref={rootRef}
       className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-visible pt-20 pb-0 sm:pt-20 sm:pb-2 md:pt-24 md:pb-4 px-2 sm:px-4 lg:px-8"
       dir={isRTL ? "rtl" : "ltr"}
+      onTouchStart={() => hold(6000)}
       onMouseEnter={() => { pausedRef.current = true; }}
       onMouseLeave={() => { pausedRef.current = false; }}
       onFocus={() => { pausedRef.current = true; }}
@@ -811,7 +883,7 @@ const AutoplayCampaigns = ({
                 type="button"
                 onClick={isRTL ? next : prev}
                 aria-label={isRTL ? "البطاقة التالية" : "Previous slide"}
-                className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-2xl backdrop-blur-md transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
+                className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-xl transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
               >
                 <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
@@ -821,7 +893,7 @@ const AutoplayCampaigns = ({
                 type="button"
                 onClick={isRTL ? prev : next}
                 aria-label={isRTL ? "البطاقة السابقة" : "Next slide"}
-                className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-2xl backdrop-blur-md transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
+                className="pointer-events-auto flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 dark:bg-slate-900/95 text-primary border border-border/80 shadow-xl transition-all duration-200 hover:bg-white dark:hover:bg-slate-900 hover:scale-110 hover:border-secondary hover:text-secondary active:scale-95 cursor-pointer ring-1 ring-black/5"
               >
                 <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
@@ -1015,7 +1087,7 @@ type CardProps = {
   ariaSize?: number;
 };
 
-const CampaignCard = ({ p, i, total, lang, isRTL, Arrow, className = "", style, ariaPos, ariaSize }: CardProps) => {
+const CampaignCard = memo(function CampaignCard({ p, i, total, lang, isRTL, Arrow, className = "", style, ariaPos, ariaSize }: CardProps) {
   const resolvedPropImg = useMemo(() => {
     if (!p.image || p.image.includes("example.com")) return p.image || "/og-ar.jpg";
     return formatServerImageUrl(p.image) || p.image;
@@ -1119,7 +1191,7 @@ const CampaignCard = ({ p, i, total, lang, isRTL, Arrow, className = "", style, 
       </div>
     </article>
   );
-};
+});
 
 /* ── Final CTA card ───────────────────────────────────────────────────── */
 const FinalCTACard = ({

@@ -1254,3 +1254,14 @@ img, video, svg, canvas {
   .misbaha-ring:active { transform: none; }
   .misbaha-bead-new, .misbaha-tap, .misbaha-fade { animation: none; }
 }
+
+/* ── Home campaigns carousel (CampaignsScroll, pinned mode) ──
+ * Track and pinned viewport use the *small* viewport height (svh): on iOS Safari it stays constant while
+ * the address bar collapses/expands, so the pinned layout and the scroll→slide mapping never shift
+ * mid-scroll. vh is the fallback for browsers without svh. --cs-n = track height in viewport heights. */
+.cs-track { height: calc(var(--cs-n, 1) * 100vh); }
+.cs-pin { height: 100vh; max-height: 100vh; }
+@supports (height: 100svh) {
+  .cs-track { height: calc(var(--cs-n, 1) * 100svh); }
+  .cs-pin { height: 100svh; max-height: 100svh; }
+}
