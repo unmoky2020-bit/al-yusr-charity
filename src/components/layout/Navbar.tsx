@@ -113,6 +113,7 @@ export const Navbar = () => {
     { to: "/programs",  label: lang === "ar" ? "برامجنا" : "Programs" },
     { to: "/projects",  label: lang === "ar" ? "مشاريعنا" : "Projects" },
     { to: "/campaigns", label: lang === "ar" ? "حملاتنا" : "Campaigns" },
+    { to: "/misbaha",   label: lang === "ar" ? "المسبحة" : "Tasbih" },
     { to: "/cases",     label: lang === "ar" ? "الحالات" : "Cases" },
     { to: "/blog",      label: lang === "ar" ? "المدونة" : "Blog" },
     { to: "/contact",   label: t.nav.contact },

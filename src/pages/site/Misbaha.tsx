@@ -50,17 +50,28 @@ const GROUPS: Group[] = [
 const ALL = GROUPS.flatMap((g) => g.items);
 const TARGETS = [33, 100, 1000, 0]; // 0 = open count
 const BEADS = 33;
+/** «متنوّع» mode: each tap moves to the next dhikr in this order, so a session covers salawat,
+ *  tasbih, istighfar and tahleel instead of one phrase only. */
+const MIXED_ORDER = ["salawat", "subhan_bihamdih", "astaghfir", "hamd", "hawqala", "tahleel", "kalimatan", "baqiyat"];
+const MIXED = MIXED_ORDER.map((id) => ALL.find((d) => d.id === id)).filter((d): d is Dhikr => !!d);
+const MIXED_KEY = "__mixed";
+type Mode = "mixed" | "single";
+const MODES: { id: Mode; ar: string; en: string; subAr: string; subEn: string }[] = [
+  { id: "mixed", ar: "أذكار متنوّعة", en: "Varied dhikr", subAr: "بتتغيّر مع كل ضغطة", subEn: "changes with every tap" },
+  { id: "single", ar: "ذكر واحد", en: "One dhikr", subAr: "تختاره وتكرّره", subEn: "pick one and repeat" },
+];
 
-type Saved = { selected: string; counts: Record<string, number>; targets: Record<string, number>; day: string; today: number; vibrate: boolean };
+type Saved = { mode: Mode; selected: string; counts: Record<string, number>; targets: Record<string, number>; day: string; today: number; vibrate: boolean };
 const KEY = "yusr-misbaha-v1";
 const todayStr = () => new Date().toISOString().slice(0, 10);
 const load = (): Saved => {
-  const fresh: Saved = { selected: ALL[0].id, counts: {}, targets: {}, day: todayStr(), today: 0, vibrate: true };
+  const fresh: Saved = { mode: "mixed", selected: ALL[0].id, counts: {}, targets: {}, day: todayStr(), today: 0, vibrate: true };
   try {
     const s = JSON.parse(localStorage.getItem(KEY) || "null") as Partial<Saved> | null;
     if (!s || typeof s !== "object") return fresh;
     const out = { ...fresh, ...s, counts: { ...(s.counts || {}) }, targets: { ...(s.targets || {}) } } as Saved;
     if (!ALL.some((d) => d.id === out.selected)) out.selected = fresh.selected;
+    if (out.mode !== "single") out.mode = "mixed";
     if (out.day !== fresh.day) { out.day = fresh.day; out.today = 0; }
     return out;
   } catch {
@@ -88,10 +99,14 @@ const Misbaha = () => {
   }, [st]);
   useEffect(() => () => window.clearTimeout(doneTimer.current), []);
 
-  const dhikr = ALL.find((d) => d.id === st.selected) ?? ALL[0];
+  const isMixed = st.mode === "mixed";
+  // In mixed mode the counter is shared and the dhikr to say now follows the count.
+  const countKey = isMixed ? MIXED_KEY : st.selected;
+  const count = st.counts[countKey] ?? 0;
+  const dhikr = isMixed ? MIXED[count % MIXED.length] : ALL.find((d) => d.id === st.selected) ?? ALL[0];
+  const nextDhikr = isMixed ? MIXED[(count + 1) % MIXED.length] : null;
   const group = GROUPS.find((g) => g.items.some((d) => d.id === dhikr.id)) ?? GROUPS[0];
-  const count = st.counts[dhikr.id] ?? 0;
-  const target = st.targets[dhikr.id] ?? dhikr.target;
+  const target = st.targets[countKey] ?? (isMixed ? 100 : dhikr.target);
   const rounds = target ? Math.floor(count / target) : 0;
   const inRound = target ? count % target : count;
   // Beads lit: progress within the target, or within each 33 on an open count.
@@ -108,7 +123,7 @@ const Misbaha = () => {
     setSt((s) => {
       const day = todayStr();
       const today = s.day === day ? s.today : 0;
-      return { ...s, counts: { ...s.counts, [dhikr.id]: (s.counts[dhikr.id] ?? 0) + 1 }, today: today + 1, day };
+      return { ...s, counts: { ...s.counts, [countKey]: (s.counts[countKey] ?? 0) + 1 }, today: today + 1, day };
     });
     setPulse((p) => p + 1);
     if (completes) {
@@ -117,11 +132,12 @@ const Misbaha = () => {
       doneTimer.current = window.setTimeout(() => setDone(false), 1800);
     }
     vibrate(completes ? [40, 60, 40] : 8);
-  }, [dhikr.id, target, count]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [countKey, target, count]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const reset = () => { setSt((s) => ({ ...s, counts: { ...s.counts, [dhikr.id]: 0 } })); setDone(false); };
-  const choose = (id: string) => { setSt((s) => ({ ...s, selected: id })); setDone(false); };
-  const setTarget = (n: number) => setSt((s) => ({ ...s, targets: { ...s.targets, [dhikr.id]: n } }));
+  const reset = () => { setSt((s) => ({ ...s, counts: { ...s.counts, [countKey]: 0 } })); setDone(false); };
+  const choose = (id: string) => { setSt((s) => ({ ...s, mode: "single", selected: id })); setDone(false); };
+  const setMode = (mode: Mode) => { setSt((s) => ({ ...s, mode })); setDone(false); };
+  const setTarget = (n: number) => setSt((s) => ({ ...s, targets: { ...s.targets, [countKey]: n } }));
 
   const share = async () => {
     const url = "https://elyusr.org/misbaha";
@@ -155,19 +171,26 @@ const Misbaha = () => {
           <div className="mx-auto mt-6 max-w-2xl text-center">
             <h1 className="text-3xl font-black sm:text-4xl md:text-5xl">{isAr ? "المسبحة الإلكترونية" : "Digital tasbih"}</h1>
             <p className="mt-3 text-base text-primary-foreground/85 md:text-lg">
-              {isAr ? "اختار ذكرك، واضغط على المسبحة مع كل تسبيحة. عدّادك بيتحفظ على جهازك." : "Choose your dhikr and tap the beads with each one. Your count is saved on this device."}
+              {isAr ? "قول الذكر واضغط على المسبحة. الذكر بيتغيّر مع كل ضغطة علشان تجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، وتقدر تختار ذكر واحد لو حابب. عدّادك بيتحفظ على جهازك." : "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count is saved on this device."}
             </p>
           </div>
 
           <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
             {/* ── Counter ── */}
             <div className="flex flex-col items-center">
+              <div className="mb-5 min-h-[5.5rem] w-full max-w-md text-center" aria-live="polite">
+                <p className="text-xs font-black text-secondary">{isMixed ? (isAr ? "قول دلوقتي" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}</p>
+                <p key={`${dhikr.id}-${isMixed ? count : 0}`} className="misbaha-fade mt-1 text-xl font-black leading-[1.7] text-white sm:text-2xl">{isAr ? dhikr.text : dhikr.en}</p>
+                {nextDhikr && (
+                  <p className="mt-1 truncate text-xs font-bold text-white/55">{isAr ? `اللي بعده: ${nextDhikr.text}` : `Next: ${nextDhikr.en}`}</p>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={tap}
                 className={`misbaha-ring relative aspect-square w-full max-w-[340px] select-none rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary/60 ${done ? "misbaha-done" : ""}`}
                 style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
-                aria-label={isAr ? `اضغط للتسبيح: ${dhikr.text}. العدد ${count}` : `Tap to count: ${dhikr.en}. Count ${count}`}
+                aria-label={isAr ? `اضغط بعد ما تقول: ${dhikr.text}. العدد ${count}` : `Tap after saying: ${dhikr.en}. Count ${count}`}
               >
                 <svg viewBox="0 0 300 300" className="h-full w-full" aria-hidden>
                   <circle cx="150" cy="150" r="146" fill="hsl(152 55% 9%)" />
@@ -228,6 +251,32 @@ const Misbaha = () => {
 
             {/* ── Choice of dhikr ── */}
             <div className="rounded-3xl bg-card p-5 text-foreground shadow-card sm:p-7">
+              <div className="mb-4 grid grid-cols-2 gap-1 rounded-2xl bg-muted/60 p-1" role="radiogroup" aria-label={isAr ? "طريقة الذكر" : "Dhikr mode"}>
+                {MODES.map((m) => {
+                  const on = st.mode === m.id;
+                  return (
+                    <button key={m.id} type="button" role="radio" aria-checked={on} onClick={() => setMode(m.id)}
+                      className={`rounded-xl px-3 py-2 text-center transition ${on ? "bg-card shadow-soft" : "hover:bg-card/60"}`}>
+                      <span className={`block text-sm font-black ${on ? "text-primary" : "text-muted-foreground"}`}>{isAr ? m.ar : m.en}</span>
+                      <span className="block text-[11px] font-bold text-muted-foreground">{isAr ? m.subAr : m.subEn}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {isMixed ? (
+                <ol className="grid grid-cols-2 gap-1.5 text-xs font-bold sm:grid-cols-4" aria-label={isAr ? "ترتيب الأذكار" : "Dhikr order"}>
+                  {MIXED.map((d, i) => {
+                    const on = d.id === dhikr.id;
+                    return (
+                      <li key={d.id} className={`truncate rounded-lg px-2 py-1.5 text-center transition-colors ${on ? "bg-secondary/25 text-primary" : "bg-muted/40 text-muted-foreground"}`} title={d.text}>
+                        {(i + 1).toLocaleString(isAr ? "ar-EG" : "en-US")}. {isAr ? d.text : d.en}
+                      </li>
+                    );
+                  })}
+                </ol>
+              ) : (
+              <>
               <div role="tablist" aria-label={isAr ? "نوع الذكر" : "Type of dhikr"} className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {GROUPS.map((g) => {
                   const on = g.id === group.id;
@@ -254,8 +303,10 @@ const Misbaha = () => {
                   })}
                 </div>
               )}
+              </>
+              )}
 
-              <div key={dhikr.id} className="misbaha-fade mt-6 rounded-2xl bg-muted/40 p-5 text-center">
+              <div key={`${dhikr.id}-${isMixed ? count : 0}`} className="misbaha-fade mt-6 rounded-2xl bg-muted/40 p-5 text-center">
                 <p className="text-2xl font-black leading-[1.8] text-primary md:text-3xl">{dhikr.text}</p>
                 {!isAr && <p className="mt-2 text-sm text-muted-foreground">{dhikr.en}</p>}
               </div>
