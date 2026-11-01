@@ -135,7 +135,9 @@ export const Navbar = () => {
     : "border-border bg-background/50 hover:bg-secondary/20";
 
   const solidBar =
-    "bg-background/95 backdrop-blur-md shadow-elegant supports-[backdrop-filter]:bg-background/80";
+    // Blur only on desktop: on phones a backdrop-filter over the animating home carousel is recomputed
+    // every frame (visible as tremor on iPhone); a near-opaque background looks the same there.
+    "bg-background/95 shadow-elegant lg:backdrop-blur-md lg:supports-[backdrop-filter]:bg-background/80";
 
   return (
     <header

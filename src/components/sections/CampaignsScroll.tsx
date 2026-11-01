@@ -173,12 +173,17 @@ export const CampaignsScroll = () => {
 
   /** Scroll distance while pinned: track height − pinned viewport height. Both are svh-based, so the
    *  value does not change when the iOS toolbar collapses or expands. */
-  const getScrollRange = useCallback(() => {
+  /** Cached: re-measured only when the track or pinned viewport really changes size (ResizeObserver),
+   *  so a scroll frame only reads the track's position. */
+  const rangeRef = useRef(0);
+  const measureRange = useCallback(() => {
     const s = sectionRef.current;
     if (!s || typeof window === "undefined") return 1;
     const pinH = pinRef.current?.offsetHeight || window.innerHeight;
-    return Math.max(1, s.offsetHeight - pinH);
+    rangeRef.current = Math.max(1, s.offsetHeight - pinH);
+    return rangeRef.current;
   }, []);
+  const getScrollRange = useCallback(() => rangeRef.current || measureRange(), [measureRange]);
 
   const releaseLock = useCallback(() => {
     if (settleTimerRef.current) window.clearTimeout(settleTimerRef.current);
@@ -209,6 +214,13 @@ export const CampaignsScroll = () => {
       }
     };
     syncFromScrollRef.current = compute;
+    measureRange();
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => { measureRange(); });
+      if (sectionRef.current) ro.observe(sectionRef.current);
+      if (pinRef.current) ro.observe(pinRef.current);
+    }
     const onScroll = () => {
       if (isProgrammaticScrollRef.current) {
         // A programmatic (smooth) scroll is running: wait until it has really stopped — iOS can
@@ -224,19 +236,21 @@ export const CampaignsScroll = () => {
     // The visitor takes over (touch / wheel) → stop waiting for the programmatic scroll.
     const onUserInput = () => { if (isProgrammaticScrollRef.current) releaseLock(); };
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    const onResize = () => { measureRange(); onScroll(); };
+    window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("touchstart", onUserInput, { passive: true });
     window.addEventListener("wheel", onUserInput, { passive: true });
     compute();
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
       window.removeEventListener("touchstart", onUserInput);
       window.removeEventListener("wheel", onUserInput);
       if (settleTimerRef.current) window.clearTimeout(settleTimerRef.current);
+      ro?.disconnect();
     };
-  }, [enableScrollTrigger, reduce, totalSlides, getScrollRange, releaseLock]);
+  }, [enableScrollTrigger, reduce, totalSlides, getScrollRange, measureRange, releaseLock]);
 
   // On desktop show 5 cards (radius 2), on mobile 3 (radius 1)
   const renderRadius = isNarrow ? 1 : 2;

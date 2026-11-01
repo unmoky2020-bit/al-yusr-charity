@@ -906,7 +906,9 @@ img, video, svg, canvas {
   background-size: 100% 100%;
   opacity: 0.95;
   pointer-events: none;
-  animation: handUnderlineDraw 1.2s ease-out both;
+  /* backwards (not both): once drawn, no clip-path stays on the layer (a persistent clip-path inside a
+     pinned/sticky box repaints on every scroll frame in iOS Safari). */
+  animation: handUnderlineDraw 1.2s ease-out backwards;
 }
 @keyframes handUnderlineDraw {
   from { clip-path: inset(0 100% 0 0); }
@@ -1261,6 +1263,10 @@ img, video, svg, canvas {
  * mid-scroll. vh is the fallback for browsers without svh. --cs-n = track height in viewport heights. */
 .cs-track { height: calc(var(--cs-n, 1) * 100vh); }
 .cs-pin { height: 100vh; max-height: 100vh; }
+/* Own compositor layer for the pinned viewport: iOS Safari otherwise re-positions the sticky box on
+ * the main thread while its contents animate, which shows as a tremor of the heading. A transform on
+ * the sticky element itself (not on an ancestor) keeps sticky positioning intact. */
+.cs-pin { transform: translate3d(0, 0, 0); -webkit-transform: translate3d(0, 0, 0); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 @supports (height: 100svh) {
   .cs-track { height: calc(var(--cs-n, 1) * 100svh); }
   .cs-pin { height: 100svh; max-height: 100svh; }

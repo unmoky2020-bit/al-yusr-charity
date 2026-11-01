@@ -174,6 +174,8 @@ const RouteTracker = () => {
   const navType = useNavigationType();
   const didInitScroll = useRef(false);
   const currentKey = useRef(loc.key);
+  /** Last scroll position of the current entry (kept in memory every scroll, stored on pause/leave). */
+  const lastY = useRef<number | null>(null);
   useEffect(() => {
     bindAnchorClickTracker();
     try { if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual"; } catch { void 0; }
@@ -185,21 +187,38 @@ const RouteTracker = () => {
       const k = (window.history.state as { key?: string } | null)?.key;
       return !k || k === currentKey.current;
     };
+    // Saved when scrolling pauses (and on pagehide), not on every frame: no main-thread work while the
+    // visitor scrolls (matters on iPhone with the pinned home carousel).
     const onScroll = () => {
-      if (raf) return;
-      raf = requestAnimationFrame(() => { raf = 0; if (settled()) writeScroll(currentKey.current, window.scrollY); });
+      if (raf) window.clearTimeout(raf);
+      if (!settled()) return;
+      lastY.current = window.scrollY;
+      raf = window.setTimeout(() => { raf = 0; if (settled()) writeScroll(currentKey.current, window.scrollY); }, 150);
     };
     const onHide = () => { if (settled()) writeScroll(currentKey.current, window.scrollY); };
+    // A click (link, button that navigates) is saved immediately, in the capture phase — before the
+    // router changes the page — so a quick scroll-then-tap still returns to the right place.
+    const onIntent = () => {
+      if (!settled()) return;
+      lastY.current = window.scrollY;
+      writeScroll(currentKey.current, window.scrollY);
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("pagehide", onHide);
+    document.addEventListener("click", onIntent, true);
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pagehide", onHide);
-      if (raf) cancelAnimationFrame(raf);
+      document.removeEventListener("click", onIntent, true);
+      if (raf) window.clearTimeout(raf);
     };
   }, []);
   useEffect(() => {
+    // Store where the visitor left the previous page, even if they navigated within the save delay.
+    // Only when a position was actually seen on that page, so a stale value never overwrites a good save.
+    if (currentKey.current !== loc.key && lastY.current !== null) writeScroll(currentKey.current, lastY.current);
     currentKey.current = loc.key;
+    lastY.current = null;
     if (typeof window !== "undefined") {
       const isFirst = !didInitScroll.current;
       const saved = readScroll(loc.key);
