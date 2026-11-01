@@ -1267,6 +1267,9 @@ img, video, svg, canvas {
  * the main thread while its contents animate, which shows as a tremor of the heading. A transform on
  * the sticky element itself (not on an ancestor) keeps sticky positioning intact. */
 .cs-pin { transform: translate3d(0, 0, 0); -webkit-transform: translate3d(0, 0, 0); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+/* Touch devices, while the section is fully pinned (set by CampaignsScroll): fixed to the screen
+ * instead of sticky — WebKit repositions sticky boxes every scroll frame with ±1px rounding. */
+.cs-pin.cs-pin--fixed { position: fixed !important; top: 0; left: 0; right: 0; }
 @supports (height: 100svh) {
   .cs-track { height: calc(var(--cs-n, 1) * 100svh); }
   .cs-pin { height: 100svh; max-height: 100svh; }

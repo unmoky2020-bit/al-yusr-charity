@@ -131,3 +131,49 @@ describe("pinned home carousel (iOS-proof scroll mapping)", () => {
     expect(active(c)).toBe(chosen);
   });
 });
+
+describe("pinned home carousel on touch devices (fixed instead of sticky while pinned)", () => {
+  let pinTop = 0;
+  beforeEach(() => {
+    pinTop = 0;
+    const realMM = window.matchMedia;
+    vi.stubGlobal("matchMedia", (q: string) => {
+      if (q.includes("pointer: coarse")) return { matches: true, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, onchange: null, dispatchEvent: () => false } as unknown as MediaQueryList;
+      return realMM ? realMM.call(window, q) : ({ matches: false, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, onchange: null, dispatchEvent: () => false } as unknown as MediaQueryList);
+    });
+    const rect = HTMLElement.prototype.getBoundingClientRect as unknown as { mockImplementation: (f: (this: HTMLElement) => DOMRect) => void };
+    rect.mockImplementation(function (this: HTMLElement) {
+      if (this.classList.contains("cs-track")) {
+        const top = TRACK_TOP - scrollY;
+        return { top, bottom: top + TRACK, left: 0, right: 0, width: 0, height: TRACK, x: 0, y: top, toJSON: () => ({}) } as DOMRect;
+      }
+      const top = this.classList.contains("cs-pin") ? pinTop : 0;
+      return { top, bottom: top, left: 0, right: 0, width: 0, height: 0, x: 0, y: top, toJSON: () => ({}) } as DOMRect;
+    });
+  });
+
+  const pinEl = (c: HTMLElement) => c.querySelector(".cs-pin") as HTMLElement;
+
+  it("is fixed only inside the fully pinned range, sticky before and after", async () => {
+    const c = await mount();
+    await setScroll(TRACK_TOP - 300); // section still below the top
+    expect(pinEl(c).classList.contains("cs-pin--fixed")).toBe(false);
+    await atProgress(0.3);
+    expect(pinEl(c).classList.contains("cs-pin--fixed")).toBe(true);
+    await atProgress(0.9);
+    expect(pinEl(c).classList.contains("cs-pin--fixed")).toBe(true);
+    await setScroll(TRACK_TOP + RANGE + 50); // released at the end: sticky carries it off with the page
+    expect(pinEl(c).classList.contains("cs-pin--fixed")).toBe(false);
+    await atProgress(0.5); // and back in
+    expect(pinEl(c).classList.contains("cs-pin--fixed")).toBe(true);
+  });
+
+  it("falls back to sticky for good when fixed would not sit at the top of the screen", async () => {
+    pinTop = 120; // e.g. an ancestor with a transform
+    const c = await mount();
+    await atProgress(0.3);
+    expect(pinEl(c).classList.contains("cs-pin--fixed")).toBe(false);
+    await atProgress(0.6);
+    expect(pinEl(c).classList.contains("cs-pin--fixed")).toBe(false);
+  });
+});

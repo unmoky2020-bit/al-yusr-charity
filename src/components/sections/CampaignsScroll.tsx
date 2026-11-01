@@ -214,6 +214,38 @@ export const CampaignsScroll = () => {
       }
     };
     syncFromScrollRef.current = compute;
+
+    // ── iOS: fixed instead of sticky while fully pinned ──
+    // WebKit re-positions a sticky box every scroll frame and rounds it ±1px differently from the
+    // page, which shows as a constant tremor of the whole pinned section on iPhone (measured on a
+    // screen recording: ±1px every frame while scrolling, 0 when the finger stops). A fixed box is
+    // composited against the screen and does not move. The switch happens only when entering and
+    // leaving the fully-pinned range, where sticky and fixed sit at the same place, so it is seamless.
+    // Touch devices only (desktop sticky is smooth); disabled for good if fixed lands anywhere else.
+    const pinAtMount = pinRef.current;
+    let fixedPin = typeof window.matchMedia === "function" && window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    let isFixed = false;
+    let verified = false;
+    const updatePin = () => {
+      const s = sectionRef.current;
+      const pin = pinRef.current;
+      if (!fixedPin || !s || !pin) return;
+      const rect = s.getBoundingClientRect();
+      const pinH = pin.offsetHeight || window.innerHeight;
+      const want = rect.top <= 0 && rect.bottom >= pinH;
+      if (want === isFixed) return;
+      isFixed = want;
+      pin.classList.toggle("cs-pin--fixed", want);
+      if (want && !verified) {
+        verified = true;
+        // Safety net: an ancestor with a transform would make "fixed" relative to it, not the screen.
+        if (Math.abs(pin.getBoundingClientRect().top) > 2) {
+          fixedPin = false;
+          isFixed = false;
+          pin.classList.remove("cs-pin--fixed");
+        }
+      }
+    };
     measureRange();
     let ro: ResizeObserver | null = null;
     if (typeof ResizeObserver !== "undefined") {
@@ -222,6 +254,7 @@ export const CampaignsScroll = () => {
       if (pinRef.current) ro.observe(pinRef.current);
     }
     const onScroll = () => {
+      updatePin(); // synchronous: the pin state must follow every frame, also during programmatic scrolls
       if (isProgrammaticScrollRef.current) {
         // A programmatic (smooth) scroll is running: wait until it has really stopped — iOS can
         // take well over a second for long distances — instead of a fixed timeout.
@@ -241,7 +274,9 @@ export const CampaignsScroll = () => {
     window.addEventListener("touchstart", onUserInput, { passive: true });
     window.addEventListener("wheel", onUserInput, { passive: true });
     compute();
+    updatePin();
     return () => {
+      pinAtMount?.classList.remove("cs-pin--fixed");
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
