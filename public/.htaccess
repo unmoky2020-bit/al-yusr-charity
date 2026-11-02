@@ -9,6 +9,9 @@
     
     # Prevent MIME sniffing
     Header always set X-Content-Type-Options "nosniff"
+    # Don't advertise the PHP version (was "X-Powered-By: PHP/8.3.x")
+    Header always unset X-Powered-By
+    Header unset X-Powered-By
     
     # Clickjacking protection
     Header always set X-Frame-Options "SAMEORIGIN"

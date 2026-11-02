@@ -90,7 +90,7 @@ const RegisterVolunteer = () => {
               </p>
             </div>
 
-            <form onSubmit={submit} className="mt-6 grid gap-3.5 sm:grid-cols-2">
+            <form method="post" onSubmit={submit} className="mt-6 grid gap-3.5 sm:grid-cols-2">
               {/* Full Name */}
               <div className="relative sm:col-span-2">
                 <User className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

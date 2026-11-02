@@ -115,7 +115,7 @@ const Register = () => {
               </div>
             )}
 
-            <form onSubmit={submit} className="mt-5 space-y-3">
+            <form method="post" onSubmit={submit} className="mt-5 space-y-3">
               <div className="relative">
                 <UserIcon className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input required placeholder={isRTL ? "الاسم بالكامل" : "Full name"} className="h-12 ps-9" value={form.name} onChange={(e) => set("name", e.target.value)} />

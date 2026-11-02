@@ -122,7 +122,7 @@ const ProfileInner = () => {
             <div className="space-y-4">
               <div className="rounded-3xl bg-card p-5 shadow-card md:p-7">
                 <h3 className="text-lg font-black text-primary">{lang === "ar" ? "البيانات الشخصية" : "Personal info"}</h3>
-                <form onSubmit={saveProfile} className="mt-4 grid gap-3 sm:grid-cols-2">
+                <form method="post" onSubmit={saveProfile} className="mt-4 grid gap-3 sm:grid-cols-2">
                   <div className="relative sm:col-span-2">
                     <UserIcon className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input className="h-12 ps-9" placeholder={lang === "ar" ? "الاسم" : "Name"} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
@@ -148,7 +148,7 @@ const ProfileInner = () => {
 
               <div className="rounded-3xl bg-card p-5 shadow-card md:p-7">
                 <h3 className="text-lg font-black text-primary">{lang === "ar" ? "تغيير كلمة المرور" : "Change password"}</h3>
-                <form onSubmit={savePwd} className="mt-4 grid gap-3 sm:grid-cols-3">
+                <form method="post" onSubmit={savePwd} className="mt-4 grid gap-3 sm:grid-cols-3">
                   <div className="relative sm:col-span-3">
                     <Lock className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input type="password" required className="h-12 ps-9" placeholder={lang === "ar" ? "كلمة المرور الحالية" : "Current password"} value={pwd.old} onChange={(e) => setPwd({ ...pwd, old: e.target.value })} />

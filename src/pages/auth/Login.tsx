@@ -148,16 +148,16 @@ const Login = () => {
               </button>
             </div>
 
-            <form onSubmit={submit} className="mt-6 space-y-3">
+            <form method="post" onSubmit={submit} className="mt-6 space-y-3">
               {tab === "email" ? (
                 <>
                   <div className="relative">
                     <Mail className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input type="email" required placeholder={lang === "ar" ? "البريد الإلكتروني" : "Email"} className="h-12 ps-9" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <Input type="email" name="email" autoComplete="email" required placeholder={lang === "ar" ? "البريد الإلكتروني" : "Email"} className="h-12 ps-9" value={email} onChange={(e) => setEmail(e.target.value)} />
                   </div>
                   <div className="relative">
                     <Lock className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input type={show ? "text" : "password"} required placeholder={lang === "ar" ? "كلمة المرور" : "Password"} className="h-12 ps-9 pe-10" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <Input type={show ? "text" : "password"} name="password" autoComplete="current-password" required placeholder={lang === "ar" ? "كلمة المرور" : "Password"} className="h-12 ps-9 pe-10" value={password} onChange={(e) => setPassword(e.target.value)} />
                     <button type="button" onClick={() => setShow(!show)} className="absolute end-2 top-1/2 -translate-y-1/2 rounded p-1 text-muted-foreground hover:text-foreground" aria-label="toggle password">
                       {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>

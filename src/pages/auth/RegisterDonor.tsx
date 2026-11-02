@@ -54,7 +54,7 @@ const RegisterDonor = () => {
                 {lang === "ar" ? "تابع تبرعاتك وأثرك في مكان واحد" : "Track your donations and impact in one place"}
               </p>
             </div>
-            <form onSubmit={submit} className="mt-6 space-y-3">
+            <form method="post" onSubmit={submit} className="mt-6 space-y-3">
               <Input required placeholder={lang === "ar" ? "الاسم بالكامل" : "Full name"} className="h-12" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
               <Input required type="email" placeholder={lang === "ar" ? "البريد الإلكتروني" : "Email"} className="h-12" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
               <Input required type="tel" placeholder={lang === "ar" ? "رقم الهاتف" : "Phone"} className="h-12" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
