@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
 #  Al-Yusr API — deploy of 2 Nov 2026
-#    • projects: page fields + GET /projects/by-slug/{slug} + visitors see active only
 #    • newsletter: public POST /newsletter/subscribe (visitors were getting 401)
 #    • misbaha: shared misbaha rooms (deceased / sick / group) + stats
 #
@@ -12,7 +11,7 @@
 #    1. checks PHP, artisan, and that every file it replaces is still the version we expect
 #    2. backs up the code it touches + the WHOLE database to ~/backups/2026-11-02-<time>/
 #    3. copies the files, adds one require line to routes/api.php, runs php -l on everything
-#    4. runs the migrations, clears caches, and calls the new endpoints
+#    4. runs ONLY its own migration (never other pending ones), clears caches, calls the new endpoints
 #    5. if any step after the backup fails, it restores the code automatically
 #  A rollback.sh is written into the backup folder for later.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -96,7 +95,7 @@ set -e
 cd "$APP"
 rm -f routes/api-2026-11.php app/Http/Controllers/Api/V1/Misbaha/MisbahaRoomController.php app/Models/MisbahaRoom.php \\
       app/Http/Controllers/Api/V1/Newsletter/NewsletterPublicController.php app/Console/Commands/SendNewsletterConfirmations.php \\
-      database/migrations/2026_11_02_100000_add_page_fields_to_projects_table.php database/migrations/2026_11_02_120000_create_misbaha_rooms_table.php
+      database/migrations/2026_11_02_120000_create_misbaha_rooms_table.php
 tar -xzf "$BK/code.tgz" -C "$APP"
 php artisan optimize:clear
 echo "الكود رجع. الجداول/الأعمدة الجديدة لسه موجودة ومش بتضر."
@@ -115,7 +114,9 @@ trap restore ERR
 
 # ── 3. Files ─────────────────────────────────────────────────────────────────
 step "3/5 نسخ الملفات"
-(cd "$SRC" && find app database routes -type f) | while read -r f; do
+# Only the files in the manifest (anything else left in files/ from an older copy is ignored).
+awk '{print $2}' "$HERE/expected-base.sha256" | while read -r f; do
+  [[ -z "$f" ]] && continue
   mkdir -p "$APP/$(dirname "$f")"
   cp "$SRC/$f" "$APP/$f"
   php -l "$APP/$f" >/dev/null
@@ -129,7 +130,8 @@ php -l "$APP/routes/api.php" >/dev/null
 
 # ── 4. Migrate + caches ─────────────────────────────────────────────────────
 step "4/5 migrations"
-php artisan migrate --force --no-ansi
+# Only our migration: other people's pending migrations on this server are left alone.
+php artisan migrate --force --no-ansi --path=database/migrations/2026_11_02_120000_create_misbaha_rooms_table.php
 php artisan optimize:clear --no-ansi
 php artisan route:list --path=misbaha-rooms --no-ansi | grep -q "misbaha-rooms/stats"
 php artisan route:list --path=newsletter/subscribe --no-ansi | grep -q "newsletter/subscribe"
@@ -143,7 +145,6 @@ c=$(code "$API_URL/misbaha-rooms/stats");                         echo "  GET  m
 c=$(code "$API_URL/misbaha-rooms");                               echo "  GET  misbaha-rooms              → $c (المتوقع 200)"; [[ $c == 200 ]] || ok=0
 c=$(code -X POST -H 'Accept: application/json' -H 'Content-Type: application/json' -d '{"email":"x"}' "$API_URL/newsletter/subscribe")
                                                                   echo "  POST newsletter/subscribe (غلط) → $c (المتوقع 422، مش 401)"; [[ $c == 422 ]] || ok=0
-c=$(code "$API_URL/projects/by-slug/__nope__");                   echo "  GET  projects/by-slug/__nope__  → $c (المتوقع 404)"; [[ $c == 404 ]] || ok=0
 
 echo
 if (( ok )); then
