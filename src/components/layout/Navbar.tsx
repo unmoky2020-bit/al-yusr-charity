@@ -109,7 +109,7 @@ export const Navbar = () => {
     { to: "/farm", ar: "المزارع الوقفية", en: "Endowment farm", descAr: "وقف أجره مستمر", descEn: "A lasting endowment", Icon: Sprout, group: "give" },
   ];
 
-  // Primary navigation. `wide` links move into «المزيد» between 1024 and 1280 px so nothing overlaps.
+  // Primary navigation (always in the bar on desktop; sizes tighten on 1024–1280 px so nothing overlaps).
   const links: { to: string; label: string; highlight?: boolean; wide?: boolean; Icon?: LucideIcon; descAr?: string; descEn?: string }[] = [
     { to: "/about",     label: t.nav.about, wide: true, Icon: Info, descAr: "مين إحنا وإزاي بنشتغل", descEn: "Who we are" },
     { to: "/programs",  label: lang === "ar" ? "برامجنا" : "Programs" },
@@ -167,7 +167,7 @@ export const Navbar = () => {
               className={
                 l.highlight
                   ? `rounded-full px-3 py-2 text-[13.5px] font-extrabold ring-1 transition bg-secondary/25 ring-secondary/50 hover:bg-secondary/40 ${transparent ? "text-white" : "text-primary"}`
-                  : `${l.wide ? "hidden xl:inline-flex" : "inline-flex"} shrink-0 whitespace-nowrap rounded-full px-2.5 py-2 text-[13.5px] font-bold transition-colors xl:px-3 ${linkBase} ${isActive(l.to) ? (transparent ? "bg-white/15 text-white font-black" : "bg-secondary/25 text-primary font-black") : ""}`
+                  : `inline-flex shrink-0 whitespace-nowrap rounded-full px-[7px] py-2 text-[12.5px] font-bold transition-colors xl:px-3 xl:text-[13.5px] ${linkBase} ${isActive(l.to) ? (transparent ? "bg-white/15 text-white font-black" : "bg-secondary/25 text-primary font-black") : ""}`
               }
             >
               {l.label}
@@ -180,7 +180,7 @@ export const Navbar = () => {
               onClick={() => setMoreOpen((v) => !v)}
               aria-haspopup="menu"
               aria-expanded={moreOpen ? "true" : "false"}
-              className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-2 text-[13.5px] font-bold transition-colors xl:px-3 ${linkBase} ${moreOpen ? (transparent ? "bg-white/15" : "bg-secondary/20 text-primary") : ""}`}
+              className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-[7px] py-2 text-[12.5px] font-bold transition-colors xl:px-3 xl:text-[13.5px] ${linkBase} ${moreOpen ? (transparent ? "bg-white/15" : "bg-secondary/20 text-primary") : ""}`}
             >
               {lang === "ar" ? "المزيد" : "More"}
               <ChevronDown className={`h-3.5 w-3.5 transition ${moreOpen ? "rotate-180" : ""}`} />
@@ -192,12 +192,6 @@ export const Navbar = () => {
                 className="absolute end-0 top-full z-10 mt-3 w-[min(30rem,calc(100vw-2rem))] origin-top animate-fade-in-up rounded-3xl border border-border/80 bg-background p-3 text-start shadow-card"
               >
                 <span aria-hidden className="absolute -top-1.5 end-8 h-3 w-3 rotate-45 border-s border-t border-border/80 bg-background" />
-                {/* links that don't fit in the bar on 1024–1280 px */}
-                <div className="mb-2 grid grid-cols-2 gap-1 border-b border-border/60 pb-2 xl:hidden">
-                  {links.filter((l) => l.wide).map((l) => (
-                    <MenuItem key={l.to} to={l.to} label={l.label} desc={lang === "ar" ? l.descAr : l.descEn} Icon={l.Icon!} active={isActive(l.to)} onClick={() => setMoreOpen(false)} />
-                  ))}
-                </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {(["about", "give"] as const).map((g) => (
                     <div key={g}>
