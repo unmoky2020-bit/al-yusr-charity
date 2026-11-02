@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { ChevronDown, Search, X, Check, Plus, Minus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useDonationEntities } from "@/data/sources/donationEntities";
+import type { DonationEntity } from "@/data/donationEntities";
 
 export type DonationItemState = {
   id: string;
@@ -27,15 +28,18 @@ interface Props {
   totalItems: number;
   error?: string;
   lang: string;
+  /** The form's entity list (with the backend cases attached); defaults to the plain list. */
+  entities?: DonationEntity[];
   onUpdate: (updated: DonationItemState) => void;
   onRemove: (id: string) => void;
 }
 
 export function DonationEntityItem({
-  item, index, totalItems, error, lang, onUpdate, onRemove,
+  item, index, totalItems, error, lang, entities: entitiesProp, onUpdate, onRemove,
 }: Props) {
   const isAR = lang === "ar";
-  const { entities } = useDonationEntities();
+  const { entities: ownEntities } = useDonationEntities();
+  const entities = entitiesProp?.length ? entitiesProp : ownEntities;
 
   // ── Entity Dropdown State ──
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -498,50 +502,79 @@ export function DonationEntityItem({
             <p className="text-[11px] text-muted-foreground">
               {isAR ? "اختر الحالة الإنسانية وحدد مبلغ مساهمتك:" : "Select a case and your contribution:"}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div role="radiogroup" aria-label={isAR ? "الحالات" : "Cases"}
+              className={`grid grid-cols-1 gap-2 sm:grid-cols-2 ${selectedEntity.cases.length > 4 ? "max-h-[22rem] overflow-y-auto overscroll-contain pe-1" : ""}`}>
               {selectedEntity.cases.map((cs) => {
                 const sel = item.selectedCaseId === cs.id;
-                const pct = Math.min(100, Math.round((cs.raisedAmount / cs.neededAmount) * 100));
+                const need = Math.max(0, cs.neededAmount);
+                const raised = Math.max(0, cs.raisedAmount);
+                const left = Math.max(0, need - raised);
+                const pct = need > 0 ? Math.min(100, Math.floor((raised / need) * 100)) : 0;
+                const loc = "en-US";
+                const place = [cs.beneficiaryName, cs.city || cs.governorate].filter(Boolean).join(" — ");
                 return (
-                  <div key={cs.id}
-                    onClick={() => onUpdate({ ...item, selectedCaseId: cs.id })}
-                    className={`rounded-xl border p-2.5 cursor-pointer transition-all ${
-                      sel ? "border-secondary bg-secondary/8 ring-1 ring-secondary/25" : "border-border/70 bg-card hover:border-secondary/40"
+                  <button type="button" role="radio" aria-checked={sel} key={cs.id}
+                    onClick={() => onUpdate({ ...item, selectedCaseId: cs.id, amount: left > 0 && item.amount > left ? left : item.amount })}
+                    className={`flex h-full flex-col rounded-xl border p-3 text-start transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary ${
+                      sel ? "border-secondary bg-secondary/[0.08] ring-1 ring-secondary/30" : "border-border/70 bg-card hover:border-secondary/40"
                     }`}>
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0">
-                        <p className="text-xs font-black text-primary leading-snug">
+                    <span className="flex w-full items-start gap-2">
+                      <span className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full border-2 ${sel ? "border-secondary bg-secondary" : "border-border"}`}>
+                        {sel && <Check className="h-2.5 w-2.5 text-slate-950" strokeWidth={4} />}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="line-clamp-2 block text-xs font-black leading-5 text-primary sm:text-[13px]">
                           {isAR ? cs.titleAr : cs.titleEn}
-                        </p>
-                        <p className="text-[10.5px] text-accent font-bold mt-0.5">
-                          {cs.beneficiaryName} — {cs.city || cs.governorate}
-                        </p>
-                      </div>
-                      <div className="flex flex-col items-end gap-1 shrink-0">
-                        {cs.urgent && (
-                          <span className="rounded px-1.5 py-px text-[9px] font-black bg-destructive/12 text-destructive border border-destructive/20">
-                            {isAR ? "عاجلة" : "Urgent"}
-                          </span>
-                        )}
-                        <span className="text-[10px] font-mono text-muted-foreground">#{cs.refCode}</span>
-                      </div>
-                    </div>
-                    <div className="mt-2 space-y-1">
-                      <div className="flex justify-between text-[10.5px] font-bold">
-                        <span className="text-muted-foreground">
-                          {cs.raisedAmount.toLocaleString()} / {cs.neededAmount.toLocaleString()} {isAR ? "ج" : "EGP"}
                         </span>
-                        <span className="text-secondary">{pct}%</span>
-                      </div>
-                      <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-                        <div className="h-full bg-secondary rounded-full" style={{ width: `${pct}%` }} />
-                      </div>
-                    </div>
-                    {sel && <p className="mt-1.5 text-[10.5px] font-black text-secondary">{isAR ? "تم الاختيار ✓" : "Selected ✓"}</p>}
-                  </div>
+                        {place && <span className="mt-0.5 block truncate text-[10.5px] font-bold text-accent">{place}</span>}
+                      </span>
+                      {cs.urgent && (
+                        <span className="shrink-0 rounded-md border border-destructive/20 bg-destructive/10 px-1.5 py-px text-[9.5px] font-black text-destructive">
+                          {isAR ? "عاجلة" : "Urgent"}
+                        </span>
+                      )}
+                    </span>
+                    {need > 0 && (
+                      <span className="mt-auto block w-full pt-2.5">
+                        <span className="block h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                          <span className="block h-full rounded-full bg-secondary" style={{ width: `${pct}%` }} />
+                        </span>
+                        <span className="mt-1 flex items-center justify-between gap-2 text-[10.5px] font-bold">
+                          <span className="text-muted-foreground">
+                            {isAR ? `اتجمع ${raised.toLocaleString(loc)} من ${need.toLocaleString(loc)} ج` : `${raised.toLocaleString(loc)} of ${need.toLocaleString(loc)} EGP`}
+                          </span>
+                          <span className="shrink-0 font-black text-primary">
+                            {left > 0 ? (isAR ? `فاضل ${left.toLocaleString(loc)}` : `${left.toLocaleString(loc)} left`) : (isAR ? "اكتملت" : "Funded")}
+                          </span>
+                        </span>
+                      </span>
+                    )}
+                    <span className="mt-1 block font-mono text-[10px] text-muted-foreground/80" dir="ltr">#{cs.refCode}</span>
+                  </button>
                 );
               })}
             </div>
+            {(() => {
+              const cs = selectedEntity.cases.find((c) => c.id === item.selectedCaseId);
+              const left = cs ? Math.max(0, cs.neededAmount - cs.raisedAmount) : 0;
+              if (!cs || left <= 0) return null;
+              const chips = [100, 250, 500, 1000].filter((a) => a < left).slice(0, 3);
+              if (left <= 15000) chips.push(left);
+              return (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {chips.map((a) => (
+                    <button key={a} type="button" onClick={() => onUpdate({ ...item, amount: a })}
+                      className={`rounded-lg border px-3 py-1.5 text-xs font-black transition ${
+                        item.amount === a ? "border-secondary bg-secondary text-slate-950" : "border-border/70 bg-card text-primary hover:border-secondary/50"
+                      }`}>
+                      {a === left
+                        ? (isAR ? `كمّل الحالة (${a.toLocaleString("en-US")} ج)` : `Complete it (${a.toLocaleString()} EGP)`)
+                        : `${a.toLocaleString("en-US")} ${isAR ? "ج" : "EGP"}`}
+                    </button>
+                  ))}
+                </div>
+              );
+            })()}
             <div className="flex items-center gap-3 pt-1">
               <label className="text-xs font-bold text-muted-foreground whitespace-nowrap">
                 {isAR ? "مبلغ المساهمة:" : "Your amount:"}

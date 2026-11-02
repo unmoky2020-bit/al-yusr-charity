@@ -107,7 +107,8 @@ export function mapApiEntity(raw: ApiRecord, kind: EntityType, fallback?: Donati
   const packages = activeSorted(r.donation_packages);
   const shares = packages.length ? packages.map((p) => mapApiPackage(p, fb?.shares)) : fb?.shares ?? [];
   const casesRaw = Array.isArray(r.cases) ? (r.cases as ApiRecord[]) : [];
-  const cases = casesRaw.length ? casesRaw.map(mapApiCase) : fb?.cases ?? [];
+  // Only real backend cases: the static sample cases are never offered on a backend record.
+  const cases = casesRaw.map(mapApiCase);
   const sharePrices = shares.map((s) => s.price).filter((n) => n > 0);
   const category: ApiRecord = (r.category && typeof r.category === "object" ? r.category : r.axis) || {};
   const out: DonationEntity = {

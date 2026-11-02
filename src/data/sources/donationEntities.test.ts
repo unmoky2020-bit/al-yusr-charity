@@ -23,10 +23,10 @@ describe("donation entities source", () => {
     expect(e).toMatchObject({ apiId: API_CAMPAIGN_ZELL.id, slug: "zell" });
   });
 
-  it("falls back to static fields (cases, color, category) when the API lacks them", () => {
+  it("falls back to static fields (color, category) when the API lacks them, never to sample cases", () => {
     const fb = ENTITY_MAP.dhill;
     const e = mapApiEntity(API_CAMPAIGN_ZELL, "campaign", fb);
-    expect(e.cases).toBe(fb.cases); // API cases: []
+    expect(e.cases).toEqual([]); // API cases: [] → no sample cases
     expect(e.color).toBe(fb.color);
     expect(e.categoryAr).toBe(fb.categoryAr);
     expect(e.donationType).toBe(fb.donationType);

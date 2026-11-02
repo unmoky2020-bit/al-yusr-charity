@@ -18,7 +18,9 @@ import { useLang } from "@/i18n/LangContext";
 import { SimpleDonateHero } from "@/components/sections/SimpleDonateHero";
 import { donationsStore, type DonationRecord } from "@/data/donationsStore";
 import { toast } from "@/hooks/use-toast";
-import { createDonation, getCaseByRef, verifyDonationPayment } from "@/data/casesApi";
+import { createDonation, getCaseByRef, listPublicCases, verifyDonationPayment, type CaseRow } from "@/data/casesApi";
+import { attachCases, linkedCaseId, ownerOfCase } from "@/data/donationCases";
+import { caseFunding } from "@/lib/caseFunding";
 import { fromLaravelRow } from "@/data/donationRecordMapper";
 import { useAuth } from "@/auth/AuthContext";
 
@@ -105,7 +107,17 @@ export type { DonationItemState };
 
 const DonatePage = () => {
   // Backend programs / projects / campaigns (static list only while loading or when the API is unreachable).
-  const { entities: DONATION_ENTITIES, fromApi: entitiesFromApi } = useDonationEntities();
+  const { entities: baseEntities, fromApi: entitiesFromApi } = useDonationEntities();
+  // Open backend cases, each under its program / project / campaign (or the general donation),
+  // plus the case opened from a case page (?case=…), listed first.
+  const [openCases, setOpenCases] = useState<CaseRow[]>([]);
+  const [pageCase, setPageCase] = useState<CaseRow | null>(null);
+  useEffect(() => {
+    let alive = true;
+    void listPublicCases().then((rows) => alive && setOpenCases(rows));
+    return () => { alive = false; };
+  }, []);
+  const DONATION_ENTITIES = useMemo(() => attachCases(baseEntities, openCases, pageCase), [baseEntities, openCases, pageCase]);
   const { lang, t } = useLang();
   const { user } = useAuth();
   const [params] = useSearchParams();
@@ -153,7 +165,7 @@ const DonatePage = () => {
       donationMode: initialMode,
       amount: initialAmount,
       selectedShares: {},
-      selectedCaseId: caseRef || null,
+      selectedCaseId: null,
     },
   ]);
   const [sectorFilter, setSectorFilter] = useState<string>(sectorSlugParam || "all");
@@ -328,8 +340,6 @@ const DonatePage = () => {
 
   const [receiptDataUrl, setReceiptDataUrl]   = useState<string>("");
   const [receiptFilename, setReceiptFilename] = useState<string>("");
-  const [caseId, setCaseId]                   = useState<string | null>(null);
-  const [caseTitle, setCaseTitle]             = useState<string>("");
 
   const idemKey = useRef<string>(
     (typeof crypto !== "undefined" && "randomUUID" in crypto)
@@ -339,35 +349,46 @@ const DonatePage = () => {
 
   useEffect(() => {
     if (!caseRef) return;
-    void getCaseByRef(caseRef).then((c) => {
-      if (c) {
-        setCaseId(c.id); setCaseTitle(c.title);
-        if (Number(c.needed_amount) - Number(c.raised_amount) > 0) {
-          const remaining = Number(c.needed_amount) - Number(c.raised_amount);
-          // The amount picked on the case page (?amount=) wins over the suggestion.
-          const linked = Number(params.get("amount"));
-          const suggested = linked >= 10 ? Math.round(linked) : Math.min(500, Math.max(50, Math.ceil(remaining / 10)));
-          const owner =
-            DONATION_ENTITIES.find((e) => e.apiId && (
-              (e.entityType === "program" && String(e.apiId) === String(c.program_id)) ||
-              (e.entityType === "project" && String(e.apiId) === String(c.project_id)) ||
-              (e.entityType === "campaign" && String(e.apiId) === String(c.donation_campaign_id))
-            )) || DONATION_ENTITIES[0];
-          basketEditedRef.current = true;
-          setItems([
-            {
-              id: "item-case",
-              entityId: owner.id,
-              donationMode: "case",
-              amount: suggested,
-              selectedShares: {},
-              selectedCaseId: c.id,
-            },
-          ]);
-        }
-      }
-    });
+    let alive = true;
+    void getCaseByRef(caseRef).then((c) => alive && setPageCase(c));
+    return () => { alive = false; };
   }, [caseRef]);
+
+  // Put the page case in the basket once; keep its item under the case's owner when the
+  // backend entity list arrives after the case.
+  const pageCaseAppliedRef = useRef(false);
+  useEffect(() => {
+    if (!pageCase) return;
+    const { remaining, done } = caseFunding(pageCase);
+    if (done) return; // funded: the banner says so; the form stays on its default item
+    const ownerId = (ownerOfCase(baseEntities, pageCase) ?? baseEntities[0]).id;
+    const lcId = linkedCaseId(pageCase.id);
+    if (pageCaseAppliedRef.current) {
+      setItems((prev) => prev.map((it) => (it.selectedCaseId === lcId && it.entityId !== ownerId ? { ...it, entityId: ownerId } : it)));
+      return;
+    }
+    pageCaseAppliedRef.current = true;
+    // The amount picked on the case page (?amount=) wins over the suggestion.
+    const linked = Number(params.get("amount"));
+    const suggested = linked >= 10 ? Math.round(linked) : Math.min(500, Math.max(50, Math.ceil(remaining / 10)));
+    basketEditedRef.current = true;
+    setItems([
+      {
+        id: "item-case",
+        entityId: ownerId,
+        donationMode: "case",
+        amount: Math.min(suggested, remaining),
+        selectedShares: {},
+        selectedCaseId: lcId,
+      },
+    ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageCase, baseEntities]);
+
+  /** The page case, while it is still in the basket (the donor may switch to something else). */
+  const activeCase = pageCase && items.some((it) => it.donationMode === "case" && it.selectedCaseId === linkedCaseId(pageCase.id)) ? pageCase : null;
+  const caseId = activeCase ? activeCase.id : null;
+  const caseTitle = activeCase?.title ?? "";
 
   const Arrow   = lang === "ar" ? ArrowLeft  : ArrowRight;
   const Back    = lang === "ar" ? ArrowRight : ArrowLeft;
@@ -718,16 +739,62 @@ const DonatePage = () => {
                   </p>
                 </div>
 
-                {caseTitle && (
-                  <div className="flex items-start gap-2.5 sm:gap-3 rounded-2xl border-2 border-accent/30 bg-accent/5 p-3 sm:p-3.5 text-start">
-                    <Heart className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-accent" />
-                    <div>
-                      <p className="text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider text-accent">{lang === "ar" ? "تبرع لحالة خاصة" : "Special Case"}</p>
-                      <p className="mt-0.5 truncate text-xs sm:text-sm font-black text-primary">{caseTitle}</p>
-                      <p className="mt-0.5 text-[10.5px] sm:text-[11px] text-muted-foreground" dir="ltr">#{caseRef}</p>
+                {pageCase && (() => {
+                  const f = caseFunding(pageCase);
+                  const loc = "en-US"; // the site writes amounts in Latin digits
+                  const inBasket = !!activeCase;
+                  return (
+                    <div className="rounded-2xl border border-accent/30 bg-gradient-to-l from-accent/[0.07] to-transparent p-3 sm:p-4">
+                      <div className="flex items-center gap-3">
+                        {pageCase.cover_image_url && (
+                          <img src={pageCase.cover_image_url} alt="" className="h-14 w-14 shrink-0 rounded-xl object-cover sm:h-16 sm:w-16" loading="lazy" decoding="async" />
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] font-extrabold text-accent">
+                            <Heart className="h-3.5 w-3.5" />
+                            {lang === "ar" ? "تبرعك لحالة محددة" : "Donating to a specific case"}
+                            <span className="font-mono text-[10.5px] font-bold text-muted-foreground" dir="ltr">#{pageCase.ref_code}</span>
+                          </p>
+                          <p className="mt-0.5 line-clamp-2 text-sm font-black leading-6 text-primary sm:text-base">{pageCase.title}</p>
+                          {(pageCase.program_name || pageCase.project_name || pageCase.donation_campaign_name) && (
+                            <p className="text-[11px] font-bold text-muted-foreground">
+                              {lang === "ar" ? "ضمن: " : "Part of: "}{pageCase.program_name || pageCase.project_name || pageCase.donation_campaign_name}
+                            </p>
+                          )}
+                        </div>
+                        <Link to={`/cases/${pageCase.ref_code}`} className="hidden shrink-0 rounded-full border border-border bg-card px-3 py-1.5 text-[11px] font-black text-primary transition hover:border-secondary sm:inline-flex">
+                          {lang === "ar" ? "تفاصيل الحالة" : "Case details"}
+                        </Link>
+                      </div>
+                      {f.need > 0 && (
+                        <div className="mt-3">
+                          <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                            <div className="h-full rounded-full bg-secondary" style={{ width: `${f.pct}%` }} />
+                          </div>
+                          <div className="mt-1.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 text-[11px] font-bold text-muted-foreground">
+                            <span>
+                              {lang === "ar"
+                                ? `اتجمع ${f.raised.toLocaleString(loc)} من ${f.need.toLocaleString(loc)} ج (${f.pct}%)`
+                                : `${f.raised.toLocaleString(loc)} of ${f.need.toLocaleString(loc)} EGP (${f.pct}%)`}
+                            </span>
+                            {f.done ? (
+                              <span className="font-black text-secondary">{lang === "ar" ? "الحالة اكتملت، الحمد لله — تقدر تتبرع لحالة تانية" : "Fully funded — pick another case"}</span>
+                            ) : (
+                              <span className="font-black text-accent">
+                                {lang === "ar" ? `فاضل ${f.remaining.toLocaleString(loc)} ج` : `${f.remaining.toLocaleString(loc)} EGP left`}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      {!f.done && !inBasket && (
+                        <p className="mt-2 text-[11px] font-bold text-muted-foreground">
+                          {lang === "ar" ? "غيّرت بند التبرع، فالتبرع مش هيروح للحالة دي." : "You changed the item, so this case won't receive this donation."}
+                        </p>
+                      )}
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
 
                 {/* Programs, Projects, Campaigns, Shares & Cases Selection */}
                 <div className="space-y-4">
@@ -749,6 +816,7 @@ const DonatePage = () => {
                         totalItems={items.length}
                         error={fieldErrors[`amount_${it.id}`]}
                         lang={lang}
+                        entities={DONATION_ENTITIES}
                         onUpdate={updateItem}
                         onRemove={removeItem}
                       />
@@ -1648,7 +1716,7 @@ const DonatePage = () => {
         donorName={donor.name}
         donorEmail={donor.email}
         donorPhone={donor.phone}
-        caseId={caseId}
+        caseId={donationTarget?.kind === "case" ? String(donationTarget.id) : null}
         message={[
           caseTitle ? `Case: ${caseTitle}` : "",
           `Entities: ${itemsBreakdownText}`,
