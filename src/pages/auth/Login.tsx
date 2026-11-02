@@ -115,7 +115,7 @@ const Login = () => {
 
   return (
     <PageLayout>
-      <SEOHelmet
+      <SEOHelmet noindex
         title={lang === "ar" ? "تسجيل الدخول | مؤسسة اليسر الخيرية" : "Login | Al-Yusr Charity"}
         description={lang === "ar" ? "ادخل إلى حسابك في مؤسسة اليسر الخيرية لإدارة تبرعاتك أو بيانات تطوعك." : "Sign in to your Al-Yusr account to manage donations or volunteer info."}
         path="/login"

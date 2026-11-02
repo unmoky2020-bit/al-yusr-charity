@@ -41,7 +41,7 @@ const RegisterVolunteer = () => {
 
   return (
     <PageLayout>
-      <SEOHelmet
+      <SEOHelmet noindex
         title={isAR ? "انضم لفريق المتطوعين | مؤسسة اليسر الخيرية" : "Join our volunteer team | Al-Yusr Charity"}
         description={isAR ? "انضم لفريق متطوعي مؤسسة اليسر في الدقهلية. ساعة من وقتك تفرّح بيت كامل." : "Join Al-Yusr volunteers in Dakahlia. One hour of yours brings joy to a whole home."}
         path="/register/volunteer"

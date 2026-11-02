@@ -34,7 +34,7 @@ const RegisterDonor = () => {
 
   return (
     <PageLayout>
-      <SEOHelmet
+      <SEOHelmet noindex
         title={lang === "ar" ? "إنشاء حساب متبرع | مؤسسة اليسر" : "Donor account | Al-Yusr"}
         description={lang === "ar" ? "أنشئ حساب متبرع لتتبع تبرعاتك وأثرك في مؤسسة اليسر الخيرية." : "Create a donor account to track your donations and impact with Al-Yusr."}
         path="/register/donor"

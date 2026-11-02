@@ -9,6 +9,8 @@ interface Props {
   image?: string;
   ogType?: "website" | "article";
   keywords?: string;
+  /** Account/auth pages: keep them out of search results. */
+  noindex?: boolean;
 }
 
 const HIGH_VOLUME_KEYWORDS = [
@@ -22,7 +24,7 @@ const HIGH_VOLUME_KEYWORDS = [
   "Al-Yusr Charity Foundation", "Al-Yusr Egypt", "Donate Egypt", "Zakat Egypt", "Orphan sponsorship Egypt",
 ].join(", ");
 
-export const SEOHelmet = ({ title, description, path = "/", image, ogType = "website", keywords }: Props) => {
+export const SEOHelmet = ({ title, description, path = "/", image, ogType = "website", keywords, noindex = false }: Props) => {
   const { lang } = useLang();
   // Arabic is the default URL; English is the same path with ?lang=en (LangContext reads it).
   const arUrl = absoluteSiteUrl(path);
@@ -59,7 +61,7 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
       <title>{safeTitle}</title>
       <meta name="description" content={safeDescription} />
       <meta name="keywords" content={safeKeywords} />
-      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
       <link rel="canonical" href={url} />
       <link rel="alternate" hrefLang="ar-EG" href={arUrl} />
       <link rel="alternate" hrefLang="ar" href={arUrl} />

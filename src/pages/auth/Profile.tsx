@@ -62,7 +62,7 @@ const ProfileInner = () => {
 
   return (
     <PageLayout>
-      <SEOHelmet
+      <SEOHelmet noindex
         title={lang === "ar" ? "حسابي | مؤسسة اليسر" : "My Profile | Al-Yusr"}
         description={lang === "ar" ? "إدارة بياناتك الشخصية وكلمة المرور في مؤسسة اليسر." : "Manage your personal data and password at Al-Yusr."}
         path="/profile"

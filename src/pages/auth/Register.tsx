@@ -65,7 +65,7 @@ const Register = () => {
 
   return (
     <PageLayout>
-      <SEOHelmet
+      <SEOHelmet noindex
         title={isRTL ? "إنشاء حساب | مؤسسة اليسر الخيرية" : "Create account | Al-Yusr Charity"}
         description={isRTL ? "أنشئ حسابك في مؤسسة اليسر كمتبرع أو متطوع أو محرر." : "Create your Al-Yusr account as a donor, volunteer, or editor."}
         path="/register"
