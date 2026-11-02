@@ -160,54 +160,39 @@ export const Footer = () => {
         </section>
       )}
 
-      {/* Newsletter — an airmail envelope that floats over the previous section */}
+      {/* Newsletter — a calm card with a seal, floating over the previous section */}
       <div className="relative overflow-visible">
         <div className="container relative z-30 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -translate-y-[15%] -mb-7 sm:-mb-8 md:-mb-10">
-          <div className="relative mx-auto w-full overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#fbfdf7] via-[#f1f8e7] to-[#e6f3d6] text-[#0b4429] shadow-[0_26px_60px_-28px_rgba(6,48,28,0.45)] ring-1 ring-[#0b4429]/10">
-            {/* airmail edge */}
-            <div aria-hidden className="h-2.5 w-full" style={{ background: "repeating-linear-gradient(135deg,#f58220 0 16px,#fdfaf3 16px 26px,#8cc63f 26px 42px,#fdfaf3 42px 52px)" }} />
-            {/* faint envelope fold lines */}
-            <svg aria-hidden className="pointer-events-none absolute inset-x-0 top-2.5 h-full w-full text-[#0b4429]/[0.07]" viewBox="0 0 100 40" preserveAspectRatio="none">
-              <path d="M0 0 L50 22 L100 0" fill="none" stroke="currentColor" strokeWidth="0.35" vectorEffect="non-scaling-stroke" />
-            </svg>
-
-            {/* stamp */}
-            <div aria-hidden className="absolute start-6 top-8 hidden rotate-[-6deg] md:block lg:start-10">
-              {/* perforated edge: a ring of holes around a solid face */}
-              <div
-                className="h-[86px] w-[74px] p-[4px] drop-shadow-md"
-                style={{ background: "radial-gradient(circle at 4px 4px, transparent 2.4px, #ffffff 2.9px) -4px -4px / 8px 8px" }}
-              >
-                <div className="flex h-full w-full flex-col items-center justify-center gap-0.5 border border-dashed border-[#0b4429]/35 bg-white">
-                  <img src={logoCircle} alt="" className="h-9 w-9" loading="lazy" />
-                  <span className="text-[9px] font-black text-[#0b4429]">{isRTL ? "بريد الخير" : "Al-Yusr post"}</span>
-                </div>
-              </div>
-              {/* postmark */}
-              <div className="absolute -end-10 top-10 h-12 w-12 rotate-[14deg] rounded-full border-2 border-[#0b4429]/25 text-center text-[8px] font-black leading-[2.6rem] text-[#0b4429]/45">
-                {isRTL ? "المنصورة" : "Mansoura"}
-              </div>
-            </div>
+          <div className="relative mx-auto w-full overflow-hidden rounded-[2rem] bg-[#fbfcf8] text-[#0b4429] shadow-[0_30px_70px_-34px_rgba(6,48,28,0.5)] ring-1 ring-[#0b4429]/[0.08]">
+            {/* quiet light: a soft lime glow and a hairline inner frame */}
+            <div aria-hidden className="pointer-events-none absolute -top-24 start-[-6rem] h-72 w-72 rounded-full bg-[#a3e635]/20 blur-3xl" />
+            <div aria-hidden className="pointer-events-none absolute -bottom-28 end-[-4rem] h-64 w-64 rounded-full bg-[#f58220]/10 blur-3xl" />
+            <div aria-hidden className="pointer-events-none absolute inset-2 rounded-[1.6rem] ring-1 ring-[#0b4429]/[0.06]" />
 
             {!subscribed ? (
-              <div className="relative grid items-end gap-6 px-5 pb-7 pt-9 sm:px-8 md:grid-cols-[1.05fr_1fr] md:gap-10 md:px-10 md:pb-10 md:pt-14">
-                <div className="text-center md:ps-28 md:text-start lg:ps-32">
-                  <p className="text-xs font-black text-[#4d8a1f]">{isRTL ? "نشرة اليسر، كل أسبوعين" : "Al-Yusr letter, every two weeks"}</p>
-                  <h3 className="mt-2 text-[1.45rem] font-black leading-snug md:text-[1.8rem]">
-                    {isRTL ? "رسالة من الميدان توصل بريدك" : "A letter from the field, in your inbox"}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#0b4429]/70">
-                    {isRTL
-                      ? "صور التوزيع، والحالات اللي اكتملت بتبرعاتكم، والحملة الجاية قبل ما تبدأ."
-                      : "Photos from distributions, cases your gifts completed, and the next campaign before it starts."}
-                  </p>
+              <div className="relative grid items-center gap-7 px-5 py-8 sm:px-8 md:grid-cols-[1.1fr_1fr] md:gap-12 md:px-12 md:py-11">
+                <div className="flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:text-start">
+                  <NewsletterSeal />
+                  <div className="min-w-0">
+                    <p className="inline-flex items-center gap-2 text-xs font-black tracking-wide text-[#4d8a1f]">
+                      <span className="h-px w-6 bg-[#4d8a1f]/50" aria-hidden />
+                      {isRTL ? "نشرة اليسر · كل أسبوعين" : "The Al-Yusr letter · every two weeks"}
+                    </p>
+                    <h3 className="mt-2 text-[1.5rem] font-black leading-snug md:text-[1.9rem]">
+                      {isRTL ? "رسالة من الميدان توصل بريدك" : "A letter from the field, in your inbox"}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-[#0b4429]/65 md:text-[15px]">
+                      {isRTL
+                        ? "صور التوزيع، والحالات اللي اكتملت بتبرعاتكم، والحملة الجاية قبل ما تبدأ."
+                        : "Photos from distributions, cases your gifts completed, and the next campaign before it starts."}
+                    </p>
+                  </div>
                 </div>
 
                 <form onSubmit={handleSubscribe} className="relative w-full" noValidate>
-                  <label htmlFor="newsletter-email" className="mb-1 block text-xs font-black text-[#0b4429]/55">
-                    {isRTL ? "إلى:" : "To:"}
-                  </label>
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+                  <label htmlFor="newsletter-email" className="sr-only">{isRTL ? "إيميلك" : "Your email"}</label>
+                  <div className={`flex flex-col gap-2 rounded-2xl bg-white p-1.5 shadow-[0_10px_30px_-18px_rgba(6,48,28,0.45)] ring-1 transition sm:flex-row sm:items-center ${subscribeError ? "ring-destructive/50" : "ring-[#0b4429]/10 focus-within:ring-2 focus-within:ring-[#8cc63f]/70"}`}>
+                    <span className="hidden ps-3 text-[#0b4429]/35 sm:block" aria-hidden><Mail className="h-5 w-5" /></span>
                     <input
                       id="newsletter-email"
                       type="email"
@@ -219,31 +204,33 @@ export const Footer = () => {
                       value={email}
                       onChange={(e) => { setEmail(e.target.value); if (subscribeError) setSubscribeError(null); }}
                       aria-invalid={!!subscribeError}
-                      aria-describedby={subscribeError ? "newsletter-error" : undefined}
+                      aria-describedby={subscribeError ? "newsletter-error" : "newsletter-note"}
                       placeholder="name@example.com"
-                      className="h-12 min-w-0 flex-1 border-0 border-b-2 border-dashed border-[#0b4429]/30 bg-transparent px-1 text-base font-bold text-[#0b4429] outline-none transition-colors placeholder:text-[#0b4429]/35 focus:border-[#f58220] focus-visible:ring-0"
+                      className="h-12 min-w-0 flex-1 rounded-xl border-0 bg-transparent px-3 text-base font-bold text-[#0b4429] outline-none placeholder:font-semibold placeholder:text-[#0b4429]/35 focus-visible:ring-0"
                     />
                     <button
                       type="submit"
                       disabled={subscribing}
-                      className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-orange-grad px-6 text-sm font-black text-accent-foreground shadow-cta transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b4429] focus-visible:ring-offset-2 disabled:translate-y-0 disabled:opacity-60"
+                      className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#0b4429] px-6 text-sm font-black text-white transition hover:bg-[#0e5534] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8cc63f] focus-visible:ring-offset-2 disabled:opacity-60"
                     >
-                      <Send className="h-4 w-4 rtl:-scale-x-100" />
-                      {subscribing ? (isRTL ? "بيتبعت..." : "Sending...") : (isRTL ? "ابعتولي النشرة" : "Send me the letter")}
+                      {subscribing ? (isRTL ? "بيتبعت..." : "Sending...") : (isRTL ? "اشترك" : "Subscribe")}
+                      <Send className="h-4 w-4 text-[#a3e635] rtl:-scale-x-100" />
                     </button>
                   </div>
                   {subscribeError && (
-                    <p id="newsletter-error" role="alert" className="mt-2 text-xs font-bold text-destructive">{subscribeError}</p>
+                    <p id="newsletter-error" role="alert" className="mt-2 px-1 text-xs font-bold text-destructive">{subscribeError}</p>
                   )}
-                  <p className="mt-2.5 text-[11px] font-semibold text-[#0b4429]/50">
-                    {isRTL ? "تقدر تلغي الاشتراك من أي رسالة بضغطة واحدة." : "Unsubscribe from any letter with one click."}
-                  </p>
+                  <ul id="newsletter-note" className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 px-1 text-[11.5px] font-semibold text-[#0b4429]/55 md:justify-start">
+                    <li className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-[#4d8a1f]" /> {isRTL ? "من غير إعلانات" : "No ads"}</li>
+                    <li className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-[#4d8a1f]" /> {isRTL ? "رسالة كل أسبوعين" : "Every two weeks"}</li>
+                    <li className="inline-flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#4d8a1f]" /> {isRTL ? "إلغاء بضغطة" : "One-click unsubscribe"}</li>
+                  </ul>
                 </form>
               </div>
             ) : (
-              <div className="relative flex flex-col items-center gap-4 px-5 py-7 text-center sm:px-8 md:flex-row md:justify-between md:px-10 md:text-start" role="status">
+              <div className="relative flex flex-col items-center gap-4 px-5 py-9 text-center sm:px-8 md:flex-row md:justify-between md:px-12 md:text-start" role="status">
                 <div className="flex flex-col items-center gap-4 md:flex-row">
-                  <div className="grid h-14 w-14 shrink-0 rotate-[-8deg] place-items-center rounded-full border-2 border-dashed border-[#4d8a1f] text-[#4d8a1f]">
+                  <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#0b4429] text-[#a3e635] shadow-[0_10px_24px_-12px_rgba(6,48,28,0.7)] ring-4 ring-[#a3e635]/25">
                     <CheckCircle2 className="h-7 w-7" />
                   </div>
                   <div>
@@ -275,7 +262,7 @@ export const Footer = () => {
                   <button
                     type="button"
                     onClick={() => setSubscribed(false)}
-                    className="inline-flex h-10 items-center rounded-xl border border-[#0b4429]/20 bg-white/70 px-3.5 text-xs font-bold text-[#0b4429] hover:border-[#0b4429]/50"
+                    className="inline-flex h-10 items-center rounded-xl bg-white px-3.5 text-xs font-bold text-[#0b4429] ring-1 ring-[#0b4429]/15 hover:ring-[#0b4429]/40"
                   >
                     {isRTL ? "سجّل بريد تاني" : "Add another email"}
                   </button>
@@ -445,3 +432,22 @@ export const Footer = () => {
 
   );
 };
+
+/** Round seal for the newsletter: the logo in a dark disc with a dashed ring and bead dots. */
+function NewsletterSeal() {
+  return (
+    <div aria-hidden className="relative h-[104px] w-[104px] shrink-0 -rotate-6 transition-transform duration-500 hover:rotate-0">
+      <div className="absolute inset-0 rounded-full bg-[#0b4429] shadow-[0_14px_30px_-14px_rgba(6,48,28,0.8)]" />
+      <div className="absolute inset-[5px] rounded-full border border-dashed border-[#a3e635]/45" />
+      {/* tiny lime dots around the edge, like the beads of a seal */}
+      <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+        {Array.from({ length: 24 }, (_, i) => {
+          const a = (i * 15 * Math.PI) / 180;
+          return <circle key={i} cx={50 + 39 * Math.cos(a)} cy={50 + 39 * Math.sin(a)} r={i % 6 === 0 ? 1.8 : 1.1} fill="#a3e635" opacity={i % 6 === 0 ? 0.95 : 0.55} />;
+        })}
+      </svg>
+      <img src={logoCircle} alt="" loading="lazy" className="absolute inset-[26px] h-[52px] w-[52px] rounded-full ring-2 ring-[#a3e635]/40" />
+    </div>
+  );
+}
+

@@ -36,7 +36,8 @@ import { useLang } from "@/i18n/LangContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs } from "@/data/faqsApi";
 import { usePrograms } from "@/data/sources/programs";
-import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
+import { Skeleton } from "@/components/ui/skeleton";
+import { BrideTrousseau } from "@/components/sections/BrideTrousseau";
 import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
 import { Helmet } from "react-helmet-async";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
@@ -62,7 +63,8 @@ const Projects = () => {
   // Published backend programs (static copy only when the API is unreachable).
   const { programs: allPrograms, isLoading: programsLoading } = usePrograms();
   // One list, from the backend: campaigns and projects have their own pages and are never repeated here.
-  const programs = useMemo(() => allPrograms.filter((p) => isListedProgram(p.slug)), [allPrograms]);
+  // While the backend list loads, nothing from the built-in copy is shown (no flash of old programs).
+  const programs = useMemo(() => (programsLoading ? [] : allPrograms.filter((p) => isListedProgram(p.slug))), [allPrograms, programsLoading]);
   const programSlugs = useMemo(() => new Set(programs.map((p) => p.slug)), [programs]);
   // Cases shown on this page belong to a program that is listed here (not to a hidden / stopped one).
   const includeProgramCase = useCallback((c: CaseRow) => !!c.program_slug && programSlugs.has(c.program_slug), [programSlugs]);
@@ -444,7 +446,7 @@ const Projects = () => {
           {/* Trust strip */}
           <div className="mt-10 grid grid-cols-2 gap-3 rounded-3xl border border-border bg-card p-4 text-center shadow-soft sm:grid-cols-4 md:p-6">
             {[
-              { k: "+12", l: isRTL ? "برنامج موثّق" : "Verified programs" },
+              { k: programsLoading ? "—" : String(programs.length), l: isRTL ? "برنامج موثّق" : "Verified programs" },
               { k: "<8%", l: isRTL ? "مصاريف تشغيل" : "Operating costs" },
               { k: "100%", l: isRTL ? "توصيل لباب البيت" : "Doorstep delivery" },
               { k: "24/7", l: isRTL ? "دعم واتساب" : "WhatsApp support" },
@@ -476,9 +478,31 @@ const Projects = () => {
                 : "Pick the cause that matches your intention — every program is field-verified with transparent pricing."}
             </p>
           </div>
-          {programsLoading && <CardGridSkeleton count={4} />}
+          {programsLoading && (
+            <div className="mx-auto max-w-6xl space-y-6 md:space-y-8" aria-busy="true" aria-label={isRTL ? "بنحمّل البرامج" : "Loading programs"}>
+              {[0, 1, 2].map((i) => (
+                <div key={i} className={`flex ${i % 2 ? "lg:justify-end" : "lg:justify-start"}`}>
+                  <div className={`flex w-full flex-col gap-4 overflow-hidden rounded-[28px] border border-primary/10 bg-card p-3 shadow-card md:flex-row lg:w-[86%] ${i % 2 ? "md:flex-row-reverse" : ""}`}>
+                    <div className="flex-1 space-y-3 p-3 md:py-8">
+                      <Skeleton className="h-5 w-24 rounded-full" />
+                      <Skeleton className="h-8 w-2/3" />
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-5/6" />
+                      <Skeleton className="mt-4 h-8 w-40 rounded-full" />
+                    </div>
+                    <Skeleton className="aspect-[4/3] w-full rounded-[20px] md:aspect-auto md:min-h-[260px] md:w-1/2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          {!programsLoading && programs.length === 0 && (
+            <p className="mx-auto max-w-md rounded-2xl border border-dashed border-border p-6 text-center text-sm font-bold text-muted-foreground">
+              {isRTL ? "البرامج بتتحدّث دلوقتي. تقدر تتبرع للصندوق العام أو تكلّمنا واتساب." : "Programs are being updated. You can give to the general fund or WhatsApp us."}
+            </p>
+          )}
           {!programsLoading && (
-          <StickyStack className="mx-auto max-w-5xl overflow-x-clip" gap="mb-6 md:mb-8">
+          <StickyStack className="mx-auto max-w-6xl overflow-x-clip" gap="mb-6 md:mb-8">
             {programs.map((p, idx) => {
               // Static (JIT-safe) sticky offsets that cascade so each card peeks under the next.
               const offsets = [
@@ -489,13 +513,15 @@ const Projects = () => {
               ];
               const offset = offsets[idx % offsets.length];
               const reverse = idx % 2 === 1;
+              // Large screens: one card to the start side, the next to the end side (zigzag, like /arboun).
               return (
                 <StickyStackItem key={p.slug} index={idx} top={offset}>
+                  <div className={`flex w-full ${reverse ? "lg:justify-end" : "lg:justify-start"}`}>
                   <Link
                     to={programHref(p.slug)}
                     data-source="projects"
                     data-label={`project-${p.slug}`}
-                    className={`group relative isolate mx-auto flex w-full max-w-5xl transform-gpu flex-col overflow-hidden rounded-[28px] border border-primary/10 bg-gradient-to-b from-card to-card/95 shadow-card ring-1 ring-primary/5 transition-colors duration-300 [backface-visibility:hidden] hover:border-secondary/50 md:items-stretch ${reverse ? "md:flex-row-reverse" : "md:flex-row"}`}
+                    className={`group relative isolate mx-auto flex w-full max-w-5xl transform-gpu flex-col overflow-hidden rounded-[28px] lg:mx-0 lg:w-[86%] lg:max-w-none border border-primary/10 bg-gradient-to-b from-card to-card/95 shadow-card ring-1 ring-primary/5 transition-colors duration-300 [backface-visibility:hidden] hover:border-secondary/50 md:items-stretch ${reverse ? "md:flex-row-reverse" : "md:flex-row"}`}
                   >
                     {/* Content first in DOM so it reads first on large screens */}
                     <div className="order-2 flex flex-1 flex-col px-5 pb-5 pt-4 md:order-1 md:w-1/2 md:justify-center md:px-6 md:py-6">
@@ -535,6 +561,7 @@ const Projects = () => {
                       <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
                     </div>
                   </Link>
+                  </div>
                 </StickyStackItem>
               );
             })}
@@ -562,6 +589,9 @@ const Projects = () => {
 
        
       </section>
+
+      {/* Bride trousseau call to action */}
+      <BrideTrousseau />
 
       {/* Visible FAQ — paired with the FAQPage JSON-LD above */}
       {/* ── GEO coverage — internal links to /geo/:gov/:program for local SEO ── */}

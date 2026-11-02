@@ -1,4 +1,5 @@
-import { Heart, TrendingUp, Home, Sparkles, ShieldCheck } from "lucide-react";
+import { Heart, Home, Sparkles, ShieldCheck, Gift } from "lucide-react";
+import { Link } from "react-router-dom";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
@@ -6,15 +7,13 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
-import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import bride from "@/assets/yusr-bride.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * "تجارة رابحة" — bride trousseau (jihaz) campaign.
- * Frames donation toward fridge/stove for an orphan bride as an investment
- * with multiplied reward in Ramadan.
+ * "تجارة رابحة" — bride trousseau (jihaz) call to action on the programs page:
+ * help buy a fridge / stove for an orphan bride after a field visit.
  */
 export const BrideTrousseau = () => {
   const { lang } = useLang();
@@ -52,14 +51,14 @@ export const BrideTrousseau = () => {
   );
 
   const points = [
-    { icon: TrendingUp, t: isAR ? "الحسنة × 70 ضعف" : "Reward × 70",        d: isAR ? "في رمضان كل عمل صالح يتضاعف" : "Every good deed is multiplied in Ramadan" },
-    { icon: Home,       t: isAR ? "بيت مسلم بيتبني" : "Building a Muslim home", d: isAR ? "أنت بتساهم في تكوين أسرة كاملة" : "You help start a whole family" },
-    { icon: Heart,      t: isAR ? "صدقة جارية" : "Continuous charity",       d: isAR ? "كل لقمة تُطبخ في رصيدك لسنين" : "Every meal cooked counts for years" },
-    { icon: ShieldCheck,t: isAR ? "ستر يتيمة" : "Sheltering an orphan",      d: isAR ? "ومن ستر مسلمًا ستره الله" : "Whoever shelters a Muslim, Allah shelters them" },
+    { icon: Home,       t: isAR ? "بيت مسلم بيتبني" : "Building a Muslim home", d: isAR ? "بتساهم في بداية أسرة كاملة" : "You help start a whole family" },
+    { icon: Heart,      t: isAR ? "أثر بيفضل سنين" : "A lasting gift",          d: isAR ? "كل لقمة بتتطبخ في بيتها" : "In every meal cooked in her home" },
+    { icon: ShieldCheck,t: isAR ? "ستر يتيمة" : "Sheltering an orphan",      d: isAR ? "«ومن ستر مسلمًا ستره الله» متفق عليه" : "“Whoever shelters a Muslim, Allah shelters him”" },
+    { icon: Gift,       t: isAR ? "تسليم موثّق" : "Documented delivery",     d: isAR ? "بعد بحث ميداني، وبنبعتلك صور التسليم" : "After a field visit, with delivery photos" },
   ];
 
   return (
-    <section ref={root} id="bride-trousseau" className="pattern-hero-luxe hero-pattern-fade relative overflow-hidden pt-12 md:pt-16 pb-24 sm:pb-28 md:pb-36 lg:pb-44 text-primary-foreground">
+    <section ref={root} id="bride-trousseau" className="pattern-hero-luxe hero-pattern-fade relative overflow-hidden py-14 md:py-20 text-primary-foreground">
       <Helmet>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
@@ -72,36 +71,20 @@ export const BrideTrousseau = () => {
               areaServed: { "@type": "AdministrativeArea", name: "Dakahlia, Egypt" },
               provider: { "@type": "NGO", name: "Al-Yusr Charity Foundation", url: "https://elyusr.org" },
               description: isAR
-                ? "ساهم في شراء أجهزة (تلاجة/بوتاجاز) لعروسة يتيمة في الدقهلية — صدقة جارية بثواب مضاعف في رمضان."
-                : "Sponsor appliances for an orphan bride in Dakahlia — continuous charity, multiplied reward in Ramadan.",
-              url: "https://elyusr.org/#bride-trousseau",
+                ? "ساهم في شراء أجهزة (تلاجة/بوتاجاز) لعروسة يتيمة في الدقهلية بعد بحث ميداني وتسليم موثّق."
+                : "Sponsor appliances for an orphan bride in Dakahlia after a field visit, with documented delivery.",
+              url: "https://elyusr.org/programs#bride-trousseau",
             },
             {
               "@type": "DonateAction",
               name: isAR ? "تبرع لجهاز عروسة يتيمة" : "Donate for orphan bride trousseau",
               recipient: { "@type": "NGO", name: "Al-Yusr Charity Foundation" },
-              target: "https://elyusr.org/donate?cause=bride-trousseau",
-            },
-            {
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                { "@type": "ListItem", position: 1, name: isAR ? "الرئيسية" : "Home", item: "https://elyusr.org/" },
-                { "@type": "ListItem", position: 2, name: isAR ? "البرامج" : "Programs", item: "https://elyusr.org/#programs" },
-                { "@type": "ListItem", position: 3, name: isAR ? "تجهيز عرائس" : "Bride trousseau", item: "https://elyusr.org/#bride-trousseau" },
-              ],
+              target: "https://elyusr.org/donate",
             },
           ],
         })}</script>
       </Helmet>
-      <div className="container relative mx-auto px-4 [&_a]:text-secondary [&_a:hover]:text-secondary [&_span]:text-primary-foreground [&_nav]:text-primary-foreground/80 [&_nav]:justify-center flex justify-center">
-        <Breadcrumbs items={[
-          { name: isAR ? "الرئيسية" : "Home", href: "/" },
-          { name: isAR ? "البرامج" : "Programs", href: "/projects" },
-          { name: isAR ? "تجهيز عرائس" : "Bride trousseau", href: "/programs/bride" },
-          { name: isAR ? "حملة جهاز العرائس" : "Trousseau campaign" },
-        ]} />
-      </div>
-      <div className="container relative mx-auto mt-5 grid gap-8 px-4 md:mt-6 md:gap-10 md:grid-cols-2 md:items-center">
+      <div className="container relative mx-auto grid max-w-6xl gap-8 px-4 md:gap-12 md:grid-cols-2 md:items-center">
         <div data-bt="img" className="relative order-2 md:order-1">
           <div className="absolute -inset-3 rounded-[2.5rem] bg-secondary/15 blur-2xl" aria-hidden />
           <img
@@ -147,21 +130,21 @@ export const BrideTrousseau = () => {
 
           <div className="mt-6 grid grid-cols-2 gap-2 sm:gap-3">
             <Button asChild size="lg" className="h-11 px-2.5 sm:px-4 bg-orange-grad text-xs font-black text-accent-foreground shadow-cta hover:opacity-95 sm:text-sm md:h-12">
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 whitespace-nowrap">
+              <a href={wa} target="_blank" rel="noopener noreferrer" data-source="programs" data-label="bride-trousseau-whatsapp" className="flex items-center justify-center gap-1.5 whitespace-nowrap">
                 <WhatsAppIcon className="h-4 w-4 shrink-0" />
                 <span>{isAR ? "تكلفة الأجهزة" : "Appliance cost"}</span>
               </a>
             </Button>
             <Button asChild size="lg" variant="outline" className="h-11 px-2.5 sm:px-4 border-secondary/40 bg-primary-foreground/5 text-xs font-black text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground sm:text-sm md:h-12">
-              <a href="/donate?cause=bride-trousseau" className="flex items-center justify-center gap-1.5 whitespace-nowrap">
+              <Link to="/donate" data-source="programs" data-label="bride-trousseau-donate" className="flex items-center justify-center gap-1.5 whitespace-nowrap">
                 <Heart className="h-4 w-4 shrink-0" />
-                <span>{isAR ? "ابدأ استثمارك الآن" : "Start investing"}</span>
-              </a>
+                <span>{isAR ? "ساهم في جهاز عروسة" : "Help a bride"}</span>
+              </Link>
             </Button>
           </div>
 
           <p className="mt-3 text-[11px] font-bold text-secondary/90">
-            {isAR ? "خلّي الأبواب الخيرية مفتوحة قبل ما تتقفل — العدد محدود" : "Doors of charity won't stay open forever — limited spots"}
+            {isAR ? "كل جهاز بيتسلّم للعروسة بعد بحث ميداني، وبتوصلك صور التسليم." : "Every appliance is delivered after a field visit, with photos sent to you."}
           </p>
         </div>
       </div>
