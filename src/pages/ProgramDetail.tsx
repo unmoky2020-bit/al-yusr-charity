@@ -340,15 +340,13 @@ const ProgramDetail = () => {
 
           <div className="relative mx-auto w-full max-w-md md:max-w-full">
             <div className="absolute -inset-4 rounded-[2.5rem] bg-secondary/25 blur-3xl" />
-            {/* The whole picture, centred: a blurred copy fills the frame instead of cropping the image. */}
+            {/* The photo fills the frame (no blurred side bars). */}
             <div className="relative aspect-[4/3] max-h-[460px] w-full overflow-hidden rounded-[2rem] bg-primary/30 shadow-card md:rounded-[2.5rem]">
-              <img src={hero.image} alt="" aria-hidden decoding="async"
-                className="absolute inset-0 h-full w-full scale-110 object-cover opacity-60 blur-2xl" />
               <img decoding="async"
                 src={hero.image}
                 alt={hero.title}
                 fetchpriority="high"
-                className="relative h-full w-full object-contain"
+                className="relative h-full w-full object-cover object-center"
                 loading="eager"
               />
             </div>
@@ -535,7 +533,7 @@ const ProgramDetail = () => {
                 key={i}
                 className="sticky top-24 z-10 relative rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-1 hover:shadow-card md:static"
               >
-                <span className="absolute -top-3 left-5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-orange-grad text-xs font-black text-accent-foreground shadow-cta">
+                <span className="absolute -top-3 start-5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-orange-grad text-xs font-black text-accent-foreground shadow-cta">
                   {i + 1}
                 </span>
                 <s.icon className="mt-2 h-7 w-7 text-secondary" />
@@ -639,9 +637,9 @@ const ProgramDetail = () => {
                   whileInView={{ opacity: 1, y: 0, x: 0 }}
                   viewport={{ once: true, margin: isMobile ? "-40px" : "-80px", amount: 0.2 }}
                   transition={{ duration: isMobile ? 0.45 : 0.6, delay: i * (isMobile ? 0.05 : 0.09), ease: [0.22, 1, 0.36, 1] }}
-                  className="sticky top-24 z-10 group relative rounded-3xl border border-primary/10 bg-[linear-gradient(145deg,hsl(var(--card)),hsl(var(--secondary)/0.08))] p-5 shadow-soft transition will-change-transform hover:-translate-y-1 hover:border-secondary/40 hover:shadow-card md:static"
+                  className="sticky top-24 z-10 group relative rounded-3xl border border-primary/10 bg-[linear-gradient(145deg,hsl(var(--card)),hsl(var(--secondary)/0.08))] p-5 shadow-soft transition will-change-transform hover:-translate-y-1 hover:border-secondary/40 hover:shadow-card md:static md:h-full"
                 >
-                  <span className="absolute -top-3 left-5 rounded-full bg-accent px-2.5 py-0.5 font-mono text-[11px] font-black text-accent-foreground shadow-sm">{n}</span>
+                  <span className="absolute -top-3 start-5 rounded-full bg-accent px-2.5 py-0.5 font-mono text-[11px] font-black text-accent-foreground shadow-sm">{n}</span>
                   <span className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary/20 text-primary transition group-hover:bg-secondary">
                     <Icon className="h-6 w-6" />
                   </span>
