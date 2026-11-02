@@ -424,8 +424,10 @@ const DonatePage = () => {
 
   /** Backend record the payment is booked on (null → general program, breakdown in the notes). */
   const donationTarget = useMemo(
-    () => targetOfBasket(items, (id) => DONATION_ENTITIES.find((e) => e.id === id), caseId),
-    [items, DONATION_ENTITIES, caseId],
+    // One payment = one backend donation: a case is the target only when it is the whole basket
+    // (a mixed basket is booked once, with the per-item split in the notes).
+    () => targetOfBasket(items, (id) => DONATION_ENTITIES.find((e) => e.id === id)),
+    [items, DONATION_ENTITIES],
   );
   const selectedEntity = useMemo(() => {
     return DONATION_ENTITIES.find((x) => x.id === primaryItem.entityId) || DONATION_ENTITIES[0];
@@ -486,6 +488,18 @@ const DonatePage = () => {
             lang === "ar"
               ? `حدد مبلغ لا يقل عن 10 ج.م للبند رقم (${idx + 1})`
               : `Enter at least 10 EGP for item #${idx + 1}`;
+          return;
+        }
+        // A case can't take more than what is left on it (the backend refuses it).
+        if (it.donationMode === "case" && it.selectedCaseId) {
+          const cs = DONATION_ENTITIES.find((e) => e.id === it.entityId)?.cases.find((c) => c.id === it.selectedCaseId);
+          const left = cs ? Math.max(0, cs.neededAmount - cs.raisedAmount) : 0;
+          if (cs && cs.neededAmount > 0 && it.amount > left) {
+            errs[`amount_${it.id}`] =
+              lang === "ar"
+                ? `الحالة فاضلها ${left.toLocaleString("en-US")} ج بس — قلّل مبلغ البند رقم (${idx + 1})`
+                : `Only ${left.toLocaleString("en-US")} EGP is left on this case (item #${idx + 1})`;
+          }
         }
       });
     }
@@ -857,6 +871,24 @@ const DonatePage = () => {
                       )}
                     </div>
                   </div>
+
+                  {items.length > 1 && !donationTarget && (
+                    <div className="flex items-start gap-2 rounded-xl border border-secondary/40 bg-secondary/[0.07] p-3 text-[11.5px] font-bold leading-6 text-primary">
+                      <Layers className="mt-1 h-3.5 w-3.5 shrink-0 text-secondary" />
+                      <p>
+                        {lang === "ar"
+                          ? "سلتك فيها أكتر من بند: هتدفع مرة واحدة، والتوزيع اللي اخترته بيتسجل مع التبرع بالظبط وبيتوزع عليه."
+                          : "Several items: you pay once, and your exact split is recorded with the donation."}
+                        {items.some((it) => it.donationMode === "case") && (
+                          <span className="block text-muted-foreground">
+                            {lang === "ar"
+                              ? "مبلغ الحالة بيتضاف لعدّادها بعد مراجعة الفريق. لو عاوزه يتحسب عليها فورًا، اتبرع للحالة لوحدها."
+                              : "The case's share is added to its counter after review. Donate to the case alone for an instant update."}
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  )}
 
                   {fieldErrors.amount && (
                     <p role="alert" className="text-xs font-bold text-destructive text-start">
