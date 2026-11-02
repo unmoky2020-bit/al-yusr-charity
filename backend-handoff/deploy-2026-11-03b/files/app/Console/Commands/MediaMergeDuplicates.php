@@ -33,7 +33,7 @@ class MediaMergeDuplicates extends Command
     private const SKIP_TABLES = [
         'migrations', 'sessions', 'cache', 'cache_locks', 'jobs', 'job_batches', 'failed_jobs',
         'password_reset_tokens', 'password_resets', 'personal_access_tokens', 'telescope_entries',
-        'telescope_entries_tags', 'telescope_monitoring', 'activity_log', 'notifications',
+        'telescope_entries_tags', 'telescope_monitoring', 'activity_log', 'activity_logs', 'audit_logs', 'notifications',
     ];
 
     private const PRIVATE_TABLES_RE = '/(document|receipt|donation(?!_campaign)|attachment|case_media|identity)/i';

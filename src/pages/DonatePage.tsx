@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, Link, useNavigate, useLocation } from "react-router-dom";
 import confetti from "canvas-confetti";
 import {
@@ -465,13 +465,51 @@ const DonatePage = () => {
       .join(" + ");
   }, [items, lang, DONATION_ENTITIES]);
 
+  /** The case an item donates to (a case item), with the entity it belongs to. */
+  const caseOfItem = useCallback((it: DonationItemState) => {
+    if (it.donationMode !== "case" || !it.selectedCaseId) return null;
+    const ent = DONATION_ENTITIES.find((x) => x.id === it.entityId);
+    const cs = ent?.cases.find((c) => c.id === it.selectedCaseId);
+    return cs ? { cs, ent } : null;
+  }, [DONATION_ENTITIES]);
+
+  /** Receipt line of one item: a case item is shown as the case (and what it belongs to), not as its program. */
+  const receiptLine = useCallback((it: DonationItemState) => {
+    const ar = lang === "ar";
+    const ent = DONATION_ENTITIES.find((e) => e.id === it.entityId);
+    const sharesCount = Object.values(it.selectedShares || {}).reduce((a, b) => a + b, 0);
+    const kind = (e?: DonationEntity) =>
+      !e ? (ar ? "برنامج خيري" : "Program")
+        : e.entityType === "project" ? (ar ? "مشروع تنموي" : "Project")
+        : e.entityType === "campaign" ? (ar ? "حملة إغاثية" : "Campaign")
+        : (ar ? "برنامج خيري" : "Program");
+    const c = caseOfItem(it);
+    if (c) {
+      const owner = c.ent && c.ent.id !== "general" ? (ar ? c.ent.ar : c.ent.en) : "";
+      return {
+        title: `${ar ? c.cs.titleAr : c.cs.titleEn || c.cs.titleAr} (#${c.cs.refCode})`,
+        category: owner ? (ar ? `حالة إنسانية — ضمن ${owner}` : `Case — part of ${owner}`) : (ar ? "حالة إنسانية" : "Case"),
+        quantity: 1,
+        amount: it.amount || 0,
+      };
+    }
+    return {
+      title: ent ? (ar ? ent.ar : ent.en) : (ar ? "تبرع عام" : "General donation"),
+      category: kind(ent),
+      quantity: sharesCount > 0 ? sharesCount : 1,
+      amount: it.amount || 0,
+    };
+  }, [DONATION_ENTITIES, caseOfItem, lang]);
+
   const programLabel = useMemo(() => {
     if (items.length === 1) {
+      const c = caseOfItem(items[0]);
+      if (c) return lang === "ar" ? c.cs.titleAr : c.cs.titleEn || c.cs.titleAr;
       const ent = DONATION_ENTITIES.find((x) => x.id === items[0].entityId) || DONATION_ENTITIES[0];
       return lang === "ar" ? ent.ar : ent.en;
     }
     return lang === "ar" ? `سلة تبرعات (${items.length} بنود)` : `Donation Basket (${items.length} items)`;
-  }, [items, lang, DONATION_ENTITIES]);
+  }, [items, lang, DONATION_ENTITIES, caseOfItem]);
 
   const validateStep1 = (): Record<string, string> => {
     const errs: Record<string, string> = {};
@@ -573,22 +611,12 @@ const DonatePage = () => {
               idempotency_key: idemKey.current,
             });
             const refGenerated = saved?.ref_code || `YSR-${Date.now().toString(36).toUpperCase()}`;
-            const receiptItems = items.map((it) => {
-              const ent = DONATION_ENTITIES.find((e) => e.id === it.entityId);
-              const sharesCount = Object.values(it.selectedShares || {}).reduce((a, b) => a + b, 0);
-              const title = ent ? (lang === "ar" ? ent.ar : ent.en) : (programLabel || "تبرع عام");
-              const category = ent
-                ? (ent.entityType === "project" ? (lang === "ar" ? "مشروع تنموي" : "Project") : ent.entityType === "campaign" ? (lang === "ar" ? "حملة إغاثية" : "Campaign") : (lang === "ar" ? "برنامج خيري" : "Program"))
-                : (lang === "ar" ? "برنامج خيري" : "Program");
-              return {
-                title,
-                category,
-                quantity: sharesCount > 0 ? sharesCount : 1,
-                amount: it.amount || 0,
-              };
-            });
+            const receiptItems = items.map(receiptLine);
+            const singleCase = items.length === 1 ? caseOfItem(items[0]) : null;
             const firstEnt = items.length === 1 ? DONATION_ENTITIES.find((e) => e.id === items[0].entityId) : null;
-            const targetType = firstEnt
+            const targetType = singleCase
+              ? (lang === "ar" ? "حالة إنسانية" : "Case")
+              : firstEnt
               ? (firstEnt.entityType === "project" ? (lang === "ar" ? "مشروع تنموي" : "Project") : firstEnt.entityType === "campaign" ? (lang === "ar" ? "حملة إغاثية" : "Campaign") : (lang === "ar" ? "برنامج خيري" : "Program"))
               : (items.length > 1 ? (lang === "ar" ? "برامج ومشاريع متعددة" : "Multiple Programs") : (lang === "ar" ? "برنامج خيري" : "Program"));
 
@@ -1760,22 +1788,12 @@ const DonatePage = () => {
           // Reached only after the backend confirmed the payment as paid.
           setIsKashierModalOpen(false);
           const finalRef = verifiedRef || kashierOrderId;
-          const receiptItems = items.map((it) => {
-            const ent = DONATION_ENTITIES.find((e) => e.id === it.entityId);
-            const sharesCount = Object.values(it.selectedShares || {}).reduce((a, b) => a + b, 0);
-            const title = ent ? (lang === "ar" ? ent.ar : ent.en) : (programLabel || "تبرع عام");
-            const category = ent
-              ? (ent.entityType === "project" ? (lang === "ar" ? "مشروع تنموي" : "Project") : ent.entityType === "campaign" ? (lang === "ar" ? "حملة إغاثية" : "Campaign") : (lang === "ar" ? "برنامج خيري" : "Program"))
-              : (lang === "ar" ? "برنامج خيري" : "Program");
-            return {
-              title,
-              category,
-              quantity: sharesCount > 0 ? sharesCount : 1,
-              amount: it.amount || 0,
-            };
-          });
+          const receiptItems = items.map(receiptLine);
+          const singleCase = items.length === 1 ? caseOfItem(items[0]) : null;
           const firstEnt = items.length === 1 ? DONATION_ENTITIES.find((e) => e.id === items[0].entityId) : null;
-          const targetType = firstEnt
+          const targetType = singleCase
+            ? (lang === "ar" ? "حالة إنسانية" : "Case")
+            : firstEnt
             ? (firstEnt.entityType === "project" ? (lang === "ar" ? "مشروع تنموي" : "Project") : firstEnt.entityType === "campaign" ? (lang === "ar" ? "حملة إغاثية" : "Campaign") : (lang === "ar" ? "برنامج خيري" : "Program"))
             : (items.length > 1 ? (lang === "ar" ? "برامج ومشاريع متعددة" : "Multiple Programs") : (lang === "ar" ? "برنامج خيري" : "Program"));
 
