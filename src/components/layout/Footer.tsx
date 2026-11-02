@@ -172,7 +172,7 @@ export const Footer = () => {
             {!subscribed ? (
               <div className="relative grid items-center gap-7 px-5 py-8 sm:px-8 md:grid-cols-[1.1fr_1fr] md:gap-12 md:px-12 md:py-11">
                 <div className="flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:text-start">
-                  <NewsletterSeal />
+                  <NewsletterSeal isRTL={isRTL} />
                   <div className="min-w-0">
                     <p className="inline-flex items-center gap-2 text-xs font-black tracking-wide text-[#4d8a1f]">
                       <span className="h-px w-6 bg-[#4d8a1f]/50" aria-hidden />
@@ -433,20 +433,57 @@ export const Footer = () => {
   );
 };
 
-/** Round seal for the newsletter: the logo in a dark disc with a dashed ring and bead dots. */
-function NewsletterSeal() {
+/** Perforation holes along the stamp's edges (computed once). */
+const STAMP_W = 92;
+const STAMP_H = 108;
+const STAMP_HOLES = (() => {
+  const r = 3.2;
+  const step = 9.2;
+  const out: { x: number; y: number }[] = [];
+  for (let x = step / 2; x < STAMP_W; x += step) out.push({ x, y: 0 }, { x, y: STAMP_H });
+  for (let y = step / 2; y < STAMP_H; y += step) out.push({ x: 0, y }, { x: STAMP_W, y });
+  return { r, out };
+})();
+
+/**
+ * The newsletter's postage stamp: a paper stamp with perforated edges (an SVG mask, so the holes are
+ * exact), the logo, «بريد الخير», and a Mansoura postmark with cancellation waves over its corner.
+ */
+function NewsletterSeal({ isRTL }: { isRTL: boolean }) {
   return (
-    <div aria-hidden className="relative h-[104px] w-[104px] shrink-0 -rotate-6 transition-transform duration-500 hover:rotate-0">
-      <div className="absolute inset-0 rounded-full bg-[#0b4429] shadow-[0_14px_30px_-14px_rgba(6,48,28,0.8)]" />
-      <div className="absolute inset-[5px] rounded-full border border-dashed border-[#a3e635]/45" />
-      {/* tiny lime dots around the edge, like the beads of a seal */}
-      <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
-        {Array.from({ length: 24 }, (_, i) => {
-          const a = (i * 15 * Math.PI) / 180;
-          return <circle key={i} cx={50 + 39 * Math.cos(a)} cy={50 + 39 * Math.sin(a)} r={i % 6 === 0 ? 1.8 : 1.1} fill="#a3e635" opacity={i % 6 === 0 ? 0.95 : 0.55} />;
-        })}
+    <div aria-hidden className="relative shrink-0 pe-6 pt-1">
+      <div className="relative -rotate-[5deg] transition-transform duration-500 hover:rotate-0">
+        <svg width={STAMP_W} height={STAMP_H} viewBox={`0 0 ${STAMP_W} ${STAMP_H}`} className="block drop-shadow-[0_10px_18px_rgba(6,48,28,0.22)]">
+          <defs>
+            <mask id="stamp-perf">
+              <rect width={STAMP_W} height={STAMP_H} fill="#fff" />
+              {STAMP_HOLES.out.map((h, i) => <circle key={i} cx={h.x} cy={h.y} r={STAMP_HOLES.r} fill="#000" />)}
+            </mask>
+            <linearGradient id="stamp-face" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#f4fae9" />
+              <stop offset="1" stopColor="#e3f1cf" />
+            </linearGradient>
+          </defs>
+          <rect width={STAMP_W} height={STAMP_H} fill="#fffdf7" mask="url(#stamp-perf)" />
+          <rect x="8" y="8" width={STAMP_W - 16} height={STAMP_H - 16} rx="3" fill="url(#stamp-face)" stroke="#0b4429" strokeOpacity="0.35" strokeWidth="1" />
+          <rect x="11" y="11" width={STAMP_W - 22} height={STAMP_H - 22} rx="2" fill="none" stroke="#0b4429" strokeOpacity="0.15" strokeWidth="0.8" strokeDasharray="2 2" />
+        </svg>
+        <div className="absolute inset-[8px] flex flex-col items-center justify-center gap-1 text-[#0b4429]">
+          <img src={logoCircle} alt="" loading="lazy" className="h-11 w-11 rounded-full shadow-sm" />
+          <span className="text-[10px] font-black leading-none">{isRTL ? "بريد الخير" : "Al-Yusr post"}</span>
+          <span className="text-[8px] font-bold leading-none text-[#0b4429]/55" dir="ltr">elyusr.org</span>
+        </div>
+      </div>
+      {/* postmark + cancellation waves */}
+      <svg viewBox="0 0 120 64" className="pointer-events-none absolute -bottom-3 end-[-14px] w-[92px] rotate-[-12deg] text-[#0b4429]/40">
+        <circle cx="30" cy="32" r="24" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="30" cy="32" r="18" fill="none" stroke="currentColor" strokeWidth="0.9" />
+        <text x="30" y="30" textAnchor="middle" fontSize="8.5" fontWeight={800} fill="currentColor">{isRTL ? "المنصورة" : "Mansoura"}</text>
+        <text x="30" y="41" textAnchor="middle" fontSize="6.5" fontWeight={700} fill="currentColor">{new Date().getFullYear()}</text>
+        {[18, 26, 34, 42].map((y) => (
+          <path key={y} d={`M58 ${y} q7 -5 14 0 t14 0 t14 0 t14 0`} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        ))}
       </svg>
-      <img src={logoCircle} alt="" loading="lazy" className="absolute inset-[26px] h-[52px] w-[52px] rounded-full ring-2 ring-[#a3e635]/40" />
     </div>
   );
 }
