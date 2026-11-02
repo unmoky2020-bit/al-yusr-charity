@@ -11,6 +11,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
 import { Button } from "@/components/ui/button";
 import { CaseCard } from "@/components/cases/CaseCard";
+import { NiceSelect } from "@/components/common/NiceSelect";
 import { useLang } from "@/i18n/LangContext";
 import { listPublicCases, listCategories, type CaseRow, type CategoryRow } from "@/data/casesApi";
 import { caseFunding, filterCases, sortCases, type CaseSort, type CaseStatusFilter } from "@/lib/caseFunding";
@@ -214,24 +215,21 @@ const Cases = () => {
                   <Chip key={slug} active={cat === slug} onClick={() => update({ cat: cat === slug ? null : slug })} label={v.name} n={v.n} />
                 ))}
               </div>
-              <div className="flex items-center gap-2">
-                <div className="flex rounded-xl bg-muted p-1" role="radiogroup" aria-label={isRTL ? "حالة التمويل" : "Funding status"}>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex min-w-0 rounded-xl bg-muted p-1" role="radiogroup" aria-label={isRTL ? "حالة التمويل" : "Funding status"}>
                   {STATUSES.map((s) => (
                     <button key={s.key} type="button" role="radio" aria-checked={status === s.key}
                       onClick={() => update({ status: s.key === "open" ? null : s.key })}
-                      className={`rounded-lg px-3 py-1.5 text-xs font-black transition ${status === s.key ? "bg-card text-primary shadow-sm" : "text-muted-foreground hover:text-primary"}`}>
+                      className={`whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs font-black transition sm:px-3 ${status === s.key ? "bg-card text-primary shadow-sm" : "text-muted-foreground hover:text-primary"}`}>
                       {isRTL ? s.ar : s.en}
                     </button>
                   ))}
                 </div>
-                <label className="relative flex items-center">
-                  <SlidersHorizontal className="pointer-events-none absolute start-2.5 h-4 w-4 text-muted-foreground" />
-                  <span className="sr-only">{isRTL ? "ترتيب" : "Sort"}</span>
-                  <select value={sort} onChange={(e) => update({ sort: e.target.value === "urgent" ? null : e.target.value })}
-                    className="h-9 appearance-none rounded-xl border border-border bg-card pe-3 ps-8 text-xs font-black text-primary outline-none focus:ring-2 focus:ring-secondary">
-                    {SORTS.map((s) => <option key={s.key} value={s.key}>{isRTL ? s.ar : s.en}</option>)}
-                  </select>
-                </label>
+                <div className="flex w-36 shrink-0 items-center gap-1.5 sm:w-44">
+                  <SlidersHorizontal className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+                  <NiceSelect size="sm" value={sort} onChange={(v) => update({ sort: v === "urgent" ? null : v })} ariaLabel={isRTL ? "ترتيب الحالات" : "Sort cases"} dir={isRTL ? "rtl" : "ltr"}
+                    options={SORTS.map((s) => ({ value: s.key, label: isRTL ? s.ar : s.en }))} />
+                </div>
               </div>
             </div>
           </div>

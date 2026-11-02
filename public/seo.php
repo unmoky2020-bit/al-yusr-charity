@@ -16,6 +16,8 @@ const SITE = 'https://elyusr.org';
 const API = 'https://api.elyusr.org/api/v1/seo/page';
 const CACHE_TTL = 300; // seconds; the API caches 5 minutes too
 const DYNAMIC = '#^/(cases|programs|axes|stories|blog)/[^/]+$#';
+const ROOMS_API = 'https://api.elyusr.org/api/v1/misbaha-rooms/';
+const MISBAHA_ROOM = '#^/misbaha/([a-z0-9]{4,24})$#';
 
 $index = @file_get_contents(__DIR__ . '/index.html');
 if ($index === false) {
@@ -29,7 +31,9 @@ try {
     $page = null;
     $status = 200;
 
-    if (preg_match(DYNAMIC, $path)) {
+    if (preg_match(MISBAHA_ROOM, $path, $m)) {
+        [$page, $status] = misbaha_room_page($m[1], $lang);
+    } elseif (preg_match(DYNAMIC, $path)) {
         [$page, $status] = fetch_page($path, $lang);
     } else {
         $page = static_page($path, $lang);
@@ -84,6 +88,55 @@ function fetch_page(string $path, string $lang): array
     return $result;
 }
 
+/**
+ * Shared misbaha (/misbaha/{slug}): the link preview carries the person's name and a picture made
+ * for its kind (public/og/misbaha-{kind}.jpg). The page itself stays out of search (noindex).
+ * @return array{0: ?array, 1: int}
+ */
+function misbaha_room_page(string $slug, string $lang): array
+{
+    $dir = sys_get_temp_dir() . '/elyusr-seo';
+    $file = $dir . '/room-' . sha1($slug) . '.json';
+    $room = null;
+    if (is_file($file) && time() - filemtime($file) < 120) {
+        $room = json_decode((string) file_get_contents($file), true);
+    } else {
+        $ch = curl_init(ROOMS_API . rawurlencode($slug));
+        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 2, CURLOPT_TIMEOUT => 3, CURLOPT_HTTPHEADER => ['Accept: application/json']]);
+        $body = curl_exec($ch);
+        $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($code === 200) {
+            $room = json_decode((string) $body, true)['data'] ?? null;
+            if (! is_dir($dir)) {
+                @mkdir($dir, 0700, true);
+            }
+            @file_put_contents($file, json_encode($room), LOCK_EX);
+        }
+    }
+    $kind = in_array($room['kind'] ?? '', ['deceased', 'sick', 'group'], true) ? $room['kind'] : 'deceased';
+    $image = SITE . '/og/misbaha-' . $kind . '.jpg?v=2026.11';
+    if (! is_array($room) || empty($room['name'])) {
+        return [['title' => 'سبحة مشتركة | مؤسسة اليسر', 'description' => 'شارك بالتسبيح والاستغفار والصلاة على النبي ﷺ، وكل ذكر بيتضاف لعدّاد واحد.', 'image' => $image, 'robots' => 'noindex,follow'], 200];
+    }
+    $name = trim((string) $room['name']);
+    $female = ($room['gender'] ?? '') === 'f';
+    if ($lang === 'en') {
+        $title = $kind === 'sick' ? "For the healing of $name" : ($kind === 'group' ? $name : "For the soul of $name");
+        $desc = 'Join with tasbih, istighfar and salawat — every dhikr adds to one shared count.';
+    } else {
+        $title = $kind === 'sick' ? "بنية شفاء $name"
+            : ($kind === 'group' ? $name
+            : (preg_match('/^(ال)?(مرحوم|مرحومة|فقيد|فقيدة|المغفور)/u', $name) ? "لروح $name" : 'لروح ' . ($female ? 'المرحومة ' : 'المرحوم ') . $name));
+        $ask = $kind === 'deceased' ? ($female ? 'ادعولها وشاركوا بتسبيحة أو استغفار' : 'ادعوله وشاركوا بتسبيحة أو استغفار')
+            : ($kind === 'sick' ? 'شاركوا بذكر ودعاء بنية الشفاء' : 'شاركونا الذكر');
+        $count = (int) ($room['total_count'] ?? 0);
+        $desc = $ask . '، وكل ذكر بيتضاف لعدّاد واحد' . ($count > 0 ? ' (اتقال لحد دلوقتي ' . number_format($count) . ' ذكر)' : '') . '. والدال على الخير كفاعله.';
+    }
+
+    return [['title' => ($lang === 'en' ? 'Tasbih ' : 'سبحة ') . $title, 'description' => $desc, 'image' => $image, 'robots' => 'noindex,follow'], 200];
+}
+
 function static_page(string $path, string $lang): ?array
 {
     static $map = null;
@@ -118,6 +171,9 @@ function render(string $html, array $p, string $path, string $lang): string
     }
     foreach (['twitter:title' => $title, 'twitter:description' => $desc, 'twitter:image' => $image, 'twitter:image:alt' => $title] as $name => $val) {
         $set['#<meta\b[^>]*\bname="' . preg_quote($name, '#') . '"[^>]*>#s'] = '<meta data-rh="true" name="' . $name . '" content="' . e((string) $val) . '" />';
+    }
+    if (! empty($p['robots'])) {
+        $set['#<meta\b[^>]*\bname="robots"[^>]*>#s'] = '<meta data-rh="true" name="robots" content="' . e((string) $p['robots']) . '" />';
     }
     foreach ($set as $re => $tag) {
         $html = preg_replace($re, str_replace(['\\', '$'], ['\\\\', '\\$'], $tag), $html, 1);

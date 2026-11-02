@@ -1,0 +1,12 @@
+NEW  app/Console/Commands/SendNewsletterConfirmations.php
+NEW  app/Http/Controllers/Api/V1/Misbaha/MisbahaRoomController.php
+NEW  app/Http/Controllers/Api/V1/Newsletter/NewsletterPublicController.php
+f82c3678d7699d71698cd1d38b0586e5c42c335766a5aa48ddcd8221a5f5b90f  app/Http/Controllers/Api/V1/Project/ProjectController.php
+dd51c041c6344ab9fd939bd988edeb667ecbf92f2c2b2bc55543760c554356a9  app/Http/Requests/Project/StoreProjectRequest.php
+7dfa6cafcab6c15cf1d580d5e1897bed4438866319767a1f29c217dd984b987d  app/Http/Requests/Project/UpdateProjectRequest.php
+31463cd6fafcaf01acd9979ec499777ca3cf93e60b26617e3d57970a5256f9fc  app/Http/Resources/ProjectResource.php
+NEW  app/Models/MisbahaRoom.php
+4e9495d5dd45e6e5ebaa6161271d4ca68fdfd226faf9f8ae95ceef3f89a120b7  app/Models/Project.php
+NEW  database/migrations/2026_11_02_100000_add_page_fields_to_projects_table.php
+NEW  database/migrations/2026_11_02_120000_create_misbaha_rooms_table.php
+NEW  routes/api-2026-11.php

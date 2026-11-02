@@ -709,7 +709,7 @@ const ProjectsPage = () => {
 
       {/* ══════════ CTA (Expanded max-w-[1440px]) ══════════ */}
       {/* Cases that belong to our projects (live from the backend) */}
-      <LinkedCasesSection filter={{ linkedTo: "project" }} showOwner isRTL={isAR}
+      <LinkedCasesSection filter={{ linkedTo: "project" }} showOwner variant="carousel" filterByOwner limit={30} isRTL={isAR} className="bg-muted/30"
         title={isAR ? "حالات ميدانية ضمن مشاريعنا" : "Field cases in our projects"}
         subtitle={isAR ? "كل حالة اتعمل لها بحث ميداني، وتبرعك ليها بيروح لنفس المشروع." : "Every case is field-verified; your donation goes to the same project."} />
 

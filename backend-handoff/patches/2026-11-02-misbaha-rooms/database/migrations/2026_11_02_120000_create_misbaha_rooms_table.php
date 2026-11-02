@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/** Shared misbaha for someone who passed away (/misbaha/{slug} on the site). */
+/** Shared misbaha (/misbaha/{slug} on the site): for someone who passed away, someone sick, or a group. */
 return new class extends Migration
 {
     public function up(): void
@@ -12,7 +12,9 @@ return new class extends Migration
         Schema::create('misbaha_rooms', function (Blueprint $table) {
             $table->id();
             $table->string('slug', 24)->unique();
-            $table->string('name', 80);                 // the deceased
+            $table->string('kind', 12)->default('deceased');   // deceased | sick | group
+            $table->string('gender', 1)->nullable();            // m | f (so the duas read «له» / «لها»)
+            $table->string('name', 80);                 // the person (or the group's title)
             $table->string('created_by', 60)->nullable();
             $table->unsignedBigInteger('total_count')->default(0);
             $table->unsignedBigInteger('target_total')->nullable();   // optional shared goal (1,000 / 10,000 / 100,000)

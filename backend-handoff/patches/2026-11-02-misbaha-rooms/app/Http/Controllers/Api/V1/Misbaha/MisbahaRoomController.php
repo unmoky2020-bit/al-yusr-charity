@@ -5,13 +5,15 @@ namespace App\Http\Controllers\Api\V1\Misbaha;
 use App\Http\Controllers\Controller;
 use App\Models\MisbahaRoom;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
- * Shared misbaha rooms («سبحة لمتوفّى»).
+ * Shared misbaha rooms: «سبحة لمتوفّى» / «سبحة لمريض» / «ذكر جماعي».
  *   POST /misbaha-rooms                 public, throttled: create
  *   GET  /misbaha-rooms                 public: latest visible rooms (the list on /misbaha)
+ *   GET  /misbaha-rooms/stats           public: { rooms, total } across the site
  *   GET  /misbaha-rooms/{slug}          public: one room
  *   POST /misbaha-rooms/{slug}/count    public, throttled: add 1..500 to the shared total
  *   GET  /admin/misbaha-rooms           team: every room
@@ -23,6 +25,8 @@ class MisbahaRoomController extends Controller
     {
         return [
             'slug' => $r->slug,
+            'kind' => $r->kind ?: 'deceased',
+            'gender' => $r->gender,
             'name' => $r->name,
             'created_by' => $r->created_by,
             'total_count' => (int) $r->total_count,
@@ -36,12 +40,24 @@ class MisbahaRoomController extends Controller
     {
         $perPage = min(30, max(1, (int) $request->input('per_page', 12)));
         $rooms = MisbahaRoom::where('is_hidden', false)
+            ->when(in_array($request->input('kind'), ['deceased', 'sick', 'group'], true), fn ($q) => $q->where('kind', $request->input('kind')))
             ->orderByDesc('last_activity_at')
             ->orderByDesc('id')
             ->limit($perPage)
             ->get();
 
         return response()->json(['data' => $rooms->map(fn ($r) => $this->present($r))->values()]);
+    }
+
+    /** Site-wide numbers for the /misbaha page («سبحة اتعملت» / «ذكر اتقال»), cached for a minute. */
+    public function stats()
+    {
+        $data = Cache::remember('misbaha-rooms:stats', 60, fn () => [
+            'rooms' => MisbahaRoom::where('is_hidden', false)->count(),
+            'total' => (int) MisbahaRoom::where('is_hidden', false)->sum('total_count'),
+        ]);
+
+        return response()->json(['data' => $data]);
     }
 
     public function show(string $slug)
@@ -54,6 +70,8 @@ class MisbahaRoomController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'kind' => ['nullable', 'string', 'in:deceased,sick,group'],
+            'gender' => ['nullable', 'string', 'in:m,f'],
             'name' => ['required', 'string', 'min:2', 'max:80'],
             'created_by' => ['nullable', 'string', 'max:60'],
             'target_total' => ['nullable', 'integer', 'in:1000,10000,100000,1000000'],
@@ -74,6 +92,8 @@ class MisbahaRoomController extends Controller
 
         $room = MisbahaRoom::create([
             'slug' => $slug,
+            'kind' => $data['kind'] ?? 'deceased',
+            'gender' => ($data['kind'] ?? 'deceased') === 'group' ? null : ($data['gender'] ?? null),
             'name' => $clean($data['name']),
             'created_by' => $clean($data['created_by'] ?? null) ?: null,
             'target_total' => $data['target_total'] ?? null,

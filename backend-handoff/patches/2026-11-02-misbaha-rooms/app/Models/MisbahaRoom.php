@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MisbahaRoom extends Model
 {
-    protected $fillable = ['slug', 'name', 'created_by', 'total_count', 'target_total', 'dhikr_id', 'is_hidden', 'creator_ip_hash', 'last_activity_at'];
+    protected $fillable = ['slug', 'kind', 'gender', 'name', 'created_by', 'total_count', 'target_total', 'dhikr_id', 'is_hidden', 'creator_ip_hash', 'last_activity_at'];
 
     protected $casts = [
         'total_count' => 'integer',

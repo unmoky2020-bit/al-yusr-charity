@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo } from "react";
+import { NiceSelect } from "@/components/common/NiceSelect";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs, type FaqItem } from "@/data/faqsApi";
@@ -404,14 +405,15 @@ const Volunteer = () => {
             </div>
             <div>
               <label className="mb-2 block text-sm font-extrabold text-foreground">{isRTL ? "مسار التطوع المفضل" : "Your preferred volunteer track"}</label>
-              <select className="h-12 w-full rounded-md border border-input bg-background px-3 text-sm font-bold text-foreground" value={form.area} onChange={(e) => setForm({ ...form, area: e.target.value })} aria-label={isRTL ? "مسار التطوع" : "Volunteer track"}>
-                <option value="field">{isRTL ? "قوافل التوزيع الميداني" : "Field distribution convoys"}</option>
-                <option value="cases">{isRTL ? "بحث وتوثيق الحالات" : "Case research & documentation"}</option>
-                <option value="medical">{isRTL ? "القوافل الطبية والصحية" : "Medical & health convoys"}</option>
-                <option value="media">{isRTL ? "الإعلام والمحتوى" : "Media & social content"}</option>
-                <option value="tech">{isRTL ? "الدعم التقني والإداري" : "Tech & admin support"}</option>
-                <option value="general">{isRTL ? "متطوع عام" : "General volunteer"}</option>
-              </select>
+              <NiceSelect value={form.area} onChange={(v) => setForm({ ...form, area: v })} ariaLabel={isRTL ? "مسار التطوع" : "Volunteer track"} dir={isRTL ? "rtl" : "ltr"}
+                options={[
+                  { value: "field", label: isRTL ? "قوافل التوزيع الميداني" : "Field distribution convoys" },
+                  { value: "cases", label: isRTL ? "بحث وتوثيق الحالات" : "Case research & documentation" },
+                  { value: "medical", label: isRTL ? "القوافل الطبية والصحية" : "Medical & health convoys" },
+                  { value: "media", label: isRTL ? "الإعلام والمحتوى" : "Media & social content" },
+                  { value: "tech", label: isRTL ? "الدعم التقني والإداري" : "Tech & admin support" },
+                  { value: "general", label: isRTL ? "متطوع عام" : "General volunteer" },
+                ]} />
             </div>
             <Input maxLength={100} placeholder={isRTL ? "وقت التفرغ (مثال: كل جمعة أو الإجازات)" : "Your availability (e.g. every Friday, or holidays)"} className="h-12" value={form.availability} onChange={(e) => setForm({ ...form, availability: e.target.value })} />
             <Textarea maxLength={500} rows={4} placeholder={isRTL ? "مهارات أو خبرات يمكن أن تساعدنا (اختياري)" : "Skills or expertise that could help (optional)"} value={form.skills} onChange={(e) => setForm({ ...form, skills: e.target.value })} />

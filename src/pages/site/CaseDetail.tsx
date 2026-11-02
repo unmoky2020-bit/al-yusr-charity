@@ -357,19 +357,19 @@ const CaseDetail = () => {
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-[#06301c]/70 via-[#06301c]/85 to-[#06301c]" />
         <div className="container mx-auto max-w-6xl px-4 pb-8 pt-6 md:pb-12 md:pt-8">
           <div className="text-white/80">
-            <Breadcrumbs items={[{ name: isRTL ? "الرئيسية" : "Home", href: "/" }, { name: isRTL ? "الحالات" : "Cases", href: "/cases" }, { name: c.title }]} />
+            <Breadcrumbs items={[{ name: isRTL ? "الرئيسية" : "Home", href: "/" }, { name: isRTL ? "الحالات" : "Cases", href: "/cases" }, { name: c.title.length > 38 ? `${c.title.slice(0, 36).trim()}…` : c.title }]} />
           </div>
-          <div className="mt-4 grid items-end gap-6 lg:grid-cols-[1.15fr_1fr]">
+          <div className="mt-4 grid items-center gap-6 md:gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-12">
             <div className="relative overflow-hidden rounded-[1.75rem] bg-black/30 shadow-2xl ring-1 ring-white/10">
-              <img src={coverImg} alt={c.title} className="aspect-[4/3] w-full object-cover" fetchPriority="high" />
+              <img src={coverImg} alt={c.title} className="aspect-[4/3] max-h-[70vh] w-full object-cover sm:aspect-[16/10] lg:aspect-[4/3]" fetchPriority="high" />
               {f.done && (
                 <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-black/85 to-transparent p-4 pt-10 text-sm font-black">
                   <CheckCircle2 className="h-5 w-5 text-[#a3e635]" /> {isRTL ? "اكتملت بفضل الله ثم بفضلكم" : "Fully funded — thank you"}
                 </div>
               )}
             </div>
-            <div className="pb-1">
-              <div className="flex flex-wrap items-center gap-2">
+            <div className="min-w-0 text-center lg:text-start">
+              <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
                 {!f.done && (
                   <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-black ${u.tone}`}>
                     <AlertCircle className="h-3.5 w-3.5" /> {isRTL ? u.ar : u.en}
@@ -380,8 +380,8 @@ const CaseDetail = () => {
                   <Hash className="h-3 w-3" />{c.ref_code}
                 </span>
               </div>
-              <h1 className="mt-3 text-2xl font-black leading-tight md:text-4xl">{c.title}</h1>
-              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-sm font-bold text-white/80">
+              <h1 className="mt-3 text-balance break-words text-[1.6rem] font-black leading-snug sm:text-3xl lg:text-4xl lg:leading-tight">{c.title}</h1>
+              <div className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-sm font-bold text-white/80 lg:justify-start">
                 {place && <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4 text-[#a3e635]" /> {place}</span>}
                 {c.beneficiary_name && <span className="inline-flex items-center gap-1"><User className="h-4 w-4 text-[#a3e635]" /> {c.beneficiary_name}</span>}
                 {c.created_at && (
@@ -397,12 +397,24 @@ const CaseDetail = () => {
                   {isRTL ? `ضمن ${owner}` : owner}
                 </Link>
               )}
-              {/* quick funding line for small screens; the full box is below */}
-              <div className="mt-5 lg:hidden">
-                <div className="h-2 overflow-hidden rounded-full bg-white/20"><div className="h-full rounded-full bg-[#a3e635]" style={{ width: `${f.pct}%` }} /></div>
-                <p className="mt-2 text-sm font-bold text-white/85">
-                  {f.done ? (isRTL ? "اكتمل التمويل" : "Fully funded") : isRTL ? `اتجمع ${f.pct}% — باقي ${formatNumberEN(f.remaining)} ${egp}` : `${f.pct}% raised — ${formatNumberEN(f.remaining)} ${egp} to go`}
+              {/* funding at a glance + jump to the donate box */}
+              <div className="mx-auto mt-6 max-w-md rounded-2xl bg-white/10 p-4 ring-1 ring-white/10 lg:mx-0">
+                <div className="flex items-end justify-between gap-3 text-start">
+                  <span>
+                    <span className="block text-[11px] font-bold text-white/70">{f.done ? (isRTL ? "اتجمع" : "Raised") : isRTL ? "باقي" : "To go"}</span>
+                    <span className="text-2xl font-black tabular-nums">{formatNumberEN(f.done ? f.raised : f.remaining)} <span className="text-sm">{egp}</span></span>
+                  </span>
+                  <span className="text-3xl font-black tabular-nums text-[#a3e635]">{f.pct}%</span>
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/20"><div className="h-full rounded-full bg-[#a3e635]" style={{ width: `${f.pct}%` }} /></div>
+                <p className="mt-2 text-start text-xs font-bold text-white/70">
+                  {isRTL ? `اتجمع ${formatNumberEN(f.raised)} من ${formatNumberEN(f.need)} ${egp}` : `${formatNumberEN(f.raised)} of ${formatNumberEN(f.need)} ${egp} raised`}
                 </p>
+                {!f.done && (
+                  <a href="#donate-box" className="mt-3 flex h-11 items-center justify-center gap-2 rounded-xl bg-orange-grad text-sm font-black text-accent-foreground shadow-cta transition hover:opacity-95">
+                    <Heart className="h-4 w-4" /> {isRTL ? "تبرع للحالة" : "Donate to this case"}
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -412,7 +424,7 @@ const CaseDetail = () => {
       <section className="bg-background py-8 md:py-12">
         <div className="container mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_380px]">
           <aside className="lg:order-2">
-            <div ref={donateBoxRef} className="lg:sticky lg:top-24">
+            <div ref={donateBoxRef} id="donate-box" className="scroll-mt-28 lg:sticky lg:top-24">
               <DonateBox c={c} isRTL={isRTL} days={days} />
               <div className="mt-4 rounded-3xl border border-border bg-card p-5 shadow-soft">
                 <p className="mb-3 text-sm font-black text-primary">

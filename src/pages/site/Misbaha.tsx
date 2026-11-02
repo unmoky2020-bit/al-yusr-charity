@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { RotateCcw, Vibrate, VibrateOff, Share2, Check, Heart, Sparkles, ImageDown, X, Users, Plus, Copy } from "lucide-react";
+import { RotateCcw, Vibrate, VibrateOff, Share2, Check, Heart, Sparkles, ImageDown, X, Plus, Flame, CalendarDays, Users } from "lucide-react";
 import { DHIKR_GROUPS, ALL_DHIKR, MIXED_DHIKR, groupOfDhikr, type Dhikr as DhikrType } from "@/data/adhkar";
-import { misbahaRoomsApi, MISBAHA_ROOMS_PENDING_AR, type MisbahaRoom } from "@/data/api/misbahaRoomsApi";
+import { misbahaRoomsApi, type MisbahaRoom } from "@/data/api/misbahaRoomsApi";
+import { roomShareText, roomTitle } from "@/data/memorialDuas";
+import { RoomHeader } from "@/components/misbaha/RoomHeader";
+import { RoomExtras } from "@/components/misbaha/RoomExtras";
+import { StoryDialog } from "@/components/misbaha/StoryDialog";
+import { MemorialCreate } from "@/components/misbaha/MemorialCreate";
+import { track } from "@/lib/track";
 import { isEndpointMissing } from "@/data/api/backendPending";
 import { drawMisbahaSummary } from "@/lib/misbahaSummaryImage";
-import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { BreadcrumbSchema } from "@/components/common/Schemas";
@@ -59,6 +64,43 @@ const load = (room?: string): Saved => {
   }
 };
 
+/** Days in a row with at least one dhikr (this device). */
+const STREAK_KEY = "yusr-misbaha-streak";
+const dayBefore = (day: string) => {
+  const [y, m, d] = day.split("-").map(Number);
+  const t = new Date(y, m - 1, d - 1);
+  return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+};
+const readStreak = (): number => {
+  try {
+    const s = JSON.parse(localStorage.getItem(STREAK_KEY) || "null") as { last: string; n: number } | null;
+    if (!s) return 0;
+    const today = todayStr();
+    return s.last === today || s.last === dayBefore(today) ? s.n : 0;
+  } catch {
+    return 0;
+  }
+};
+const bumpStreak = (): number => {
+  try {
+    const today = todayStr();
+    const s = JSON.parse(localStorage.getItem(STREAK_KEY) || "null") as { last: string; n: number } | null;
+    if (s?.last === today) return s.n;
+    const n = s?.last === dayBefore(today) ? s.n + 1 : 1;
+    localStorage.setItem(STREAK_KEY, JSON.stringify({ last: today, n }));
+    return n;
+  } catch {
+    return 0;
+  }
+};
+const hijriToday = (isAr: boolean) => {
+  try {
+    return new Intl.DateTimeFormat(isAr ? "ar-EG-u-ca-islamic-umalqura" : "en-u-ca-islamic-umalqura", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
+  } catch {
+    return "";
+  }
+};
+
 /** Bead positions on the ring (static). */
 const BEAD_POS = Array.from({ length: BEADS }, (_, i) => {
   const a = (-90 + (i * 360) / BEADS) * (Math.PI / 180);
@@ -79,6 +121,13 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
   const [done, setDone] = useState(false);
   const [copied, setCopied] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
+  const [storyOpen, setStoryOpen] = useState(false);
+  const [streak, setStreak] = useState<number>(() => readStreak());
+  const [siteStats, setSiteStats] = useState<{ rooms: number; total: number } | null>(null);
+  useEffect(() => {
+    if (roomSlug) return;
+    void misbahaRoomsApi.stats().then(setSiteStats);
+  }, [roomSlug]);
   const doneTimer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
@@ -90,15 +139,37 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
   const [room, setRoom] = useState<MisbahaRoom | null>(null);
   const [roomState, setRoomState] = useState<"none" | "loading" | "ok" | "missing" | "pending">(roomSlug ? "loading" : "none");
   const pendingAdd = useRef(0);
+  const myFlushed = useRef(0);
+  const baseline = useRef<number | null>(null);
+  const [othersRecent, setOthersRecent] = useState(0);
   useEffect(() => {
     if (!roomSlug) return;
     let alive = true;
     misbahaRoomsApi
       .get(roomSlug)
-      .then((r) => { if (!alive) return; setRoom(r); setRoomState(r ? "ok" : "missing"); })
+      .then((r) => {
+        if (!alive) return;
+        setRoom(r);
+        setRoomState(r ? "ok" : "missing");
+        if (r) baseline.current = r.total_count;
+      })
       .catch((e) => alive && setRoomState(isEndpointMissing(e) ? "pending" : "missing"));
     return () => { alive = false; };
   }, [roomSlug]);
+  // Live: refresh the shared total every 15 s while the page is visible, so everyone sees it climb.
+  useEffect(() => {
+    if (!roomSlug || roomState !== "ok") return;
+    const refresh = () => {
+      if (document.visibilityState !== "visible") return;
+      void misbahaRoomsApi.get(roomSlug).then((r) => {
+        if (!r) return;
+        setRoom((prev) => (prev ? { ...prev, ...r, total_count: Math.max(prev.total_count, r.total_count + pendingAdd.current) } : r));
+        if (baseline.current !== null) setOthersRecent(Math.max(0, r.total_count - baseline.current - myFlushed.current));
+      }).catch(() => undefined);
+    };
+    const t = window.setInterval(refresh, 15000);
+    return () => window.clearInterval(t);
+  }, [roomSlug, roomState]);
   // Taps are sent in small batches (every 3 s, and when the page is hidden) instead of one request each.
   useEffect(() => {
     if (!roomSlug || roomState !== "ok") return;
@@ -108,7 +179,10 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
       pendingAdd.current = 0;
       misbahaRoomsApi
         .add(roomSlug, Math.min(n, 500))
-        .then((total) => { if (total !== null) setRoom((r) => (r ? { ...r, total_count: total } : r)); })
+        .then((total) => {
+          myFlushed.current += n;
+          if (total !== null) setRoom((r) => (r ? { ...r, total_count: Math.max(total + pendingAdd.current, r.total_count) } : r));
+        })
         .catch(() => { pendingAdd.current += n; });
     };
     const t = window.setInterval(flush, 3000);
@@ -171,13 +245,14 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
       setRoom((r) => (r ? { ...r, total_count: r.total_count + 1 } : r));
     }
     setPulse((p) => p + 1);
+    if (st.today === 0 || streak === 0) setStreak(bumpStreak());
     if (completes) {
       setDone(true);
       window.clearTimeout(doneTimer.current);
       doneTimer.current = window.setTimeout(() => setDone(false), 1800);
     }
     vibrate(completes ? [40, 60, 40] : 8);
-  }, [countKey, target, count, dhikr.id, roomSlug, roomState]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [countKey, target, count, dhikr.id, roomSlug, roomState, st.today, streak]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -221,19 +296,26 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
 
   const pageUrl = roomSlug ? `https://elyusr.org/misbaha/${roomSlug}` : "https://elyusr.org/misbaha";
   const shareText = room
-    ? (isAr ? `سبحة لروح ${room.name}: شاركنا بتسبيحة أو استغفار أو صلاة على النبي ﷺ، وكل ذكر بيتضاف لعدّاد السبحة. والدال على الخير كفاعله.` : `A shared tasbih for the soul of ${room.name}. Every dhikr you say is added. Join in.`)
+    ? roomShareText(room.kind, room.gender, room.name, isAr)
     : (isAr ? "مسبحة إلكترونية من مؤسسة اليسر: صلّ على النبي ﷺ، وسبّح، واستغفر" : "A digital tasbih from Al-Yusr");
-  const waHref = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${pageUrl}`)}`;
-  const share = async () => {
-    const url = pageUrl;
-    const text = shareText;
+  const waHref = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${pageUrl}?utm_source=whatsapp&utm_medium=share&utm_campaign=misbaha`)}`;
+  const copyLink = async () => {
     try {
-      if (navigator.share) { await navigator.share({ title: isAr ? "المسبحة الإلكترونية" : "Digital tasbih", text, url }); return; }
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(pageUrl);
       setCopied(true);
+      track("misbaha_share", { payload: { channel: "copy", room: roomSlug ?? "personal" }, fbCustom: false });
       window.setTimeout(() => setCopied(false), 1800);
+    } catch { /* no clipboard */ }
+  };
+  const canNative = typeof navigator !== "undefined" && typeof navigator.share === "function";
+  const nativeShare = async () => {
+    try {
+      await navigator.share({ title: room ? roomTitle(room.kind, room.gender, room.name, isAr) : isAr ? "المسبحة الإلكترونية" : "Digital tasbih", text: shareText, url: pageUrl });
+      track("misbaha_share", { payload: { channel: "native", room: roomSlug ?? "personal" }, fbCustom: false });
     } catch { /* dismissed */ }
   };
+  const share = async () => (canNative ? nativeShare() : copyLink());
+  const isNew = !!roomSlug && params.get("new") === "1";
 
   const fmt = (n: number) => n.toLocaleString(isAr ? "ar-EG" : "en-US");
   const beads = useMemo(() => BEAD_POS, []);
@@ -243,15 +325,17 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
       {roomSlug ? (
         // Shared misbaha pages carry a family's loved one's name: kept out of search results.
         <SEOHelmet noindex
-          title={room ? (isAr ? `سبحة لروح ${room.name} | مؤسسة اليسر` : `Tasbih for ${room.name} | Al-Yusr`) : (isAr ? "سبحة لمتوفّى | مؤسسة اليسر" : "Tasbih for a loved one | Al-Yusr")}
+          title={room ? `${isAr ? "سبحة" : "Tasbih"} ${roomTitle(room.kind, room.gender, room.name, isAr)} | ${isAr ? "مؤسسة اليسر" : "Al-Yusr"}` : (isAr ? "سبحة مشتركة | مؤسسة اليسر" : "Shared tasbih | Al-Yusr")}
           description={isAr ? "شارك بالتسبيح والاستغفار والصلاة على النبي ﷺ، وكل ذكر بيتضاف لعدّاد واحد." : "Join in with tasbih, istighfar and salawat; every dhikr adds to one shared count."}
           path={`/misbaha/${roomSlug}`}
+          image={`https://elyusr.org/og/misbaha-${room?.kind ?? "deceased"}.jpg?v=2026.11`}
         />
       ) : (
       <SEOHelmet
         title={isAr ? "المسبحة الإلكترونية | صلاة على النبي وتسبيح واستغفار — مؤسسة اليسر" : "Digital tasbih | Salawat, tasbih & istighfar — Al-Yusr"}
         description={isAr ? "مسبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وهدف يومي وفضل كل ذكر من الأحاديث الصحيحة. واعمل سبحة لروح حد غالي عليك وشاركها." : "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter, daily goal and the virtue of each dhikr. Create a shared tasbih for a loved one who passed away."}
         path="/misbaha"
+        image="https://elyusr.org/og/misbaha.jpg?v=2026.11"
       />
       )}
       <BreadcrumbSchema items={[{ name: isAr ? "الرئيسية" : "Home", url: "https://elyusr.org/" }, { name: isAr ? "المسبحة الإلكترونية" : "Digital tasbih", url: "https://elyusr.org/misbaha" }]} />
@@ -264,9 +348,20 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
           </div>
           <div className="mx-auto mt-6 max-w-2xl text-center">
             {roomSlug ? (
-              <RoomHeader isAr={isAr} state={roomState} room={room} onShare={share} waHref={waHref} pageUrl={pageUrl} copied={copied} fmt={(n) => n.toLocaleString(isAr ? "ar-EG" : "en-US")} />
+              <RoomHeader isAr={isAr} state={roomState} room={room} waHref={waHref} copied={copied} onCopy={copyLink} onNativeShare={canNative ? nativeShare : null}
+                onStory={() => setStoryOpen(true)} live={roomState === "ok"} othersRecent={othersRecent} isNew={isNew} fmt={(n) => n.toLocaleString(isAr ? "ar-EG" : "en-US")} />
             ) : (
               <>
+                <div className="mb-4 flex flex-wrap items-center justify-center gap-2 text-xs font-black">
+                  {hijriToday(isAr) && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white/85"><CalendarDays className="h-3.5 w-3.5 text-secondary" /> {hijriToday(isAr)}</span>
+                  )}
+                  {siteStats && siteStats.total > 0 && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white/85">
+                      <Users className="h-3.5 w-3.5 text-secondary" /> {isAr ? `${fmt(siteStats.total)} ذكر في ${fmt(siteStats.rooms)} سبحة مشتركة` : `${fmt(siteStats.total)} dhikr in ${fmt(siteStats.rooms)} shared tasbihs`}
+                    </span>
+                  )}
+                </div>
                 <h1 className="text-3xl font-black sm:text-4xl md:text-5xl">{isAr ? "المسبحة الإلكترونية" : "Digital tasbih"}</h1>
                 <p className="mt-3 text-base text-primary-foreground/85 md:text-lg">
                   {isAr ? "قول الذكر واضغط على المسبحة. الذكر بيتغيّر مع كل ضغطة علشان تجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، وتقدر تختار ذكر واحد لو حابب. عدّادك بيتحفظ على جهازك طول اليوم، ويبدأ من الأول مع يوم جديد." : "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count stays on this device for the day and starts fresh each new day."}
@@ -345,8 +440,13 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 </button>
               </div>
               <div className="mt-4 flex flex-col items-center gap-2">
-                <p className="text-sm font-bold text-white/75">
-                  {isAr ? `ذكرك النهارده: ${fmt(st.today)}` : `Today's dhikr: ${fmt(st.today)}`}
+                <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm font-bold text-white/75">
+                  <span>{isAr ? `ذكرك النهارده: ${fmt(st.today)}` : `Today's dhikr: ${fmt(st.today)}`}</span>
+                  {streak >= 2 && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-black text-secondary">
+                      <Flame className="h-3.5 w-3.5" /> {isAr ? `${fmt(streak)} أيام ورا بعض` : `${fmt(streak)}-day streak`}
+                    </span>
+                  )}
                 </p>
                 {st.today > 0 && (
                   <button type="button" onClick={() => setSummaryOpen(true)}
@@ -471,7 +571,9 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
         </div>
       </section>
 
-      {!roomSlug && <MemorialSection isAr={isAr} onCreated={(slug) => navigate(`/misbaha/${slug}`)} />}
+      {roomSlug && room && roomState === "ok" && <RoomExtras isAr={isAr} room={room} pageUrl={pageUrl} />}
+      {!roomSlug && <MemorialCreate isAr={isAr} onCreated={(slug) => navigate(`/misbaha/${slug}?new=1`)} />}
+      {storyOpen && room && <StoryDialog isAr={isAr} room={room} pageUrl={pageUrl} onClose={() => setStoryOpen(false)} />}
 
       {summaryOpen && (
         <SummaryDialog
@@ -484,8 +586,8 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
         />
       )}
 
-      {/* A gentle reminder, below the tool so it never gets in the way */}
-      <section className="bg-background py-12 md:py-16">
+      {/* A gentle reminder, below the tool so it never gets in the way (rooms have their own) */}
+      {!roomSlug && <section className="bg-background py-12 md:py-16">
         <div className="container mx-auto max-w-3xl px-4 text-center">
           <Sparkles className="mx-auto h-8 w-8 text-secondary" />
           <h2 className="mt-3 text-2xl font-black text-primary md:text-3xl">{isAr ? "ومع الذكر، ما تنساش الصدقة" : "Alongside dhikr, remember charity"}</h2>
@@ -496,179 +598,10 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
             <Heart className="h-5 w-5" /> {isAr ? "تصدّق الآن" : "Give now"}
           </Link>
         </div>
-      </section>
+      </section>}
     </PageLayout>
   );
 };
-
-/** Top of a shared misbaha page: whose it is, the shared total, and how to spread it. */
-function RoomHeader({ isAr, state, room, onShare, waHref, pageUrl, copied, fmt }: {
-  isAr: boolean; state: string; room: MisbahaRoom | null; onShare: () => void; waHref: string; pageUrl: string; copied: boolean; fmt: (n: number) => string;
-}) {
-  if (state === "loading") return <div className="mx-auto h-28 max-w-md animate-pulse rounded-3xl bg-white/10" />;
-  if (!room) {
-    return (
-      <div className="rounded-3xl bg-white/10 p-6">
-        <h1 className="text-2xl font-black md:text-3xl">{isAr ? "السبحة دي مش متاحة" : "This tasbih is not available"}</h1>
-        <p className="mt-2 text-sm text-white/80">{state === "pending" ? MISBAHA_ROOMS_PENDING_AR : (isAr ? "الرابط ممكن يكون غلط أو السبحة اتشالت. تقدر تسبّح هنا عادي، أو تعمل سبحة جديدة." : "The link may be wrong or the tasbih was removed. You can still count here, or create a new one.")}</p>
-        <Link to="/misbaha#memorial" className="mt-4 inline-flex items-center gap-2 rounded-xl bg-secondary px-4 py-2 text-sm font-black text-slate-950"><Plus className="h-4 w-4" /> {isAr ? "اعمل سبحة لحد غالي عليك" : "Create one for a loved one"}</Link>
-      </div>
-    );
-  }
-  return (
-    <div>
-      <p className="text-sm font-black text-secondary">{isAr ? "سبحة جماعية" : "Shared tasbih"}</p>
-      <h1 className="mt-1 text-3xl font-black leading-tight sm:text-4xl md:text-5xl">{isAr ? `لروح ${room.name}` : `For the soul of ${room.name}`}</h1>
-      <p className="mt-2 text-sm text-white/80">{isAr ? "اللهم اغفر لموتانا وموتى المسلمين، وارحمهم، واجعل قبورهم روضةً من رياض الجنة." : "O Allah, forgive our dead and the dead of the Muslims and have mercy on them."}</p>
-      <div className="mx-auto mt-5 inline-flex items-center gap-3 rounded-2xl bg-white/10 px-5 py-3">
-        <Users className="h-5 w-5 text-secondary" />
-        <span className="text-start">
-          <span className="block font-mono text-3xl font-black tabular-nums">{fmt(room.total_count)}</span>
-          <span className="block text-xs font-bold text-white/70">{isAr ? "ذكر اتقال لحد دلوقتي من كل اللي شاركوا" : "dhikr said so far by everyone"}</span>
-        </span>
-      </div>
-      {room.target_total ? (
-        <div className="mx-auto mt-3 max-w-sm">
-          <div className="h-2 overflow-hidden rounded-full bg-white/15" role="progressbar" aria-valuemin={0} aria-valuemax={room.target_total} aria-valuenow={Math.min(room.total_count, room.target_total)}
-            aria-label={isAr ? "التقدم نحو هدف السبحة" : "Progress to the goal"}>
-            <div className="h-full rounded-full bg-secondary transition-[width] duration-500" style={{ width: `${Math.min(100, (room.total_count / room.target_total) * 100)}%` }} />
-          </div>
-          <p className="mt-1.5 text-xs font-bold text-white/70">
-            {room.total_count >= room.target_total
-              ? (isAr ? `وصلنا للهدف: ${fmt(room.target_total)} ذكر. كمّلوا، الخير ما بيخلصش.` : `Goal of ${fmt(room.target_total)} reached. Keep going.`)
-              : (isAr ? `الهدف ${fmt(room.target_total)} ذكر، فاضل ${fmt(room.target_total - room.total_count)}` : `Goal ${fmt(room.target_total)}, ${fmt(room.target_total - room.total_count)} to go`)}
-          </p>
-        </div>
-      ) : null}
-      {room.created_by && <p className="mt-2 text-xs font-bold text-white/60">{isAr ? `السبحة دي عملها ${room.created_by}` : `Created by ${room.created_by}`}</p>}
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-        <a href={waHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-sm font-black text-white shadow-cta">
-          <WhatsAppIcon className="h-4 w-4" /> {isAr ? "ابعتها على واتساب" : "Send on WhatsApp"}
-        </a>
-        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`} target="_blank" rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-xl bg-[#1877F2] px-4 py-2.5 text-sm font-black text-white">{isAr ? "فيسبوك" : "Facebook"}</a>
-        <a href={`https://t.me/share/url?url=${encodeURIComponent(pageUrl)}`} target="_blank" rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-xl bg-[#229ED9] px-4 py-2.5 text-sm font-black text-white">{isAr ? "تليجرام" : "Telegram"}</a>
-        <button type="button" onClick={onShare} className="inline-flex items-center gap-2 rounded-xl border border-white/25 px-4 py-2.5 text-sm font-black text-white hover:bg-white/10">
-          {copied ? <Check className="h-4 w-4 text-secondary" /> : <Copy className="h-4 w-4" />} {copied ? (isAr ? "اتنسخ الرابط" : "Link copied") : (isAr ? "انسخ الرابط" : "Copy link")}
-        </button>
-      </div>
-      <p className="mt-4 text-sm text-white/80">
-        {isAr ? `وتقدر كمان تعمل صدقة جارية على روح ${room.name}: ` : `You can also give an ongoing charity for ${room.name}: `}
-        <Link to="/water" className="font-black text-secondary underline-offset-4 hover:underline">{isAr ? "سقيا ماء" : "water"}</Link>
-        {isAr ? " أو " : " or "}
-        <Link to="/donate" className="font-black text-secondary underline-offset-4 hover:underline">{isAr ? "تبرّع صدقة جارية" : "give an ongoing charity"}</Link>
-      </p>
-    </div>
-  );
-}
-
-/** «سبحة لمتوفّى»: create a shared misbaha, and see recent ones. */
-function MemorialSection({ isAr, onCreated }: { isAr: boolean; onCreated: (slug: string) => void }) {
-  const [name, setName] = useState("");
-  const [by, setBy] = useState("");
-  const [goal, setGoal] = useState<number>(10000);
-  const [dhikrId, setDhikrId] = useState<string>("");
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [rooms, setRooms] = useState<MisbahaRoom[]>([]);
-  useEffect(() => { void misbahaRoomsApi.list(12).then(setRooms); }, []);
-  const fmt = (n: number) => n.toLocaleString(isAr ? "ar-EG" : "en-US");
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const clean = name.trim();
-    if (clean.length < 2) { setError(isAr ? "اكتب اسم المتوفّى" : "Enter the name"); return; }
-    setBusy(true); setError(null);
-    try {
-      const room = await misbahaRoomsApi.create({
-        name: clean.slice(0, 80),
-        created_by: by.trim().slice(0, 60) || undefined,
-        target_total: goal || undefined,
-        dhikr_id: dhikrId || undefined,
-      });
-      onCreated(room.slug);
-    } catch (err) {
-      setError(isEndpointMissing(err) ? MISBAHA_ROOMS_PENDING_AR : ((err as Error)?.message || (isAr ? "تعذر إنشاء السبحة" : "Could not create it")));
-    } finally {
-      setBusy(false);
-    }
-  };
-  return (
-    <section id="memorial" className="bg-muted/40 py-12 md:py-16" aria-labelledby="memorial-title">
-      <div className="container mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_1.1fr] lg:items-start">
-        <div>
-          <h2 id="memorial-title" className="text-2xl font-black text-primary md:text-3xl">{isAr ? "اعمل سبحة لروح حد غالي عليك" : "Create a tasbih for a loved one"}</h2>
-          <p className="mt-3 leading-relaxed text-muted-foreground">
-            {isAr ? "اكتب اسم المتوفّى، وهتاخد رابط تبعته للعيلة والأصحاب. كل اللي يفتح الرابط ويسبّح، ذكره بيتضاف لعدّاد واحد، وتشوفوا كلكم مع بعض اتقال قد إيه." : "Enter the name and you get a link to send to family and friends. Everyone who opens it adds to one shared count."}
-          </p>
-          <form onSubmit={submit} className="mt-5 space-y-3 rounded-3xl bg-card p-5 shadow-soft" noValidate>
-            <div>
-              <label htmlFor="memorial-name" className="text-sm font-black text-primary">{isAr ? "اسم المتوفّى" : "Name of the deceased"}</label>
-              <input id="memorial-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={80} required
-                placeholder={isAr ? "مثلًا: الحاج محمد عبد الله" : "e.g. Hajj Muhammad Abdullah"}
-                className="mt-1 h-12 w-full rounded-xl border border-border bg-background px-3 font-bold outline-none focus:border-secondary" />
-            </div>
-            <div>
-              <label htmlFor="memorial-by" className="text-sm font-black text-primary">{isAr ? "اسمك (اختياري)" : "Your name (optional)"}</label>
-              <input id="memorial-by" value={by} onChange={(e) => setBy(e.target.value)} maxLength={60}
-                placeholder={isAr ? "هيظهر تحت اسم السبحة" : "Shown under the tasbih name"}
-                className="mt-1 h-12 w-full rounded-xl border border-border bg-background px-3 font-bold outline-none focus:border-secondary" />
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label htmlFor="memorial-goal" className="text-sm font-black text-primary">{isAr ? "هدف السبحة" : "Goal"}</label>
-                <select id="memorial-goal" value={goal} onChange={(e) => setGoal(Number(e.target.value))}
-                  className="mt-1 h-12 w-full rounded-xl border border-border bg-background px-3 font-bold outline-none focus:border-secondary">
-                  {[1000, 10000, 100000, 1000000].map((n) => <option key={n} value={n}>{n.toLocaleString(isAr ? "ar-EG" : "en-US")} {isAr ? "ذكر" : "dhikr"}</option>)}
-                  <option value={0}>{isAr ? "من غير هدف" : "No goal"}</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="memorial-dhikr" className="text-sm font-black text-primary">{isAr ? "الذكر المقترح" : "Suggested dhikr"}</label>
-                <select id="memorial-dhikr" value={dhikrId} onChange={(e) => setDhikrId(e.target.value)}
-                  className="mt-1 h-12 w-full rounded-xl border border-border bg-background px-3 font-bold outline-none focus:border-secondary">
-                  <option value="">{isAr ? "أذكار متنوّعة" : "Varied dhikr"}</option>
-                  {["astaghfir", "salawat", "la_ilaha", "subhan_bihamdih", "tahleel", "hawqala"].map((id) => {
-                    const d = ALL.find((x) => x.id === id);
-                    return d ? <option key={id} value={id}>{isAr ? d.text : d.en}</option> : null;
-                  })}
-                </select>
-              </div>
-            </div>
-            {error && <p className="text-sm font-bold text-destructive" role="alert">{error}</p>}
-            <button type="submit" disabled={busy} className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary font-black text-primary-foreground transition hover:opacity-95 disabled:opacity-60">
-              <Plus className="h-4 w-4" /> {busy ? (isAr ? "بتتعمل..." : "Creating...") : (isAr ? "اعمل السبحة وخُد الرابط" : "Create and get the link")}
-            </button>
-            <p className="text-[11px] font-semibold text-muted-foreground">{isAr ? "صفحة السبحة مش بتظهر في جوجل، وبتوصل بس للي معاه الرابط أو من القايمة هنا." : "Tasbih pages are not shown in search engines."}</p>
-          </form>
-        </div>
-        <div>
-          <h3 className="text-lg font-black text-primary">{isAr ? "سبح بيتشارك فيها دلوقتي" : "Shared tasbihs right now"}</h3>
-          {rooms.length === 0 ? (
-            <p className="mt-3 rounded-2xl border border-dashed border-border p-5 text-sm text-muted-foreground">{isAr ? "أول سبحة هتعملها هتظهر هنا، وأي حد يقدر يدخل يشارك فيها." : "The first one you create will show here."}</p>
-          ) : (
-            <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-              {rooms.map((r) => (
-                <li key={r.slug}>
-                  <Link to={`/misbaha/${r.slug}`} className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card px-4 py-3 transition hover:border-secondary">
-                    <span className="min-w-0">
-                      <span className="block truncate text-sm font-black text-primary">{isAr ? `لروح ${r.name}` : `For ${r.name}`}</span>
-                      <span className="block text-[11px] font-bold text-muted-foreground">
-                        {isAr ? `${fmt(r.total_count)} ذكر` : `${fmt(r.total_count)} dhikr`}
-                        {r.target_total ? (isAr ? ` من ${fmt(r.target_total)}` : ` of ${fmt(r.target_total)}`) : ""}
-                      </span>
-                    </span>
-                    <span className="shrink-0 rounded-full bg-secondary/20 px-3 py-1 text-xs font-black text-primary">{isAr ? "شارك" : "Join"}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /** «حصيلتك»: an image of today's dhikr by kind, ready to save or share. */
 function SummaryDialog({ isAr, tally, total, roomName, pageUrl, onClose }: {

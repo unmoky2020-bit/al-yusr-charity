@@ -80,8 +80,8 @@
     "en": { "title": "Charity in the first ten days of Dhul Hijjah | Al-Yusr", "description": "A daily charity, iftar on the day of Arafah, local meat, water and a Qurbani share with Al-Yusr." }
   },
   "/misbaha": {
-    "ar": { "title": "المسبحة الإلكترونية | صلاة على النبي وتسبيح واستغفار — مؤسسة اليسر", "description": "مسبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وفضل كل ذكر." },
-    "en": { "title": "Digital tasbih | Al-Yusr", "description": "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter and the virtue of each dhikr." }
+    "ar": { "title": "المسبحة الإلكترونية | صلاة على النبي وتسبيح واستغفار — مؤسسة اليسر", "description": "مسبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وفضل كل ذكر، واعمل سبحة مشتركة لروح حد غالي أو بنية شفاء مريض.", "image": "https://elyusr.org/og/misbaha.jpg?v=2026.11" },
+    "en": { "title": "Digital tasbih | Al-Yusr", "description": "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter and the virtue of each dhikr.", "image": "https://elyusr.org/og/misbaha.jpg?v=2026.11" }
   },
   "/dhill": {
     "ar": { "title": "حملة ظِلّ — سقيا الماء | مؤسسة اليسر الخيرية", "description": "وصلات مياه نظيفة وأسقف للأسر المستحقة — صدقة جارية." },

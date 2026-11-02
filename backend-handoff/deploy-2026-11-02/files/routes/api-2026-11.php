@@ -1,0 +1,34 @@
+<?php
+/*
+ | Routes added on 2 Nov 2026 (projects by slug, public newsletter subscribe, shared misbaha).
+ | Loaded from the last line of routes/api.php:  require __DIR__.'/api-2026-11.php';
+ | Kept in their own file so nobody has to edit the big routes file by hand.
+ */
+
+use App\Http\Controllers\Api\V1\Misbaha\MisbahaRoomController;
+use App\Http\Controllers\Api\V1\Newsletter\NewsletterPublicController;
+use App\Http\Controllers\Api\V1\Project\ProjectController;
+use Illuminate\Support\Facades\Route;
+
+Route::prefix('v1')->group(function () {
+    // ── Public ──
+    // 3 segments, so it never clashes with projects/{project}.
+    Route::get('projects/by-slug/{slug}', [ProjectController::class, 'showBySlug']);
+
+    Route::post('newsletter/subscribe', [NewsletterPublicController::class, 'subscribe'])
+        ->middleware('throttle:5,1');
+
+    Route::get('misbaha-rooms', [MisbahaRoomController::class, 'index']);
+    Route::get('misbaha-rooms/stats', [MisbahaRoomController::class, 'stats']); // before {slug}
+    Route::post('misbaha-rooms', [MisbahaRoomController::class, 'store'])->middleware('throttle:5,1');
+    Route::get('misbaha-rooms/{slug}', [MisbahaRoomController::class, 'show']);
+    Route::post('misbaha-rooms/{slug}/count', [MisbahaRoomController::class, 'count'])->middleware('throttle:120,1');
+
+    // ── Team ──
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('admin/misbaha-rooms', [MisbahaRoomController::class, 'adminIndex'])
+            ->middleware('permission:content.view');
+        Route::patch('admin/misbaha-rooms/{misbahaRoom}', [MisbahaRoomController::class, 'adminUpdate'])
+            ->middleware('permission:content.update');
+    });
+});
