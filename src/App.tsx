@@ -325,6 +325,7 @@ const App = () => (
                   <Route path="/ten-days" element={<AshrLanding />} />
                   <Route path="/ashr" element={<Navigate to="/ten-days" replace />} />
                   <Route path="/misbaha" element={<Misbaha />} />
+                  <Route path="/misbaha/:slug" element={<Misbaha />} />
                   <Route path="/tasbih" element={<Navigate to="/misbaha" replace />} />
                   <Route path="/freelancers" element={<ArbounLanding />} />
                   <Route path="/donate/track/:ref" element={<DonationTracking />} />

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { CaseRow } from "@/data/casesApi";
-import { CaseCard } from "./CaseCard";
+import { CasePosterCard } from "./CaseCard";
 
 /**
  * Horizontal, swipeable row of case cards (homepage urgent cases, programs page).
@@ -80,12 +80,12 @@ export function CasesCarousel({
         className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-2 pt-1 outline-none [scrollbar-width:none] focus-visible:ring-2 focus-visible:ring-secondary/60 [&::-webkit-scrollbar]:hidden"
       >
         {cases.map((c) => (
-          <CaseCard
+          <CasePosterCard
             key={c.id}
             c={c}
             isRTL={isRTL}
             showOwner={showOwner}
-            className="w-[84%] shrink-0 snap-start xs:w-[72%] sm:w-[46%] lg:w-[31.5%] xl:w-[23.6%]"
+            className="w-[78%] shrink-0 snap-start sm:w-[44%] lg:w-[30.5%] xl:w-[23.6%]"
           />
         ))}
       </div>

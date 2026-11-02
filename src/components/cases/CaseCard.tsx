@@ -83,3 +83,59 @@ export function CaseCard({ c, isRTL, showOwner = false, className = "" }: { c: C
     </article>
   );
 }
+
+/**
+ * Poster card for carousels: the photo fills the card, a dark gradient at the bottom carries the
+ * case name and one funding line, and a small donate button. Nothing else.
+ */
+export function CasePosterCard({ c, isRTL, showOwner = false, className = "" }: { c: CaseRow; isRTL: boolean; showOwner?: boolean; className?: string }) {
+  const need = Number(c.needed_amount) || 0;
+  const raised = Number(c.raised_amount) || 0;
+  const pct = need > 0 ? Math.min(100, Math.round((raised / need) * 100)) : 0;
+  const remaining = Math.max(0, need - raised);
+  const done = need > 0 && remaining === 0;
+  const owner = showOwner ? caseOwnerLabel(c, isRTL) : null;
+  const egp = isRTL ? "ج" : "EGP";
+  return (
+    <article className={`group relative isolate aspect-[4/5] overflow-hidden rounded-[1.6rem] bg-[#06301c] shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-card ${className}`}>
+      <img src={c.cover_image_url || "/images/cases/case-medical.jpg"} alt="" loading="lazy" decoding="async"
+        className="absolute inset-0 -z-10 h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-black/90 via-black/35 to-transparent" />
+      <div aria-hidden className="absolute inset-x-0 top-0 -z-10 h-24 bg-gradient-to-b from-black/35 to-transparent" />
+
+      {/* whole card opens the case; the donate button sits above this layer */}
+      <Link to={`/cases/${c.ref_code}`} className="absolute inset-0 z-0 rounded-[1.6rem] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary/70" aria-label={c.title} />
+
+      <div className="pointer-events-none absolute inset-x-3 top-3 flex items-start justify-between gap-2">
+        {c.is_urgent ? (
+          <span className="inline-flex items-center gap-1 rounded-full bg-destructive px-2.5 py-1 text-[11px] font-black text-destructive-foreground shadow">
+            <AlertCircle className="h-3 w-3" /> {isRTL ? "عاجلة" : "Urgent"}
+          </span>
+        ) : <span />}
+        {(owner || c.category_name_ar) && (
+          <span className="max-w-[60%] truncate rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-black text-primary">{owner || c.category_name_ar}</span>
+        )}
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 text-white">
+        <h3 className="line-clamp-2 text-[17px] font-black leading-snug drop-shadow">{c.title}</h3>
+        <div className="mt-2.5 h-1 overflow-hidden rounded-full bg-white/25" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={isRTL ? "نسبة التمويل" : "Funded"}>
+          <div className="h-full rounded-full bg-[#a3e635]" style={{ width: `${pct}%` }} />
+        </div>
+        <div className="mt-2.5 flex items-center justify-between gap-2">
+          <span className="text-[12px] font-bold text-white/85">
+            {done ? (isRTL ? "اكتمل التمويل" : "Fully funded") : (isRTL ? `متبقي ${formatNumberEN(remaining)} ${egp} من ${formatNumberEN(need)}` : `${formatNumberEN(remaining)} of ${formatNumberEN(need)} ${egp} left`)}
+          </span>
+          {!done && (
+            <Link
+              to={`/donate?case=${encodeURIComponent(c.ref_code)}`}
+              className="pointer-events-auto relative z-10 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-orange-grad px-3.5 text-xs font-black text-accent-foreground shadow-cta transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <HeartHandshake className="h-3.5 w-3.5" /> {isRTL ? "تبرع" : "Donate"}
+            </Link>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}

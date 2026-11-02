@@ -154,12 +154,12 @@ export const Footer = () => {
 
       {/* Newsletter — an airmail envelope that floats over the previous section */}
       <div className="relative overflow-visible">
-        <div className="container relative z-30 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 -translate-y-[15%] -mb-7 sm:-mb-8 md:-mb-10">
-          <div className="relative mx-auto w-full overflow-hidden rounded-[2rem] bg-[#0b4429] text-white shadow-[0_26px_70px_-24px_rgba(6,48,28,0.65)] ring-1 ring-white/10">
+        <div className="container relative z-30 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -translate-y-[15%] -mb-7 sm:-mb-8 md:-mb-10">
+          <div className="relative mx-auto w-full overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#fbfdf7] via-[#f1f8e7] to-[#e6f3d6] text-[#0b4429] shadow-[0_26px_60px_-28px_rgba(6,48,28,0.45)] ring-1 ring-[#0b4429]/10">
             {/* airmail edge */}
             <div aria-hidden className="h-2.5 w-full" style={{ background: "repeating-linear-gradient(135deg,#f58220 0 16px,#fdfaf3 16px 26px,#8cc63f 26px 42px,#fdfaf3 42px 52px)" }} />
             {/* faint envelope fold lines */}
-            <svg aria-hidden className="pointer-events-none absolute inset-x-0 top-2.5 h-full w-full text-white/[0.05]" viewBox="0 0 100 40" preserveAspectRatio="none">
+            <svg aria-hidden className="pointer-events-none absolute inset-x-0 top-2.5 h-full w-full text-[#0b4429]/[0.07]" viewBox="0 0 100 40" preserveAspectRatio="none">
               <path d="M0 0 L50 22 L100 0" fill="none" stroke="currentColor" strokeWidth="0.35" vectorEffect="non-scaling-stroke" />
             </svg>
 
@@ -168,27 +168,27 @@ export const Footer = () => {
               {/* perforated edge: a ring of holes around a solid face */}
               <div
                 className="h-[86px] w-[74px] p-[4px] drop-shadow-md"
-                style={{ background: "radial-gradient(circle at 4px 4px, transparent 2.4px, #fdfaf3 2.9px) -4px -4px / 8px 8px" }}
+                style={{ background: "radial-gradient(circle at 4px 4px, transparent 2.4px, #ffffff 2.9px) -4px -4px / 8px 8px" }}
               >
-                <div className="flex h-full w-full flex-col items-center justify-center gap-0.5 border border-dashed border-[#0b4429]/35 bg-[#fdfaf3]">
+                <div className="flex h-full w-full flex-col items-center justify-center gap-0.5 border border-dashed border-[#0b4429]/35 bg-white">
                   <img src={logoCircle} alt="" className="h-9 w-9" loading="lazy" />
                   <span className="text-[9px] font-black text-[#0b4429]">{isRTL ? "بريد الخير" : "Al-Yusr post"}</span>
                 </div>
               </div>
               {/* postmark */}
-              <div className="absolute -end-10 top-10 h-12 w-12 rotate-[14deg] rounded-full border-2 border-white/30 text-center text-[8px] font-black leading-[2.6rem] text-white/45">
+              <div className="absolute -end-10 top-10 h-12 w-12 rotate-[14deg] rounded-full border-2 border-[#0b4429]/25 text-center text-[8px] font-black leading-[2.6rem] text-[#0b4429]/45">
                 {isRTL ? "المنصورة" : "Mansoura"}
               </div>
             </div>
 
             {!subscribed ? (
-              <div className="relative grid items-end gap-6 px-5 pb-6 pt-6 sm:px-8 md:grid-cols-[1.05fr_1fr] md:gap-10 md:px-10 md:pb-9 md:pt-8">
+              <div className="relative grid items-end gap-6 px-5 pb-7 pt-9 sm:px-8 md:grid-cols-[1.05fr_1fr] md:gap-10 md:px-10 md:pb-10 md:pt-14">
                 <div className="text-center md:ps-28 md:text-start lg:ps-32">
-                  <p className="text-xs font-bold text-[#c8e88f]">{isRTL ? "نشرة اليسر، كل أسبوعين" : "Al-Yusr letter, every two weeks"}</p>
+                  <p className="text-xs font-black text-[#4d8a1f]">{isRTL ? "نشرة اليسر، كل أسبوعين" : "Al-Yusr letter, every two weeks"}</p>
                   <h3 className="mt-2 text-[1.45rem] font-black leading-snug md:text-[1.8rem]">
                     {isRTL ? "رسالة من الميدان توصل بريدك" : "A letter from the field, in your inbox"}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/75">
+                  <p className="mt-2 text-sm leading-relaxed text-[#0b4429]/70">
                     {isRTL
                       ? "صور التوزيع، والحالات اللي اكتملت بتبرعاتكم، والحملة الجاية قبل ما تبدأ."
                       : "Photos from distributions, cases your gifts completed, and the next campaign before it starts."}
@@ -196,7 +196,7 @@ export const Footer = () => {
                 </div>
 
                 <form onSubmit={handleSubscribe} className="relative w-full" noValidate>
-                  <label htmlFor="newsletter-email" className="mb-1 block text-xs font-black text-white/60">
+                  <label htmlFor="newsletter-email" className="mb-1 block text-xs font-black text-[#0b4429]/55">
                     {isRTL ? "إلى:" : "To:"}
                   </label>
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
@@ -211,18 +211,18 @@ export const Footer = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="name@example.com"
-                      className="h-12 min-w-0 flex-1 border-0 border-b-2 border-dashed border-white/35 bg-transparent px-1 text-base font-bold text-white outline-none transition-colors placeholder:text-white/35 focus:border-[#8cc63f] focus-visible:ring-0"
+                      className="h-12 min-w-0 flex-1 border-0 border-b-2 border-dashed border-[#0b4429]/30 bg-transparent px-1 text-base font-bold text-[#0b4429] outline-none transition-colors placeholder:text-[#0b4429]/35 focus:border-[#f58220] focus-visible:ring-0"
                     />
                     <button
                       type="submit"
                       disabled={subscribing}
-                      className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-orange-grad px-6 text-sm font-black text-accent-foreground shadow-cta transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:translate-y-0 disabled:opacity-60"
+                      className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-orange-grad px-6 text-sm font-black text-accent-foreground shadow-cta transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b4429] focus-visible:ring-offset-2 disabled:translate-y-0 disabled:opacity-60"
                     >
                       <Send className="h-4 w-4 rtl:-scale-x-100" />
                       {subscribing ? (isRTL ? "بيتبعت..." : "Sending...") : (isRTL ? "ابعتولي النشرة" : "Send me the letter")}
                     </button>
                   </div>
-                  <p className="mt-2.5 text-[11px] font-semibold text-white/50">
+                  <p className="mt-2.5 text-[11px] font-semibold text-[#0b4429]/50">
                     {isRTL ? "تقدر تلغي الاشتراك من أي رسالة بضغطة واحدة." : "Unsubscribe from any letter with one click."}
                   </p>
                 </form>
@@ -230,14 +230,14 @@ export const Footer = () => {
             ) : (
               <div className="relative flex flex-col items-center gap-4 px-5 py-7 text-center sm:px-8 md:flex-row md:justify-between md:px-10 md:text-start" role="status">
                 <div className="flex flex-col items-center gap-4 md:flex-row">
-                  <div className="grid h-14 w-14 shrink-0 rotate-[-8deg] place-items-center rounded-full border-2 border-dashed border-[#8cc63f] text-[#c8e88f]">
+                  <div className="grid h-14 w-14 shrink-0 rotate-[-8deg] place-items-center rounded-full border-2 border-dashed border-[#4d8a1f] text-[#4d8a1f]">
                     <CheckCircle2 className="h-7 w-7" />
                   </div>
                   <div>
                     <h3 className="text-lg font-black leading-tight sm:text-xl md:text-2xl">
                       {isRTL ? "اتسجّلت. فاضل خطوة واحدة" : "You're on the list. One step left"}
                     </h3>
-                    <p className="mt-1 text-sm text-white/75">
+                    <p className="mt-1 text-sm text-[#0b4429]/70">
                       {isRTL
                         ? "بعتنالك إيميل تأكيد. افتحه واضغط على الرابط علشان النشرة توصلك."
                         : "We sent you a confirmation email. Open it and click the link to start receiving the letter."}
@@ -256,7 +256,7 @@ export const Footer = () => {
                   <button
                     type="button"
                     onClick={() => setSubscribed(false)}
-                    className="inline-flex h-10 items-center rounded-xl border border-white/25 px-3.5 text-xs font-bold text-white hover:border-white/60"
+                    className="inline-flex h-10 items-center rounded-xl border border-[#0b4429]/20 bg-white/70 px-3.5 text-xs font-bold text-[#0b4429] hover:border-[#0b4429]/50"
                   >
                     {isRTL ? "سجّل بريد تاني" : "Add another email"}
                   </button>
