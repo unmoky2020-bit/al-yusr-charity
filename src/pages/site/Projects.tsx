@@ -464,7 +464,7 @@ const Projects = () => {
 
 
       <section className="pattern-programs relative overflow-x-clip py-14 md:py-20">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-10 max-w-2xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
               <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "كل البرامج" : "All programs"}
@@ -479,10 +479,10 @@ const Projects = () => {
             </p>
           </div>
           {programsLoading && (
-            <div className="mx-auto max-w-6xl space-y-6 md:space-y-8" aria-busy="true" aria-label={isRTL ? "بنحمّل البرامج" : "Loading programs"}>
+            <div className="w-full space-y-6 md:space-y-8" aria-busy="true" aria-label={isRTL ? "بنحمّل البرامج" : "Loading programs"}>
               {[0, 1, 2].map((i) => (
                 <div key={i} className={`flex ${i % 2 ? "lg:justify-end" : "lg:justify-start"}`}>
-                  <div className={`flex w-full flex-col gap-4 overflow-hidden rounded-[28px] border border-primary/10 bg-card p-3 shadow-card md:flex-row lg:w-[86%] ${i % 2 ? "md:flex-row-reverse" : ""}`}>
+                  <div className={`flex w-full flex-col gap-4 overflow-hidden rounded-[28px] border border-primary/10 bg-card p-3 shadow-card md:flex-row lg:w-[90%] ${i % 2 ? "md:flex-row-reverse" : ""}`}>
                     <div className="flex-1 space-y-3 p-3 md:py-8">
                       <Skeleton className="h-5 w-24 rounded-full" />
                       <Skeleton className="h-8 w-2/3" />
@@ -502,7 +502,7 @@ const Projects = () => {
             </p>
           )}
           {!programsLoading && (
-          <StickyStack className="mx-auto max-w-6xl overflow-x-clip" gap="mb-6 md:mb-8">
+          <StickyStack className="w-full overflow-x-clip" gap="mb-6 md:mb-8">
             {programs.map((p, idx) => {
               // Static (JIT-safe) sticky offsets that cascade so each card peeks under the next.
               const offsets = [
@@ -521,7 +521,7 @@ const Projects = () => {
                     to={programHref(p.slug)}
                     data-source="projects"
                     data-label={`project-${p.slug}`}
-                    className={`group relative isolate mx-auto flex w-full max-w-5xl transform-gpu flex-col overflow-hidden rounded-[28px] lg:mx-0 lg:w-[86%] lg:max-w-none border border-primary/10 bg-gradient-to-b from-card to-card/95 shadow-card ring-1 ring-primary/5 transition-colors duration-300 [backface-visibility:hidden] hover:border-secondary/50 md:items-stretch ${reverse ? "md:flex-row-reverse" : "md:flex-row"}`}
+                    className={`group relative isolate mx-auto flex w-full transform-gpu flex-col overflow-hidden rounded-[28px] lg:mx-0 lg:w-[90%] lg:max-w-none border border-primary/10 bg-gradient-to-b from-card to-card/95 shadow-card ring-1 ring-primary/5 transition-colors duration-300 [backface-visibility:hidden] hover:border-secondary/50 md:items-stretch ${reverse ? "md:flex-row-reverse" : "md:flex-row"}`}
                   >
                     {/* Content first in DOM so it reads first on large screens */}
                     <div className="order-2 flex flex-1 flex-col px-5 pb-5 pt-4 md:order-1 md:w-1/2 md:justify-center md:px-6 md:py-6">
@@ -569,29 +569,25 @@ const Projects = () => {
           )}
         </div>
 
-        <div className="container mx-auto mt-12 max-w-3xl px-4">
-          <div className="rounded-3xl border border-secondary/30 bg-card/85 p-5 text-center shadow-soft backdrop-blur md:p-7">
-            <h3 className="text-base font-black text-primary md:text-lg">
-              {isRTL ? "محتار تختار أي برنامج؟" : "Not sure which program fits?"}
-            </h3>
-            <p className="mx-auto mt-2 max-w-md text-xs font-semibold leading-6 text-muted-foreground md:text-sm">
-              {isRTL
-                ? "اسألنا واتساب وفريق الاستشارات يرشدك لأكثر احتياج عاجل يناسب نيتك."
-                : "WhatsApp us and our advisory team will guide you to the most urgent fit for your intention."}
-            </p>
-            <div className="mt-4 flex justify-center">
-              <a href={waHref} target="_blank" rel="noopener" className="inline-flex items-center justify-center gap-2 rounded-full bg-whatsapp px-5 py-2.5 text-sm font-extrabold text-whatsapp-foreground shadow-whatsapp transition hover:opacity-95" data-source="programs" data-label="programs-whatsapp-list">
-                <WhatsAppIcon className="h-4 w-4" aria-hidden />{isRTL ? "اسأل عن أنسب برنامج" : "Ask for guidance"}
-              </a>
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12">
+          <div className="flex flex-col items-center gap-4 rounded-3xl border border-secondary/30 bg-card/90 p-6 text-center shadow-soft backdrop-blur md:flex-row md:justify-between md:p-8 md:text-start">
+            <div>
+              <h3 className="text-lg font-black text-primary md:text-xl">
+                {isRTL ? "محتار تختار أي برنامج؟" : "Not sure which program fits?"}
+              </h3>
+              <p className="mt-1.5 text-sm font-semibold leading-6 text-muted-foreground">
+                {isRTL
+                  ? "اسألنا واتساب وفريق الاستشارات يرشدك لأكثر احتياج عاجل يناسب نيتك."
+                  : "WhatsApp us and our advisory team will guide you to the most urgent fit for your intention."}
+              </p>
             </div>
+            <a href={waHref} target="_blank" rel="noopener" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-whatsapp px-6 py-3 text-sm font-extrabold text-whatsapp-foreground shadow-whatsapp transition hover:opacity-95" data-source="programs" data-label="programs-whatsapp-list">
+              <WhatsAppIcon className="h-4 w-4" aria-hidden />{isRTL ? "اسأل عن أنسب برنامج" : "Ask for guidance"}
+            </a>
           </div>
         </div>
-
        
       </section>
-
-      {/* Bride trousseau call to action */}
-      <BrideTrousseau />
 
       {/* Visible FAQ — paired with the FAQPage JSON-LD above */}
       {/* ── GEO coverage — internal links to /geo/:gov/:program for local SEO ── */}
@@ -851,6 +847,8 @@ const Projects = () => {
       <LinkedCasesSection filter={{ linkedTo: "program" }} showOwner variant="carousel" filterByOwner limit={30} include={includeProgramCase} isRTL={isRTL} className="bg-muted/30"
         title={isRTL ? "حالات بتتجمع لها التبرعات في برامجنا" : "Cases our programs are funding"}
         subtitle={isRTL ? "اختار حالة بعينها وتابع تحديثاتها بالصور لحد ما تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
+      {/* Bride trousseau call to action, closing the page */}
+      <BrideTrousseau />
     </PageLayout>
   );
 };

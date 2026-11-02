@@ -84,7 +84,7 @@ export const BrideTrousseau = () => {
           ],
         })}</script>
       </Helmet>
-      <div className="container relative mx-auto grid max-w-6xl gap-8 px-4 md:gap-12 md:grid-cols-2 md:items-center">
+      <div className="container relative mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 md:gap-12 md:grid-cols-2 md:items-center lg:px-8">
         <div data-bt="img" className="relative order-2 md:order-1">
           <div className="absolute -inset-3 rounded-[2.5rem] bg-secondary/15 blur-2xl" aria-hidden />
           <img
