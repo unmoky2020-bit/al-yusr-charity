@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { newsletterApi } from "@/data/laravelApi";
 import { track } from "@/lib/track";
 import ctaHourglass from "@/assets/cta-hourglass-banner.jpg";
+import logoCircle from "@/assets/logo-circle.png";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
@@ -151,71 +152,99 @@ export const Footer = () => {
         </section>
       )}
 
-      {/* Newsletter card — floats upward overlapping into previous section */}
+      {/* Newsletter — an airmail envelope that floats over the previous section */}
       <div className="relative overflow-visible">
-        <div className="container relative z-30 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -translate-y-[15%] -mb-7 sm:-mb-8 md:-mb-10">
-          <div className="group relative mx-auto w-full overflow-hidden rounded-[2.2rem] border border-accent/30 bg-card text-primary shadow-[0_22px_65px_-20px_rgba(15,76,44,0.35)]">
+        <div className="container relative z-30 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 -translate-y-[15%] -mb-7 sm:-mb-8 md:-mb-10">
+          <div className="relative mx-auto w-full overflow-hidden rounded-[2rem] bg-[#0b4429] text-white shadow-[0_26px_70px_-24px_rgba(6,48,28,0.65)] ring-1 ring-white/10">
+            {/* airmail edge */}
+            <div aria-hidden className="h-2.5 w-full" style={{ background: "repeating-linear-gradient(135deg,#f58220 0 16px,#fdfaf3 16px 26px,#8cc63f 26px 42px,#fdfaf3 42px 52px)" }} />
+            {/* faint envelope fold lines */}
+            <svg aria-hidden className="pointer-events-none absolute inset-x-0 top-2.5 h-full w-full text-white/[0.05]" viewBox="0 0 100 40" preserveAspectRatio="none">
+              <path d="M0 0 L50 22 L100 0" fill="none" stroke="currentColor" strokeWidth="0.35" vectorEffect="non-scaling-stroke" />
+            </svg>
+
+            {/* stamp */}
+            <div aria-hidden className="absolute start-6 top-8 hidden rotate-[-6deg] md:block lg:start-10">
+              {/* perforated edge: a ring of holes around a solid face */}
+              <div
+                className="h-[86px] w-[74px] p-[4px] drop-shadow-md"
+                style={{ background: "radial-gradient(circle at 4px 4px, transparent 2.4px, #fdfaf3 2.9px) -4px -4px / 8px 8px" }}
+              >
+                <div className="flex h-full w-full flex-col items-center justify-center gap-0.5 border border-dashed border-[#0b4429]/35 bg-[#fdfaf3]">
+                  <img src={logoCircle} alt="" className="h-9 w-9" loading="lazy" />
+                  <span className="text-[9px] font-black text-[#0b4429]">{isRTL ? "بريد الخير" : "Al-Yusr post"}</span>
+                </div>
+              </div>
+              {/* postmark */}
+              <div className="absolute -end-10 top-10 h-12 w-12 rotate-[14deg] rounded-full border-2 border-white/30 text-center text-[8px] font-black leading-[2.6rem] text-white/45">
+                {isRTL ? "المنصورة" : "Mansoura"}
+              </div>
+            </div>
 
             {!subscribed ? (
-              <div className="relative grid items-center gap-6 p-5 sm:p-7 md:grid-cols-[1fr_1.15fr] md:gap-8 md:p-8">
-                <div className="text-center md:text-start">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-accent/35 bg-accent/10 px-3.5 py-1.5 text-xs font-black text-accent">
-                    <span>{isRTL ? "النشرة البريدية الحصرية" : "Exclusive Newsletter"}</span>
-                    <Bell className="h-3.5 w-3.5 shrink-0 text-accent" />
-                  </span>
-                  <h3 className="mt-3 text-xl font-black leading-tight tracking-tight md:text-[1.55rem]">
-                    {isRTL ? (
-                      <>اشترك وتابع أحدث <span className="text-accent">حملاتنا</span> وقصص الأثر</>
-                    ) : (
-                      <>Subscribe for our latest <span className="text-accent">campaigns</span> &amp; impact stories</>
-                    )}
+              <div className="relative grid items-end gap-6 px-5 pb-6 pt-6 sm:px-8 md:grid-cols-[1.05fr_1fr] md:gap-10 md:px-10 md:pb-9 md:pt-8">
+                <div className="text-center md:ps-28 md:text-start lg:ps-32">
+                  <p className="text-xs font-bold text-[#c8e88f]">{isRTL ? "نشرة اليسر، كل أسبوعين" : "Al-Yusr letter, every two weeks"}</p>
+                  <h3 className="mt-2 text-[1.45rem] font-black leading-snug md:text-[1.8rem]">
+                    {isRTL ? "رسالة من الميدان توصل بريدك" : "A letter from the field, in your inbox"}
                   </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/75">
+                    {isRTL
+                      ? "صور التوزيع، والحالات اللي اكتملت بتبرعاتكم، والحملة الجاية قبل ما تبدأ."
+                      : "Photos from distributions, cases your gifts completed, and the next campaign before it starts."}
+                  </p>
                 </div>
 
-                <form onSubmit={handleSubscribe} className="relative flex w-full flex-col gap-2 rounded-2xl border border-accent/30 bg-background p-1.5 shadow-[0_6px_25px_rgb(0,0,0,0.06)] sm:flex-row sm:items-center">
-                  <label className="sr-only" htmlFor="newsletter-email">Email</label>
-                  <div className="relative flex-1 flex items-center min-w-0">
-                    <Mail className="absolute start-3.5 h-4 w-4 shrink-0 text-primary/40 pointer-events-none" />
+                <form onSubmit={handleSubscribe} className="relative w-full" noValidate>
+                  <label htmlFor="newsletter-email" className="mb-1 block text-xs font-black text-white/60">
+                    {isRTL ? "إلى:" : "To:"}
+                  </label>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
                     <input
                       id="newsletter-email"
                       type="email"
+                      name="email"
+                      autoComplete="email"
+                      inputMode="email"
                       required
-                      dir={isRTL ? "rtl" : "ltr"}
+                      dir="ltr"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder={isRTL ? "بريدك الإلكتروني" : "your@email.com"}
-                      className="h-11 w-full rounded-xl border border-transparent bg-transparent ps-10 pe-4 text-xs font-bold text-primary outline-none placeholder:text-primary/40 focus:border-accent/50 transition-all sm:text-sm"
+                      placeholder="name@example.com"
+                      className="h-12 min-w-0 flex-1 border-0 border-b-2 border-dashed border-white/35 bg-transparent px-1 text-base font-bold text-white outline-none transition-colors placeholder:text-white/35 focus:border-[#8cc63f] focus-visible:ring-0"
                     />
+                    <button
+                      type="submit"
+                      disabled={subscribing}
+                      className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-orange-grad px-6 text-sm font-black text-accent-foreground shadow-cta transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:translate-y-0 disabled:opacity-60"
+                    >
+                      <Send className="h-4 w-4 rtl:-scale-x-100" />
+                      {subscribing ? (isRTL ? "بيتبعت..." : "Sending...") : (isRTL ? "ابعتولي النشرة" : "Send me the letter")}
+                    </button>
                   </div>
-                  <button
-                    type="submit"
-                    disabled={subscribing}
-                    className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-accent px-6 text-xs font-black text-accent-foreground shadow-sm transition-colors hover:bg-accent/90 disabled:opacity-60 sm:text-sm"
-                  >
-                    <span className="flex items-center">
-                      {subscribing ? (isRTL ? "جاري..." : "Subscribing...") : (isRTL ? "اشترك الآن" : "Subscribe Now")}
-                    </span>
-                  </button>
+                  <p className="mt-2.5 text-[11px] font-semibold text-white/50">
+                    {isRTL ? "تقدر تلغي الاشتراك من أي رسالة بضغطة واحدة." : "Unsubscribe from any letter with one click."}
+                  </p>
                 </form>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-4 p-6 text-center md:flex-row md:text-start md:justify-between md:gap-6 md:p-8">
-                <div className="flex flex-col items-center gap-4 text-center md:flex-row md:text-start">
-                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-amber-500/20 text-amber-500 shadow-cta">
-                    <CheckCircle2 className="h-6 w-6" />
+              <div className="relative flex flex-col items-center gap-4 px-5 py-7 text-center sm:px-8 md:flex-row md:justify-between md:px-10 md:text-start" role="status">
+                <div className="flex flex-col items-center gap-4 md:flex-row">
+                  <div className="grid h-14 w-14 shrink-0 rotate-[-8deg] place-items-center rounded-full border-2 border-dashed border-[#8cc63f] text-[#c8e88f]">
+                    <CheckCircle2 className="h-7 w-7" />
                   </div>
                   <div>
                     <h3 className="text-lg font-black leading-tight sm:text-xl md:text-2xl">
-                      {isRTL ? "تم الاشتراك — تأكيد البريد في طريقه إليك ✉️" : "You're in — please confirm via the email we just sent ✉️"}
+                      {isRTL ? "اتسجّلت. فاضل خطوة واحدة" : "You're on the list. One step left"}
                     </h3>
-                    <p className="mt-1 text-xs font-semibold text-primary/75 sm:text-sm">
+                    <p className="mt-1 text-sm text-white/75">
                       {isRTL
-                        ? "ادخل بريدك واضغط على رابط التفعيل لتبدأ تستقبل أخبار حملاتنا."
-                        : "Open the email and click the activation link to start receiving our updates."}
+                        ? "بعتنالك إيميل تأكيد. افتحه واضغط على الرابط علشان النشرة توصلك."
+                        : "We sent you a confirmation email. Open it and click the link to start receiving the letter."}
                     </p>
                   </div>
                 </div>
-                <div className="flex flex-wrap justify-center gap-2 shrink-0 md:justify-end">
+                <div className="flex shrink-0 flex-wrap justify-center gap-2">
                   <Link
                     to="/donate"
                     onClick={() => track("newsletter_thanks_cta_donate", { payload: { source: "footer" } })}
@@ -227,9 +256,9 @@ export const Footer = () => {
                   <button
                     type="button"
                     onClick={() => setSubscribed(false)}
-                    className="inline-flex h-10 items-center gap-2 rounded-xl border border-primary/15 bg-background px-3.5 text-xs font-bold text-primary hover:border-secondary"
+                    className="inline-flex h-10 items-center rounded-xl border border-white/25 px-3.5 text-xs font-bold text-white hover:border-white/60"
                   >
-                    {isRTL ? "اشترك ببريد آخر" : "Add another email"}
+                    {isRTL ? "سجّل بريد تاني" : "Add another email"}
                   </button>
                 </div>
               </div>

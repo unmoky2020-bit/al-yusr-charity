@@ -433,14 +433,11 @@ export async function listPublicCases(opts?: LinkedCasesFilter & { limit?: numbe
       return (opts?.limit ? visible.slice(0, opts.limit) : visible).map(mapLaravelCaseToRow);
     }
   } catch (err) {
-    if (import.meta.env.DEV) console.warn("listPublicCases: API unreachable, showing sample cases", err);
+    if (import.meta.env.DEV) console.warn("listPublicCases: API unreachable", err);
   }
-  let results = [...FALLBACK_PUBLIC_CASES];
-  if (opts?.categorySlug) {
-    const slug = opts.categorySlug.toLowerCase();
-    results = results.filter((c) => (c as unknown as { case_categories?: { slug?: string } }).case_categories?.slug?.toLowerCase() === slug);
-  }
-  return opts?.limit ? results.slice(0, opts.limit) : results;
+  // Only real backend cases are ever shown to donors: no sample cases when the API is unreachable
+  // (sections that list cases hide themselves when this is empty).
+  return [];
 }
 
 /** One case by its public code (CASE-4224) or id. Visitors only get approved / completed cases. */
@@ -452,7 +449,7 @@ export async function getCaseByRef(ref: string) {
   } catch (err) {
     if (err instanceof ApiError && (err.status === 404 || err.status === 403)) return null;
   }
-  return FALLBACK_PUBLIC_CASES.find((c) => c.ref_code.toLowerCase() === ref.toLowerCase() || c.id === ref) ?? null;
+  return null;
 }
 
 const toUrgency = (priority?: string): Urgency => (priority === "high" || priority === "low" ? priority : "medium");

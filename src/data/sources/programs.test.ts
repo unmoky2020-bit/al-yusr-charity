@@ -6,14 +6,15 @@ import { mergeByKey, normalizeSlug, unwrapList } from "./_shared";
 import { API_PROGRAM_ORPHANS, API_PROGRAM_URL_SLUG, API_PROGRAM_ZAKAT_INACTIVE } from "./_testFixtures";
 
 describe("content source flag", () => {
-  it("defaults to static", () => {
+  it("tests run against the static copies (VITE_CONTENT_SOURCE=static in vitest.config.ts)", () => {
     expect(CONTENT_SOURCE).toBe("static");
     expect(useApiContent).toBe(false);
   });
-  it("parses the env value", () => {
-    expect(__readContentSource(undefined)).toBe("static");
-    expect(__readContentSource("")).toBe("static");
-    expect(__readContentSource("weird")).toBe("static");
+  it("parses the env value; a missing value means the backend", () => {
+    expect(__readContentSource(undefined)).toBe("api");
+    expect(__readContentSource("")).toBe("api");
+    expect(__readContentSource("weird")).toBe("api");
+    expect(__readContentSource(" Static ")).toBe("static");
     expect(__readContentSource("API")).toBe("api");
     expect(__readContentSource(" auto ")).toBe("auto");
   });

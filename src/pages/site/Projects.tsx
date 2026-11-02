@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   ArrowRight,
   ArrowLeft,
@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
+import type { CaseRow } from "@/data/casesApi";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
@@ -36,8 +37,6 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs } from "@/data/faqsApi";
 import { usePrograms } from "@/data/sources/programs";
 import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
-import { BrideTrousseau } from "@/components/sections/BrideTrousseau";
-import { HomeSeasons } from "@/components/sections/HomeSeasons";
 import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
 import { Helmet } from "react-helmet-async";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
@@ -47,6 +46,7 @@ import { GEO_GOVERNORATES } from "@/data/geoPages";
 import { DAKAHLIA_CITIES } from "@/data/dakahliaCities";
 import { TagsRail } from "@/components/common/TagsRail";
 import { programHref } from "@/data/programLandings";
+import { isListedProgram } from "@/data/programScope";
 // Accordion imports kept for other uses
 import {
   Accordion,
@@ -60,7 +60,17 @@ const Projects = () => {
   const isRTL = lang === "ar";
   const reduce = useReducedMotion();
   // Published backend programs (static copy only when the API is unreachable).
-  const { programs, isLoading: programsLoading } = usePrograms();
+  const { programs: allPrograms, isLoading: programsLoading } = usePrograms();
+  // One list, from the backend: campaigns and projects have their own pages and are never repeated here.
+  const programs = useMemo(() => allPrograms.filter((p) => isListedProgram(p.slug)), [allPrograms]);
+  const programSlugs = useMemo(() => new Set(programs.map((p) => p.slug)), [programs]);
+  // Cases shown on this page belong to a program that is listed here (not to a hidden / stopped one).
+  const includeProgramCase = useCallback((c: CaseRow) => !!c.program_slug && programSlugs.has(c.program_slug), [programSlugs]);
+  const programNamesAr = programs.map((p) => p.ar.name).join("، ");
+  const programNamesEn = programs.map((p) => p.en.name).join(", ");
+  const programsSeoDescription = isRTL
+    ? `برامج مؤسسة اليسر الخيرية بالمنصورة والدقهلية: ${programs.slice(0, 7).map((p) => p.ar.name).join("، ")} — بحث اجتماعي قبل الصرف وتوثيق بالصور.`
+    : `Al-Yusr Charity programs in Mansoura and Dakahlia: ${programs.slice(0, 7).map((p) => p.en.name).join(", ")} — social assessment before spending and photo documentation.`;
   // Selected governorate tag — filters the GEO section so the page isn't
   // overwhelmed by 11+ huge cards. Defaults to Dakahlia (our home turf).
   const [activeGeo, setActiveGeo] = useState<string>(
@@ -180,7 +190,7 @@ const Projects = () => {
     }
     return isRTL
       ? [
-          { q: "ما هي أبواب التبرع المتاحة في مؤسسة اليسر؟", a: "بنوفّر مسارات تبرع لكل نية: صك أضحية، كرتونة عزومة شهرية، كيلو لحمة بلدي من مزارعنا الوقفية، زكاة المال، كفالة يتيم، تعليم (سبتمبر)، علاج وقوافل طبية، وصلات مياه، تجهيز عرائس، وحملة ستر للتسقيف والترميم." },
+          { q: "ما هي أبواب التبرع المتاحة في مؤسسة اليسر؟", a: `برامجنا الحالية: ${programNamesAr}. ولكل موسم حملاته، وتلاقيها في صفحة «حملاتنا».` },
           { q: "هل تبرعي يصل فعلًا للمستحقين؟", a: "نعم — كل تبرع يمر ببحث اجتماعي ميداني للأسر، يُسلَّم بكرامة لباب البيت، ويتم توثيقه بصور وفيديو يصلك عبر واتساب أو البريد بعد التنفيذ." },
           { q: "هل أحصل على إيصال رسمي بالتبرع؟", a: "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري برقم مرجعي تقدر تتبع به الحالة من صفحة «تتبع التبرع»." },
           { q: "إيه الفرق بين التبرع لبرنامج وبين التبرع لحالة موثّقة؟", a: "التبرع لبرنامج (مثل صك أضحية أو كرتونة عزومة) بيُوزَّع على أسر متعددة حسب الأكثر احتياجًا. التبرع لحالة موثّقة بيروح لحالة فردية بعينها مع متابعة نتيجتها." },
@@ -190,7 +200,7 @@ const Projects = () => {
           { q: "إزاي أتطوع أو أنضم لفريق العمل؟", a: "ادخل على صفحة حملات التطوع واختر حملة وقدّم على المقعد المناسب لمهاراتك. بنوفّر تدريب ميداني ومتابعة لكل متطوع جديد." },
         ]
       : [
-          { q: "What donation programs does Al-Yusr offer?", a: "We provide a track for every intention: Qurbani vouchers, monthly food box, fresh farm meat, Zakat, orphan sponsorship, education (September), healthcare and medical convoys, water connections, bride preparation, and the Sitr roofing & repair campaign." },
+          { q: "What donation programs does Al-Yusr offer?", a: `Our current programs: ${programNamesEn}. Seasonal campaigns are listed on the Campaigns page.` },
           { q: "Does my donation really reach the beneficiaries?", a: "Yes — every donation goes through field social assessment, dignified doorstep delivery, and is documented with photos and videos shared with you on WhatsApp or email after execution." },
           { q: "Will I receive an official receipt?", a: "An electronic receipt with a reference code is emailed to you instantly so you can track the case from our donation tracking page." },
           { q: "What is the difference between donating to a program and donating to a verified case?", a: "Program donations (e.g. a Qurbani voucher or food box) are distributed across multiple families by need. A verified case donation goes to one specific family with outcome follow-up." },
@@ -199,13 +209,13 @@ const Projects = () => {
           { q: "Is the foundation officially licensed?", a: "Al-Yusr Charity Foundation is licensed by the Ministry of Social Solidarity under license number 2665/2019, headquartered in Mansoura, Dakahlia." },
           { q: "How can I volunteer or join the field team?", a: "Visit our volunteer campaigns page, pick a campaign, and apply for the slot that matches your skills. We provide field training and follow-up for every new volunteer." },
         ];
-  }, [rawProgramsFaqs, isRTL]);
+  }, [rawProgramsFaqs, isRTL, programNamesAr, programNamesEn]);
 
   return (
     <PageLayout>
       <SEOHelmet
         title={isRTL ? "برامج اليسر الخيرية بالدقهلية | غذاء علاج تعليم مياه سكن" : "Al-Yusr Programs in Dakahlia | Food, Health, Education, Water, Shelter"}
-        description={isRTL ? "كل برامج مؤسسة اليسر الخيرية بالمنصورة والدقهلية: كرتونة العزومة، صك أضحية مضمون، زكاة، كفالة يتيم، تعليم، علاج، مياه، تجهيز عرائس وستر بيوت — توثيق بالصور وتواصل واتساب فوري." : "All Al-Yusr Foundation programs across Mansoura and Dakahlia: food box, guaranteed Qurbani, Zakat, orphan sponsorship, education, healthcare, water, bride trousseau and home shelter — photo-documented with instant WhatsApp support."}
+        description={programsSeoDescription}
         path="/programs"
       />
       <SiteSchemas />
@@ -602,7 +612,7 @@ const Projects = () => {
                   </div>
                 </div>
                 <span className="rounded-full border border-secondary/30 bg-secondary/15 px-3 py-1 text-xs font-black text-secondary">
-                  {Object.keys(activeGov.programs).length} {isRTL ? "برنامج نشط" : "active programs"}
+                  {Object.keys(activeGov.programs).filter((s) => programSlugs.has(s)).length} {isRTL ? "برنامج نشط" : "active programs"}
                 </span>
               </div>
 
@@ -635,7 +645,7 @@ const Projects = () => {
                     {DAKAHLIA_CITIES.map((c) => (
                       <Link
                         key={c.slug}
-                        to={`/dakahlia/${c.slug}/odhya`}
+                        to={`/dakahlia/${c.slug}/${c.programs.find((s) => programSlugs.has(s)) ?? programs[0]?.slug ?? ""}`}
                         data-source="programs-geo-city"
                         data-label={`dakahlia-${c.slug}`}
                         className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-extrabold text-primary transition hover:border-secondary/60 hover:bg-secondary/10 hover:-translate-y-0.5"
@@ -807,11 +817,8 @@ const Projects = () => {
         </div>
       </section>
 
-      {/* Bride trousseau campaign */}
-      <BrideTrousseau />
-
       {/* Field cases across all programs (live from the backend; hidden when there are none) */}
-      <LinkedCasesSection filter={{ linkedTo: "program" }} showOwner isRTL={isRTL} className="bg-muted/30"
+      <LinkedCasesSection filter={{ linkedTo: "program" }} showOwner variant="carousel" filterByOwner limit={30} include={includeProgramCase} isRTL={isRTL} className="bg-muted/30"
         title={isRTL ? "حالات بتتجمع لها التبرعات في برامجنا" : "Cases our programs are funding"}
         subtitle={isRTL ? "اختار حالة بعينها وتابع تحديثاتها بالصور لحد ما تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
     </PageLayout>

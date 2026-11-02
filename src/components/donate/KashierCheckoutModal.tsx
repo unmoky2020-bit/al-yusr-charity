@@ -78,9 +78,6 @@ export function KashierCheckoutModal({
   const aliveRef = useRef(false);
   const orderIdRef = useRef<string>("");
 
-  if (!orderIdRef.current || !isOpen) {
-    orderIdRef.current = orderId || `YSR-${Date.now().toString(36).toUpperCase()}`;
-  }
 
   const fireSuccess = () => {
     if (successFiredRef.current) return;
@@ -190,6 +187,9 @@ export function KashierCheckoutModal({
     }
 
     aliveRef.current = true;
+    // The reference to verify is the one the backend saved for THIS donation (passed in by the page).
+    // A value left over from an earlier render must never be used: GET /donations/track/{ref} would 404 forever.
+    orderIdRef.current = orderId || `YSR-${Date.now().toString(36).toUpperCase()}`;
     successFiredRef.current = false;
     verifyingRef.current = false;
     iframeLoadCount.current = 0;
