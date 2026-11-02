@@ -7,8 +7,8 @@ import { Crescent, Lantern, Star8, NightSky } from "@/components/campaigns/Ramad
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import RAMADAN_DEFAULTS from "@/data/campaignPages/ramadan";
 import yusrRamadanBox from "@/assets/yusr-ramadan-box.png";
-import yusrMeals from "@/assets/yusr-meals.jpg";
-import yusrDistribution from "@/assets/yusr-distribution-1.jpg";
+import yusrMeals from "@/assets/yusr-meals.webp";
+import yusrDistribution from "@/assets/yusr-distribution-1.webp";
 import farmHero from "@/assets/farm-hero.jpg";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";

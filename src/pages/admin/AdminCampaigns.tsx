@@ -28,7 +28,8 @@ const APP_STATUS: Record<ApplicationStatus, { ar: string; en: string; cls: strin
   waitlist:  { ar: "قائمة انتظار", en: "Waitlist", cls: "bg-secondary/30 text-primary" },
   attended:  { ar: "حضر",          en: "Attended", cls: "bg-primary/15 text-primary" },
   noshow:    { ar: "لم يحضر",      en: "No-show",  cls: "bg-muted text-muted-foreground" },
-  cancelled: { ar: "ألغى",         en: "Cancelled", cls: "bg-muted text-muted-foreground" },
+  withdrawn: { ar: "انسحب",        en: "Withdrawn", cls: "bg-muted text-muted-foreground" },
+  invited:   { ar: "مدعو",         en: "Invited",   cls: "bg-secondary/20 text-primary" },
 };
 
 const emptyForm = (): Partial<Campaign> => ({

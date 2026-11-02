@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { getCity, DAKAHLIA_CITIES } from "@/data/dakahliaCities";
+import { QURBANI_SEASON, daysUntilEid } from "@/data/qurbaniSeason";
 
 const PROGRAM_LABEL: Record<string, { ar: string; en: string }> = {
   odhya: { ar: "صك أضحية", en: "Qurbani share" },
@@ -22,16 +23,20 @@ const PROGRAM_LABEL: Record<string, { ar: string; en: string }> = {
 
 const QurbaniCity = () => {
   const { city: slug } = useParams<{ city: string }>();
-  const { lang } = useLang();
   const city = slug ? getCity(slug) : undefined;
   if (!city) return <Navigate to="/qurbani" replace />;
+  return <QurbaniCityView key={city.slug} city={city} />;
+};
+
+const QurbaniCityView = ({ city }: { city: NonNullable<ReturnType<typeof getCity>> }) => {
+  const { lang } = useLang();
 
   const isAr = lang === "ar";
   const name = city[lang];
   const url = `https://elyusr.org/qurbani/${city.slug}`;
   const title = isAr
-    ? `صك أضحية ${city.ar} 2026 | مضمون مع توثيق — مؤسسة اليسر`
-    : `Qurbani share in ${city.en} 2026 | Verified — Al-Yusr`;
+    ? `صك أضحية ${city.ar} ${QURBANI_SEASON.year} | مضمون مع توثيق — مؤسسة اليسر`
+    : `Qurbani share in ${city.en} ${QURBANI_SEASON.year} | Verified — Al-Yusr`;
   const desc = isAr
     ? `احجز صك أضحية ${city.ar} (الدقهلية) مع مؤسسة اليسر — ${city.copy.ar.intro}`
     : `Reserve a Qurbani share for ${city.en} (Dakahlia) with Al-Yusr — ${city.copy.en.intro}`;
@@ -39,14 +44,13 @@ const QurbaniCity = () => {
   // Other cities for internal linking
   const others = DAKAHLIA_CITIES.filter((c) => c.slug !== city.slug).slice(0, 8);
 
-  // Eid Al-Adha 2026: ~May 27, 2026. Live countdown for urgency.
-  const EID_DATE = useMemo(() => new Date("2026-05-27T05:00:00+02:00"), []);
+  // Next Eid al-Adha comes from the season config (src/data/qurbaniSeason.ts).
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 60_000);
     return () => clearInterval(id);
   }, []);
-  const daysLeft = Math.max(0, Math.ceil((EID_DATE.getTime() - now.getTime()) / 86_400_000));
+  const daysLeft = daysUntilEid(now.getTime());
 
   // City-level price tiers (EGP) — keep in sync with /donate.
   const TIERS = [
@@ -107,8 +111,8 @@ const QurbaniCity = () => {
                 lowPrice: "4500",
                 highPrice: "32000",
                 offerCount: 3,
-                availability: "https://schema.org/InStock",
-                validThrough: "2026-05-27",
+                availability: QURBANI_SEASON.bookingOpen ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
+                validThrough: QURBANI_SEASON.eidDate.slice(0, 10),
                 url: `https://elyusr.org/donate?program=odhya&city=${city.slug}`,
               },
             },
@@ -248,7 +252,7 @@ const QurbaniCity = () => {
       <section className="bg-background py-14">
         <div className="container mx-auto max-w-5xl px-4">
           <h2 className="text-2xl font-black text-primary md:text-3xl">
-            {isAr ? `أسعار صك أضحية ${city.ar} 2026` : `Qurbani share prices in ${city.en} 2026`}
+            {isAr ? `أسعار صك أضحية ${city.ar}` : `Qurbani share prices in ${city.en}`}
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-foreground/70">
             {isAr

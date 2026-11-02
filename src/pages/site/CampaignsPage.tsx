@@ -71,8 +71,8 @@ const AlternatingCard = memo(({
 import posterWater from "@/assets/poster-water.png";
 import yusrRamadanBox from "@/assets/yusr-ramadan-box.png";
 import posterEdu from "@/assets/poster-education.png";
-import markounPuzzle from "@/assets/markoun-puzzle.jpg";
-import posterOdhy from "@/assets/poster-odhya.png";
+import markounPuzzle from "@/assets/markoun-puzzle.webp";
+import posterOdhy from "@/assets/poster-odhya.webp";
 import foodBoxImg from "@/assets/program-food-new.jpg";
 
 

@@ -8,12 +8,12 @@
  */
 import { storiesApi as laravelStoriesApi, invalidateApiCache, type LaravelStory } from "@/data/laravelApi";
 import { apiErrorMessage, fetchItem, fetchList, sendJson } from "@/data/api/adminApiHelpers";
-import family from "@/assets/family-hope.jpg";
+import family from "@/assets/family-hope.webp";
 import hands from "@/assets/hands-sprout.jpg";
 import edu from "@/assets/program-education.jpg";
 import orph from "@/assets/program-orphans.jpg";
 import food from "@/assets/program-food.jpg";
-import health from "@/assets/program-health.jpg";
+import health from "@/assets/program-health.webp";
 import bride from "@/assets/yusr-bride.png";
 import heroChild from "@/assets/hero-child.jpg";
 

@@ -5,7 +5,7 @@ import { CampaignLandingShell } from "@/components/sections/CampaignLandingShell
 import { ProjectKindNote } from "@/components/campaigns/ProjectKind";
 import { BentoGallery } from "@/components/campaigns/shared";
 import { useLang } from "@/i18n/LangContext";
-import heroHealth from "@/assets/program-health.jpg";
+import heroHealth from "@/assets/program-health.webp";
 import prostheticsImg from "@/assets/Prosthetics.jpg";
 import medicineImg from "@/assets/axis-health.jpg";
 

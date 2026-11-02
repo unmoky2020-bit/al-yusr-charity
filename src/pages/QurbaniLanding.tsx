@@ -11,20 +11,20 @@ import { DAKAHLIA_CITIES } from "@/data/dakahliaCities";
 import { QurbaniCampaign } from "@/components/sections/QurbaniCampaign";
 import { FieldConvoysGallery } from "@/components/sections/FieldConvoysGallery";
 import { useState, useEffect } from "react";
-import cowSheep from "@/assets/qurbani-hero-trays.png";
-import qurbaniBanner from "@/assets/yusr-qurbani-banner.png";
+import cowSheep from "@/assets/qurbani-hero-trays.webp";
+import qurbaniBanner from "@/assets/yusr-qurbani-banner.webp";
 import { FAQ_AR, FAQ_EN } from "@/data/qurbaniFaq";
-import iconVet from "@/assets/program-health.png";
-import iconCam from "@/assets/qurbani-meat-quality.png";
+import iconVet from "@/assets/program-health.webp";
+import iconCam from "@/assets/qurbani-meat-quality.webp";
 import iconTruck from "@/assets/brand-truck.jpg";
 import iconReceipt from "@/assets/brand-card.jpg";
 import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
+import { QURBANI_SEASON, daysUntilEid } from "@/data/qurbaniSeason";
 
-const EID = new Date("2026-05-27T05:00:00+02:00").getTime();
 const useDays = () => {
-  const [d, setD] = useState(0);
+  const [d, setD] = useState(() => daysUntilEid());
   useEffect(() => {
-    const id = setInterval(() => setD(Math.max(0, Math.floor((EID - Date.now()) / 86400000))), 1000);
+    const id = setInterval(() => setD(daysUntilEid()), 60_000);
     return () => clearInterval(id);
   }, []);
   return d;
@@ -42,8 +42,8 @@ const QurbaniLanding = () => {
     <PageLayout>
       <SEOHelmet
         title={isAr
-          ? "صك أضحية 2026 بالدقهلية | مؤسسة اليسر"
-          : "Qurbani 2026 in Dakahlia | Al-Yusr"}
+          ? `صك أضحية ${QURBANI_SEASON.year} بالدقهلية | مؤسسة اليسر`
+          : `Qurbani ${QURBANI_SEASON.year} in Dakahlia | Al-Yusr`}
         description={isAr
           ? "احجز صك أضحية مضمون بالدقهلية مع اليسر: معاينة قبل الذبح، توثيق بالصور، وتوزيع يوم العيد على الأسر بالمنصورة."
           : "Book a verified Qurbani share in Dakahlia with Al-Yusr: pre-slaughter checks, photo proof, and same-day Eid delivery to families in Mansoura."}
@@ -51,12 +51,12 @@ const QurbaniLanding = () => {
         image={isAr ? "https://elyusr.org/og-qurbani-ar.jpg" : "https://elyusr.org/og-qurbani-en.jpg"}
       />
       <SiteSchemas />
-      <QurbaniSchema />
+      {QURBANI_SEASON.bookingOpen && <QurbaniSchema />}
       <DakahliaServiceSchema />
       <FAQSchema items={FAQ_AR} />
       <BreadcrumbSchema items={[
         { name: isAr ? "الرئيسية" : "Home", url: "https://elyusr.org/" },
-        { name: isAr ? "صك أضحية الدقهلية 2026" : "Dakahlia Qurbani 2026", url: "https://elyusr.org/qurbani" },
+        { name: isAr ? `صك أضحية الدقهلية ${QURBANI_SEASON.year}` : `Dakahlia Qurbani ${QURBANI_SEASON.year}`, url: "https://elyusr.org/qurbani" },
         { name: isAr ? "كيف تصل أضحيتك" : "How it works", url: "https://elyusr.org/qurbani#how" },
         { name: isAr ? "مدن الدقهلية" : "Dakahlia cities", url: "https://elyusr.org/qurbani#cities" },
         { name: isAr ? "الأسئلة الشائعة" : "FAQ", url: "https://elyusr.org/qurbani#faq" },
@@ -74,7 +74,7 @@ const QurbaniLanding = () => {
           <div className="flex justify-center text-primary-foreground/70">
             <Breadcrumbs items={[
               { name: isAr ? "الرئيسية" : "Home", href: "/" },
-              { name: isAr ? "صك أضحية الدقهلية 2026" : "Dakahlia Qurbani 2026" },
+              { name: isAr ? `صك أضحية الدقهلية ${QURBANI_SEASON.year}` : `Dakahlia Qurbani ${QURBANI_SEASON.year}` },
             ]} />
           </div>
 
@@ -85,12 +85,14 @@ const QurbaniLanding = () => {
             <div className="rounded-2xl border-2 border-[hsl(45_85%_55%)]/60 bg-[hsl(152_55%_12%)]/85 p-5 text-center shadow-card">
               <div className="inline-flex items-center justify-center gap-2 rounded-full border border-[hsl(45_85%_55%)]/60 bg-[hsl(45_85%_55%)]/15 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[hsl(45_85%_75%)]">
                 <AlertTriangle className="h-3.5 w-3.5" />
-                {isAr ? "حجز صكوك الأضحية لموسم 2026 انتهى" : "Qurbani 2026 booking is complete"}
+                {QURBANI_SEASON.bookingOpen
+                  ? (isAr ? `حجز صكوك أضحية ${QURBANI_SEASON.year} مفتوح` : `Qurbani ${QURBANI_SEASON.year} booking is open`)
+                  : (isAr ? `حجز صكوك أضحية ${QURBANI_SEASON.year} هيفتح قريب` : `Qurbani ${QURBANI_SEASON.year} booking opens soon`)}
               </div>
               <p className="mt-3 text-sm font-bold leading-relaxed text-primary-foreground/90 md:text-base">
                 {isAr
-                  ? "تقدر تكمل دعمك للمزرعة الوقفية اللي بتطعّم الأسر طول السنة."
-                  : "You can keep giving by supporting our endowment farm that feeds families year-round."}
+                  ? "هنعلن ميعاد الحجز هنا. ولحد ده الوقت تقدر تدعم المزرعة الوقفية اللي بتطعّم الأسر طول السنة."
+                  : "We'll announce the booking date here. Meanwhile you can support our endowment farm that feeds families year-round."}
               </p>
               <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
                 <Link
@@ -205,13 +207,13 @@ const QurbaniLanding = () => {
           {/* Countdown footer */}
           <div className="mx-auto mt-8 max-w-md text-center text-primary-foreground/85">
             <span className="font-mono text-3xl font-black text-secondary">{days}</span>
-            <span className="mx-2 text-base font-extrabold">{isAr ? "يوم على عيد الأضحى ٢٠٢٦" : "days to Eid Al-Adha 2026"}</span>
+            <span className="mx-2 text-base font-extrabold">{isAr ? `يوم تقريبًا على عيد الأضحى ${QURBANI_SEASON.year}` : `days (approx.) to Eid al-Adha ${QURBANI_SEASON.year}`}</span>
           </div>
         </div>
       </section>
 
       {/* Goals & countdown reuse */}
-      <QurbaniCampaign />
+      {QURBANI_SEASON.bookingOpen && <QurbaniCampaign />}
 
       {/* Sticky in-page nav — keeps users oriented across long content */}
       <nav
@@ -331,10 +333,12 @@ const QurbaniLanding = () => {
           <div className="text-center md:text-start">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-accent">
               <Sparkles className="h-3 w-3" />
-              {isAr ? "حملة العيد الكبير 2026" : "Eid al-Adha 2026 campaign"}
+              {isAr ? `حملة العيد الكبير ${QURBANI_SEASON.year}` : `Eid al-Adha ${QURBANI_SEASON.year} campaign`}
             </span>
             <h2 className="mt-3 text-3xl font-black leading-tight text-primary md:text-5xl">
-              {isAr ? "سارع بحجز صك أضحيتك قبل ما يخلص الوقت" : "Hurry — reserve your Qurbani before time runs out"}
+              {QURBANI_SEASON.bookingOpen
+                ? (isAr ? "سارع بحجز صك أضحيتك قبل ما يخلص الوقت" : "Hurry — reserve your Qurbani before time runs out")
+                : (isAr ? "أضحيتك مع اليسر: معاينة وتوثيق لحد باب البيت" : "Your Qurbani with Al-Yusr: inspected and documented to the doorstep")}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm font-bold text-foreground/75 md:mx-0 md:text-base">
               {isAr
@@ -376,7 +380,7 @@ const QurbaniLanding = () => {
           >
             <img
               src={qurbaniBanner}
-              alt={isAr ? "أضحيتك عندنا غير — مؤسسة اليسر الخيرية، احجز صك أضحية ٢٠٢٦" : "Your Qurbani is different with us — Al-Yusr Charity, reserve your 2026 share"}
+              alt={isAr ? "أضحيتك عندنا غير — مؤسسة اليسر الخيرية، احجز صك أضحية" : "Your Qurbani is different with us — Al-Yusr Charity, reserve your 2026 share"}
               width={1920} height={812}
               loading="lazy" decoding="async"
               className="h-auto w-full object-cover transition group-hover:scale-[1.02]"
@@ -384,7 +388,7 @@ const QurbaniLanding = () => {
           </Link>
         </div>
       </section>
-      <StickyQurbaniCTA donateHref="/donate?program=odhya" deadline="2026-05-24T23:59:00+02:00" />
+      <StickyQurbaniCTA donateHref={QURBANI_SEASON.bookingOpen ? "/donate?program=odhya" : "/farm"} />
     </PageLayout>
   );
 };

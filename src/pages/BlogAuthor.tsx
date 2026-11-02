@@ -12,11 +12,15 @@ import { authors, getAuthor, authorOfPost } from "@/data/blogTaxonomy";
 
 const BlogAuthor = () => {
   const { slug } = useParams<{ slug: string }>();
+  if (!slug || !authors.find((a) => a.slug === slug)) return <Navigate to="/blog" replace />;
+  return <BlogAuthorView key={slug} slug={slug} />;
+};
+
+const BlogAuthorView = ({ slug }: { slug: string }) => {
   const { lang, t } = useLang();
   const isRTL = lang === "ar";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
-  if (!slug || !authors.find((a) => a.slug === slug)) return <Navigate to="/blog" replace />;
   const author = getAuthor(slug)!;
   const c = author[lang];
   const baseUrl = "https://elyusr.org";

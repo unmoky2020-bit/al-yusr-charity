@@ -8,8 +8,8 @@ import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import DHILL_DEFAULTS from "@/data/campaignPages/dhill";
 import yusrWater from "@/assets/yusr-water.png";
-import yusrDistribution from "@/assets/yusr-distribution-1.jpg";
-import yusrMeals from "@/assets/yusr-meals.jpg";
+import yusrDistribution from "@/assets/yusr-distribution-1.webp";
+import yusrMeals from "@/assets/yusr-meals.webp";
 import posterWater from "@/assets/poster-water.png";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";

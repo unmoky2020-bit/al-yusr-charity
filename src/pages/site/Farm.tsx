@@ -12,13 +12,13 @@ import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { useProjectPage } from "@/hooks/useProjectPage";
 import FARM_DEFAULTS from "@/data/projectPages/farm";
 import type { StatItem } from "@/data/campaignPages/types";
-import farmHero from "@/assets/qurbani-cow-sheep.png";
-import imgQurbani from "@/assets/qurbani-meat-quality.png";
+import farmHero from "@/assets/qurbani-cow-sheep.webp";
+import imgQurbani from "@/assets/qurbani-meat-quality.webp";
 import imgCattleTruck from "@/assets/field/qurbani-2024-cattle-truck.jpg";
 import { WaqfCycle } from "@/components/campaigns/WaqfCycle";
 import { PROJECT_KINDS } from "@/components/campaigns/ProjectKind";
 import imgMeatTrays from "@/assets/yusr-qurbani-pricing.png";
-import imgTakrimVan from "@/assets/qurbani-trusted-source.png";
+import imgTakrimVan from "@/assets/qurbani-trusted-source.webp";
 import { FieldConvoysGallery } from "@/components/sections/FieldConvoysGallery";
 
 /**

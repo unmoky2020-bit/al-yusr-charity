@@ -6,8 +6,8 @@ import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
 import imgShelter from "@/assets/poster-water.png";
 import imgWater from "@/assets/poster-water.png";
 import imgRamadan from "@/assets/yusr-ramadan-box.png";
-import imgMeat from "@/assets/poster-meat.png";
-import imgQurbani from "@/assets/qurbani-hero-trays.png";
+import imgMeat from "@/assets/poster-meat.webp";
+import imgQurbani from "@/assets/qurbani-hero-trays.webp";
 import imgSchool from "@/assets/poster-education.png";
 
 /**

@@ -4,8 +4,8 @@ import { ShieldCheck } from "lucide-react";
 import { getLucideIcon } from "@/lib/lucide-icon";
 import heroSad from "@/assets/hero-girl-start.webp";
 import heroHappy from "@/assets/hero-happy-family-new.webp";
-import decoVan from "@/assets/hero-deco-van-new.png";
-import decoVan2 from "@/assets/hero-deco-van-2.png";
+import decoVan from "@/assets/hero-deco-van-new.webp";
+import decoVan2 from "@/assets/hero-deco-van-2.webp";
 import logoCircle from "@/assets/logo-circle.png";
 import { useLang } from "@/i18n/LangContext";
 import { gsap } from "gsap";
@@ -328,7 +328,6 @@ export const Hero = () => {
                 marginBottom: 0,
               }}
               decoding="async"
-              // @ts-expect-error — React 18
               fetchpriority="high"
             />
           </div>
@@ -361,7 +360,6 @@ export const Hero = () => {
                 marginBottom: 0,
               }}
               decoding="async"
-              // @ts-expect-error — high priority
               fetchpriority="high"
             />
 

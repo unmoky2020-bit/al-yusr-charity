@@ -8,8 +8,8 @@ import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import ATHAR_DEFAULTS from "@/data/campaignPages/athar";
 import posterEdu from "@/assets/poster-education.png";
-import classroom from "@/assets/brand-poster-classroom.jpg";
-import yusrDistribution from "@/assets/yusr-distribution-1.jpg";
+import classroom from "@/assets/brand-poster-classroom.webp";
+import yusrDistribution from "@/assets/yusr-distribution-1.webp";
 import axisEdu from "@/assets/axis-education.jpg";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";

@@ -2221,6 +2221,9 @@ export interface AboutUsHero {
   donate_url?: string | null;
   story_label_ar?: string | null;
   story_label_en?: string | null;
+  /** Legacy single-language button labels some older backend rows still use. */
+  donate_button_text?: string | null;
+  story_button_text?: string | null;
   registration_number?: string | null;
 }
 
@@ -2287,7 +2290,9 @@ export interface AboutUsStory {
   mission_en?: string | null;
   mission?: {
     title_ar?: string | null;
+    title_en?: string | null;
     description_ar?: string | null;
+    description_en?: string | null;
   };
   goals_ar?: string[];
   goals?: {

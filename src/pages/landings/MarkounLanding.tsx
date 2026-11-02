@@ -35,12 +35,12 @@ import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { toast } from "sonner";
 
-import posterFurniture from "@/assets/markoun-poster-furniture.png";
-import posterClothes from "@/assets/markoun-poster-clothes.png";
+import posterFurniture from "@/assets/markoun-poster-furniture.webp";
+import posterClothes from "@/assets/markoun-poster-clothes.webp";
 import posterMeds from "@/assets/markoun-poster-meds.png";
 import posterDelivery from "@/assets/markoun-poster-delivery.png";
 import posterMedBottle from "@/assets/markoun-poster-medbottle.png";
-import markounFurniture from "@/assets/markoun-furniture.jpg";
+import markounFurniture from "@/assets/markoun-furniture.webp";
 import asasMarqun from "@/assets/asas-marqun.jpg";
 import { HadithBlock } from "@/components/campaigns/HadithBlock";
 import { useCampaignPage } from "@/hooks/useCampaignPage";

@@ -1,21 +1,21 @@
-import odhya from "@/assets/poster-odhya.png";
+import odhya from "@/assets/poster-odhya.webp";
 import zakat from "@/assets/program-zakat-new.jpg";
-import meat from "@/assets/poster-meat.png";
+import meat from "@/assets/poster-meat.webp";
 import water from "@/assets/program-water-new.jpg";
 import box from "@/assets/program-food-new.jpg";
 import education from "@/assets/poster-education.png";
-import bride from "@/assets/poster-bride.png";
+import bride from "@/assets/poster-bride.webp";
 import volunteer from "@/assets/poster-volunteer.png";
 import shelter from "@/assets/brand-poster-frame.jpg";
 import orphans from "@/assets/program-orphans.jpg";
-import health from "@/assets/program-health.png";
+import health from "@/assets/program-health.webp";
 import Prosthetics from "@/assets/Prosthetics.jpg";
 import kitchen from "@/assets/program-food.jpg";
-import markounWardrobe from "@/assets/markoun-poster-furniture.png";
-import markounPuzzle from "@/assets/markoun-puzzle.jpg";
+import markounWardrobe from "@/assets/markoun-poster-furniture.webp";
+import markounPuzzle from "@/assets/markoun-puzzle.webp";
 import posterDelivery from "@/assets/markoun-poster-delivery.png";
 import posterMedBottle from "@/assets/markoun-poster-medbottle.png";
-import markounFurniture from "@/assets/markoun-furniture.jpg";
+import markounFurniture from "@/assets/markoun-furniture.webp";
 
 /**
  * Content taxonomy:

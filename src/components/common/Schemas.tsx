@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { QURBANI_SEASON } from "@/data/qurbaniSeason";
 
 /** Site-wide Organization, LocalBusiness & WebSite schema injection.
  * Targets the keyword "اليسر" for Egyptian search dominance.
@@ -165,15 +166,15 @@ export const BreadcrumbSchema = ({ items }: BreadcrumbProps) => (
   </Helmet>
 );
 
-/** Qurbani (Eid 2026) product/offer schema — boosts local "صك أضحية" search. */
+/** Qurbani product/offer schema. Render only while booking is open (see qurbaniSeason.ts). */
 export const QurbaniSchema = () => (
   <Helmet>
     <script type="application/ld+json">{JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Product",
-      "@id": "https://elyusr.org/#qurbani-2026",
-      name: "صك أضحية العيد 2026 — الدقهلية والمنصورة",
-      alternateName: "Qurbani share Eid al-Adha 2026 — Dakahlia",
+      "@id": `https://elyusr.org/#qurbani-${QURBANI_SEASON.year}`,
+      name: `صك أضحية العيد ${QURBANI_SEASON.year} — الدقهلية والمنصورة`,
+      alternateName: `Qurbani share Eid al-Adha ${QURBANI_SEASON.year} — Dakahlia`,
       description: "صك أضحية مضمون مع معاينة قبل الذبح وتوثيق بالصور والفيديو، يُوزَّع على الأسر المستحقة في الدقهلية: المنصورة، ميت غمر، بلقاس، دكرنس، شربين، أجا، السنبلاوين، المطرية.",
       image: "https://elyusr.org/og-image.jpg",
       brand: { "@type": "Organization", name: "مؤسسة اليسر الخيرية" },
@@ -197,7 +198,7 @@ export const QurbaniSchema = () => (
         offerCount: 3,
         availability: "https://schema.org/InStock",
         url: "https://elyusr.org/donate?program=odhya",
-        validThrough: "2026-05-27",
+        validThrough: QURBANI_SEASON.eidDate.slice(0, 10),
         seller: { "@id": "https://elyusr.org/#org" },
       },
     })}</script>

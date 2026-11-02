@@ -20,7 +20,7 @@ import { VolunteerJourney } from "@/components/sections/VolunteerJourney";
 import { toast } from "@/hooks/use-toast";
 import { track } from "@/lib/track";
 import { volunteersApi } from "@/data/laravelApi";
-import imgField1 from "@/assets/yusr-distribution-1.jpg";
+import imgField1 from "@/assets/yusr-distribution-1.webp";
 
 const TRACKS_AR = [
   { I: Truck, t: "قوافل التوزيع الميداني", d: "شارك بوقتك في الميدان وساعدنا في توصيل كراتين الغذاء والمساعدات إلى أبواب الأسر في قرى الدقهلية.", tag: "مناسب: لكل من يملك يومًا أو نصف يوم", area: "field" },

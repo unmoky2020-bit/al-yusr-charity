@@ -1,8 +1,10 @@
 import { volunteerCampaignsApi, apiFetch, invalidateApiCache, type LaravelVolunteerCampaign } from "@/data/laravelApi";
 import { fetchList, unwrapItem, unwrapList } from "@/data/api/adminApiHelpers";
 
-export type CampaignStatus = "open" | "closed" | "completed" | "draft";
-export type ApplicationStatus = "pending" | "accepted" | "rejected" | "waitlisted";
+export type CampaignStatus = "open" | "closed" | "completed" | "draft" | "cancelled";
+/** Matches the backend enum on volunteer_campaign_applications.status (migration 2026_10_30_140000). */
+export type ApplicationStatus =
+  | "invited" | "pending" | "approved" | "rejected" | "withdrawn" | "waitlist" | "attended" | "noshow";
 
 export type Campaign = {
   id: string;
@@ -177,7 +179,7 @@ export const getCampaignById = async (id: string): Promise<Campaign | null> => {
   }
 };
 
-export const setCampaignStatus = async (id: string, status: CampaignStatus | "cancelled") => {
+export const setCampaignStatus = async (id: string, status: CampaignStatus) => {
   await apiFetch(`/volunteer-campaigns/${id}`, { method: "PUT", body: { status } });
   invalidateApiCache("/volunteer-campaigns");
 };
@@ -234,7 +236,7 @@ export const submitApplication = async (a: ApplicationInsert) => {
 
 export const setApplicationStatus = async (
   id: string,
-  status: ApplicationStatus | "approved" | "attended" | "noshow",
+  status: ApplicationStatus,
   extras: { assigned_role?: string; shift?: string } = {}
 ) => {
   await apiFetch(`/volunteer-applications/${id}`, {

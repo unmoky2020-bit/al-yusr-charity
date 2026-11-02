@@ -1,6 +1,6 @@
 import { CampaignLandingShell } from "@/components/sections/CampaignLandingShell";
 import { useLang } from "@/i18n/LangContext";
-import poster from "@/assets/markoun-poster-furniture.png";
+import poster from "@/assets/markoun-poster-furniture.webp";
 
 const CharityMansouraLanding = () => {
   const { lang } = useLang();

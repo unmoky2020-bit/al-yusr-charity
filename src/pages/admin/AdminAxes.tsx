@@ -368,7 +368,7 @@ export const AdminAxes: React.FC = () => {
       const updatedAxes = [...axes];
 
       // Fetch fresh server axes to avoid duplicate creates and slug collisions
-      const freshServerAxes = await axesApi.list().catch(() => []);
+      const freshServerAxes = await axesApi.list().catch((): LaravelAxis[] => []);
       const serverMapBySlug = new Map(freshServerAxes.map((s) => [s.slug, s]));
       const serverMapById = new Map(freshServerAxes.map((s) => [s.id, s]));
 

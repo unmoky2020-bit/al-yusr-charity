@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Heart, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { LazyImage } from "@/components/common/LazyImage";
-import p1 from "@/assets/poster-odhya.png";
+import p1 from "@/assets/poster-odhya.webp";
 import p2 from "@/assets/poster-zakat.png";
-import p3 from "@/assets/poster-meat.png";
+import p3 from "@/assets/poster-meat.webp";
 import p4 from "@/assets/poster-water.png";
 import p5 from "@/assets/poster-box.png";
 import p6 from "@/assets/poster-education.png";
-import p7 from "@/assets/poster-bride.png";
+import p7 from "@/assets/poster-bride.webp";
 import p8 from "@/assets/poster-volunteer.png";
 
 const images = [p1, p2, p3, p4, p5, p6, p7, p8];

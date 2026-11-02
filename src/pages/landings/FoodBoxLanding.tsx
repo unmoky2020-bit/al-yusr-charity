@@ -8,9 +8,9 @@ import { useCampaignPage } from "@/hooks/useCampaignPage";
 import FOOD_DEFAULTS from "@/data/campaignPages/food";
 import heroCarton from "@/assets/hero-carton-opened.webp";
 import cartonStack from "@/assets/brand-carton-stack.png";
-import meatPlates from "@/assets/poster-meat.png";
-import mealsBoxes from "@/assets/yusr-orphans-meals.jpg";
-import iftarTrays from "@/assets/yusr-meals.jpg";
+import meatPlates from "@/assets/poster-meat.webp";
+import mealsBoxes from "@/assets/yusr-orphans-meals.webp";
+import iftarTrays from "@/assets/yusr-meals.webp";
 import doorstep from "@/assets/program-food-new.jpg";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";

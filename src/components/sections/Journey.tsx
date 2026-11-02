@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, Send, ArrowRight, ArrowLeft, Sparkles, ShieldCheck, Users, ChevronRight, ChevronLeft } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
-import family from "@/assets/family-hope.jpg";
+import family from "@/assets/family-hope.webp";
 import hands from "@/assets/hands-sprout.jpg";
 import hero from "@/assets/hero-child.jpg";
 import edu from "@/assets/program-education.jpg";

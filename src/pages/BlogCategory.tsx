@@ -14,12 +14,17 @@ const PAGE_SIZE = 9;
 
 const BlogCategory = () => {
   const { slug } = useParams<{ slug: string }>();
+  const validSlugs = axes.map((a) => a.slug);
+  if (!slug || !validSlugs.includes(slug as AxisSlug)) return <Navigate to="/blog" replace />;
+  // key resets page/sort state when moving between categories
+  return <BlogCategoryView key={slug} slug={slug} />;
+};
+
+const BlogCategoryView = ({ slug }: { slug: string }) => {
   const { lang, t } = useLang();
   const isRTL = lang === "ar";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
-  const validSlugs = axes.map((a) => a.slug);
-  if (!slug || !validSlugs.includes(slug as AxisSlug)) return <Navigate to="/blog" replace />;
   const axis = getAxis(slug as AxisSlug);
 
   const baseUrl = "https://elyusr.org";

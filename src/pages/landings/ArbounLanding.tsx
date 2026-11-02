@@ -39,9 +39,9 @@ import { GalleryCarousel } from "@/components/sections/GalleryCarousel";
 import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
 
 import posterEducation from "@/assets/poster-education.png";
-import yusrDistribution from "@/assets/yusr-distribution-1.jpg";
-import yusrMeals from "@/assets/yusr-meals.jpg";
-import markounFurniture from "@/assets/markoun-furniture.jpg";
+import yusrDistribution from "@/assets/yusr-distribution-1.webp";
+import yusrMeals from "@/assets/yusr-meals.webp";
+import markounFurniture from "@/assets/markoun-furniture.webp";
 import { HadithBlock } from "@/components/campaigns/HadithBlock";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import ARBOUN_DEFAULTS from "@/data/campaignPages/arboun";

@@ -1,8 +1,8 @@
 import { Clock, ShieldCheck, Eye, Gem, MessageCircle, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import hourglass from "@/assets/qurbani-hourglass.png";
-import iconCow from "@/assets/poster-meat.png";
-import iconSheep from "@/assets/poster-meat.png";
+import hourglass from "@/assets/qurbani-hourglass.webp";
+import iconCow from "@/assets/poster-meat.webp";
+import iconSheep from "@/assets/poster-meat.webp";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { track } from "@/lib/track";

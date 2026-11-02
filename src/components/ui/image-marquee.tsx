@@ -157,7 +157,6 @@ const Tile = ({
       alt={img.alt}
       loading="lazy"
       decoding="async"
-      // @ts-expect-error - valid HTML attr, React types lag behind
       fetchpriority="low"
       draggable={false}
       className="h-full w-full object-cover"

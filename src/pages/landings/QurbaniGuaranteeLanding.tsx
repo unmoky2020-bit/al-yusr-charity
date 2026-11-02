@@ -1,7 +1,7 @@
 import { CampaignLandingShell } from "@/components/sections/CampaignLandingShell";
-import qurbaniMeatQuality from "@/assets/qurbani-meat-quality.png";
-import qurbaniTrustedSource from "@/assets/qurbani-trusted-source.png";
-import qurbaniCowSheep from "@/assets/qurbani-cow-sheep.png";
+import qurbaniMeatQuality from "@/assets/qurbani-meat-quality.webp";
+import qurbaniTrustedSource from "@/assets/qurbani-trusted-source.webp";
+import qurbaniCowSheep from "@/assets/qurbani-cow-sheep.webp";
 import meatTrays from "@/assets/qurbani-meat-trays.jpg";
 
 const QurbaniGuaranteeLanding = () => (
@@ -44,7 +44,7 @@ const QurbaniGuaranteeLanding = () => (
       { src: meatTrays, altAr: "صواني لحم أضحية معبّأة قبل التوزيع بكفر الشيخ", altEn: "Packed Qurbani meat trays before delivery in Kafr El Sheikh" },
     ]}
     relatedLinks={[
-      { href: "/qurbani", ar: "صك أضحية الدقهلية ٢٠٢٦", en: "Dakahlia Qurbani 2026" },
+      { href: "/qurbani", ar: "صك أضحية الدقهلية", en: "Dakahlia Qurbani" },
       { href: "/qurbani/mansoura", ar: "أضحية المنصورة", en: "Mansoura Qurbani" },
       { href: "/qurbani/mit-ghamr", ar: "أضحية ميت غمر", en: "Mit Ghamr Qurbani" },
       { href: "/qurbani/talkha", ar: "أضحية طلخا", en: "Talkha Qurbani" },
@@ -62,7 +62,7 @@ const QurbaniGuaranteeLanding = () => (
       ],
       en: [
         { q: "What is the quality guarantee?", a: "Al-Yusr is the only foundation in Egypt issuing a written guarantee on weight and health. Any defect after slaughter triggers a full replacement Qurbani." },
-        { q: "What are 2026 Qurbani prices?", a: "1/7 cow: EGP 1,400 — Whole sheep: EGP 4,500 — Whole cow: EGP 9,800. All services included." },
+        { q: "What are Qurbani prices?", a: "1/7 cow: EGP 1,400 — Whole sheep: EGP 4,500 — Whole cow: EGP 9,800. All services included." },
         { q: "Can I attend the slaughter?", a: "Yes — visit our Dakahlia endowment farm by appointment, or receive a live video of your specific animal." },
         { q: "Who exactly receives the meat?", a: "Vetted families in Mansoura, Mit Ghamr, Talkha, Belqas, Aga, Sinbillawein and selected Kafr El Sheikh villages — via our social-work team's lists." },
         { q: "Can I reserve from abroad?", a: "Yes — book online from any country via Kashier or InstaPay; you receive a tracking number, photos and video on WhatsApp/email." },

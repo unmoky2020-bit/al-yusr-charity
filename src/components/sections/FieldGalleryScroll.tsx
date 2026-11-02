@@ -6,15 +6,15 @@ import { BentoCell, BentoGrid, ContainerScroll } from "@/components/ui/hero-gall
 import { useLang } from "@/i18n/LangContext";
 
 import food from "@/assets/program-food.jpg";
-import health from "@/assets/program-health.png";
+import health from "@/assets/program-health.webp";
 import orphans from "@/assets/program-orphans.jpg";
 import truck from "@/assets/brand-truck.jpg";
-import family from "@/assets/family-hope.jpg";
-import classroom from "@/assets/brand-poster-classroom.jpg";
+import family from "@/assets/family-hope.webp";
+import classroom from "@/assets/brand-poster-classroom.webp";
 import bags from "@/assets/brand-bags.jpg";
 import girl from "@/assets/brand-girl-orange.jpg";
 import farm from "@/assets/farm-hero.jpg";
-import volunteerField from "@/assets/poster-volunteer-field.png";
+import volunteerField from "@/assets/poster-volunteer-field.webp";
 import waterDrop from "@/assets/yusr-water.png";
 import shelterHome from "@/assets/poster-water.png";
 

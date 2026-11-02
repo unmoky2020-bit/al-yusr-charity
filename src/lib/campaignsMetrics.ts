@@ -79,11 +79,9 @@ export const useCampaignsMetrics = () => {
   const [state, setState] = useState<CampaignsMetricsState>(() => load());
   useEffect(() => {
     const refresh = () => setState(load());
-    const onStorage = (e: StorageEvent) => { if (e.key === KEY) refresh(); };
-    window.addEventListener("storage", onStorage);
+    // Metrics live in memory only, so there is no cross-tab "storage" event to follow.
     window.addEventListener("alyusr:campaigns-metrics", refresh as EventListener);
     return () => {
-      window.removeEventListener("storage", onStorage);
       window.removeEventListener("alyusr:campaigns-metrics", refresh as EventListener);
     };
   }, []);

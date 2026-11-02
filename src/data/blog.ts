@@ -3,13 +3,13 @@ import boxImg from "@/assets/poster-box.png";
 import volImg from "@/assets/poster-volunteer.png";
 import eduImg from "@/assets/poster-education.png";
 import zakatImg from "@/assets/poster-zakat.png";
-import meatImg from "@/assets/poster-meat.png";
-import odhyaImg from "@/assets/poster-odhya.png";
-import brideImg from "@/assets/poster-bride.png";
+import meatImg from "@/assets/poster-meat.webp";
+import odhyaImg from "@/assets/poster-odhya.webp";
+import brideImg from "@/assets/poster-bride.webp";
 import orphansImg from "@/assets/program-orphans.jpg";
-import healthImg from "@/assets/program-health.jpg";
+import healthImg from "@/assets/program-health.webp";
 import foodImg from "@/assets/program-food.jpg";
-import classroomImg from "@/assets/brand-poster-classroom.jpg";
+import classroomImg from "@/assets/brand-poster-classroom.webp";
 import frameImg from "@/assets/brand-poster-frame.jpg";
 import truckImg from "@/assets/brand-truck.jpg";
 import vanImg from "@/assets/hero-deco-van-2.webp";
@@ -20,7 +20,7 @@ import aboutImg from "@/assets/about-hero.jpg";
 import convoy2026Img from "@/assets/field/convoy-2026-pickup-loaded.jpg";
 import convoyDayImg from "@/assets/field/convoy-2026-day-distribution.jpg";
 import qurbaniPenImg from "@/assets/field/qurbani-2024-cattle-pen.jpg";
-import markounFurnitureImg from "@/assets/markoun-poster-furniture.png";
+import markounFurnitureImg from "@/assets/markoun-poster-furniture.webp";
 import posterDeliveryImg from "@/assets/markoun-poster-delivery.png";
 
 export type BlogPost = {

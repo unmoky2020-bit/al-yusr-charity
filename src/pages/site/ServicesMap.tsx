@@ -1,7 +1,8 @@
 import { useState, useMemo, useCallback, memo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs, type FaqItem } from "@/data/faqsApi";
-import { useServicesList, type ServiceCard } from "@/hooks/useServices";
+import { useServicesList } from "@/hooks/useServices";
+import type { ServiceCard } from "@/data/servicesApi";
 import { Helmet } from "react-helmet-async";
 import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
@@ -177,7 +178,8 @@ const ServicesMap = () => {
     if (activeSector === "all") return serviceList;
     return serviceList.filter((s) => {
       const sec = SERVICE_SECTOR_MAP[s.slug];
-      const sectorId = s.sector && s.sector !== "general" ? s.sector : sec?.id;
+      const ownSector = (s as { sector?: string }).sector;
+      const sectorId = ownSector && ownSector !== "general" ? ownSector : sec?.id;
       return sectorId === activeSector;
     });
   }, [activeSector, serviceList]);

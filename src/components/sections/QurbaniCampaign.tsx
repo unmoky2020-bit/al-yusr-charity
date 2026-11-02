@@ -4,30 +4,28 @@ import { Heart, Beef, Users, Sparkles, ShieldCheck, MapPin, Truck, Stethoscope, 
 import { useLang } from "@/i18n/LangContext";
 import { Button } from "@/components/ui/button";
 import qurbaniTrustedSource from "@/assets/qurbani-meat-quality-flyer.jpg";
-import qurbaniMeatQuality from "@/assets/qurbani-meat-quality.png";
+import qurbaniMeatQuality from "@/assets/qurbani-meat-quality.webp";
 // Fallback tiny transparent PNG to avoid failing the build if the
 // original `qurbani-pricing-2026.png` asset is missing during CI/build.
 // This keeps the ImageMarquee runnable and will be replaced at runtime
 // if the real image exists in the assets folder or public path.
 const qurbaniPricing = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQImWNgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=";
-import iconCowCard from "@/assets/poster-meat.png";
-import iconSheepCard from "@/assets/poster-meat.png";
+import iconCowCard from "@/assets/poster-meat.webp";
+import iconSheepCard from "@/assets/poster-meat.webp";
 import iconSharesCard from "@/assets/brand-can.png";
-import qurbaniCowSheep from "@/assets/qurbani-cow-sheep.png";
+import qurbaniCowSheep from "@/assets/qurbani-cow-sheep.webp";
 import qurbaniMeatTrays from "@/assets/qurbani-meat-trays.jpg";
-import qurbaniHeroTrays from "@/assets/qurbani-hero-trays.png";
-import qurbaniTrustedSrc from "@/assets/qurbani-trusted-source.png";
+import qurbaniHeroTrays from "@/assets/qurbani-hero-trays.webp";
+import qurbaniTrustedSrc from "@/assets/qurbani-trusted-source.webp";
 import farmHero from "@/assets/farm-hero.jpg";
-import meatFlyer from "@/assets/meat-flyer.png";
+import meatFlyer from "@/assets/meat-flyer.webp";
 import odhyaFlyer from "@/assets/odhya-flyer.png";
-import yusrQurbaniBanner from "@/assets/yusr-qurbani-banner.png";
+import yusrQurbaniBanner from "@/assets/yusr-qurbani-banner.webp";
 import { ImageMarquee } from "@/components/ui/image-marquee";
 
-/**
- * Qurbani Eid 2026 campaign — goal trackers + countdown.
- * Eid al-Adha 1447H ≈ 27 May 2026.
- */
-const EID = new Date("2026-05-27T05:00:00+02:00").getTime();
+import { QURBANI_SEASON, EID_TIME as EID } from "@/data/qurbaniSeason";
+
+/** Qurbani campaign — goal trackers + countdown. Season dates live in src/data/qurbaniSeason.ts. */
 
 const GOALS = [
   { id: "cows",    img: iconCowCard,    ar: "عجول كاملة",   en: "Whole cows",     current: 14, target: 30,  unit: { ar: "عجل", en: "cow" } },
@@ -112,7 +110,7 @@ export const QurbaniCampaign = () => {
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary/40 bg-gradient-to-r from-secondary/15 via-accent/10 to-secondary/15 px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-accent shadow-soft backdrop-blur">
-            <Sparkles className="h-3 w-3" /> {isRTL ? "حملة العيد الكبير 2026" : "Eid al-Adha 2026 campaign"}
+            <Sparkles className="h-3 w-3" /> {isRTL ? `حملة العيد الكبير ${QURBANI_SEASON.year}` : `Eid al-Adha ${QURBANI_SEASON.year} campaign`}
           </span>
           <h2 className="mt-3 text-2xl font-black leading-tight text-primary sm:text-3xl md:text-5xl">
             {isRTL ? "صك أضحيتك معانا قبل ما يخلص الوقت" : "Reserve your Qurbani before time runs out"}
@@ -303,7 +301,7 @@ export const QurbaniCampaign = () => {
                   shadow="soft"
                   ease="linear"
                   images={[
-                    { src: qurbaniPricing, alt: isRTL ? "أسعار صكوك أضحية اليسر 2026" : "Al-Yusr Qurbani prices 2026" },
+                    { src: qurbaniPricing, alt: isRTL ? "أسعار صكوك أضحية اليسر" : "Al-Yusr Qurbani prices" },
                     { src: qurbaniHeroTrays, alt: isRTL ? "توزيع لحوم العيد" : "Eid meat distribution" },
                     { src: qurbaniTrustedSrc, alt: isRTL ? "مصدر موثوق" : "Trusted source" },
                     { src: meatFlyer, alt: isRTL ? "بوستر لحوم" : "Meat poster" },

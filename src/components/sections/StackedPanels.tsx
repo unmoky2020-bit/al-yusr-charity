@@ -5,8 +5,8 @@ import { Heart, Package, Truck, Smile, HandHeart, ArrowLeft, ArrowRight } from "
 import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
 import imgCarton from "@/assets/hero-carton-opened.webp";
 import imgVan from "@/assets/brand-van.jpg";
-import imgOrphans from "@/assets/yusr-orphans-meals.jpg";
-import imgFamily from "@/assets/hero-happy-family-new.png";
+import imgOrphans from "@/assets/yusr-orphans-meals.webp";
+import imgFamily from "@/assets/hero-happy-family-new.webp";
 
 /**
  * Carton story — 4 stations rendered as a Framer-style sticky stack.

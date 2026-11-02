@@ -4,6 +4,7 @@ import { Heart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useLang } from "@/i18n/LangContext";
+import { QURBANI_SEASON } from "@/data/qurbaniSeason";
 
 /**
  * [EID-2026] Sticky bottom notice — Qurbani booking is CLOSED for the 2026 season.
@@ -18,7 +19,7 @@ export const StickyQurbaniCTA = ({
   title,
   description,
   ctaLabel,
-  dismissKey = "qurbani-2026-complete-cta-dismissed",
+  dismissKey = `qurbani-${QURBANI_SEASON.year}-cta-dismissed`,
   ariaLabel,
 }: {
   donateHref?: string;
@@ -100,7 +101,7 @@ export const StickyQurbaniCTA = ({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="min-w-0 flex-1">
             <div className="text-sm font-black text-primary-foreground md:text-base">
-              {title ? title[isAr ? "ar" : "en"] : (isAr ? "تم اكتمال حجز صكوك الأضحية لموسم 2026" : "Qurbani 2026 booking is complete")}
+              {title ? title[isAr ? "ar" : "en"] : (isAr ? `حجز صكوك أضحية ${QURBANI_SEASON.year} هيفتح قريب` : `Qurbani ${QURBANI_SEASON.year} booking opens soon`)}
             </div>
             <div className="mt-0.5 text-[11px] font-bold text-primary-foreground/80 md:text-xs">
               {description

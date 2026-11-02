@@ -8,7 +8,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { listPublishedStories, type StoryCard } from "@/data/storiesApi";
-import family from "@/assets/family-hope.jpg";
+import family from "@/assets/family-hope.webp";
 
 const Stories = () => {
   const { lang } = useLang();

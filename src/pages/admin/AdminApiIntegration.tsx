@@ -97,35 +97,30 @@ const AdminApiIntegration = () => {
   return (
     <RequireAuth roles={["admin"]}>
       <AdminLayout
-        title={isAr ? "ربط Laravel API" : "Laravel API Integration"}
-        subtitle={isAr ? "فحص حيّ لجميع نقاط النهاية وحالة الربط بالسيرفر" : "Live inspection and binding status of Laravel API"}
+        title={{ ar: "ربط Laravel API", en: "Laravel API Integration" }}
       >
         <div className="space-y-6">
           {/* Top summary cards */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
             <StatCard
-              title={isAr ? "نقاط النهاية" : "Endpoints"}
+              label={isAr ? "نقاط النهاية" : "Endpoints"}
               value={total || 18}
               icon={Server}
-              color="primary"
             />
             <StatCard
-              title={isAr ? "تعمل بنجاح" : "Working"}
+              label={isAr ? "تعمل بنجاح" : "Working"}
               value={working}
               icon={CheckCircle2}
-              color="emerald"
             />
             <StatCard
-              title={isAr ? "بها مشكلة / خطأ" : "Issues / Errors"}
+              label={isAr ? "بها مشكلة / خطأ" : "Issues / Errors"}
               value={withErrors}
               icon={AlertTriangle}
-              color="orange"
             />
             <StatCard
-              title={isAr ? "متوسط الاستجابة" : "Avg Latency"}
+              label={isAr ? "متوسط الاستجابة" : "Avg Latency"}
               value={`${avgLatency} ms`}
               icon={Zap}
-              color="blue"
             />
           </div>
 

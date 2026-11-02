@@ -8,10 +8,10 @@ import SETR_DEFAULTS from "@/data/campaignPages/setr";
 import { HadithBlock } from "@/components/campaigns/HadithBlock";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import posterWater from "@/assets/poster-water.png";
-import yusrDistribution from "@/assets/yusr-distribution-1.jpg";
-import yusrMeals from "@/assets/yusr-meals.jpg";
-import markounFurniture from "@/assets/markoun-poster-furniture.png";
-import markounClothes from "@/assets/markoun-poster-clothes.png";
+import yusrDistribution from "@/assets/yusr-distribution-1.webp";
+import yusrMeals from "@/assets/yusr-meals.webp";
+import markounFurniture from "@/assets/markoun-poster-furniture.webp";
+import markounClothes from "@/assets/markoun-poster-clothes.webp";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("setr");

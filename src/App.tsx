@@ -299,7 +299,7 @@ const App = () => (
                   <Route path="/campaigns/:slug" element={<CampaignDetail />} />
                   <Route path="/seasons/:slug" element={<SeasonDetail />} />
                   <Route path="/c/:slug" element={<AdLanding />} />
-                  <Route path="/dev/hero-breakpoints" element={<HeroBreakpointTest />} />
+                  {import.meta.env.DEV && <Route path="/dev/hero-breakpoints" element={<HeroBreakpointTest />} />}
                   <Route path="/farm" element={<Farm />} />
                   <Route path="/trust" element={<Trust />} />
                   <Route path="/markoun" element={<MarkounLanding />} />

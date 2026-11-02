@@ -6,7 +6,7 @@ import { useLang } from "@/i18n/LangContext";
 import decoCarton from "@/assets/hero-carton-opened.webp";
 import decoVan from "@/assets/brand-van.jpg";
 import decoTower from "@/assets/hero-carton-tower.webp";
-import decoFamily from "@/assets/hero-happy-family-new.png";
+import decoFamily from "@/assets/hero-happy-family-new.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 

@@ -190,7 +190,14 @@ const AdminNewsletterCampaigns = () => {
               <div className="text-xs text-muted-foreground mb-1">{active.from_name} &lt;{active.from_email || "—"}&gt;</div>
               <div className="font-bold mb-1">{active.subject || "(بدون عنوان)"}</div>
               {active.preheader && <div className="text-xs text-muted-foreground mb-3">{active.preheader}</div>}
-              <div dir="rtl" className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: active.html || "" }} />
+              {/* Sandboxed iframe: the email HTML is shown but can never run scripts or touch the admin session. */}
+              <iframe
+                title="معاينة الإيميل"
+                sandbox=""
+                referrerPolicy="no-referrer"
+                className="w-full min-h-[420px] rounded-xl border bg-white"
+                srcDoc={`<!doctype html><html dir="rtl"><head><meta charset="utf-8"><style>body{font-family:system-ui,sans-serif;margin:16px;line-height:1.7}img{max-width:100%;height:auto}</style></head><body>${active.html || ""}</body></html>`}
+              />
             </div>
           </Card>
         </div>

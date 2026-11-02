@@ -43,8 +43,7 @@ export const RelatedContentLinks = ({
           const matched = posts.filter(
             (p) =>
               p.slug.includes(programSlug) ||
-              p.tags.some((t) => t.includes(programSlug)) ||
-              (p.focus_keyword && p.focus_keyword.includes(programSlug))
+              [...(p.ar?.tags ?? []), ...(p.en?.tags ?? [])].some((t) => t.includes(programSlug))
           ).slice(0, 4);
 
           const list = (matched.length > 0 ? matched : posts.slice(0, 3)).map((p) => ({

@@ -6,7 +6,7 @@ import { amountHref, waHref, fmtNum, CampaignCrumbs, HeroActions } from "@/compo
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import ASHR_DEFAULTS from "@/data/campaignPages/ashr";
 import { campaignDonateHref } from "@/data/campaignPages/index";
-import heroImg from "@/assets/qurbani-hero-trays.png";
+import heroImg from "@/assets/qurbani-hero-trays.webp";
 
 /**
  * /ten-days — charity in the first ten days of Dhul Hijjah. All text and prices are editable from
