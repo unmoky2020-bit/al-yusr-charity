@@ -5,7 +5,7 @@ import edu from "@/assets/program-education.jpg";
 import orph from "@/assets/program-orphans.jpg";
 import food from "@/assets/program-food.jpg";
 import health from "@/assets/program-health.webp";
-import happy from "@/assets/hero-happy-family-new.webp";
+import happy from "@/assets/hero-happy-family-new.png";
 import sad from "@/assets/hero-sad.jpg";
 import odhya from "@/assets/poster-odhya.webp";
 import box from "@/assets/poster-box.png";

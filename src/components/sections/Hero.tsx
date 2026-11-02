@@ -4,8 +4,8 @@ import { ShieldCheck } from "lucide-react";
 import { getLucideIcon } from "@/lib/lucide-icon";
 import heroSad from "@/assets/hero-girl-start.webp";
 import heroHappy from "@/assets/hero-happy-family-new.webp";
-import decoVan from "@/assets/hero-deco-van-new.webp";
-import decoVan2 from "@/assets/hero-deco-van-2.webp";
+import decoVan from "@/assets/hero-deco-van-new.png";
+import decoVan2 from "@/assets/hero-deco-van-2.png";
 import logoCircle from "@/assets/logo-circle.png";
 import { useLang } from "@/i18n/LangContext";
 import { gsap } from "gsap";
@@ -195,7 +195,7 @@ export const Hero = () => {
       */}
       <div
         ref={pin}
-        className="hc-pin relative flex w-full flex-col overflow-hidden bg-[radial-gradient(ellipse_100%_90%_at_50%_-10%,#115e3b_0%,#0c492c_60%,#083820_100%)] h-screen h-[100lvh] min-h-[100lvh]"
+        className="hc-pin relative w-full overflow-hidden bg-[radial-gradient(ellipse_100%_90%_at_50%_-10%,#115e3b_0%,#0c492c_60%,#083820_100%)] h-screen h-[100lvh] min-h-[100lvh]"
       >
         {/* Ambient glow */}
         <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[680px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary/12 blur-3xl" />
@@ -211,7 +211,7 @@ export const Hero = () => {
         />
 
         {/* ── Copy + CTAs ── */}
-        <div className="relative z-20 container mx-auto shrink-0 px-4 pt-28 xs:pt-32 sm:pt-36 md:pt-36 lg:pt-28 xl:pt-32">
+        <div className="relative z-20 container mx-auto px-4 pt-36 xs:pt-40 sm:pt-44 md:pt-42 lg:pt-32 xl:pt-36">
           <div className="relative mx-auto flex max-w-[min(92vw,50rem)] lg:max-w-3xl xl:max-w-4xl flex-col items-center text-center">
 
             {/* ── Skeleton while API loads, then real content ── */}
@@ -312,18 +312,18 @@ export const Hero = () => {
         {/* ── Cinematic stage — anchored directly to the bottom floor ──────────────────────
             Fixed to absolute bottom of the pinned hero. Zero gaps, zero cutoffs under images. */}
         <div
-          className="pointer-events-none relative z-10 mt-5 flex min-h-0 w-full flex-1 items-end justify-center overflow-hidden sm:mt-7 lg:mt-6"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-center overflow-hidden h-full w-full"
           style={{ perspective: "1400px" }}
         >
           {/* ── FACE A: Sad Girl (grounded flush to bottom: 0) ─────────────────── */}
           <div
-            className="hc-face-sad pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex h-full items-end justify-center w-full"
+            className="hc-face-sad pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex items-end justify-center w-full"
             style={{ transformOrigin: "50% 100%" }}
           >
             <img
               src={heroSad}
               alt={isRTL ? "أسرة محتاجة قبل وصول الخير" : "A family before help arrives"}
-              className="hc-sad pointer-events-none select-none object-contain object-bottom block w-auto max-w-[min(76vw,380px)] max-h-[min(100%,410px)] xs:max-h-[min(100%,440px)] sm:max-h-[min(100%,470px)] lg:max-h-[min(100%,380px)] xl:max-h-[min(100%,400px)] lg:max-w-[310px] xl:max-w-[330px]"
+              className="hc-sad pointer-events-none select-none object-contain object-bottom block w-auto max-w-[min(76vw,380px)] max-h-[410px] xs:max-h-[440px] sm:max-h-[470px] lg:max-h-[380px] xl:max-h-[400px] lg:max-w-[310px] xl:max-w-[330px]"
               style={{
                 marginBottom: 0,
               }}
@@ -334,7 +334,7 @@ export const Hero = () => {
 
           {/* ── FACE B: Happy Family + Trucks (grounded flush to bottom: 0) ───── */}
           <div
-            className="hc-face-happy pointer-events-none absolute inset-x-0 bottom-0 z-[3] flex h-full items-end justify-center w-full max-w-7xl mx-auto"
+            className="hc-face-happy pointer-events-none absolute inset-x-0 bottom-0 z-[3] flex items-end justify-center w-full max-w-7xl mx-auto"
             style={{ transformOrigin: "50% 100%" }}
           >
             {/* Left Van */}
@@ -345,7 +345,7 @@ export const Hero = () => {
                 aria-hidden
                 loading="lazy"
                 decoding="async"
-                className="h-auto max-h-full w-full drop-shadow-[0_12px_20px_rgba(0,0,0,0.4)] block object-contain object-bottom"
+                className="h-auto w-full drop-shadow-[0_12px_20px_rgba(0,0,0,0.4)] block object-bottom"
                 style={{ filter: "saturate(1.12) brightness(1.06) contrast(1.06)" }}
               />
             </div>
@@ -354,7 +354,7 @@ export const Hero = () => {
             <img
               src={heroHappy}
               alt={isRTL ? "متطوعو اليسر مع أسرة مستفيدة وسلال الخير" : "Al-Yusr volunteers with a family and aid baskets"}
-              className="hc-happy pointer-events-none relative z-[3] w-[126%] xs:w-[120%] sm:w-[108%] md:w-[68%] lg:w-[50%] xl:w-[44%] max-w-none md:max-w-[670px] lg:max-w-[560px] xl:max-w-[600px] select-none object-contain object-bottom block max-h-[min(100%,460px)] xs:max-h-[min(100%,500px)] sm:max-h-[min(100%,560px)] md:max-h-[min(100%,630px)] lg:max-h-[min(100%,490px)] xl:max-h-[min(100%,510px)]"
+              className="hc-happy pointer-events-none relative z-[3] w-[126%] xs:w-[120%] sm:w-[108%] md:w-[68%] lg:w-[50%] xl:w-[44%] max-w-none md:max-w-[670px] lg:max-w-[560px] xl:max-w-[600px] select-none object-contain object-bottom block max-h-[460px] xs:max-h-[500px] sm:max-h-[560px] md:max-h-[630px] lg:max-h-[490px] xl:max-h-[510px]"
               style={{
                 filter: "saturate(1.05) contrast(1.03) drop-shadow(0 10px 24px rgba(0,0,0,0.36))",
                 marginBottom: 0,
@@ -371,7 +371,7 @@ export const Hero = () => {
                 aria-hidden
                 loading="lazy"
                 decoding="async"
-                className="h-auto max-h-full w-full drop-shadow-[0_14px_22px_rgba(0,0,0,0.42)] block object-contain object-bottom"
+                className="h-auto w-full drop-shadow-[0_14px_22px_rgba(0,0,0,0.42)] block object-bottom"
                 style={{ filter: "saturate(1.15) brightness(1.06) contrast(1.06)" }}
               />
             </div>
