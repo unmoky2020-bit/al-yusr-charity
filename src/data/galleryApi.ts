@@ -1,4 +1,5 @@
 import { compressImage } from "@/lib/image-compress";
+import { absoluteMediaUrl, findIdenticalMedia } from "@/data/api/mediaApi";
 import {
   apiFetch, formatServerImageUrl, invalidateApiCache,
   galleryApi as laravelGalleryApi, type LaravelGalleryItem,
@@ -60,13 +61,26 @@ export const programLabel = (slug: string, lang: "ar" | "en") => {
  */
 const uploadedDraftIds = new Map<string, string>();
 
+/** Image URLs taken from the media library (picked, or an identical file found): saved as the row's link. */
+const libraryUrls = new Set<string>();
+
+/** Use an image that is already stored (media library) for a gallery row, without uploading it again. */
+export function takeLibraryImage(url: string): string {
+  const abs = absoluteMediaUrl(url);
+  libraryUrls.add(abs);
+  return abs;
+}
+
 /**
  * Upload a (compressed) image to Laravel (EXISTING endpoint POST /gallery, multipart `image`).
  * The row is created unpublished (is_public = 0) and becomes the record that the admin form
  * saves into. Throws on failure — never returns a local/blob URL.
  */
-export async function uploadGalleryImage(file: File): Promise<{ url: string; path: string; width?: number; height?: number }> {
+export async function uploadGalleryImage(file: File): Promise<{ url: string; path: string; width?: number; height?: number; reused?: boolean }> {
   const compressed = await compressImage(file, { maxEdge: 1600, quality: 0.82 });
+  // The same picture is stored once: reuse an identical file that is already on the server.
+  const existing = (await findIdenticalMedia(compressed)) || (compressed !== file ? await findIdenticalMedia(file) : null);
+  if (existing) return { url: takeLibraryImage(existing.url), path: existing.path, reused: true };
   const title = file.name.replace(/\.[^.]+$/, "").slice(0, 120) || "صورة";
   const fd = new FormData();
   fd.append("image", compressed);
@@ -200,7 +214,7 @@ function toLaravelGalleryPayload(row: GalleryUpsertInput, keepImage: boolean): R
   };
   // A pasted link is stored as external_url; an image already stored on the backend is left untouched.
   const url = row.image_url?.trim();
-  if (url && !keepImage && !/\/storage\//.test(url)) payload.external_url = url;
+  if (url && !keepImage && (!/\/storage\//.test(url) || libraryUrls.has(url))) payload.external_url = url;
   Object.keys(payload).forEach((k) => payload[k] === undefined && delete payload[k]);
   return payload;
 }

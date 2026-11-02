@@ -28,7 +28,10 @@ import {
   uploadGalleryImage,
   upsertGalleryImage,
   deduplicateGalleryImages,
+  takeLibraryImage,
 } from "@/data/galleryApi";
+import { MediaPickerModal } from "@/components/admin/MediaPickerModal";
+import { formatServerImageUrl } from "@/data/laravelApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { useLang } from "@/i18n/LangContext";
 
@@ -177,7 +180,8 @@ const AdminGallery = () => {
   const [form, setForm] = useState<FormState>(empty());
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [tab, setTab] = useState<"upload" | "url">("upload");
+  const [tab, setTab] = useState<"upload" | "library" | "url">("upload");
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const { copy, copied } = useCopy();
@@ -285,7 +289,9 @@ const AdminGallery = () => {
         alt_ar: f.alt_ar || name,
         alt_en: f.alt_en || name,
       }));
-      toast.success(isRTL ? "تم رفع الصورة بنجاح" : "Image uploaded successfully");
+      toast.success(res.reused
+        ? (isRTL ? "الصورة دي موجودة على السيرفر قبل كده — استخدمنا نفس النسخة من غير ما نرفعها تاني" : "This image was already stored — reused it")
+        : (isRTL ? "تم رفع الصورة بنجاح" : "Image uploaded successfully"));
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
       toast.error((isRTL ? "فشل الرفع: " : "Upload failed: ") + msg);
@@ -522,20 +528,34 @@ const AdminGallery = () => {
 
             {/* ── Tab: upload / url ── */}
             <div className="flex gap-2 rounded-xl border border-border p-1 bg-muted/40">
-              {(["upload", "url"] as const).map((t) => (
+              {(["upload", "library", "url"] as const).map((t) => (
                 <button
                   key={t}
-                  onClick={() => setTab(t)}
+                  type="button"
+                  onClick={() => { setTab(t); if (t === "library") setPickerOpen(true); }}
                   className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-sm font-medium transition
                     ${tab === t ? "bg-card shadow text-primary" : "text-muted-foreground hover:text-primary"}`}
                 >
-                  {t === "upload" ? <Upload className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
-                  {t === "upload" ? (isRTL ? "رفع ملف" : "Upload file") : (isRTL ? "رابط خارجي" : "External URL")}
+                  {t === "upload" ? <Upload className="h-3.5 w-3.5" /> : t === "library" ? <ImageIcon className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
+                  {t === "upload" ? (isRTL ? "رفع ملف" : "Upload file") : t === "library" ? (isRTL ? "من مكتبة الوسائط" : "From library") : (isRTL ? "رابط خارجي" : "External URL")}
                 </button>
               ))}
             </div>
 
-            {tab === "upload" ? (
+            {tab === "library" ? (
+              <div className="space-y-2">
+                <button type="button" onClick={() => setPickerOpen(true)}
+                  className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-3 text-muted-foreground transition hover:border-primary/50">
+                  {form.image_url ? (
+                    <img src={formatServerImageUrl(form.image_url) || form.image_url} alt="" className="max-h-56 w-full rounded-xl object-contain" />
+                  ) : (
+                    <ImageIcon className="my-6 h-10 w-10 opacity-40" />
+                  )}
+                  <span className="text-sm font-bold text-primary">{isRTL ? (form.image_url ? "غيّر الصورة من المكتبة" : "اختار صورة من مكتبة الوسائط") : "Choose from the media library"}</span>
+                  <span className="text-xs opacity-70">{isRTL ? "صورة متخزنة قبل كده — مش هتترفع تاني" : "An image already stored — not uploaded again"}</span>
+                </button>
+              </div>
+            ) : tab === "upload" ? (
               <div
                 className={`relative rounded-xl border-2 border-dashed transition-colors cursor-pointer
                   ${dragOver ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}
@@ -685,6 +705,17 @@ const AdminGallery = () => {
                 {isRTL ? "حفظ" : "Save"}
               </Button>
             </DialogFooter>
+          <MediaPickerModal
+              open={pickerOpen}
+              onOpenChange={setPickerOpen}
+              currentValue={form.image_url || null}
+              title={isRTL ? "اختار صورة للمعرض من مكتبة الوسائط" : "Pick a gallery photo from the library"}
+              onSelect={(url) => {
+                const abs = takeLibraryImage(url);
+                const name = decodeURIComponent(abs.split("/").pop() || "").replace(/\.[^.]+$/, "").replace(/^\d{8}-\d{6}-/, "").replace(/-[a-z0-9]{5}$/, "").replace(/-/g, " ");
+                setForm((f) => ({ ...f, image_url: abs, storage_path: null, title_ar: f.title_ar || name, alt_ar: f.alt_ar || name }));
+              }}
+            />
           </DialogContent>
         </Dialog>
       </div>

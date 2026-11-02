@@ -15,6 +15,7 @@ import { MediaPickerModal } from "@/components/admin/MediaPickerModal";
 import { LucideIconPicker } from "@/components/admin/LucideIconPicker";
 import { formatServerImageUrl } from "@/data/laravelApi";
 import { describeWriteError } from "@/data/api/backendPending";
+import { toast } from "sonner";
 import { MEDIA_ACCEPT, MEDIA_MAX_BYTES, uploadMedia, type MediaCollection } from "@/data/api/mediaApi";
 import { NEEDS_BACKEND_AR, type FaqItem } from "@/data/api/programsAdminApi";
 import { toKebabIcon } from "./formUtils";
@@ -389,6 +390,7 @@ export function ImageUrlField({
     try {
       const saved = await uploadMedia(file, file.name, collection);
       onChange(saved.url);
+      if (saved.duplicate) toast.info("الصورة دي موجودة في مكتبة الوسائط قبل كده — استخدمنا نفس النسخة من غير ما نرفعها تاني");
     } catch (e) {
       setError(describeWriteError(e, "POST /media"));
     } finally {

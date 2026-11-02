@@ -22,7 +22,7 @@ import { describeWriteError } from "@/data/api/backendPending";
 import { listMedia, uploadMedia, MEDIA_ACCEPT, MEDIA_MAX_BYTES } from "@/data/api/mediaApi";
 
 /** One media-library file, in the shape the grid below renders. */
-type PickerImage = { id: string; image: string; external_url?: string; title_ar: string; title_en?: string; city?: string; program?: string; donation_program?: string };
+type PickerImage = { id: string; image: string; preview?: string; external_url?: string; title_ar: string; title_en?: string; city?: string; program?: string; donation_program?: string };
 import { toast } from "sonner";
 import { useLang } from "@/i18n/LangContext";
 
@@ -55,8 +55,9 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
     setLoading(true);
     try {
       // The media library (GET /media) — the same files as /admin/media.
-      const files = await listMedia();
-      setImages(files.map((f) => ({ id: f.path, image: f.url, title_ar: f.name, title_en: f.name, program: f.collection })));
+      // Every stored image (also older folders), without identical copies, so the same picture is reused.
+      const files = (await listMedia({ scope: "all" })).filter((f) => !f.duplicate_of);
+      setImages(files.map((f) => ({ id: f.path, image: f.url, preview: f.preview, title_ar: f.name, title_en: f.name, program: f.collection })));
     } catch (err) {
       toast.error(describeWriteError(err, "GET /media"));
     } finally {
@@ -96,7 +97,8 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
     try {
       const saved = await uploadMedia(file, file.name, "general");
       setSelectedUrl(saved.url);
-      toast.success(isAr ? "تم رفع الصورة لمكتبة الوسائط" : "Uploaded to the media library");
+      if (saved.duplicate) toast.info(isAr ? "الصورة دي موجودة في المكتبة قبل كده — اخترناها لك من غير ما نرفعها تاني" : "Already in the library — selected the existing copy");
+      else toast.success(isAr ? "تم رفع الصورة لمكتبة الوسائط" : "Uploaded to the media library");
       await loadGallery();
     } catch (err) {
       toast.error(describeWriteError(err, "POST /media"));
