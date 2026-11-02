@@ -157,6 +157,9 @@ export function formatServerImageUrl(url?: string | null): string {
   // Strip accidental leading colons or protocol junk (e.g. ":4CYZs...")
   trimmed = trimmed.replace(/^:+/, "").trim();
 
+  // Some uploads come back as ".../storage/storage/media/…": the file is served at ".../storage/media/…".
+  trimmed = trimmed.replace(/(^|\/)storage\/(?:storage\/)+/g, "$1storage/");
+
   // Migrate old domain to current backend domain
   if (trimmed.includes("elyusr-api.pyramedx.com")) {
     trimmed = trimmed.replace("https://elyusr-api.pyramedx.com", BACKEND_BASE);
@@ -1689,7 +1692,7 @@ export const galleryApi = {
             : `${BACKEND_BASE}/storage/${clean}`;
         }
 
-        return finalUrl;
+        return finalUrl.replace(/\/storage\/(?:storage\/)+/g, "/storage/");
       }
     } catch (laravelErr: any) {
       // Do NOT fall back to base64 — base64 data URLs exceed the backend's 2048-char
