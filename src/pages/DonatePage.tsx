@@ -343,7 +343,10 @@ const DonatePage = () => {
       if (c) {
         setCaseId(c.id); setCaseTitle(c.title);
         if (Number(c.needed_amount) - Number(c.raised_amount) > 0) {
-          const suggested = Math.min(500, Math.max(50, Math.ceil((Number(c.needed_amount) - Number(c.raised_amount)) / 10)));
+          const remaining = Number(c.needed_amount) - Number(c.raised_amount);
+          // The amount picked on the case page (?amount=) wins over the suggestion.
+          const linked = Number(params.get("amount"));
+          const suggested = linked >= 10 ? Math.round(linked) : Math.min(500, Math.max(50, Math.ceil(remaining / 10)));
           const owner =
             DONATION_ENTITIES.find((e) => e.apiId && (
               (e.entityType === "program" && String(e.apiId) === String(c.program_id)) ||

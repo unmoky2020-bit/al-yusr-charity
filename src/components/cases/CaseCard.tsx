@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { AlertCircle, HeartHandshake, MapPin } from "lucide-react";
+import { AlertCircle, CheckCircle2, Clock, HeartHandshake, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { CaseRow } from "@/data/casesApi";
 import { formatNumberEN } from "@/lib/utils";
+import { caseFunding, daysLeft } from "@/lib/caseFunding";
 
 /** «برنامج كفالة يتيم» — without doubling a kind word the name already starts with («حملة ستر»). */
 const withKind = (kind: string, name: string) => (name.startsWith(kind) ? name : `${kind} ${name}`);
@@ -17,13 +18,10 @@ export function caseOwnerLabel(c: CaseRow, isRTL: boolean): string | null {
 
 /** One case card (homepage urgent carousel, programs page, linked-cases sections). */
 export function CaseCard({ c, isRTL, showOwner = false, className = "" }: { c: CaseRow; isRTL: boolean; showOwner?: boolean; className?: string }) {
-  const need = Number(c.needed_amount) || 0;
-  const raised = Number(c.raised_amount) || 0;
-  const pct = need > 0 ? Math.min(100, Math.round((raised / need) * 100)) : 0;
-  const remaining = Math.max(0, need - raised);
-  const done = need > 0 && remaining === 0;
+  const { need, raised, pct, remaining, done } = caseFunding(c);
   const owner = showOwner ? caseOwnerLabel(c, isRTL) : null;
   const place = [c.city, c.governorate].filter(Boolean).join("، ");
+  const days = daysLeft(c.deadline);
   const egp = isRTL ? "ج" : "EGP";
   return (
     <article className={`group relative flex flex-col overflow-hidden rounded-[1.6rem] border border-primary/10 bg-card shadow-soft transition duration-300 hover:-translate-y-1 hover:border-secondary/50 hover:shadow-card ${className}`}>
@@ -32,7 +30,11 @@ export function CaseCard({ c, isRTL, showOwner = false, className = "" }: { c: C
           className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#06301c]/85 via-[#06301c]/10 to-transparent" />
         <div className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">
-          {c.is_urgent ? (
+          {done ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[11px] font-black text-primary-foreground shadow">
+              <CheckCircle2 className="h-3 w-3" /> {isRTL ? "اكتملت" : "Funded"}
+            </span>
+          ) : c.is_urgent ? (
             <span className="inline-flex items-center gap-1 rounded-full bg-destructive px-2.5 py-1 text-[11px] font-black text-destructive-foreground shadow">
               <AlertCircle className="h-3 w-3" /> {isRTL ? "عاجلة" : "Urgent"}
             </span>
@@ -59,9 +61,14 @@ export function CaseCard({ c, isRTL, showOwner = false, className = "" }: { c: C
       <div className="flex flex-1 flex-col p-4 pt-3.5">
         {owner && <span className="mb-1.5 w-fit max-w-full truncate rounded-md bg-secondary/15 px-2 py-0.5 text-[11px] font-black text-primary">{owner}</span>}
         <Link to={`/cases/${c.ref_code}`} className="line-clamp-2 text-[15.5px] font-black leading-snug text-primary hover:text-accent focus-visible:underline">{c.title}</Link>
-        {place && (
-          <div className="mt-1.5 flex items-center gap-1 text-[11px] font-bold text-muted-foreground">
-            <MapPin className="h-3.5 w-3.5 shrink-0 text-secondary" /> <span className="truncate">{place}</span>
+        {(place || (days !== null && days >= 0 && !done)) && (
+          <div className="mt-1.5 flex items-center gap-3 text-[11px] font-bold text-muted-foreground">
+            {place && <span className="inline-flex min-w-0 items-center gap-1"><MapPin className="h-3.5 w-3.5 shrink-0 text-secondary" /> <span className="truncate">{place}</span></span>}
+            {days !== null && days >= 0 && !done && (
+              <span className={`inline-flex shrink-0 items-center gap-1 ${days <= 7 ? "text-destructive" : ""}`}>
+                <Clock className="h-3.5 w-3.5" /> {days === 0 ? (isRTL ? "آخر يوم" : "Last day") : isRTL ? `باقي ${days} يوم` : `${days} days left`}
+              </span>
+            )}
           </div>
         )}
         <div className="mt-auto pt-4">
@@ -73,11 +80,17 @@ export function CaseCard({ c, isRTL, showOwner = false, className = "" }: { c: C
             <span>{isRTL ? "اتجمع" : "Raised"} {formatNumberEN(raised)} {egp}</span>
             <span>{isRTL ? "من" : "of"} {formatNumberEN(need)} {egp}</span>
           </div>
-          <Button asChild className="mt-3.5 h-11 w-full gap-1.5 rounded-xl bg-orange-grad font-black text-accent-foreground shadow-cta hover:opacity-95" disabled={done}>
-            <Link to={`/donate?case=${encodeURIComponent(c.ref_code)}`}>
-              <HeartHandshake className="h-4 w-4" /> {isRTL ? "تبرع للحالة" : "Donate to this case"}
+          {done ? (
+            <Link to={`/cases/${c.ref_code}`} className="mt-3.5 flex h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-primary/10 text-sm font-black text-primary transition hover:bg-primary/15">
+              <CheckCircle2 className="h-4 w-4" /> {isRTL ? "اكتملت بفضل الله — شوف التوثيق" : "Funded — see the proof"}
             </Link>
-          </Button>
+          ) : (
+            <Button asChild className="mt-3.5 h-11 w-full gap-1.5 rounded-xl bg-orange-grad font-black text-accent-foreground shadow-cta hover:opacity-95">
+              <Link to={`/donate?case=${encodeURIComponent(c.ref_code)}`} data-source="case-card" data-label={`case-${c.ref_code}`}>
+                <HeartHandshake className="h-4 w-4" /> {isRTL ? "تبرع للحالة" : "Donate to this case"}
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
     </article>
@@ -89,11 +102,7 @@ export function CaseCard({ c, isRTL, showOwner = false, className = "" }: { c: C
  * case name and one funding line, and a small donate button. Nothing else.
  */
 export function CasePosterCard({ c, isRTL, showOwner = false, className = "" }: { c: CaseRow; isRTL: boolean; showOwner?: boolean; className?: string }) {
-  const need = Number(c.needed_amount) || 0;
-  const raised = Number(c.raised_amount) || 0;
-  const pct = need > 0 ? Math.min(100, Math.round((raised / need) * 100)) : 0;
-  const remaining = Math.max(0, need - raised);
-  const done = need > 0 && remaining === 0;
+  const { need, raised, pct, remaining, done } = caseFunding(c);
   const owner = showOwner ? caseOwnerLabel(c, isRTL) : null;
   const egp = isRTL ? "ج" : "EGP";
   return (
