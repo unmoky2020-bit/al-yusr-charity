@@ -15,6 +15,10 @@ export type MisbahaRoom = {
   name: string;
   created_by: string | null;
   total_count: number;
+  /** Optional shared goal chosen when the misbaha was created. */
+  target_total?: number | null;
+  /** Optional suggested dhikr (an id from src/data/adhkar.ts). */
+  dhikr_id?: string | null;
   created_at: string;
 };
 
@@ -24,7 +28,7 @@ const unwrap = (r: unknown): MisbahaRoom | null => {
 };
 
 export const misbahaRoomsApi = {
-  async create(input: { name: string; created_by?: string }): Promise<MisbahaRoom> {
+  async create(input: { name: string; created_by?: string; target_total?: number; dhikr_id?: string }): Promise<MisbahaRoom> {
     const res = await apiFetch<unknown>("/misbaha-rooms", { method: "POST", body: input, skipAuthClear: true });
     const room = unwrap(res);
     if (!room) throw new Error("تعذر إنشاء السبحة، حاول مرة أخرى.");

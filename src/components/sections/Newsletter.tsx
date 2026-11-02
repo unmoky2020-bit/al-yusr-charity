@@ -18,12 +18,12 @@ export const Newsletter = () => {
     if (!email || loading || success) return;
     setLoading(true);
     try {
-      await newsletterApi.subscribe(email, lang as "ar" | "en");
+      await newsletterApi.subscribe(email, lang as "ar" | "en", "home");
       setSuccess(true);
       setEmail("");
       toast({
-        title: isRTL ? "تم الاشتراك بنجاح!" : "Subscribed successfully!",
-        description: isRTL ? "سنرسل لك أحدث أخبار وقصص الخير أولاً بأول." : "We'll send you our best stories of good.",
+        title: isRTL ? "اشتراكك اتسجّل" : "Subscription saved",
+        description: isRTL ? "هيوصلك إيميل تأكيد، اضغط على الرابط اللي فيه علشان النشرة توصلك." : "Check your inbox for a confirmation link.",
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "";

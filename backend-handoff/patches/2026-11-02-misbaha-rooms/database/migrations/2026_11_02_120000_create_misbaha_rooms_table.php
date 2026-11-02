@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('name', 80);                 // the deceased
             $table->string('created_by', 60)->nullable();
             $table->unsignedBigInteger('total_count')->default(0);
+            $table->unsignedBigInteger('target_total')->nullable();   // optional shared goal (1,000 / 10,000 / 100,000)
+            $table->string('dhikr_id', 40)->nullable();               // optional suggested dhikr (ids from the site's adhkar list)
             $table->boolean('is_hidden')->default(false); // team can hide abusive / mistaken rooms
             $table->string('creator_ip_hash', 64)->nullable();
             $table->timestamp('last_activity_at')->nullable()->index();

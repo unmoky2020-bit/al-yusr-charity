@@ -1959,10 +1959,22 @@ export const blogSeoApi = {
 // ── Newsletter (/newsletter) ──
 export const newsletterApi = {
   ...resource<LaravelNewsletter>("/newsletter"),
-  async subscribe(email: string, language: "ar" | "en" = "ar") {
+  /**
+   * Public sign-up from the site: POST /newsletter/subscribe (double opt-in, status "pending" until the
+   * visitor clicks the email link). `email_sent: false` = saved, but the server has no mailer yet.
+   */
+  async subscribe(email: string, language: "ar" | "en" = "ar", source = "website") {
+    return apiFetch<{ message?: string; data?: { status?: string; email_sent?: boolean } }>("/newsletter/subscribe", {
+      method: "POST",
+      body: { email, language, source },
+      skipAuthClear: true,
+    });
+  },
+  /** Team only (dashboard): add a subscriber directly. POST /newsletter needs newsletter.create. */
+  async adminAdd(email: string, language: "ar" | "en" = "ar") {
     return apiFetch<{ message?: string; data?: LaravelNewsletter }>("/newsletter", {
       method: "POST",
-      body: { email, language, source: "website", status: "confirmed" },
+      body: { email, language, source: "dashboard", status: "confirmed" },
     });
   },
   async statistics() {

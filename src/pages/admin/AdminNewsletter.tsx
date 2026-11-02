@@ -252,7 +252,7 @@ const AdminNewsletter = () => {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return toast.error(isRTL ? "بريد غير صالح" : "Invalid email");
     setBusy(true);
     try {
-      await newsletterApi.subscribe(email, newLang as "ar" | "en");
+      await newsletterApi.adminAdd(email, newLang as "ar" | "en");
       toast.success(isRTL ? "تمت الإضافة" : "Added");
       setAddOpen(false);
       setNewEmail("");

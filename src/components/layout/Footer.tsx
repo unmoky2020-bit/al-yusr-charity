@@ -22,29 +22,37 @@ export const Footer = () => {
   const [email, setEmail] = useState("");
   const [subscribing, setSubscribing] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
+  /** false = saved, but the confirmation email is not sent yet (server mailer not configured). */
+  const [emailSent, setEmailSent] = useState(true);
+  const [subscribeError, setSubscribeError] = useState<string | null>(null);
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     const value = email.trim();
     if (!value || !/^\S+@\S+\.\S+$/.test(value)) {
-      toast.error(isRTL ? "ادخل بريد إلكتروني صحيح" : "Please enter a valid email");
+      setSubscribeError(isRTL ? "اكتب إيميل صحيح، زي name@example.com" : "Enter a valid email, like name@example.com");
       return;
     }
+    setSubscribeError(null);
     setSubscribing(true);
     try {
-      // Laravel POST /newsletter — same call the homepage Newsletter section uses.
-      // apiFetch throws on any non-2xx, so success is only shown for a real 2xx.
-      const res = await newsletterApi.subscribe(value, lang === "en" ? "en" : "ar");
+      // Public POST /newsletter/subscribe (double opt-in). apiFetch throws on any non-2xx.
+      const res = await newsletterApi.subscribe(value, lang === "en" ? "en" : "ar", "footer");
+      setEmailSent(res?.data?.email_sent !== false);
       setSubscribed(true);
       setEmail("");
-      track("newsletter_subscribe", {
-        fbEvent: "Lead",
-        payload: { email_domain: value.split("@")[1], lang, source: "footer", path: pathname, status: res?.data?.status ?? "confirmed" },
-      });
+      track("newsletter_subscribe", { fbEvent: "Lead", payload: { source: "footer", lang } });
     } catch (err) {
-      if (import.meta.env.DEV) {
-        console.error(err);
-      }
-      toast.error(isRTL ? "تعذّر إتمام الاشتراك، حاول مجددًا" : "Couldn't complete the subscription, try again");
+      if (import.meta.env.DEV) console.error(err);
+      const status = (err as { status?: number } | null)?.status;
+      const msg = status === 422
+        ? (isRTL ? "الإيميل ده مش صحيح. راجعه وجرّب تاني." : "That email doesn't look right. Check it and try again.")
+        : status === 429
+          ? (isRTL ? "محاولات كتير ورا بعض. جرّب كمان دقيقة." : "Too many tries. Try again in a minute.")
+          : status === 404 || status === 405 || status === 401
+            ? (isRTL ? "الاشتراك في النشرة بيتجهّز على السيرفر. جرّب تاني قريب." : "Newsletter sign-up is being set up. Please try again soon.")
+            : (isRTL ? "مقدرناش نسجّل اشتراكك دلوقتي. جرّب تاني." : "We couldn't save your subscription. Try again.");
+      setSubscribeError(msg);
+      toast.error(msg);
     } finally {
       setSubscribing(false);
     }
@@ -209,7 +217,9 @@ export const Footer = () => {
                       required
                       dir="ltr"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => { setEmail(e.target.value); if (subscribeError) setSubscribeError(null); }}
+                      aria-invalid={!!subscribeError}
+                      aria-describedby={subscribeError ? "newsletter-error" : undefined}
                       placeholder="name@example.com"
                       className="h-12 min-w-0 flex-1 border-0 border-b-2 border-dashed border-[#0b4429]/30 bg-transparent px-1 text-base font-bold text-[#0b4429] outline-none transition-colors placeholder:text-[#0b4429]/35 focus:border-[#f58220] focus-visible:ring-0"
                     />
@@ -222,6 +232,9 @@ export const Footer = () => {
                       {subscribing ? (isRTL ? "بيتبعت..." : "Sending...") : (isRTL ? "ابعتولي النشرة" : "Send me the letter")}
                     </button>
                   </div>
+                  {subscribeError && (
+                    <p id="newsletter-error" role="alert" className="mt-2 text-xs font-bold text-destructive">{subscribeError}</p>
+                  )}
                   <p className="mt-2.5 text-[11px] font-semibold text-[#0b4429]/50">
                     {isRTL ? "تقدر تلغي الاشتراك من أي رسالة بضغطة واحدة." : "Unsubscribe from any letter with one click."}
                   </p>
@@ -235,12 +248,18 @@ export const Footer = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-black leading-tight sm:text-xl md:text-2xl">
-                      {isRTL ? "اتسجّلت. فاضل خطوة واحدة" : "You're on the list. One step left"}
+                      {emailSent
+                        ? (isRTL ? "اتسجّلت. فاضل خطوة واحدة" : "You're on the list. One step left")
+                        : (isRTL ? "اشتراكك اتسجّل" : "Your subscription is saved")}
                     </h3>
                     <p className="mt-1 text-sm text-[#0b4429]/70">
-                      {isRTL
-                        ? "بعتنالك إيميل تأكيد. افتحه واضغط على الرابط علشان النشرة توصلك."
-                        : "We sent you a confirmation email. Open it and click the link to start receiving the letter."}
+                      {emailSent
+                        ? (isRTL
+                          ? "بعتنالك إيميل تأكيد. افتحه واضغط على الرابط علشان النشرة توصلك. لو مش لاقيه، بص في الـ Spam."
+                          : "We sent you a confirmation email. Open it and click the link. If you can't find it, check spam.")
+                        : (isRTL
+                          ? "هيوصلك إيميل تأكيد قريب، اضغط على الرابط اللي فيه علشان تبدأ النشرة توصلك."
+                          : "A confirmation email is on its way soon; click its link to start receiving the letter.")}
                     </p>
                   </div>
                 </div>

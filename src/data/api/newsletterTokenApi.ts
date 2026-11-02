@@ -5,7 +5,7 @@
  *   POST /newsletter/confirm      { token }
  *   POST /newsletter/unsubscribe  { token } | { email }
  *
- * Subscribing itself uses the EXISTING `newsletterApi.subscribe` (POST /newsletter) in laravelApi.ts.
+ * Subscribing itself is `newsletterApi.subscribe` (POST /newsletter/subscribe, public) in laravelApi.ts.
  * apiFetch throws ApiError on non-2xx, so callers can show a real error state.
  */
 import { apiFetch } from "@/data/laravelApi";

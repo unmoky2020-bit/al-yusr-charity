@@ -26,6 +26,8 @@ class MisbahaRoomController extends Controller
             'name' => $r->name,
             'created_by' => $r->created_by,
             'total_count' => (int) $r->total_count,
+            'target_total' => $r->target_total ? (int) $r->target_total : null,
+            'dhikr_id' => $r->dhikr_id,
             'created_at' => $r->created_at,
         ];
     }
@@ -54,6 +56,8 @@ class MisbahaRoomController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'min:2', 'max:80'],
             'created_by' => ['nullable', 'string', 'max:60'],
+            'target_total' => ['nullable', 'integer', 'in:1000,10000,100000,1000000'],
+            'dhikr_id' => ['nullable', 'string', 'max:40', 'regex:/^[a-z_]+$/'],
         ]);
         $clean = fn (?string $v) => $v === null ? null : trim(strip_tags($v));
         $ipHash = hash('sha256', (string) $request->ip() . config('app.key'));
@@ -72,6 +76,8 @@ class MisbahaRoomController extends Controller
             'slug' => $slug,
             'name' => $clean($data['name']),
             'created_by' => $clean($data['created_by'] ?? null) ?: null,
+            'target_total' => $data['target_total'] ?? null,
+            'dhikr_id' => $data['dhikr_id'] ?? null,
             'creator_ip_hash' => $ipHash,
             'last_activity_at' => now(),
         ]);
