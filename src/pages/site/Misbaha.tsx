@@ -650,7 +650,7 @@ function SummaryDialog({ isAr, tally, total, roomName, pageUrl, onClose }: {
   };
 
   return (
-    <div className="fixed inset-0 z-[80] grid place-items-center bg-black/60 p-4" role="dialog" aria-modal="true" aria-label={isAr ? "حصيلة ذكرك" : "Your dhikr summary"} onClick={onClose}>
+    <div className="fixed inset-0 z-[150] grid place-items-center bg-black/60 p-4" role="dialog" aria-modal="true" aria-label={isAr ? "حصيلة ذكرك" : "Your dhikr summary"} onClick={onClose}>
       <div className="relative max-h-[92vh] w-full max-w-sm overflow-y-auto rounded-3xl bg-card p-4 shadow-card" onClick={(e) => e.stopPropagation()}>
         <button type="button" onClick={onClose} className="absolute end-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-muted text-primary" aria-label={isAr ? "إغلاق" : "Close"}><X className="h-4 w-4" /></button>
         <h2 className="pe-10 text-lg font-black text-primary">{isAr ? "تقبّل الله منك" : "May Allah accept it"}</h2>

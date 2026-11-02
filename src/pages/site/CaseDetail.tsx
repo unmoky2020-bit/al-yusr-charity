@@ -620,7 +620,7 @@ const CaseDetail = () => {
 
       {lightbox && (
         <div ref={lightboxDialogRef} role="dialog" aria-modal="true" aria-label={isRTL ? "معرض الصور" : "Media viewer"} tabIndex={-1}
-          className="fixed inset-0 z-50 grid place-items-center bg-black/85 p-4" onClick={closeLightbox}>
+          className="fixed inset-0 z-[150] grid place-items-center bg-black/85 p-4" onClick={closeLightbox}>
           <button type="button" onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
             className="absolute end-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white hover:bg-white/25" aria-label={isRTL ? "إغلاق" : "Close"}>
             <X className="h-5 w-5" />

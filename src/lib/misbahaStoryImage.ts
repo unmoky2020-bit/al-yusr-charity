@@ -41,6 +41,10 @@ export async function drawMisbahaStory(opts: {
   total: number;
   totalLabel: string;
   goalLine?: string;
+  /** 0..1 share of the goal reached: lights that share of the beads. */
+  progress?: number;
+  /** shown instead of «0» before anyone has counted */
+  zeroText?: string;
   cta: string;
   url: string;
   rtl: boolean;
@@ -69,55 +73,69 @@ export async function drawMisbahaStory(opts: {
   bg.addColorStop(1, GREEN);
   g.fillStyle = bg;
   g.fillRect(0, 0, W, H);
-  // soft glow
-  const glow = g.createRadialGradient(cx, 560, 40, cx, 560, 620);
-  glow.addColorStop(0, "rgba(163,230,53,0.20)");
+  // soft glow behind the ring
+  const cy = 470;
+  const glow = g.createRadialGradient(cx, cy, 40, cx, cy, 560);
+  glow.addColorStop(0, "rgba(163,230,53,0.18)");
   glow.addColorStop(1, "rgba(163,230,53,0)");
   g.fillStyle = glow;
-  g.fillRect(0, 0, W, 1200);
+  g.fillRect(0, 0, W, 1100);
 
-  // bead ring with the count in the middle
-  const cy = 560;
+  // kicker
+  g.fillStyle = LIME;
+  g.font = `800 38px ${font}`;
+  g.fillText(opts.kicker, cx, 150);
+
+  // bead ring: lit beads show the share of the goal reached
+  const lit = Math.round(Math.max(0, Math.min(1, opts.progress ?? 0)) * 33);
   for (let i = 0; i < 33; i++) {
     const a = (-90 + (i * 360) / 33) * (Math.PI / 180);
     g.beginPath();
-    g.arc(cx + 250 * Math.cos(a), cy + 250 * Math.sin(a), 17, 0, Math.PI * 2);
-    g.fillStyle = i % 11 === 0 ? LIME : "rgba(163,230,53,0.5)";
+    g.arc(cx + 215 * Math.cos(a), cy + 215 * Math.sin(a), i % 11 === 0 ? 17 : 14, 0, Math.PI * 2);
+    g.fillStyle = i < lit || i % 11 === 0 ? LIME : "rgba(163,230,53,0.38)";
     g.fill();
   }
   g.fillStyle = "#fff";
-  g.font = `900 ${opts.total >= 1_000_000 ? 108 : 132}px ${font}`;
-  g.fillText(opts.total.toLocaleString(opts.locale), cx, cy + 40);
-  g.font = `700 38px ${font}`;
-  g.fillStyle = "rgba(255,255,255,0.75)";
-  g.fillText(opts.totalLabel, cx, cy + 100);
+  if (opts.total > 0 || !opts.zeroText) {
+    g.font = `900 ${opts.total >= 1_000_000 ? 100 : 124}px ${font}`;
+    g.fillText(opts.total.toLocaleString(opts.locale), cx, cy + 30);
+    g.font = `700 36px ${font}`;
+    g.fillStyle = "rgba(255,255,255,0.75)";
+    g.fillText(opts.totalLabel, cx, cy + 88);
+  } else {
+    g.font = `900 56px ${font}`;
+    wrap(g, opts.zeroText, 330, 2).forEach((l, i, arr) => g.fillText(l, cx, cy + 20 - (arr.length - 1) * 34 + i * 68));
+  }
 
-  // kicker + title + tagline
-  g.fillStyle = LIME;
-  g.font = `800 40px ${font}`;
-  g.fillText(opts.kicker, cx, 200);
-
+  // title + tagline + goal (flowing, never under the QR card)
+  let y = 800;
   g.fillStyle = "#fff";
-  g.font = `900 78px ${font}`;
-  const titleLines = wrap(g, opts.title, W - 160, 2);
-  titleLines.forEach((l, i) => g.fillText(l, cx, 960 + i * 100));
-  let y = 960 + titleLines.length * 100 + 10;
-  g.font = `700 44px ${font}`;
+  g.font = `900 74px ${font}`;
+  const titleLines = wrap(g, opts.title, W - 150, 2);
+  titleLines.forEach((l, i) => g.fillText(l, cx, y + i * 94));
+  y += (titleLines.length - 1) * 94 + 86;
+  g.font = `700 40px ${font}`;
   g.fillStyle = "rgba(255,255,255,0.85)";
-  wrap(g, opts.tagline, W - 200, 2).forEach((l, i) => g.fillText(l, cx, y + i * 64));
-  y += 150;
+  const tagLines = wrap(g, opts.tagline, W - 200, 2);
+  tagLines.forEach((l, i) => g.fillText(l, cx, y + i * 58));
+  y += (tagLines.length - 1) * 58 + 84;
   if (opts.goalLine) {
-    g.font = `800 36px ${font}`;
+    g.font = `800 32px ${font}`;
+    const w = Math.min(W - 160, g.measureText(opts.goalLine).width + 64);
+    g.strokeStyle = "rgba(163,230,53,0.7)";
+    g.lineWidth = 2.5;
+    roundRect(g, cx - w / 2, y - 44, w, 64, 32);
+    g.stroke();
     g.fillStyle = LIME;
     g.fillText(opts.goalLine, cx, y);
   }
 
-  // QR card
-  const QR = 360;
-  const cardW = 560;
-  const cardH = 560;
+  // QR card, pinned to the bottom
+  const QR = 300;
+  const cardW = 520;
+  const cardH = 490;
   const cardX = cx - cardW / 2;
-  const cardY = H - cardH - 150;
+  const cardY = 1310;
   g.fillStyle = "#fff";
   roundRect(g, cardX, cardY, cardW, cardH, 44);
   g.fill();
@@ -125,22 +143,22 @@ export async function drawMisbahaStory(opts: {
     const QRCode = (await import("qrcode")).default;
     const qr = document.createElement("canvas");
     await QRCode.toCanvas(qr, opts.url, { width: QR, margin: 0, color: { dark: GREEN, light: "#ffffff" }, errorCorrectionLevel: "M" });
-    g.drawImage(qr, cx - QR / 2, cardY + 50, QR, QR);
+    g.drawImage(qr, cx - QR / 2, cardY + 42, QR, QR);
   } catch {
     /* no QR: the link text below still works */
   }
   g.fillStyle = GREEN;
-  g.font = `900 42px ${font}`;
-  g.fillText(opts.cta, cx, cardY + 50 + QR + 70);
-  g.font = `700 28px ${font}`;
+  g.font = `900 40px ${font}`;
+  g.fillText(opts.cta, cx, cardY + 42 + QR + 62);
+  g.font = `700 27px ${font}`;
   g.fillStyle = "rgba(6,48,28,0.65)";
   g.direction = "ltr";
-  g.fillText(opts.url.replace(/^https?:\/\//, "").replace(/\?.*$/, ""), cx, cardY + 50 + QR + 118);
+  g.fillText(opts.url.replace(/^https?:\/\//, "").replace(/\?.*$/, ""), cx, cardY + 42 + QR + 104);
   g.direction = opts.rtl ? "rtl" : "ltr";
 
   g.fillStyle = "rgba(255,255,255,0.7)";
   g.font = `700 30px ${font}`;
-  g.fillText(opts.rtl ? "مؤسسة اليسر الخيرية · elyusr.org" : "Al-Yusr Charity · elyusr.org", cx, H - 70);
+  g.fillText(opts.rtl ? "مؤسسة اليسر الخيرية · elyusr.org" : "Al-Yusr Charity · elyusr.org", cx, H - 56);
 
   return await new Promise<Blob>((resolve, reject) => c.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/png"));
 }
