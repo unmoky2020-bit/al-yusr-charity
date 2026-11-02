@@ -316,6 +316,8 @@ export const Hero = () => {
           style={{ perspective: "1400px" }}
         >
           {/* ── FACE A: Sad Girl (grounded flush to bottom: 0) ─────────────────── */}
+          {/* Image heights are capped at "screen height minus the text above", so on short
+              screens (1366×768 laptops, small phones) the picture shrinks instead of covering the text. */}
           <div
             className="hc-face-sad pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex items-end justify-center w-full"
             style={{ transformOrigin: "50% 100%" }}
@@ -323,7 +325,7 @@ export const Hero = () => {
             <img
               src={heroSad}
               alt={isRTL ? "أسرة محتاجة قبل وصول الخير" : "A family before help arrives"}
-              className="hc-sad pointer-events-none select-none object-contain object-bottom block w-auto max-w-[min(76vw,380px)] max-h-[410px] xs:max-h-[440px] sm:max-h-[470px] lg:max-h-[380px] xl:max-h-[400px] lg:max-w-[310px] xl:max-w-[330px]"
+              className="hc-sad pointer-events-none select-none object-contain object-bottom block w-auto max-w-[min(76vw,380px)] max-h-[min(410px,calc(100vh_-_395px))] sm:max-h-[min(470px,calc(100vh_-_470px))] lg:max-h-[min(380px,calc(100vh_-_415px))] xl:max-h-[min(400px,calc(100vh_-_465px))] lg:max-w-[310px] xl:max-w-[330px]"
               style={{
                 marginBottom: 0,
               }}
@@ -354,7 +356,7 @@ export const Hero = () => {
             <img
               src={heroHappy}
               alt={isRTL ? "متطوعو اليسر مع أسرة مستفيدة وسلال الخير" : "Al-Yusr volunteers with a family and aid baskets"}
-              className="hc-happy pointer-events-none relative z-[3] w-[126%] xs:w-[120%] sm:w-[108%] md:w-[68%] lg:w-[50%] xl:w-[44%] max-w-none md:max-w-[670px] lg:max-w-[560px] xl:max-w-[600px] select-none object-contain object-bottom block max-h-[460px] xs:max-h-[500px] sm:max-h-[560px] md:max-h-[630px] lg:max-h-[490px] xl:max-h-[510px]"
+              className="hc-happy pointer-events-none relative z-[3] w-[126%] xs:w-[120%] sm:w-[108%] md:w-[68%] lg:w-[50%] xl:w-[44%] max-w-none md:max-w-[670px] lg:max-w-[560px] xl:max-w-[600px] select-none object-contain object-bottom block max-h-[min(460px,calc(100vh_-_395px))] sm:max-h-[min(560px,calc(100vh_-_470px))] md:max-h-[min(630px,calc(100vh_-_470px))] lg:max-h-[min(490px,calc(100vh_-_415px))] xl:max-h-[min(510px,calc(100vh_-_465px))]"
               style={{
                 filter: "saturate(1.05) contrast(1.03) drop-shadow(0 10px 24px rgba(0,0,0,0.36))",
                 marginBottom: 0,

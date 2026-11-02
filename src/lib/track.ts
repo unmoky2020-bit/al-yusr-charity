@@ -17,6 +17,8 @@ export interface TrackOptions {
   fbEvent?: string;
   /** Optional extra payload merged into all sinks. */
   payload?: AnyObj;
+  /** Also send the event to Meta as a custom event (default: only when there is no standard fbEvent). */
+  fbCustom?: boolean;
 }
 
 /**
@@ -39,10 +41,13 @@ export function track(event: string, opts: TrackOptions = {}) {
     window.gtag?.("event", event, payload);
   } catch {}
   try {
+    // One Meta event per action: the standard event when there is one (Lead, Contact, PageView…),
+    // otherwise a custom event. Sending both made every lead and page show up twice in Events Manager.
     if (opts.fbEvent) {
-      window.fbq?.("track", opts.fbEvent, payload);
+      window.fbq?.("track", opts.fbEvent, opts.payload || {});
+    } else if (opts.fbCustom !== false) {
+      window.fbq?.("trackCustom", event, payload);
     }
-    window.fbq?.("trackCustom", event, payload);
   } catch {}
 }
 

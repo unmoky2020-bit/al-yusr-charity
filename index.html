@@ -58,11 +58,11 @@
   <meta data-rh="true" name="twitter:image" content="https://elyusr.org/og-cover.jpg?v=2026.1" />
   <meta data-rh="true" name="twitter:image:alt" content="مؤسسة اليسر الخيرية — أمانة في العطاء وأثرٌ يدوم" />
 
-  <!-- Meta (Facebook) Pixel — only loads when a real ID is set on window.__FB_PIXEL_ID -->
+  <!-- Meta Pixel Code (Al-Yusr pixel 1156274720394557). Fires PageView once on load;
+       in-app page changes send PageView from RouteTracker in src/App.tsx. -->
   <script>
     (function () {
-      var PID = window.__FB_PIXEL_ID || "";
-      if (!PID || PID === "YOUR_PIXEL_ID") return; // skip until configured
+      var PID = window.__FB_PIXEL_ID || "1156274720394557";
       !function (f, b, e, v, n, t, s) {
         if (f.fbq) return; n = f.fbq = function () {
           n.callMethod ?
@@ -192,6 +192,9 @@
 </head>
 
 <body>
+  <noscript><img height="1" width="1" style="display:none" alt=""
+    src="https://www.facebook.com/tr?id=1156274720394557&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel Code -->
   <div id="root"></div>
   <noscript>
     <!-- Static semantic fallback for search bots, AI search agents, and crawlers with JS disabled -->

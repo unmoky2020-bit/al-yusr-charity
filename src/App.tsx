@@ -173,6 +173,7 @@ const RouteTracker = () => {
   const loc = useLocation();
   const navType = useNavigationType();
   const didInitScroll = useRef(false);
+  const pageViewSent = useRef(false);
   const currentKey = useRef(loc.key);
   /** Last scroll position of the current entry (kept in memory every scroll, stored on pause/leave). */
   const lastY = useRef<number | null>(null);
@@ -241,8 +242,13 @@ const RouteTracker = () => {
       }
       didInitScroll.current = true;
     }
+    // The first PageView is sent by the pixel snippet in index.html; only in-app page changes are sent here,
+    // so Meta never counts the landing page twice.
+    const firstView = !pageViewSent.current;
+    pageViewSent.current = true;
     track("page_view", {
-      fbEvent: "PageView",
+      fbEvent: firstView ? undefined : "PageView",
+      fbCustom: false,
       payload: { path: loc.pathname, search: loc.search },
     });
   }, [loc.key]); // eslint-disable-line react-hooks/exhaustive-deps
