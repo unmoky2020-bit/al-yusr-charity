@@ -44,8 +44,8 @@
     "en": { "title": "Al-Yusr blog | Zakat, qurbani and impact stories", "description": "Guides on zakat, qurbani, Ramadan and ongoing charity, plus campaign news and impact reports." }
   },
   "/stories": {
-    "ar": { "title": "قصص الأثر | مؤسسة اليسر الخيرية", "description": "قصص حقيقية لأسر وأطفال اتغيرت حياتهم بتبرعاتكم." },
-    "en": { "title": "Impact stories | Al-Yusr Charity Foundation", "description": "Real stories of families and children whose lives your donations changed." }
+    "ar": { "title": "قصص الأثر — حكايات حقيقية من أسر وصلها خيركم | مؤسسة اليسر", "description": "قصص حقيقية موثّقة لأسر وأطفال في الدقهلية ومحافظات مصر اتغيّرت حياتهم بتبرعاتكم: إطعام، علاج، تعليم، سكن وجهاز عرائس." },
+    "en": { "title": "Impact stories — real families your giving reached | Al-Yusr", "description": "Documented, real stories of families and children across Egypt whose lives changed thanks to your donations." }
   },
   "/donate/track": {
     "ar": { "title": "تتبع تبرعك | مؤسسة اليسر الخيرية", "description": "اكتب رقم التتبع وشوف مرحلة تنفيذ تبرعك وصور التسليم بدون تسجيل دخول." },

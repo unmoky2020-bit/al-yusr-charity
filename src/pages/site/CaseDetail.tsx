@@ -421,8 +421,9 @@ const CaseDetail = () => {
         </div>
       </section>
 
-      <section className="bg-background py-8 md:py-12">
-        <div className="container mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_380px]">
+      {/* bottom room: the footer's newsletter card floats ~80px over the last section */}
+      <section className="bg-background pb-24 pt-8 md:pb-20 md:pt-12">
+        <div className="container mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[minmax(0,1fr)_380px]">
           <aside className="lg:order-2">
             <div ref={donateBoxRef} id="donate-box" className="scroll-mt-28 lg:sticky lg:top-24">
               <DonateBox c={c} isRTL={isRTL} days={days} />
@@ -758,22 +759,42 @@ function DonateBox({ c, isRTL, days }: { c: CaseRow; isRTL: boolean; days: numbe
   );
 }
 
+/** Same grid as the real hero (photo first, facts centred beside it), so nothing jumps when data arrives. */
 function DetailSkeleton() {
+  const glass = "bg-white/10";
   return (
-    <div aria-busy="true">
+    <div aria-busy="true" aria-label="جاري التحميل">
       <div className="bg-[#06301c]">
-        <div className="container mx-auto grid max-w-6xl gap-6 px-4 py-10 lg:grid-cols-[1.15fr_1fr]">
-          <Skeleton className="aspect-[4/3] w-full rounded-[1.75rem] bg-white/10" />
-          <div className="space-y-3 self-end">
-            <Skeleton className="h-6 w-40 bg-white/10" />
-            <Skeleton className="h-10 w-full bg-white/10" />
-            <Skeleton className="h-5 w-2/3 bg-white/10" />
+        <div className="container mx-auto max-w-6xl px-4 pb-8 pt-6 md:pb-12 md:pt-8">
+          <Skeleton className={`mx-auto h-9 w-72 max-w-full rounded-full lg:mx-0 ${glass}`} />
+          <div className="mt-4 grid items-center gap-6 md:gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-12">
+            <Skeleton className={`aspect-[4/3] w-full rounded-[1.75rem] sm:aspect-[16/10] lg:aspect-[4/3] ${glass}`} />
+            <div className="flex min-w-0 flex-col items-center lg:items-start">
+              <div className="flex gap-2">
+                <Skeleton className={`h-6 w-16 rounded-full ${glass}`} />
+                <Skeleton className={`h-6 w-20 rounded-full ${glass}`} />
+                <Skeleton className={`h-6 w-24 rounded-full ${glass}`} />
+              </div>
+              <Skeleton className={`mt-4 h-10 w-4/5 ${glass}`} />
+              <Skeleton className={`mt-3 h-5 w-3/5 ${glass}`} />
+              <Skeleton className={`mt-4 h-8 w-48 rounded-full ${glass}`} />
+              <div className="mt-6 w-full max-w-md space-y-3 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
+                <div className="flex items-end justify-between">
+                  <Skeleton className={`h-8 w-32 ${glass}`} />
+                  <Skeleton className={`h-8 w-14 ${glass}`} />
+                </div>
+                <Skeleton className={`h-2 w-full rounded-full ${glass}`} />
+                <Skeleton className={`h-4 w-40 ${glass}`} />
+                <Skeleton className="h-11 w-full rounded-xl bg-white/15" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div className="container mx-auto grid max-w-6xl gap-8 px-4 py-10 lg:grid-cols-[1fr_380px]">
+      <div className="container mx-auto grid max-w-6xl gap-8 px-4 py-10 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="space-y-3">
-          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-4 w-full" />)}
+          <Skeleton className="h-7 w-40" />
+          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className={`h-4 ${i % 3 === 2 ? "w-2/3" : "w-full"}`} />)}
         </div>
         <Skeleton className="h-80 w-full rounded-3xl" />
       </div>

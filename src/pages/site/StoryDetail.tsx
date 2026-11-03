@@ -37,7 +37,10 @@ export default function StoryDetail() {
       // Fetch related stories (excluding current)
       const all = await listPublishedStories();
       if (!cancelled) {
-        setRelatedStories(all.filter((s) => s.slug !== slug).slice(0, 3));
+        // same program / category first, then the rest
+        const others = all.filter((s) => s.slug !== slug);
+        const same = (s: StoryCard) => (data?.program_id && s.program_id === data.program_id) || (!!data?.role_ar && s.role_ar === data.role_ar);
+        setRelatedStories([...others.filter(same), ...others.filter((s) => !same(s))].slice(0, 3));
       }
       setLoading(false);
     })();
@@ -47,8 +50,18 @@ export default function StoryDetail() {
   if (loading) {
     return (
       <PageLayout>
-        <div className="flex min-h-[60vh] items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div aria-busy="true" aria-label="جاري التحميل">
+          <div className="bg-primary/90 py-14">
+            <div className="container mx-auto max-w-3xl space-y-4 px-4 text-center">
+              <div className="mx-auto h-4 w-40 animate-pulse rounded bg-white/20" />
+              <div className="mx-auto h-10 w-4/5 animate-pulse rounded bg-white/25" />
+              <div className="mx-auto h-5 w-2/3 animate-pulse rounded bg-white/20" />
+            </div>
+          </div>
+          <div className="container mx-auto max-w-3xl space-y-4 px-4 py-12">
+            <div className="aspect-[16/9] w-full animate-pulse rounded-3xl bg-muted" />
+            {Array.from({ length: 5 }).map((_, i) => <div key={i} className={`h-4 animate-pulse rounded bg-muted ${i % 3 === 2 ? "w-2/3" : "w-full"}`} />)}
+          </div>
         </div>
       </PageLayout>
     );

@@ -6,7 +6,7 @@
  *   - Admin: list / get / create / update / delete through Laravel only. Failures are returned as
  *     `{ error }` (or thrown for reads) — there is NO localStorage fallback any more.
  */
-import { storiesApi as laravelStoriesApi, invalidateApiCache, type LaravelStory } from "@/data/laravelApi";
+import { apiFetch, formatServerImageUrl, invalidateApiCache, type LaravelStory } from "@/data/laravelApi";
 import { apiErrorMessage, fetchItem, fetchList, sendJson } from "@/data/api/adminApiHelpers";
 import family from "@/assets/family-hope.webp";
 import hands from "@/assets/hands-sprout.jpg";
@@ -227,7 +227,7 @@ function mapLaravelStory(raw: LaravelStory): StoryCard {
     beneficiary_name: s.beneficiary_name || null,
     location_ar: s.location_ar || null,
     location_en: s.location_en || null,
-    image_url: s.cover_image_url || s.cover_image || null,
+    image_url: formatServerImageUrl(s.cover_image_url || s.cover_image || "") || null,
     program_id: s.program_id != null ? String(s.program_id) : null,
     program: s.program?.slug ? { slug: s.program.slug, name_ar: s.program.name_ar || "", name_en: s.program.name_en || "" } : null,
     pillar_slug: s.pillar_slug || null,
@@ -279,44 +279,40 @@ const isStaticId = (id?: string | null) => !id || id.startsWith("static-");
 
 // ─── Public API (public pages keep the static fallback) ──────────────────────
 
-/** List all published stories (featured first) */
-export async function listPublishedStories(): Promise<StoryCard[]> {
-  // 1. Try Laravel API first (primary source)
-  try {
-    const laravelData = await laravelStoriesApi.listPublished();
-    if (Array.isArray(laravelData) && laravelData.length > 0) {
-      return laravelData
-        .filter((s: LaravelStory) => s.status === "published")
-        .map(mapLaravelStory)
-        .sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0) || a.sort_order - b.sort_order);
-    }
-  } catch {}
+const byFeatured = (a: StoryCard, b: StoryCard) =>
+  (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0) || a.sort_order - b.sort_order || String(b.created_at || "").localeCompare(String(a.created_at || ""));
 
-  // 2. Static fallback
-  return [...STATIC_STORIES].filter((s) => s.is_published).sort((a, b) => a.sort_order - b.sort_order);
+/**
+ * Published stories (featured first). Only real stories from the dashboard: the sample stories are used
+ * ONLY when the API is unreachable — an empty list stays empty (the sections hide themselves).
+ */
+export async function listPublishedStories(): Promise<StoryCard[]> {
+  try {
+    const rows = await fetchList<LaravelStory>("/stories", { status: "published", per_page: 100 });
+    return rows.filter((s) => !s.status || s.status === "published").map(mapLaravelStory).sort(byFeatured);
+  } catch {
+    return [...STATIC_STORIES].filter((s) => s.is_published).sort((a, b) => a.sort_order - b.sort_order);
+  }
 }
 
-
-/** List featured stories for Testimonial carousel */
+/** Stories for the home carousel: the featured ones, else the latest. */
 export async function listFeaturedStories(limit = 5): Promise<StoryCard[]> {
   const all = await listPublishedStories();
   const featured = all.filter((s) => s.is_featured);
-  return featured.length > 0 ? featured.slice(0, limit) : all.slice(0, limit);
+  return (featured.length > 0 ? featured : all).slice(0, limit);
 }
 
-/** Get a single story by slug */
+/** One published story by slug (GET /stories/{slug}, else from the list). */
 export async function getStoryBySlug(slug: string): Promise<StoryCard | null> {
-  // 1. Try Laravel API first
   try {
-    const allLaravel = await laravelStoriesApi.listPublished();
-    if (Array.isArray(allLaravel) && allLaravel.length > 0) {
-      const found = allLaravel.find((s: LaravelStory) => s.slug === slug && s.status === "published");
-      if (found) return mapLaravelStory(found);
-    }
-  } catch {}
-
-  // 2. Static fallback
-  return STATIC_STORIES.find((s) => s.slug === slug && s.is_published) || null;
+    const res = await apiFetch<{ data?: LaravelStory } | LaravelStory>(`/stories/${encodeURIComponent(slug)}`, { method: "GET" });
+    const row = ((res as { data?: LaravelStory })?.data ?? res) as LaravelStory | null;
+    if (row?.slug === slug && (!row.status || row.status === "published")) return mapLaravelStory(row);
+  } catch {
+    /* fall through to the list */
+  }
+  const all = await listPublishedStories();
+  return all.find((s) => s.slug === slug) || null;
 }
 
 // ─── Admin API (Laravel only — failures are reported, never faked) ────────────

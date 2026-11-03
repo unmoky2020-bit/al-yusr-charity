@@ -170,7 +170,7 @@ export const Footer = () => {
             <div aria-hidden className="pointer-events-none absolute inset-2 rounded-[1.6rem] ring-1 ring-[#0b4429]/[0.06]" />
 
             {!subscribed ? (
-              <div className="relative grid items-center gap-7 px-5 py-8 sm:px-8 md:grid-cols-[1.1fr_1fr] md:gap-12 md:px-12 md:py-11">
+              <div className="relative grid items-center gap-7 px-5 pb-10 pt-9 sm:px-8 md:grid-cols-[1.1fr_1fr] md:gap-12 md:px-12 md:py-11">
                 <div className="flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:text-start">
                   <NewsletterSeal isRTL={isRTL} />
                   <div className="min-w-0">
@@ -204,7 +204,7 @@ export const Footer = () => {
                       value={email}
                       onChange={(e) => { setEmail(e.target.value); if (subscribeError) setSubscribeError(null); }}
                       aria-invalid={!!subscribeError}
-                      aria-describedby={subscribeError ? "newsletter-error" : "newsletter-note"}
+                      aria-describedby={subscribeError ? "newsletter-error" : undefined}
                       placeholder="name@example.com"
                       className="h-12 min-w-0 flex-1 rounded-xl border-0 bg-transparent px-3 text-base font-bold text-[#0b4429] outline-none placeholder:font-semibold placeholder:text-[#0b4429]/35 focus-visible:ring-0"
                     />
@@ -220,11 +220,6 @@ export const Footer = () => {
                   {subscribeError && (
                     <p id="newsletter-error" role="alert" className="mt-2 px-1 text-xs font-bold text-destructive">{subscribeError}</p>
                   )}
-                  <ul id="newsletter-note" className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 px-1 text-[11.5px] font-semibold text-[#0b4429]/55 md:justify-start">
-                    <li className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-[#4d8a1f]" /> {isRTL ? "من غير إعلانات" : "No ads"}</li>
-                    <li className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-[#4d8a1f]" /> {isRTL ? "رسالة كل أسبوعين" : "Every two weeks"}</li>
-                    <li className="inline-flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-[#4d8a1f]" /> {isRTL ? "إلغاء بضغطة" : "One-click unsubscribe"}</li>
-                  </ul>
                 </form>
               </div>
             ) : (
@@ -434,11 +429,11 @@ export const Footer = () => {
 };
 
 /** Perforation holes along the stamp's edges (computed once). */
-const STAMP_W = 92;
-const STAMP_H = 108;
+const STAMP_W = 112;
+const STAMP_H = 132;
 const STAMP_HOLES = (() => {
-  const r = 3.2;
-  const step = 9.2;
+  const r = 3.6;
+  const step = 10.2;
   const out: { x: number; y: number }[] = [];
   for (let x = step / 2; x < STAMP_W; x += step) out.push({ x, y: 0 }, { x, y: STAMP_H });
   for (let y = step / 2; y < STAMP_H; y += step) out.push({ x: 0, y }, { x: STAMP_W, y });
@@ -451,9 +446,10 @@ const STAMP_HOLES = (() => {
  */
 function NewsletterSeal({ isRTL }: { isRTL: boolean }) {
   return (
-    <div aria-hidden className="relative shrink-0 pe-6 pt-1">
+    // room for the postmark on the stamp's lower corner, centred on phones
+    <div aria-hidden className="relative mx-auto shrink-0 pb-4 pe-16 ps-16 pt-1 md:mx-0 md:ps-0">
       <div className="relative -rotate-[5deg] transition-transform duration-500 hover:rotate-0">
-        <svg width={STAMP_W} height={STAMP_H} viewBox={`0 0 ${STAMP_W} ${STAMP_H}`} className="block drop-shadow-[0_10px_18px_rgba(6,48,28,0.22)]">
+        <svg width={STAMP_W} height={STAMP_H} viewBox={`0 0 ${STAMP_W} ${STAMP_H}`} className="block drop-shadow-[0_12px_22px_rgba(6,48,28,0.24)]">
           <defs>
             <mask id="stamp-perf">
               <rect width={STAMP_W} height={STAMP_H} fill="#fff" />
@@ -465,25 +461,27 @@ function NewsletterSeal({ isRTL }: { isRTL: boolean }) {
             </linearGradient>
           </defs>
           <rect width={STAMP_W} height={STAMP_H} fill="#fffdf7" mask="url(#stamp-perf)" />
-          <rect x="8" y="8" width={STAMP_W - 16} height={STAMP_H - 16} rx="3" fill="url(#stamp-face)" stroke="#0b4429" strokeOpacity="0.35" strokeWidth="1" />
-          <rect x="11" y="11" width={STAMP_W - 22} height={STAMP_H - 22} rx="2" fill="none" stroke="#0b4429" strokeOpacity="0.15" strokeWidth="0.8" strokeDasharray="2 2" />
+          <rect x="9" y="9" width={STAMP_W - 18} height={STAMP_H - 18} rx="3" fill="url(#stamp-face)" stroke="#0b4429" strokeOpacity="0.35" strokeWidth="1" />
+          <rect x="12.5" y="12.5" width={STAMP_W - 25} height={STAMP_H - 25} rx="2" fill="none" stroke="#0b4429" strokeOpacity="0.15" strokeWidth="0.8" strokeDasharray="2 2" />
         </svg>
-        <div className="absolute inset-[8px] flex flex-col items-center justify-center gap-1 text-[#0b4429]">
-          <img src={logoCircle} alt="" loading="lazy" className="h-11 w-11 rounded-full shadow-sm" />
-          <span className="text-[10px] font-black leading-none">{isRTL ? "بريد الخير" : "Al-Yusr post"}</span>
-          <span className="text-[8px] font-bold leading-none text-[#0b4429]/55" dir="ltr">elyusr.org</span>
+        <div className="absolute inset-[9px] flex flex-col items-center justify-center gap-1.5 text-[#0b4429]">
+          <img src={logoCircle} alt="" loading="lazy" className="h-14 w-14 rounded-full shadow-sm ring-2 ring-white" />
+          <span className="text-[11.5px] font-black leading-none">{isRTL ? "بريد الخير" : "Al-Yusr post"}</span>
+          <span className="text-[8.5px] font-bold leading-none text-[#0b4429]/55" dir="ltr">elyusr.org</span>
         </div>
+        {/* postmark: the round cancel sits on the stamp's lower corner; the waves run off the paper */}
+        <svg viewBox="0 0 56 56" className="pointer-events-none absolute -bottom-4 -end-5 w-[60px] rotate-[-12deg] text-[#0b4429]/50 mix-blend-multiply">
+          <circle cx="28" cy="28" r="25" fill="none" stroke="currentColor" strokeWidth="1.8" />
+          <circle cx="28" cy="28" r="19" fill="none" stroke="currentColor" strokeWidth="0.9" />
+          <text x="28" y="27" textAnchor="middle" fontSize="8.5" fontWeight={800} fill="currentColor">{isRTL ? "المنصورة" : "Mansoura"}</text>
+          <text x="28" y="38" textAnchor="middle" fontSize="6.5" fontWeight={700} fill="currentColor">{new Date().getFullYear()}</text>
+        </svg>
+        <svg viewBox="0 0 60 30" className="pointer-events-none absolute -bottom-1 -end-[4.6rem] w-[58px] rotate-[-12deg] text-[#0b4429]/40">
+          {[5, 12, 19, 26].map((y) => (
+            <path key={y} d={`M2 ${y} q7 -5 14 0 t14 0 t14 0 t14 0`} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          ))}
+        </svg>
       </div>
-      {/* postmark + cancellation waves */}
-      <svg viewBox="0 0 120 64" className="pointer-events-none absolute -bottom-3 end-[-14px] w-[92px] rotate-[-12deg] text-[#0b4429]/40">
-        <circle cx="30" cy="32" r="24" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <circle cx="30" cy="32" r="18" fill="none" stroke="currentColor" strokeWidth="0.9" />
-        <text x="30" y="30" textAnchor="middle" fontSize="8.5" fontWeight={800} fill="currentColor">{isRTL ? "المنصورة" : "Mansoura"}</text>
-        <text x="30" y="41" textAnchor="middle" fontSize="6.5" fontWeight={700} fill="currentColor">{new Date().getFullYear()}</text>
-        {[18, 26, 34, 42].map((y) => (
-          <path key={y} d={`M58 ${y} q7 -5 14 0 t14 0 t14 0 t14 0`} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-        ))}
-      </svg>
     </div>
   );
 }
