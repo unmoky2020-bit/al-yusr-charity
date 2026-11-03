@@ -49,7 +49,7 @@ export const slugify = (v: string) =>
     .replace(/^-|-$/g, "");
 
 export function parseArticleMarkdown(text: string, file = ""): ImportedArticle {
-  const src = text.replace(/\r\n?/g, "\n").replace(/^﻿/, "");
+  const src = text.replace(/\r\n?/g, "\n").replace(/^\uFEFF/, "");
   const lines = src.split("\n");
   const meta: Record<string, string> = {};
   let i = 0;
