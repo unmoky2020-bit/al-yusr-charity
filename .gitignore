@@ -55,3 +55,6 @@ scripts/check-server.mjs
 
 # Backups that hold beneficiary data — never commit
 backend-handoff/deleted-cases-backup-*.json
+
+# packed deploy archives (scripts/deploy/pack-front.sh)
+deploy-out/

@@ -1,7 +1,8 @@
 # مؤسسة اليسر الخيرية — Al-Yusr Charity Platform
 
-> **الحالة الراهنة:** فرونت-إند كامل (React/Vite) متصل بـ Supabase.
-> **الهدف المقبل:** الهجرة إلى Laravel REST API مع الحفاظ على الفرونت بأقل تعديل ممكن.
+> **الحالة الراهنة (3 نوفمبر 2026):** الواجهة (React/Vite) منشورة على `elyusr.org` ومتصلة بـ Laravel API على `api.elyusr.org`. Supabase اتشال خالص.
+> **ابدأ من هنا:** [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md) (التشغيل والنشر والحالة)، و [`docs/AUDIT-2026-11-03.md`](docs/AUDIT-2026-11-03.md) (المراجعة الكاملة)، و [`docs/NEXT-SESSION-PROMPT.md`](docs/NEXT-SESSION-PROMPT.md) (خطة الشغل الجاي).
+> باقي الملف ده قديم (من وقت Supabase) ومحتاج يتكتب من جديد.
 
 ---
 

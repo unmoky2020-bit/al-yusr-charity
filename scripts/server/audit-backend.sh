@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # فحص الباك إند والاستضافة — قراية بس. مبيغيّرش أي ملف ولا أي سجل، ومبيطبعش باسوردات ولا مفاتيح.
 #
-#   scp -P 65002 scripts/server/audit-backend.sh u389354171@195.35.26.214:~/
-#   ssh -p 65002 u389354171@195.35.26.214 'bash ~/audit-backend.sh > ~/audit-$(date +%Y%m%d).txt 2>&1; tail -5 ~/audit-$(date +%Y%m%d).txt'
-#   scp -P 65002 u389354171@195.35.26.214:~/audit-*.txt .
+#   scp -P <port> scripts/server/audit-backend.sh <user>@<host>:~/          (port, user and host: hPanel ← SSH Access)
+#   ssh -p <port> <user>@<host> "bash ~/audit-backend.sh > ~/audit.txt 2>&1; tail -3 ~/audit.txt"
+#   scp -P <port> <user>@<host>:~/audit.txt .
 #
 # The output is meant to be pasted back into the review: it holds counts, versions, flags and route names,
 # never .env secrets, tokens, password hashes or donor data.
