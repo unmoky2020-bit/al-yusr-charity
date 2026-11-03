@@ -45,6 +45,8 @@ rm -rf ~/front-new && mkdir ~/front-new && cd ~/front-new && tar -xzf ~/front-1-
 ```
 - `deploy.sh` بياخد باك أب كامل لـ `public_html` + `rollback.sh` في `~/backups/front-<التاريخ>/`، وينسخ من غير ما يمسح، ويتأكد إن كل ملف وصل بنفس الحجم **قبل** ما يغيّر `index.html`، وبعدين يجرّب الصفحات وأنواع ملفات JS/CSS والسايت ماب.
 - السيرفر مافيهوش `/dev/fd` (process substitution مش شغال في bash)، فالسكريبتات متكتبة من غيره.
+- `front-2-site.tgz` فيه `MANIFEST.txt` (حجم ومسار كل ملف في البناء): `deploy.sh` بيرفض يبدأ لو `front-1` من بناء تاني، وبيتأكد إن كل ملف `index.html` بيطلبه موجود. ولو التجربة بعد النشر فشلت، بيرجّع `index.html` و `.htaccess` و `seo.php` و `sitemap.php` القديمة لوحده.
+- بعد ما تبعت الملفين لجهاز صاحب المشروع، اعمل stage ليهم وقارن md5 قبل ما تقوله يرفعهم.
 - الرجوع: `bash ~/backups/front-<التاريخ>/rollback.sh`.
 
 ## 6) نشر الباك إند
