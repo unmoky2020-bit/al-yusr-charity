@@ -276,5 +276,8 @@ const STATIC_BLOG_SLUGS: { slug: string; date: string }[] = [
     `</urlset>`,
   ].join("\n");
   writeFileSync(resolve("public/sitemap.xml"), xml);
+  // The live sitemap (public/sitemap.php, served at /sitemap.xml) starts from this copy and adds what the
+  // dashboard publishes after the build.
+  writeFileSync(resolve("public/sitemap-base.xml"), xml);
   console.log(`sitemap.xml written (${all.length} entries; ${dyn.length} dynamic)`);
 })();

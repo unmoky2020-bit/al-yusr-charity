@@ -42,6 +42,9 @@
     RewriteCond %{HTTP_HOST} ^www\.elyusr\.org$ [NC]
     RewriteRule ^(.*)$ https://elyusr.org/$1 [L,R=301]
 
+    # C0. Live sitemap: the built one + whatever the dashboard published since (cached 30 min).
+    RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
     # C. Allow direct access to existing files and directories
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d

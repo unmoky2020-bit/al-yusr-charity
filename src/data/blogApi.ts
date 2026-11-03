@@ -70,8 +70,14 @@ const toStaticRow = (p: BlogPost): DbBlogPost => ({
   updated_at: new Date().toISOString(),
 });
 
-/** Laravel numeric id from our row id ("laravel-12" | "12"), or null for static rows. */
-const laravelIdOf = (id: string): string | null =>
+/**
+ * Row ids:  "seo-<blog_seo id>"   an article with its SEO record (/blog-seo) — the normal case;
+ *           "laravel-<content id>" an article saved only through /content (older) — saving it creates its SEO record;
+ *           "static-<slug>"        an article shipped with the site's code — saving it creates it on the backend.
+ * Every admin write goes through /blog-seo (it keeps the article in `contents` and its SEO in `blog_seos`).
+ */
+const seoIdOf = (id: string): string | null => (id.startsWith("seo-") ? id.slice(4) : null);
+const contentIdOf = (id: string): string | null =>
   id.startsWith("laravel-") ? id.replace("laravel-", "") : (/^\d+$/.test(id) ? id : null);
 
 const joinBody = (b: string[] | string | undefined | null) => (Array.isArray(b) ? b.join("\n\n") : (b ?? ""));
@@ -79,21 +85,28 @@ const splitBody = (v: unknown): string[] =>
   typeof v === "string" ? v.split(/\n\s*\n/).filter(Boolean) : Array.isArray(v) ? v.map(String) : [];
 const strArr = (v: unknown): string[] =>
   Array.isArray(v) ? v.map(String) : typeof v === "string" && v ? v.split(",").map((x) => x.trim()).filter(Boolean) : [];
+const DB_STATUSES: DbStatus[] = ["draft", "pending_review", "scheduled", "published", "archived"];
+const toDbStatus = (v: unknown): DbStatus => {
+  const s = String(v || "");
+  if (s === "review") return "pending_review";
+  return (DB_STATUSES as string[]).includes(s) ? (s as DbStatus) : "draft";
+};
 
-/** Map a Laravel /content article to DbBlogPost */
-function laravelToBlogPost(item: any): DbBlogPost {
+/** Map a /content article or a /blog-seo record to DbBlogPost. */
+function laravelToBlogPost(item: any, kind: "content" | "seo" = "content"): DbBlogPost {
   const rawImg = item.cover_image || item.cover_image_url || item.image || item.image_url || null;
+  const og = item.og_image_url || item.og_image || null;
   return {
-    id: `laravel-${item.id || item.slug}`,
+    id: kind === "seo" ? `seo-${item.id}` : `laravel-${item.id || item.slug}`,
     slug: item.slug || "",
-    status: (item.status || "published") as DbStatus,
-    published_at: item.published_at || item.created_at || new Date().toISOString(),
+    status: kind === "seo" ? toDbStatus(item.workflow_status) : toDbStatus(item.status || "published"),
+    published_at: item.published_at || item.created_at || null,
     scheduled_at: item.scheduled_at || null,
     image_url: rawImg ? formatServerImageUrl(rawImg) : null,
-    og_image_url: item.og_image_url ? formatServerImageUrl(item.og_image_url) : null,
+    og_image_url: og ? formatServerImageUrl(og) : null,
     category_ar: item.category_ar || "مقالات",
     category_en: item.category_en || "Articles",
-    focus_keyword: item.focus_keyword || item.primary_keyword || item.slug || null,
+    focus_keyword: item.primary_keyword || item.focus_keyword || null,
     title_ar: item.title_ar || item.title || "",
     title_en: item.title_en || item.title_ar || item.title || "",
     excerpt_ar: item.summary_ar || item.excerpt_ar || item.excerpt || "",
@@ -102,55 +115,67 @@ function laravelToBlogPost(item: any): DbBlogPost {
     body_en: splitBody(item.content_en),
     tags_ar: strArr(item.tags_ar ?? item.tags),
     tags_en: strArr(item.tags_en),
-    seo_score: Number(item.seo_score ?? 90) || 0,
+    seo_score: Number(item.seo_score ?? 0) || 0,
     created_at: item.created_at || new Date().toISOString(),
     updated_at: item.updated_at || item.created_at || new Date().toISOString(),
   };
 }
 
-/**
- * DbBlogPost fields → Laravel `/content` body.
- * Existing (Postman): type, status, slug, title_ar/en, summary_ar/en, content_ar/en, cover_image, tags, author_id.
- * NEW columns the admin now sends (see backend-handoff/02-replace-supabase-admin.md):
- * category_ar, category_en, tags_ar, tags_en, focus_keyword, og_image_url, seo_score, published_at, scheduled_at.
- */
-function toLaravelContent(p: Partial<DbBlogPost>): Record<string, unknown> {
+/** Images are saved as plain URLs / storage paths (never data: or blob: — those are local previews). */
+const savableImage = (v: string | null | undefined) =>
+  v && !v.startsWith("data:") && !v.startsWith("blob:") && !v.startsWith("/src/") && !v.startsWith("/assets/") ? v : null;
+
+/** DbBlogPost fields → /blog-seo body (StoreBlogSeoRequest / UpdateBlogSeoRequest). */
+function toBlogSeoBody(p: Partial<DbBlogPost>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   if (p.slug !== undefined) out.slug = p.slug;
-  if (p.status !== undefined) out.status = p.status;
   if (p.title_ar !== undefined) out.title_ar = p.title_ar;
-  if (p.title_en !== undefined) out.title_en = p.title_en;
-  if (p.excerpt_ar !== undefined) out.summary_ar = p.excerpt_ar;
-  if (p.excerpt_en !== undefined) out.summary_en = p.excerpt_en;
+  if (p.title_en !== undefined) out.title_en = p.title_en || null;
+  if (p.excerpt_ar !== undefined) out.summary_ar = p.excerpt_ar || null;
+  if (p.excerpt_en !== undefined) out.summary_en = p.excerpt_en || null;
   if (p.body_ar !== undefined) out.content_ar = joinBody(p.body_ar);
-  if (p.body_en !== undefined) out.content_en = joinBody(p.body_en);
-  if (p.category_ar !== undefined) out.category_ar = p.category_ar;
-  if (p.category_en !== undefined) out.category_en = p.category_en;
-  if (p.focus_keyword !== undefined) out.focus_keyword = p.focus_keyword;
-  if (p.image_url !== undefined) out.cover_image = p.image_url;
-  if (p.og_image_url !== undefined) out.og_image_url = p.og_image_url;
-  if (p.tags_ar !== undefined) { out.tags = p.tags_ar; out.tags_ar = p.tags_ar; }
+  if (p.body_en !== undefined) out.content_en = joinBody(p.body_en) || null;
+  if (p.category_ar !== undefined) out.category_ar = p.category_ar || null;
+  if (p.category_en !== undefined) out.category_en = p.category_en || null;
+  if (p.focus_keyword !== undefined) out.primary_keyword = p.focus_keyword || null;
+  if (p.image_url !== undefined) out.cover_image = savableImage(p.image_url);
+  if (p.og_image_url !== undefined) out.og_image_url = savableImage(p.og_image_url);
+  if (p.tags_ar !== undefined) out.tags_ar = p.tags_ar;
   if (p.tags_en !== undefined) out.tags_en = p.tags_en;
-  if (p.seo_score !== undefined) out.seo_score = p.seo_score;
-  if (p.published_at !== undefined) out.published_at = p.published_at;
+  if (p.status !== undefined) out.workflow_status = p.status === "pending_review" ? "review" : p.status;
   if (p.scheduled_at !== undefined) out.scheduled_at = p.scheduled_at;
   return out;
 }
 
+/** Every page of a list endpoint (admin token is sent by apiFetch). */
+async function listAll(path: string, params: Record<string, unknown>): Promise<any[]> {
+  const out: any[] = [];
+  for (let page = 1; page <= 20; page++) {
+    const res = await apiFetch<any>(path, { method: "GET", params: { ...params, per_page: 100, page }, useCache: false });
+    const items = Array.isArray(res) ? res : Array.isArray(res?.data) ? res.data : [];
+    out.push(...items);
+    const last = Number(res?.meta?.last_page ?? res?.last_page ?? 1);
+    if (Array.isArray(res) || page >= last || !items.length) break;
+  }
+  return out;
+}
+
+/** Backend articles: SEO records first, then /content articles that have none yet. */
 async function fetchLaravelArticles(): Promise<DbBlogPost[]> {
-  const res = await apiFetch<{ data?: any[] } | any[]>("/content", {
-    method: "GET",
-    params: { type: "article", per_page: 200 },
-    ttlMs: 30000, // writes below call invalidateApiCache("/content")
-  });
-  const items = Array.isArray(res) ? res : (res && Array.isArray((res as any).data) ? (res as any).data : []);
-  return items.filter((item: any) => item && item.slug).map(laravelToBlogPost);
+  const settle = <T,>(p: Promise<T[]>) => p.catch((): T[] => []);
+  const [seo, content] = await Promise.all([
+    settle(listAll("/blog-seo", {})),
+    settle(listAll("/content", { type: "article" })),
+  ]);
+  const rows = seo.filter((r) => r && r.slug).map((r) => laravelToBlogPost(r, "seo"));
+  const seen = new Set(rows.map((r) => r.slug));
+  content.filter((r) => r && r.slug && !seen.has(r.slug)).forEach((r) => rows.push(laravelToBlogPost(r, "content")));
+  return rows;
 }
 
 /**
- * Rows for the blog: the static articles shipped with the site, overlaid by the Laravel `/content`
- * articles (type=article) with the same slug. Static rows keep id "static-<slug>"; saving one from
- * the admin creates it on Laravel (POST /content). No localStorage layer.
+ * Rows for the blog: the static articles shipped with the site, overlaid by the backend articles with the
+ * same slug. Static rows keep id "static-<slug>"; saving one from the admin creates it on the backend.
  */
 export const fetchAllRowsAdmin = async (): Promise<DbBlogPost[]> => {
   const map = new Map<string, DbBlogPost>();
@@ -165,9 +190,7 @@ export const fetchAllRowsAdmin = async (): Promise<DbBlogPost[]> => {
 
 export const fetchPublishedPosts = async (): Promise<BlogPost[]> => {
   const allRows = await fetchAllRowsAdmin();
-  return allRows
-    .filter((r) => r.status === "published")
-    .map(dbToBlogPost);
+  return allRows.filter((r) => r.status === "published").map(dbToBlogPost);
 };
 
 export const fetchAllPostsAdmin = async (): Promise<BlogPost[]> => {
@@ -176,21 +199,18 @@ export const fetchAllPostsAdmin = async (): Promise<BlogPost[]> => {
 };
 
 export const fetchPostBySlug = async (slug: string): Promise<BlogPost | null> => {
-  // Try Laravel first directly
   try {
-    const res = await apiFetch<{ data?: any } | any>(`/content?type=article&slug=${encodeURIComponent(slug)}`, {
-      method: "GET",
-      useCache: false,
-    });
-    const item = (res as any)?.data?.[0] || (Array.isArray(res) ? res[0] : null) || res;
-    if (item && item.slug === slug) {
-      return dbToBlogPost(laravelToBlogPost(item));
+    const res = await apiFetch<any>("/blog-seo", { method: "GET", params: { slug }, useCache: false });
+    const item = (Array.isArray(res?.data) ? res.data : []).find((r: any) => r?.slug === slug);
+    if (item) {
+      const row = laravelToBlogPost(item, "seo");
+      return row.status === "published" ? dbToBlogPost(row) : null;
     }
-  } catch {}
-
-  // Fallback to full list
+  } catch {
+    /* fall back to the merged list */
+  }
   const allRows = await fetchAllRowsAdmin();
-  const found = allRows.find((p) => p.slug === slug);
+  const found = allRows.find((p) => p.slug === slug && p.status === "published");
   return found ? dbToBlogPost(found) : null;
 };
 
@@ -209,116 +229,105 @@ export type NewPostInput = {
   seo_score?: number;
 };
 
-/** POST /content (type=article). Throws on failure; returns the created row. */
-export const createPost = async (p: NewPostInput): Promise<DbBlogPost> => {
-  const status: DbStatus = p.status ?? "draft";
-  const res = await apiFetch<{ data?: any }>("/content", {
-    method: "POST",
-    body: {
-      type: "article",
-      ...toLaravelContent({
-        slug: p.slug,
-        status,
-        title_ar: p.title_ar,
-        title_en: p.title_en,
-        excerpt_ar: p.excerpt_ar,
-        excerpt_en: p.excerpt_en,
-        body_ar: p.body_ar,
-        body_en: p.body_en,
-        category_ar: p.category_ar,
-        category_en: p.category_en,
-        focus_keyword: p.focus_keyword || p.slug,
-        image_url: p.image_url ?? null,
-        og_image_url: p.og_image_url ?? null,
-        tags_ar: p.tags_ar,
-        tags_en: p.tags_en,
-        seo_score: p.seo_score ?? 0,
-        published_at: status === "published" ? new Date().toISOString() : null,
-        scheduled_at: status === "scheduled" ? p.scheduled_at ?? null : null,
-      }),
-    },
-  });
+const done = () => {
+  invalidateApiCache("/blog-seo");
   invalidateApiCache("/content");
-  const item = (res as any)?.data ?? res;
-  return laravelToBlogPost({ ...item, slug: item?.slug || p.slug });
 };
 
-/** Resolve (or create) the Laravel record behind a row id. Static rows are created on first save. */
-async function ensureLaravelId(id: string, patch: Partial<DbBlogPost> = {}): Promise<string> {
-  const direct = laravelIdOf(id);
-  if (direct) return direct;
-  const staticRow = (await staticRows()).find((x) => x.id === id || x.slug === id);
-  const slug = staticRow?.slug ?? id.replace(/^static-/, "");
-  // A record with this slug may already exist on the backend.
-  const existing = (await fetchLaravelArticles()).find((r) => r.slug === slug);
-  if (existing) return laravelIdOf(existing.id) as string;
-  const base: Partial<DbBlogPost> = staticRow ? { ...staticRow } : { slug };
-  const created = await createPost({
-    slug: patch.slug ?? base.slug ?? slug,
-    category_ar: patch.category_ar ?? base.category_ar ?? "مقالات",
-    category_en: patch.category_en ?? base.category_en ?? "Articles",
-    focus_keyword: (patch.focus_keyword ?? base.focus_keyword ?? slug) || slug,
-    title_ar: patch.title_ar ?? base.title_ar ?? slug,
-    title_en: patch.title_en ?? base.title_en ?? slug,
-    excerpt_ar: patch.excerpt_ar ?? base.excerpt_ar ?? "",
-    excerpt_en: patch.excerpt_en ?? base.excerpt_en ?? "",
-    body_ar: patch.body_ar ?? base.body_ar ?? [],
-    body_en: patch.body_en ?? base.body_en ?? [],
-    tags_ar: patch.tags_ar ?? base.tags_ar ?? [],
-    tags_en: patch.tags_en ?? base.tags_en ?? [],
-    // Bundled static images are build-time asset paths; only real URLs are sent.
-    image_url: (patch.image_url ?? undefined) || undefined,
-    og_image_url: (patch.og_image_url ?? undefined) || undefined,
-    status: base.status ?? "published",
-    seo_score: patch.seo_score ?? base.seo_score,
+/** POST /blog-seo. Throws on failure; returns the created row. */
+export const createPost = async (p: NewPostInput): Promise<DbBlogPost> => {
+  const status: DbStatus = p.status ?? "draft";
+  const body = toBlogSeoBody({
+    ...p,
+    status,
+    image_url: p.image_url ?? null,
+    og_image_url: p.og_image_url ?? null,
+    focus_keyword: p.focus_keyword || p.slug,
+    scheduled_at: status === "scheduled" ? p.scheduled_at ?? null : null,
   });
-  const newId = laravelIdOf(created.id);
-  if (!newId) throw new Error("تم الإنشاء لكن الخادم لم يُرجع رقم المقال");
+  // content_ar is required by the backend: an empty new article still gets a first paragraph.
+  if (!body.content_ar) body.content_ar = p.excerpt_ar || p.title_ar;
+  const res = await apiFetch<{ data?: any }>("/blog-seo", { method: "POST", body });
+  done();
+  const item = (res as any)?.data ?? res;
+  return laravelToBlogPost({ ...item, slug: item?.slug || p.slug }, "seo");
+};
+
+/** The /blog-seo id behind a row. Older /content articles and site articles get their record on first save. */
+async function ensureSeoId(id: string, patch: Partial<DbBlogPost> = {}): Promise<string> {
+  const direct = seoIdOf(id);
+  if (direct) return direct;
+  const all = await fetchAllRowsAdmin();
+  const base = all.find((x) => x.id === id) || (await staticRows()).find((x) => x.id === id || x.slug === id);
+  const slug = patch.slug ?? base?.slug ?? id.replace(/^(static|laravel)-/, "");
+  const already = all.find((r) => r.slug === slug && r.id.startsWith("seo-"));
+  if (already) return seoIdOf(already.id) as string;
+  const created = await createPost({
+    slug,
+    category_ar: patch.category_ar ?? base?.category_ar ?? "مقالات",
+    category_en: patch.category_en ?? base?.category_en ?? "Articles",
+    focus_keyword: (patch.focus_keyword ?? base?.focus_keyword ?? slug) || slug,
+    title_ar: patch.title_ar ?? base?.title_ar ?? slug,
+    title_en: patch.title_en ?? base?.title_en ?? slug,
+    excerpt_ar: patch.excerpt_ar ?? base?.excerpt_ar ?? "",
+    excerpt_en: patch.excerpt_en ?? base?.excerpt_en ?? "",
+    body_ar: patch.body_ar ?? base?.body_ar ?? [],
+    body_en: patch.body_en ?? base?.body_en ?? [],
+    tags_ar: patch.tags_ar ?? base?.tags_ar ?? [],
+    tags_en: patch.tags_en ?? base?.tags_en ?? [],
+    image_url: savableImage(patch.image_url ?? base?.image_url) || undefined,
+    og_image_url: savableImage(patch.og_image_url ?? base?.og_image_url) || undefined,
+    status: patch.status ?? base?.status ?? "published",
+  });
+  const newId = seoIdOf(created.id);
+  if (!newId) throw new Error("تم الحفظ لكن الخادم لم يُرجع رقم المقال");
   return newId;
 }
 
-async function patchContent(laravelId: string, body: Record<string, unknown>) {
-  await apiFetch(`/content/${laravelId}`, { method: "PATCH", body });
-  invalidateApiCache("/content");
+async function patchSeo(seoId: string, body: Record<string, unknown>) {
+  await apiFetch(`/blog-seo/${seoId}`, { method: "PATCH", body });
+  done();
 }
 
-/** PATCH /content/{id} {status, published_at, scheduled_at}. Throws on failure. */
-export const updatePostStatus = async (
-  id: string,
-  status: DbStatus,
-  scheduled_at?: string | null,
-) => {
-  const laravelId = await ensureLaravelId(id);
-  const payload: Record<string, unknown> = { status };
-  if (status === "published") payload.published_at = new Date().toISOString();
-  if (status === "scheduled") payload.scheduled_at = scheduled_at ?? null;
-  if (status === "draft") payload.scheduled_at = null;
-  await patchContent(laravelId, payload);
+/** Status change (published / draft / scheduled / archived). Throws on failure. */
+export const updatePostStatus = async (id: string, status: DbStatus, scheduled_at?: string | null) => {
+  const seoId = await ensureSeoId(id, { status });
+  await patchSeo(seoId, toBlogSeoBody({ status, scheduled_at: status === "scheduled" ? scheduled_at ?? null : null }));
 };
 
-/** PATCH /content/{id} {cover_image, og_image_url}. Throws on failure. */
-export const updatePostMedia = async (
-  id: string,
-  patch: { image_url?: string | null; og_image_url?: string | null },
-) => {
-  const laravelId = await ensureLaravelId(id, patch);
-  await patchContent(laravelId, toLaravelContent(patch));
+/** Cover / OG image. Throws on failure. */
+export const updatePostMedia = async (id: string, patch: { image_url?: string | null; og_image_url?: string | null }) => {
+  const seoId = await ensureSeoId(id, patch);
+  await patchSeo(seoId, toBlogSeoBody(patch));
 };
 
-/** Admin: update full content of a post (everything except status). Throws on failure; returns the Laravel row id. */
+/** Full content (everything except status). Throws on failure; returns the row id ("seo-<id>"). */
 export const updatePost = async (
   id: string,
   patch: Partial<Omit<DbBlogPost, "id" | "created_at" | "updated_at" | "status" | "published_at">>,
 ): Promise<string> => {
-  const laravelId = await ensureLaravelId(id, patch);
-  await patchContent(laravelId, toLaravelContent(patch));
-  return `laravel-${laravelId}`;
+  const seoId = await ensureSeoId(id, patch);
+  await patchSeo(seoId, toBlogSeoBody(patch));
+  return `seo-${seoId}`;
 };
 
-/** DELETE /content/{id}. Static (not yet saved) articles cannot be deleted from here. */
-export const deletePost = async (id: string): Promise<void> => {
-  const laravelId = laravelIdOf(id);
-  if (!laravelId) throw new Error("هذا المقال غير محفوظ في قاعدة البيانات (مقال ثابت من كود الموقع)");
-  await apiFetch(`/content/${laravelId}`, { method: "DELETE" });
-  invalidateApiCache("/content");
+/**
+ * Delete an article. Backend articles are deleted (article + SEO record). An article shipped with the
+ * site's code can't be removed from the code here, so it is archived instead — hidden from the site and the sitemap.
+ */
+export const deletePost = async (id: string): Promise<"deleted" | "archived"> => {
+  const seoId = seoIdOf(id);
+  if (seoId) {
+    await apiFetch(`/blog-seo/${seoId}`, { method: "DELETE" });
+    done();
+    return "deleted";
+  }
+  const contentId = contentIdOf(id);
+  if (contentId) {
+    await apiFetch(`/content/${contentId}`, { method: "DELETE" });
+    done();
+    return "deleted";
+  }
+  await updatePostStatus(id, "archived");
+  return "archived";
 };

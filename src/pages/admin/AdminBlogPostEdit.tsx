@@ -413,7 +413,7 @@ const Inner = () => {
     if (!row || !draft) return;
     setSaving(true);
     try {
-      // PATCH /content/{id} (or POST /content the first time a static article is saved)
+      // PATCH /blog-seo/{id} (or POST /blog-seo the first time an older / built-in article is saved)
       const savedId = await updatePost(row.id, {
         slug: draft.slug.toLowerCase().replace(/\s+/g, "-"),
         category_ar: draft.category_ar, category_en: draft.category_en || draft.category_ar,
@@ -435,7 +435,9 @@ const Inner = () => {
         await updatePostStatus(savedId, "scheduled", new Date(draft.scheduled_at).toISOString());
       }
       try { localStorage.removeItem(draftKey(row.slug)); } catch {}
-      toast({ title: isRTL ? " تم الحفظ" : " Saved" });
+      toast({ title: isRTL ? "تم الحفظ" : "Saved" });
+      const newSlug = draft.slug.toLowerCase().replace(/\s+/g, "-");
+      if (newSlug && newSlug !== row.slug) { nav(`/admin/blog-seo/${newSlug}`, { replace: true }); return; }
       await load();
     } catch (e: unknown) {
       toast({ title: isRTL ? "فشل الحفظ على الخادم" : "Save failed", description: apiErrorMessage(e), variant: "destructive" });
@@ -444,12 +446,15 @@ const Inner = () => {
 
   const removePost = async () => {
     if (!row) return;
-    if (!confirm(isRTL ? "حذف هذا المقال نهائيًا من قاعدة البيانات؟" : "Delete this article permanently?")) return;
+    const builtIn = row.id.startsWith("static-");
+    if (!confirm(builtIn
+      ? (isRTL ? "المقال ده جزء من كود الموقع، فهيتأرشف: هيختفي من المدونة والسايت ماب، وتقدر ترجّعه بالنشر تاني. نكمّل؟" : "This article ships with the site, so it will be archived (hidden from the blog and sitemap). Continue?")
+      : (isRTL ? "حذف هذا المقال نهائيًا من قاعدة البيانات؟" : "Delete this article permanently?"))) return;
     setSaving(true);
     try {
-      await deletePost(row.id); // DELETE /content/{id}
+      const result = await deletePost(row.id);
       try { localStorage.removeItem(draftKey(row.slug)); } catch { /* local draft cleanup only */ }
-      toast({ title: isRTL ? "تم حذف المقال" : "Article deleted" });
+      toast({ title: result === "archived" ? (isRTL ? "اتأرشف المقال واختفى من الموقع" : "Article archived") : (isRTL ? "تم حذف المقال" : "Article deleted") });
       nav("/admin/blog-seo");
     } catch (e: unknown) {
       toast({ title: isRTL ? "فشل الحذف" : "Delete failed", description: apiErrorMessage(e), variant: "destructive" });

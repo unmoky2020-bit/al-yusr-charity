@@ -4,7 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import {
   CheckCircle2, AlertTriangle, Search as SearchIcon, ExternalLink, Tag, Image as ImageIcon,
   ShieldAlert, Loader2, Wand2, Plus, X, Calendar, Clock, FileDown, FileJson, Upload, Eye,
-  MoreHorizontal, Pencil,
+  MoreHorizontal, Pencil, Trash2, Archive,
 } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,7 @@ import { useLang } from "@/i18n/LangContext";
 import { type BlogPost } from "@/data/blog";
 import { useAllBlogRowsAdmin } from "@/data/useBlogPosts";
 import {
-  createPost, updatePostStatus, updatePostMedia,
+  createPost, updatePostStatus, updatePostMedia, deletePost,
   type DbBlogPost, type DbStatus, dbToBlogPost,
 } from "@/data/blogApi";
 import { axisOfPost, getAxis, authorOfPost, readingTime } from "@/data/blogTaxonomy";
@@ -258,6 +258,20 @@ const Inner = () => {
     if (!row.db) return;
     try { await updatePostStatus(row.db.id, s); toast({ title: STATUS_LABELS[s][lang] }); refetch(); }
     catch (e: any) { toast({ title: e.message, variant: "destructive" }); }
+  };
+
+  const removeRow = async (row: Row) => {
+    if (!row.db) return;
+    const builtIn = row.db.id.startsWith("static-");
+    const msg = builtIn
+      ? (isRTL ? `«${row.post.ar.title}» جزء من كود الموقع، فهيتأرشف ويختفي من المدونة والسايت ماب. نكمّل؟` : "This built-in article will be archived (hidden). Continue?")
+      : (isRTL ? `حذف «${row.post.ar.title}» نهائيًا؟` : "Delete this article permanently?");
+    if (!confirm(msg)) return;
+    try {
+      const r = await deletePost(row.db.id);
+      toast({ title: r === "archived" ? (isRTL ? "اتأرشف المقال" : "Archived") : (isRTL ? "اتحذف المقال" : "Deleted") });
+      refetch();
+    } catch (e: any) { toast({ title: e.message, variant: "destructive" }); }
   };
 
   const downloadReport = (row: Row, kind: "pdf" | "json") => {
@@ -565,6 +579,19 @@ const Inner = () => {
                             <DropdownMenuItem onClick={() => setStatus(r, "draft")} className="gap-2 font-bold text-amber-800">
                               {isRTL ? "حول لمسودّة" : "Unpublish"}
                             </DropdownMenuItem>
+                          )}
+                          {r.db && r.db.status !== "archived" && (
+                            <DropdownMenuItem onClick={() => setStatus(r, "archived")} className="gap-2 font-bold text-slate-600">
+                              <Archive className="h-3.5 w-3.5" /> {isRTL ? "أرشفة (إخفاء من الموقع)" : "Archive"}
+                            </DropdownMenuItem>
+                          )}
+                          {r.db && (
+                            <>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem onClick={() => removeRow(r)} className="gap-2 font-bold text-rose-700">
+                                <Trash2 className="h-3.5 w-3.5" /> {isRTL ? "حذف" : "Delete"}
+                              </DropdownMenuItem>
+                            </>
                           )}
                         </DropdownMenuContent>
                       </DropdownMenu>

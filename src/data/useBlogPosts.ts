@@ -1,22 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
 import { blogPosts as staticPosts } from "./blog";
-import { fetchPublishedPosts, fetchAllPostsAdmin, fetchAllRowsAdmin, type DbBlogPost } from "./blogApi";
+import { fetchAllPostsAdmin, fetchAllRowsAdmin, dbToBlogPost, type DbBlogPost } from "./blogApi";
 import type { BlogPost } from "./blog";
 
-const merge = (db: BlogPost[]): BlogPost[] => {
+/** `hidden`: slugs the team unpublished or deleted-as-archived — their built-in copy must not show either. */
+const merge = (db: BlogPost[], hidden: Set<string> = new Set()): BlogPost[] => {
   const seen = new Set(db.map((p) => p.slug));
-  const fromStatic = staticPosts.filter((p) => !seen.has(p.slug));
+  const fromStatic = staticPosts.filter((p) => !seen.has(p.slug) && !hidden.has(p.slug));
   return [...db, ...fromStatic].sort((a, b) => (a.date < b.date ? 1 : -1));
 };
 
-/** Public hook — merges DB-published posts with static seed posts. */
+/** Public hook — published backend posts + the built-in posts the team hasn't unpublished. */
 export function useAllBlogPosts() {
-  const { data = [], isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["blog_posts", "published"],
-    queryFn: fetchPublishedPosts,
+    queryFn: async () => {
+      const rows = await fetchAllRowsAdmin();
+      const backend = rows.filter((r) => !r.id.startsWith("static-"));
+      return {
+        published: rows.filter((r) => r.status === "published").map(dbToBlogPost),
+        hidden: new Set(backend.filter((r) => r.status !== "published").map((r) => r.slug)),
+      };
+    },
     staleTime: 60_000,
   });
-  return { posts: merge(data), loading: isLoading };
+  return { posts: merge(data?.published ?? [], data?.hidden), loading: isLoading };
 }
 
 /** Admin hook — pulls every DB row (incl. drafts) merged with static. */
