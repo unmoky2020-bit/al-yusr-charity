@@ -164,9 +164,10 @@ export const Footer = () => {
       <div className="relative overflow-visible">
         <div className="container relative z-30 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -translate-y-[15%] -mb-7 sm:-mb-8 md:-mb-10">
           <div className="relative mx-auto w-full overflow-hidden rounded-[2rem] bg-[#fbfcf8] text-[#0b4429] shadow-[0_30px_70px_-34px_rgba(6,48,28,0.5)] ring-1 ring-[#0b4429]/[0.08]">
-            {/* quiet light: a soft lime glow and a hairline inner frame */}
-            <div aria-hidden className="pointer-events-none absolute -top-24 start-[-6rem] h-72 w-72 rounded-full bg-[#a3e635]/20 blur-3xl" />
-            <div aria-hidden className="pointer-events-none absolute -bottom-28 end-[-4rem] h-64 w-64 rounded-full bg-[#f58220]/10 blur-3xl" />
+            {/* warm light: an orange glow from both top corners and a hairline inner frame */}
+            <div aria-hidden className="pointer-events-none absolute -top-28 -left-24 h-72 w-72 rounded-full bg-[#f58220]/[0.16] blur-3xl" />
+            <div aria-hidden className="pointer-events-none absolute -top-28 -right-24 h-72 w-72 rounded-full bg-[#f58220]/[0.16] blur-3xl" />
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#fde7d1]/60 to-transparent" />
             <div aria-hidden className="pointer-events-none absolute inset-2 rounded-[1.6rem] ring-1 ring-[#0b4429]/[0.06]" />
 
             {!subscribed ? (
@@ -210,10 +211,12 @@ export const Footer = () => {
                     <button
                       type="submit"
                       disabled={subscribing}
-                      className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#0b4429] px-6 text-sm font-black text-white transition hover:bg-[#0e5534] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8cc63f] focus-visible:ring-offset-2 disabled:opacity-60"
+                      className="group inline-flex h-12 shrink-0 items-center justify-center gap-2.5 rounded-xl bg-gradient-to-l from-[#f58220] to-[#ff9a3c] pe-2 ps-5 text-[15px] font-black text-white shadow-[0_12px_24px_-12px_rgba(245,130,32,0.9)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_28px_-12px_rgba(245,130,32,0.95)] active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f58220] focus-visible:ring-offset-2 disabled:translate-y-0 disabled:opacity-60 ltr:bg-gradient-to-r"
                     >
-                      {subscribing ? (isRTL ? "بيتبعت..." : "Sending...") : (isRTL ? "اشترك" : "Subscribe")}
-                      <Send className="h-4 w-4 text-[#a3e635] rtl:-scale-x-100" />
+                      {subscribing ? (isRTL ? "بيتبعت..." : "Sending...") : (isRTL ? "اشترك مجانًا" : "Subscribe free")}
+                      <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/20 transition group-hover:bg-white/30">
+                        <Send className="h-4 w-4 transition group-hover:-translate-y-px rtl:-scale-x-100" />
+                      </span>
                     </button>
                   </div>
                   {subscribeError && (
@@ -441,12 +444,12 @@ const STAMP_HOLES = (() => {
 
 /**
  * The newsletter's postage stamp: a paper stamp with perforated edges (an SVG mask, so the holes are
- * exact), the logo, «بريد الخير», and a Mansoura postmark with cancellation waves over its corner.
+ * exact), the logo, «بريد الخير» and the site address.
  */
 function NewsletterSeal({ isRTL }: { isRTL: boolean }) {
   return (
-    // room for the postmark on the stamp's lower corner, centred on phones
-    <div aria-hidden className="relative mx-auto shrink-0 pb-5 pe-16 ps-16 pt-2 md:mx-0 md:pe-3">
+    // the stamp alone, centred on phones
+    <div aria-hidden className="relative mx-auto shrink-0 px-2 pb-3 pt-2 md:mx-0">
       <div className="relative rotate-[6deg] transition-transform duration-500 hover:rotate-0">
         <svg width={STAMP_W} height={STAMP_H} viewBox={`0 0 ${STAMP_W} ${STAMP_H}`} className="block drop-shadow-[0_12px_22px_rgba(6,48,28,0.24)]">
           <defs>
@@ -468,18 +471,6 @@ function NewsletterSeal({ isRTL }: { isRTL: boolean }) {
           <span className="text-[12.5px] font-black leading-none">{isRTL ? "بريد الخير" : "Al-Yusr post"}</span>
           <span className="text-[8.5px] font-bold leading-none text-[#0b4429]/55" dir="ltr">elyusr.org</span>
         </div>
-        {/* postmark: the round cancel sits on the stamp's corner, its waves run across the ring's top and bottom and off the paper */}
-        <svg viewBox="0 0 100 56" className="pointer-events-none absolute -bottom-3 -start-[46px] w-[88px] rotate-[8deg] text-[#0b4429]/50 mix-blend-multiply">
-          <g transform={isRTL ? undefined : "translate(100 0) scale(-1 1)"}>
-            <circle cx="28" cy="28" r="23" fill="none" stroke="currentColor" strokeWidth="1.6" />
-            <circle cx="28" cy="28" r="17.5" fill="none" stroke="currentColor" strokeWidth="0.8" />
-            {[10, 15.5, 40.5, 46].map((y) => (
-              <path key={y} d={`M18 ${y} q5.5 -3.5 11 0 t11 0 t11 0 t11 0 t11 0 t11 0 t11 0`} fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-            ))}
-          </g>
-          <text x={isRTL ? 28 : 72} y="27.5" textAnchor="middle" fontSize="7.5" fontWeight={800} fill="currentColor">{isRTL ? "المنصورة" : "Mansoura"}</text>
-          <text x={isRTL ? 28 : 72} y="36.5" textAnchor="middle" fontSize="6" fontWeight={700} fill="currentColor">{new Date().getFullYear()}</text>
-        </svg>
       </div>
     </div>
   );
