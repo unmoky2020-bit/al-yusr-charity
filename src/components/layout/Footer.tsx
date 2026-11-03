@@ -174,8 +174,7 @@ export const Footer = () => {
                 <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-center md:gap-2 md:text-start">
                   <NewsletterSeal isRTL={isRTL} />
                   <div className="min-w-0">
-                    <p className="inline-flex items-center gap-2 text-xs font-black tracking-wide text-[#4d8a1f]">
-                      <span className="h-px w-6 bg-[#4d8a1f]/50" aria-hidden />
+                    <p className="text-xs font-black tracking-wide text-[#4d8a1f]">
                       {isRTL ? "نشرة اليسر · كل أسبوعين" : "The Al-Yusr letter · every two weeks"}
                     </p>
                     <h3 className="mt-2 text-[1.5rem] font-black leading-snug md:text-[1.9rem]">
