@@ -11,6 +11,7 @@ import { useLang } from "@/i18n/LangContext";
 import { findBlogPost, useBlogPosts } from "@/data/sources/blog";
 import { DetailPageSkeleton } from "@/components/common/ContentSkeletons";
 import { fetchPostBySlug } from "@/data/blogApi";
+import { linkifyBarePaths } from "@/lib/article-links";
 import type { BlogPost as BlogPostType } from "@/data/blog";
 import { linkifyParagraph } from "@/data/internalLinks";
 import { TagsRail } from "@/components/common/TagsRail";
@@ -85,9 +86,10 @@ const BlogPost = () => {
   };
 
   // Flatten and split by newlines so every line/paragraph is a discrete block
+  // bare site paths written as text in older articles ("صفحة التبرع: /donate?…") become real links
   const lines = c.body
     .flatMap((p) => (typeof p === "string" ? p.split(/\r?\n+/) : []))
-    .map((l) => l.trim())
+    .map((l) => linkifyBarePaths(l.trim()))
     .filter(Boolean);
 
   const cells = (row: string) => row.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim());

@@ -262,6 +262,27 @@ const Inner = () => {
     catch (e: any) { toast({ title: e.message, variant: "destructive" }); }
   };
 
+  /** OG + cover for every backend / built-in article that has none — the thumbnail next to it in Google. */
+  const [bulkOg, setBulkOg] = useState<{ done: number; total: number } | null>(null);
+  const generateMissingOg = async () => {
+    const todo = rows.filter((r) => r.db && !r.db.og_image_url);
+    if (!todo.length) { toast({ title: isRTL ? "كل المقالات ليها صورة مشاركة" : "Every article has an OG image" }); return; }
+    if (!confirm(isRTL ? `هنعمل صورة مشاركة (1200×630) لـ ${todo.length} مقال من عنوانه وتصنيفه، ونحطها غلاف للي مالوش غلاف. نكمّل؟` : `Generate OG images for ${todo.length} articles?`)) return;
+    let ok = 0;
+    setBulkOg({ done: 0, total: todo.length });
+    for (const r of todo) {
+      try {
+        const og = await generateAndUploadOg({ slug: r.post.slug, title: r.post.ar.title, category: r.post.category.ar });
+        await updatePostMedia(r.db!.id, { og_image_url: og, image_url: r.db!.image_url || og });
+        ok++;
+      } catch { /* keep going */ }
+      setBulkOg((b) => (b ? { ...b, done: b.done + 1 } : b));
+    }
+    setBulkOg(null);
+    toast({ title: isRTL ? `اتعملت صورة مشاركة لـ ${ok} مقال` : `${ok} OG images generated` });
+    refetch();
+  };
+
   const removeRow = async (row: Row) => {
     if (!row.db) return;
     const builtIn = row.db.id.startsWith("static-");
@@ -365,6 +386,10 @@ const Inner = () => {
           <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer">
             <ExternalLink className="h-3.5 w-3.5 me-1" /> {isRTL ? "خريطة الموقع XML" : "Sitemap XML"}
           </a>
+        </Button>
+        <Button size="sm" variant="outline" onClick={generateMissingOg} disabled={!!bulkOg} className="font-extrabold">
+          {bulkOg ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />}
+          {bulkOg ? `${bulkOg.done}/${bulkOg.total}` : isRTL ? "صور مشاركة للناقص" : "Missing OG images"}
         </Button>
         <Button size="sm" variant="outline" onClick={() => setShowImport(true)} className="font-extrabold">
           <Upload className="h-3.5 w-3.5" /> {isRTL ? "استيراد مقالات" : "Import"}

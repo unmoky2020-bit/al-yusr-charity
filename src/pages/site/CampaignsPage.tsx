@@ -23,6 +23,7 @@ import { useLang } from "@/i18n/LangContext";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs, type FaqItem } from "@/data/faqsApi";
+import { useDonationEntities } from "@/data/sources/donationEntities";
 
 /** Motion wrapper for cards matching ServicesMap exact motion */
 const AlternatingCard = memo(({
@@ -409,9 +410,13 @@ export const CampaignsPage = () => {
     { key: "education", labelAr: "تعليم وبناء الإنسان", labelEn: "Education" },
   ];
 
-  const filteredCampaigns = CAMPAIGNS_DATA.filter((c) => {
-    if (filter === "all") return true;
-    return c.category === filter;
+  // The dashboard's campaign (same slug) gives the live photo and starting price; the copy here is the fallback.
+  const { entities } = useDonationEntities();
+  const live = (slug: string) => entities.find((e) => e.entityType === "campaign" && (e.slug === slug || e.id === slug));
+  const filteredCampaigns = CAMPAIGNS_DATA.filter((c) => filter === "all" || c.category === filter).map((c) => {
+    const e = live(c.slug);
+    const img = e?.image && !e.image.includes("placeholder") ? e.image : c.image;
+    return { ...c, image: img, livePrice: e?.priceFrom || 0 };
   });
 
   return (
@@ -597,79 +602,53 @@ export const CampaignsPage = () => {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredCampaigns.map((camp, idx) => (
               <AlternatingCard key={camp.id} index={idx} className="h-full">
-                <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-primary/15 bg-card shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl ring-1 ring-border/60">
-                  {/* Visual Header with Taller Height (h-72 sm:h-80 md:h-88) */}
-                  <div className="relative h-72 w-full overflow-hidden bg-primary/25 sm:h-80 md:h-88">
-                    <img
-                      src={camp.image}
-                      alt={isRTL ? camp.titleAr : camp.titleEn}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                    
-                    {/* Badge */}
-                    <span className="absolute start-3.5 top-3.5 inline-flex items-center gap-1 rounded-full bg-background/95 px-3 py-1 text-[11px] font-black text-primary ring-1 ring-primary/15 shadow-sm">
+                <article className="group relative isolate flex aspect-[4/5] h-full min-h-[430px] flex-col justify-end overflow-hidden rounded-[1.75rem] bg-primary shadow-card ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl">
+                  <img
+                    src={camp.image}
+                    alt={isRTL ? camp.titleAr : camp.titleEn}
+                    loading={idx < 3 ? "eager" : "lazy"}
+                    decoding="async"
+                    className="absolute inset-0 -z-20 h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                  {/* reading veil: clear photo on top, deep green-black where the text sits */}
+                  <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-[#03170d] via-[#03170d]/90 via-50% to-transparent to-85%" />
+
+                  <div className="absolute inset-x-3.5 top-3.5 flex items-start justify-between gap-2">
+                    <span className="max-w-[62%] truncate rounded-full bg-white/95 px-3 py-1 text-[11px] font-black text-primary shadow-sm">
                       {isRTL ? camp.badgeAr : camp.badgeEn}
                     </span>
-
-                    {/* Price Chip */}
-                    <span className="absolute end-3.5 top-3.5 rounded-full bg-orange-grad px-3 py-1 text-[11px] font-black text-accent-foreground shadow-cta">
-                      {isRTL ? camp.priceFromAr : camp.priceFromEn}
+                    <span className="shrink-0 rounded-full bg-orange-grad px-3 py-1 text-[11px] font-black text-accent-foreground shadow-cta">
+                      {camp.livePrice ? (isRTL ? `يبدأ من ${camp.livePrice} ج` : `From ${camp.livePrice} EGP`) : isRTL ? camp.priceFromAr : camp.priceFromEn}
                     </span>
-
-                    {/* Title over Image */}
-                    <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-                      <h2 className="text-xl font-black tracking-tight leading-tight sm:text-2xl">
-                        {isRTL ? camp.titleAr : camp.titleEn}
-                      </h2>
-                      <p className="mt-1 text-[11.5px] font-bold text-secondary line-clamp-1">
-                        {isRTL ? camp.subtitleAr : camp.subtitleEn}
-                      </p>
-                    </div>
                   </div>
 
-                  {/* Content & Pillars */}
-                  <div className="flex flex-1 flex-col justify-between p-5">
-                    <p className="text-xs font-medium leading-relaxed text-muted-foreground sm:text-[13px]">
-                      {isRTL ? camp.descAr : camp.descEn}
-                    </p>
-
-                    {/* Key Pillars */}
-                    <div className="mt-4 space-y-1.5 border-t border-border/60 pt-3">
-                      {camp.pillars.map((pil, pIdx) => (
-                        <div key={pIdx} className="flex items-center gap-2 text-[11px] font-bold text-foreground/85">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-secondary shrink-0" />
+                  <div className="p-5 text-white sm:p-6">
+                    <h2 className="text-2xl font-black leading-tight tracking-tight drop-shadow sm:text-[1.7rem]">
+                      <Link to={camp.path} className="after:absolute after:inset-0 after:content-[''] focus:outline-none">
+                        {isRTL ? camp.titleAr : camp.titleEn}
+                      </Link>
+                    </h2>
+                    <p className="mt-1.5 line-clamp-1 text-[12.5px] font-bold text-secondary">{isRTL ? camp.subtitleAr : camp.subtitleEn}</p>
+                    <p className="mt-2 line-clamp-2 text-[13px] leading-6 text-white/80">{isRTL ? camp.descAr : camp.descEn}</p>
+                    <ul className="mt-3 flex flex-wrap gap-1.5">
+                      {camp.pillars.slice(0, 2).map((pil, pIdx) => (
+                        <li key={pIdx} className="inline-flex max-w-full items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white/90 ring-1 ring-white/15 backdrop-blur">
+                          <CheckCircle2 className="h-3 w-3 shrink-0 text-secondary" />
                           <span className="truncate">{isRTL ? pil.ar : pil.en}</span>
-                        </div>
+                        </li>
                       ))}
-                    </div>
-
-                    {/* CTAs — 2 buttons side by side */}
-                    <div className="mt-5 flex items-center justify-between gap-2 border-t border-border/60 pt-4">
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="h-10 flex-1 rounded-xl border-primary/20 text-xs font-extrabold text-primary hover:bg-secondary/20 hover:text-primary"
-                      >
-                        <Link to={camp.path}>
-                          {isRTL ? "تفاصيل الحملة" : "Campaign details"}
-                          <Arrow className="h-3.5 w-3.5 ms-1" />
-                        </Link>
-                      </Button>
-
-                      <Button
-                        asChild
-                        size="sm"
-                        className="h-10 flex-1 rounded-xl bg-orange-grad text-xs font-extrabold text-accent-foreground shadow-cta hover:opacity-95"
-                      >
-                        <Link to={camp.slug === "markoun" ? "/markoun" : `/donate?program=${camp.slug}`}>
-                          <Heart className="h-3.5 w-3.5 me-1" />
-                          {camp.slug === "markoun" ? (isRTL ? "طلب مندوب" : "Pickup") : (isRTL ? "تبرع الآن" : "Donate")}
-                        </Link>
-                      </Button>
+                    </ul>
+                    <div className="relative z-10 mt-4 grid grid-cols-2 gap-2">
+                      <Link to={camp.path}
+                        className="inline-flex h-11 items-center justify-center gap-1 rounded-xl bg-white/12 text-xs font-black text-white ring-1 ring-white/25 backdrop-blur transition hover:bg-white/20">
+                        {isRTL ? "تفاصيل الحملة" : "Details"} <Arrow className="h-3.5 w-3.5" />
+                      </Link>
+                      <Link to={camp.slug === "markoun" ? "/markoun" : `/donate?campaign=${camp.slug}`}
+                        data-source="campaigns" data-label={`campaign-${camp.slug}`}
+                        className="inline-flex h-11 items-center justify-center gap-1 rounded-xl bg-orange-grad text-xs font-black text-accent-foreground shadow-cta transition hover:opacity-95">
+                        <Heart className="h-3.5 w-3.5" />
+                        {camp.slug === "markoun" ? (isRTL ? "طلب مندوب" : "Pickup") : (isRTL ? "تبرع الآن" : "Donate")}
+                      </Link>
                     </div>
                   </div>
                 </article>

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { MediaPickerModal } from "@/components/admin/MediaPickerModal";
+import { ArticleToolbar } from "@/components/admin/ArticleToolbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RequireAuth } from "@/auth/RequireAuth";
@@ -325,6 +326,7 @@ const Inner = () => {
   const nav = useNavigate();
   const [row, setRow] = useState<DbBlogPost | null>(null);
   const [picker, setPicker] = useState<null | "cover" | "og">(null);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
   const [draft, setDraft] = useState<EditState | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -709,7 +711,17 @@ const Inner = () => {
               <textarea dir="ltr" className="min-h-[60px] w-full rounded-md border border-input bg-background p-3 text-sm" value={draft.excerpt_en} onChange={(e) => setDraft({ ...draft, excerpt_en: e.target.value })} />
             </Field>
             <Field label={isRTL ? "نص المقال (عربي)" : "Body (AR)"} hint={isRTL ? "افصل الفقرات بسطر فارغ — اهدف ≥600 كلمة" : "blank line between paragraphs — aim ≥600 words"}>
-              <textarea className="min-h-[260px] w-full rounded-md border border-input bg-background p-3 text-sm" value={draft.body_ar} onChange={(e) => setDraft({ ...draft, body_ar: e.target.value })} />
+              <ArticleToolbar
+                textareaRef={bodyRef}
+                value={draft.body_ar}
+                onChange={(v) => setDraft({ ...draft, body_ar: v })}
+                slug={draft.slug}
+                focus={draft.focus_keyword}
+              />
+              <textarea ref={bodyRef} dir="rtl" className="min-h-[420px] w-full rounded-b-md rounded-t-none border border-t-0 border-input bg-background p-3 text-[14.5px] leading-8" value={draft.body_ar} onChange={(e) => setDraft({ ...draft, body_ar: e.target.value })} />
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                {(() => { const w = draft.body_ar.split(/\s+/).filter(Boolean).length; return `${w} كلمة · ${Math.max(1, Math.round(w / 180))} دقيقة قراءة`; })()}
+              </p>
             </Field>
             <Field label="Body (EN)">
               <textarea dir="ltr" className="min-h-[160px] w-full rounded-md border border-input bg-background p-3 text-sm" value={draft.body_en} onChange={(e) => setDraft({ ...draft, body_en: e.target.value })} />
