@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -59,18 +60,18 @@ const AdminAnalytics = () => {
           </label>
           <label className="space-y-1 text-[11px] font-bold text-muted-foreground">
             <span>{isRTL ? "الجهة" : "Target"}</span>
-            <select className={`${selectCls} block`} value={filters.target ?? ""} onChange={(e) => setFilter({ target: (e.target.value || undefined) as TargetKind | undefined })}>
+            <UiSelect className={`${selectCls} block`} value={filters.target ?? ""} onChange={(e) => setFilter({ target: (e.target.value || undefined) as TargetKind | undefined })}>
               <option value="">{isRTL ? "كل الجهات" : "Any target"}</option>
               {(Object.keys(TARGET_LABEL) as TargetKind[]).map((k) => <option key={k} value={k}>{TARGET_LABEL[k][lang]}</option>)}
-            </select>
+            </UiSelect>
           </label>
           <label className="space-y-1 text-[11px] font-bold text-muted-foreground">
             <span>{isRTL ? "القناة" : "Channel"}</span>
-            <select className={`${selectCls} block`} value={filters.channel ?? ""} onChange={(e) => setFilter({ channel: (e.target.value || undefined) as DonationFilters["channel"] })}>
+            <UiSelect className={`${selectCls} block`} value={filters.channel ?? ""} onChange={(e) => setFilter({ channel: (e.target.value || undefined) as DonationFilters["channel"] })}>
               <option value="">{isRTL ? "أونلاين ويدوي" : "Online & manual"}</option>
               <option value="gateway">{isRTL ? "أونلاين (بوابة دفع)" : "Online (gateway)"}</option>
               <option value="manual">{isRTL ? "يدوي" : "Manual"}</option>
-            </select>
+            </UiSelect>
           </label>
           {Object.keys(filters).length > 0 && (
             <Button size="sm" variant="outline" className="h-9 gap-1 text-xs font-bold" onClick={() => setSp({}, { replace: true })}>

@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -622,19 +623,19 @@ const ContentEditor = ({
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
             <Label>{lang === "ar" ? "النوع" : "Type"}</Label>
-            <select value={form.type} onChange={(e) => upd("type", e.target.value as ContentType)} className="h-10 w-full rounded-md border border-border bg-background px-2.5 text-sm font-bold">
+            <UiSelect value={form.type} onChange={(e) => upd("type", e.target.value as ContentType)} className="h-10 w-full rounded-md border border-border bg-background px-2.5 text-sm font-bold">
               <option value="article">{lang === "ar" ? "مقال" : "Article"}</option>
               <option value="program">{lang === "ar" ? "برنامج" : "Program"}</option>
               <option value="faq">{lang === "ar" ? "سؤال شائع" : "FAQ"}</option>
               <option value="page">{lang === "ar" ? "صفحة" : "Page"}</option>
-            </select>
+            </UiSelect>
           </div>
           <div>
             <Label>{lang === "ar" ? "الحالة" : "Status"}</Label>
-            <select value={form.status} onChange={(e) => upd("status", e.target.value as ContentDoc["status"])} className="h-10 w-full rounded-md border border-border bg-background px-2.5 text-sm font-bold">
+            <UiSelect value={form.status} onChange={(e) => upd("status", e.target.value as ContentDoc["status"])} className="h-10 w-full rounded-md border border-border bg-background px-2.5 text-sm font-bold">
               <option value="draft">{lang === "ar" ? "مسودة" : "Draft"}</option>
               <option value="published">{lang === "ar" ? "منشور" : "Published"}</option>
-            </select>
+            </UiSelect>
           </div>
           <div className="sm:col-span-2"><Label>{lang === "ar" ? "Slug (URL)" : "Slug (URL)"}</Label>
             <Input value={form.slug || ""} onChange={(e) => upd("slug", e.target.value)} placeholder="my-article-slug" />

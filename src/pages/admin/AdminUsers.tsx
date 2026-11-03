@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search, Shield, Loader2, KeyRound, Users as UsersIcon, Plus, Trash2, X, Check, CheckSquare, Square, Save, UserCheck } from "lucide-react";
@@ -727,7 +728,7 @@ const Inner = () => {
                 </div>
                 <div>
                   <label className="mb-1 block text-xs font-bold text-muted-foreground">{isAr ? "الدور الأساسي *" : "Primary Role *"}</label>
-                  <select
+                  <UiSelect
                     value={newUserData.roleId}
                     onChange={(e) => setNewUserData({ ...newUserData, roleId: Number(e.target.value) })}
                     className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm font-bold"
@@ -737,7 +738,7 @@ const Inner = () => {
                         {ROLE_LABEL[r.slug]?.[lang] || r.name} ({r.slug})
                       </option>
                     ))}
-                  </select>
+                  </UiSelect>
                 </div>
                 <div>
                   <label className="mb-1 block text-xs font-bold text-muted-foreground">{isAr ? "كلمة المرور (الافتراضي Password123!)" : "Password (Default: Password123!)"}</label>

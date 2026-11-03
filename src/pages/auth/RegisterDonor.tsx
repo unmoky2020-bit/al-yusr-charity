@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HeartHandshake } from "lucide-react";
@@ -59,13 +60,13 @@ const RegisterDonor = () => {
               <Input required type="email" placeholder={lang === "ar" ? "البريد الإلكتروني" : "Email"} className="h-12" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
               <Input required type="tel" placeholder={lang === "ar" ? "رقم الهاتف" : "Phone"} className="h-12" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
               <Input required type="password" placeholder={lang === "ar" ? "كلمة المرور (٦ أحرف+)" : "Password (6+ chars)"} className="h-12" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
-              <select value={form.preferredProgram} onChange={(e) => setForm({ ...form, preferredProgram: e.target.value })}
+              <UiSelect value={form.preferredProgram} onChange={(e) => setForm({ ...form, preferredProgram: e.target.value })}
                 className="h-12 w-full rounded-md border border-input bg-background px-3 text-sm font-bold">
                 <option value="">{lang === "ar" ? "البرنامج المفضل (اختياري)" : "Preferred program (optional)"}</option>
                 {programs.filter((p) => p.priceFrom > 0).map((p) => (
                   <option key={p.slug} value={p.slug}>{p[lang].name}</option>
                 ))}
-              </select>
+              </UiSelect>
               <Button type="submit" className="h-12 w-full bg-orange-grad text-base font-extrabold text-accent-foreground shadow-cta hover:opacity-95">
                 {lang === "ar" ? "أنشئ حسابي" : "Create my account"}
               </Button>

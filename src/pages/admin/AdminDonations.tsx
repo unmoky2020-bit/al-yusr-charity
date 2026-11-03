@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -230,46 +231,46 @@ const AdminDonations = () => {
               <Input value={qInput} onChange={(e) => setQInput(e.target.value)} className="h-9 ps-8 text-xs"
                 placeholder={isAr ? "بحث: رقم العملية / الاسم / الموبايل / الإيميل" : "Search: reference / name / phone / email"} />
             </div>
-            <select aria-label={isAr ? "الحالة" : "Status"} className={selectCls} value={filters.status ?? ""} onChange={(e) => setFilter({ status: e.target.value })}>
+            <UiSelect aria-label={isAr ? "الحالة" : "Status"} className={selectCls} value={filters.status ?? ""} onChange={(e) => setFilter({ status: e.target.value })}>
               <option value="">{isAr ? "كل الحالات" : "All statuses"}</option>
               <option value="paid">{isAr ? "مدفوع" : "Paid"}</option>
               <option value="pending">{isAr ? "معلق" : "Pending"}</option>
               <option value="failed">{isAr ? "فشل" : "Failed"}</option>
               <option value="refunded">{isAr ? "مسترد" : "Refunded"}</option>
-            </select>
-            <select aria-label={isAr ? "القناة" : "Channel"} className={selectCls} value={filters.channel ?? ""} onChange={(e) => setFilter({ channel: (e.target.value || undefined) as DonationFilters["channel"] })}>
+            </UiSelect>
+            <UiSelect aria-label={isAr ? "القناة" : "Channel"} className={selectCls} value={filters.channel ?? ""} onChange={(e) => setFilter({ channel: (e.target.value || undefined) as DonationFilters["channel"] })}>
               <option value="">{isAr ? "أونلاين ويدوي" : "Online & manual"}</option>
               <option value="gateway">{isAr ? "أونلاين (بوابة دفع)" : "Online (gateway)"}</option>
               <option value="manual">{isAr ? "يدوي (تحويل/محفظة/مندوب)" : "Manual"}</option>
-            </select>
-            <select aria-label={isAr ? "طريقة الدفع" : "Method"} className={selectCls} value={filters.payment_method_id ?? ""} onChange={(e) => setFilter({ payment_method_id: e.target.value })}>
+            </UiSelect>
+            <UiSelect aria-label={isAr ? "طريقة الدفع" : "Method"} className={selectCls} value={filters.payment_method_id ?? ""} onChange={(e) => setFilter({ payment_method_id: e.target.value })}>
               <option value="">{isAr ? "كل طرق الدفع" : "All methods"}</option>
               {(methodsQuery.data ?? []).map((m) => (
                 <option key={m.id} value={String(m.id)}>{isAr ? m.name_ar : m.name_en || m.name_ar}</option>
               ))}
-            </select>
-            <select aria-label={isAr ? "نوع الجهة" : "Target kind"} className={selectCls} value={filters.target ?? ""}
+            </UiSelect>
+            <UiSelect aria-label={isAr ? "نوع الجهة" : "Target kind"} className={selectCls} value={filters.target ?? ""}
               onChange={(e) => writeUrl({ ...filters, target: (e.target.value || undefined) as DonationFilters["target"], program_id: "", project_id: "", donation_campaign_id: "" })}>
               <option value="">{isAr ? "كل الجهات" : "Any target"}</option>
               <option value="program">{isAr ? "برامج" : "Programs"}</option>
               <option value="project">{isAr ? "مشاريع" : "Projects"}</option>
               <option value="campaign">{isAr ? "حملات" : "Campaigns"}</option>
               <option value="case">{isAr ? "حالات" : "Cases"}</option>
-            </select>
+            </UiSelect>
             {filters.target && filters.target !== "case" ? (
-              <select aria-label={isAr ? "الجهة" : "Target"} className={selectCls}
+              <UiSelect aria-label={isAr ? "الجهة" : "Target"} className={selectCls}
                 value={filters[TARGET_ID_KEY[filters.target]] ?? ""}
                 onChange={(e) => setFilter({ [TARGET_ID_KEY[filters.target as keyof typeof TARGET_ID_KEY]]: e.target.value })}>
                 <option value="">{isAr ? "الكل" : "All"}</option>
                 {(targetOptions.data ?? []).map((o) => <option key={o.id} value={String(o.id)}>{o.name}</option>)}
-              </select>
+              </UiSelect>
             ) : (
-              <select aria-label={isAr ? "الترتيب" : "Sort"} className={selectCls} value={filters.sort ?? "-created_at"} onChange={(e) => setFilter({ sort: e.target.value as DonationFilters["sort"] })}>
+              <UiSelect aria-label={isAr ? "الترتيب" : "Sort"} className={selectCls} value={filters.sort ?? "-created_at"} onChange={(e) => setFilter({ sort: e.target.value as DonationFilters["sort"] })}>
                 <option value="-created_at">{isAr ? "الأحدث أولاً" : "Newest first"}</option>
                 <option value="created_at">{isAr ? "الأقدم أولاً" : "Oldest first"}</option>
                 <option value="-amount">{isAr ? "الأعلى مبلغاً" : "Highest amount"}</option>
                 <option value="amount">{isAr ? "الأقل مبلغاً" : "Lowest amount"}</option>
-              </select>
+              </UiSelect>
             )}
             <label className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
               {isAr ? "من" : "From"}
@@ -362,10 +363,10 @@ const AdminDonations = () => {
                   : `Showing ${meta.from}–${meta.to} of ${meta.total}`}
               </span>
               <div className="flex items-center gap-2">
-                <select aria-label={isAr ? "عدد الصفوف" : "Rows per page"} className={selectCls} value={perPage}
+                <UiSelect aria-label={isAr ? "عدد الصفوف" : "Rows per page"} className={selectCls} value={perPage}
                   onChange={(e) => writeUrl(filters, { perPage: Number(e.target.value) })}>
                   {PER_PAGE_OPTIONS.map((n) => <option key={n} value={n}>{isAr ? `${n} في الصفحة` : `${n} / page`}</option>)}
-                </select>
+                </UiSelect>
                 <button type="button" aria-label={isAr ? "الصفحة السابقة" : "Previous page"} disabled={page <= 1}
                   onClick={() => writeUrl(filters, { page: page - 1 })} className="grid h-9 w-9 place-items-center rounded-lg border border-border disabled:opacity-40">
                   {isAr ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}

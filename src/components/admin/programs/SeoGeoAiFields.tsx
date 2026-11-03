@@ -2,6 +2,7 @@
  * SEO & social / Geo / AI summary + FAQ blocks. Same column names on programs (existing)
  * and projects (proposed), so both editors share these components.
  */
+import { UiSelect } from "@/components/common/UiSelect";
 import type { ReactNode } from "react";
 import { Globe2, MapPin, Sparkles, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -70,20 +71,20 @@ export function SeoFields({
             onChange={(e) => onChange({ canonical_url: e.target.value.trim() })} />
         </Field>
         <Field label="نوع البيانات المنظمة (Schema)">
-          <select className={selectCls} value={value.schema_type} onChange={(e) => onChange({ schema_type: e.target.value })}>
+          <UiSelect className={selectCls} value={value.schema_type} onChange={(e) => onChange({ schema_type: e.target.value })}>
             <option value="">افتراضي (Service)</option>
             <option value="Service">Service</option>
             <option value="Product">Product</option>
             <option value="DonateAction">DonateAction</option>
             <option value="Event">Event</option>
-          </select>
+          </UiSelect>
         </Field>
         <Field label="بطاقة تويتر / X">
-          <select className={selectCls} value={value.twitter_card} onChange={(e) => onChange({ twitter_card: e.target.value })}>
+          <UiSelect className={selectCls} value={value.twitter_card} onChange={(e) => onChange({ twitter_card: e.target.value })}>
             <option value="">افتراضي (summary_large_image)</option>
             <option value="summary_large_image">summary_large_image</option>
             <option value="summary">summary</option>
-          </select>
+          </UiSelect>
         </Field>
         <div className="flex flex-col justify-end gap-2">
           <label className="flex items-center justify-between gap-2 rounded-xl border border-border p-2.5 text-xs font-bold">

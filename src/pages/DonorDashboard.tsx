@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -206,12 +207,12 @@ const Inner = () => {
               <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="h-11" />
             </Field>
             <Field label={lang === "ar" ? "العملة المفضلة" : "Preferred currency"}>
-              <select value={form.currency} onChange={(e) => setForm({ ...form, currency: e.target.value })}
+              <UiSelect value={form.currency} onChange={(e) => setForm({ ...form, currency: e.target.value })}
                 className="h-11 w-full rounded-md border border-border bg-background px-3 text-sm font-bold">
                 <option value="EGP">{lang === "ar" ? "الجنيه المصري (EGP)" : "Egyptian Pound (EGP)"}</option>
                 <option value="USD">{lang === "ar" ? "دولار أمريكي (USD)" : "US Dollar (USD)"}</option>
                 <option value="SAR">{lang === "ar" ? "ريال سعودي (SAR)" : "Saudi Riyal (SAR)"}</option>
-              </select>
+              </UiSelect>
             </Field>
           </div>
           <div className="mt-6 flex flex-wrap gap-2">

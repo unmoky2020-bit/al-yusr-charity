@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { paymentTransactionsApi, type PaymentTransaction } from "@/data/api/paymentTransactionsApi";
@@ -76,12 +77,12 @@ export default function AdminPaymentTransactions() {
       </div>
 
       <div className="mt-4 grid gap-2 sm:grid-cols-4">
-        <select value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 rounded-xl border border-border bg-card px-3 text-sm">
+        <UiSelect value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 rounded-xl border border-border bg-card px-3 text-sm">
           {STATUSES.map((s) => <option key={s} value={s}>الحالة: {s}</option>)}
-        </select>
-        <select value={channel} onChange={(e) => setChannel(e.target.value)} className="h-10 rounded-xl border border-border bg-card px-3 text-sm">
+        </UiSelect>
+        <UiSelect value={channel} onChange={(e) => setChannel(e.target.value)} className="h-10 rounded-xl border border-border bg-card px-3 text-sm">
           {CHANNELS.map((c) => <option key={c} value={c}>القناة: {c}</option>)}
-        </select>
+        </UiSelect>
         <Input placeholder="بحث: مرجع/هاتف/إيميل" value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => e.key === "Enter" && reload()} className="sm:col-span-2" />
       </div>
 

@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useState } from "react";
 import { Search, Check, X as XIcon, Eye, Briefcase, Megaphone, Send, RefreshCw } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
@@ -236,20 +237,20 @@ const Inner = () => {
             </div>
           )}
           <div className="flex flex-wrap items-center gap-2">
-            <select value={cityFilter} onChange={(e) => setCityFilter(e.target.value)}
+            <UiSelect value={cityFilter} onChange={(e) => setCityFilter(e.target.value)}
               className="h-9 rounded-md border border-input bg-background px-2 text-xs font-bold">
               <option value="">{lang === "ar" ? "كل المدن" : "All cities"}</option>
               {allCities.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
+            </UiSelect>
             <div className="ms-auto flex flex-wrap items-center gap-1.5">
               <Megaphone className="h-3.5 w-3.5 text-accent" />
-              <select value={inviteCampaign} onChange={(e) => setInviteCampaign(e.target.value)}
+              <UiSelect value={inviteCampaign} onChange={(e) => setInviteCampaign(e.target.value)}
                 className="h-9 rounded-md border border-input bg-background px-2 text-xs font-bold">
                 <option value="">{lang === "ar" ? "— اختر حملة —" : "— pick campaign —"}</option>
                 {(Array.isArray(campaigns) ? campaigns : []).filter((c) => c && (c.status === "open" || c.status === "draft")).map((c) => (
                   <option key={c.id} value={c.id}>{lang === "ar" ? c.title_ar : c.title_en} ({c.event_date})</option>
                 ))}
-              </select>
+              </UiSelect>
               <Button onClick={bulkInvite} disabled={inviting || pickedIds.length === 0 || !inviteCampaign}
                 className="h-9 bg-orange-grad text-xs font-extrabold text-accent-foreground">
                 <Send className="me-1 h-3.5 w-3.5" />
@@ -346,11 +347,11 @@ const Inner = () => {
                 </dl>
                 <div className="mt-4">
                   <div className="mb-1 text-[10px] font-bold uppercase text-muted-foreground">{lang === "ar" ? "تعيين برنامج" : "Assign program"}</div>
-                  <select value={selected.assignedProgram || ""} onChange={(e) => assign(selected.id, e.target.value)}
+                  <UiSelect value={selected.assignedProgram || ""} onChange={(e) => assign(selected.id, e.target.value)}
                     className="h-10 w-full rounded-md border border-border bg-background px-2 text-xs font-bold">
                     <option value="">{lang === "ar" ? "— اختر —" : "— pick —"}</option>
                     {programs.map((p) => <option key={p.slug} value={p.slug}>{p[lang].name}</option>)}
-                  </select>
+                  </UiSelect>
                 </div>
                 <div className="mt-4 grid grid-cols-2 gap-2">
                   <Button onClick={() => action(selected.id, "approved")} className="bg-secondary text-secondary-foreground"><Check className="h-4 w-4" />{lang === "ar" ? "اعتماد" : "Approve"}</Button>

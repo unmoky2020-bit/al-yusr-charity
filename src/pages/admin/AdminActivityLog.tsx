@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { NiceSelect } from "@/components/common/NiceSelect";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { RequireAuth } from "@/auth/RequireAuth";
 import { useLang } from "@/i18n/LangContext";
@@ -84,8 +86,8 @@ function roleBadgeCls(role: string | null) {
   if (!role) return "bg-muted text-muted-foreground";
   const r = role.toLowerCase();
   if (r.includes("super") || r === "admin") return "bg-primary/15 text-primary border-primary/20";
-  if (r.includes("editor") || r.includes("content")) return "bg-accent/15 text-accent-foreground border-accent/20";
-  if (r.includes("delegate") || r.includes("field")) return "bg-secondary/15 text-secondary-foreground border-secondary/20";
+  if (r.includes("editor") || r.includes("content")) return "bg-amber-500/15 text-amber-800 border-amber-500/30";
+  if (r.includes("delegate") || r.includes("field")) return "bg-sky-500/15 text-sky-800 border-sky-500/30";
   return "bg-muted/70 text-muted-foreground border-border";
 }
 
@@ -94,19 +96,70 @@ const MODULE_LABELS: Record<string, { ar: string; en: string }> = {
   Project: { ar: "مشروع", en: "Project" },
   User: { ar: "مستخدم", en: "User" },
   Case: { ar: "حالة", en: "Case" },
+  CaseModel: { ar: "حالة", en: "Case" },
   Donation: { ar: "تبرع", en: "Donation" },
   Campaign: { ar: "حملة", en: "Campaign" },
+  DonationCampaign: { ar: "حملة", en: "Campaign" },
   Blog: { ar: "مقال", en: "Blog" },
+  Article: { ar: "مقال", en: "Article" },
+  Story: { ar: "قصة", en: "Story" },
+  Gallery: { ar: "معرض الصور", en: "Gallery" },
+  GalleryImage: { ar: "معرض الصور", en: "Gallery" },
+  Media: { ar: "مكتبة الوسائط", en: "Media" },
+  PaymentMethod: { ar: "طريقة دفع", en: "Payment method" },
+  Volunteer: { ar: "تطوع", en: "Volunteer" },
+  Newsletter: { ar: "النشرة", en: "Newsletter" },
   Settings: { ar: "إعدادات", en: "Settings" },
+  Setting: { ar: "إعدادات", en: "Settings" },
+  Auth: { ar: "الدخول", en: "Auth" },
+};
+
+/** "donation_status", "CaseModel", "case-models" → one key for the label maps. */
+const keyOf = (v: string) => v.replace(/[-\s]+/g, "_").replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+const moduleLabel = (m: string, isAr: boolean) => {
+  const hit = Object.entries(MODULE_LABELS).find(([k]) => keyOf(k) === keyOf(m) || keyOf(k) + "s" === keyOf(m));
+  return hit ? (isAr ? hit[1].ar : hit[1].en) : m.replace(/[_-]+/g, " ");
 };
 
 const ACTION_LABELS: Record<string, { ar: string; en: string }> = {
   create: { ar: "إضافة", en: "Create" },
+  created: { ar: "إضافة", en: "Create" },
   update: { ar: "تعديل", en: "Update" },
+  updated: { ar: "تعديل", en: "Update" },
   delete: { ar: "حذف", en: "Delete" },
+  deleted: { ar: "حذف", en: "Delete" },
+  restore: { ar: "استرجاع", en: "Restore" },
   login: { ar: "تسجيل دخول", en: "Login" },
   logout: { ar: "تسجيل خروج", en: "Logout" },
+  donation_status: { ar: "تغيير حالة تبرع", en: "Donation status" },
+  status_change: { ar: "تغيير حالة", en: "Status change" },
+  approve: { ar: "اعتماد", en: "Approve" },
+  approved: { ar: "اعتماد", en: "Approve" },
+  reject: { ar: "رفض", en: "Reject" },
+  rejected: { ar: "رفض", en: "Reject" },
+  publish: { ar: "نشر", en: "Publish" },
+  upload: { ar: "رفع ملف", en: "Upload" },
+  export: { ar: "تصدير", en: "Export" },
+  payment: { ar: "دفع", en: "Payment" },
+  refund: { ar: "استرداد", en: "Refund" },
 };
+const actionLabel = (a: string, isAr: boolean) => {
+  const hit = ACTION_LABELS[keyOf(a)];
+  return hit ? (isAr ? hit.ar : hit.en) : a.replace(/[_-]+/g, " ");
+};
+/** Where an entity opens in the dashboard. */
+const entityHref = (module: string | null, id: string | null): string | null => {
+  if (!module || !id) return null;
+  const k = keyOf(module);
+  if (k.startsWith("donation_campaign") || k === "campaign" || k === "campaigns") return "/admin/campaigns";
+  if (k.startsWith("donation")) return `/admin/donations/${id}`;
+  if (k.startsWith("case")) return `/admin/cases/${id}`;
+  if (k.startsWith("project")) return `/admin/projects/${id}`;
+  if (k.startsWith("program")) return `/admin/programs/${id}`;
+  if (k.startsWith("user")) return "/admin/users";
+  return null;
+};
+const showValue = (v: unknown) => (v === null || v === undefined || v === "" ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v));
 
 function fmtRelative(dateStr: string, isAr: boolean): string {
   try {
@@ -124,8 +177,8 @@ function fmtRelative(dateStr: string, isAr: boolean): string {
 }
 
 const PER_PAGE_OPTIONS = [10, 25, 50, 100];
-const MODULES = ["", "Program", "Project", "User", "Case", "Donation", "Campaign", "Blog", "Settings"];
-const ACTIONS = ["", "create", "update", "delete", "login"];
+const MODULES = ["Program", "Project", "User", "Case", "Donation", "Campaign", "Blog", "Settings"];
+const ACTIONS = ["create", "update", "delete", "login", "donation_status"];
 
 // --- Component ---
 const Inner = () => {
@@ -143,6 +196,9 @@ const Inner = () => {
   const [perPage, setPerPage] = useState(25);
   const [lastPage, setLastPage] = useState(1);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  // Filter options: the known ones + every value the log actually returned (e.g. "donation_status").
+  const [seenModules, setSeenModules] = useState<string[]>([]);
+  const [seenActions, setSeenActions] = useState<string[]>([]);
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -176,7 +232,10 @@ const Inner = () => {
         lp = res.meta?.last_page ?? 1;
       }
 
-      setRows(items.map((item) => mapItem(item, isAr)));
+      const mapped = items.map((item) => mapItem(item, isAr));
+      setRows(mapped);
+      setSeenModules((prev) => Array.from(new Set([...prev, ...mapped.map((r) => r.module).filter(Boolean) as string[]])));
+      setSeenActions((prev) => Array.from(new Set([...prev, ...mapped.map((r) => r.action).filter(Boolean)])));
       setTotalCount(total);
       setLastPage(lp);
     } catch (err) {
@@ -205,19 +264,35 @@ const Inner = () => {
   }, [rows, q]);
 
   const uniqueUsers = useMemo(() => new Set(rows.map((r) => r.actor_id).filter(Boolean)).size, [rows]);
-  const createCount = rows.filter((r) => r.action.toLowerCase() === "create").length;
-  const deleteCount = rows.filter((r) => r.action.toLowerCase() === "delete").length;
+  const createCount = rows.filter((r) => ["create", "created"].includes(keyOf(r.action))).length;
+  const deleteCount = rows.filter((r) => ["delete", "deleted"].includes(keyOf(r.action))).length;
+  const updateCount = rows.filter((r) => !["create", "created", "delete", "deleted", "login", "logout"].includes(keyOf(r.action))).length;
+
+  const uniqBy = (list: string[]) => {
+    const out = new Map<string, string>();
+    list.forEach((v) => { const k = keyOf(v); if (!out.has(k)) out.set(k, v); });
+    return Array.from(out.values());
+  };
+  const moduleOptions = useMemo(() => [
+    { value: "__all", label: isAr ? "كل الوحدات" : "All modules" },
+    ...uniqBy([...MODULES, ...seenModules]).map((m) => ({ value: m, label: moduleLabel(m, isAr) })),
+  ], [seenModules, isAr]);
+  const actionOptions = useMemo(() => [
+    { value: "__all", label: isAr ? "كل الإجراءات" : "All actions" },
+    ...uniqBy([...ACTIONS, ...seenActions]).map((a) => ({ value: a, label: actionLabel(a, isAr) })),
+  ], [seenActions, isAr]);
 
   return (
     <AdminLayout title={{ ar: "سجل النشاط والتدقيق", en: "Audit Activity Log" }}>
       <div dir={isAr ? "rtl" : "ltr"} className="space-y-6">
         {/* KPI */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
           {[
             { icon: <Activity className="h-5 w-5 text-secondary" />, bg: "bg-secondary/15", label: { ar: "إجمالي السجلات", en: "Total Records" }, val: totalCount.toLocaleString() },
-            { icon: <PlusCircle className="h-5 w-5 text-emerald-600" />, bg: "bg-emerald-500/15", label: { ar: "إضافات", en: "Creates" }, val: createCount },
-            { icon: <Trash2 className="h-5 w-5 text-rose-600" />, bg: "bg-rose-500/15", label: { ar: "حذفيات", en: "Deletions" }, val: deleteCount },
-            { icon: <Users className="h-5 w-5 text-primary" />, bg: "bg-primary/15", label: { ar: "مستخدمون نشطون", en: "Active Users" }, val: uniqueUsers },
+            { icon: <PlusCircle className="h-5 w-5 text-emerald-600" />, bg: "bg-emerald-500/15", label: { ar: "إضافات (في الصفحة)", en: "Creates (this page)" }, val: createCount },
+            { icon: <Pencil className="h-5 w-5 text-amber-600" />, bg: "bg-amber-500/15", label: { ar: "تعديلات (في الصفحة)", en: "Changes (this page)" }, val: updateCount },
+            { icon: <Trash2 className="h-5 w-5 text-rose-600" />, bg: "bg-rose-500/15", label: { ar: "حذف (في الصفحة)", en: "Deletions (this page)" }, val: deleteCount },
+            { icon: <Users className="h-5 w-5 text-primary" />, bg: "bg-primary/15", label: { ar: "مستخدمين (في الصفحة)", en: "Users (this page)" }, val: uniqueUsers },
           ].map((kpi, i) => (
             <Card key={i} className="p-4 sm:p-5 bg-card border-border/80">
               <div className="flex items-center gap-3">
@@ -237,17 +312,13 @@ const Inner = () => {
             <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input className="ps-9 h-11 rounded-2xl bg-card" placeholder={isAr ? "بحث بالمستخدم، الإجراء، الملخص…" : "Search user, action, summary…"} value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
-          <select value={filterModule} onChange={(e) => setFilterModule(e.target.value)} className="h-11 rounded-2xl border border-border bg-card px-4 text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-secondary/50">
-            <option value="">{isAr ? "كل الوحدات" : "All Modules"}</option>
-            {MODULES.filter(Boolean).map((m) => <option key={m} value={m}>{isAr ? MODULE_LABELS[m]?.ar || m : m}</option>)}
-          </select>
-          <select value={filterAction} onChange={(e) => setFilterAction(e.target.value)} className="h-11 rounded-2xl border border-border bg-card px-4 text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-secondary/50">
-            <option value="">{isAr ? "كل الإجراءات" : "All Actions"}</option>
-            {ACTIONS.filter(Boolean).map((a) => <option key={a} value={a}>{isAr ? ACTION_LABELS[a]?.ar || a : a}</option>)}
-          </select>
-          <select value={perPage} onChange={(e) => setPerPage(Number(e.target.value))} className="h-11 rounded-2xl border border-border bg-card px-4 text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-secondary/50">
-            {PER_PAGE_OPTIONS.map((n) => <option key={n} value={n}>{n} {isAr ? "لكل صفحة" : "per page"}</option>)}
-          </select>
+          <NiceSelect value={filterModule || "__all"} onChange={(v) => setFilterModule(v === "__all" ? "" : v)} options={moduleOptions}
+            ariaLabel={isAr ? "الوحدة" : "Module"} dir={isAr ? "rtl" : "ltr"} className="h-11 rounded-2xl bg-card sm:w-48" />
+          <NiceSelect value={filterAction || "__all"} onChange={(v) => setFilterAction(v === "__all" ? "" : v)} options={actionOptions}
+            ariaLabel={isAr ? "الإجراء" : "Action"} dir={isAr ? "rtl" : "ltr"} className="h-11 rounded-2xl bg-card sm:w-48" />
+          <NiceSelect value={String(perPage)} onChange={(v) => setPerPage(Number(v))}
+            options={PER_PAGE_OPTIONS.map((n) => ({ value: String(n), label: `${n} ${isAr ? "لكل صفحة" : "per page"}` }))}
+            ariaLabel={isAr ? "عدد السجلات" : "Per page"} dir={isAr ? "rtl" : "ltr"} className="h-11 rounded-2xl bg-card sm:w-40" />
           <Button onClick={reload} variant="secondary" className="h-11 rounded-2xl px-5 font-bold shrink-0" disabled={loading}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
             <span className="ms-2">{isAr ? "تحديث" : "Refresh"}</span>
@@ -287,15 +358,16 @@ const Inner = () => {
                 )}
                 {!loading && filtered.map((r) => {
                   const isExpanded = expandedId === r.id;
-                  const modLabel = r.module ? (isAr ? MODULE_LABELS[r.module]?.ar || r.module : r.module) : "—";
-                  const actLabel = ACTION_LABELS[r.action.toLowerCase()] ? (isAr ? ACTION_LABELS[r.action.toLowerCase()].ar : ACTION_LABELS[r.action.toLowerCase()].en) : r.action;
-                  const hasDetails = (r.new_values && Object.keys(r.new_values).length > 0) || (r.old_values && Object.keys(r.old_values).length > 0);
+                  const modLabel = r.module ? moduleLabel(r.module, isAr) : "—";
+                  const actLabel = actionLabel(r.action, isAr);
+                  const href = entityHref(r.module || r.entity_type, r.entity_id);
+                  const hasDetails = true; // connection info at least
                   return (
-                    <>
-                      <tr key={r.id} className="hover:bg-muted/30 transition-colors cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : r.id)}>
-                        <td className="px-4 py-3 text-xs text-muted-foreground font-mono whitespace-nowrap" dir="ltr">
+                    <Fragment key={r.id}>
+                      <tr className="hover:bg-muted/30 transition-colors cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : r.id)}>
+                        <td className="whitespace-nowrap px-4 py-3 text-xs text-muted-foreground">
                           <div className="flex items-center gap-1.5"><Clock className="h-3 w-3 opacity-60 shrink-0" /><span title={new Date(r.created_at).toLocaleString()}>{fmtRelative(r.created_at, isAr)}</span></div>
-                          <span className="block text-[10px] opacity-60 mt-0.5">{new Date(r.created_at).toLocaleDateString("ar-EG")}</span>
+                          <span className="mt-0.5 block font-mono text-[10px] opacity-60" dir="ltr">{new Date(r.created_at).toLocaleString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
                         </td>
                         <td className="px-4 py-3">
                           <span className="font-extrabold text-primary text-xs block">{r.actor_name || "—"}</span>
@@ -313,10 +385,16 @@ const Inner = () => {
                           <span className="inline-flex items-center gap-1 rounded-lg bg-muted/60 border border-border/60 px-2.5 py-1 text-[11px] font-bold text-muted-foreground"><Layers className="h-3 w-3" />{modLabel}</span>
                         </td>
                         <td className="px-4 py-3 text-xs font-mono text-muted-foreground">
-                          {r.entity_id ? <span className="rounded bg-muted/40 px-1.5 py-0.5 border border-border/40">#{r.entity_id}</span> : "—"}
+                          {r.entity_id ? (
+                            href ? (
+                              <Link to={href} onClick={(e) => e.stopPropagation()} className="rounded border border-secondary/40 bg-secondary/10 px-1.5 py-0.5 font-bold text-primary hover:bg-secondary/25">#{r.entity_id}</Link>
+                            ) : (
+                              <span className="rounded border border-border/40 bg-muted/40 px-1.5 py-0.5">#{r.entity_id}</span>
+                            )
+                          ) : "—"}
                         </td>
-                        <td className="px-4 py-3 text-xs font-medium text-muted-foreground max-w-[200px]">
-                          <span className="line-clamp-2">{r.summary || "—"}</span>
+                        <td className="min-w-[240px] max-w-[420px] px-4 py-3 text-xs font-medium text-foreground/80">
+                          <span className="line-clamp-2" title={r.summary || ""}>{r.summary || "—"}</span>
                         </td>
                         <td className="px-4 py-3 text-end">
                           {hasDetails && (
@@ -327,40 +405,71 @@ const Inner = () => {
                         </td>
                       </tr>
                       {isExpanded && (
-                        <tr key={`${r.id}-detail`} className="bg-muted/20 border-b border-border/40">
+                        <tr className="bg-muted/20 border-b border-border/40">
                           <td colSpan={8} className="px-6 py-4">
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 text-xs">
-                              <div className="space-y-1.5">
-                                <p className="font-black text-[11px] uppercase tracking-wider text-muted-foreground">{isAr ? "معلومات الاتصال" : "Connection Info"}</p>
-                                {r.ip && <div className="flex items-center gap-2 text-muted-foreground"><Globe className="h-3.5 w-3.5 shrink-0" /><span dir="ltr" className="font-mono">{r.ip}</span></div>}
-                                {r.user_agent && <div className="flex items-start gap-2 text-muted-foreground"><Monitor className="h-3.5 w-3.5 shrink-0 mt-0.5" /><span className="line-clamp-2 break-all">{r.user_agent}</span></div>}
-                                {!r.ip && !r.user_agent && <span className="text-muted-foreground/50">{isAr ? "لا توجد معلومات" : "No info"}</span>}
-                              </div>
-                              {r.new_values && Object.keys(r.new_values).length > 0 && (
-                                <div className="space-y-1.5">
-                                  <p className="font-black text-[11px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400">{isAr ? "القيم الجديدة" : "New Values"}</p>
-                                  <div className="rounded-xl bg-emerald-500/5 border border-emerald-500/20 p-3 space-y-1 font-mono">
-                                    {Object.entries(r.new_values).slice(0, 8).map(([k, v]) => (
-                                      <div key={k} className="flex gap-2"><span className="text-emerald-600/70 shrink-0">{k}:</span><span className="text-foreground break-all">{typeof v === "object" ? JSON.stringify(v) : String(v ?? "—")}</span></div>
-                                    ))}
+                            {(() => {
+                              const oldV = r.old_values || {};
+                              const newV = (r.new_values && r.new_values !== r.metadata ? r.new_values : null) || {};
+                              const keys = Array.from(new Set([...Object.keys(oldV), ...Object.keys(newV)]));
+                              const meta = r.metadata && r.metadata !== r.new_values ? r.metadata : r.metadata && !r.old_values && !keys.length ? r.metadata : null;
+                              const metaKeys = meta ? Object.keys(meta) : [];
+                              return (
+                                <div className="grid gap-4 text-xs lg:grid-cols-[minmax(0,1fr)_260px]">
+                                  <div className="space-y-3">
+                                    {r.summary && <p className="text-sm font-bold leading-6 text-foreground">{r.summary}</p>}
+                                    {keys.length > 0 && (
+                                      <div className="overflow-hidden rounded-xl border border-border bg-card">
+                                        <table className="w-full text-xs">
+                                          <thead className="bg-muted/50 text-[10.5px] font-black text-muted-foreground">
+                                            <tr>
+                                              <th className="px-3 py-2 text-start">{isAr ? "الحقل" : "Field"}</th>
+                                              <th className="px-3 py-2 text-start text-rose-700">{isAr ? "قبل" : "Before"}</th>
+                                              <th className="px-3 py-2 text-start text-emerald-700">{isAr ? "بعد" : "After"}</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody className="divide-y divide-border/60 font-mono">
+                                            {keys.map((k) => {
+                                              const changed = showValue(oldV[k]) !== showValue(newV[k]);
+                                              return (
+                                                <tr key={k} className={changed ? "" : "opacity-60"}>
+                                                  <td className="px-3 py-1.5 font-bold text-muted-foreground" dir="ltr">{k}</td>
+                                                  <td className="max-w-[280px] break-all px-3 py-1.5 text-rose-700/90">{k in oldV ? showValue(oldV[k]) : "—"}</td>
+                                                  <td className="max-w-[280px] break-all px-3 py-1.5 text-emerald-700">{k in newV ? showValue(newV[k]) : "—"}</td>
+                                                </tr>
+                                              );
+                                            })}
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    )}
+                                    {metaKeys.length > 0 && (
+                                      <div className="rounded-xl border border-border bg-card p-3">
+                                        <p className="mb-1.5 text-[10.5px] font-black text-muted-foreground">{isAr ? "تفاصيل إضافية" : "Details"}</p>
+                                        <div className="grid gap-1 font-mono sm:grid-cols-2">
+                                          {metaKeys.map((k) => (
+                                            <div key={k} className="flex gap-2"><span className="shrink-0 text-muted-foreground" dir="ltr">{k}:</span><span className="break-all text-foreground">{showValue(meta?.[k])}</span></div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                    {!keys.length && !metaKeys.length && !r.summary && (
+                                      <p className="text-muted-foreground">{isAr ? "السجل ده مفيهوش تفاصيل إضافية." : "No further details."}</p>
+                                    )}
+                                  </div>
+                                  <div className="space-y-1.5 rounded-xl border border-border bg-card p-3">
+                                    <p className="text-[10.5px] font-black text-muted-foreground">{isAr ? "معلومات الاتصال" : "Connection"}</p>
+                                    <div className="flex items-center gap-2 text-muted-foreground"><Clock className="h-3.5 w-3.5 shrink-0" /><span dir="ltr" className="font-mono">{new Date(r.created_at).toLocaleString("en-GB")}</span></div>
+                                    {r.ip && <div className="flex items-center gap-2 text-muted-foreground"><Globe className="h-3.5 w-3.5 shrink-0" /><span dir="ltr" className="font-mono">{r.ip}</span></div>}
+                                    {r.user_agent && <div className="flex items-start gap-2 text-muted-foreground"><Monitor className="mt-0.5 h-3.5 w-3.5 shrink-0" /><span className="line-clamp-3 break-all">{r.user_agent}</span></div>}
+                                    {href && <Link to={href} className="inline-flex items-center gap-1 pt-1 font-bold text-primary underline">{isAr ? `افتح ${modLabel} #${r.entity_id}` : `Open ${modLabel} #${r.entity_id}`}</Link>}
                                   </div>
                                 </div>
-                              )}
-                              {r.old_values && Object.keys(r.old_values).length > 0 && (
-                                <div className="space-y-1.5">
-                                  <p className="font-black text-[11px] uppercase tracking-wider text-rose-600 dark:text-rose-400">{isAr ? "القيم القديمة" : "Old Values"}</p>
-                                  <div className="rounded-xl bg-rose-500/5 border border-rose-500/20 p-3 space-y-1 font-mono">
-                                    {Object.entries(r.old_values).slice(0, 8).map(([k, v]) => (
-                                      <div key={k} className="flex gap-2"><span className="text-rose-600/70 shrink-0">{k}:</span><span className="text-foreground break-all">{typeof v === "object" ? JSON.stringify(v) : String(v ?? "—")}</span></div>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
+                              );
+                            })()}
                           </td>
                         </tr>
                       )}
-                    </>
+                    </Fragment>
                   );
                 })}
               </tbody>

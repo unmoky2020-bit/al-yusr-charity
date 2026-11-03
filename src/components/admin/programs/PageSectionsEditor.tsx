@@ -5,6 +5,7 @@
  * content_ar / content_en are arrays whose item shape depends on section_key (see sectionSchemas.ts);
  * known shapes get structured inputs, anything else falls back to a validated JSON textarea.
  */
+import { UiSelect } from "@/components/common/UiSelect";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ArrowDown, ArrowUp, Braces, ChevronDown, ChevronUp, LayoutList, Loader2, Pencil, Plus, RefreshCw, Save, Trash2, X,
@@ -492,14 +493,14 @@ export function PageSectionsEditor({ programId }: { programId: number | string }
       <div className="space-y-2 rounded-2xl border border-primary/20 bg-primary/5 p-3">
         <p className="flex items-center gap-1.5 text-xs font-black text-primary"><Plus className="h-3.5 w-3.5" /> إضافة قسم</p>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <select value={newKey} onChange={(e) => setNewKey(e.target.value)}
+          <UiSelect value={newKey} onChange={(e) => setNewKey(e.target.value)}
             className="flex h-9 flex-1 rounded-xl border border-input bg-background px-3 text-xs">
             <option value="">اختر نوع القسم…</option>
             {freeSchemas.map((sc) => (
               <option key={sc.key} value={sc.key}>{sc.labelAr} ({sc.key})</option>
             ))}
             <option value="__custom">مفتاح مخصص…</option>
-          </select>
+          </UiSelect>
           {newKey === "__custom" && (
             <Input dir="ltr" value={customKey} placeholder="custom_section_key" className="h-9 flex-1 rounded-xl font-mono text-xs"
               onChange={(e) => setCustomKey(e.target.value.toLowerCase())} />

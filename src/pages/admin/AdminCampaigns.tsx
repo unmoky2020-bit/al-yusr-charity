@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Plus, Megaphone, Users2, MapPin, CalendarDays, Trash2, Pencil, Search, X, CheckCircle2, XCircle, Clock, Phone, Mail } from "lucide-react";
@@ -243,7 +244,7 @@ const Inner = () => {
               <Field label={lang === "ar" ? "عدد المتطوعين المطلوب" : "Slots needed"} type="number" v={String(editing.slots_needed ?? 0)} onChange={(v) => setEditing({ ...editing, slots_needed: Number(v) })} />
               <div>
                 <label className="text-[11px] font-bold uppercase text-muted-foreground">{lang === "ar" ? "الحالة" : "Status"}</label>
-                <select
+                <UiSelect
                   className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
                   value={editing.status || "draft"}
                   onChange={(e) => setEditing({ ...editing, status: e.target.value as CampaignStatus })}
@@ -251,7 +252,7 @@ const Inner = () => {
                   {(Object.keys(STATUS_LABEL) as CampaignStatus[]).map((s) => (
                     <option key={s} value={s}>{STATUS_LABEL[s][lang]}</option>
                   ))}
-                </select>
+                </UiSelect>
               </div>
               <div className="sm:col-span-2">
                 <Field label={lang === "ar" ? "المهارات المطلوبة (مفصولة بفاصلة)" : "Required skills (comma separated)"} v={skillsText} onChange={setSkillsText} placeholder="logistics, first-aid, driving" />
@@ -323,7 +324,7 @@ const Inner = () => {
                             }}
                           />
                           <span className="text-[10px] font-extrabold uppercase text-muted-foreground">{lang === "ar" ? "المناوبة:" : "Shift:"}</span>
-                          <select
+                          <UiSelect
                             className="h-7 rounded-md border border-input bg-background px-1 text-[11px] font-bold"
                             defaultValue={a.shift || ""}
                             onChange={async (e) => {
@@ -336,7 +337,7 @@ const Inner = () => {
                             <option value="noon">{lang === "ar" ? "ظهر" : "Noon"}</option>
                             <option value="evening">{lang === "ar" ? "مسائي" : "Evening"}</option>
                             <option value="night">{lang === "ar" ? "ليلي" : "Night"}</option>
-                          </select>
+                          </UiSelect>
                         </div>
                       )}
                         </div>

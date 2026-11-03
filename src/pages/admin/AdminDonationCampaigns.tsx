@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -717,7 +718,7 @@ export default function AdminDonationCampaigns() {
                 </div>
                 <div>
                   <Label>{isAr ? "التصنيف التابع له *" : "Category *"}</Label>
-                  <select
+                  <UiSelect
                     value={editing.category_id ? String(editing.category_id) : ""}
                     onChange={(e) => setEditing({ ...editing, category_id: e.target.value ? Number(e.target.value) : null })}
                     className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
@@ -728,7 +729,7 @@ export default function AdminDonationCampaigns() {
                         {k.name_ar} ({k.slug})
                       </option>
                     ))}
-                  </select>
+                  </UiSelect>
                 </div>
               </div>
 

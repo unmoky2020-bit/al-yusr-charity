@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useRef, useState } from "react";
 import { Image as ImageIcon, Loader2, Trash2, ArrowUp, ArrowDown, Eye, EyeOff, Save, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -177,14 +178,14 @@ function MediaRowEditor({
   return (
     <div className="space-y-2 p-3">
       <div className="flex items-center justify-between gap-2">
-        <select
+        <UiSelect
           value={draft.kind}
           onChange={(e) => setDraft({ ...draft, kind: e.target.value as CaseMediaKind })}
           className="h-8 rounded-md border border-border bg-background px-2 text-xs font-bold"
           aria-label={isAr ? "نوع الوسائط" : "Media kind"}
         >
           {KINDS.map((k) => <option key={k.v} value={k.v}>{isAr ? k.ar : k.en}</option>)}
-        </select>
+        </UiSelect>
         <div className="flex items-center gap-1">
           <button onClick={() => onMove(index, -1)} disabled={index === 0}
             className="grid h-8 w-8 place-items-center rounded-md bg-muted hover:bg-muted/70 disabled:opacity-30"

@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
@@ -339,11 +340,11 @@ const Inner = () => {
           <span className="text-xs text-muted-foreground">→</span>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="h-9 w-[150px]" />
         </div>
-        <select value={sort} onChange={(e) => setSort(e.target.value as any)} className="h-9 rounded-md border border-border bg-background px-2 text-xs font-bold">
+        <UiSelect value={sort} onChange={(e) => setSort(e.target.value as any)} className="h-9 rounded-md border border-border bg-background px-2 text-xs font-bold">
           <option value="score">{isRTL ? "ترتيب: النقاط" : "Sort: score"}</option>
           <option value="date">{isRTL ? "ترتيب: التاريخ" : "Sort: date"}</option>
           <option value="updated">{isRTL ? "ترتيب: آخر تعديل" : "Sort: updated"}</option>
-        </select>
+        </UiSelect>
         <Button asChild variant="outline" size="sm" className="font-extrabold">
           <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer">
             <ExternalLink className="h-3.5 w-3.5 me-1" /> {isRTL ? "خريطة الموقع XML" : "Sitemap XML"}

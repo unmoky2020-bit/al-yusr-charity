@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -326,9 +327,9 @@ const AdminServices = () => {
               </div>
               <div>
                 <Label className="text-xs font-bold">القطاع</Label>
-                <select className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-sm font-bold" value={form.sector} onChange={(e) => patch("sector", e.target.value)}>
+                <UiSelect className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-sm font-bold" value={form.sector} onChange={(e) => patch("sector", e.target.value)}>
                   {SECTORS.map((s) => <option key={s.v} value={s.v}>{s.ar} / {s.en}</option>)}
-                </select>
+                </UiSelect>
               </div>
               <div><Label className="text-xs font-bold">رابط الصورة (URL)</Label><Input placeholder="https://..." value={form.hero} onChange={(e) => patch("hero", e.target.value)} className="mt-1 font-mono" dir="ltr" /></div>
               {form.hero && <img src={form.hero} alt="" className="h-32 w-full rounded-xl object-cover" />}

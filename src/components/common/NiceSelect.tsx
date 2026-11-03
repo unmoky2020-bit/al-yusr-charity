@@ -3,7 +3,7 @@ import { Check } from "lucide-react";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
-export type NiceOption = { value: string; label: string; hint?: string };
+export type NiceOption = { value: string; label: string; hint?: string; disabled?: boolean };
 
 /**
  * The site's dropdown (Radix under the hood): rounded, branded, RTL-aware, keyboard friendly.
@@ -18,6 +18,7 @@ export function NiceSelect({
   className = "",
   size = "md",
   dir,
+  disabled,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -27,9 +28,10 @@ export function NiceSelect({
   className?: string;
   size?: "sm" | "md";
   dir?: "rtl" | "ltr";
+  disabled?: boolean;
 }) {
   return (
-    <Select value={value} onValueChange={onChange} dir={dir}>
+    <Select value={value} onValueChange={onChange} dir={dir} disabled={disabled}>
       <SelectTrigger
         id={id}
         dir={dir}
@@ -52,6 +54,7 @@ export function NiceSelect({
           <SelectPrimitive.Item
             key={o.value || "__empty"}
             value={o.value || "__empty"}
+            disabled={o.disabled}
             className="relative flex w-full cursor-pointer select-none flex-col rounded-xl py-2.5 pe-3 ps-8 text-start text-sm font-bold text-primary outline-none focus:bg-secondary/15 data-[state=checked]:bg-secondary/20 data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
           >
             <span className="absolute start-2.5 top-3 flex h-3.5 w-3.5 items-center justify-center">

@@ -1,3 +1,4 @@
+import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useState } from "react";
 import { Loader2, ShieldCheck, MapPin, Phone, Package, HeartHandshake, UserPlus, RefreshCw, Calendar, Download, Eye } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
@@ -145,7 +146,7 @@ const Inner = () => {
                   <span className="flex items-center gap-1 text-[11px] text-muted-foreground"><MapPin className="h-3 w-3" />{k.city}</span>
                   <a className="flex items-center gap-1 text-[11px] text-primary" dir="ltr" href={`tel:${k.phone}`}><Phone className="h-3 w-3" />{k.phone}</a>
                   <div className="ms-auto flex items-center gap-1.5">
-                    <select
+                    <UiSelect
                       disabled={savingId === k.id || !delegates.length}
                       onChange={(e) => e.target.value && assignKhabia(k.id, e.target.value)}
                       defaultValue=""
@@ -154,7 +155,7 @@ const Inner = () => {
                       {delegates.map((d) => (
                         <option key={d.id} value={d.id}>{d.full_name || d.phone || d.id.slice(0, 6)}</option>
                       ))}
-                    </select>
+                    </UiSelect>
                   </div>
                 </div>
               ))}
