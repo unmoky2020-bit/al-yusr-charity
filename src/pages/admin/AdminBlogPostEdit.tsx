@@ -7,6 +7,7 @@ import {
   Instagram, Music2, Undo2, Redo2, X,
 } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
+import { MediaPickerModal } from "@/components/admin/MediaPickerModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RequireAuth } from "@/auth/RequireAuth";
@@ -323,6 +324,7 @@ const Inner = () => {
   const { slug = "" } = useParams();
   const nav = useNavigate();
   const [row, setRow] = useState<DbBlogPost | null>(null);
+  const [picker, setPicker] = useState<null | "cover" | "og">(null);
   const [draft, setDraft] = useState<EditState | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -751,11 +753,32 @@ const Inner = () => {
                   {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
                   {isRTL ? "رفع صورة" : "Upload"}
                 </Button>
+                <Button type="button" size="sm" variant="outline" onClick={() => setPicker("cover")}>
+                  <ImageIcon className="h-3.5 w-3.5" /> {isRTL ? "من المكتبة" : "From library"}
+                </Button>
                 <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickImage} />
                 <Input className="min-w-[200px] flex-1" placeholder={isRTL ? "أو ألصق رابط صورة خارجية" : "Or paste external image URL"} value={draft.image_url} onChange={(e) => setDraft({ ...draft, image_url: e.target.value })} />
                 <Button type="button" size="sm" variant="outline" onClick={regenerateOg}><Wand2 className="h-3.5 w-3.5" /> {isRTL ? "ولّد OG" : "Generate OG"}</Button>
               </div>
-              {draft.og_image_url && <p className="mt-2 text-[10px] text-muted-foreground" dir="ltr">OG: {draft.og_image_url}</p>}
+              <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
+                <span className="text-[11px] font-extrabold text-muted-foreground">{isRTL ? "صورة المشاركة (OG) 1200×630:" : "Share image (OG):"}</span>
+                {draft.og_image_url
+                  ? <img src={draft.og_image_url} alt="" className="h-10 w-[76px] rounded-md object-cover" />
+                  : <span className="text-[11px] text-muted-foreground">{isRTL ? "مش موجودة — هتستخدم صورة الغلاف" : "none — the cover is used"}</span>}
+                <Button type="button" size="sm" variant="outline" onClick={() => setPicker("og")}>
+                  <ImageIcon className="h-3.5 w-3.5" /> {isRTL ? "اختار من المكتبة" : "From library"}
+                </Button>
+                {draft.og_image_url && (
+                  <Button type="button" size="sm" variant="ghost" onClick={() => setDraft({ ...draft, og_image_url: "" })}>{isRTL ? "شيلها" : "Remove"}</Button>
+                )}
+              </div>
+              <MediaPickerModal
+                open={picker !== null}
+                onOpenChange={(v) => !v && setPicker(null)}
+                currentValue={picker === "og" ? draft.og_image_url : draft.image_url}
+                title={picker === "og" ? (isRTL ? "صورة المشاركة من المكتبة" : "Share image from the library") : (isRTL ? "صورة الغلاف من المكتبة" : "Cover from the library")}
+                onSelect={(url) => setDraft((d) => (d ? (picker === "og" ? { ...d, og_image_url: url } : { ...d, image_url: url }) : d))}
+              />
             </div>
 
             <div className="rounded-xl border border-border bg-muted/20 p-3">

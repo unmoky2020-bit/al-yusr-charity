@@ -26,6 +26,7 @@ import { uploadBlogMedia, generateAndUploadOg } from "@/lib/blog-uploads";
 import { auditPost, downloadJson, downloadPdf } from "@/lib/seo-report";
 import { lintArticleSchema, type SchemaIssue } from "@/lib/lint-jsonld";
 import { toast } from "@/hooks/use-toast";
+import { BlogImportDialog } from "@/components/admin/BlogImportDialog";
 import { publicUrls } from "@/lib/publicUrls";
 
 type Row = {
@@ -109,6 +110,7 @@ const Inner = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
   const { rows: dbRows, refetch } = useAllBlogRowsAdmin();
+  const [showImport, setShowImport] = useState(false);
   const [params, setParams] = useSearchParams();
 
   const [q, setQ] = useState(params.get("q") ?? "");
@@ -364,6 +366,11 @@ const Inner = () => {
             <ExternalLink className="h-3.5 w-3.5 me-1" /> {isRTL ? "خريطة الموقع XML" : "Sitemap XML"}
           </a>
         </Button>
+        <Button size="sm" variant="outline" onClick={() => setShowImport(true)} className="font-extrabold">
+          <Upload className="h-3.5 w-3.5" /> {isRTL ? "استيراد مقالات" : "Import"}
+        </Button>
+        <BlogImportDialog open={showImport} onOpenChange={setShowImport} isRTL={isRTL}
+          existingSlugs={new Set(dbRows.map((r) => r.slug))} onDone={() => refetch()} />
         <Button size="sm" onClick={() => setShowNew(true)} className="bg-orange-grad font-extrabold text-accent-foreground">
           <Plus className="h-3.5 w-3.5" /> {isRTL ? "مقالة جديدة" : "New post"}
         </Button>

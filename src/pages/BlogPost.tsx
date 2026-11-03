@@ -53,7 +53,13 @@ const BlogPost = () => {
     | { type: "h3"; text: string }
     | { type: "related_group"; items: RelatedLink[] }
     | { type: "related_single"; item: RelatedLink }
-    | { type: "paragraph"; raw: string };
+    | { type: "paragraph"; raw: string }
+    | { type: "ul"; items: string[] }
+    | { type: "ol"; items: string[] }
+    | { type: "table"; head: string[]; rows: string[][] }
+    | { type: "quick"; raw: string }
+    | { type: "sources"; items: RelatedLink[] }
+    | { type: "cta"; item: RelatedLink };
 
   const parseRelatedLink = (text: string): RelatedLink | null => {
     const trimmed = text.trim().replace(/^[-*•]\s*/, "");
@@ -84,8 +90,41 @@ const BlogPost = () => {
     .map((l) => l.trim())
     .filter(Boolean);
 
-  for (const line of lines) {
+  const cells = (row: string) => row.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim());
+  let inSources = false;
+  for (let li = 0; li < lines.length; li++) {
+    const line = lines[li];
+    if (/^#\s+/.test(line) || /^-{3,}$/.test(line)) { flushRelated(); continue; } // the title is the page H1; rules are spacing
+
+    // «**المصادر:**» → the links after it are sources (external, cited), not "read also" cards
+    if (/^\*\*(المصادر|المراجع|Sources)\s*:?\*\*\s*:?$/i.test(line)) { flushRelated(); inSources = true; blocks.push({ type: "sources", items: [] }); continue; }
+    if (inSources) {
+      const rel = parseRelatedLink(line);
+      const last = blocks[blocks.length - 1];
+      if (rel && last?.type === "sources") { last.items.push(rel); continue; }
+      inSources = false;
+    }
+
+    // tables: consecutive "| a | b |" lines (the "|---|" row is the separator)
+    if (line.startsWith("|")) {
+      flushRelated();
+      const rows: string[][] = [];
+      while (li < lines.length && lines[li].startsWith("|")) {
+        if (!/^\|?\s*:?-{2,}/.test(lines[li])) rows.push(cells(lines[li]));
+        li++;
+      }
+      li--;
+      if (rows.length) blocks.push({ type: "table", head: rows[0], rows: rows.slice(1) });
+      continue;
+    }
+
+    // a line that is only a link to a page of the site → a call to action / related card
     const rel = parseRelatedLink(line);
+    if (rel && !/^[-*•]\s/.test(line) && rel.href.startsWith("/") && !rel.href.startsWith("/blog/")) {
+      flushRelated();
+      blocks.push({ type: "cta", item: rel });
+      continue;
+    }
     if (rel) {
       pendingRelated.push(rel);
       continue;
@@ -93,10 +132,29 @@ const BlogPost = () => {
 
     flushRelated();
 
+    // lists
+    const ulm = line.match(/^[-*•]\s+(.*)$/);
+    const olm = line.match(/^\d+[.)]\s+(.*)$/);
+    if (ulm || olm) {
+      const kind = ulm ? "ul" : "ol";
+      const last = blocks[blocks.length - 1];
+      const text = (ulm || olm)![1];
+      if (last && last.type === kind) last.items.push(text);
+      else blocks.push(kind === "ul" ? { type: "ul", items: [text] } : { type: "ol", items: [text] });
+      continue;
+    }
+
     if (line.startsWith("## ")) {
       blocks.push({ type: "h2", text: line.replace(/^##\s+/, "") });
     } else if (line.startsWith("### ")) {
       blocks.push({ type: "h3", text: line.replace(/^###\s+/, "") });
+    } else if (/^\*\*(الإجابة السريعة|الخلاصة|باختصار|الإجابة المختصرة|Quick answer|In short)\s*:?\*\*/i.test(line)) {
+      blocks.push({ type: "quick", raw: line.replace(/^\*\*[^*]+\*\*\s*:?\s*/, "") });
+    } else if (line.startsWith("> ")) {
+      blocks.push({ type: "quick", raw: line.replace(/^>\s+/, "") });
+    } else if (/^\*\*[^*]+[؟?]\*\*$/.test(line)) {
+      // «**سؤال؟**» on its own line = a question heading (FAQ style)
+      blocks.push({ type: "h3", text: line.replace(/^\*\*|\*\*$/g, "") });
     } else {
       blocks.push({ type: "paragraph", raw: line });
     }
@@ -322,7 +380,7 @@ const BlogPost = () => {
                 if (match[2] !== undefined) {
                   elements.push(
                     <strong key={`b-${match.index}`} className="font-extrabold text-slate-900">
-                      {match[2]}
+                      {/\[[^\]]+\]\([^)]+\)/.test(match[2]) ? renderInline(match[2]) : match[2]}
                     </strong>
                   );
                 } else if (match[3] !== undefined && match[4] !== undefined) {
@@ -419,6 +477,7 @@ const BlogPost = () => {
                             <Link
                               key={idx}
                               to={item.href}
+                              {...(/^https?:/.test(item.href) ? { reloadDocument: true, target: "_blank", rel: "noopener noreferrer" } : {})}
                               className="flex items-center justify-between gap-3 p-3.5 rounded-xl border border-border/70 bg-background hover:bg-secondary/15 hover:border-secondary/40 transition group shadow-xs"
                             >
                               <div className="flex items-center gap-2.5 min-w-0">
@@ -455,6 +514,66 @@ const BlogPost = () => {
                         </div>
                       </div>
                     );
+                  }
+                  if (block.type === "quick") {
+                    return (
+                      <aside key={i} id={i < 4 ? "quick-answer" : undefined} className="quick-answer my-6 rounded-2xl border-s-4 border-secondary bg-secondary/10 p-4 sm:p-5">
+                        <p className="mb-1 text-xs font-black text-primary">{lang === "ar" ? "الإجابة باختصار" : "In short"}</p>
+                        <p className="font-semibold leading-8 text-slate-900">{renderInline(block.raw)}</p>
+                      </aside>
+                    );
+                  }
+                  if (block.type === "ul" || block.type === "ol") {
+                    const ListTag = block.type === "ul" ? "ul" : "ol";
+                    return (
+                      <ListTag key={i} className={`space-y-2 ps-6 marker:font-black marker:text-secondary ${block.type === "ul" ? "list-disc" : "list-decimal"}`}>
+                        {block.items.map((t, k) => <li key={k} className="ps-1 leading-8">{renderInline(t)}</li>)}
+                      </ListTag>
+                    );
+                  }
+                  if (block.type === "table") {
+                    return (
+                      <div key={i} className="my-6 overflow-x-auto rounded-2xl border border-border shadow-xs">
+                        <table className="w-full min-w-[480px] border-collapse text-start text-[15px] leading-7">
+                          <thead className="bg-primary text-primary-foreground">
+                            <tr>{block.head.map((h, k) => <th key={k} scope="col" className="px-4 py-3 text-start font-black">{renderInline(h)}</th>)}</tr>
+                          </thead>
+                          <tbody>
+                            {block.rows.map((r, k) => (
+                              <tr key={k} className="border-t border-border odd:bg-card even:bg-muted/40">
+                                {r.map((c2, x) => <td key={x} className={`px-4 py-3 align-top ${x === 0 ? "font-bold text-primary" : ""}`}>{renderInline(c2)}</td>)}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    );
+                  }
+                  if (block.type === "cta") {
+                    return (
+                      <div key={i} className="my-7 flex justify-center">
+                        <Link to={block.item.href} data-source={`blog-${post.slug}`} data-label="article-cta"
+                          className="inline-flex items-center gap-2 rounded-2xl bg-orange-grad px-6 py-3.5 text-base font-black text-accent-foreground shadow-cta transition hover:opacity-95">
+                          {block.item.title} <Arrow className="h-4 w-4" />
+                        </Link>
+                      </div>
+                    );
+                  }
+                  if (block.type === "sources") {
+                    return block.items.length ? (
+                      <div key={i} className="mt-10 rounded-2xl border border-border bg-muted/30 p-4 sm:p-5 text-sm">
+                        <p className="mb-2 font-black text-primary">{lang === "ar" ? "المصادر" : "Sources"}</p>
+                        <ol className="list-decimal space-y-1.5 ps-5">
+                          {block.items.map((it, k) => (
+                            <li key={k}>
+                              {/^https?:/.test(it.href)
+                                ? <a href={it.href} target="_blank" rel="noopener noreferrer" className="font-bold text-accent underline underline-offset-4 hover:text-primary">{it.title}</a>
+                                : <Link to={it.href} className="font-bold text-accent underline underline-offset-4 hover:text-primary">{it.title}</Link>}
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    ) : null;
                   }
                   return (
                     <p key={i} className="font-normal text-slate-900 leading-8 sm:leading-9">

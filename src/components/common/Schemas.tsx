@@ -305,6 +305,8 @@ export const ArticleSchema = ({
       ...(keywords && keywords.length ? { keywords: keywords.join(", ") } : {}),
       ...(wordCount ? { wordCount } : {}),
       ...(timeRequiredMinutes ? { timeRequired: `PT${timeRequiredMinutes}M` } : {}),
+      // what voice assistants / AI answers should read first: the title and the short answer box
+      speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", "#quick-answer"] },
     })}</script>
   </Helmet>
 );
