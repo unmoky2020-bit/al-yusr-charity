@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLang } from "@/i18n/LangContext";
 import { apiFetch, getApiToken } from "@/data/laravelApi";
@@ -62,9 +62,53 @@ async function fetchPackages(apiId?: number, apiSlugs?: string[]): Promise<Pkg[]
   return [];
 }
 
+const pageQuery = (slug: string, isAdmin: boolean) => ({
+  queryKey: ["campaign-page", slug],
+  queryFn: () => campaignPagesApi.load(slug, { fresh: isAdmin }),
+  staleTime: isAdmin ? 0 : 60_000,
+  retry: 0,
+});
+
+const packagesQuery = (slug: string) => {
+  const meta = getCampaignPageMeta(slug);
+  return {
+    queryKey: ["campaign-packages", slug],
+    queryFn: () => fetchPackages(meta?.apiIds[0], meta?.apiSlugs),
+    staleTime: 60_000,
+    retry: 0,
+    enabled: !!meta,
+  };
+};
+
+/** Longest a visitor waits for the dashboard content before the page shows its built-in copy. */
+export const CONTENT_MAX_WAIT_MS = 8000;
+
+/** True once a value has settled, or after `maxWait` (a slow API never keeps the page blank). */
+export function useSettled(settled: boolean, maxWait = CONTENT_MAX_WAIT_MS): boolean {
+  const [timedOut, setTimedOut] = useState(false);
+  useEffect(() => {
+    if (settled) return;
+    const t = window.setTimeout(() => setTimedOut(true), maxWait);
+    return () => window.clearTimeout(t);
+  }, [settled, maxWait]);
+  return settled || timedOut;
+}
+
+/**
+ * True when the landing page's dashboard content and prices have arrived (or failed), so the page
+ * renders once with the real content instead of showing the built-in copy and images first.
+ */
+export function useCampaignPageReady(slug: string): boolean {
+  const isAdmin = !!getApiToken();
+  const page = useQuery(pageQuery(slug, isAdmin));
+  const pk = useQuery(packagesQuery(slug));
+  const pkSettled = !getCampaignPageMeta(slug) || !pk.isLoading;
+  return useSettled(!page.isLoading && pkSettled);
+}
+
 /**
  * Content for a campaign landing page: code defaults merged with the dashboard override.
- * Renders defaults immediately; the override (if any) is applied when it arrives.
+ * Routes wrap the page in <CampaignPageGate> (useCampaignPageReady), so it renders once the override arrived.
  * A failing API never breaks the page.
  */
 export function useCampaignPage(slug: string, defaults: CampaignPageContent) {
@@ -72,23 +116,11 @@ export function useCampaignPage(slug: string, defaults: CampaignPageContent) {
   const isAr = lang === "ar";
   const isAdmin = !!getApiToken();
 
-  const { data } = useQuery({
-    queryKey: ["campaign-page", slug],
-    queryFn: () => campaignPagesApi.load(slug, { fresh: isAdmin }),
-    staleTime: isAdmin ? 0 : 60_000,
-    retry: 0,
-  });
+  const { data } = useQuery(pageQuery(slug, isAdmin));
 
   // Prices: the backend donation packages of this campaign are the source of truth.
   // A package applies to a price item when their names match (normalised Arabic, either direction).
-  const meta = getCampaignPageMeta(slug);
-  const { data: packages } = useQuery({
-    queryKey: ["campaign-packages", slug],
-    queryFn: () => fetchPackages(meta?.apiIds[0], meta?.apiSlugs),
-    staleTime: 60_000,
-    retry: 0,
-    enabled: !!meta,
-  });
+  const { data: packages } = useQuery(packagesQuery(slug));
 
   const c = useMemo(() => {
     const merged = mergeCampaignContent(defaults, data?.content ?? null);

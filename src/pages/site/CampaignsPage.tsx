@@ -24,6 +24,8 @@ import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs, type FaqItem } from "@/data/faqsApi";
 import { useDonationEntities } from "@/data/sources/donationEntities";
+import { useSettled } from "@/hooks/useCampaignPage";
+import { Skeleton } from "@/components/ui/skeleton";
 
 /** Motion wrapper for cards matching ServicesMap exact motion */
 const AlternatingCard = memo(({
@@ -411,7 +413,9 @@ export const CampaignsPage = () => {
   ];
 
   // The dashboard's campaign (same slug) gives the live photo and starting price; the copy here is the fallback.
-  const { entities } = useDonationEntities();
+  const { entities, isLoading: entitiesLoading } = useDonationEntities();
+  // Posters wait for the dashboard (or a short timeout) so the built-in photo never shows first and then swaps.
+  const entitiesReady = useSettled(!entitiesLoading);
   const live = (slug: string) => entities.find((e) => e.entityType === "campaign" && (e.slug === slug || e.id === slug));
   const filteredCampaigns = CAMPAIGNS_DATA.filter((c) => filter === "all" || c.category === filter).map((c) => {
     const e = live(c.slug);
@@ -599,6 +603,21 @@ export const CampaignsPage = () => {
           </div>
 
           {/* Campaigns Grid — Using Exact AlternatingCard Motion from ServicesMap */}
+          {!entitiesReady ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-label={isRTL ? "جاري التحميل" : "Loading"}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="flex aspect-[4/5] min-h-[430px] flex-col justify-end gap-3 rounded-[1.75rem] bg-muted p-6">
+                  <Skeleton className="h-7 w-3/5 bg-foreground/10" />
+                  <Skeleton className="h-4 w-full bg-foreground/10" />
+                  <Skeleton className="h-4 w-4/5 bg-foreground/10" />
+                  <div className="mt-2 flex gap-2">
+                    <Skeleton className="h-11 flex-1 rounded-xl bg-foreground/10" />
+                    <Skeleton className="h-11 flex-1 rounded-xl bg-foreground/10" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredCampaigns.map((camp, idx) => (
               <AlternatingCard key={camp.id} index={idx} className="h-full">
@@ -655,6 +674,7 @@ export const CampaignsPage = () => {
               </AlternatingCard>
             ))}
           </div>
+          )}
 
           {/* Direct Doorstep In-Kind Donation Banner with 2 Buttons in 1 row on mobile */}
           <motion.div

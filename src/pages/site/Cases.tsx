@@ -240,7 +240,7 @@ const Cases = () => {
               to={`/cases/${nearlyThere.c.ref_code}`}
               className="group mb-8 flex flex-col overflow-hidden rounded-[1.75rem] border border-secondary/40 bg-gradient-to-l from-[#f3fae6] to-card shadow-soft transition hover:shadow-card sm:flex-row"
             >
-              <img src={nearlyThere.c.cover_image_url || "/images/cases/case-medical.jpg"} alt="" loading="lazy"
+              <img src={nearlyThere.c.cover_image_url || "/images/cases/case-placeholder.svg"} alt="" loading="lazy"
                 className="h-40 w-full object-cover sm:h-auto sm:w-64" />
               <div className="flex flex-1 flex-col justify-center gap-2 p-5">
                 <span className="inline-flex w-fit items-center gap-1 rounded-full bg-secondary/25 px-2.5 py-1 text-[11px] font-black text-primary">

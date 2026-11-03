@@ -268,7 +268,7 @@ const CaseDetail = () => {
         ? `/donate?campaign=${encodeURIComponent(c.donation_campaign_slug)}`
         : null;
   const place = [c.city, c.governorate].filter(Boolean).join("، ");
-  const coverImg = c.cover_image_url || "/images/cases/case-medical.jpg";
+  const coverImg = c.cover_image_url || "/images/cases/case-placeholder.svg";
   const story = c.story || (isRTL ? "تفاصيل الحالة بتتحدّث." : "Story is being updated.");
   const longStory = story.length > STORY_CLAMP;
   const egp = isRTL ? "ج.م" : "EGP";

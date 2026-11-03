@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="مؤسسة اليسر الخيرية">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d5433"/>
+      <stop offset="1" stop-color="#06301c"/>
+    </linearGradient>
+    <radialGradient id="r" cx="0.5" cy="0.42" r="0.55">
+      <stop offset="0" stop-color="#8cc63f" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#8cc63f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#g)"/>
+  <rect width="800" height="500" fill="url(#r)"/>
+  <g fill="none" stroke="#a3e635" stroke-opacity="0.08" stroke-width="2">
+    <path d="M60 420c40-60 110-70 150-20M620 90c40 50 110 50 140 0M120 120c30-40 90-40 110 0M560 430c40-50 100-50 140-10"/>
+  </g>
+  <g transform="translate(400 225)">
+    <circle r="62" fill="#ffffff" fill-opacity="0.08" stroke="#a3e635" stroke-opacity="0.55" stroke-width="3"/>
+    <path d="M-26 -4 L-6 18 L28 -24" fill="none" stroke="#a3e635" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="400" y="345" text-anchor="middle" font-family="Tajawal, Cairo, Arial, sans-serif" font-size="30" font-weight="800" fill="#ffffff" fill-opacity="0.85">مؤسسة اليسر الخيرية</text>
+</svg>

@@ -10,6 +10,8 @@ import { AuthProvider } from "@/auth/AuthContext";
 import { bindAnchorClickTracker, track } from "@/lib/track";
 const Index = lazy(() => import("./pages/Index.tsx"));
 import { SmoothScroll } from "@/components/common/SmoothScroll";
+const CampaignPageGate = lazy(() => import("@/components/common/PageGates").then((m) => ({ default: m.CampaignPageGate })));
+const ProjectPageGate = lazy(() => import("@/components/common/PageGates").then((m) => ({ default: m.ProjectPageGate })));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const ProgramDetail = lazy(() => import("./pages/ProgramDetail.tsx"));
 const ProgramOptionDetail = lazy(() => import("./pages/ProgramOptionDetail.tsx"));
@@ -306,28 +308,28 @@ const App = () => (
                   <Route path="/seasons/:slug" element={<SeasonDetail />} />
                   <Route path="/c/:slug" element={<AdLanding />} />
                   {import.meta.env.DEV && <Route path="/dev/hero-breakpoints" element={<HeroBreakpointTest />} />}
-                  <Route path="/farm" element={<Farm />} />
+                  <Route path="/farm" element={<ProjectPageGate slug="waqf"><Farm /></ProjectPageGate>} />
                   <Route path="/trust" element={<Trust />} />
-                  <Route path="/markoun" element={<MarkounLanding />} />
-                  <Route path="/food-box" element={<FoodBoxLanding />} />
+                  <Route path="/markoun" element={<CampaignPageGate slug="markoun"><MarkounLanding /></CampaignPageGate>} />
+                  <Route path="/food-box" element={<CampaignPageGate slug="food"><FoodBoxLanding /></CampaignPageGate>} />
                   <Route path="/qurbani-guarantee" element={<QurbaniGuaranteeLanding />} />
                   <Route path="/khabia" element={<KhabiaLanding />} />
-                  <Route path="/dhill" element={<DhillLanding />} />
-                  <Route path="/setr" element={<SetrLanding />} />
-                  <Route path="/athar" element={<AtharLanding />} />
-                  <Route path="/education-campaign" element={<AtharLanding />} />
-                  <Route path="/ramadan" element={<RamadanLanding />} />
-                  <Route path="/arboun" element={<ArbounLanding />} />
+                  <Route path="/dhill" element={<CampaignPageGate slug="dhill"><DhillLanding /></CampaignPageGate>} />
+                  <Route path="/setr" element={<CampaignPageGate slug="setr"><SetrLanding /></CampaignPageGate>} />
+                  <Route path="/athar" element={<CampaignPageGate slug="athar"><AtharLanding /></CampaignPageGate>} />
+                  <Route path="/education-campaign" element={<CampaignPageGate slug="athar"><AtharLanding /></CampaignPageGate>} />
+                  <Route path="/ramadan" element={<CampaignPageGate slug="ramadan"><RamadanLanding /></CampaignPageGate>} />
+                  <Route path="/arboun" element={<CampaignPageGate slug="arboun"><ArbounLanding /></CampaignPageGate>} />
                   <Route path="/takrim" element={<TakrimLanding />} />
                   <Route path="/water" element={<WaterLanding />} />
                   <Route path="/nurseries" element={<NurseriesLanding />} />
                   <Route path="/medical" element={<MedicalLanding />} />
-                  <Route path="/ten-days" element={<AshrLanding />} />
+                  <Route path="/ten-days" element={<CampaignPageGate slug="ashr"><AshrLanding /></CampaignPageGate>} />
                   <Route path="/ashr" element={<Navigate to="/ten-days" replace />} />
                   <Route path="/misbaha" element={<Misbaha />} />
                   <Route path="/misbaha/:slug" element={<Misbaha />} />
                   <Route path="/tasbih" element={<Navigate to="/misbaha" replace />} />
-                  <Route path="/freelancers" element={<ArbounLanding />} />
+                  <Route path="/freelancers" element={<CampaignPageGate slug="arboun"><ArbounLanding /></CampaignPageGate>} />
                   <Route path="/donate/track/:ref" element={<DonationTracking />} />
                   <Route path="/donate/track" element={<DonationTracking />} />
                   <Route path="/dashboard" element={<RequireAuth><DonorDashboard /></RequireAuth>} />

@@ -6,7 +6,8 @@ import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
-import { useAllBlogPosts } from "@/data/useBlogPosts";
+import { useBlogPosts } from "@/data/sources/blog";
+import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
 import { axes, axisOfPost, getAxis, readingTime, type AxisSlug } from "@/data/blogTaxonomy";
 import { TagsRail } from "@/components/common/TagsRail";
 
@@ -30,7 +31,7 @@ const BlogCategoryView = ({ slug }: { slug: string }) => {
   const baseUrl = "https://elyusr.org";
   const [sort, setSort] = useState<"newest" | "oldest">("newest");
   const [page, setPage] = useState(1);
-  const { posts: allBlogPosts } = useAllBlogPosts();
+  const { posts: allBlogPosts, loading: postsLoading } = useBlogPosts();
   const allPosts = useMemo(
     () => allBlogPosts.filter((p) => axisOfPost(p) === slug),
     [allBlogPosts, slug],
@@ -120,7 +121,9 @@ const BlogCategoryView = ({ slug }: { slug: string }) => {
               </button>
             </div>
           )}
-          {posts.length === 0 ? (
+          {postsLoading ? (
+            <CardGridSkeleton count={6} />
+          ) : posts.length === 0 ? (
             <p className="py-12 text-center text-muted-foreground">
               {isRTL ? "مفيش مقالات في هذا التصنيف بعد. تابعنا قريبًا." : "No articles in this category yet. Stay tuned."}
             </p>

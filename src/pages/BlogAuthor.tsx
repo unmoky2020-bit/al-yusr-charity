@@ -7,7 +7,8 @@ import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
-import { useAllBlogPosts } from "@/data/useBlogPosts";
+import { useBlogPosts } from "@/data/sources/blog";
+import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
 import { authors, getAuthor, authorOfPost } from "@/data/blogTaxonomy";
 
 const BlogAuthor = () => {
@@ -26,7 +27,7 @@ const BlogAuthorView = ({ slug }: { slug: string }) => {
   const baseUrl = "https://elyusr.org";
   const url = `${baseUrl}/blog/author/${slug}`;
 
-  const { posts: all } = useAllBlogPosts();
+  const { posts: all, loading: postsLoading } = useBlogPosts();
   const posts = useMemo(
     () => all.filter((p) => authorOfPost(p).slug === slug).sort((a, b) => (a.date < b.date ? 1 : -1)),
     [all, slug],
@@ -80,7 +81,9 @@ const BlogAuthorView = ({ slug }: { slug: string }) => {
           <h2 className="text-xl font-black text-primary md:text-2xl">
             {isRTL ? `مقالات ${c.name} (${posts.length})` : `Articles by ${c.name} (${posts.length})`}
           </h2>
-          {posts.length === 0 ? (
+          {postsLoading ? (
+            <CardGridSkeleton count={6} />
+          ) : posts.length === 0 ? (
             <p className="mt-6 text-muted-foreground">{isRTL ? "لسه مفيش مقالات." : "No articles yet."}</p>
           ) : (
             <div className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">

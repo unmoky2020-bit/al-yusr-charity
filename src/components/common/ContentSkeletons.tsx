@@ -67,3 +67,42 @@ export function FormSkeleton({ sections = 3 }: { sections?: number }) {
     </div>
   );
 }
+
+/** A campaign / project landing page: poster hero, a stats strip and a row of option cards. */
+export function LandingPageSkeleton() {
+  return (
+    <div aria-busy="true" aria-label="جاري التحميل">
+      <div className="bg-primary py-12 md:py-16">
+        <div className="container mx-auto grid gap-10 px-4 md:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] md:items-center">
+          <div className="space-y-4">
+            <Skeleton className="h-6 w-56 rounded-full bg-white/15" />
+            <Skeleton className="h-11 w-4/5 bg-white/20" />
+            <Skeleton className="h-11 w-3/5 bg-white/20" />
+            <Skeleton className="h-4 w-full bg-white/15" />
+            <Skeleton className="h-4 w-5/6 bg-white/15" />
+            <div className="flex gap-3 pt-2">
+              <Skeleton className="h-12 w-44 rounded-full bg-white/20" />
+              <Skeleton className="h-12 w-40 rounded-full bg-white/15" />
+            </div>
+          </div>
+          <Skeleton className="mx-auto aspect-[4/5] w-full max-w-sm rounded-[2rem] bg-white/15" />
+        </div>
+      </div>
+      <div className="container mx-auto px-4 py-12">
+        <Skeleton className="mx-auto h-8 w-2/3 max-w-xl" />
+        <Skeleton className="mx-auto mt-3 h-4 w-1/2 max-w-md" />
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="space-y-3 rounded-3xl border border-border/70 bg-card p-6">
+              <Skeleton className="h-10 w-10 rounded-xl" />
+              <Skeleton className="h-5 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+              <Skeleton className="mt-2 h-11 w-full rounded-xl" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
