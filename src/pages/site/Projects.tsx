@@ -337,7 +337,7 @@ const Projects = () => {
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "NGO",
-          "@id": `${base}/#ngo`,
+          "@id": `${base}/#org`,
           name: isRTL ? "مؤسسة اليسر الخيرية" : "Al-Yusr Charity Foundation",
           url: `${base}/programs`,
           areaServed: GEO_GOVERNORATES.map((g) => ({

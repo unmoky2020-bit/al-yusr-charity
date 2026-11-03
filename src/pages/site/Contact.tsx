@@ -13,6 +13,7 @@ import { toast } from "@/hooks/use-toast";
 import { track } from "@/lib/track";
 import { submitContactMessage, buildWhatsAppUrl } from "@/data/api/contactApi";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
+import { ORG } from "@/data/orgInfo";
 import { z } from "zod";
 
 import { useQuery } from "@tanstack/react-query";
@@ -275,8 +276,8 @@ const Contact = () => {
 
           <p className="mx-auto mt-2.5 max-w-2xl text-xs leading-relaxed text-primary-foreground/85 sm:text-sm md:text-base">
             {isRTL
-              ? "سواء عاوز تتبرّع، تقترح حالة، تتطوّع، أو حتى تطمّن على كرتونة وصلت — فريقنا متاح كل يوم من ٩ ص حتى ٦ م."
-              : "Whether you want to donate, suggest a case, volunteer, or confirm a delivery — our team is here daily 9am–6pm."}
+              ? "سواء عاوز تتبرّع، تقترح حالة، تتطوّع، أو حتى تطمّن على كرتونة وصلت — فريقنا متاح من السبت للخميس، من 10 الصبح لـ 9 بالليل."
+              : "Whether you want to donate, suggest a case, volunteer, or confirm a delivery — our team is here Saturday to Thursday, 10am–9pm."}
           </p>
 
           {/* CTA buttons */}
@@ -487,7 +488,7 @@ const Contact = () => {
                         <div className="min-w-0">
                           <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "مواعيد الاستقبال" : "Working Hours"}</div>
                           <span className="text-xs font-extrabold text-foreground">
-                            {isRTL ? "السبت – الخميس: 9 ص — 6 م" : "Sat–Thu: 9am — 6pm"}
+                            {isRTL ? ORG.hours.labelAr : ORG.hours.labelEn}
                           </span>
                         </div>
                       </div>

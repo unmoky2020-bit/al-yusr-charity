@@ -3,6 +3,7 @@ import { Link, useParams, Navigate } from "react-router-dom";
 import { Heart, MapPin, ShieldCheck, Users, Truck, CheckCircle2, ArrowLeft, ArrowRight, Phone, Clock, Award, Quote, Building2, FileCheck2, Banknote, HandHeart, Sparkles } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
+import { SiteSchemas } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Helmet } from "react-helmet-async";
 import { useLang } from "@/i18n/LangContext";
@@ -43,22 +44,22 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         "مؤسسة اليسر الخيرية مقرها الرئيسي في المنصورة، عاصمة الدقهلية. بنخدم آلاف الأسر الفقيرة في المنصورة وقراها وكفور الدقهلية كل سنة، عبر برامج موثقة بالكامل: تبرعك بيوصل لباب البيت بمعاينة قبل التسليم وصور وفيديو بعد كل عملية. كل جنيه بيتسجل، وكل أسرة بيتم زيارتها قبل اعتمادها.",
       longIntro: [
         "في قلب المنصورة، وعلى بُعد دقائق من جامعة المنصورة وكوبري طلخا، يقف فريق اليسر يوميًا لخدمة الأسر الأكثر احتياجًا في عواصم الدقهلية وكفورها. من حي الجامعة وتوريل وميت حدر، إلى شارع الجمهورية والسكة الجديدة، نعرف العائلات بالاسم — مش بالأرقام. كل تبرع جنيه بيتحوّل إلى كرتونة عزومة، أو صك أضحية، أو علاج طفل، أو سقف بيت لأسرة بتنام تحت السما.",
-        "اليسر مش جمعية بتنقل فلوس، إحنا فريق ميداني مقيم في المنصورة طول السنة. عندنا قاعدة بيانات لأكتر من 3200 أسرة محتاجة تم التحقق منها بزيارات منزلية ومعاينات اجتماعية. كل أسرة بتدخل قاعدتنا بعد ما يتم التأكد من وضعها الاقتصادي والصحي والاجتماعي بالتعاون مع شيوخ الجوامع والوحدات المحلية ومديرية التضامن الاجتماعي بالدقهلية.",
-        "تبرعك في المنصورة بيشتغل على 3 محاور: إغاثة فورية (أكل، علاج، إيواء)، تنمية مستدامة (تعليم، تدريب، مشاريع صغيرة)، وكرامة إنسانية (جواز عرايس، تجهيز بيوت، كفالة أيتام). 95% من قيمة تبرعك بتوصل للأسرة — والباقي بيغطي تكاليف التشغيل والتوثيق والمتابعة الميدانية."
+        "اليسر مش جمعية بتنقل فلوس، إحنا فريق ميداني مقيم في المنصورة طول السنة. عندنا قاعدة بيانات لأسر محتاجة اتحقق منها بزيارات منزلية ومعاينات اجتماعية. كل أسرة بتدخل قاعدتنا بعد ما يتم التأكد من وضعها الاقتصادي والصحي والاجتماعي بالتعاون مع شيوخ الجوامع والوحدات المحلية ومديرية التضامن الاجتماعي بالدقهلية.",
+        "تبرعك في المنصورة بيشتغل على 3 محاور: إغاثة فورية (أكل، علاج، إيواء)، تنمية مستدامة (تعليم، تدريب، مشاريع صغيرة)، وكرامة إنسانية (جواز عرايس، تجهيز بيوت، كفالة أيتام)."
       ],
       why: [
         "فريق ميداني مقيم في المنصورة — مش وسيط، إحنا اللي بنوزع",
         "تعاون رسمي مع مديرية التضامن الاجتماعي وشيوخ الجوامع",
         "توثيق بالصور والفيديو لكل أسرة وكل عملية تسليم",
         "تقارير شهرية للمتبرعين الدائمين بالأرقام والأسماء",
-        "بدون عمولات وسطاء — 95% من تبرعك بيوصل للأسرة",
+        "بدون عمولات وسطاء",
         "مقر دائم في المنصورة لاستقبال المتبرعين والمتطوعين",
-        "خط ساخن 24/7 للرد على استفسارات المتبرعين والأسر",
-        "تبرع آمن بفيزا، فودافون كاش، انستاباي، أو تحويل بنكي معفى من الضرائب",
+        "واتساب للرد على استفسارات المتبرعين والأسر",
+        "تبرع آمن بفيزا، فودافون كاش، انستاباي، أو تحويل بنكي",
       ],
       neighborhoods: [
         { name: "حي الجامعة وتوريل", note: "خدمة طلاب جامعة المنصورة المغتربين والأسر منخفضة الدخل" },
-        { name: "ميت حدر والمشاية", note: "كرتونة عزومة شهرية لأكتر من 180 أسرة" },
+        { name: "ميت حدر والمشاية", note: "كرتونة عزومة شهرية لأسر الحي" },
         { name: "كفور المنصورة الريفية", note: "وصلات مياه نظيفة وترميم بيوت طينية" },
         { name: "شربين وطلخا والمتفرعات", note: "كفالة أيتام وعلاج مرضى الفشل الكلوي" },
         { name: "وسط البلد والسكة الجديدة", note: "نقطة استلام التبرعات العينية وصكوك الأضحية" },
@@ -98,7 +99,7 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         },
         {
           q: "هل اليسر مرخصة في الدقهلية؟",
-          a: "نعم، مؤسسة اليسر الخيرية مرخصة من وزارة التضامن الاجتماعي ومسجلة رسميًا في محافظة الدقهلية. كل التبرعات معفاة من ضريبة الدخل بموجب قانون الجمعيات الأهلية.",
+          a: "نعم، مؤسسة اليسر الخيرية مرخصة من وزارة التضامن الاجتماعي ومسجلة رسميًا في محافظة الدقهلية.",
         },
         {
           q: "ممكن أزور المؤسسة في المنصورة؟",
@@ -106,18 +107,18 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         },
         {
           q: "كم تكلفة كفالة يتيم في المنصورة شهريًا؟",
-          a: "كفالة اليتيم في المنصورة تبدأ من 500 جنيه شهريًا، وبتشمل مصاريف أساسية (طعام، تعليم، علاج). بتستلم تقرير شهري بصور الطفل وأخباره.",
+          a: "تكلفة الكفالة الحالية موجودة في صفحة برنامج كفالة الأيتام، وبتشمل مصاريف أساسية (طعام، تعليم، علاج). بتستلم تقرير شهري بصور الطفل وأخباره.",
         },
         {
           q: "ممكن أتطوع في المنصورة؟",
           a: "نعم، فريق التطوع في المنصورة بيرحب بكل من يحب يساعد. سجل من /volunteer وهنتواصل معاك لتحديد دورك المناسب.",
         },
         { q: "ايه هي طرق الدفع المتاحة للمتبرعين في المنصورة؟", a: "بنقبل فيزا وماستر كارد عبر بوابة دفع آمنة، فودافون كاش، إنستاباي، تحويل بنكي على حساب المؤسسة الرسمي، واستلام كاش من المقر الرئيسي. كل التبرعات بتطلع إيصال إلكتروني فوري." },
-        { q: "كم سعر كرتونة العزومة في المنصورة؟", a: "كرتونة العزومة الأساسية ٤٥٠ جنيه وفيها ١٢ صنف يكفي أسرة من ٤–٥ أفراد لمدة شهر. الكرتونة الكبيرة ٧٥٠ جنيه وفيها ٢٠ صنف ولحوم." },
+        { q: "كم سعر كرتونة العزومة في المنصورة؟", a: "الأسعار الحالية والمحتويات موجودة في صفحة برنامج الغذاء الشهري، لأن الأسعار بتتغيّر مع السوق." },
         { q: "إزاي أتأكد إن تبرعي وصل فعلاً للأسرة؟", a: "بتستلم خلال أسبوع كحد أقصى: صور التسليم، فيديو قصير، اسم الأسرة المستفيدة، وتقرير حالتها. كل ده بيوصلك على واتساب أو إيميل أو من خلال صفحتك في الموقع لو متبرع مسجّل." },
         { q: "هل بتستلموا تبرعات عينية في المنصورة؟", a: "أكيد — ملابس، أثاث، أجهزة كهربائية، مواد غذائية، كتب مدرسية. بنبعت سيارة المؤسسة تستلم من بيتك في المنصورة وضواحيها مجانًا." },
         { q: "هل في حملات أضحية وزكاة في المنصورة؟", a: "نعم. صكوك الأضحية بتبدأ تنزل قبل العيد بشهر، والزكاة بنوزعها على مدار السنة على ٧ مصارف شرعية. تابع /qurbani و /zakat لكل التفاصيل." },
-        { q: "هل التبرع لليسر معفي من الضرائب؟", a: "نعم، التبرعات للجمعيات المشهرة في وزارة التضامن (ومنها اليسر) معفاة من ضريبة الدخل بحد أقصى ١٠٪ من صافي الربح للشركات و٢٠٪ للأفراد طبقًا للقانون المصري." },
+        { q: "هل التبرع لليسر معفي من الضرائب؟", a: "التبرع لجمعية مشهرة ممكن يتخصم من الوعاء الضريبي في الحدود اللي بيحددها قانون الضرائب. اسأل محاسبك عن اللي ينطبق عليك، وإحنا بنديك إيصال بتبرعك." },
       ],
     },
     en: {
@@ -125,22 +126,22 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         "Al-Yusr Foundation is headquartered in Mansoura, capital of Dakahlia governorate. We serve thousands of low-income families across Mansoura, its surrounding villages, and the kafr districts of Dakahlia every year through fully-documented programs. Your donation reaches the family's doorstep with pre-delivery inspection and full photo/video proof after every operation.",
       longIntro: [
         "In the heart of Mansoura, minutes from Mansoura University and Talkha bridge, the Al-Yusr team works daily to serve the most vulnerable families across Dakahlia's districts and villages. From the University quarter, Toreel and Mit Hadar, to Gomhoria street and El-Sekka El-Gedida, we know our families by name — not by numbers. Every pound becomes a food box, a Qurbani share, a child's surgery, or a roof for a family sleeping under the open sky.",
-        "Al-Yusr is not a money-transfer charity. We are a year-round field team based in Mansoura with a verified database of 3,200+ families, vetted through home visits and social assessments in coordination with mosque imams, local councils and Dakahlia's Ministry of Social Solidarity.",
-        "Your donation in Mansoura works on 3 axes: immediate relief (food, medical, shelter), sustainable development (education, training, micro-projects) and human dignity (bride trousseaus, orphan sponsorship, home renovation). 95% of every pound reaches the family — the rest covers operations, documentation and field follow-up.",
+        "Al-Yusr is not a money-transfer charity. We are a year-round field team based in Mansoura with a verified database of families, vetted through home visits and social assessments in coordination with mosque imams, local councils and Dakahlia's Ministry of Social Solidarity.",
+        "Your donation in Mansoura works on 3 axes: immediate relief (food, medical, shelter), sustainable development (education, training, micro-projects) and human dignity (bride trousseaus, orphan sponsorship, home renovation).",
       ],
       why: [
         "Field team based in Mansoura — we deliver, not middlemen",
         "Official partnership with Dakahlia Social Solidarity Directorate and mosque imams",
         "Photo & video documentation of every family and every delivery",
         "Monthly reports to recurring donors with names and amounts",
-        "No broker commissions — 95% of your donation reaches the family",
+        "No broker commissions",
         "Permanent Mansoura office welcoming donors and volunteers",
-        "24/7 hotline for donor and beneficiary inquiries",
-        "Secure payment via Visa, Vodafone Cash, InstaPay or tax-exempt bank transfer",
+        "WhatsApp for donor and beneficiary inquiries",
+        "Secure payment via Visa, Vodafone Cash, InstaPay or bank transfer",
       ],
       neighborhoods: [
         { name: "University & Toreel quarter", note: "Serving Mansoura University expat students and low-income families" },
-        { name: "Mit Hadar & Mashaya", note: "Monthly food boxes for 180+ families" },
+        { name: "Mit Hadar & Mashaya", note: "Monthly food boxes for local families" },
         { name: "Mansoura rural kafrs", note: "Clean water lines and mud-house renovation" },
         { name: "Sherbin, Talkha & branches", note: "Orphan sponsorship and dialysis patient care" },
         { name: "Downtown & El-Sekka El-Gedida", note: "In-kind donation drop-off and Qurbani booking" },
@@ -180,7 +181,7 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         },
         {
           q: "Is Al-Yusr licensed in Dakahlia?",
-          a: "Yes, Al-Yusr Foundation is licensed by the Ministry of Social Solidarity and officially registered in Dakahlia governorate. All donations are tax-deductible under Egypt's NGO law.",
+          a: "Yes, Al-Yusr Foundation is licensed by the Ministry of Social Solidarity and officially registered in Dakahlia governorate.",
         },
         {
           q: "Can I visit the foundation in Mansoura?",
@@ -188,22 +189,30 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         },
         {
           q: "How much is monthly orphan sponsorship in Mansoura?",
-          a: "Orphan sponsorship in Mansoura starts at EGP 500/month and covers essentials (food, education, medical). You receive a monthly report with the child's photo and updates.",
+          a: "The current sponsorship amount is on the orphan sponsorship program page; it covers essentials (food, education, medical). You receive a monthly report with the child's photo and updates.",
         },
         {
           q: "Can I volunteer in Mansoura?",
           a: "Yes, our Mansoura volunteer team welcomes anyone willing to help. Register at /volunteer and we'll match you with the right role.",
         },
         { q: "What payment methods do you accept in Mansoura?", a: "Visa & Mastercard via a secure gateway, Vodafone Cash, InstaPay, bank transfer to our official account, or cash at our Mansoura HQ. Every donation generates an instant electronic receipt." },
-        { q: "How much is a food box in Mansoura?", a: "Standard food box is EGP 450 (12 items, feeds a family of 4–5 for a month). Large box is EGP 750 (20 items including meat)." },
+        { q: "How much is a food box in Mansoura?", a: "Current prices and contents are on the monthly food program page, since prices follow the market." },
         { q: "How can I verify my donation reached the family?", a: "Within a week you receive: delivery photos, a short video, the beneficiary family name, and a status report — via WhatsApp, email or your donor dashboard if registered." },
         { q: "Do you accept in-kind donations in Mansoura?", a: "Absolutely — clothes, furniture, appliances, food, school supplies. Our truck collects from your home in Mansoura and surroundings free of charge." },
         { q: "Do you run Qurbani and Zakat campaigns in Mansoura?", a: "Yes. Qurbani vouchers open one month before Eid; Zakat is distributed year-round across the 7 sharia categories. See /qurbani and /zakat for details." },
-        { q: "Are donations to Al-Yusr tax-exempt?", a: "Yes, donations to Ministry-registered NGOs (including Al-Yusr) are tax-deductible up to 10% of net profit for companies and 20% for individuals under Egyptian tax law." },
+        { q: "Are donations to Al-Yusr tax-exempt?", a: "Donations to a registered NGO may be deductible within the limits set by Egyptian tax law. Ask your accountant what applies to you; we give you a receipt for your donation." },
       ],
     },
   },
 };
+
+/**
+ * Numbers, testimonials and the hero stats below were written before they were checked with the
+ * foundation (families served, «95%», «12+ years» although it was registered in 2019, named quotes).
+ * They stay hidden until the management confirms them — then move them to the dashboard
+ * («الأرقام والإحصائيات», real testimonials with consent) or set this to true.
+ */
+const SHOW_UNCONFIRMED_CLAIMS = false;
 
 const DonateCity = () => {
   const { city = "" } = useParams<{ city: string }>();
@@ -245,24 +254,19 @@ const DonateCity = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
+      // One real place for the foundation (its Mansoura office, defined site-wide as #org / #local);
+      // a city page is a page *about serving* that city, not another branch at the city centre.
       {
-        "@type": ["NGO", "LocalBusiness"],
-        "@id": `https://elyusr.org/donate/${city}#org`,
-        name: lang === "ar" ? `مؤسسة اليسر الخيرية — ${cityName}` : `Al-Yusr Charitable Foundation — ${cityName}`,
+        "@type": "WebPage",
+        "@id": `https://elyusr.org/donate/${city}#webpage`,
         url: `https://elyusr.org/donate/${city}`,
-        areaServed: {
+        name: title,
+        about: { "@id": "https://elyusr.org/#org" },
+        spatialCoverage: {
           "@type": "City",
           name: cityName,
           containedInPlace: { "@type": "AdministrativeArea", name: lang === "ar" ? "محافظة الدقهلية" : "Dakahlia Governorate" },
         },
-        geo: { "@type": "GeoCoordinates", latitude: cityData.lat, longitude: cityData.lon },
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: cityName,
-          addressRegion: lang === "ar" ? "الدقهلية" : "Dakahlia",
-          addressCountry: "EG",
-        },
-        sameAs: ["https://elyusr.org"],
       },
       {
         "@type": "BreadcrumbList",
@@ -288,6 +292,7 @@ const DonateCity = () => {
   return (
     <PageLayout>
       <SEOHelmet title={title} description={description} path={`/donate/${city}`} keywords={keywords} />
+      <SiteSchemas />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
@@ -330,9 +335,14 @@ const DonateCity = () => {
                 <Arrow className="h-4 w-4" />
               </Link>
             </div>
+            <Link to="/charity-mansoura" className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-primary-foreground/85 underline-offset-4 hover:underline">
+              <MapPin className="h-3.5 w-3.5" />
+              {lang === "ar" ? "مقرنا في المنصورة: العنوان والمواعيد وطرق التواصل" : "Our Mansoura office: address, hours and contact"}
+            </Link>
           </div>
 
           {/* Quick stats */}
+          {SHOW_UNCONFIRMED_CLAIMS && (
           <div className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4">
             {[
               { icon: Users, n: cityData.families.toLocaleString(), label: lang === "ar" ? "أسرة مخدومة" : "Families served" },
@@ -347,6 +357,7 @@ const DonateCity = () => {
               </div>
             ))}
           </div>
+          )}
         </div>
       </section>
 
@@ -385,7 +396,7 @@ const DonateCity = () => {
       </section>
 
       {/* Impact numbers */}
-      {copy.impact.length > 0 && (
+      {SHOW_UNCONFIRMED_CLAIMS && copy.impact.length > 0 && (
         <section className="bg-gradient-to-b from-secondary/10 to-background py-12 md:py-16">
           <div className="container mx-auto max-w-5xl px-4">
             <h2 className="mb-8 text-center text-2xl font-black text-primary md:text-3xl">
@@ -449,7 +460,7 @@ const DonateCity = () => {
       )}
 
       {/* Testimonials */}
-      {copy.testimonials.length > 0 && (
+      {SHOW_UNCONFIRMED_CLAIMS && copy.testimonials.length > 0 && (
         <section className="bg-background py-12 md:py-16">
           <div className="container mx-auto max-w-5xl px-4">
             <h2 className="mb-8 text-center text-2xl font-black text-primary md:text-3xl">

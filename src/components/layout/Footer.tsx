@@ -2,6 +2,7 @@ import { Logo } from "@/components/common/Logo";
 import { Link, useLocation } from "react-router-dom";
 import { Facebook, Instagram, Phone, Mail, MapPin, Building2, BadgeCheck, HandHeart, HeartHandshake, Heart, ShieldCheck, Beef, Sparkles, ArrowLeft, Clock, Send, Bell, CheckCircle2 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
+import { ORG } from "@/data/orgInfo";
 import { useLang } from "@/i18n/LangContext";
 import { prefetchHandlers } from "@/lib/prefetch";
 import { useState } from "react";
@@ -310,6 +311,7 @@ export const Footer = () => {
             <h3 className="mb-4 text-base sm:text-lg font-extrabold text-secondary">{t.footer.quickLinks}</h3>
             <ul className="mx-auto grid max-w-xs grid-cols-2 gap-x-3 gap-y-2 text-xs sm:text-sm font-bold sm:max-w-none">
               <li><Link to="/about" {...prefetchHandlers("/about")} className="block text-primary-foreground/85 hover:text-secondary">{t.nav.about}</Link></li>
+              <li><Link to="/charity-mansoura" {...prefetchHandlers("/charity-mansoura")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "جمعية خيرية بالمنصورة" : "Charity in Mansoura"}</Link></li>
               <li><Link to="/programs" {...prefetchHandlers("/programs")} className="block text-primary-foreground/85 hover:text-secondary">{t.nav.programs}</Link></li>
               <li><Link to="/projects" {...prefetchHandlers("/projects")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "مشاريعنا" : "Projects"}</Link></li>
               <li><Link to="/cases" {...prefetchHandlers("/cases")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الحالات الإنسانية" : "Cases"}</Link></li>
@@ -390,6 +392,11 @@ export const Footer = () => {
               <a href="https://wa.me/201097000137" target="_blank" rel="noopener" aria-label="WhatsApp"
                 className="grid h-9 w-9 place-items-center rounded-full bg-primary-foreground/10 transition hover:bg-secondary hover:text-secondary-foreground">
                 <WhatsAppIcon className="h-4 w-4" />
+              </a>
+              {/* The Google Business Profile: the link ties the site and the Maps listing to one place */}
+              <a href={ORG.mapsUrl} target="_blank" rel="noopener" aria-label={lang === "ar" ? "مؤسسة اليسر على خرائط جوجل" : "Al-Yusr on Google Maps"}
+                className="grid h-9 w-9 place-items-center rounded-full bg-primary-foreground/10 transition hover:bg-secondary hover:text-secondary-foreground">
+                <MapPin className="h-4 w-4" />
               </a>
             </div>
           </div>

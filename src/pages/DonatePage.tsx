@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import { googleReviewLink } from "@/data/orgInfo";
 import { useSearchParams, Link, useNavigate, useLocation } from "react-router-dom";
 import confetti from "canvas-confetti";
 import {
@@ -1730,6 +1731,13 @@ const DonatePage = () => {
                           </a>
                         </Button>
                       </div>
+
+                      {/* Reviews from real donors on the Google profile (no reward offered — Google forbids incentives) */}
+                      <a href={googleReviewLink()} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground underline-offset-4 hover:text-primary hover:underline sm:text-sm">
+                        <span aria-hidden className="text-amber-500">★★★★★</span>
+                        {lang === "ar" ? "تجربتك تهمّنا: قيّم مؤسسة اليسر على جوجل" : "Your experience matters: review Al-Yusr on Google"}
+                      </a>
 
                       {/* الصف الثاني: زر العودة للرئيسية منفرد تحت الزرين */}
                       <Button asChild size="lg" variant="ghost" className="rounded-xl h-10 sm:h-11 text-xs sm:text-sm font-bold text-muted-foreground hover:text-foreground w-full sm:w-auto px-8">

@@ -113,7 +113,7 @@ const AdminServices = lazy(() => import("./pages/admin/AdminServices.tsx"));
 const AdminDonationCampaigns = lazy(() => import("./pages/admin/AdminDonationCampaigns.tsx"));
 const AdminDonationCampaignDetail = lazy(() => import("./pages/admin/AdminDonationCampaignDetail.tsx"));
 const MarkounLanding = lazy(() => import("./pages/landings/MarkounLanding.tsx"));
-const CharityMansouraLanding = lazy(() => import("./pages/landings/CharityMansouraLanding.tsx"));
+const CharityMansoura = lazy(() => import("./pages/site/CharityMansoura.tsx"));
 const FoodBoxLanding = lazy(() => import("./pages/landings/FoodBoxLanding.tsx"));
 const QurbaniGuaranteeLanding = lazy(() => import("./pages/landings/QurbaniGuaranteeLanding.tsx"));
 const KhabiaLanding = lazy(() => import("./pages/landings/KhabiaLanding.tsx"));
@@ -282,6 +282,8 @@ const App = () => (
                   <Route path="/qurbani/:city" element={<QurbaniCity />} />
                   <Route path="/donate" element={<DonatePage />} />
                   <Route path="/donate/:city" element={<DonateCity />} />
+                  <Route path="/charity-mansoura" element={<CharityMansoura />} />
+                  <Route path="/mansoura" element={<Navigate to="/charity-mansoura" replace />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/stories" element={<Stories />} />

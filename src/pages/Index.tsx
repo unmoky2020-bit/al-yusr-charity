@@ -24,7 +24,7 @@ const Index = () => {
       <SEOHelmet
         title={
           lang === "ar"
-            ? "اليسر — مؤسسة اليسر الخيرية | أمانة في العطاء وأثرٌ يدوم"
+            ? "مؤسسة اليسر الخيرية بالمنصورة | أمانة في العطاء وأثرٌ يدوم"
             : "Al-Yusr Charity Foundation | Compassionate Giving & Lasting Impact"
         }
         description={

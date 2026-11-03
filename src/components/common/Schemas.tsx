@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { ORG } from "@/data/orgInfo";
 import { QURBANI_SEASON } from "@/data/qurbaniSeason";
 
 /** Site-wide Organization, LocalBusiness & WebSite schema injection.
@@ -53,6 +54,7 @@ export const SiteSchemas = () => (
             "https://facebook.com/Elyosr.Charity",
             "https://instagram.com/elyosr.charity",
             "https://wa.me/201097000137",
+            ORG.mapsUrl,
           ],
           areaServed: [
             { "@type": "AdministrativeArea", name: "محافظة الدقهلية" },
@@ -107,19 +109,15 @@ export const SiteSchemas = () => (
             addressCountry: "EG",
           },
           geo: { "@type": "GeoCoordinates", latitude: 31.0298521, longitude: 31.3655258 },
-          hasMap: "https://maps.app.goo.gl/VYc3KdxrU1DQWwFf6",
+          hasMap: ORG.mapsUrl,
+          // Same hours as the contact page (src/data/orgInfo.ts). Friday is closed: no entry for it
+          // (opens 00:00 / closes 00:00 would mean "open 24 hours" to Google).
           openingHoursSpecification: [
             {
               "@type": "OpeningHoursSpecification",
-              dayOfWeek: ["Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday"],
-              opens: "09:00", closes: "17:00",
+              dayOfWeek: [...ORG.hours.days],
+              opens: ORG.hours.opens, closes: ORG.hours.closes,
             },
-            {
-              "@type": "OpeningHoursSpecification",
-              dayOfWeek: ["Friday"],
-              opens: "00:00", closes: "00:00",
-              description: "طوارئ ومتابعة هاتفية فقط"
-            }
           ]
         },
         {
@@ -127,16 +125,12 @@ export const SiteSchemas = () => (
           "@id": "https://elyusr.org/#website",
           url: "https://elyusr.org/",
           name: "مؤسسة اليسر الخيرية",
-          alternateName: "Al-Yusr Charity Foundation",
+          alternateName: ["اليسر", "مؤسسة اليسر", "Al-Yusr Charity Foundation"],
           description: "الموقع الرسمي لمؤسسة اليسر الخيرية — تبرع، زكاة، صك أضحية، كفالة أيتام، علاج، مياه.",
           inLanguage: ["ar-EG", "en"],
           publisher: { "@id": "https://elyusr.org/#org" },
+          // No SearchAction: the site has no /search page, and Google retired the sitelinks search box.
           potentialAction: [
-            {
-              "@type": "SearchAction",
-              target: { "@type": "EntryPoint", urlTemplate: "https://elyusr.org/search?q={search_term_string}" },
-              "query-input": "required name=search_term_string",
-            },
             {
               "@type": "DonateAction",
               target: "https://elyusr.org/donate",
