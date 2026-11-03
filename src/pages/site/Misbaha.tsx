@@ -370,10 +370,10 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
             )}
           </div>
 
-          <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+          <div className="mt-10 grid grid-cols-[minmax(0,1fr)] items-start gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
             {/* ── Counter ── */}
-            <div className="flex flex-col items-center">
-              <div className="mb-5 min-h-[5.5rem] w-full max-w-md text-center" aria-live="polite">
+            <div className="flex min-w-0 flex-col items-center">
+              <div className="mb-5 flex min-h-[8.75rem] w-full min-w-0 max-w-md flex-col justify-center text-center sm:min-h-[6.5rem]" aria-live="polite">
                 <p className="text-xs font-black text-secondary">{isMixed ? (isAr ? "قول دلوقتي" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}<span className="hidden font-bold text-white/45 sm:inline">{isAr ? " (اضغط المسبحة أو زرار المسافة)" : " (tap the beads or press Space)"}</span></p>
                 <p key={`${dhikr.id}-${isMixed ? count : 0}`} className="misbaha-fade mt-1 text-xl font-black leading-[1.7] text-white sm:text-2xl">{isAr ? dhikr.text : dhikr.en}</p>
                 {nextDhikr && (
