@@ -580,7 +580,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
           isAr={isAr}
           tally={st.tally}
           total={st.today}
-          roomName={room?.name}
+          roomTitle={room ? (room.kind === "group" ? (isAr ? `مع ${room.name}` : `With ${room.name}`) : roomTitle(room.kind, room.gender, room.name, isAr)) : undefined}
           pageUrl={pageUrl}
           onClose={() => setSummaryOpen(false)}
         />
@@ -604,8 +604,8 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
 };
 
 /** «حصيلتك»: an image of today's dhikr by kind, ready to save or share. */
-function SummaryDialog({ isAr, tally, total, roomName, pageUrl, onClose }: {
-  isAr: boolean; tally: Tally; total: number; roomName?: string; pageUrl: string; onClose: () => void;
+function SummaryDialog({ isAr, tally, total, roomTitle: title, pageUrl, onClose }: {
+  isAr: boolean; tally: Tally; total: number; /** the room's own wording: «لروح المرحوم …» / «بنية شفاء …» / «مع عيلة …» */ roomTitle?: string; pageUrl: string; onClose: () => void;
 }) {
   const [url, setUrl] = useState<string | null>(null);
   const [blob, setBlob] = useState<Blob | null>(null);
@@ -619,12 +619,12 @@ function SummaryDialog({ isAr, tally, total, roomName, pageUrl, onClose }: {
     let alive = true;
     let objectUrl: string | null = null;
     drawMisbahaSummary({
-      title: roomName ? (isAr ? `لروح ${roomName}` : `For the soul of ${roomName}`) : (isAr ? "حصيلة ذكري النهارده" : "My dhikr today"),
+      title: title || (isAr ? "حصيلة ذكري النهارده" : "My dhikr today"),
       subtitle: day,
       lines,
       total,
       totalLabel: isAr ? "ذكر" : "dhikr",
-      footer: isAr ? "سبّح معانا: elyusr.org/misbaha" : "Join in: elyusr.org/misbaha",
+      footer: `${isAr ? "سبّح معانا:" : "Join in:"} ${pageUrl.replace(/^https?:\/\//, "")}`,
       rtl: isAr,
       locale,
     })
@@ -645,7 +645,7 @@ function SummaryDialog({ isAr, tally, total, roomName, pageUrl, onClose }: {
   const shareImage = async () => {
     if (!blob) return;
     try {
-      await navigator.share({ files: [new File([blob], fileName, { type: "image/png" })], text: isAr ? `حصيلة ذكري النهارده. سبّح معانا: ${pageUrl}` : `My dhikr today. Join in: ${pageUrl}` });
+      await navigator.share({ files: [new File([blob], fileName, { type: "image/png" })], text: isAr ? `حصيلة ذكري النهارده${title ? ` — ${title}` : ""}. سبّح معانا: ${pageUrl}` : `My dhikr today${title ? ` — ${title}` : ""}. Join in: ${pageUrl}` });
     } catch { /* dismissed */ }
   };
 

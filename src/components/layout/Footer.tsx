@@ -468,17 +468,17 @@ function NewsletterSeal({ isRTL }: { isRTL: boolean }) {
           <span className="text-[12.5px] font-black leading-none">{isRTL ? "بريد الخير" : "Al-Yusr post"}</span>
           <span className="text-[8.5px] font-bold leading-none text-[#0b4429]/55" dir="ltr">elyusr.org</span>
         </div>
-        {/* postmark: the round cancel sits on the stamp's lower corner; the waves run off the paper */}
-        <svg viewBox="0 0 56 56" className="pointer-events-none absolute -bottom-4 -start-5 w-[64px] rotate-[10deg] text-[#0b4429]/50 mix-blend-multiply">
-          <circle cx="28" cy="28" r="25" fill="none" stroke="currentColor" strokeWidth="1.8" />
-          <circle cx="28" cy="28" r="19" fill="none" stroke="currentColor" strokeWidth="0.9" />
-          <text x="28" y="27" textAnchor="middle" fontSize="8.5" fontWeight={800} fill="currentColor">{isRTL ? "المنصورة" : "Mansoura"}</text>
-          <text x="28" y="38" textAnchor="middle" fontSize="6.5" fontWeight={700} fill="currentColor">{new Date().getFullYear()}</text>
-        </svg>
-        <svg viewBox="0 0 60 30" className="pointer-events-none absolute -bottom-1 -start-[4.8rem] w-[60px] rotate-[10deg] text-[#0b4429]/40">
-          {[5, 12, 19, 26].map((y) => (
-            <path key={y} d={`M2 ${y} q7 -5 14 0 t14 0 t14 0 t14 0`} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-          ))}
+        {/* postmark: the round cancel sits on the stamp's corner, its waves run across the ring's top and bottom and off the paper */}
+        <svg viewBox="0 0 100 56" className="pointer-events-none absolute -bottom-3 -start-[46px] w-[88px] rotate-[8deg] text-[#0b4429]/50 mix-blend-multiply">
+          <g transform={isRTL ? undefined : "translate(100 0) scale(-1 1)"}>
+            <circle cx="28" cy="28" r="23" fill="none" stroke="currentColor" strokeWidth="1.6" />
+            <circle cx="28" cy="28" r="17.5" fill="none" stroke="currentColor" strokeWidth="0.8" />
+            {[10, 15.5, 40.5, 46].map((y) => (
+              <path key={y} d={`M18 ${y} q5.5 -3.5 11 0 t11 0 t11 0 t11 0 t11 0 t11 0 t11 0`} fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+            ))}
+          </g>
+          <text x={isRTL ? 28 : 72} y="27.5" textAnchor="middle" fontSize="7.5" fontWeight={800} fill="currentColor">{isRTL ? "المنصورة" : "Mansoura"}</text>
+          <text x={isRTL ? 28 : 72} y="36.5" textAnchor="middle" fontSize="6" fontWeight={700} fill="currentColor">{new Date().getFullYear()}</text>
         </svg>
       </div>
     </div>
