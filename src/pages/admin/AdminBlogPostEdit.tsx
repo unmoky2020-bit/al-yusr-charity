@@ -99,7 +99,7 @@ const Field = ({
       <span className="flex items-center justify-between gap-2 text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
         <span>{label}{hint && <span className="ms-1 font-normal normal-case text-muted-foreground/70">— {hint}</span>}</span>
         {showCount && (
-          <span className={`font-bold tabular-nums ${inRange ? "text-secondary" : "text-destructive"}`}>{len}/{max}</span>
+          <span className={`font-bold tabular-nums ${inRange ? "text-emerald-800" : "text-destructive"}`}>{len}/{max}</span>
         )}
       </span>
       {children}
@@ -190,7 +190,7 @@ const SocialPreview = ({
   const Badge = ({ k }: { k: keyof typeof fits }) => {
     const f = fits[k];
     if (!img) return null;
-    const tone = f.ok ? "bg-secondary/15 text-secondary" : f.level === "small" ? "bg-accent/15 text-accent" : "bg-destructive/15 text-destructive";
+    const tone = f.ok ? "bg-secondary/15 text-emerald-800" : f.level === "small" ? "bg-accent/15 text-accent" : "bg-destructive/15 text-destructive";
     return <span className={`ms-auto rounded px-1.5 py-0.5 text-[9px] font-bold ${tone}`}>{f.label}</span>;
   };
 
@@ -230,10 +230,10 @@ const SocialPreview = ({
           {!img && <span className="rounded bg-muted px-2 py-0.5 font-bold text-muted-foreground">{isRTL ? "لا توجد صورة OG — ولّد واحدة" : "No OG image — generate one"}</span>}
           {img && dims.loading && <span className="rounded bg-muted px-2 py-0.5 font-bold text-muted-foreground">{isRTL ? "فحص الأبعاد…" : "Checking…"}</span>}
           {img && !dims.loading && status.level === "perfect" && (
-            <span className="rounded bg-secondary/15 px-2 py-0.5 font-bold text-secondary"><CheckCircle2 className="me-1 inline h-3 w-3" />{isRTL ? "أبعاد مثالية 1200×630" : "Ideal 1200×630"}</span>
+            <span className="rounded bg-secondary/15 px-2 py-0.5 font-bold text-emerald-800"><CheckCircle2 className="me-1 inline h-3 w-3" />{isRTL ? "أبعاد مثالية 1200×630" : "Ideal 1200×630"}</span>
           )}
           {img && !dims.loading && status.level === "good" && (
-            <span className="rounded bg-secondary/15 px-2 py-0.5 font-bold text-secondary"><CheckCircle2 className="me-1 inline h-3 w-3" />{dims.w}×{dims.h} ✓</span>
+            <span className="rounded bg-secondary/15 px-2 py-0.5 font-bold text-emerald-800"><CheckCircle2 className="me-1 inline h-3 w-3" />{dims.w}×{dims.h} ✓</span>
           )}
           {img && !dims.loading && status.level === "ratio" && (
             <span className="rounded bg-destructive/15 px-2 py-0.5 font-bold text-destructive"><AlertTriangle className="me-1 inline h-3 w-3" />{isRTL ? `نسبة غير مناسبة ${dims.w}×${dims.h} — يفضل 1200×630` : `Bad ratio ${dims.w}×${dims.h} — use 1200×630`}</span>
@@ -251,7 +251,7 @@ const SocialPreview = ({
         {/* Google SERP */}
         <div className="rounded-lg border border-border bg-background p-3">
           <div className="flex items-center gap-1 text-[10px] font-bold text-muted-foreground"><Search className="h-3 w-3" /> Google · 1200×630 <Badge k="google" /></div>
-          <div className="mt-1.5 truncate text-[11px] text-secondary" dir="ltr">{url}</div>
+          <div className="mt-1.5 truncate text-[11px] text-emerald-800" dir="ltr">{url}</div>
           <div className="line-clamp-1 text-[15px] font-bold text-primary" dir={isRTL ? "rtl" : "ltr"}>{t}</div>
           <div className="mt-0.5 line-clamp-2 text-[11px] text-muted-foreground" dir={isRTL ? "rtl" : "ltr"}>{d}</div>
         </div>
@@ -821,7 +821,7 @@ const Inner = () => {
                 </div>
               </div>
               {suggestions.length === 0 ? (
-                <p className="mt-2 text-[11px] text-secondary">{isRTL ? "✓ لا اقتراحات — كل المعايير ضمن المدى المثالي." : "✓ No suggestions — all in ideal range."}</p>
+                <p className="mt-2 text-[11px] text-emerald-800">{isRTL ? "✓ لا اقتراحات — كل المعايير ضمن المدى المثالي." : "✓ No suggestions — all in ideal range."}</p>
               ) : (
                 <>
                   {reviewMode && (
@@ -900,7 +900,7 @@ const Inner = () => {
                                 <pre className="mt-1 max-h-48 overflow-auto whitespace-pre-wrap text-[10px]">{s.before || "—"}</pre>
                               </div>
                               <div className="rounded-md border border-secondary/30 bg-secondary/5 p-2">
-                                <div className="text-[9px] font-bold uppercase text-secondary">+ {isRTL ? "بعد" : "After"}</div>
+                                <div className="text-[9px] font-bold uppercase text-emerald-800">+ {isRTL ? "بعد" : "After"}</div>
                                 <pre className="mt-1 max-h-48 overflow-auto whitespace-pre-wrap text-[10px]">{s.after}</pre>
                               </div>
                             </div>
@@ -919,7 +919,7 @@ const Inner = () => {
                 <div className="flex items-center gap-1.5 text-xs font-extrabold text-primary">
                   <Link2 className="h-4 w-4" /> {isRTL ? "تدقيق الروابط الداخلية" : "Internal links audit"}
                 </div>
-                <span className={`text-[10px] font-bold ${internalLinks >= 2 ? "text-secondary" : "text-destructive"}`}>
+                <span className={`text-[10px] font-bold ${internalLinks >= 2 ? "text-emerald-800" : "text-destructive"}`}>
                   {internalLinks} {isRTL ? "رابط" : "links"} · {isRTL ? "الهدف ≥2" : "target ≥2"}
                 </span>
               </div>
@@ -935,7 +935,7 @@ const Inner = () => {
                       </div>
                       {r.alreadyLinked ? (
                         <div className="flex items-center gap-1 shrink-0">
-                          <span className="rounded bg-secondary/15 px-1.5 py-0.5 text-[9px] font-bold text-secondary inline-flex items-center gap-0.5">
+                          <span className="rounded bg-secondary/15 px-1.5 py-0.5 text-[9px] font-bold text-emerald-800 inline-flex items-center gap-0.5">
                             <CheckCircle2 className="h-3 w-3" />
                             {isRTL ? "مرتبط" : "linked"}
                           </span>
@@ -965,13 +965,13 @@ const Inner = () => {
               {sc.score >= 100 ? (isRTL ? "ممتاز — مهيّأ بالكامل" : "Perfect — fully optimized")
                 : `${100 - sc.score} ${isRTL ? "نقطة متبقية للوصول 100/100" : "pts left to 100/100"}`}
             </div>
-            <ul className="mt-3 space-y-1.5 text-[11px]">
+            <ul className="mt-3 space-y-1.5 text-[12px] text-foreground">
               {sc.checks.map((c) => {
                 const pct = c.weight ? Math.round((c.earned / c.weight) * 100) : 0;
                 return (
                   <li key={c.key} className="rounded-md border border-border bg-muted/20 p-1.5">
                     <div className="flex items-center justify-between gap-2">
-                      <span className={`flex items-center gap-1 font-bold ${c.ok ? "text-secondary" : "text-destructive"}`}>
+                      <span className={`flex items-center gap-1 font-bold ${c.ok ? "text-emerald-800" : "text-destructive"}`}>
                         {c.ok ? <CheckCircle2 className="h-3 w-3 shrink-0" /> : <AlertTriangle className="h-3 w-3 shrink-0" />}
                         <span className="truncate">{c.label}</span>
                       </span>

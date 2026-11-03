@@ -171,7 +171,7 @@ export const Footer = () => {
 
             {!subscribed ? (
               <div className="relative grid items-center gap-7 px-5 pb-10 pt-9 sm:px-8 md:grid-cols-[1.1fr_1fr] md:gap-12 md:px-12 md:py-11">
-                <div className="flex flex-col items-center gap-5 text-center md:flex-row md:items-center md:text-start">
+                <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-center md:gap-2 md:text-start">
                   <NewsletterSeal isRTL={isRTL} />
                   <div className="min-w-0">
                     <p className="inline-flex items-center gap-2 text-xs font-black tracking-wide text-[#4d8a1f]">
@@ -429,8 +429,8 @@ export const Footer = () => {
 };
 
 /** Perforation holes along the stamp's edges (computed once). */
-const STAMP_W = 112;
-const STAMP_H = 132;
+const STAMP_W = 128;
+const STAMP_H = 150;
 const STAMP_HOLES = (() => {
   const r = 3.6;
   const step = 10.2;
@@ -447,8 +447,8 @@ const STAMP_HOLES = (() => {
 function NewsletterSeal({ isRTL }: { isRTL: boolean }) {
   return (
     // room for the postmark on the stamp's lower corner, centred on phones
-    <div aria-hidden className="relative mx-auto shrink-0 pb-4 pe-16 ps-16 pt-1 md:mx-0 md:ps-0">
-      <div className="relative -rotate-[5deg] transition-transform duration-500 hover:rotate-0">
+    <div aria-hidden className="relative mx-auto shrink-0 pb-5 pe-16 ps-16 pt-2 md:mx-0 md:pe-3">
+      <div className="relative rotate-[6deg] transition-transform duration-500 hover:rotate-0">
         <svg width={STAMP_W} height={STAMP_H} viewBox={`0 0 ${STAMP_W} ${STAMP_H}`} className="block drop-shadow-[0_12px_22px_rgba(6,48,28,0.24)]">
           <defs>
             <mask id="stamp-perf">
@@ -465,18 +465,18 @@ function NewsletterSeal({ isRTL }: { isRTL: boolean }) {
           <rect x="12.5" y="12.5" width={STAMP_W - 25} height={STAMP_H - 25} rx="2" fill="none" stroke="#0b4429" strokeOpacity="0.15" strokeWidth="0.8" strokeDasharray="2 2" />
         </svg>
         <div className="absolute inset-[9px] flex flex-col items-center justify-center gap-1.5 text-[#0b4429]">
-          <img src={logoCircle} alt="" loading="lazy" className="h-14 w-14 rounded-full shadow-sm ring-2 ring-white" />
-          <span className="text-[11.5px] font-black leading-none">{isRTL ? "بريد الخير" : "Al-Yusr post"}</span>
+          <img src={logoCircle} alt="" loading="lazy" className="h-16 w-16 rounded-full shadow-sm ring-2 ring-white" />
+          <span className="text-[12.5px] font-black leading-none">{isRTL ? "بريد الخير" : "Al-Yusr post"}</span>
           <span className="text-[8.5px] font-bold leading-none text-[#0b4429]/55" dir="ltr">elyusr.org</span>
         </div>
         {/* postmark: the round cancel sits on the stamp's lower corner; the waves run off the paper */}
-        <svg viewBox="0 0 56 56" className="pointer-events-none absolute -bottom-4 -end-5 w-[60px] rotate-[-12deg] text-[#0b4429]/50 mix-blend-multiply">
+        <svg viewBox="0 0 56 56" className="pointer-events-none absolute -bottom-4 -start-5 w-[64px] rotate-[10deg] text-[#0b4429]/50 mix-blend-multiply">
           <circle cx="28" cy="28" r="25" fill="none" stroke="currentColor" strokeWidth="1.8" />
           <circle cx="28" cy="28" r="19" fill="none" stroke="currentColor" strokeWidth="0.9" />
           <text x="28" y="27" textAnchor="middle" fontSize="8.5" fontWeight={800} fill="currentColor">{isRTL ? "المنصورة" : "Mansoura"}</text>
           <text x="28" y="38" textAnchor="middle" fontSize="6.5" fontWeight={700} fill="currentColor">{new Date().getFullYear()}</text>
         </svg>
-        <svg viewBox="0 0 60 30" className="pointer-events-none absolute -bottom-1 -end-[4.6rem] w-[58px] rotate-[-12deg] text-[#0b4429]/40">
+        <svg viewBox="0 0 60 30" className="pointer-events-none absolute -bottom-1 -start-[4.8rem] w-[60px] rotate-[10deg] text-[#0b4429]/40">
           {[5, 12, 19, 26].map((y) => (
             <path key={y} d={`M2 ${y} q7 -5 14 0 t14 0 t14 0 t14 0`} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
           ))}
