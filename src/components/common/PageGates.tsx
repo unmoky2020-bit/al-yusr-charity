@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { LandingPageSkeleton } from "@/components/common/ContentSkeletons";
-import { useCampaignPageReady, useSettled } from "@/hooks/useCampaignPage";
+import { CONTENT_MAX_WAIT_MS, useCampaignPageReady, useSettled } from "@/hooks/useCampaignPage";
 import { useProjectDetail } from "@/data/sources/projects";
 import { fetchProgramRecords } from "@/data/sources/programs";
 import { fetchProjectRecords } from "@/data/entityShares";
@@ -23,7 +23,7 @@ export function CampaignPageGate({ slug, children }: { slug: string; children: R
 
 export function ProjectPageGate({ slug, children }: { slug: string; children: ReactNode }) {
   const { isLoading } = useProjectDetail(slug);
-  const ready = useSettled(!isLoading);
+  const ready = useSettled(!isLoading, CONTENT_MAX_WAIT_MS, slug);
   if (!ready) return <PageLayout><LandingPageSkeleton /></PageLayout>;
   return <>{children}</>;
 }

@@ -3,7 +3,7 @@ import { Building2, HardHat, Hammer, Heart, BookOpen, MapPin, ShieldCheck, Truck
 import { ServicePage, type ServicePageConfig } from "@/components/services/ServicePage";
 import { useServicePage } from "@/data/sources/services";
 import { useServiceDetail } from "@/hooks/useServices";
-import { useSettled } from "@/hooks/useCampaignPage";
+import { CONTENT_MAX_WAIT_MS, useSettled } from "@/hooks/useCampaignPage";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { LandingPageSkeleton } from "@/components/common/ContentSkeletons";
 
@@ -30,7 +30,7 @@ const ServiceRouter = () => {
   const { data: remoteDetail, isLoading } = useServiceDetail(slug);
   const { servicePage: staticConfig, isLoading: listLoading } = useServicePage(slug);
   // Wait for the dashboard copy (or a short timeout) so the built-in text and photo never show first.
-  const ready = useSettled(!isLoading && !listLoading);
+  const ready = useSettled(!isLoading && !listLoading, CONTENT_MAX_WAIT_MS, slug);
 
   if (!ready) {
     return (

@@ -83,15 +83,27 @@ const packagesQuery = (slug: string) => {
 /** Longest a visitor waits for the dashboard content before the page shows its built-in copy. */
 export const CONTENT_MAX_WAIT_MS = 8000;
 
-/** True once a value has settled, or after `maxWait` (a slow API never keeps the page blank). */
-export function useSettled(settled: boolean, maxWait = CONTENT_MAX_WAIT_MS): boolean {
-  const [timedOut, setTimedOut] = useState(false);
+/**
+ * True once a value has settled, or after `maxWait` (a slow API never keeps the page blank).
+ *
+ * It latches: once true it stays true for the same `resetKey` (pass the page's slug when one component
+ * serves several pages). Without the latch a failing API loops forever: a query that failed has no data,
+ * so every component that mounts under the gate refetches it, which puts it back in "loading", which
+ * swaps the page for the skeleton again, and the timeout never gets to fire.
+ */
+export function useSettled(settled: boolean, maxWait = CONTENT_MAX_WAIT_MS, resetKey: unknown = ""): boolean {
+  const [latchedFor, setLatchedFor] = useState<{ key: unknown } | null>(settled ? { key: resetKey } : null);
+  const done = latchedFor !== null && Object.is(latchedFor.key, resetKey);
   useEffect(() => {
-    if (settled) return;
-    const t = window.setTimeout(() => setTimedOut(true), maxWait);
+    if (done) return;
+    if (settled) {
+      setLatchedFor({ key: resetKey });
+      return;
+    }
+    const t = window.setTimeout(() => setLatchedFor({ key: resetKey }), maxWait);
     return () => window.clearTimeout(t);
-  }, [settled, maxWait]);
-  return settled || timedOut;
+  }, [settled, done, maxWait, resetKey]);
+  return done || settled;
 }
 
 /**
@@ -103,7 +115,7 @@ export function useCampaignPageReady(slug: string): boolean {
   const page = useQuery(pageQuery(slug, isAdmin));
   const pk = useQuery(packagesQuery(slug));
   const pkSettled = !getCampaignPageMeta(slug) || !pk.isLoading;
-  return useSettled(!page.isLoading && pkSettled);
+  return useSettled(!page.isLoading && pkSettled, CONTENT_MAX_WAIT_MS, slug);
 }
 
 /**
