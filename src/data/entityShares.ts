@@ -67,7 +67,8 @@ export function findShare(shares: Share[], words: string[]): Share | undefined {
   });
 }
 
-const fetchProjectRecords = () => fetchPublicList("/projects", { per_page: 100 });
+/** The public /projects records (also read by ProgramsPageGate, so both share one cached request). */
+export const fetchProjectRecords = () => fetchPublicList("/projects", { per_page: 100 });
 
 /** Shares of every record kind, read through the shared content-source switch (cache shared per kind). */
 export function useEntityShares(kind: EntityKind, slug: string, defaults: Share[]): Share[] {

@@ -12,6 +12,7 @@ const Index = lazy(() => import("./pages/Index.tsx"));
 import { SmoothScroll } from "@/components/common/SmoothScroll";
 const CampaignPageGate = lazy(() => import("@/components/common/PageGates").then((m) => ({ default: m.CampaignPageGate })));
 const ProjectPageGate = lazy(() => import("@/components/common/PageGates").then((m) => ({ default: m.ProjectPageGate })));
+const ProgramsPageGate = lazy(() => import("@/components/common/PageGates").then((m) => ({ default: m.ProgramsPageGate })));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const ProgramDetail = lazy(() => import("./pages/ProgramDetail.tsx"));
 const ProgramOptionDetail = lazy(() => import("./pages/ProgramOptionDetail.tsx"));
@@ -322,10 +323,10 @@ const App = () => (
                   <Route path="/education-campaign" element={<CampaignPageGate slug="athar"><AtharLanding /></CampaignPageGate>} />
                   <Route path="/ramadan" element={<CampaignPageGate slug="ramadan"><RamadanLanding /></CampaignPageGate>} />
                   <Route path="/arboun" element={<CampaignPageGate slug="arboun"><ArbounLanding /></CampaignPageGate>} />
-                  <Route path="/takrim" element={<TakrimLanding />} />
+                  <Route path="/takrim" element={<ProgramsPageGate><TakrimLanding /></ProgramsPageGate>} />
                   <Route path="/water" element={<WaterLanding />} />
-                  <Route path="/nurseries" element={<NurseriesLanding />} />
-                  <Route path="/medical" element={<MedicalLanding />} />
+                  <Route path="/nurseries" element={<ProgramsPageGate><NurseriesLanding /></ProgramsPageGate>} />
+                  <Route path="/medical" element={<ProgramsPageGate withProjects><MedicalLanding /></ProgramsPageGate>} />
                   <Route path="/ten-days" element={<CampaignPageGate slug="ashr"><AshrLanding /></CampaignPageGate>} />
                   <Route path="/ashr" element={<Navigate to="/ten-days" replace />} />
                   <Route path="/misbaha" element={<Misbaha />} />
