@@ -18,6 +18,9 @@ const map: Record<string, () => Promise<unknown>> = {
   "/register/volunteer": () => import("@/pages/auth/RegisterVolunteer.tsx"),
   "/profile": () => import("@/pages/auth/Profile.tsx"),
   "/donate/track": () => import("@/pages/DonationTracking.tsx"),
+  "/charity-mansoura": () => import("@/pages/site/CharityMansoura.tsx"),
+  "/charity-egypt": () => import("@/pages/site/CharityEgypt.tsx"),
+  "/donate-from-abroad": () => import("@/pages/site/DonateFromAbroad.tsx"),
 };
 
 const done = new Set<string>();

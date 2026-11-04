@@ -115,6 +115,8 @@ const AdminDonationCampaigns = lazy(() => import("./pages/admin/AdminDonationCam
 const AdminDonationCampaignDetail = lazy(() => import("./pages/admin/AdminDonationCampaignDetail.tsx"));
 const MarkounLanding = lazy(() => import("./pages/landings/MarkounLanding.tsx"));
 const CharityMansoura = lazy(() => import("./pages/site/CharityMansoura.tsx"));
+const CharityEgypt = lazy(() => import("./pages/site/CharityEgypt.tsx"));
+const DonateFromAbroad = lazy(() => import("./pages/site/DonateFromAbroad.tsx"));
 const FoodBoxLanding = lazy(() => import("./pages/landings/FoodBoxLanding.tsx"));
 const QurbaniGuaranteeLanding = lazy(() => import("./pages/landings/QurbaniGuaranteeLanding.tsx"));
 const KhabiaLanding = lazy(() => import("./pages/landings/KhabiaLanding.tsx"));
@@ -285,6 +287,8 @@ const App = () => (
                   <Route path="/donate/:city" element={<DonateCity />} />
                   <Route path="/charity-mansoura" element={<CharityMansoura />} />
                   <Route path="/mansoura" element={<Navigate to="/charity-mansoura" replace />} />
+                  <Route path="/charity-egypt" element={<CharityEgypt />} />
+                  <Route path="/donate-from-abroad" element={<DonateFromAbroad />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/stories" element={<Stories />} />

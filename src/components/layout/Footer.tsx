@@ -312,6 +312,8 @@ export const Footer = () => {
             <ul className="mx-auto grid max-w-xs grid-cols-2 gap-x-3 gap-y-2 text-xs sm:text-sm font-bold sm:max-w-none">
               <li><Link to="/about" {...prefetchHandlers("/about")} className="block text-primary-foreground/85 hover:text-secondary">{t.nav.about}</Link></li>
               <li><Link to="/charity-mansoura" {...prefetchHandlers("/charity-mansoura")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "جمعية خيرية بالمنصورة" : "Charity in Mansoura"}</Link></li>
+              <li><Link to="/charity-egypt" {...prefetchHandlers("/charity-egypt")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "اتبرع من أي محافظة" : "Give from anywhere in Egypt"}</Link></li>
+              <li><Link to="/donate-from-abroad" {...prefetchHandlers("/donate-from-abroad")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "التبرع من خارج مصر" : "Donate from abroad"}</Link></li>
               <li><Link to="/programs" {...prefetchHandlers("/programs")} className="block text-primary-foreground/85 hover:text-secondary">{t.nav.programs}</Link></li>
               <li><Link to="/projects" {...prefetchHandlers("/projects")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "مشاريعنا" : "Projects"}</Link></li>
               <li><Link to="/cases" {...prefetchHandlers("/cases")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الحالات الإنسانية" : "Cases"}</Link></li>

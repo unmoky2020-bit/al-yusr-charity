@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
-  ArrowLeft, ArrowRight, BadgeCheck, Building2, Clock, CreditCard, FileSearch, HandHeart, LifeBuoy, MapPin,
-  Navigation, Phone, Receipt, ShieldCheck, Sofa, Star, Users,
+  ArrowLeft, ArrowRight, BadgeCheck, Building2, Car, Clock, CreditCard, FileSearch, Globe, HandHeart, LifeBuoy, MapPin,
+  Navigation, Phone, Receipt, ShieldCheck, Sofa, Star, Stethoscope, Users,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
@@ -55,6 +55,32 @@ const CharityMansoura = () => {
     { Icon: Receipt, t: ar ? "رقم تتبع لكل تبرع" : "A tracking number for every gift", d: ar ? "كل تبرع بياخد رقم تقدر تتابع بيه حالته في أي وقت." : "Every donation gets a number you can use to follow it at any time.", to: "/donate/track" },
     { Icon: CreditCard, t: ar ? "دفع آمن" : "Secure payment", d: ar ? "الدفع بالكارت عن طريق بوابة كاشير، ومش بنحتفظ ببيانات كارتك." : "Card payments go through the Kashier gateway; we never store your card.", to: "/trust" },
     { Icon: FileSearch, t: ar ? "حالات بتتراجع قبل ما تتنشر" : "Cases are checked before they go live", d: ar ? "كل حالة بتتعمل لها مراجعة ميدانية، وتقدر تشوف المطلوب والمتجمّع لحد دلوقتي." : "Each case is reviewed in the field, and you can see the goal and what's been raised.", to: "/cases" },
+    { Icon: Star, t: ar ? "رأي الناس فيها" : "What people say about it", d: ar ? "اقرأ تقييمات اللي اتعاملوا معانا على خرايط جوجل، وبعد ما تتعامل معانا اكتب رأيك." : "Read reviews from people who dealt with us on Google Maps, and leave yours once you have.", href: googleReviewLink() },
+  ];
+
+  // Two services people look up by name: free Takrim inside Mansoura, and the medical complex in El-Hafir.
+  const takrimText = ar
+    ? "السلام عليكم، محتاج خدمة تكريم الإنسان (الغسل والتكفين والنقل) في المنصورة."
+    : "Hello, I need the Takrim service (washing, shrouding and transport) in Mansoura.";
+  const services = [
+    {
+      Icon: Car, to: "/takrim",
+      t: ar ? "تكريم الإنسان: غسل وتكفين ونقل المتوفى مجانًا" : "Takrim: free washing, shrouding and funeral transport",
+      d: ar
+        ? "فريق اليسر وسيارة تكريم الإنسان بيوصلوا لك داخل مدينة المنصورة: غسل وتكفين على السنة، ونقل للمسجد وبعدين للمقابر. الخدمة مجانية لكل الناس."
+        : "Al-Yusr's team and the Takrim van come to you inside Mansoura: washing and shrouding per the Sunnah, then to the mosque and the cemetery. Free for everyone.",
+      ctaHref: whatsappLink(takrimText), cta: ar ? "اطلب الخدمة على واتساب" : "Request it on WhatsApp",
+      more: ar ? "تفاصيل الخدمة" : "About the service",
+    },
+    {
+      Icon: Stethoscope, to: "/medical",
+      t: ar ? "مجمع اليسر الطبي بالحفير" : "Al-Yusr Medical Complex, El-Hafir",
+      d: ar
+        ? "عيادات في تخصصات مختلفة، وروشتات بتتصرف بالمجان للمستحقين، وعمليات وأشعة وتحاليل، لأهالي القرى حوالين الحفير بين الدقهلية وكفر الشيخ."
+        : "Clinics in several specialties, free prescriptions for those in need, surgeries, scans and lab tests for the villages around El-Hafir, between Dakahlia and Kafr El-Sheikh.",
+      ctaTo: "/medical", cta: ar ? "ساهم في المجمع" : "Support the complex",
+      more: ar ? "اعرف أكتر" : "Learn more",
+    },
   ];
 
   const helpSteps = ar
@@ -80,7 +106,9 @@ const CharityMansoura = () => {
         { q: "إزاي أتبرع لجمعية خيرية في المنصورة وأنا في البيت؟", a: "من صفحة التبرع: بالكارت عن طريق بوابة كاشير، أو بالتحويل البنكي أو المحفظة أو إنستاباي وتبعت الإيصال على واتساب. وكل تبرع بياخد رقم تتبع." },
         { q: "أنا محتاج مساعدة، أتواصل مع الجمعية إزاي؟", a: "ابعتلنا على واتساب اسمك ومنطقتك ونوع المساعدة، أو زورنا في المقر في مواعيد الاستقبال. فريقنا هيتواصل معاك، والحالات بتتراجع ميدانيًا قبل اعتمادها." },
         { q: "ممكن أتبرع بملابس أو أثاث أو أجهزة في المنصورة؟", a: "أيوه، من خلال حملة مَرْكُون: بتبعت نوع الحاجات اللي عندك، ومندوب المؤسسة بيستلمها من بيتك في المنصورة والدقهلية." },
-        { q: "بتخدموا فين غير المنصورة؟", a: `بنخدم المنصورة ومراكز وقرى الدقهلية، منها: ${cities.filter((c) => c.slug !== "mansoura").map((c) => c.ar).join("، ")}.` },
+        { q: "فيه جمعية في المنصورة بتغسّل وتكفّن الموتى مجانًا؟", a: "أيوه، خدمة تكريم الإنسان من مؤسسة اليسر: فريق وسيارة بيوصلوا لك داخل مدينة المنصورة، بيغسّلوا المتوفى ويكفّنوه على السنة، وبينقلوه للمسجد وبعدين للمقابر. الخدمة مجانية لكل الناس، واطلبها على واتساب أو بالتليفون." },
+        { q: "بتخدموا فين غير المنصورة؟", a: `بنخدم المنصورة ومراكز وقرى الدقهلية، منها: ${cities.filter((c) => c.slug !== "mansoura").map((c) => c.ar).join("، ")}. ومجمع الحفير الطبي بيخدم قرى بين الدقهلية وكفر الشيخ، وبعض المشاريع بتوصل لمحافظات تانية.` },
+        { q: "أقدر أتبرع لجمعية في المنصورة وأنا برا مصر؟", a: "أيوه، بالكارت أونلاين من أي بلد، أو بتحويل بنكي دولي. الخطوات في صفحة «اتبرع لمصر من برا مصر»." },
         { q: "أقدر أتابع تبرعي بعد ما أدفع؟", a: "أيوه، برقم التتبع من صفحة «تتبع تبرعك» في أي وقت." },
         { q: "أقدر أتطوع مع جمعية خيرية في المنصورة؟", a: "أيوه، سجّل من صفحة التطوع، وهنتواصل معاك لما يبقى فيه حملة أو توزيع يناسبك." },
       ]
@@ -90,7 +118,9 @@ const CharityMansoura = () => {
         { q: "How can I donate to a charity in Mansoura from home?", a: "From the donate page: by card through the Kashier gateway, or by bank transfer, wallet or InstaPay and send the receipt on WhatsApp. Every donation gets a tracking number." },
         { q: "I need help — how do I contact you?", a: "Send us your name, area and the help you need on WhatsApp, or visit our office during opening hours. Our team will contact you; cases are reviewed in the field before approval." },
         { q: "Can I donate clothes, furniture or appliances in Mansoura?", a: "Yes, through the Markoun campaign: tell us what you have and our team picks it up from your home in Mansoura and Dakahlia." },
-        { q: "Where else do you work?", a: `Mansoura and the towns and villages of Dakahlia, including ${cities.filter((c) => c.slug !== "mansoura").map((c) => c.en).join(", ")}.` },
+        { q: "Is there a charity in Mansoura that washes and shrouds the deceased for free?", a: "Yes, Al-Yusr's Takrim service: a team and a van come to you inside Mansoura, wash and shroud the deceased per the Sunnah, and carry them to the mosque and then the cemetery. It is free for everyone; request it on WhatsApp or by phone." },
+        { q: "Where else do you work?", a: `Mansoura and the towns and villages of Dakahlia, including ${cities.filter((c) => c.slug !== "mansoura").map((c) => c.en).join(", ")}. The El-Hafir medical complex serves villages between Dakahlia and Kafr El-Sheikh, and some projects reach other governorates.` },
+        { q: "Can I donate to a Mansoura charity from outside Egypt?", a: "Yes, by card online from any country, or by international bank transfer. The steps are on the «Donate to Egypt from abroad» page." },
         { q: "Can I follow my donation?", a: "Yes, with your tracking number on the «Track your donation» page." },
         { q: "Can I volunteer?", a: "Yes, sign up on the volunteer page and we'll contact you when there's a campaign or distribution that suits you." },
       ];
@@ -100,7 +130,7 @@ const CharityMansoura = () => {
     ? "مؤسسة اليسر جمعية خيرية مشهرة برقم 2665 مقرها المنصورة (تقسيم خطاب). اتبرع أونلاين بأمان، أو اطلب مساعدة، أو اتبرع بملابس وأثاث يتستلموا من بيتك."
     : "Al-Yusr is a registered charity (No. 2665) based in Mansoura. Donate online securely, ask for help, or give clothes and furniture picked up from your home.";
   const keywords = ar
-    ? "جمعيات خيرية في المنصورة, جمعية خيرية بالمنصورة, مؤسسة خيرية في المنصورة, جمعيات خيرية بالدقهلية, التبرع في المنصورة, عنوان جمعية خيرية في المنصورة, رقم جمعية خيرية في المنصورة, التبرع بالملابس في المنصورة, التبرع بالأثاث في المنصورة"
+    ? "جمعيات خيرية في المنصورة, جمعية خيرية بالمنصورة, مؤسسة خيرية في المنصورة, جمعيات خيرية بالدقهلية, التبرع في المنصورة, عنوان جمعية خيرية في المنصورة, رقم جمعية خيرية في المنصورة, التبرع بالملابس في المنصورة, التبرع بالأثاث في المنصورة, غسل وتكفين الموتى مجانا المنصورة, نقل الموتى مجانا المنصورة, مجمع طبي الحفير"
     : "charity in Mansoura, charities in Mansoura Egypt, NGO Mansoura, donate in Mansoura, charity Dakahlia";
 
   const pageLd = {
@@ -280,21 +310,51 @@ const CharityMansoura = () => {
         </div>
       </section>
 
+      {/* Free services people in Mansoura search for by name */}
+      <section className="bg-background py-12 md:py-16">
+        <div className="container mx-auto max-w-6xl px-4">
+          <h2 className="text-2xl font-black text-primary md:text-3xl">{ar ? "خدمات مجانية من اليسر في المنصورة وحواليها" : "Free services from Al-Yusr in and around Mansoura"}</h2>
+          <div className="mt-7 grid gap-4 md:grid-cols-2">
+            {services.map(({ Icon, to, t, d, ctaHref, ctaTo, cta, more }) => (
+              <article key={t} className="flex h-full flex-col rounded-3xl border border-border/70 bg-card p-6 shadow-soft">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary/15 text-primary"><Icon className="h-6 w-6" /></span>
+                <h3 className="mt-4 text-lg font-black leading-snug text-primary md:text-xl">{t}</h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{d}</p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {ctaHref ? (
+                    <a href={ctaHref} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 text-sm font-black text-white hover:opacity-95">
+                      <WhatsAppIcon className="h-4 w-4" /> {cta}
+                    </a>
+                  ) : (
+                    <Link to={ctaTo ?? to} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-orange-grad px-5 text-sm font-black text-accent-foreground shadow-cta">
+                      <HandHeart className="h-4 w-4" /> {cta}
+                    </Link>
+                  )}
+                  <Link to={to} className="inline-flex h-11 items-center justify-center gap-1 rounded-xl border border-border px-5 text-sm font-black text-primary hover:border-secondary">
+                    {more} <Arrow className="h-4 w-4" />
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <LinkedCasesSection
         filter={{}}
         limit={3}
         isRTL={ar}
         title={ar ? "حالات محتاجة دعم دلوقتي" : "Cases that need support now"}
         subtitle={ar ? "حالات اتراجعت ميدانيًا، وتقدر تشوف المطلوب والمتجمّع لكل واحدة." : "Field-reviewed cases with their goal and what has been raised."}
-        className="bg-background"
+        className="bg-muted/30"
       />
 
       {/* How to choose a charity you can trust — the question behind «جمعيات خيرية في المنصورة» */}
-      <section className="bg-muted/30 py-12 md:py-16">
+      <section className="bg-background py-12 md:py-16">
         <div className="container mx-auto max-w-6xl px-4">
           <h2 className="text-2xl font-black text-primary md:text-3xl">{ar ? "إزاي تختار جمعية خيرية في المنصورة تثق فيها؟" : "How to choose a charity in Mansoura you can trust"}</h2>
           <p className="mt-2 max-w-3xl text-sm text-muted-foreground md:text-base">
-            {ar ? "قبل ما تتبرع لأي جمعية، اتأكد من الخمس حاجات دول. ودي إجابة اليسر على كل واحدة:" : "Before giving to any charity, check these five things. Here is how Al-Yusr answers each:"}
+            {ar ? "قبل ما تتبرع لأي جمعية، اتأكد من الست حاجات دول. ودي إجابة اليسر على كل واحدة:" : "Before giving to any charity, check these six things. Here is how Al-Yusr answers each:"}
           </p>
           <ol className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {trust.map(({ Icon, t, d, to, href }, i) => {
@@ -319,7 +379,7 @@ const CharityMansoura = () => {
       </section>
 
       {/* For families who need help */}
-      <section className="bg-background py-12 md:py-16">
+      <section className="bg-muted/30 py-12 md:py-16">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="rounded-3xl bg-primary p-6 text-primary-foreground shadow-card md:p-10">
             <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
@@ -347,7 +407,7 @@ const CharityMansoura = () => {
       </section>
 
       {/* Where we work */}
-      <section className="bg-muted/30 py-12 md:py-14">
+      <section className="bg-background py-12 md:py-14">
         <div className="container mx-auto max-w-5xl px-4 text-center">
           <h2 className="text-2xl font-black text-primary md:text-3xl">{ar ? "بنخدم المنصورة وكل مراكز الدقهلية" : "Mansoura and every Dakahlia district"}</h2>
           <ul className="mt-6 flex flex-wrap justify-center gap-2">
@@ -359,11 +419,28 @@ const CharityMansoura = () => {
               </li>
             ))}
           </ul>
+          {/* Donors outside Mansoura and outside Egypt */}
+          <div className="mx-auto mt-8 grid max-w-3xl gap-3 text-start sm:grid-cols-2">
+            <Link to="/charity-egypt" className="flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-4 shadow-soft transition hover:border-secondary">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground"><MapPin className="h-5 w-5" /></span>
+              <span className="min-w-0">
+                <span className="block font-black text-primary">{ar ? "مش في المنصورة؟" : "Not in Mansoura?"}</span>
+                <span className="block text-xs font-bold text-muted-foreground">{ar ? "اتبرع من أي محافظة في مصر" : "Give from any governorate in Egypt"}</span>
+              </span>
+            </Link>
+            <Link to="/donate-from-abroad" className="flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-4 shadow-soft transition hover:border-secondary">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground"><Globe className="h-5 w-5" /></span>
+              <span className="min-w-0">
+                <span className="block font-black text-primary">{ar ? "عايش برا مصر؟" : "Living outside Egypt?"}</span>
+                <span className="block text-xs font-bold text-muted-foreground">{ar ? "اتبرع بالكارت أو بتحويل بنكي دولي" : "Give by card or international transfer"}</span>
+              </span>
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Questions people ask about charities in Mansoura */}
-      <section className="bg-background pb-28 pt-12 sm:pb-36 md:pb-44 md:pt-16">
+      <section className="bg-muted/30 pb-28 pt-12 sm:pb-36 md:pb-44 md:pt-16">
         <div className="container mx-auto max-w-3xl px-4">
           <h2 className="text-2xl font-black text-primary md:text-3xl">{ar ? "أسئلة عن الجمعيات الخيرية في المنصورة" : "Questions about charities in Mansoura"}</h2>
           <Accordion type="single" collapsible className="mt-6 rounded-3xl border border-border/70 bg-card px-5 shadow-soft">
