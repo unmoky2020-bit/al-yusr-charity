@@ -18,8 +18,9 @@ export const PROGRAM_LANDINGS: Record<string, string> = {
   zakat: "/zakat",
   quran: "/nurseries",
   takrim: "/takrim",
-  treatment: "/medical",
-  prosthetics: "/medical",
+  treatment: "/medical#prescriptions",
+  prosthetics: "/medical#disability",
+  "medical-convoys": "/medical#convoys",
 };
 
 /** Where a program card's "details" link goes. */

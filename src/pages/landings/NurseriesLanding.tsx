@@ -4,6 +4,8 @@ import { HadithBlock, HADITH } from "@/components/campaigns/HadithBlock";
 import { ProjectKindNote } from "@/components/campaigns/ProjectKind";
 import { BentoGallery } from "@/components/campaigns/shared";
 import { useLang } from "@/i18n/LangContext";
+import { DonationPicker } from "@/components/campaigns/DonationPicker";
+import { entityDonateHref, useEntityShares, type Share } from "@/data/entityShares";
 import heroChild from "@/assets/hero-child.jpg";
 import programEducation from "@/assets/program-education.jpg";
 import posterEducation from "@/assets/poster-education.png";
@@ -14,7 +16,16 @@ import axisEducation from "@/assets/axis-education.jpg";
  * learning nurseries for ages 4–6, Qur'an houses for ages 4–16, Qur'an competitions,
  * curricula the foundation builds and supervises, and its educational team.
  */
-const DONATE = "/donate?type=project";
+/** Backend program behind this page: its packages (dashboard → البرامج → تحفيظ القرآن الكريم) are sold below. */
+const SOURCE = { kind: "program" as const, slug: "quran" };
+const DONATE = entityDonateHref(SOURCE.kind, SOURCE.slug);
+/** Shown only until the backend program answers (offline / static mode). */
+const DEFAULT_SHARES: Share[] = [
+  { id: "qr-student", nameAr: "سهم دعم طالب حفظ قرآن", nameEn: "Support a Qur'an student", amount: 100 },
+  { id: "qr-teacher", nameAr: "سهم راتب معلم تحفيظ شهري", nameEn: "A teacher's monthly salary share", amount: 500 },
+  { id: "qr-circle", nameAr: "سهم تجهيز حلقة تحفيظ (أثاث وألواح)", nameEn: "Equip a memorisation circle", amount: 1500 },
+  { id: "qr-centre", nameAr: "رعاية مركز تحفيظ كامل لمدة شهر", nameEn: "Sponsor a whole centre for a month", amount: 5000 },
+];
 
 const AGE_MIN = 4;
 const AGE_MAX = 16;
@@ -129,6 +140,7 @@ const AgeJourney = ({ isAr }: { isAr: boolean }) => (
 const NurseriesMain = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const shares = useEntityShares(SOURCE.kind, SOURCE.slug, DEFAULT_SHARES);
   return (
     <>
       {/* Key facts */}
@@ -217,6 +229,17 @@ const NurseriesMain = () => {
                 : "Your gift helps us develop the curricula, train the educational team, equip classrooms and Qur'an circles, and honour memorisers at the competitions. Every verse a student memorises is ongoing charity for all who helped."}
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Donation packages (from the backend program) */}
+      <section id="nurseries-shares" className="scroll-mt-24 py-12 md:py-16">
+        <div className="container mx-auto max-w-5xl px-4">
+          <h2 className="text-center text-2xl font-black text-primary md:text-3xl">{isAr ? "ساهم في حضانات ودور اليسر" : "Support Al-Yusr's nurseries and Qur'an houses"}</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-loose text-muted-foreground sm:text-base">
+            {isAr ? "اختر السهم المناسب لك، ويمكنك زيادة عدد الأسهم أو تعديل المبلغ في صفحة التبرع." : "Pick the share that suits you; you can add more shares or change the amount on the donation page."}
+          </p>
+          <DonationPicker source={SOURCE} shares={shares} title={isAr ? "أسهم المشروع" : "Project shares"} />
         </div>
       </section>
 
