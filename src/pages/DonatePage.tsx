@@ -191,14 +191,16 @@ const DonatePage = () => {
     const share = pkgParam ? linkedEntity.shares.find((s) => String(s.apiId) === pkgParam || s.id === pkgParam) : undefined;
     const defMode = linkedEntity.isMarkoun ? "in_kind" : share ? "shares" : "general";
     const paramAmt = Number(params.get("amount"));
-    const defAmount = share ? share.price : paramAmt > 0 ? paramAmt : (defMode === "in_kind" ? 0 : linkedEntity.priceFrom || 100);
+    // ?qty=<n> (with ?package=): open the form with n of that share (1–99).
+    const qty = share ? Math.min(99, Math.max(1, Math.floor(Number(params.get("qty")) || 1))) : 1;
+    const defAmount = share ? share.price * qty : paramAmt > 0 ? paramAmt : (defMode === "in_kind" ? 0 : linkedEntity.priceFrom || 100);
     setItems([
       {
         id: "item-init",
         entityId: linkedEntity.id,
         donationMode: defMode,
         amount: defAmount,
-        selectedShares: share ? { [share.id]: 1 } : {},
+        selectedShares: share ? { [share.id]: qty } : {},
         selectedCaseId: null,
       },
     ]);

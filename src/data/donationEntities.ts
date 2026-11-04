@@ -10,7 +10,6 @@ import markounImg    from "@/assets/markoun-furniture.webp";
 import odhyaImg      from "@/assets/poster-odhya.webp";
 import educationImg  from "@/assets/poster-education.png";
 import ramadanImg    from "@/assets/yusr-ramadan-box.png";
-import prostheticsImg from "@/assets/Prosthetics.jpg";
 
 export type EntityType = "program" | "project" | "campaign";
 export type DonationType = "cash" | "in_kind" | "both";
@@ -491,26 +490,27 @@ export const DONATION_ENTITIES: DonationEntity[] = [
     id: "takrim",
     ar: "سيارات تكريم الإنسان",
     en: "Takrim Mortuary Vans",
-    taglineAr: "نقل الموتى وتكريم الإنسان مجاناً لوجه الله لغير القادرين",
-    taglineEn: "Free dignified mortuary transport for underprivileged families",
+    taglineAr: "غسل وتكفين ونقل الموتى مجانًا لكل الناس دون استثناء",
+    taglineEn: "Free washing, shrouding and funeral transport for everyone, without exception",
     image: takrimImg,
     entityType: "program",
     donationType: "cash",
     categoryAr: "خدمة مجتمعية",
     categoryEn: "Community Service",
-    priceFrom: 100,
+    priceFrom: 500,
     color: "#64748b",
     shares: [
-      { id: "tkr-fuel",   nameAr: "سهم وقود وصيانة دورية للسيارة",     nameEn: "Van Fuel & Maintenance Share",      price: 100, popular: true },
-      { id: "tkr-shroud", nameAr: "سهم كفن شرعي ومستلزمات الغسل",     nameEn: "Islamic Shroud & Washing Kit",      price: 250 },
-      { id: "tkr-trip",   nameAr: "كفالة رحلة نقل جثمان لمسافة بعيدة", nameEn: "Long-Distance Transit Sponsorship", price: 500 },
+      { id: "tkr-shroud", nameAr: "كفن شرعي", nameEn: "An Islamic shroud", price: 500 },
+      { id: "tkr-running", nameAr: "مصاريف تشغيل السيارة (وقود وصيانة)", nameEn: "Van running costs (fuel & maintenance)", price: 1000 },
+      { id: "tkr-washer", nameAr: "مصاريف المغسّل والمكفّن", nameEn: "Washer & shrouder costs", price: 500 },
+      { id: "tkr-new-car", nameAr: "مساهمة في شراء سيارة جديدة", nameEn: "Contribution to a new van", price: 10000 },
     ],
     cases: [
       {
         id: "case-tkr-1",
         refCode: "PRJ-TKR-001",
-        titleAr: "تغطية نفقات نقل جثمان وتجهيز شرعي لمتوفى فقير من مستشفى الطوارئ",
-        titleEn: "Mortuary transport & Islamic burial kit for an indigent deceased",
+        titleAr: "تغطية نفقات نقل جثمان وتجهيز شرعي كامل من مستشفى الطوارئ",
+        titleEn: "Mortuary transport & full Islamic burial kit from the emergency hospital",
         beneficiaryName: "أسرة متوفى بمستشفى الطوارئ بالمنصورة",
         governorate: "الدقهلية",
         city: "المنصورة",
@@ -571,40 +571,27 @@ export const DONATION_ENTITIES: DonationEntity[] = [
     ],
   },
 
-  // 11. مجمعات طبية (combines treatment + prosthetics)
+  // 11. مجمع اليسر الطبي بالحفير
   {
     id: "medical",
-    ar: "المجمعات الطبية — رعاية صحية شاملة",
-    en: "Medical Complexes — Comprehensive Healthcare",
-    taglineAr: "كشوفات طبية وأدوية شهرية وعمليات وأطراف صناعية لغير القادرين",
-    taglineEn: "Medical checkups, monthly medicines, surgeries and prosthetics for the poor",
-    image: prostheticsImg,
+    ar: "مجمع اليسر الطبي بالحفير",
+    en: "Al-Yusr Medical Complex, El-Hafir",
+    taglineAr: "مجمع طبي يخدم 43 قرية بين الدقهلية وكفر الشيخ",
+    taglineEn: "A medical complex serving 43 villages between Dakahlia and Kafr El-Sheikh",
+    image: healthImg,
     entityType: "project",
     donationType: "cash",
     categoryAr: "رعاية صحية",
     categoryEn: "Healthcare",
-    priceFrom: 200,
+    priceFrom: 80,
     color: "#10b981",
     shares: [
-      { id: "med-presc",  nameAr: "سهم روشتة علاج ودواء شهري",       nameEn: "Monthly Prescription Share",  price: 200, popular: true },
-      { id: "med-tests",  nameAr: "سهم تحاليل وأشعة تشخيصية",        nameEn: "Lab & Diagnostics Share",     price: 400 },
-      { id: "med-surg",   nameAr: "سهم مساهمة في عملية جراحية",       nameEn: "Surgery Contribution Share",  price: 1000 },
-      { id: "med-chair",  nameAr: "كرسي متحرك طبي قياسي كامل",        nameEn: "Standard Medical Wheelchair", price: 2500 },
-      { id: "med-prosth", nameAr: "سهم مساهمة في تركيب طرف صناعي",   nameEn: "Prosthetic Limb Share",       price: 3000 },
+      { id: "mc-checkup",      nameAr: "ادفع كشف مريض",                   nameEn: "Pay for a patient's check-up",                 price: 80, popular: true },
+      { id: "mc-prescription", nameAr: "صرف روشتة مريض",                  nameEn: "A patient's prescription",                     price: 500 },
+      { id: "mc-equip",        nameAr: "شراء جهاز طبي أو تجهيزات للمبنى", nameEn: "A medical device or equipment for the building", price: 1000 },
+      { id: "mc-surgery",      nameAr: "المساهمة في عملية جراحية",        nameEn: "Contribute to a surgery",                      price: 1000 },
     ],
     cases: [
-      {
-        id: "case-med-1",
-        refCode: "CAS-MED-501",
-        titleAr: "تركيب طرف صناعي سفلي لشاب عائل أسرته بعد حادث",
-        titleEn: "Lower prosthetic limb for a young family provider after accident",
-        beneficiaryName: "الشاب محمود (24 سنة)",
-        governorate: "الدقهلية",
-        city: "دكرنس",
-        neededAmount: 18000,
-        raisedAmount: 11000,
-        urgent: true,
-      },
       {
         id: "case-med-2",
         refCode: "CAS-MED-502",
