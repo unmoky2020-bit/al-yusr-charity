@@ -8,6 +8,12 @@ import { isEndpointMissing } from "@/data/api/backendPending";
 import { MISBAHA_KINDS, kindMeta, roomTagline, roomTitle } from "@/data/memorialDuas";
 import { track } from "@/lib/track";
 
+/**
+ * The public «سبح بيتشارك فيها دلوقتي» list under the form. Hidden: shared tasbihs reach people only
+ * through their link. Set to true to show the list again.
+ */
+const SHOW_PUBLIC_ROOMS = false;
+
 const KIND_ICON: Record<MisbahaKind, typeof Moon> = { deceased: Moon, sick: HeartPulse, group: Users };
 const GOALS = [1000, 10000, 100000, 1000000, 0];
 const DHIKR_CHOICES = ["astaghfir", "salawat", "la_ilaha", "subhan_bihamdih", "tahleel", "hawqala", "kalimatan", "yunus", "ya_hayy"];
@@ -29,6 +35,7 @@ export function MemorialCreate({ isAr, onCreated }: { isAr: boolean; onCreated: 
   const dir = isAr ? "rtl" : "ltr";
 
   useEffect(() => {
+    if (!SHOW_PUBLIC_ROOMS) return;
     let alive = true;
     setRooms(null);
     void misbahaRoomsApi.list(12, filter === "all" ? undefined : filter).then((r) => alive && setRooms(r));
@@ -69,7 +76,7 @@ export function MemorialCreate({ isAr, onCreated }: { isAr: boolean; onCreated: 
 
   return (
     <section id="memorial" className="scroll-mt-24 bg-muted/40 py-12 md:py-16" aria-labelledby="memorial-title">
-      <div className="container mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-[1.1fr_1fr] lg:items-start">
+      <div className={`container mx-auto grid gap-10 px-4 ${SHOW_PUBLIC_ROOMS ? "max-w-6xl lg:grid-cols-[1.1fr_1fr] lg:items-start" : "max-w-3xl"}`}>
         <div>
           <span className="inline-block rounded-full bg-secondary/20 px-3 py-1 text-xs font-black text-primary">{isAr ? "سبحة مشتركة" : "Shared tasbih"}</span>
           <h2 id="memorial-title" className="mt-2 text-2xl font-black text-primary md:text-3xl">{isAr ? "اعمل سبحة يتشارك فيها الكل" : "Create a tasbih everyone can join"}</h2>
@@ -158,11 +165,11 @@ export function MemorialCreate({ isAr, onCreated }: { isAr: boolean; onCreated: 
             <button type="submit" disabled={busy} className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary font-black text-primary-foreground transition hover:opacity-95 disabled:opacity-60">
               <Plus className="h-4 w-4" /> {busy ? (isAr ? "بتتعمل..." : "Creating...") : isAr ? "اعمل السبحة وخُد الرابط" : "Create and get the link"}
             </button>
-            <p className="text-[11px] font-semibold text-muted-foreground">{isAr ? "صفحة السبحة مش بتظهر في جوجل، وبتوصل للي معاه الرابط أو من القايمة هنا." : "Tasbih pages are not shown in search engines."}</p>
+            <p className="text-[11px] font-semibold text-muted-foreground">{isAr ? (SHOW_PUBLIC_ROOMS ? "صفحة السبحة مش بتظهر في جوجل، وبتوصل للي معاه الرابط أو من القايمة هنا." : "صفحة السبحة مش بتظهر في جوجل، وبتوصل بس للي معاه الرابط.") : "Tasbih pages are not shown in search engines."}</p>
           </form>
         </div>
 
-        <div>
+        {SHOW_PUBLIC_ROOMS && <div>
           <h3 className="text-lg font-black text-primary">{isAr ? "سبح بيتشارك فيها دلوقتي" : "Shared right now"}</h3>
           <div className="mt-3 flex flex-wrap gap-2" role="tablist">
             {(["all", ...MISBAHA_KINDS.map((k) => k.id)] as const).map((f) => (
@@ -201,7 +208,7 @@ export function MemorialCreate({ isAr, onCreated }: { isAr: boolean; onCreated: 
               })}
             </ul>
           )}
-        </div>
+        </div>}
       </div>
     </section>
   );

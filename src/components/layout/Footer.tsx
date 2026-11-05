@@ -59,6 +59,9 @@ export const Footer = () => {
   };
   // Hide the closing donation CTA on auth/profile/admin pages — those
   // contexts have their own primary action (login / dashboard / save).
+  // /misbaha: a smaller weekly-letter box that sits inside the footer instead of floating over the
+  // section above it.
+  const compactNewsletter = pathname.startsWith("/misbaha");
   const hideClosingCta =
     pathname.startsWith("/login") ||
     pathname.startsWith("/register") ||
@@ -162,8 +165,10 @@ export const Footer = () => {
 
       {/* Newsletter — a calm card with a seal, floating over the previous section */}
       <div className="relative overflow-visible">
-        <div className="container relative z-30 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -translate-y-[15%] -mb-7 sm:-mb-8 md:-mb-10">
-          <div className="relative mx-auto w-full overflow-hidden rounded-[2rem] bg-[#fbfcf8] text-[#0b4429] shadow-[0_30px_70px_-34px_rgba(6,48,28,0.5)] ring-1 ring-[#0b4429]/[0.08]">
+        <div className={compactNewsletter
+          ? "container relative z-30 mx-auto max-w-4xl px-4 pt-10 sm:px-6 md:pt-12"
+          : "container relative z-30 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -translate-y-[15%] -mb-7 sm:-mb-8 md:-mb-10"}>
+          <div className={`relative mx-auto w-full overflow-hidden bg-[#fbfcf8] text-[#0b4429] ring-1 ring-[#0b4429]/[0.08] ${compactNewsletter ? "rounded-3xl shadow-[0_20px_50px_-30px_rgba(6,48,28,0.6)]" : "rounded-[2rem] shadow-[0_30px_70px_-34px_rgba(6,48,28,0.5)]"}`}>
             {/* warm light: an orange glow from both top corners and a hairline inner frame */}
             <div aria-hidden className="pointer-events-none absolute -top-28 -left-24 h-72 w-72 rounded-full bg-[#f58220]/[0.16] blur-3xl" />
             <div aria-hidden className="pointer-events-none absolute -top-28 -right-24 h-72 w-72 rounded-full bg-[#f58220]/[0.16] blur-3xl" />
@@ -171,7 +176,24 @@ export const Footer = () => {
             <div aria-hidden className="pointer-events-none absolute inset-2 rounded-[1.6rem] ring-1 ring-[#0b4429]/[0.06]" />
 
             {!subscribed ? (
-              <div className="relative grid items-center gap-7 px-5 pb-10 pt-9 sm:px-8 md:grid-cols-[1.1fr_1fr] md:gap-12 md:px-12 md:py-11">
+              <div className={`relative grid items-center ${compactNewsletter ? "gap-4 px-5 py-6 sm:px-7 md:grid-cols-[1fr_1.1fr] md:gap-8" : "gap-7 px-5 pb-10 pt-9 sm:px-8 md:grid-cols-[1.1fr_1fr] md:gap-12 md:px-12 md:py-11"}`}>
+                {compactNewsletter ? (
+                  <div className="flex items-center gap-3 text-center md:text-start">
+                    <span className="hidden h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#0b4429] text-[#a3e635] sm:grid" aria-hidden>
+                      <Mail className="h-5 w-5" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-lg font-black leading-snug md:text-xl">
+                        {isRTL ? "الإيميل الأسبوعي" : "The weekly email"}
+                      </h3>
+                      <p className="mt-1 text-sm leading-relaxed text-[#0b4429]/70">
+                        {isRTL
+                          ? "شارك إيميلك ليصلك الأعمال والصدقات المطلوبة أسبوعيًا."
+                          : "Share your email to get the week's good deeds and needed charity."}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
                 <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-center md:gap-2 md:text-start">
                   <NewsletterSeal isRTL={isRTL} />
                   <div className="min-w-0">
@@ -188,6 +210,7 @@ export const Footer = () => {
                     </p>
                   </div>
                 </div>
+                )}
 
                 <form onSubmit={handleSubscribe} className="relative w-full" noValidate>
                   <label htmlFor="newsletter-email" className="sr-only">{isRTL ? "إيميلك" : "Your email"}</label>

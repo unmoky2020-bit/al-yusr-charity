@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { RotateCcw, Vibrate, VibrateOff, Share2, Check, Heart, Sparkles, ImageDown, X, Plus, Flame, CalendarDays, Users } from "lucide-react";
+import { RotateCcw, Vibrate, VibrateOff, Share2, Check, ImageDown, X, Plus, Flame, CalendarDays, Users, Gift, ArrowLeft } from "lucide-react";
 import { DHIKR_GROUPS, ALL_DHIKR, MIXED_DHIKR, groupOfDhikr, type Dhikr as DhikrType } from "@/data/adhkar";
 import { misbahaRoomsApi, type MisbahaRoom } from "@/data/api/misbahaRoomsApi";
 import { roomShareText, roomTitle } from "@/data/memorialDuas";
@@ -586,17 +586,25 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
         />
       )}
 
-      {/* A gentle reminder, below the tool so it never gets in the way (rooms have their own) */}
+      {/* Who the tasbih is from (rooms have their own closing section) */}
       {!roomSlug && <section className="bg-background py-12 md:py-16">
-        <div className="container mx-auto max-w-3xl px-4 text-center">
-          <Sparkles className="mx-auto h-8 w-8 text-secondary" />
-          <h2 className="mt-3 text-2xl font-black text-primary md:text-3xl">{isAr ? "ومع الذكر، ما تنساش الصدقة" : "Alongside dhikr, remember charity"}</h2>
-          <p className="mt-3 text-muted-foreground md:text-lg">
-            {isAr ? "صدقة صغيرة النهارده ممكن تفتح باب فرحة لأسرة محتاجة، وتفضل في ميزانك." : "A small charity today can open a door of joy for a family in need, and stays on your scale."}
-          </p>
-          <Link to="/donate" className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-orange-grad px-7 py-3 text-sm font-black text-accent-foreground shadow-cta transition hover:opacity-95">
-            <Heart className="h-5 w-5" /> {isAr ? "تصدّق الآن" : "Give now"}
-          </Link>
+        <div className="container mx-auto max-w-3xl px-4">
+          <div className="relative overflow-hidden rounded-[2rem] bg-primary px-6 py-10 text-center text-primary-foreground shadow-card sm:px-10">
+            <span aria-hidden className="pointer-events-none absolute inset-0 leaf-bg opacity-20" />
+            <span className="relative mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-accent/15 ring-1 ring-accent/40">
+              <Gift className="h-7 w-7 text-accent" />
+            </span>
+            <h2 className="relative mt-4 text-2xl font-black leading-snug md:text-3xl">
+              {isAr ? "هذه السبحة هدية من مؤسسة اليسر الخيرية" : "This tasbih is a gift from Al-Yusr Charity Foundation"}
+            </h2>
+            <p className="relative mx-auto mt-3 max-w-xl text-sm leading-relaxed text-primary-foreground/80 md:text-base">
+              {isAr ? "استخدمها وشاركها مع أحبابك، ولكل من يذكر الله بيها أجر." : "Use it and share it with your loved ones; every remembrance carries reward."}
+            </p>
+            <Link to="/about" className="relative mt-6 inline-flex items-center gap-2 rounded-2xl bg-orange-grad px-7 py-3 text-sm font-black text-accent-foreground shadow-cta transition hover:-translate-y-0.5 hover:opacity-95">
+              {isAr ? "تعرّف علينا أكثر" : "Get to know us"}
+              <ArrowLeft className="h-4 w-4 ltr:rotate-180" />
+            </Link>
+          </div>
         </div>
       </section>}
     </PageLayout>
