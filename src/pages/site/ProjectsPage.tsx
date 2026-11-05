@@ -35,6 +35,7 @@ import { PROJECT_KINDS } from "@/components/campaigns/ProjectKind";
 // ── Images ──
 import heroImg from "@/assets/hands-sprout.jpg";
 import nurseriesImg from "@/assets/program-education.jpg";
+import { PROJECT_LANDINGS } from "@/data/projectLandings";
 
 /** Look of a project card (icon + colours + optional landing page), by project slug. Text, image and
  *  prices come from the backend (dashboard → المشاريع); a project without an entry gets DEFAULT_THEME. */
@@ -45,6 +46,8 @@ interface ProjectTheme {
   landingUrl?: string;
   /** Donation link when the project has no backend record of its own. */
   donateUrl?: string;
+  /** Card image while the backend project has no cover image. */
+  fallbackImage?: string;
 }
 
 const DEFAULT_THEME: ProjectTheme = { icon: Building2, bgGradient: "from-slate-950 via-slate-950/85 to-transparent", accentColor: "#0f766e" };
@@ -57,14 +60,20 @@ const PROJECT_THEMES: Record<string, ProjectTheme> = {
   bride: { icon: Heart, bgGradient: "from-pink-950 via-slate-950/85 to-transparent", accentColor: "#ec4899" },
   medical: { icon: Stethoscope, bgGradient: "from-emerald-950 via-slate-950/85 to-transparent", accentColor: "#10b981", landingUrl: "/medical" },
   takrim: { icon: Truck, bgGradient: "from-slate-950 via-slate-950/85 to-transparent", accentColor: "#64748b", landingUrl: "/takrim" },
+  nurseries: { icon: BookOpen, bgGradient: "from-emerald-950 via-slate-950/85 to-transparent", accentColor: "#0f766e", landingUrl: "/nurseries", fallbackImage: nurseriesImg },
 };
 
 type ProjectItem = ProjectCard & ProjectTheme;
 
-const toItem = (p: ProjectCard): ProjectItem => ({ ...p, ...(PROJECT_THEMES[p.slug] ?? DEFAULT_THEME) });
+/** The site's own photo stands in until a cover image is uploaded in the dashboard. */
+const toItem = (p: ProjectCard): ProjectItem => {
+  const theme = PROJECT_THEMES[p.slug] ?? DEFAULT_THEME;
+  const noCover = !p.image || p.image === "/placeholder.svg";
+  return { ...p, ...theme, image: noCover && theme.fallbackImage ? theme.fallbackImage : p.image };
+};
 
 /** Details: the campaign landing page when the project has one, else its own page. */
-const detailsHref = (p: ProjectItem) => p.landingUrl ?? `/projects/${p.slug}`;
+const detailsHref = (p: ProjectItem) => p.landingUrl ?? PROJECT_LANDINGS[p.slug] ?? `/projects/${p.slug}`;
 const donateHref = (p: ProjectItem) => p.donateUrl ?? `/donate?project=${encodeURIComponent(p.slug)}`;
 
 /**

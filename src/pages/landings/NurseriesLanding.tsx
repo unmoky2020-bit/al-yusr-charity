@@ -16,15 +16,15 @@ import axisEducation from "@/assets/axis-education.jpg";
  * learning nurseries for ages 4–6, Qur'an houses for ages 4–16, Qur'an competitions,
  * curricula the foundation builds and supervises, and its educational team.
  */
-/** Backend program behind this page: its packages (dashboard → البرامج → تحفيظ القرآن الكريم) are sold below. */
-const SOURCE = { kind: "program" as const, slug: "quran" };
+/** Backend project behind this page: its packages (dashboard → المشاريع → حضانات اليسر, slug `nurseries`) are sold below. */
+const SOURCE = { kind: "project" as const, slug: "nurseries" };
 const DONATE = entityDonateHref(SOURCE.kind, SOURCE.slug);
 /** Shown only until the backend program answers (offline / static mode). */
 const DEFAULT_SHARES: Share[] = [
-  { id: "qr-student", nameAr: "سهم دعم طالب حفظ قرآن", nameEn: "Support a Qur'an student", amount: 100 },
-  { id: "qr-teacher", nameAr: "سهم راتب معلم تحفيظ شهري", nameEn: "A teacher's monthly salary share", amount: 500 },
-  { id: "qr-circle", nameAr: "سهم تجهيز حلقة تحفيظ (أثاث وألواح)", nameEn: "Equip a memorisation circle", amount: 1500 },
-  { id: "qr-centre", nameAr: "رعاية مركز تحفيظ كامل لمدة شهر", nameEn: "Sponsor a whole centre for a month", amount: 5000 },
+  { id: "qr-student", nameAr: "سهم تحفيظ طفل", nameEn: "Sponsor a child's memorisation", amount: 150 },
+  { id: "qr-teacher", nameAr: "سهم في مرتب معلم", nameEn: "A share of a teacher's salary", amount: 500 },
+  { id: "qr-teacher-full", nameAr: "مرتب معلم كامل", nameEn: "A teacher's full salary", amount: 4000 },
+  { id: "qr-full", nameAr: "سهم التحفيظ بالكامل", nameEn: "Sponsor the whole memorisation programme", amount: 25000 },
 ];
 
 const AGE_MIN = 4;

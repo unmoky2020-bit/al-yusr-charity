@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowLeft, ArrowRight, Heart, SearchX, Target, Sparkles } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -11,6 +11,7 @@ import { LocalFAQ } from "@/components/common/LocalFAQ";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { useProjectDetail } from "@/data/sources/projects";
+import { PROJECT_LANDINGS } from "@/data/projectLandings";
 
 /**
  * /projects/:slug — one development project, entirely from the backend record (dashboard → المشاريع):
@@ -24,6 +25,10 @@ const ProjectDetail = () => {
   const Arrow = isAR ? ArrowLeft : ArrowRight;
   const { project, isLoading, notFound } = useProjectDetail(slug);
   const fmt = (n: number) => n.toLocaleString(isAR ? "ar-EG" : "en-US");
+
+  // A project with its own landing page (e.g. nurseries → /nurseries) has no second, generic page.
+  const landing = PROJECT_LANDINGS[slug];
+  if (landing) return <Navigate to={landing} replace />;
 
   if (isLoading && !project) {
     return (
