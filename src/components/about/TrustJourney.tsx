@@ -89,7 +89,7 @@ export const TrustJourney = ({ steps, isRTL }: { steps: TrustStep[]; isRTL: bool
           </h2>
           <p className="mt-4 max-w-md text-base leading-relaxed text-foreground/80">
             {isRTL
-              ? "تابع الطريق اللي بيمشيه تبرعك من لحظة ما تدفعه لحد ما يوصل لباب البيت. في كل محطة ضمانة تقدر تتأكد منها بنفسك."
+              ? "تابع الطريق الذي يسلكه تبرعك من لحظة الدفع حتى يصل إلى باب البيت. في كل محطة ضمانة يمكنك أن تتأكد منها بنفسك."
               : "Follow the path your gift takes, from the moment you give to the family's doorstep. Every stop is a guarantee you can check yourself."}
           </p>
 

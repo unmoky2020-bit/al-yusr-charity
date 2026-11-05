@@ -141,11 +141,11 @@ const About = () => {
   // Map values from API (aboutData.values) — falls back to static defaults if API is empty
   const STATIC_VALUE_ICONS = [Sparkles, HeartHandshake, ShieldCheck, Award, BadgeCheck];
   const defaultValuesAr = [
-    { title: "التمكين", desc: "بناء الإنسان بالتعليم والعلاج بدل الإحسان اللحظي." },
-    { title: "الإحسان", desc: "نسعى لباب البيت بكرامة." },
+    { title: "التمكين", desc: "بناء الإنسان بالتعليم والعلاج بدلًا من الإحسان اللحظي." },
+    { title: "الإحسان", desc: "نصل إلى باب البيت ونحفظ كرامة الأسرة." },
     { title: "الأمانة", desc: "كل تبرع موثق بالصور والفيديو." },
     { title: "القوة", desc: "برامج تنموية متجددة ومستمرة." },
-    { title: "الثقة", desc: "كيان مشهر رسميًا بوزارة التضامن." },
+    { title: "الثقة", desc: "كيان مشهر رسميًا لدى وزارة التضامن." },
   ];
   const defaultValuesEn = [
     { title: "Empowerment", desc: "Building people through education and healthcare, not one-off relief." },
@@ -174,11 +174,11 @@ const About = () => {
   const timeline = isRTL
     ? [
         { y: "2000–2019", t: "البداية: فريق اجتمع على عمل الخير", d: "فريق جمعه هدف واحد: خدمة الأسر المستحقة. وعلى مدار السنين بنى خبرته في الميدان قبل التأسيس الرسمي." },
-        { y: "2019", t: "تأسيس وإشهار مؤسسة اليسر", d: "في آخر شهرين من 2019 — إشهار رسمي رقم 2665 من وزارة التضامن الاجتماعي." },
-        { y: "2020", t: "إطلاق محاور الغذاء والتعليم والصحة", d: "بناء الإنسان محوراً مركزياً لكل المبادرات والقوافل الميدانية." },
-        { y: "2022", t: "حملة سِتْر للشتاء", d: "أسقف عازلة، ألحفة فايبر، ملابس شتوية، وأبواب وشبابيك لبيوت أهالينا." },
+        { y: "2019", t: "تأسيس وإشهار مؤسسة اليسر", d: "في الشهرين الأخيرين من عام 2019 صدر الإشهار الرسمي رقم 2665 من وزارة التضامن الاجتماعي." },
+        { y: "2020", t: "إطلاق محاور الغذاء والتعليم والصحة", d: "جعلنا بناء الإنسان محورًا رئيسيًا لكل المبادرات والقوافل الميدانية." },
+        { y: "2022", t: "حملة سِتْر للشتاء", d: "أسقف عازلة وألحفة فايبر وملابس شتوية وأبواب وشبابيك لبيوت أهالينا." },
         { y: "2023", t: "حملة ظِلّ ومبادرة مَرْكُون", d: "سقيا الماء وتوصيل خطوط القرى، وإعادة تدوير الأثاث والأجهزة والأدوية." },
-        { y: "2025", t: "إنجازات قياسية في كافة المحافظات", d: "1400 كرتونة رمضان، 3000+ كرتونة شهرية، 385 وصلة مياه، 122 سقف، و4 طن لحوم." },
+        { y: "2025", t: "إنجازات قياسية في كافة المحافظات", d: "1400 كرتونة رمضان، 3000+ كرتونة شهرية، 385 وصلة مياه، و122 سقفًا، و5 أطنان من اللحوم." },
       ]
     : [
         { y: "2000–2019", t: "The start: a team for good", d: "A team united by one aim, serving families in need, which built its field experience over the years before official incorporation." },
@@ -186,7 +186,7 @@ const About = () => {
         { y: "2020", t: "Food, Health & Education Pillars", d: "Placing human development at the heart of all programs." },
         { y: "2022", t: "Winter Setr Campaign", d: "Insulated roofs, thermal comforters, warm clothing, doors & windows." },
         { y: "2023", t: "Dhill & Markoun Initiatives", d: "Clean water taps, village supply lines, and in-kind recycling." },
-        { y: "2025", t: "Record Impact Year Across Egypt", d: "1,400 Ramadan boxes, 3,000+ monthly food boxes, 385 water taps, 122 roofs, and 4 tons of meat." },
+        { y: "2025", t: "Record Impact Year Across Egypt", d: "1,400 Ramadan boxes, 3,000+ monthly food boxes, 385 water taps, 122 roofs, and 5 tons of meat." },
       ];
 
   const stickyOffsets = ["top-[84px] md:top-[96px]", "top-[100px] md:top-[116px]", "top-[116px] md:top-[136px]"];
@@ -331,9 +331,9 @@ const About = () => {
     return isRTL
       ? [
           { q: "أين مقر مؤسسة اليسر الخيرية؟", a: "المقر الرئيسي في المنصورة — تقسيم خطاب، بجوار وكالة المنصورة، محافظة الدقهلية، وتغطي قوافلنا ومشاريعنا كل محافظات مصر." },
-          { q: "هل تبرعاتي مُعفاة ضريبياً؟", a: "نعم، مؤسسة اليسر مرخصة رسمياً برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي وتبرعاتك تخضع للإعفاء الضريبي وفق القانون المصري." },
-          { q: "كيف أتأكد من وصول تبرعي بنفسي؟", a: "نوفر ميزة 'الحضور بنفسك'؛ يمكنك مرافقة مندوبينا للميدان لتسليم تبرعك أو معاينة وصلة المياه والسقف، بالإضافة إلى توثيق فوري بالصور والفيديو مع كود تتبع." },
-          { q: "هل أستطيع التطوع معكم؟", a: "نعم، نرحب بالمتطوعين والشباب والعائلات ليكونوا جزءاً من فريقنا الميداني عبر صفحة التطوع بالموقع." },
+          { q: "هل تبرعاتي مُعفاة ضريبيًا؟", a: "نعم، مؤسسة اليسر مرخّصة رسميًا برقم 2665 لسنة 2019 لدى وزارة التضامن الاجتماعي، وتخضع تبرعاتك للإعفاء الضريبي وفق القانون المصري." },
+          { q: "كيف أتأكد من وصول تبرعي بنفسي؟", a: "نوفر ميزة «الحضور بنفسك»؛ إذ يمكنك مرافقة مندوبينا إلى الميدان لتسليم تبرعك أو معاينة وصلة المياه والسقف، بالإضافة إلى توثيق فوري بالصور والفيديو مع كود تتبع." },
+          { q: "هل أستطيع التطوع معكم؟", a: "نعم، نرحب بالمتطوعين والشباب والعائلات ليكونوا جزءًا من فريقنا الميداني عبر صفحة التطوع بالموقع." },
         ]
       : [
           { q: "Where is Al-Yusr Charity headquartered?", a: "Headquarters in Mansoura — Khattab District, next to Mansoura Agency, Dakahlia, with active convoys and aid operations serving families all across Egypt." },
@@ -346,8 +346,8 @@ const About = () => {
   return (
     <PageLayout>
       <SEOHelmet
-        title={isRTL ? "من نحن | مؤسسة اليسر الخيرية" : "About Us | Al-Yusr Charity Foundation"}
-        description={isRTL ? "تعرف على مسيرة مؤسسة اليسر الخيرية، رسالتنا، ومشاريعنا الميدانية الموثقة في رعاية الأيتام، الإغاثة، والتنمية المستدامة في مصر." : "Learn about Al-Yusr Charity Foundation, our mission, values, and verified humanitarian initiatives across Egypt."}
+        title={isRTL ? "من نحن | مؤسسة اليسر الخيرية — مؤسسة خيرية في مصر" : "About Us | Al-Yusr Charity Foundation — Egypt"}
+        description={isRTL ? "مؤسسة اليسر الخيرية مؤسسة مصرية تعمل في محافظات مصر، ومقرها الرئيسي في المنصورة. تعرّف على رسالتها ومشاريعها الموثقة في رعاية الأيتام والإغاثة والتنمية." : "Al-Yusr Charity Foundation is an Egyptian foundation working across Egypt, headquartered in Mansoura. Learn about our mission and verified projects."}
         path="/about"
         image={aboutHero}
       />
@@ -401,13 +401,13 @@ const About = () => {
                     
                     <p className="mt-4 mx-auto md:mx-0 max-w-xl text-base leading-relaxed text-primary-foreground/90 md:text-lg">
                       {isRTL
-                        ? (aboutData.hero.description_ar || "مؤسسة غير ربحية تم إنشاؤها عام 2019، تابعة لوزارة التضامن الاجتماعي. هدفنا أن تصل الصدقة لمستحقها — في المنصورة والدقهلية وكل محافظات مصر.")
+                        ? (aboutData.hero.description_ar || "مؤسسة غير ربحية أُسّست عام 2019، ومشهرة لدى وزارة التضامن الاجتماعي. هدفنا أن تصل الصدقة إلى مستحقها، في المنصورة والدقهلية وكل محافظات مصر.")
                         : (aboutData.hero.description_en || "A registered non-profit foundation established in 2019 under the Ministry of Social Solidarity, delivering verified aid across Mansoura, Dakahlia, and all of Egypt.")}
                     </p>
 
                     <blockquote className="mt-5 mx-auto md:mx-0 max-w-xl text-lg font-black text-secondary sm:text-xl">
                       {isRTL
-                        ? (aboutData.hero.quote_ar ? `«${aboutData.hero.quote_ar.replace(/[«»]/g, "")}»` : "«تبرعك يترك أثراً ويغير حياة»")
+                        ? (aboutData.hero.quote_ar ? `«${aboutData.hero.quote_ar.replace(/[«»]/g, "")}»` : "«تبرعك يترك أثرًا ويغيّر حياة»")
                         : (aboutData.hero.quote_en ? `'${aboutData.hero.quote_en.replace(/['"]/g, "")}'` : "'Your donation leaves lasting impact and transforms lives'")}
                     </blockquote>
                   </>
@@ -536,7 +536,7 @@ const About = () => {
 
             <p data-reveal className="reveal-up mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-foreground/90 sm:text-base md:text-lg">
               {isRTL
-                ? (aboutData.story?.description_ar || "بعد العمل لأكثر من عشر سنوات في العمل الخيري كان لابد من كيان منظم ومرخص يجمع أعمالنا ويكبر ويساعدنا في بناء العمل الخيري في جمع تبرعات وتوزيعها لمؤسسة قادرة تغير مفهوم العمل الخيري وتنمو بالأثر من خلال مبادراتنا.")
+                ? (aboutData.story?.description_ar || "بعد أكثر من عشر سنوات في العمل الخيري، كان لا بد من كيان منظم ومرخّص يجمع أعمالنا ويطوّرها، ويساعدنا على بناء عمل خيري مؤسسي في جمع التبرعات وتوزيعها؛ مؤسسة قادرة على تغيير مفهوم العمل الخيري، وتنمو بالأثر من خلال مبادراتها.")
                 : (aboutData.story?.description_en || "Al-Yusr Charity Foundation was born after more than a decade of direct grassroots volunteering across Egyptian villages, officially incorporated in 2019 (#2665) to maximize donation impact with transparency.")}
             </p>
 
@@ -564,7 +564,7 @@ const About = () => {
                   {isRTL
                     ? (aboutData.story?.mission_ar ||
                        (typeof aboutData.story?.mission === "object" ? (aboutData.story.mission as any)?.description_ar : null) ||
-                       "بناء إنسان واعٍ جسدياً، ثقافياً، وصحياً.")
+                       "بناء إنسان واعٍ جسديًا وثقافيًا وصحيًا.")
                     : (aboutData.story?.mission_en ||
                        (typeof aboutData.story?.mission === "object" ? (aboutData.story.mission as any)?.description_en : null) ||
                        "Building an individual who is physically, culturally, and medically empowered.")}
@@ -585,7 +585,7 @@ const About = () => {
                           ? ((aboutData.story.goals as any).items as string[])
                           : null);
                     const staticGoalsAr = [
-                      "أن تصل الصدقة لمن يستحقها بأعلى معايير الأمانة.",
+                      "أن تصل الصدقة إلى من يستحقها بأعلى معايير الأمانة.",
                       "تغيير مفهوم العمل الخيري في مصر — من إعطاء صدقة لحظية إلى تغيير حياة كاملة.",
                       "الحفاظ على أموال المتبرعين وتوفير طرق تبرع آمنة وموثقة.",
                     ];
@@ -626,7 +626,7 @@ const About = () => {
 
               <p data-reveal className="reveal-up mt-3 text-sm text-primary-foreground/75 md:text-base">
                 {isRTL
-                  ? "مستهدفات طموحة للانتقال بالمجتمعات الأكثر احتياجاً من دائرة الاحتياج إلى الاكتفاء الذاتي والإنتاج:"
+                  ? "مستهدفات طموحة لنقل المجتمعات الأشد حاجة من دائرة العوز إلى الاكتفاء الذاتي والإنتاج:"
                   : "Ambitious milestones moving communities from poverty to self-reliance:"}
               </p>
             </div>
@@ -635,10 +635,10 @@ const About = () => {
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {(() => {
                 const staticItems = [
-                  { icon: Sprout, titleAr: "مشاريع استثمارية وقف لله", titleEn: "Endowment Investments", descAr: "بناء مشاريع استثمارية وقف لله، يُستخدم ريعها وأرباحها في كفالة الأسر وتغطية المصاريف التشغيلية بصفة مستدامة.", descEn: "Endowment ventures funding ongoing family stipends and operating sustainability." },
-                  { icon: Hospital, titleAr: "مستشفى طبية متكاملة", titleEn: "Comprehensive Hospital", descAr: "بناء مستشفى طبية كبرى لخدمة أكثر من 100 ألف مريض سنوياً بأحدث الأجهزة الطبية ورعاية مجانية لغير القادرين.", descEn: "State-of-the-art charitable hospital serving over 100,000 underprivileged patients annually." },
+                  { icon: Sprout, titleAr: "مشاريع استثمارية وقفية", titleEn: "Endowment Investments", descAr: "بناء مشاريع استثمارية وقفًا لله، يُستخدم ريعها وأرباحها في كفالة الأسر وتغطية المصاريف التشغيلية بصورة مستدامة.", descEn: "Endowment ventures funding ongoing family stipends and operating sustainability." },
+                  { icon: Hospital, titleAr: "مستشفى متكامل", titleEn: "Comprehensive Hospital", descAr: "بناء مستشفى كبير يخدم أكثر من 100 ألف مريض سنويًا بأحدث الأجهزة الطبية، مع رعاية مجانية لغير القادرين.", descEn: "State-of-the-art charitable hospital serving over 100,000 underprivileged patients annually." },
                   { icon: GraduationCap, titleAr: "كفالة 20 ألف طالب", titleEn: "20,000 Student Sponsorships", descAr: "كفالة تعليمية متكاملة لأكثر من 20,000 طالب وطالبة للنجاة بهم من الفقر وكسر حلقة التسرّب الدراسي.", descEn: "Comprehensive tuition and support securing 20,000 young learners from poverty." },
-                  { icon: Briefcase, titleAr: "مشاريع صغيرة للمستحقين", titleEn: "Micro-Enterprises", descAr: "تمويل وتأسيس مشاريع إنتاجية صغيرة للأسر المستحقة لتمكينهم من الاعتماد على أنفسهم والتحول لأسر منتجة.", descEn: "Funding sustainable micro-businesses enabling families to become independent and productive." },
+                  { icon: Briefcase, titleAr: "مشاريع صغيرة للمستحقين", titleEn: "Micro-Enterprises", descAr: "تمويل وتأسيس مشاريع إنتاجية صغيرة للأسر المستحقة لتمكينها من الاعتماد على نفسها والتحول إلى أسر منتجة.", descEn: "Funding sustainable micro-businesses enabling families to become independent and productive." },
                 ];
                 const apiItems = aboutData.vision_2030?.items;
                 const useApi = Array.isArray(apiItems) && apiItems.length > 0;
@@ -727,7 +727,7 @@ const About = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/75 to-primary/50" aria-hidden />
           <div className="container relative mx-auto px-4 py-16 text-center text-primary-foreground md:py-20">
             <h2 data-reveal className="reveal-up mx-auto max-w-3xl text-2xl font-black md:text-4xl">
-              {isRTL ? "نزرع اليوم… ليثمر غداً في كل بيت في مصر" : "We plant today — to bloom tomorrow in every home across Egypt"}
+              {isRTL ? "نزرع اليوم… ليثمر غدًا في كل بيت في مصر" : "We plant today — to bloom tomorrow in every home across Egypt"}
             </h2>
           </div>
         </section>
@@ -737,7 +737,7 @@ const About = () => {
           <div className="container mx-auto max-w-6xl px-4">
             <h2 data-reveal className="reveal-up text-center text-2xl font-black text-primary md:text-3xl">{isRTL ? "قيمنا" : "Our Values"}</h2>
             <p data-reveal className="reveal-up mx-auto mt-3 max-w-2xl text-center text-muted-foreground text-sm sm:text-base">
-              {isRTL ? "قيم بنشتغل بيها كل يوم في كل قرية بالدقهلية ومحافظات مصر." : "Guiding principles lived daily across every village in Egypt."}
+              {isRTL ? "قيم نعمل بها كل يوم في كل قرية بالدقهلية ومحافظات مصر." : "Guiding principles lived daily across every village in Egypt."}
             </p>
             <div className="mx-auto mt-10 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-5">
               {values.map((v, i) => (
@@ -759,7 +759,7 @@ const About = () => {
             <Quote className="mx-auto h-8 w-8 text-secondary" />
             <p data-reveal className="reveal-up mt-4 text-xl sm:text-2xl md:text-3xl font-black leading-relaxed text-secondary">
               {isRTL
-                ? "«نترك أثراً في حياتك وأثراً في حياة المستحق»"
+                ? "«نترك أثرًا في حياتك وأثرًا في حياة المستحق»"
                 : "“We leave a lasting impact in your life, and an enduring impact in the recipient's life.”"}
             </p>
             <div className="mt-4 text-xs sm:text-sm font-bold text-primary-foreground/80">
@@ -827,7 +827,7 @@ const About = () => {
             </h2>
             <p data-reveal className="reveal-up mx-auto mt-3 max-w-2xl text-center text-muted-foreground text-sm sm:text-base">
               {isRTL
-                ? "مشهرة رسمياً من وزارة التضامن الاجتماعي مع تقارير محاسبية سنوية وإشراف كامل."
+                ? "مشهرة رسميًا لدى وزارة التضامن الاجتماعي، مع تقارير محاسبية سنوية وإشراف كامل."
                 : "Officially registered by the Ministry of Social Solidarity with certified annual accounting."}
             </p>
             <div className="mt-12 grid gap-10 sm:grid-cols-3 sm:gap-6">
@@ -988,7 +988,7 @@ const About = () => {
                 {isRTL ? "تواصل ومقر المؤسسة" : "Contact & Headquarters"}
               </h2>
               <p data-reveal className="reveal-up mt-3 text-muted-foreground text-sm sm:text-base">
-                {isRTL ? "أبوابنا مفتوحة يومياً لخدمتكم واستقبال مساهماتكم بالمنصورة وكافة المحافظات." : "Our headquarters welcome donors and beneficiaries daily in Mansoura and nationwide."}
+                {isRTL ? "أبوابنا مفتوحة يوميًا لخدمتكم واستقبال مساهماتكم في المنصورة وجميع المحافظات." : "Our headquarters welcome donors and beneficiaries daily in Mansoura and nationwide."}
               </p>
             </div>
             <div className="mt-10 grid gap-6 lg:grid-cols-[1.3fr_1fr]">

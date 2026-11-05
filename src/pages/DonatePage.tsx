@@ -77,7 +77,7 @@ const METHOD_LOOK: Record<string, Omit<StaticMethod, "id" | "ar" | "en" | "isMan
   card_kashier: { subtitleAr: "كاشير (فيزا / ماستركارد / ميزة)", subtitleEn: "Kashier (Visa / Mastercard / Meeza)", icon: CreditCard, isGateway: true,
     instructions_ar: "ستفتح نافذة الدفع المشفرة المعتمدة عبر بوابة كاشير (3D-Secure) لإتمام التبرع بأمان.", instructions_en: "Secure encrypted online payment via the Kashier gateway." },
   delegate_pickup: { subtitleAr: "استلام منزلي مجاني", subtitleEn: "Free Doorstep Pickup", icon: Truck, badge: { ar: "استلام منزلي مجاني", en: "Free Home Pickup", color: "emerald" }, isDelegate: true,
-    instructions_ar: "سيتواصل معك مندوبنا هاتفياً لتحديد الميعاد الأنسب واستلام التبرع بإيصال معتمد.", instructions_en: "Our delegate will call you to arrange a time and collect the donation with an official receipt." },
+    instructions_ar: "سيتواصل معك مندوبنا هاتفيًا لتحديد الموعد الأنسب واستلام التبرع بإيصال معتمد.", instructions_en: "Our delegate will call you to arrange a time and collect the donation with an official receipt." },
 };
 
 /** A dashboard payment option as the form shows it (its own description wins over the default text). */
@@ -519,14 +519,14 @@ const DonatePage = () => {
 
     if (!isMarkounInKind) {
       if (totalAmount < 10) {
-        errs.amount = lang === "ar" ? "إجمالي التبرع يجب أن يكون 10 جنيه كحد أدنى" : "Total donation must be at least 10 EGP";
+        errs.amount = lang === "ar" ? "يجب ألّا يقل إجمالي التبرع عن 10 جنيهات" : "Total donation must be at least 10 EGP";
       }
 
       items.forEach((it, idx) => {
         if (it.donationMode !== "in_kind" && (!it.amount || it.amount < 10)) {
           errs[`amount_${it.id}`] =
             lang === "ar"
-              ? `حدد مبلغ لا يقل عن 10 ج.م للبند رقم (${idx + 1})`
+              ? `حدّد مبلغًا لا يقل عن 10 ج.م للبند رقم (${idx + 1})`
               : `Enter at least 10 EGP for item #${idx + 1}`;
           return;
         }
@@ -537,7 +537,7 @@ const DonatePage = () => {
           if (cs && cs.neededAmount > 0 && it.amount > left) {
             errs[`amount_${it.id}`] =
               lang === "ar"
-                ? `الحالة فاضلها ${left.toLocaleString("en-US")} ج بس — قلّل مبلغ البند رقم (${idx + 1})`
+                ? `المتبقي لهذه الحالة ${left.toLocaleString("en-US")} ج فقط، فقلّل مبلغ البند رقم (${idx + 1})`
                 : `Only ${left.toLocaleString("en-US")} EGP is left on this case (item #${idx + 1})`;
           }
         }
@@ -546,7 +546,7 @@ const DonatePage = () => {
 
     // Name is optional (empty = «فاعل خير»); the phone is always required to confirm the donation.
     if (donor.name.trim().length === 1) {
-      errs.name = lang === "ar" ? "اكتب الاسم بالكامل أو سيبه فاضي للتبرع كفاعل خير" : "Enter your full name or leave it empty to give anonymously";
+      errs.name = lang === "ar" ? "اكتب الاسم بالكامل، أو اتركه فارغًا للتبرع كفاعل خير" : "Enter your full name or leave it empty to give anonymously";
     }
     if (!phoneRe.test(donor.phone.trim())) {
       errs.phone = lang === "ar" ? "رقم الهاتف غير صحيح (01 + 9 أرقام، مثال: 01012345678)" : "Phone must be 01 + 9 digits";
@@ -568,7 +568,7 @@ const DonatePage = () => {
     }
     if (isDelegatePickup) {
       if (methodFields.pickupAddress.trim().length < 5) {
-        errs.pickupAddress = lang === "ar" ? "اكتب عنوان تفصيلي واضح" : "Enter a clear address";
+        errs.pickupAddress = lang === "ar" ? "اكتب عنوانًا تفصيليًا واضحًا" : "Enter a clear address";
       }
       if (methodFields.pickupCity.trim().length < 2) {
         errs.pickupCity = lang === "ar" ? "اكتب المدينة / المحافظة" : "Enter your city";
@@ -672,13 +672,13 @@ const DonatePage = () => {
         <div className="fixed inset-0 z-[70] grid place-items-center bg-background/90 backdrop-blur-sm" role="status" aria-live="polite">
           <div className="flex flex-col items-center gap-3 text-center">
             <Loader2 className="h-10 w-10 animate-spin text-primary" />
-            <p className="text-base font-black text-primary">{lang === "ar" ? "بنأكد عملية الدفع…" : "Confirming your payment…"}</p>
+            <p className="text-base font-black text-primary">{lang === "ar" ? "جارٍ تأكيد عملية الدفع…" : "Confirming your payment…"}</p>
           </div>
         </div>
       )}
       <SEOHelmet
-        title={lang === "ar" ? "تبرع الآن — مؤسسة اليسر الخيرية" : "Donate Now — Al-Yusr Charity"}
-        description={lang === "ar" ? "تبرع بأمان عبر بوابة كاشير أو فودافون كاش أو إنستاباي." : "Donate safely via Kashier, Vodafone Cash, or InstaPay."}
+        title={lang === "ar" ? "تبرع أونلاين في مصر | مؤسسة اليسر الخيرية" : "Donate online in Egypt | Al-Yusr Charity"}
+        description={lang === "ar" ? "تبرع بأمان من أي مكان في مصر لمؤسسة اليسر الخيرية (مقرها المنصورة) عبر بوابة كاشير أو فودافون كاش أو إنستاباي، مع رقم تتبع لكل تبرع." : "Donate safely from anywhere in Egypt to Al-Yusr (headquartered in Mansoura) via Kashier, Vodafone Cash or InstaPay, with a tracking number for every gift."}
         path="/donate"
       />
       <SiteSchemas />
@@ -818,14 +818,14 @@ const DonatePage = () => {
                           <div className="mt-1.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 text-[11px] font-bold text-muted-foreground">
                             <span>
                               {lang === "ar"
-                                ? `اتجمع ${f.raised.toLocaleString(loc)} من ${f.need.toLocaleString(loc)} ج (${f.pct}%)`
+                                ? `جُمع ${f.raised.toLocaleString(loc)} من ${f.need.toLocaleString(loc)} ج (${f.pct}%)`
                                 : `${f.raised.toLocaleString(loc)} of ${f.need.toLocaleString(loc)} EGP (${f.pct}%)`}
                             </span>
                             {f.done ? (
-                              <span className="font-black text-secondary">{lang === "ar" ? "الحالة اكتملت، الحمد لله — تقدر تتبرع لحالة تانية" : "Fully funded — pick another case"}</span>
+                              <span className="font-black text-secondary">{lang === "ar" ? "اكتملت الحالة، والحمد لله. يمكنك التبرع لحالة أخرى" : "Fully funded — pick another case"}</span>
                             ) : (
                               <span className="font-black text-accent">
-                                {lang === "ar" ? `فاضل ${f.remaining.toLocaleString(loc)} ج` : `${f.remaining.toLocaleString(loc)} EGP left`}
+                                {lang === "ar" ? `المتبقي ${f.remaining.toLocaleString(loc)} ج` : `${f.remaining.toLocaleString(loc)} EGP left`}
                               </span>
                             )}
                           </div>
@@ -833,7 +833,7 @@ const DonatePage = () => {
                       )}
                       {!f.done && !inBasket && (
                         <p className="mt-2 text-[11px] font-bold text-muted-foreground">
-                          {lang === "ar" ? "غيّرت بند التبرع، فالتبرع مش هيروح للحالة دي." : "You changed the item, so this case won't receive this donation."}
+                          {lang === "ar" ? "غيّرت بند التبرع، لذا لن يذهب هذا التبرع إلى هذه الحالة." : "You changed the item, so this case won't receive this donation."}
                         </p>
                       )}
                     </div>
@@ -907,12 +907,12 @@ const DonatePage = () => {
                       <Layers className="mt-1 h-3.5 w-3.5 shrink-0 text-secondary" />
                       <p>
                         {lang === "ar"
-                          ? "سلتك فيها أكتر من بند: هتدفع مرة واحدة، والتوزيع اللي اخترته بيتسجل مع التبرع بالظبط وبيتوزع عليه."
+                          ? "في سلتك أكثر من بند: ستدفع مرة واحدة، ويُسجَّل التوزيع الذي اخترته مع التبرع كما هو ويُوزَّع وفقه."
                           : "Several items: you pay once, and your exact split is recorded with the donation."}
                         {items.some((it) => it.donationMode === "case") && (
                           <span className="block text-muted-foreground">
                             {lang === "ar"
-                              ? "مبلغ الحالة بيتضاف لعدّادها بعد مراجعة الفريق. لو عاوزه يتحسب عليها فورًا، اتبرع للحالة لوحدها."
+                              ? "يُضاف مبلغ الحالة إلى عدّادها بعد مراجعة الفريق. إن أردت أن يُحتسب لها فورًا، فتبرّع للحالة وحدها."
                               : "The case's share is added to its counter after review. Donate to the case alone for an instant update."}
                           </span>
                         )}
@@ -941,12 +941,12 @@ const DonatePage = () => {
                     </div>
                     {user ? (
                       <span className="inline-flex items-center gap-1 text-[11px] font-black bg-secondary text-slate-950 px-2.5 py-0.5 rounded-full shadow-2xs shrink-0">
-                        {lang === "ar" ? "مسجل الدخول ✓" : "Logged In ✓"}
+                        {lang === "ar" ? "تم تسجيل الدخول ✓" : "Logged In ✓"}
                       </span>
                     ) : (
                       <Link to="/auth/login" className="inline-flex items-center gap-1 text-[11px] font-bold text-accent hover:underline shrink-0">
                         <LogIn className="h-3 w-3" />
-                        {lang === "ar" ? "تسجيل دخول لتتبع تبرعاتك" : "Login to track"}
+                        {lang === "ar" ? "سجّل الدخول لتتبع تبرعاتك" : "Login to track"}
                       </Link>
                     )}
                   </div>
@@ -964,7 +964,7 @@ const DonatePage = () => {
                           setDonor((d) => ({ ...d, name: e.target.value }));
                           if (fieldErrors.name) setFieldErrors((p) => ({ ...p, name: "" }));
                         }}
-                        placeholder={lang === "ar" ? "سيبه فاضي للتبرع كفاعل خير" : "Leave empty to give anonymously"}
+                        placeholder={lang === "ar" ? "اتركه فارغًا للتبرع كفاعل خير" : "Leave empty to give anonymously"}
                         className="h-10 sm:h-10.5 rounded-xl bg-card border-border/70 text-xs sm:text-sm font-bold focus:border-secondary focus:ring-2 focus:ring-secondary/20"
                       />
                       {fieldErrors.name && (
@@ -1065,7 +1065,7 @@ const DonatePage = () => {
                           {lang === "ar" ? "تبرع عيني (حملة مركون) — مسار مستقل بدون بوابة دفع" : "In-Kind (Markoun) — No Payment Gateway"}
                         </p>
                         <p className="text-[11px] text-muted-foreground">
-                          {lang === "ar" ? "مندوبنا يصل لباب بيتك مجاناً لاستلام الأثاث والأجهزة، وتصدر لك إيصال استلام رسمي." : "Free delegate pickup from your doorstep with official receipt."}
+                          {lang === "ar" ? "يصل مندوبنا إلى باب بيتك مجانًا لاستلام الأثاث والأجهزة، ويسلّمك إيصال استلام رسميًا." : "Free delegate pickup from your doorstep with official receipt."}
                         </p>
                       </div>
                     </div>
@@ -1092,7 +1092,7 @@ const DonatePage = () => {
                         }}
                         className="flex-1 sm:flex-none h-11 px-4 rounded-xl bg-primary text-primary-foreground font-black text-xs sm:text-sm hover:opacity-90 cursor-pointer"
                       >
-                        {lang === "ar" ? "تأكيد طلب المندوب بالموقع" : "Confirm Online"}
+                        {lang === "ar" ? "تأكيد طلب المندوب عبر الموقع" : "Confirm Online"}
                       </Button>
                     </div>
                   </div>
@@ -1327,7 +1327,7 @@ const DonatePage = () => {
                           {isVodafoneWallet && (
                             <>
                               <label className="block text-xs font-bold text-muted-foreground mb-1">
-                                {lang === "ar" ? "رقم محفظتك المحول منها (اختياري - لتأكيد أسرع)" : "Your sending wallet number (optional)"}
+                                {lang === "ar" ? "رقم المحفظة التي حوّلت منها (اختياري، لتأكيد أسرع)" : "Your sending wallet number (optional)"}
                               </label>
                               <Input
                                 type="tel"
@@ -1374,7 +1374,7 @@ const DonatePage = () => {
                         {/* Column 2: Receipt Upload Box matching the input height */}
                         <div>
                           <label className="block text-xs font-bold text-muted-foreground mb-1">
-                            {lang === "ar" ? "إرفاق إيصال التحويل (اختياري، يسرع التوثيق)" : "Attach transfer receipt (optional)"}
+                            {lang === "ar" ? "إرفاق إيصال التحويل (اختياري، يُسرّع التوثيق)" : "Attach transfer receipt (optional)"}
                           </label>
                           <label className={`flex h-10 sm:h-10.5 cursor-pointer items-center justify-between gap-2 rounded-xl border border-dashed px-3 text-xs font-bold transition ${
                             receiptFilename
@@ -1409,7 +1409,7 @@ const DonatePage = () => {
                         <ShieldCheck className="h-4 w-4 text-secondary shrink-0" />
                         <span>
                           {lang === "ar"
-                            ? "يتم مراجعة إشعار التحويل وتأكيد التبرع وإرسال إيصال رسمي معتمد فور التحقق."
+                            ? "نراجع إشعار التحويل ونؤكد التبرع، ثم نرسل إيصالًا رسميًا معتمدًا فور التحقق."
                             : "Transfer notification is verified and an official receipt is issued upon verification."}
                         </span>
                       </div>
@@ -1423,7 +1423,7 @@ const DonatePage = () => {
                         <div className="flex items-center gap-2.5 rounded-xl bg-card border border-border/70 p-2.5 sm:p-3">
                           <ShieldCheck className="h-4 w-4 sm:h-5 sm:w-5 text-secondary shrink-0" />
                           <div>
-                            <p className="text-xs font-black text-primary">{lang === "ar" ? "حماية ثلاثية الأبعاد" : "3D Secure"}</p>
+                            <p className="text-xs font-black text-primary">{lang === "ar" ? "حماية 3D Secure" : "3D Secure"}</p>
                             <p className="text-[10px] sm:text-[10.5px] text-muted-foreground">{lang === "ar" ? "دفع بنكي مشفّر 100%" : "Encrypted payment"}</p>
                           </div>
                         </div>
@@ -1483,7 +1483,7 @@ const DonatePage = () => {
                             type="text"
                             value={methodFields.pickupTime}
                             onChange={(e) => setMethodFields((f) => ({ ...f, pickupTime: e.target.value }))}
-                            placeholder={lang === "ar" ? "صباحاً / مساءً" : "Morning / Evening"}
+                            placeholder={lang === "ar" ? "صباحًا / مساءً" : "Morning / Evening"}
                             className="h-10 sm:h-10.5 rounded-xl bg-card border-border/70 text-xs sm:text-sm font-bold focus:border-secondary focus:ring-2 focus:ring-secondary/20"
                           />
                         </div>
@@ -1511,7 +1511,7 @@ const DonatePage = () => {
                         <Truck className="h-4 w-4 text-secondary shrink-0" />
                         <span>
                           {lang === "ar"
-                            ? "خدمة الاستلام المنزلي مجانية بالكامل، وسيقوم مندوبنا بتسليمك إيصال رسمي معتمد عند الاستلام."
+                            ? "خدمة الاستلام المنزلي مجانية بالكامل، وسيسلّمك مندوبنا إيصالًا رسميًا معتمدًا عند الاستلام."
                             : "Home pickup is completely free, and our delegate will provide an official receipt."}
                         </span>
                       </div>
@@ -1593,7 +1593,7 @@ const DonatePage = () => {
                           toast({
                             variant: "destructive",
                             title: lang === "ar" ? "تعذر فتح بوابة الدفع" : "Payment gateway error",
-                            description: err?.message || (lang === "ar" ? "يرجى تجربة وسيلة دفع أخرى أو المحاولة لاحقاً" : "Please try another method"),
+                            description: err?.message || (lang === "ar" ? "يُرجى تجربة وسيلة دفع أخرى أو المحاولة لاحقًا" : "Please try another method"),
                           });
                         } finally {
                           setProcessing(false);
@@ -1608,7 +1608,7 @@ const DonatePage = () => {
                     {processing ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin me-1.5" />
-                        {lang === "ar" ? "جاري المعالجة..." : "Processing..."}
+                        {lang === "ar" ? "جارٍ المعالجة..." : "Processing..."}
                       </>
                     ) : (
                       <>
@@ -1643,7 +1643,7 @@ const DonatePage = () => {
                   <div className="py-12">
                     <Loader2 className="mx-auto h-12 w-12 animate-spin text-secondary" />
                     <p className="mt-4 text-base sm:text-lg font-bold text-primary">
-                      {lang === "ar" ? "جاري تسجيل التبرع..." : "Recording donation..."}
+                      {lang === "ar" ? "جارٍ تسجيل التبرع..." : "Recording donation..."}
                     </p>
                   </div>
                 ) : (
@@ -1656,11 +1656,11 @@ const DonatePage = () => {
                     </div>
 
                     <h2 className="mt-2 sm:mt-3 text-xl sm:text-2xl font-black text-primary md:text-3xl">
-                      {lang === "ar" ? "جزاك الله خيراً!" : "May God reward you!"}
+                      {lang === "ar" ? "جزاك الله خيرًا!" : "May God reward you!"}
                     </h2>
                     <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-muted-foreground max-w-md mx-auto font-medium">
                       {lang === "ar"
-                        ? "تم تسجيل طلب تبرعك بنجاح. سنقوم بتأكيد الاستلام والتواصل معك عبر الواتساب."
+                        ? "تم تسجيل طلب تبرعك بنجاح. سنؤكد الاستلام ونتواصل معك عبر واتساب."
                         : "Your donation has been recorded. We will confirm receipt and reach out via WhatsApp."}
                     </p>
 
@@ -1668,7 +1668,7 @@ const DonatePage = () => {
                     <div className="mt-3.5 inline-flex items-center justify-center gap-2 rounded-2xl bg-secondary/15 border border-secondary/35 px-4 py-2.5 text-xs sm:text-sm font-black text-slate-900 dark:text-secondary shadow-xs">
                       <span>
                         {lang === "ar"
-                          ? "تقبل الله تبرعاتكم.. صدقة مباركة وأجرٌ دائم بإذن الله 💚 🤲"
+                          ? "تقبّل الله تبرعكم، وجعله صدقة مباركة وأجرًا دائمًا بإذن الله 💚 🤲"
                           : "May Allah accept your donations.. A blessed continuous charity 💚 🤲"}
                       </span>
                     </div>

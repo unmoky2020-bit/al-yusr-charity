@@ -126,7 +126,7 @@ const AtharMain = () => {
               >
                 <Heart className="h-5 w-5" /> {isAr ? "جهّز الشنطة وتبرّع" : "Pack it and donate"}
               </Link>
-              {total === 0 && <p className="mt-2 text-center text-xs text-primary-foreground/70">{isAr ? "اختر بنداً واحداً على الأقل" : "Pick at least one item"}</p>}
+              {total === 0 && <p className="mt-2 text-center text-xs text-primary-foreground/70">{isAr ? "اختر بندًا واحدًا على الأقل" : "Pick at least one item"}</p>}
             </div>
           </div>
 
@@ -189,7 +189,7 @@ const AtharMain = () => {
                   <li key={n.id} className="flex items-center justify-between gap-3 border-b border-border py-3 last:border-0">
                     <span className="font-bold text-primary">{t(n.title)}</span>
                     <span className={`rounded-md px-2.5 py-1 text-xs font-black ${live ? "bg-secondary/25 text-primary" : "bg-accent/15 text-accent"}`}>
-                      {live ? (isAr ? "تعمل" : "Open") : (isAr ? "جاري التجهيز" : "In preparation")}
+                      {live ? (isAr ? "تعمل" : "Open") : (isAr ? "جارٍ التجهيز" : "In preparation")}
                     </span>
                   </li>
                 );
@@ -241,7 +241,7 @@ const AtharMain = () => {
               );
             })}
             <a href={waHref(isAr, "كفالة تعليمية صدقة جارية عن متوفى", "a dedicated education sponsorship")} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[44px] items-center gap-2 text-sm font-black text-secondary underline underline-offset-4 hover:text-primary-foreground sm:col-span-2">
-              <WhatsAppIcon className="h-4 w-4" /> {isAr ? "أرسل لنا اسم من تنوي عنه" : "Send us the name to dedicate it"}
+              <WhatsAppIcon className="h-4 w-4" /> {isAr ? "أرسل لنا اسم من تنوي الصدقة عنه" : "Send us the name to dedicate it"}
             </a>
           </div>
         </div>
@@ -285,10 +285,10 @@ const AtharLanding = () => {
       titleEn={page?.title.en ?? ""}
       taglineAr={page?.lead?.ar ?? ""}
       taglineEn={page?.lead?.en ?? ""}
-      metaDescAr="شارك في حملة أَثَر التعليمية مع مؤسسة اليسر: شنط وأدوات مدرسية، زي مدرسي، سداد مصروفات، مبادرة تدوير الكتب 'أثر يتوارث'، ودور تحفيظ القرآن وحضانات نموذجية بالدقهلية."
+      metaDescAr="شارك في حملة أَثَر التعليمية مع مؤسسة اليسر: شنط وأدوات مدرسية، زي مدرسي، سداد المصروفات الدراسية، ومبادرة تدوير الكتب «أثر يتوارث»، ودور تحفيظ القرآن وحضانات نموذجية بالدقهلية."
       metaDescEn="Join Al-Yusr's Athar Education Campaign: school bags, supplies, uniforms, tuition sponsorship, textbook recycling, and Quranic pre-schools across Dakahlia, Egypt."
       heroImage={images("hero")[0]?.src ?? posterEdu}
-      heroAlt="حملة أثر التعليمية - شنط وأدوات مدرسية وكفالة مصاريف للطلاب المستحقين"
+      heroAlt="حملة أثر التعليمية - شنط وأدوات مدرسية وكفالة مصروفات للطلاب المستحقين"
       hero={<AtharHero />}
       main={<AtharMain />}
       relatedLinks={[

@@ -239,8 +239,8 @@ const ArbounLanding = () => {
             "@graph": [
               {
                 "@type": "NGO",
-                name: "مؤسسة اليسر للتنمية",
-                alternateName: ["مؤسسة اليسر الخيرية", "جمعية اليسر", "Al-Yusr Charity Foundation"],
+                name: "مؤسسة اليسر الخيرية",
+                alternateName: ["مؤسسة اليسر", "جمعية اليسر", "Al-Yusr Charity Foundation"],
                 url: "https://elyusr.org/",
                 logo: "https://elyusr.org/logo-512.png",
                 telephone: "+201097000137",
@@ -261,7 +261,7 @@ const ArbounLanding = () => {
                 "@type": "DonateAction",
                 name: isRTL ? "تبرع لمبادرة عربون خير" : "Donate to Arboun Khair",
                 description: isRTL ? "استقطع عربون بركة من أرباح مشروعك" : "Pledge a share of your project revenue",
-                recipient: { "@type": "NGO", name: "مؤسسة اليسر للتنمية", url: "https://elyusr.org/" },
+                recipient: { "@type": "NGO", name: "مؤسسة اليسر الخيرية", url: "https://elyusr.org/" },
                 target: `https://elyusr.org${DONATE}`,
               },
               {

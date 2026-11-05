@@ -122,7 +122,7 @@ const DayPlanner = () => {
               <Link to={amountHref(DONATE, special === "arafah" ? amount("arafah_iftar", 95) : dayAmount)} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-grad px-6 py-3.5 text-sm font-black text-accent-foreground shadow-cta transition hover:opacity-95">
                 <Heart className="h-5 w-5" />
                 {special === "arafah"
-                  ? (isAr ? `فطّر صائم بـ ${fmtNum(amount("arafah_iftar", 95), true)} ج` : `Give an iftar for EGP ${fmtNum(amount("arafah_iftar", 95), false)}`)
+                  ? (isAr ? `فطّر صائمًا بـ ${fmtNum(amount("arafah_iftar", 95), true)} ج` : `Give an iftar for EGP ${fmtNum(amount("arafah_iftar", 95), false)}`)
                   : (isAr ? `تصدّق اليوم بـ ${fmtNum(dayAmount, true)} ج` : `Give today: EGP ${fmtNum(dayAmount, false)}`)}
               </Link>
             )}
@@ -160,7 +160,7 @@ const AshrMain = () => {
       {/* What to give */}
       <section className="bg-muted/30 py-16 md:py-20">
         <div className="container mx-auto max-w-6xl px-4">
-          <h2 className="text-center text-3xl font-black text-primary md:text-4xl">{isAr ? "اختار صدقتك في العشر" : "Choose your charity for the ten days"}</h2>
+          <h2 className="text-center text-3xl font-black text-primary md:text-4xl">{isAr ? "اختر صدقتك في العشر" : "Choose your charity for the ten days"}</h2>
           <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {c.prices.map((p) => (
               <Link key={p.id} to={amountHref(DONATE, p.amount)} className="group flex flex-col rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-secondary/60 hover:shadow-card">
@@ -169,7 +169,7 @@ const AshrMain = () => {
                 <span className="mt-4 text-3xl font-black tabular-nums text-accent">
                   {fmtNum(p.amount, isAr)} <span className="text-sm font-bold text-muted-foreground">{isAr ? "جنيه" : "EGP"}</span>
                 </span>
-                <span className="mt-2 text-xs font-black text-accent group-hover:underline">{isAr ? "تبرع بالمبلغ ده ←" : "Give this amount →"}</span>
+                <span className="mt-2 text-xs font-black text-accent group-hover:underline">{isAr ? "تبرّع بهذا المبلغ ←" : "Give this amount →"}</span>
               </Link>
             ))}
           </div>

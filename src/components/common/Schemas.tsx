@@ -34,7 +34,7 @@ export const SiteSchemas = () => (
           url: "https://elyusr.org/",
           logo: { "@type": "ImageObject", url: "https://elyusr.org/logo.png", width: 512, height: 512 },
           image: "https://elyusr.org/og-image.jpg",
-          description: "مؤسسة اليسر الخيرية — مؤسسة خيرية مصرية مشهرة (رقم 2665) بالمنصورة، الدقهلية. تعمل في رعاية الأيتام والأرامل وتوزيع الصدقات والزكاة وصكوك الأضحية والمساعدات الشهرية للأسر المستحقة. مؤسسة اليسر هي المرجع الخيري الموثوق في المنصورة والدقهلية.",
+          description: "مؤسسة اليسر الخيرية — مؤسسة خيرية مصرية مشهرة (رقم 2665) تعمل في محافظات مصر، ومقرها الرئيسي في المنصورة بمحافظة الدقهلية. تعمل في رعاية الأيتام والأرامل وتوزيع الصدقات والزكاة وصكوك الأضحية والمساعدات الشهرية للأسر المستحقة.",
           foundingDate: "2019",
           nonprofitStatus: "NonprofitType",
           taxID: "2665/2019",
@@ -55,12 +55,12 @@ export const SiteSchemas = () => (
             "https://wa.me/201097000137",
           ],
           areaServed: [
+            { "@type": "Country", name: "مصر" },
             { "@type": "AdministrativeArea", name: "محافظة الدقهلية" },
             { "@type": "City", name: "المنصورة" },
-            { "@type": "Country", name: "مصر" },
           ],
           knowsAbout: [
-            "اليسر", "مؤسسة اليسر", "مؤسسة خيرية بالمنصورة",
+            "اليسر", "مؤسسة اليسر", "مؤسسة خيرية في مصر", "مؤسسة خيرية في المنصورة",
             "صدقة جارية", "زكاة المال", "كفالة أيتام", "صك أضحية",
             "كرتونة عيد", "توزيع لحوم", "إيواء أسر", "علاج مرضى",
             "تيسير زواج", "سقيا الماء", "تعليم وكفالة طلاب",
@@ -93,7 +93,12 @@ export const SiteSchemas = () => (
           name: "مؤسسة اليسر الخيرية",
           alternateName: ["اليسر", "مؤسسة اليسر", "جمعية اليسر", "اليسر المنصورة", "مؤسسة اليسر المنصورة", "جمعية اليسر الخيرية بالمنصورة", "Al-Yusr Charity Mansoura"],
           parentOrganization: { "@id": "https://elyusr.org/#org" },
-          description: "مؤسسة اليسر الخيرية — توزيع الصدقات والزكاة وصكوك الأضحية وكفالة الأيتام في المنصورة والدقهلية. رقم التسجيل 2665.",
+          description: "المقر الرئيسي لمؤسسة اليسر الخيرية في المنصورة — مؤسسة مصرية تعمل في محافظات مصر في الصدقات والزكاة وصكوك الأضحية وكفالة الأيتام. رقم التسجيل 2665.",
+          areaServed: [
+            { "@type": "Country", name: "مصر" },
+            { "@type": "AdministrativeArea", name: "محافظة الدقهلية" },
+            { "@type": "City", name: "المنصورة" },
+          ],
           image: "https://elyusr.org/og-image.jpg",
           url: "https://elyusr.org/",
           telephone: "+201097000137",
@@ -141,7 +146,7 @@ export const SiteSchemas = () => (
               "@type": "DonateAction",
               target: "https://elyusr.org/donate",
               name: "تبرع لمؤسسة اليسر الخيرية الآن",
-              description: "تبرع آمن وموثق عبر الإنترنت لمؤسسة اليسر الخيرية في المنصورة."
+              description: "تبرع آمن وموثق عبر الإنترنت لمؤسسة اليسر الخيرية من أي مكان في مصر."
             }
           ],
         },
@@ -193,8 +198,8 @@ export const QurbaniSchema = () => (
       offers: {
         "@type": "AggregateOffer",
         priceCurrency: "EGP",
-        lowPrice: "1400",
-        highPrice: "32000",
+        lowPrice: "14000",
+        highPrice: "16000",
         offerCount: 3,
         availability: "https://schema.org/InStock",
         url: "https://elyusr.org/donate?program=odhya",

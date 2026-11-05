@@ -67,10 +67,10 @@ const Zakat = () => {
       }));
     }
     return isRTL ? [
-      { q: "هل سعر الذهب في الحاسبة لحظي؟", a: "نعم، نسحب سعر الأونصة العالمي وسعر الدولار مقابل الجنيه آنيًا، ونحتسب الجرام عيار 24/21/18 تلقائيًا. تقدر تحدّثه يدويًا أيضًا." },
-      { q: "ما الفرق بين زكاة المال وزكاة الفطر؟", a: "زكاة المال 2.5% من صافي مالك إذا بلغ النصاب وحال عليه الحول. زكاة الفطر صاع من غالب القوت أو قيمته النقدية عن كل فرد قبل صلاة العيد." },
+      { q: "هل سعر الذهب في الحاسبة لحظي؟", a: "نعم، نسحب سعر الأونصة العالمي وسعر الدولار مقابل الجنيه آنيًا، ونحتسب سعر الجرام لعيارات 24/21/18 تلقائيًا، ويمكنك تحديثه يدويًا أيضًا." },
+      { q: "ما الفرق بين زكاة المال وزكاة الفطر؟", a: "زكاة المال 2.5% من صافي مالك إذا بلغ النصاب وحال عليه الحول، أما زكاة الفطر فهي صاع من غالب القوت أو قيمته النقدية عن كل فرد قبل صلاة العيد." },
       { q: "هل تُخصم الديون من وعاء الزكاة؟", a: "نعم، الديون المستحقة عليك حاليًا تُخصم. أما الأقساط طويلة المدى فيُخصم منها قسط السنة." },
-      { q: "هل اليسر تستحق الزكاة؟", a: "نوجّه زكاتك مباشرة لمصارفها الشرعية الثمانية: الفقراء، المساكين، الغارمين، وفي الرقاب… عبر حالات موثّقة بأبحاث ميدانية." },
+      { q: "هل يجوز إخراج الزكاة عبر مؤسسة اليسر؟", a: "نوجّه زكاتك مباشرة لمصارفها الشرعية الثمانية: الفقراء، المساكين، الغارمين، وفي الرقاب… عبر حالات موثّقة بأبحاث ميدانية." },
       { q: "كيف أتأكد أن زكاتي وصلت؟", a: "تصلك تقارير صور وفيديو، ويمكنك زيارة الأسرة بنفسك أو طلب تقرير الأثر من فريق الشفافية." },
     ] : [
       { q: "Is the gold price in the calculator live?", a: "Yes — we fetch the global ounce price and USD/EGP rate in real time and compute 24/21/18K gram prices automatically. Manual override is supported." },
@@ -130,7 +130,7 @@ const Zakat = () => {
   const types = isRTL
     ? [
         { icon: Coins,   t: "زكاة المال",          d: "ربع العشر (2.5%) على المال إذا بلغ النصاب وحال عليه الحول." },
-        { icon: Banknote,t: "زكاة عروض التجارة",   d: "تُقوَّم البضاعة بسعر السوق يوم وجوب الزكاة وتُضاف للنقد." },
+        { icon: Banknote,t: "زكاة عروض التجارة",   d: "تُقوَّم البضاعة بسعر السوق يوم وجوب الزكاة وتُضاف إلى النقد." },
         { icon: Wheat,   t: "زكاة الزروع والثمار", d: "العُشر فيما سُقي بلا كلفة، ونصف العُشر فيما سُقي بكلفة." },
         { icon: Sprout,  t: "زكاة الفطر",          d: "صاع من غالب قوت البلد عن كل فرد قبل صلاة العيد." },
         { icon: ShieldCheck, t: "النذور والكفارات", d: "تُخرج عن الأيمان والكفارات حسب نوعها وسبب وجوبها." },
@@ -162,8 +162,8 @@ const Zakat = () => {
   return (
     <PageLayout>
       <SEOHelmet
-        title={isRTL ? "حاسبة الزكاة 2026 بسعر الذهب اليوم | مؤسسة اليسر" : "Zakat Calculator 2026 — Live Gold Price (Dakahlia) | Al-Yusr"}
-        description={isRTL ? "احسب زكاتك أونلاين بسعر الذهب الحي في مصر اليوم (24/21/18 قيراط)، زكاة المال والتجارة والفطر، واصرفها في أبواب موثّقة بالدقهلية والمنصورة: كفالة يتيم، علاج، سداد ديون الغارمين، ومشاريع صغيرة عبر مؤسسة اليسر." : "Calculate Zakat online with Egypt's live gold price (24/21/18K), wealth, business and Zakat al-Fitr, then channel it through verified causes in Dakahlia & Mansoura via Al-Yusr."}
+        title={isRTL ? "حاسبة زكاة المال 2026 بسعر الذهب اليوم في مصر | اليسر" : "Zakat Calculator Egypt 2026 — Live Gold Price | Al-Yusr"}
+        description={isRTL ? "احسب زكاة المال أونلاين بسعر الذهب اليوم في مصر (24/21/18 قيراط)، وزكاة التجارة والفطر، وأخرجها في أبواب موثّقة في المنصورة والدقهلية ومحافظات مصر: كفالة يتيم، علاج، سداد ديون الغارمين، ومشاريع صغيرة." : "Calculate Zakat online with Egypt's live gold price (24/21/18K), wealth, business and Zakat al-Fitr, then give it through verified causes in Mansoura, Dakahlia and across Egypt via Al-Yusr."}
         path="/zakat"
       />
       <SiteSchemas />
@@ -402,7 +402,7 @@ const Zakat = () => {
             </h2>
             <p className="mx-auto mt-3 max-w-[52ch] text-[15px] leading-relaxed text-muted-foreground sm:text-base">
               {isRTL
-                ? "نحن لا نمنح إعانة، بل نصنع حياة. زكاتك تتحوّل إلى غذاء يحفظ الكرامة، علاج يعيد الأمل، وتعليم يكسر دائرة الفقر."
+                ? "نحن لا نمنح إعانة، بل نصنع حياة. زكاتك تتحوّل إلى غذاء يحفظ الكرامة، وعلاج يعيد الأمل، وتعليم يكسر دائرة الفقر."
                 : "We don't hand out aid — we rebuild lives. Your Zakat becomes food, healthcare and education that break the cycle of poverty."}
             </p>
           </header>
@@ -411,7 +411,7 @@ const Zakat = () => {
               { img: imgFood, number: "01", donateSlug: "box", href: "/axes/food",
                 tag: isRTL ? "محور الإطعام" : "Food pillar", title: isRTL ? "الغذاء" : "Food",
                 desc: isRTL ? "أمان غذائي لكل أسرة مستحقة عبر مزارعنا الوقفية ومطابخ اليسر الدائمة." : "Food security via endowment farms & permanent Al-Yusr kitchens.",
-                bullets: isRTL ? ["كرتونة الغذاء الشهرية + كيلو لحمة بلدي", "مطبخ يومي بآلاف الوجبات الساخنة", "أكثر من 5 طن لحوم سنويًا"] : ["Monthly box + 1kg farm meat", "Daily kitchen, thousands of hot meals", "5+ tons of meat per year"],
+                bullets: isRTL ? ["كرتونة الغذاء الشهرية + كيلو لحم بلدي", "مطبخ يومي بآلاف الوجبات الساخنة", "أكثر من 5 أطنان من اللحوم سنويًا"] : ["Monthly box + 1kg farm meat", "Daily kitchen, thousands of hot meals", "5+ tons of meat per year"],
                 accent: "bg-secondary text-secondary-foreground" },
               { img: imgHealth, number: "02", donateSlug: "treatment", href: "/axes/health",
                 tag: isRTL ? "محور الصحة" : "Health pillar", title: isRTL ? "الصحة" : "Healthcare",
@@ -420,7 +420,7 @@ const Zakat = () => {
                 accent: "bg-accent text-accent-foreground" },
               { img: imgEdu, number: "03", donateSlug: "education", href: "/axes/education",
                 tag: isRTL ? "محور التعليم" : "Education pillar", title: isRTL ? "التعليم" : "Education",
-                desc: isRTL ? "محاربة الفقر الأول بالعلم وتأمين مستقبل الأجيال داخل مجمّعنا التعليمي." : "Fighting poverty with knowledge inside our educational complex.",
+                desc: isRTL ? "محاربة الفقر بالعلم أولًا، وتأمين مستقبل الأجيال داخل مجمّعنا التعليمي." : "Fighting poverty with knowledge inside our educational complex.",
                 bullets: isRTL ? ["كفالة تعليمية لـ 354 طالبًا", "دروس ومتابعة داخل المجمّع", "حقائب وأدوات لكل عام دراسي"] : ["Sponsorship for 354 students", "Tutoring inside our complex", "Backpacks & tools each year"],
                 accent: "bg-primary text-primary-foreground" },
             ].map((p, idx) => (
@@ -485,8 +485,8 @@ const Zakat = () => {
               { icon: Droplets, t: isRTL ? "سهم سُقيا الماء" : "Water share", d: isRTL ? "وصلة مياه أو حفر بئر." : "Water connection or well.", to: "/programs/water" },
               { icon: HomeIcon, t: isRTL ? "سهم سَتر" : "Shelter share (Satr)", d: isRTL ? "تسقيف وترميم منزل لأسرة." : "Roof and home repair for a family.", to: "/programs/shelter" },
               { icon: Wheat, t: isRTL ? "كرتونة الخير 25 كيلو" : "Food box 25kg", d: isRTL ? "إطعام أسرة لمدة شهر كامل." : "Feed a family for a full month.", to: "/programs/box" },
-              { icon: Coins, t: isRTL ? "صك الأضحية" : "Qurbani share", d: isRTL ? "لحوم بلدي من مزارعنا — بدون ربح." : "Farm-fresh meat at cost — no margin.", to: "/qurbani" },
-              { icon: HandHeart, t: isRTL ? "تيسير عروسة" : "Bride preparation", d: isRTL ? "تجهيز يتيمة بأجهزة ومستلزمات بيتها." : "Outfitting an orphan bride's home.", to: "/programs/bride" },
+              { icon: Coins, t: isRTL ? "صك الأضحية" : "Qurbani share", d: isRTL ? "لحوم بلدي من مزارعنا دون ربح." : "Farm-fresh meat at cost — no margin.", to: "/qurbani" },
+              { icon: HandHeart, t: isRTL ? "تجهيز عروس" : "Bride preparation", d: isRTL ? "تجهيز يتيمة بأجهزة ومستلزمات بيتها." : "Outfitting an orphan bride's home.", to: "/programs/bride" },
               { icon: Stethoscope, t: isRTL ? "سهم العلاج" : "Treatment share", d: isRTL ? "دواء أو عملية جراحية عاجلة." : "Medication or urgent surgery.", to: "/cases?cat=medication" },
             ].map(({ icon: Icon, t, d, to }) => (
               <Link key={t} to={to} className="group rounded-3xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-1 hover:shadow-card">
@@ -507,10 +507,10 @@ const Zakat = () => {
           <h2 className="text-center text-2xl font-black text-primary md:text-3xl">{isRTL ? "مواسم الخير في اليسر" : "Al-Yusr seasons of giving"}</h2>
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             {[
-              { t: isRTL ? "موسم الشتاء — حملة ستر" : "Winter — Satr campaign", d: isRTL ? "من أكتوبر لفبراير: لحاف، مراتب، كسوة، أسقف، أبواب وشبابيك. «من ستر مسلماً ستره الله»." : "Oct–Feb: blankets, mattresses, clothing, roofs, doors and windows." },
-              { t: isRTL ? "موسم الصيف — حملة ظل" : "Summer — Shade campaign", d: isRTL ? "وصلات مياه، تركيب مراوح من «مركون»، ومشروبات باردة لعمال الشمس." : "Water hookups, refurbished fans, and cold drinks for outdoor workers." },
-              { t: isRTL ? "رمضان المبارك" : "Holy Ramadan", d: isRTL ? "كرتونة 25 كيلو، مطبخ اليسر، لحوم مزارعنا الوقفية، زكاة المال والفطر." : "25kg box, Al-Yusr kitchen, endowment-farm meat, Zakat al-mal and Fitr." },
-              { t: isRTL ? "عيد الأضحى — تيسير الطاعة" : "Eid al-Adha", d: isRTL ? "ربط المضحي بالمستحق مباشرة، أكثر من 2 طن لحوم سنويًا للأسر المتعففة." : "Direct link between the donor and beneficiary, 2+ tons of meat yearly." },
+              { t: isRTL ? "موسم الشتاء — حملة ستر" : "Winter — Satr campaign", d: isRTL ? "من أكتوبر إلى فبراير: ألحفة ومراتب وكسوة وأسقف وأبواب وشبابيك. «من ستر مسلماً ستره الله»." : "Oct–Feb: blankets, mattresses, clothing, roofs, doors and windows." },
+              { t: isRTL ? "موسم الصيف — حملة ظل" : "Summer — Shade campaign", d: isRTL ? "وصلات مياه، وتركيب مراوح من «مركون»، ومشروبات باردة للعاملين تحت الشمس." : "Water hookups, refurbished fans, and cold drinks for outdoor workers." },
+              { t: isRTL ? "رمضان المبارك" : "Holy Ramadan", d: isRTL ? "كرتونة 25 كيلو، ومطبخ اليسر، ولحوم مزارعنا الوقفية، وزكاة المال والفطر." : "25kg box, Al-Yusr kitchen, endowment-farm meat, Zakat al-mal and Fitr." },
+              { t: isRTL ? "عيد الأضحى — تيسير الطاعة" : "Eid al-Adha", d: isRTL ? "ربط المضحّي بالمستحق مباشرة، وأكثر من 5 أطنان من اللحوم سنويًا للأسر المتعففة." : "Direct link between the donor and beneficiary, 5+ tons of meat yearly." },
             ].map(s => (
               <article key={s.t} className="rounded-3xl border border-border bg-card p-5 shadow-soft">
                 <h3 className="text-base font-black text-primary">{s.t}</h3>
@@ -527,11 +527,11 @@ const Zakat = () => {
           <h2 className="text-center text-2xl font-black text-primary md:text-3xl">{isRTL ? "سجل الإنجازات منذ 2019" : "Track record since 2019"}</h2>
           <ol className="relative mt-8 space-y-6 border-s-2 border-secondary/30 ps-6">
             {[
-              { y: "2019–2021", t: isRTL ? "التأسيس" : "Foundation", d: isRTL ? "انطلاق قوافل الدقهلية، تأمين 42 منزلًا بالعاصفرة، وتوفير الأكسجين لـ 37 أسرة في كورونا." : "Dakahlia convoys begin, 42 homes secured, oxygen for 37 families during COVID." },
-              { y: "2022", t: isRTL ? "الانتشار" : "Expansion", d: isRTL ? "بناء مسجد الفيوم، 1200 شنطة رمضان، وتسقيف 40 منزلًا في شهر." : "Fayoum mosque built, 1,200 Ramadan boxes, 40 roofs in one month." },
+              { y: "2019–2021", t: isRTL ? "التأسيس" : "Foundation", d: isRTL ? "انطلاق قوافل الدقهلية، وتأمين 42 منزلًا بالعاصفرة، وتوفير الأكسجين لـ 37 أسرة خلال جائحة كورونا." : "Dakahlia convoys begin, 42 homes secured, oxygen for 37 families during COVID." },
+              { y: "2022", t: isRTL ? "الانتشار" : "Expansion", d: isRTL ? "بناء مسجد الفيوم، و1200 شنطة رمضان، وتسقيف 40 منزلًا في شهر واحد." : "Fayoum mosque built, 1,200 Ramadan boxes, 40 roofs in one month." },
               { y: "2023", t: isRTL ? "المشاريع الكبرى" : "Major projects", d: isRTL ? "خط مياه 750م بالمنزلة، ومجمّع خدمي طبي وتعليمي من 4 طوابق." : "750m water main in Al-Manzala, 4-floor medical & educational complex." },
-              { y: "2024", t: isRTL ? "الاستدامة" : "Sustainability", d: isRTL ? "كرتونة 12 كيلو المكثفة، وتسقيف 11 منزلًا واسعًا بالحفير." : "Compact 12kg box launched, 11 large roofs in Al-Hafeer." },
-              { y: "2025", t: isRTL ? "عام القمة" : "Peak year", d: isRTL ? "1100 كرتونة + 5 طن لحوم، تسقيف 70 منزلًا (8361 م²)، 100 وصلة مياه، إعمار 20 مسجدًا، 9 عرائس، كفالة 354 طالبًا، ودعم 700 أسرة." : "1,100 boxes + 5t meat, 70 roofs (8,361m²), 100 water hookups, 20 mosques, 9 brides, 354 students, 700 families." },
+              { y: "2024", t: isRTL ? "الاستدامة" : "Sustainability", d: isRTL ? "إطلاق كرتونة 12 كيلو المكثفة، وتسقيف 11 منزلًا واسعًا بالحفير." : "Compact 12kg box launched, 11 large roofs in Al-Hafeer." },
+              { y: "2025", t: isRTL ? "عام القمة" : "Peak year", d: isRTL ? "1400 كرتونة + 5 أطنان من اللحوم، وتسقيف 70 منزلًا (8361 م²)، 385 وصلة مياه، إعمار 20 مسجدًا، 9 عرائس، كفالة 354 طالبًا، ودعم 700 أسرة." : "1,400 boxes + 5t meat, 70 roofs (8,361m²), 385 water hookups, 20 mosques, 9 brides, 354 students, 700 families." },
             ].map(it => (
               <li key={it.y} className="relative">
                 <span className="absolute -start-[34px] mt-1 grid h-5 w-5 place-items-center rounded-full bg-secondary text-secondary-foreground text-[10px] font-black">●</span>
@@ -549,7 +549,7 @@ const Zakat = () => {
         <div className="container mx-auto max-w-5xl px-4">
           <h2 className="text-center text-2xl font-black text-primary md:text-3xl">{isRTL ? "خريطة عملنا في مصر" : "Our coverage across Egypt"}</h2>
           <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-muted-foreground">
-            {isRTL ? "تواجد دائم في 5 محافظات + استجابة عاجلة لكل ربوع مصر." : "Permanent teams in 5 governorates + urgent response across Egypt."}
+            {isRTL ? "وجود دائم في 5 محافظات، واستجابة عاجلة في كل ربوع مصر." : "Permanent teams in 5 governorates + urgent response across Egypt."}
           </p>
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[
@@ -643,14 +643,14 @@ const Zakat = () => {
         <div className="container relative mx-auto max-w-3xl px-4 pt-14 pb-28 sm:pb-36 md:pt-20 md:pb-44 text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[11px] font-extrabold backdrop-blur">
             <Sparkles className="h-3.5 w-3.5 text-secondary" />
-            {isRTL ? "زكاتك تصل لأهلها" : "Your Zakat reaches its rightful people"}
+            {isRTL ? "زكاتك تصل إلى أهلها" : "Your Zakat reaches its rightful people"}
           </span>
           <h2 className="mt-3 text-2xl font-black leading-tight text-shadow-soft md:text-4xl">
             {isRTL ? "أمانة موثّقة بالصور والفيديو" : "A trust — documented with photos and video"}
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm text-primary-foreground/85 md:text-base">
             {isRTL
-              ? "كل جنيه يُصرف يُعرض للمتبرع: التاريخ، المكان، الأسرة، والأثر — بدون رمزية ولا اختصار."
+              ? "نعرض على المتبرع تفاصيل كل جنيه يُصرف: التاريخ والمكان والأسرة والأثر، بوضوح ودون اختصار."
               : "Every EGP is reported back to the donor: date, place, family, impact — never symbolic."}
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">

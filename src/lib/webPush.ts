@@ -34,7 +34,7 @@ export async function enablePush(): Promise<PushStatus> {
   if (permission !== "granted") return permission === "denied" ? "denied" : "off";
 
   const { public_key } = await apiFetch<{ public_key?: string }>("/push/public-key", { useCache: false });
-  if (!public_key) throw new Error("مفتاح الإشعارات مش متظبط على السيرفر");
+  if (!public_key) throw new Error("مفتاح الإشعارات غير مضبوط على الخادم");
 
   const reg = await registration();
   await navigator.serviceWorker.ready;

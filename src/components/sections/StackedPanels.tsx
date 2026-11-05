@@ -20,10 +20,10 @@ export const StackedPanels = () => {
 
   const stations = isAR
     ? [
-        { tag: "البداية", title: "كرتونة خير", text: "كل تبرع يبدأ بكرتونة: طعام وكساء ودواء — نجمعها بجودة، نوثّقها بالصور، ونوصّلها لباب البيت بأمانة.", img: imgCarton, icon: Package, accent: "from-secondary/30 to-primary/10" },
-        { tag: "في الطريق", title: "قافلة على الدرب", text: "قافلة اليسر تتحرّك من المنصورة لكل قرى الدقهلية ومحافظات مصر — توثيق بالصوت والصورة في كل محطة.", img: imgVan, icon: Truck, accent: "from-sky-400/20 to-indigo-500/10" },
-        { tag: "بسمة يتيم", title: "كفالة كاملة", text: "كفالة، علاج، تعليم وكساء — رعاية متكاملة لكل طفل يستحق الفرصة.", img: imgOrphans, icon: HandHeart, accent: "from-rose-400/25 to-amber-400/10" },
-        { tag: "النهاية", title: "عيلة في أمان", text: "وصلت الكرتونة. وصلت البسمة. شكرًا إنّك جزء من القصة.", img: imgFamily, icon: Smile, accent: "from-emerald-400/25 to-teal-400/10" },
+        { tag: "البداية", title: "كرتونة خير", text: "كل تبرع يبدأ بكرتونة: طعام وكساء ودواء — نجهّزها بجودة عالية، ونوثّقها بالصور، ونوصلها إلى باب البيت بأمانة.", img: imgCarton, icon: Package, accent: "from-secondary/30 to-primary/10" },
+        { tag: "في الطريق", title: "قافلة على الدرب", text: "قافلة اليسر تتحرّك من المنصورة إلى كل قرى الدقهلية ومحافظات مصر — توثيق بالصوت والصورة في كل محطة.", img: imgVan, icon: Truck, accent: "from-sky-400/20 to-indigo-500/10" },
+        { tag: "بسمة يتيم", title: "كفالة كاملة", text: "كفالة وعلاج وتعليم وكساء — رعاية متكاملة لكل طفل يستحق الفرصة.", img: imgOrphans, icon: HandHeart, accent: "from-rose-400/25 to-amber-400/10" },
+        { tag: "النهاية", title: "أسرة في أمان", text: "وصلت الكرتونة، ووصلت البسمة. شكرًا لأنك جزء من القصة.", img: imgFamily, icon: Smile, accent: "from-emerald-400/25 to-teal-400/10" },
       ]
     : [
         { tag: "Start", title: "An Aid Carton", text: "Every gift starts with a carton — food, clothing, medicine — packed with care, documented with photos, delivered to the doorstep.", img: imgCarton, icon: Package, accent: "from-secondary/30 to-primary/10" },
@@ -44,11 +44,11 @@ export const StackedPanels = () => {
             {isAR ? "قصة الكرتونة" : "The Carton Story"}
           </span>
           <h2 className="mt-3 text-3xl font-black leading-tight text-foreground sm:text-4xl md:text-5xl">
-            {isAR ? "أربع محطات.. رحلة خير واحدة" : "Four stations.. one journey of goodness"}
+            {isAR ? "أربع محطات… ورحلة خير واحدة" : "Four stations.. one journey of goodness"}
           </h2>
           <p className="mx-auto mt-3 max-w-[58ch] text-[15px] leading-relaxed text-muted-foreground sm:text-base">
             {isAR
-              ? "مرّر للأسفل لتعيش كل محطة من رحلة تبرعك — من الكرتونة الأولى إلى بسمة عيلة في أمان."
+              ? "مرّر للأسفل لتعيش كل محطة من رحلة تبرعك — من الكرتونة الأولى إلى بسمة أسرة في أمان."
               : "Scroll down to live every station of your gift — from the first carton to a family's smile."}
           </p>
         </header>

@@ -195,7 +195,7 @@ export const BrandPromise = () => {
     ? (c.section2_card_title_ar || c.section2_card_cta_title_ar || "كن سبب الفرحة")
     : (c.section2_card_title_en || c.section2_card_cta_title_en || "Be their joy");
   const cardSubtitle = isRTL
-    ? (c.section2_card_subtitle_ar || c.section2_card_cta_sub_ar || "كل تبرع موثّق و كل أثر مرئي")
+    ? (c.section2_card_subtitle_ar || c.section2_card_cta_sub_ar || "كل تبرع موثّق، وكل أثر مرئي")
     : (c.section2_card_subtitle_en || c.section2_card_cta_sub_en || "Every donation tracked, every impact visible");
   const cardLink = c.section2_card_url || c.section2_card_cta_link || "/about#impact";
 

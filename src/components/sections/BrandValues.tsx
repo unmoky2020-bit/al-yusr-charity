@@ -14,7 +14,7 @@ export const BrandValues = () => {
   const pillars = isRTL
     ? [
         { I: Workflow, t: "قوة العمل", d: "نظام قوي يعمل لتحقيق أقصى استفادة للمتبرع." },
-        { I: HeartHandshake, t: "إحسان العطاء", d: "الصدقة لله قبل الفقير." },
+        { I: HeartHandshake, t: "إحسان العطاء", d: "الصدقة تقع في يد الله قبل أن تقع في يد الفقير." },
         { I: ShieldCheck, t: "أمانة التوصيل", d: "صدقتك أمانة نتعامل معها بكل شفافية." },
       ]
     : [
@@ -48,14 +48,14 @@ export const BrandValues = () => {
         <div className="mx-auto max-w-xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary/30 bg-secondary/15 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-secondary">
             <Sparkles className="h-3 w-3" />
-            {isRTL ? "مبدأ نعمل به" : "The principle we work by"}
+            {isRTL ? "مبادئ نعمل بها" : "The principle we work by"}
           </span>
           <h2 className="mt-2 text-xl font-black leading-tight md:text-3xl">
             {isRTL ? "قوة · إحسان · أمانة" : "Strength · Excellence · Trust"}
           </h2>
           <p className="mx-auto mt-1.5 max-w-lg text-[12px] leading-relaxed text-primary-foreground/85 md:text-sm">
             {isRTL
-              ? "تلات مبادئ بنشتغل بيها كل يوم، ونتيجتها واحدة."
+              ? "ثلاثة مبادئ نعمل بها كل يوم، ونتيجتها واحدة."
               : "Three principles we work by every day, with one result."}
           </p>
         </div>

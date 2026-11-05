@@ -23,7 +23,7 @@ const ProfileInner = () => {
     e.preventDefault();
     try {
       await updateProfile(user!.id, { name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim(), bio: form.bio.trim() });
-      toast({ title: lang === "ar" ? " تم تحديث البيانات" : " Profile updated" });
+      toast({ title: lang === "ar" ? "تم تحديث البيانات" : "Profile updated" });
     } catch { /* AuthContext already showed the server error */ }
   };
 
@@ -42,7 +42,7 @@ const ProfileInner = () => {
       return;
     }
     setPwd({ old: "", neu: "", confirm: "" });
-    toast({ title: lang === "ar" ? " تم تغيير كلمة المرور" : " Password changed" });
+    toast({ title: lang === "ar" ? "تم تغيير كلمة المرور" : "Password changed" });
   };
 
   const isAdmin = user!.roles.includes("admin") || user!.roles.includes("editor");

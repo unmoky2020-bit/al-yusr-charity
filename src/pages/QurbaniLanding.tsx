@@ -42,10 +42,10 @@ const QurbaniLanding = () => {
     <PageLayout>
       <SEOHelmet
         title={isAr
-          ? `صك أضحية ${QURBANI_SEASON.year} بالدقهلية | مؤسسة اليسر`
-          : `Qurbani ${QURBANI_SEASON.year} in Dakahlia | Al-Yusr`}
+          ? `صك أضحية ${QURBANI_SEASON.year} في مصر والمنصورة | مؤسسة اليسر`
+          : `Qurbani ${QURBANI_SEASON.year} in Egypt & Mansoura | Al-Yusr`}
         description={isAr
-          ? "احجز صك أضحية مضمون بالدقهلية مع اليسر: معاينة قبل الذبح، توثيق بالصور، وتوزيع يوم العيد على الأسر بالمنصورة."
+          ? "احجز صك أضحية مضمون من أي مكان في مصر مع مؤسسة اليسر: معاينة قبل الذبح، وتوثيق بالصور، وتوزيع يوم العيد على الأسر المستحقة في المنصورة والدقهلية."
           : "Book a verified Qurbani share in Dakahlia with Al-Yusr: pre-slaughter checks, photo proof, and same-day Eid delivery to families in Mansoura."}
         path="/qurbani"
         image={isAr ? "https://elyusr.org/og-qurbani-ar.jpg" : "https://elyusr.org/og-qurbani-en.jpg"}
@@ -87,11 +87,11 @@ const QurbaniLanding = () => {
                 <AlertTriangle className="h-3.5 w-3.5" />
                 {QURBANI_SEASON.bookingOpen
                   ? (isAr ? `حجز صكوك أضحية ${QURBANI_SEASON.year} مفتوح` : `Qurbani ${QURBANI_SEASON.year} booking is open`)
-                  : (isAr ? `حجز صكوك أضحية ${QURBANI_SEASON.year} هيفتح قريب` : `Qurbani ${QURBANI_SEASON.year} booking opens soon`)}
+                  : (isAr ? `حجز صكوك أضحية ${QURBANI_SEASON.year} يُفتح قريبًا` : `Qurbani ${QURBANI_SEASON.year} booking opens soon`)}
               </div>
               <p className="mt-3 text-sm font-bold leading-relaxed text-primary-foreground/90 md:text-base">
                 {isAr
-                  ? "هنعلن ميعاد الحجز هنا. ولحد ده الوقت تقدر تدعم المزرعة الوقفية اللي بتطعّم الأسر طول السنة."
+                  ? "سنعلن موعد الحجز هنا، وحتى ذلك الحين يمكنك دعم المزرعة الوقفية التي تُطعم الأسر طوال العام."
                   : "We'll announce the booking date here. Meanwhile you can support our endowment farm that feeds families year-round."}
               </p>
               <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
@@ -112,30 +112,30 @@ const QurbaniLanding = () => {
             </div>
             <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-[hsl(45_85%_55%)]/40 bg-[hsl(152_55%_15%)]/70 px-3 py-1 text-[11px] font-extrabold tracking-wider text-[hsl(45_85%_70%)]">
               <Sparkles className="h-3.5 w-3.5" />
-              {isAr ? "الوحيدين في مصر بنديك ضمان جودة الأضحية" : "The only ones in Egypt guaranteeing share quality"}
+              {isAr ? "الوحيدون في مصر الذين يضمنون لك جودة الأضحية" : "The only ones in Egypt guaranteeing share quality"}
             </div>
             <h1 className="mt-3 text-3xl font-black leading-tight text-primary-foreground md:text-5xl">
-              {isAr ? "صكّ أضحية مش غالي — والجودة مضمونة" : "Affordable Qurbani share with guaranteed quality"}
+              {isAr ? "صك أضحية بسعر مناسب وجودة مضمونة" : "Affordable Qurbani share with guaranteed quality"}
             </h1>
             <p className="mx-auto mt-3 max-w-xl text-sm font-bold text-primary-foreground/85 md:text-base">
               {isAr
-                ? "الصك عندنا مش غالي، محدش بيقدّم اللي إحنا بنقدّمه: ٣٠ كجم لحم صافي + توثيق صور وفيديو + توزيع نفس يوم العيد على أسر مستحقة في الدقهلية."
+                ? "سعر الصك لدينا مناسب، ونقدّم ما لا يقدّمه غيرنا: ٣٠ كجم لحم صافٍ، وتوثيق بالصور والفيديو، وتوزيع في يوم العيد نفسه على الأسر المستحقة في الدقهلية."
                 : "Our share is honestly priced — 30 kg of clean meat, full photo/video proof, and Eid-day delivery to families in need across Dakahlia."}
             </p>
             <div className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-primary-foreground/90 md:text-base">
               <Phone className="h-4 w-4 text-[hsl(45_85%_65%)]" />
-              {isAr ? "احجز الآن بالاتصال أو واتساب — مندوب يوصلك" : "Book now by call or WhatsApp — agent visits you"}
+              {isAr ? "احجز الآن بالاتصال أو عبر واتساب، ويصلك مندوبنا" : "Book now by call or WhatsApp — agent visits you"}
             </div>
           </div>
 
-          {/* Animal image + 4 pricing tiles */}
+          {/* Animal image + 3 pricing tiles */}
           <div className="mx-auto mt-10 grid max-w-6xl gap-5 md:grid-cols-2">
             {/* Image card */}
-            <div className="overflow-hidden rounded-3xl border-4 border-[hsl(45_85%_55%)]/70 bg-[hsl(152_55%_15%)] shadow-card md:row-span-2">
+            <div className="overflow-hidden rounded-3xl border-4 border-[hsl(45_85%_55%)]/70 bg-[hsl(152_55%_15%)] shadow-card md:row-span-3">
               <div className="relative h-full overflow-hidden rounded-[1.25rem]">
                 <img
                   src={cowSheep}
-                  alt={isAr ? "صك أضحية ٣٠ كجم لحم صافي — مؤسسة اليسر" : "Qurbani share 30kg clean meat — Al-Yusr"}
+                  alt={isAr ? "صك أضحية ٣٠ كجم لحم صافٍ — مؤسسة اليسر" : "Qurbani share 30kg clean meat — Al-Yusr"}
                   width={1080} height={1440}
                   className="h-full w-full object-cover"
                 />
@@ -144,10 +144,9 @@ const QurbaniLanding = () => {
 
             {/* Pricing tiles 2x2 (right side) */}
             {[
-              { icon: Beef, ar: "جاموسي", en: "Buffalo",      weight: isAr ? "وزن الصك ٣٠ ك صافي" : "Share weight: 30 kg net", price: "14,000" },
-              { icon: Beef, ar: "بقري",   en: "Cow",          weight: isAr ? "وزن الصك ٣٠ صافي" : "Share weight: 30 kg net", price: "16,000" },
-              { icon: Beef, ar: "بقري",   en: "Cow",          weight: isAr ? "وزن الصك ٣٥-٣٧ صافي" : "Share weight: 35-37 net", price: "18,000" },
-              { icon: Beef, ar: "خروف",   en: "Sheep",        weight: isAr ? "وزن ٥٠-٦٠ ك قائم" : "Live weight: 50-60 kg", price: isAr ? "١٤٥٠ - ١٥٥٠" : "1,450 - 1,550" },
+              { icon: Beef, ar: "خروف",           en: "Sheep",             weight: isAr ? "خروف كامل" : "Whole sheep", price: "14,500" },
+              { icon: Beef, ar: "صك سُبع بقري",   en: "1/7 cow share",     weight: isAr ? "سُبع (1/7) بقرة" : "One seventh of a cow", price: "16,000" },
+              { icon: Beef, ar: "صك سُبع جاموسي", en: "1/7 buffalo share", weight: isAr ? "سُبع (1/7) جاموسة" : "One seventh of a buffalo", price: "14,000" },
             ].map((p, i) => (
               <div key={i} className="rounded-3xl border-2 border-[hsl(45_85%_55%)]/40 bg-[hsl(152_55%_15%)]/95 p-5 text-center shadow-card transition hover:-translate-y-0.5 hover:border-[hsl(45_85%_60%)]/80">
                 <div className="flex items-center justify-center gap-2">
@@ -165,13 +164,13 @@ const QurbaniLanding = () => {
           {/* Warning */}
           <div className="mx-auto mt-6 flex max-w-3xl items-center justify-center gap-2 rounded-full border border-[hsl(45_85%_55%)]/30 bg-[hsl(152_55%_15%)]/60 px-4 py-3 text-center text-sm font-bold text-primary-foreground/95 md:text-base">
             <AlertTriangle className="h-5 w-5 shrink-0 text-[hsl(45_85%_65%)]" />
-            {isAr ? "الأسعار تحت العجز والزيادة شاملة كل النفقات المتعلقة بالصك" : "Prices include all expenses; subject to ±deficit/surplus adjustment"}
+            {isAr ? "الأسعار تحت العجز والزيادة، وتشمل جميع النفقات المتعلقة بالصك" : "Prices include all expenses; subject to ±deficit/surplus adjustment"}
           </div>
 
           {/* Lime contact pill */}
           <div className="mx-auto mt-6 max-w-3xl rounded-[2rem] bg-secondary p-5 text-center text-secondary-foreground shadow-cta">
             <div className="space-y-1.5 text-sm font-extrabold md:text-base">
-              <div>{isAr ? "أرقامنا:" : "Phones:"} <span className="font-mono">01097000137</span> – {isAr ? "يمكنك طلب مندوب يصل لمنزلك" : "Home pickup available"}</div>
+              <div>{isAr ? "أرقامنا:" : "Phones:"} <span className="font-mono">01097000137</span> – {isAr ? "يمكنك طلب مندوب يصل إلى منزلك" : "Home pickup available"}</div>
               {bankText && <div>{isAr ? "الحساب البنكي" : "Bank account"} <span className="font-mono">{bankText}</span></div>}
               <div>{isAr ? "العنوان: المنصورة، تقسيم خطاب، بجوار وكالة المنصورة" : "Address: Mansoura, Khattab District, next to Mansoura Agency"}</div>
             </div>
@@ -247,13 +246,13 @@ const QurbaniLanding = () => {
       {/* How it works */}
       <section id="how" className="scroll-mt-24 bg-background py-16 md:py-20 leaf-pattern">
         <div className="container mx-auto px-4">
-          <h2 className="text-center text-2xl font-black text-primary md:text-2xl">{isAr ? "كيف تصل أضحيتك للأسرة؟" : "How your Qurbani reaches the family"}</h2>
+          <h2 className="text-center text-2xl font-black text-primary md:text-2xl">{isAr ? "كيف تصل أضحيتك إلى الأسرة؟" : "How your Qurbani reaches the family"}</h2>
           <div className="mx-auto mt-10 grid max-w-5xl gap-4 md:grid-cols-4">
             {[
               { I: Heart, ar: "1. تحجز صك أضحية", en: "1. Reserve a share" },
-              { I: ShieldCheck, ar: "2. نعاين الحيوان طبياً", en: "2. Vet inspects animal" },
+              { I: ShieldCheck, ar: "2. نعاين الذبيحة بيطريًا", en: "2. Vet inspects animal" },
               { I: Camera, ar: "3. نوثّق الذبح بالفيديو", en: "3. Slaughter on video" },
-              { I: Truck, ar: "4. نسلم لباب البيت", en: "4. Doorstep delivery" },
+              { I: Truck, ar: "4. نسلّم حتى باب البيت", en: "4. Doorstep delivery" },
             ].map((s, i) => (
               <div key={i} className="rounded-3xl border border-border bg-card p-5 text-center shadow-soft">
                 <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-secondary/15 text-primary"><s.I className="h-5 w-5" /></div>
@@ -269,7 +268,7 @@ const QurbaniLanding = () => {
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-2xl font-black text-primary md:text-2xl">{isAr ? "صك أضحية في كل مدن الدقهلية" : "Qurbani in every Dakahlia city"}</h2>
-            <p className="mt-3 text-muted-foreground">{isAr ? "اختر مدينتك لرؤية البرامج الفعالة فيها وحجز صك أضحية موجَّه لأسرها." : "Pick your city to see active programs and reserve a Qurbani share targeted to its families."}</p>
+            <p className="mt-3 text-muted-foreground">{isAr ? "اختر مدينتك لترى البرامج النشطة فيها، وتحجز صك أضحية موجَّهًا لأسرها." : "Pick your city to see active programs and reserve a Qurbani share targeted to its families."}</p>
           </div>
           <div className="mx-auto mt-8 grid max-w-6xl gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {DAKAHLIA_CITIES.map((c) => (
@@ -337,12 +336,12 @@ const QurbaniLanding = () => {
             </span>
             <h2 className="mt-3 text-3xl font-black leading-tight text-primary md:text-5xl">
               {QURBANI_SEASON.bookingOpen
-                ? (isAr ? "سارع بحجز صك أضحيتك قبل ما يخلص الوقت" : "Hurry — reserve your Qurbani before time runs out")
-                : (isAr ? "أضحيتك مع اليسر: معاينة وتوثيق لحد باب البيت" : "Your Qurbani with Al-Yusr: inspected and documented to the doorstep")}
+                ? (isAr ? "سارع بحجز صك أضحيتك قبل انتهاء الوقت" : "Hurry — reserve your Qurbani before time runs out")
+                : (isAr ? "أضحيتك مع اليسر: معاينة وتوثيق حتى باب البيت" : "Your Qurbani with Al-Yusr: inspected and documented to the doorstep")}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm font-bold text-foreground/75 md:mx-0 md:text-base">
               {isAr
-                ? "كل صك بيتعاين قبل الذبح ويتوثّق بالصور والفيديو — لراحة بال كاملة."
+                ? "يُعايَن كل صك قبل الذبح ويوثَّق بالصور والفيديو، لتطمئن تمامًا."
                 : "Every share is vet-inspected before slaughter and documented with photo & video — full peace of mind."}
             </p>
 

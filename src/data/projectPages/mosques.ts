@@ -14,7 +14,7 @@ const MOSQUES: CampaignPageContent = {
     title: l("عمارة بيوت الله: بناء مسجد أو إعادة إعماره", "Building God's houses: a new mosque, or bringing one back to life"),
     title2: l("", ""),
     lead: l(
-      "في قرى كتير المسجد الوحيد سقفه مشروخ أو أرضه من غير فرش، وفي قرى تانية مفيش مسجد أصلاً. مع اليسر تقدر تشارك في بناء مسجد جديد من الأساس، أو في ترميم مسجد قائم وفرشه وتجهيزه، وأجرك جاري مع كل صلاة فيه.",
+      "في قرى كثيرة يكون المسجد الوحيد مشروخ السقف أو بلا فرش، وفي قرى أخرى لا يوجد مسجد أصلًا. مع اليسر يمكنك المشاركة في بناء مسجد جديد من الأساس، أو في ترميم مسجد قائم وفرشه وتجهيزه، ويجري أجرك مع كل صلاة فيه.",
       "In many villages the only mosque has a cracked roof or a bare floor, and some villages have no mosque at all. With Al-Yusr you can help build a new mosque from the ground up, or restore, carpet and equip one that stands, with reward that continues with every prayer in it.",
     ),
     donateLabel: l("ساهم في عمارة مسجد", "Help build a mosque"),
@@ -35,20 +35,20 @@ const MOSQUES: CampaignPageContent = {
     facts: {
       title: l("المشروع في سطور", "The project at a glance"),
       items: [
-        { id: "build", title: l("بناء جديد", "New builds"), desc: l("مسجد من الأساس للمئذنة", "From foundations to minaret") },
+        { id: "build", title: l("بناء جديد", "New builds"), desc: l("مسجد من الأساس حتى المئذنة", "From foundations to minaret") },
         { id: "restore", title: l("ترميم", "Restoration"), desc: l("سقف وحوائط وكهرباء ودورات مياه", "Roofs, walls, wiring and washrooms") },
         { id: "furnish", title: l("فرش وتجهيز", "Furnishing"), desc: l("سجاد وإضاءة وتكييف وصوت", "Carpets, lights, cooling and sound") },
         { id: "reward", title: l("صدقة جارية", "Ongoing charity"), desc: l("أجر مع كل ركعة وسجدة", "Reward with every prayer") },
       ],
     },
     tracks: {
-      title: l("المشروع قسمين، اختار اللي يناسبك", "Two parts — choose where you give"),
+      title: l("المشروع قسمان، فاختر ما يناسبك", "Two parts — choose where you give"),
       items: [
         {
           id: "build",
           title: l("بناء مسجد جديد", "Building a new mosque"),
           desc: l(
-            "للقرى والعزب اللي مفيهاش مسجد، أو اللي مسجدها مبقاش يستوعب المصلين. بنبدأ من الأرض والأساسات، ونكمّل الحوائط والسقف ومصلى النساء، لحد ما نرفع المئذنة ويتفتح المسجد للصلاة.",
+            "للقرى والعزب التي لا يوجد فيها مسجد، أو التي لم يعد مسجدها يستوعب المصلين. نبدأ من الأرض والأساسات، ثم نستكمل الحوائط والسقف ومصلى النساء، حتى نرفع المئذنة ويُفتح المسجد للصلاة.",
             "For villages and hamlets with no mosque, or whose mosque no longer holds the worshippers. We start with the land and foundations, then the walls, roof and women's prayer hall, until the minaret rises and the mosque opens for prayer.",
           ),
         },
@@ -56,7 +56,7 @@ const MOSQUES: CampaignPageContent = {
           id: "rebuild",
           title: l("إعادة إعمار مسجد قائم", "Restoring a standing mosque"),
           desc: l(
-            "لمساجد قائمة محتاجة ترجع لها الحياة: ترميم السقف والحوائط والأرضيات، وتجديد الكهرباء ودورات المياه والميضأة، وبعدها فرش المسجد بالسجاد وتجهيزه بالإضاءة والتكييف والصوت.",
+            "لمساجد قائمة تحتاج إلى أن تعود إليها الحياة: ترميم السقف والحوائط والأرضيات، وتجديد الكهرباء ودورات المياه والميضأة، ثم فرش المسجد بالسجاد وتجهيزه بالإضاءة والتكييف والصوت.",
             "For standing mosques that need life brought back: repairing roofs, walls and floors, renewing wiring, washrooms and the ablution area, then carpeting the mosque and equipping it with lighting, cooling and sound.",
           ),
         },
@@ -87,32 +87,32 @@ const MOSQUES: CampaignPageContent = {
     },
     rebuild_shares: {
       title: l("أسهم إعادة الإعمار والفرش", "Shares in restoring and furnishing"),
-      lead: l("رجّع لمسجد قريتك نوره وراحته.", "Bring a village mosque back to light and comfort."),
+      lead: l("أعِد إلى مسجد قريتك نوره وراحته.", "Bring a village mosque back to light and comfort."),
       items: [],
     },
     steps: {
-      title: l("إزاي بنشتغل", "How we work"),
+      title: l("كيف نعمل", "How we work"),
       items: [
-        { id: "s1", title: l("نختار المسجد", "We choose the mosque"), desc: l("فريقنا بيزور القرية ويحدد الاحتياج: مسجد جديد ولا ترميم ولا فرش.", "Our team visits the village and sets the need: a new build, a restoration or furnishing.") },
-        { id: "s2", title: l("ندرس التكلفة", "We cost it"), desc: l("بنعمل مقايسة واضحة بالمواد والعمالة قبل ما نبدأ.", "We prepare a clear bill of materials and labour before starting.") },
-        { id: "s3", title: l("ننفّذ ونتابع", "We build and supervise"), desc: l("التنفيذ بيتم تحت إشراف هندسي ومتابعة من فريق المؤسسة.", "Work is done under engineering supervision, followed by our team.") },
-        { id: "s4", title: l("نوثّق ونسلّم", "We document and hand over"), desc: l("بنبعتلك صور وفيديو من الشغل، ونسلّم المسجد جاهز للصلاة.", "We send you photos and video of the work and hand over a mosque ready for prayer.") },
+        { id: "s1", title: l("نختار المسجد", "We choose the mosque"), desc: l("يزور فريقنا القرية ويحدد الاحتياج: مسجد جديد أم ترميم أم فرش.", "Our team visits the village and sets the need: a new build, a restoration or furnishing.") },
+        { id: "s2", title: l("ندرس التكلفة", "We cost it"), desc: l("نُعدّ مقايسة واضحة بالمواد والعمالة قبل البدء.", "We prepare a clear bill of materials and labour before starting.") },
+        { id: "s3", title: l("ننفّذ ونتابع", "We build and supervise"), desc: l("يتم التنفيذ تحت إشراف هندسي ومتابعة من فريق المؤسسة.", "Work is done under engineering supervision, followed by our team.") },
+        { id: "s4", title: l("نوثّق ونسلّم", "We document and hand over"), desc: l("نرسل لك صورًا وفيديو من مراحل العمل، ونسلّم المسجد جاهزًا للصلاة.", "We send you photos and video of the work and hand over a mosque ready for prayer.") },
       ],
     },
     hadith_label: { title: l("فضل بناء المساجد", "The virtue of building mosques"), items: [] },
     kind: {
       title: l("نوع المشروع", "Project type"),
       lead: l(
-        "عمارة المساجد مشروع أثر مجتمعي: هدفه إن كل قرية يبقى فيها بيت لله لائق، يجمع أهلها على الصلاة وحلقات القرآن، مش تحقيق دخل.",
+        "عمارة المساجد مشروع أثر مجتمعي، هدفه أن يكون في كل قرية بيت لائق من بيوت الله يجمع أهلها على الصلاة وحلقات القرآن، لا تحقيق دخل.",
         "Building mosques is a community-impact project: its aim is a worthy house of God in every village that gathers its people for prayer and Qur'an circles, not income.",
       ),
       items: [],
     },
     gallery: { title: l("من مساجدنا", "From our mosques"), items: [] },
     give: {
-      title: l("تبرعك بيروح فين", "Where your gift goes"),
+      title: l("أين يذهب تبرعك؟", "Where your gift goes"),
       lead: l(
-        "تبرعك بيروح لمواد البناء والعمالة في المساجد الجديدة، أو لترميم المساجد القائمة وفرشها وتجهيزها. وكل ركعة وسجدة وآية بتتقري في المسجد ليك فيها أجر.",
+        "يذهب تبرعك إلى مواد البناء والعمالة في المساجد الجديدة، أو إلى ترميم المساجد القائمة وفرشها وتجهيزها. ولك أجر في كل ركعة وسجدة وآية تُتلى في المسجد.",
         "Your gift pays for materials and labour on new mosques, or for restoring, carpeting and equipping standing ones. Every prayer and every verse recited there carries reward for you.",
       ),
       items: [],
@@ -121,10 +121,10 @@ const MOSQUES: CampaignPageContent = {
 
   /** Shown only while the project's FAQ category is empty or unreachable. */
   faq: [
-    { q: l("إيه الفرق بين بناء مسجد وإعادة إعماره؟", "What is the difference between building and restoring?"), a: l("البناء لمسجد جديد من الأساس في مكان مفيهوش مسجد أو محتاج مسجد أكبر. إعادة الإعمار لمسجد قائم: ترميمه، أو فرشه وتجهيزه.", "Building is a new mosque from the foundations where there is none or a bigger one is needed. Restoration is for a standing mosque: repairing it, or carpeting and equipping it.") },
-    { q: l("أقدر أتبرع بأي مبلغ؟", "Can I give any amount?"), a: l("أيوه، تقدر تختار سهم أو أكتر، أو تكتب المبلغ اللي يناسبك في صفحة التبرع، وكله بيتجمع لمسجد واحد لحد ما يكمل.", "Yes. Pick one or more shares, or enter the amount that suits you on the donation page; gifts are pooled until a mosque is complete.") },
-    { q: l("هعرف تبرعي راح فين؟", "Will I know where my gift went?"), a: l("أيوه، بنوثّق الشغل بالصور والفيديو ونبعته للمتبرعين، وتقدر تتابع تبرعك من صفحة تتبع التبرع.", "Yes. We document the work in photos and video and share it with donors, and you can follow your gift on the tracking page.") },
-    { q: l("أقدر أبني مسجد باسم حد متوفي؟", "Can I build a mosque in someone's name?"), a: l("أيوه، تقدر تهدي ثواب السهم أو المسجد لحد من أحبابك، واكتب اسمه في الملاحظات وانت بتتبرع.", "Yes. You can dedicate the reward of a share or a whole mosque to a loved one; add their name in the notes when you give.") },
+    { q: l("ما الفرق بين بناء مسجد وإعادة إعماره؟", "What is the difference between building and restoring?"), a: l("البناء يعني إقامة مسجد جديد من الأساس في مكان لا يوجد فيه مسجد أو يحتاج إلى مسجد أكبر. أما إعادة الإعمار فتكون لمسجد قائم: بترميمه، أو بفرشه وتجهيزه.", "Building is a new mosque from the foundations where there is none or a bigger one is needed. Restoration is for a standing mosque: repairing it, or carpeting and equipping it.") },
+    { q: l("هل يمكنني التبرع بأي مبلغ؟", "Can I give any amount?"), a: l("نعم، يمكنك اختيار سهم أو أكثر، أو كتابة المبلغ الذي يناسبك في صفحة التبرع، وتُجمع التبرعات لمسجد واحد حتى يكتمل.", "Yes. Pick one or more shares, or enter the amount that suits you on the donation page; gifts are pooled until a mosque is complete.") },
+    { q: l("هل سأعرف أين ذهب تبرعي؟", "Will I know where my gift went?"), a: l("نعم، نوثّق العمل بالصور والفيديو ونرسله إلى المتبرعين، ويمكنك متابعة تبرعك من صفحة تتبع التبرع.", "Yes. We document the work in photos and video and share it with donors, and you can follow your gift on the tracking page.") },
+    { q: l("هل يمكنني بناء مسجد باسم شخص متوفى؟", "Can I build a mosque in someone's name?"), a: l("نعم، يمكنك إهداء ثواب السهم أو المسجد لأحد أحبابك، واكتب اسمه في الملاحظات أثناء التبرع.", "Yes. You can dedicate the reward of a share or a whole mosque to a loved one; add their name in the notes when you give.") },
   ],
 
   cta: {
@@ -136,7 +136,7 @@ const MOSQUES: CampaignPageContent = {
   images: {
     gallery: {
       label: l("معرض صور المساجد", "Mosques gallery"),
-      hint: l("صور من المساجد اللي اتبنت أو اتجددت. القسم بيظهر في الصفحة أول ما تضيف صورة.", "Photos of built or restored mosques; the section shows once a picture is added."),
+      hint: l("صور من المساجد التي بُنيت أو جُدّدت. يظهر القسم في الصفحة بمجرد إضافة صورة.", "Photos of built or restored mosques; the section shows once a picture is added."),
       items: [],
     },
   },

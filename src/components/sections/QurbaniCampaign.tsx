@@ -113,11 +113,11 @@ export const QurbaniCampaign = () => {
             <Sparkles className="h-3 w-3" /> {isRTL ? `حملة العيد الكبير ${QURBANI_SEASON.year}` : `Eid al-Adha ${QURBANI_SEASON.year} campaign`}
           </span>
           <h2 className="mt-3 text-2xl font-black leading-tight text-primary sm:text-3xl md:text-5xl">
-            {isRTL ? "صك أضحيتك معانا قبل ما يخلص الوقت" : "Reserve your Qurbani before time runs out"}
+            {isRTL ? "احجز صك أضحيتك قبل انتهاء الوقت" : "Reserve your Qurbani before time runs out"}
           </h2>
           <p className="mt-2 text-sm font-bold leading-relaxed text-muted-foreground md:mt-3 md:text-base">
             {isRTL
-              ? "هدفنا نوصل لحوم العيد لـ 800 أسرة في الدقهلية. كل صك بيتعاين قبل الذبح ويتوثّق بالصور والفيديو."
+              ? "هدفنا أن نوصل لحوم العيد إلى 800 أسرة في الدقهلية. كل صك يُعايَن قبل الذبح ويُوثَّق بالصور والفيديو."
               : "Our goal: deliver Eid meat to 800 families in Dakahlia. Every share is inspected pre-slaughter & documented."}
           </p>
         </div>
@@ -126,7 +126,7 @@ export const QurbaniCampaign = () => {
         <div className="mx-auto mt-6 max-w-md sm:max-w-lg">
           <div className="mb-3 flex items-center justify-center gap-2 text-[11px] font-extrabold text-accent">
             <Clock className="h-3.5 w-3.5 animate-pulse" />
-            <span>{isRTL ? "الوقت بيجري… العدد محدود" : "Time is running — limited spots"}</span>
+            <span>{isRTL ? "الوقت يمضي… والعدد محدود" : "Time is running — limited spots"}</span>
           </div>
           <div className="grid grid-cols-4 gap-1.5 text-center sm:gap-2.5" dir="ltr">
             {[
@@ -222,14 +222,14 @@ export const QurbaniCampaign = () => {
           <div className="grid items-center gap-6 md:grid-cols-[0.9fr_1.1fr] md:gap-10">
             <div className="order-2 md:order-1">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-primary">
-                <BadgeCheck className="h-3 w-3" /> {isRTL ? "ليه أضحيتك عندنا غير" : "Why our Qurbani is different"}
+                <BadgeCheck className="h-3 w-3" /> {isRTL ? "لماذا أضحيتك عندنا مختلفة" : "Why our Qurbani is different"}
               </span>
               <h3 className="mt-3 text-xl font-black leading-tight text-primary sm:text-2xl md:text-4xl">
-                {isRTL ? "قبل ما تحجز صك أضحيتك… لازم تتأكد إنها صحيحة" : "Before you book — be sure your Qurbani is right"}
+                {isRTL ? "قبل أن تحجز صك أضحيتك… تأكّد أنها صحيحة" : "Before you book — be sure your Qurbani is right"}
               </h3>
               <p className="mt-3 text-sm font-bold leading-relaxed text-muted-foreground md:text-base">
                 {isRTL
-                  ? "أكبر مشكلة هتقابلك كمضحي هي جودة اللحمة. عشان كده في مؤسسة اليسر بنشتغل طول السنة في مزارعنا بفريق طبي متخصص عشان نوفّرلك أضحية:"
+                  ? "أكبر ما يشغل المضحّي هو جودة اللحم؛ لذلك نعمل في مؤسسة اليسر طوال العام في مزارعنا مع فريق بيطري متخصص لنوفّر لك أضحية:"
                   : "The hardest part for any Mudahhi is meat quality. That's why Al-Yusr works year-round in its own farms with a specialised veterinary team to bring you a Qurbani that is:"}
               </p>
               <ul className="mt-4 space-y-2 text-sm font-extrabold text-primary md:text-base">
@@ -250,7 +250,7 @@ export const QurbaniCampaign = () => {
               </ul>
               <p className="mt-4 text-xs font-bold text-muted-foreground sm:text-sm">
                 {isRTL
-                  ? "احجز صك أضحيتك عندنا دلوقتي — اليوم الأول بأسبقية الحجز والعدد محدود فعلاً."
+                  ? "احجز صك أضحيتك الآن — الأولوية في اليوم الأول لمن يحجز أولًا، والعدد محدود فعلًا."
                   : "Reserve your share now — first-day priority booking, quantities are truly limited."}
               </p>
             </div>
@@ -267,7 +267,7 @@ export const QurbaniCampaign = () => {
                 {/* Caption chip */}
                 <div className="absolute bottom-3 start-3 inline-flex items-center gap-1.5 rounded-full bg-primary/85 px-3 py-1 text-[10.5px] font-extrabold text-primary-foreground backdrop-blur-sm">
                   <Eye className="h-3 w-3 text-secondary" />
-                  {isRTL ? "من مزارعنا · مرحب بحضورك" : "From our farms · you're welcome to visit"}
+                  {isRTL ? "من مزارعنا · مرحبًا بحضورك" : "From our farms · you're welcome to visit"}
                 </div>
               </div>
 
@@ -319,11 +319,11 @@ export const QurbaniCampaign = () => {
           <div className="mt-6 grid gap-3 sm:mt-8 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
             {[
               { icon: BookOpen,    ar: "مطابقة للشريعة الإسلامية", en: "Sharia-compliant",   d_ar: "ذبح شرعي بحضور علماء وتوثيق كامل لكل صك.", d_en: "Halal slaughter under scholar supervision with full documentation per share." },
-              { icon: Beef,        ar: "جودة لحم ممتازة",          en: "Premium meat quality", d_ar: "نفس اللحمة اللي بتشتريها لبيتك — تربية حديثة وأعلى نسبة تصفية.", d_en: "Same quality you'd buy for your own family — modern breeding & top yield ratio." },
-              { icon: Stethoscope, ar: "فريق طبي وتحصينات كاملة",  en: "Full veterinary care", d_ar: "أطباء بيتابعوا التغذية والتحصينات على مدار السنة.", d_en: "Vets follow nutrition and vaccination all year round." },
-              { icon: Eye,         ar: "تشوف الذبح بنفسك",         en: "Witness the slaughter", d_ar: "مرحب بحضورك يوم العيد لمتابعة أضحيتك خطوة بخطوة.", d_en: "You're welcome to attend on Eid day and follow your share step by step." },
-              { icon: ShieldCheck, ar: "ضمان 100% من مزارعنا",     en: "100% farm-to-family",  d_ar: "كل عجل وخروف من مزارع اليسر — مصدر واحد، جودة واحدة.", d_en: "Every cow and sheep is from Al-Yusr's own farms — one source, one standard." },
-              { icon: Sparkles,    ar: "أسبقية الحجز",              en: "First-day priority",   d_ar: "اليوم الأول بأسبقية الحجز — العدد محدود فعلاً.", d_en: "First-day bookings get priority — quantities are truly limited." },
+              { icon: Beef,        ar: "جودة لحم ممتازة",          en: "Premium meat quality", d_ar: "اللحم نفسه الذي تشتريه لبيتك — تربية حديثة وأعلى نسبة تصفية.", d_en: "Same quality you'd buy for your own family — modern breeding & top yield ratio." },
+              { icon: Stethoscope, ar: "فريق طبي وتحصينات كاملة",  en: "Full veterinary care", d_ar: "أطباء بيطريون يتابعون التغذية والتحصينات على مدار العام.", d_en: "Vets follow nutrition and vaccination all year round." },
+              { icon: Eye,         ar: "شاهد الذبح بنفسك",         en: "Witness the slaughter", d_ar: "نرحّب بحضورك يوم العيد لمتابعة أضحيتك خطوة بخطوة.", d_en: "You're welcome to attend on Eid day and follow your share step by step." },
+              { icon: ShieldCheck, ar: "ضمان 100% من مزارعنا",     en: "100% farm-to-family",  d_ar: "كل عجل وخروف من مزارع اليسر — مصدر واحد وجودة واحدة.", d_en: "Every cow and sheep is from Al-Yusr's own farms — one source, one standard." },
+              { icon: Sparkles,    ar: "أسبقية الحجز",              en: "First-day priority",   d_ar: "الأولوية في اليوم الأول لمن يحجز أولًا — والعدد محدود فعلًا.", d_en: "First-day bookings get priority — quantities are truly limited." },
             ].map(({ icon: Icon, ar, en, d_ar, d_en }) => (
               <div key={en} className="rounded-2xl border border-border bg-background p-4 transition hover:-translate-y-0.5 hover:border-secondary/40 hover:shadow-soft sm:p-5">
                 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary/20 text-primary sm:h-11 sm:w-11">
@@ -350,17 +350,17 @@ export const QurbaniCampaign = () => {
                   track("qurbani_reserve_click", {
                     source: "qurbani-campaign-quality",
                     target: "/donate?program=odhya",
-                    label: isRTL ? "احجز صك أضحيتك دلوقتي" : "Reserve your share now",
+                    label: isRTL ? "احجز صك أضحيتك الآن" : "Reserve your share now",
                     fbEvent: "InitiateCheckout",
                   })
                 }
               >
                 <Heart className="h-5 w-5" />
-                {isRTL ? "احجز صك أضحيتك دلوقتي" : "Reserve your share now"}
+                {isRTL ? "احجز صك أضحيتك الآن" : "Reserve your share now"}
               </Link>
             </Button>
             <a
-              href="https://wa.me/201097000137?text=عايز%20احجز%20صك%20أضحية"
+              href="https://wa.me/201097000137?text=أريد%20حجز%20صك%20أضحية"
               target="_blank"
               rel="noopener"
               data-cta="qurbani-whatsapp-quality"
@@ -368,14 +368,14 @@ export const QurbaniCampaign = () => {
                 track("qurbani_whatsapp_click", {
                   source: "qurbani-campaign-quality",
                   target: "wa.me",
-                  label: isRTL ? "تواصل واتساب" : "Chat on WhatsApp",
+                  label: isRTL ? "تواصل عبر واتساب" : "Chat on WhatsApp",
                   fbEvent: "Contact",
                 })
               }
               className="inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-md border-2 border-secondary/50 bg-card px-5 text-base font-black text-primary transition-transform duration-150 hover:bg-secondary/10 active:scale-[.98]"
             >
               <Users className="h-4 w-4" />
-              {isRTL ? "تواصل واتساب" : "Chat on WhatsApp"}
+              {isRTL ? "تواصل عبر واتساب" : "Chat on WhatsApp"}
             </a>
           </div>
         </div>

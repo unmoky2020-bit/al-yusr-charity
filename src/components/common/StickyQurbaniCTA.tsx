@@ -78,7 +78,7 @@ export const StickyQurbaniCTA = ({
   if (!open || overChrome) return null;
 
   const wa = `https://wa.me/201097000137?text=${encodeURIComponent(
-    waText || (isAr ? "السلام عليكم، عايز أعرف تفاصيل دعم المزرعة الوقفية." : "Hi, I'd like details on supporting the endowment farm."),
+    waText || (isAr ? "السلام عليكم، أود معرفة تفاصيل دعم المزرعة الوقفية." : "Hi, I'd like details on supporting the endowment farm."),
   )}`;
 
   return (
@@ -101,13 +101,13 @@ export const StickyQurbaniCTA = ({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="min-w-0 flex-1">
             <div className="text-sm font-black text-primary-foreground md:text-base">
-              {title ? title[isAr ? "ar" : "en"] : (isAr ? `حجز صكوك أضحية ${QURBANI_SEASON.year} هيفتح قريب` : `Qurbani ${QURBANI_SEASON.year} booking opens soon`)}
+              {title ? title[isAr ? "ar" : "en"] : (isAr ? `حجز صكوك أضحية ${QURBANI_SEASON.year} يُفتح قريبًا` : `Qurbani ${QURBANI_SEASON.year} booking opens soon`)}
             </div>
             <div className="mt-0.5 text-[11px] font-bold text-primary-foreground/80 md:text-xs">
               {description
                 ? description[isAr ? "ar" : "en"]
                 : (isAr
-                  ? "تقدر تكمل دعمك للمزرعة الوقفية اللي بتطعّم الأسر طول السنة."
+                  ? "يمكنك مواصلة دعمك للمزرعة الوقفية التي تُطعم الأسر طوال العام."
                   : "You can keep giving by supporting our endowment farm that feeds families year-round.")}
             </div>
           </div>

@@ -12,7 +12,7 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
     title: l("كنزك المركون..", "What's idle in your home.."),
     title2: l("يبني حياة لغيرك!", "builds a new life for another!"),
     lead: l(
-      "في زوايا بيوتنا الكثير من الأشياء التي لم نَعد نستخدمها، ولكنها بالنسبة لأسر أخرى تُمثّل حلماً طال انتظاره. نحن لا نجمع مجرد أغراض فائضة، بل نعيد صياغة الأمل وننقل الدفء والاستقرار من بيوتكم إلى بيوت أهالينا المستحقين.",
+      "في زوايا بيوتنا الكثير من الأشياء التي لم نَعد نستخدمها، لكنها بالنسبة لأسر أخرى تُمثّل حلمًا طال انتظاره. نحن لا نجمع مجرد أغراض فائضة، بل نعيد صياغة الأمل وننقل الدفء والاستقرار من بيوتكم إلى بيوت أهالينا المستحقين.",
       "In every home there are idle belongings that represent a lifelong dream for struggling families. We don't just collect surplus items; we restore hope and transfer comfort directly into deserving households.",
     ),
     donateLabel: l("طلب مندوب استلام", "Request Courier"),
@@ -29,11 +29,11 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
 
   sections: {
     slogan: {
-      title: l("«اجعل من كركبة بيتك.. خطوة لـ عمار بيت غيرك»", "'Transform household clutter into comfort for another home'"),
+      title: l("«اجعل من كركبة بيتك.. خطوة لعمار بيت غيرك»", "'Transform household clutter into comfort for another home'"),
       items: [
         {
           id: "main",
-          title: l("«اجعل من كركبة بيتك.. خطوة لـ عمار بيت غيرك»", "'Transform household clutter into comfort for another home'"),
+          title: l("«اجعل من كركبة بيتك.. خطوة لعمار بيت غيرك»", "'Transform household clutter into comfort for another home'"),
           desc: l("", ""),
         },
       ],
@@ -49,18 +49,18 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
         {
           id: "furniture",
           title: l("الأثاث المنزلي", "Home Furniture"),
-          extra: l("أثاثك القديم عاش معاك قصة وهيبدأ قصة جديدة في حياة أسرة تانية", "Your old furniture had a story with you, and will start a new life for another family"),
+          extra: l("أثاثك القديم عاش معك قصة، وسيبدأ قصة جديدة في حياة أسرة أخرى", "Your old furniture had a story with you, and will start a new life for another family"),
           desc: l(
-            "نجمع القطع الفائضة عن حاجتكم (غرف نوم، سرير، خزائن، كنب، طاولات ومطابخ) لنساهم في تجهيز البيوت الفقيرة ومساندة مشروعات الزواج وتأسيس منازل مستقرة، لترفع أهالينا المستحقين من النوم على الأرض إلى الستر والراحة التامة.",
+            "نجمع القطع الفائضة عن حاجتكم (غرف نوم، أسِرّة، خزائن، كنب، طاولات، مطابخ) لنساهم في تجهيز البيوت الفقيرة ومساندة مشروعات الزواج وتأسيس منازل مستقرة، فننقل أهالينا المستحقين من النوم على الأرض إلى الستر والراحة التامة.",
             "We collect surplus furniture (bedroom sets, beds, wardrobes, tables) to furnish needy homes, support marriage aid, and restore dignity.",
           ),
         },
         {
           id: "appliances",
           title: l("الأجهزة الكهربائية", "Home Appliances"),
-          extra: l("كل جهاز كهربائي مركون في بيتك لو تبرعت بيه هيكون صدقة جارية", "Every idle appliance in your home becomes an ongoing charity"),
+          extra: l("كل جهاز كهربائي مركون في بيتك يصبح صدقة جارية إذا تبرعت به", "Every idle appliance in your home becomes an ongoing charity"),
           desc: l(
-            "نستقبل (الثلاجات، الغسالات، البوتاجازات، المراوح، الشاشات، السخانات والمكاوى) لإدخال الطمأنينة والتسهيلات الحياتية لبيوت أسر بسيطة بحاجة ماسة لها بعد فحصها وصيانتها بورش المؤسسة.",
+            "نستقبل الثلاجات والغسالات والبوتاجازات والمراوح والشاشات والسخانات والمكاوي، ونفحصها ونصونها في ورش المؤسسة، ثم نوصلها إلى بيوت أسر بسيطة في حاجة ماسة إليها، لتُدخل عليها الطمأنينة وتيسّر حياتها.",
             "We receive washers, fridges, stoves, and fans, restoring them in specialized workshops before delivery.",
           ),
         },
@@ -69,7 +69,7 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
           title: l("الملابس والكساء", "Clothing & Garments"),
           extra: l("المركون في دولابك ستر لغيرك وقصة جديدة من الدفء", "What is idle in your wardrobe is dignity for another"),
           desc: l(
-            "نجمع الملابس المستعملة بحالة جيدة، لنقوم بفرزها، تنظيفها، وكيها وإعادة تقديمها بكرامة تامة للأسر والأطفال كـ «قصة جديدة» من الدفء والستر تليق بأهالينا المتعففين.",
+            "نجمع الملابس المستعملة بحالة جيدة، ثم نفرزها وننظفها ونكويها، ونقدّمها بكرامة تامة للأسر والأطفال «قصةً جديدة» من الدفء والستر تليق بأهالينا المتعففين.",
             "Surplus quality garments are carefully sorted, cleaned, and presented with utmost dignity to underprivileged children and parents.",
           ),
         },
@@ -78,7 +78,7 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
           title: l("الصيدلية المستدامة (الأدوية)", "Sustainable Medicine Bank"),
           extra: l("علاجك الفائض طوق نجاة لمريض غير قادر على ثمن الدواء", "Your surplus medicine is a lifeline for struggling patients"),
           desc: l(
-            "نجمع الأدوية الفائضة والصالحة للاستخدام من الصيدليات المنزلية، ليتم فحصها وتصنيفها تحت إشراف طبي وصيدلي دقيق وتوزيعها مجاناً بالكامل على المرضى غير القادرين على توفير تكلفة العلاج الشهري.",
+            "نجمع الأدوية الفائضة والصالحة للاستخدام من الصيدليات المنزلية، لتُفحص وتُصنَّف تحت إشراف طبي وصيدلي دقيق، ثم تُوزَّع مجانًا بالكامل على المرضى غير القادرين على توفير تكلفة العلاج الشهري.",
             "We collect valid, unexpired household medications, medically inspecting and distributing them completely free to impoverished patients.",
           ),
         },
@@ -87,7 +87,7 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
           title: l("المعرفة والتعليم (الكتب)", "Educational Knowledge (Books)"),
           extra: l("كتاب ابنك فرصة لمستقبل ابن غيرك وطوق نجاة من الفقر", "Your child's book is an opportunity for another student's bright future"),
           desc: l(
-            "نستقبل الكتب المدرسية، الثقافية، والتعليمية لإعادة تدوير المعرفة وتوزيعها على الطلاب غير القادرين وتأسيس مكتبات بالقرى لإنقاذ الطلاب من خطر التسرب الدراسي.",
+            "نستقبل الكتب المدرسية والثقافية والتعليمية لإعادة تدوير المعرفة، ونوزعها على الطلاب غير القادرين، ونؤسس مكتبات في القرى لحماية الطلاب من خطر التسرب الدراسي.",
             "We collect textbooks and references to reuse knowledge and equip students from low-income households with essential study tools.",
           ),
         },
@@ -113,15 +113,15 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
           id: "dignity",
           title: l("حفظ كرامة المتلقي", "Preserving Dignity"),
           desc: l(
-            "نحن نؤمن أن جودة العطاء من جودة التعامل؛ لذا تمر كل التبرعات بمراحل فحص وتأهيل وصيانة وتنظيف دقيقة لتصل للمستفيدين وكأنها جديدة تماماً.",
+            "نؤمن بأن جودة العطاء من جودة التعامل؛ لذا تمر كل التبرعات بمراحل فحص وتأهيل وصيانة وتنظيف دقيقة، لتصل إلى المستفيدين وكأنها جديدة تمامًا.",
             "All items undergo thorough repair, refurbishing, and cleaning so they reach recipient homes in pristine, dignified condition.",
           ),
         },
         {
           id: "doorstep",
-          title: l("راحة المتبرع (مندوب لحد الباب)", "Doorstep Pickup Convenience"),
+          title: l("راحة المتبرع (مندوب حتى باب البيت)", "Doorstep Pickup Convenience"),
           desc: l(
-            "وفرنا منظومة لوجستية متكاملة؛ لست بحاجة للتحرك من منزلك، بمجرد تواصلك معنا يتوجه مندوبنا الرسمي بسيارات المؤسسة لاستلام وتوثيق التبرع.",
+            "وفّرنا منظومة لوجستية متكاملة؛ فلست بحاجة إلى مغادرة منزلك، وبمجرد تواصلك معنا يتوجه مندوبنا الرسمي بسيارات المؤسسة لاستلام التبرع وتوثيقه.",
             "Our official logistics vans collect items directly from your home with zero hassle, scheduled at your convenience.",
           ),
         },
@@ -138,22 +138,22 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
         {
           id: "send",
           title: l("أرسل كلمة «تبرع»", "Send 'Donate'"),
-          desc: l("أرسل رسالة بكلمة «تبرع» على واتساب أو اتصل برقم 01097000137 وحدد نوع المركون عندك.", "Send 'Donate' via WhatsApp or phone call."),
+          desc: l("أرسل رسالة بكلمة «تبرع» على واتساب أو اتصل برقم 01097000137، وحدّد نوع المركون لديك.", "Send 'Donate' via WhatsApp or phone call."),
         },
         {
           id: "pickup",
           title: l("مندوبنا عند باب بيتك", "Doorstep Pickup"),
-          desc: l("سيارات المؤسسة المجهزة تصل أمام باب منزلك لاستلام الأغراض مجاناً وبكل احترام ورقي.", "Our courier collects your items directly from your home for free."),
+          desc: l("سيارات المؤسسة المجهزة تصل أمام باب منزلك لاستلام الأغراض مجانًا وبكل احترام ورقي.", "Our courier collects your items directly from your home for free."),
         },
         {
           id: "refurbish",
           title: l("ورش الصيانة والترميم", "Refurbish & Restore"),
-          desc: l("تدخل القطع ورش المؤسسة للتنظيف، الصيانة، وتغيير التالف لترجع بحالة ممتازة تليق بأهالينا.", "Workshops inspect, repair, and clean all items thoroughly."),
+          desc: l("تدخل القطع ورش المؤسسة للتنظيف والصيانة وتغيير التالف منها، لتعود بحالة ممتازة تليق بأهالينا.", "Workshops inspect, repair, and clean all items thoroughly."),
         },
         {
           id: "deliver",
           title: l("التسليم والتوثيق الميداني", "Documented Delivery"),
-          desc: l("تُسلّم وتُفرش داخل منازل الأسر الأكثر استحقاقاً مع توثيق مصور يوضح فرحتهم والأثر المحقق.", "Furnished directly inside beneficiary homes with full reporting."),
+          desc: l("تُسلَّم وتُفرش داخل منازل الأسر الأكثر استحقاقًا، مع توثيق مصوّر يُظهر فرحتهم والأثر المتحقق.", "Furnished directly inside beneficiary homes with full reporting."),
         },
       ],
     },
@@ -161,7 +161,7 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
     contact: {
       title: l("ثقتكم هي المحرك الأساسي لكل خطوة خير", "Your trust drives every step of impact"),
       lead: l(
-        "سيارات مؤسسة اليسر تتحرك من قلب الميدان محملة بمساهماتكم، لتأخذ طريقها مباشرة للترميم قبل أن تذهب لأهالينا المتعففين المستحقين.",
+        "سيارات مؤسسة اليسر تتحرك من قلب الميدان محملة بمساهماتكم، لتأخذ طريقها مباشرة إلى الترميم قبل أن تصل إلى أهالينا المتعففين المستحقين.",
         "Official Al-Yusr transport vehicles collect contributions daily, heading straight to our restoration workshops before delivery.",
       ),
       items: [
@@ -174,7 +174,7 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
           id: "bank",
           title: l("للتبرع المادي ودعم نفقات النقل والصيانة (CIB):", "Financial Support (CIB Bank):"),
           desc: l("100043605733", "100043605733"),
-          extra: l("باسم: مؤسسة اليسر للتنمية", "Account Name: Al-Yusr Foundation"),
+          extra: l("باسم: مؤسسة اليسر الخيرية", "Account Name: Al-Yusr Charity Foundation"),
         },
         {
           id: "hq",
@@ -187,72 +187,72 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
 
   faq: [
     {
-      q: l("إيه يعني حملة مَرْكون وليه أشارك فيها؟", "What is the Markoun campaign and why participate?"),
+      q: l("ما حملة مَرْكون، ولماذا أشارك فيها؟", "What is the Markoun campaign and why participate?"),
       a: l(
-        "بعد دراسة ميدانية وجدنا أن من كل 10 بيوت في 4 بيوت فيهم كنوز مركونة لو تم استغلالها بشكل صحيح هتبني حياة لأسرة كاملة. حملة مركون هي أول حملة مصرية منظمة لإعادة استخدام واستغلال كل المركون في منزلك (أثاث، أجهزة، ملابس، أدوية، كتب) لتغيير حياة أسر مستحقة من الفقر للراحة والأمان.",
+        "بعد دراسة ميدانية وجدنا أن 4 بيوت من كل 10 فيها كنوز مركونة، لو استُغلت بشكل صحيح لبنت حياة لأسرة كاملة. حملة مركون هي أول حملة مصرية منظمة لإعادة استخدام كل المركون في منزلك (أثاث، أجهزة، ملابس، أدوية، كتب) لتنقل أسرًا مستحقة من الفقر إلى الراحة والأمان.",
         "Studies show 4 out of 10 homes contain idle treasures. Markoun is Egypt's first organized campaign to repurpose surplus items and rebuild lives.",
       ),
     },
     {
-      q: l("إزاي أتبرع بالمركون عندي ومين بيستلمه؟", "How do I donate my items and who collects them?"),
+      q: l("كيف أتبرع بالمركون لديّ، ومن يستلمه؟", "How do I donate my items and who collects them?"),
       a: l(
-        "كل اللي عليك تعمله: ابعت كلمة «تبرع» في رسالة واتساب على 01097000137 أو اتصل بنا، وهيوصلك مندوبنا بسيارة المؤسسة المجهزة لحد باب منزلك ليستلم منك كل المركون بكل رقي وسهولة وبدون أي مجهود منك.",
+        "كل ما عليك: أرسل كلمة «تبرع» في رسالة واتساب على 01097000137 أو اتصل بنا، وسيصلك مندوبنا بسيارة المؤسسة المجهزة حتى باب منزلك ليستلم منك كل المركون بسهولة ورقي، ودون أي مجهود منك.",
         "Simply text 'Donate' via WhatsApp to 01097000137, and our representative will collect the items directly from your doorstep.",
       ),
     },
     {
-      q: l("هل الاستلام من باب البيت بيكلفني أي رسوم أو مصاريف؟", "Are there any pickup fees?"),
+      q: l("هل يكلفني الاستلام من باب البيت أي رسوم أو مصروفات؟", "Are there any pickup fees?"),
       a: l(
-        "الاستلام من باب منزلك والتوصيل لبيوت الأسر مجاني تماماً 100% وبدون أي مقابل على المتبرع أو الأسرة المستفيدة.",
+        "الاستلام من باب منزلك والتوصيل إلى بيوت الأسر مجانيان 100%، دون أي مقابل على المتبرع أو الأسرة المستفيدة.",
         "Pickup and delivery are 100% free with zero fees.",
       ),
     },
     {
-      q: l("هل تقبلون الأجهزة أو الأثاث اللي محتاج صيانة أو تنظيف؟", "Do you accept items needing repair?"),
+      q: l("هل تقبلون الأجهزة أو الأثاث الذي يحتاج إلى صيانة أو تنظيف؟", "Do you accept items needing repair?"),
       a: l(
-        "نعم! مؤسسة اليسر تمتلك ورش صيانة وترميم متخصصة؛ سياراتنا تنقل المساهمات مباشرة للترميم والتصليح والتنظيف قبل تسليمها وفرشها داخل منازل أهالينا المستحقين.",
+        "نعم! تمتلك مؤسسة اليسر ورش صيانة وترميم متخصصة؛ تنقل سياراتنا المساهمات مباشرة إلى الترميم والتصليح والتنظيف قبل تسليمها وفرشها داخل منازل أهالينا المستحقين.",
         "Yes! Al-Yusr has dedicated workshops that repair, clean, and restore items before delivering them.",
       ),
     },
     {
       q: l("ما هي شروط التبرع بالأدوية الفائضة؟", "What are the rules for medicine donations?"),
       a: l(
-        "نستقبل كافة الأدوية الفائضة بشرط أن تكون داخل عبواتها الأصلية وسارية الصلاحية؛ حيث تخضع للمعاينة والفرز من صيادلة المؤسسة قبل صرفها مجاناً للمرضى.",
+        "نستقبل كافة الأدوية الفائضة بشرط أن تكون داخل عبواتها الأصلية وسارية الصلاحية؛ حيث تخضع للمعاينة والفرز من صيادلة المؤسسة قبل صرفها مجانًا للمرضى.",
         "Medications must be in original blister/packaging with valid expiry dates, inspected by pharmacists before dispensing.",
       ),
     },
     {
-      q: l("هل ممكن أتبرع بمبلغ مالي لو معنديش حاجة مركونة؟", "Can I donate money if I don't have surplus items?"),
+      q: l("هل يمكنني التبرع بمبلغ مالي إذا لم يكن لديّ شيء مركون؟", "Can I donate money if I don't have surplus items?"),
       a: l(
-        "نعم بالتأكيد! لمن ليس لديه مركون ويرغب في المساهمة في نفقات صيانة وترميم ونقل الأجهزة والأثاث وشراء النواقص، متاح التبرع عبر حساب CIB رقم 100043605733 أو عبر نموذج التبرع الإلكتروني بالموقع.",
+        "نعم، بالتأكيد! من ليس لديه مركون ويرغب في المساهمة في نفقات صيانة الأجهزة والأثاث وترميمها ونقلها وشراء النواقص، يمكنه التبرع عبر حساب CIB رقم 100043605733 أو عبر نموذج التبرع الإلكتروني على الموقع.",
         "Yes, financial donations supporting repair and transport costs are welcomed via CIB account 100043605733 or our online donation portal.",
       ),
     },
     {
       q: l("هل يصل مندوب مَرْكون إلى كل مراكز الدقهلية؟", "Does the Markoun courier reach all of Dakahlia?"),
       a: l(
-        "تنطلق سيارات حملة مَرْكون من مقر مؤسسة اليسر الخيرية بالمنصورة وتغطي محافظة الدقهلية. أرسل كلمة «تبرع» على واتساب 01097000137 مع عنوانك ونوع المركون عندك، ويتم التنسيق معك على موعد استلام مجاني يناسبك.",
+        "تنطلق سيارات حملة مَرْكون من مقر مؤسسة اليسر الخيرية بالمنصورة وتغطي محافظة الدقهلية. أرسل كلمة «تبرع» على واتساب 01097000137 مع عنوانك ونوع المركون لديك، ونتفق معك على موعد استلام مجاني يناسبك.",
         "Markoun pickup vans operate from Al-Yusr's headquarters in Mansoura and cover Dakahlia governorate. Text 'Donate' on WhatsApp to 01097000137 with your address and the type of items, and we will arrange a free pickup time that suits you.",
       ),
     },
     {
-      q: l("ماذا يحدث للملابس المستهلكة تماماً التي أتبرع بها؟", "What happens to worn-out clothes I donate?"),
+      q: l("ماذا يحدث للملابس المستهلكة تمامًا التي أتبرع بها؟", "What happens to worn-out clothes I donate?"),
       a: l(
-        "لا شيء يُهدر؛ الملابس الصالحة تُفرز وتُنظّف وتُكوى ثم تُقدَّم للأسر بكرامة، أما الملابس المستهلكة تماماً فتتحول إلى مراتب قطن وتُستخدم في ترميم الأسِرّة ضمن حملة سِتر التابعة لمؤسسة اليسر.",
+        "لا شيء يُهدر؛ الملابس الصالحة تُفرز وتُنظّف وتُكوى ثم تُقدَّم للأسر بكرامة، أما الملابس المستهلكة تمامًا فتتحول إلى مراتب قطن وتُستخدم في ترميم الأسِرّة ضمن حملة سِتر التابعة لمؤسسة اليسر.",
         "Nothing goes to waste: wearable garments are sorted, cleaned, ironed and handed to families with dignity, while fully worn-out clothes are turned into cotton mattresses and used to restore beds within Al-Yusr's Setr campaign.",
       ),
     },
     {
       q: l("هل التبرع العيني لمؤسسة اليسر موثّق؟", "Is in-kind donation to Al-Yusr documented?"),
       a: l(
-        "نعم؛ مؤسسة اليسر الخيرية للتنمية جمعية مشهرة برقم 2665 لسنة 2019 ومقرها الرئيسي بالمنصورة، ويقوم مندوبنا الرسمي بتوثيق استلام التبرع من باب منزلك، كما يُوثَّق التسليم والفرش داخل بيوت الأسر المستفيدة بالصور.",
-        "Yes. Al-Yusr Charity for Development is a licensed NGO (No. 2665/2019) headquartered in Mansoura. Our official courier documents the pickup at your doorstep, and delivery inside beneficiary homes is documented with photos.",
+        "نعم؛ مؤسسة اليسر الخيرية مؤسسة أهلية مشهرة برقم 2665 لسنة 2019 ومقرها الرئيسي بالمنصورة، ويوثّق مندوبنا الرسمي استلام التبرع من باب منزلك، كما يُوثَّق التسليم والفرش داخل بيوت الأسر المستفيدة بالصور.",
+        "Yes. Al-Yusr Charity Foundation is a licensed NGO (No. 2665/2019) headquartered in Mansoura. Our official courier documents the pickup at your doorstep, and delivery inside beneficiary homes is documented with photos.",
       ),
     },
   ],
 
   cta: {
-    title: l("عندك مركون في بيتك؟ (أثاث · أجهزة · ملابس · أدوية · كتب)", "Have surplus items at home?"),
+    title: l("لديك مركون في بيتك؟ (أثاث · أجهزة · ملابس · أدوية · كتب)", "Have surplus items at home?"),
     sub: l("استلام مجاني من باب بيتك بكتابة كلمة «تبرع»", "Free doorstep pickup by texting 'Donate'"),
   },
 

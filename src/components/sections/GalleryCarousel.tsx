@@ -61,7 +61,7 @@ export const GalleryCarousel = ({ gallery, isRTL = true }: GalleryCarouselProps)
           </h2>
           <p className="mt-2 text-xs sm:text-sm text-muted-foreground max-w-lg mx-auto">
             {isRTL
-              ? "قوافل ميدانية مستمرة في قرى ومحافظات مصر تسلّم التبرعات لباب البيت بكرامة تامة."
+              ? "قوافل ميدانية مستمرة في قرى ومحافظات مصر تسلّم التبرعات إلى باب البيت بكرامة تامة."
               : "Continuous field convoys delivering dignity-first relief across Egyptian governorates."}
           </p>
         </div>

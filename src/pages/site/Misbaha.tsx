@@ -32,7 +32,7 @@ const MIXED = MIXED_DHIKR;
 const MIXED_KEY = "__mixed";
 type Mode = "mixed" | "single";
 const MODES: { id: Mode; ar: string; en: string; subAr: string; subEn: string }[] = [
-  { id: "mixed", ar: "أذكار متنوّعة", en: "Varied dhikr", subAr: "بتتغيّر مع كل ضغطة", subEn: "changes with every tap" },
+  { id: "mixed", ar: "أذكار متنوّعة", en: "Varied dhikr", subAr: "تتغيّر مع كل ضغطة", subEn: "changes with every tap" },
   { id: "single", ar: "ذكر واحد", en: "One dhikr", subAr: "تختاره وتكرّره", subEn: "pick one and repeat" },
 ];
 
@@ -280,7 +280,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
   const [dhikrCopied, setDhikrCopied] = useState(false);
   const shareDhikr = async () => {
     const url = `https://elyusr.org/misbaha?d=${dhikr.id}`;
-    const text = isAr ? `قول معايا: ${dhikr.text}` : `Say with me: ${dhikr.en}`;
+    const text = isAr ? `ردّد معي: ${dhikr.text}` : `Say with me: ${dhikr.en}`;
     try {
       if (navigator.share) { await navigator.share({ text, url }); return; }
       await navigator.clipboard.writeText(`${text}\n${url}`);
@@ -326,14 +326,14 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
         // Shared misbaha pages carry a family's loved one's name: kept out of search results.
         <SEOHelmet noindex
           title={room ? `${isAr ? "سبحة" : "Tasbih"} ${roomTitle(room.kind, room.gender, room.name, isAr)} | ${isAr ? "مؤسسة اليسر" : "Al-Yusr"}` : (isAr ? "سبحة مشتركة | مؤسسة اليسر" : "Shared tasbih | Al-Yusr")}
-          description={isAr ? "شارك بالتسبيح والاستغفار والصلاة على النبي ﷺ، وكل ذكر بيتضاف لعدّاد واحد." : "Join in with tasbih, istighfar and salawat; every dhikr adds to one shared count."}
+          description={isAr ? "شارك بالتسبيح والاستغفار والصلاة على النبي ﷺ، ويُضاف كل ذكر إلى عدّاد واحد." : "Join in with tasbih, istighfar and salawat; every dhikr adds to one shared count."}
           path={`/misbaha/${roomSlug}`}
           image={`https://elyusr.org/og/misbaha-${room?.kind ?? "deceased"}.jpg?v=2026.11`}
         />
       ) : (
       <SEOHelmet
         title={isAr ? "المسبحة الإلكترونية | صلاة على النبي وتسبيح واستغفار — مؤسسة اليسر" : "Digital tasbih | Salawat, tasbih & istighfar — Al-Yusr"}
-        description={isAr ? "مسبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وهدف يومي وفضل كل ذكر من الأحاديث الصحيحة. واعمل سبحة لروح حد غالي عليك وشاركها." : "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter, daily goal and the virtue of each dhikr. Create a shared tasbih for a loved one who passed away."}
+        description={isAr ? "مسبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وهدف يومي وفضل كل ذكر من الأحاديث الصحيحة. وأنشئ سبحة مشتركة لروح من تحب وشاركها." : "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter, daily goal and the virtue of each dhikr. Create a shared tasbih for a loved one who passed away."}
         path="/misbaha"
         image="https://elyusr.org/og/misbaha.jpg?v=2026.11"
       />
@@ -364,7 +364,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 </div>
                 <h1 className="text-3xl font-black sm:text-4xl md:text-5xl">{isAr ? "المسبحة الإلكترونية" : "Digital tasbih"}</h1>
                 <p className="mt-3 text-base text-primary-foreground/85 md:text-lg">
-                  {isAr ? "قول الذكر واضغط على المسبحة. الذكر بيتغيّر مع كل ضغطة علشان تجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، وتقدر تختار ذكر واحد لو حابب. عدّادك بيتحفظ على جهازك طول اليوم، ويبدأ من الأول مع يوم جديد." : "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count stays on this device for the day and starts fresh each new day."}
+                  {isAr ? "قل الذكر واضغط على المسبحة. يتغيّر الذكر مع كل ضغطة لتجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، ويمكنك أن تختار ذكرًا واحدًا إن أردت. يُحفظ عدّادك على جهازك طوال اليوم، ويبدأ من جديد مع كل يوم." : "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count stays on this device for the day and starts fresh each new day."}
                 </p>
               </>
             )}
@@ -374,10 +374,10 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
             {/* ── Counter ── */}
             <div className="flex min-w-0 flex-col items-center">
               <div className="mb-5 flex min-h-[8.75rem] w-full min-w-0 max-w-md flex-col justify-center text-center sm:min-h-[6.5rem]" aria-live="polite">
-                <p className="text-xs font-black text-secondary">{isMixed ? (isAr ? "قول دلوقتي" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}<span className="hidden font-bold text-white/45 sm:inline">{isAr ? " (اضغط المسبحة أو زرار المسافة)" : " (tap the beads or press Space)"}</span></p>
+                <p className="text-xs font-black text-secondary">{isMixed ? (isAr ? "قل الآن" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}<span className="hidden font-bold text-white/45 sm:inline">{isAr ? " (اضغط على المسبحة أو زر المسافة)" : " (tap the beads or press Space)"}</span></p>
                 <p key={`${dhikr.id}-${isMixed ? count : 0}`} className="misbaha-fade mt-1 text-xl font-black leading-[1.7] text-white sm:text-2xl">{isAr ? dhikr.text : dhikr.en}</p>
                 {nextDhikr && (
-                  <p className="mt-1 truncate text-xs font-bold text-white/55">{isAr ? `اللي بعده: ${nextDhikr.text}` : `Next: ${nextDhikr.en}`}</p>
+                  <p className="mt-1 truncate text-xs font-bold text-white/55">{isAr ? `التالي: ${nextDhikr.text}` : `Next: ${nextDhikr.en}`}</p>
                 )}
               </div>
               <button
@@ -385,7 +385,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 onClick={tap}
                 className={`misbaha-ring relative aspect-square w-full max-w-[340px] select-none rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary/60 ${done ? "misbaha-done" : ""}`}
                 style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
-                aria-label={isAr ? `اضغط بعد ما تقول: ${dhikr.text}. العدد ${count}` : `Tap after saying: ${dhikr.en}. Count ${count}`}
+                aria-label={isAr ? `اضغط بعد أن تقول: ${dhikr.text}. العدد ${count}` : `Tap after saying: ${dhikr.en}. Count ${count}`}
               >
                 <svg viewBox="0 0 300 300" className="h-full w-full" aria-hidden>
                   <circle cx="150" cy="150" r="146" fill="hsl(152 55% 9%)" />
@@ -436,22 +436,22 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 </button>
                 <button type="button" onClick={() => setSt((s) => ({ ...s, vibrate: !s.vibrate }))} aria-pressed={st.vibrate}
                   className="inline-flex items-center gap-1.5 rounded-full border border-white/20 px-4 py-1.5 text-white/90 transition hover:bg-white/10">
-                  {st.vibrate ? <Vibrate className="h-4 w-4" /> : <VibrateOff className="h-4 w-4" />} {isAr ? (st.vibrate ? "الاهتزاز شغال" : "الاهتزاز مقفول") : st.vibrate ? "Vibration on" : "Vibration off"}
+                  {st.vibrate ? <Vibrate className="h-4 w-4" /> : <VibrateOff className="h-4 w-4" />} {isAr ? (st.vibrate ? "الاهتزاز مفعّل" : "الاهتزاز متوقف") : st.vibrate ? "Vibration on" : "Vibration off"}
                 </button>
               </div>
               <div className="mt-4 flex flex-col items-center gap-2">
                 <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm font-bold text-white/75">
-                  <span>{isAr ? `ذكرك النهارده: ${fmt(st.today)}` : `Today's dhikr: ${fmt(st.today)}`}</span>
+                  <span>{isAr ? `ذكرك اليوم: ${fmt(st.today)}` : `Today's dhikr: ${fmt(st.today)}`}</span>
                   {streak >= 2 && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-black text-secondary">
-                      <Flame className="h-3.5 w-3.5" /> {isAr ? `${fmt(streak)} أيام ورا بعض` : `${fmt(streak)}-day streak`}
+                      <Flame className="h-3.5 w-3.5" /> {isAr ? `${fmt(streak)} أيام متتالية` : `${fmt(streak)}-day streak`}
                     </span>
                   )}
                 </p>
                 {st.today > 0 && (
                   <button type="button" onClick={() => setSummaryOpen(true)}
                     className="inline-flex items-center gap-2 rounded-full bg-secondary px-5 py-2 text-sm font-black text-slate-950 shadow-cta transition hover:-translate-y-0.5">
-                    <ImageDown className="h-4 w-4" /> {isAr ? "خلّصت؟ خُد صورة حصيلتك" : "Done? Get your summary image"}
+                    <ImageDown className="h-4 w-4" /> {isAr ? "انتهيت؟ احصل على صورة حصيلتك" : "Done? Get your summary image"}
                   </button>
                 )}
               </div>
@@ -504,19 +504,19 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                     {customDhikr.map((d) => (
                       <span key={d.id} className={`inline-flex items-center gap-1 rounded-full border ps-3 text-sm font-black ${d.id === dhikr.id ? "border-secondary bg-secondary/10 text-primary" : "border-border text-primary"}`}>
                         <button type="button" onClick={() => choose(d.id)} aria-pressed={d.id === dhikr.id} className="py-1.5">{d.text}</button>
-                        <button type="button" onClick={() => removeCustom(d.id)} className="grid h-7 w-7 place-items-center rounded-full text-muted-foreground hover:text-destructive" aria-label={isAr ? `شيل ${d.text}` : `Remove ${d.text}`}><X className="h-3.5 w-3.5" /></button>
+                        <button type="button" onClick={() => removeCustom(d.id)} className="grid h-7 w-7 place-items-center rounded-full text-muted-foreground hover:text-destructive" aria-label={isAr ? `احذف ${d.text}` : `Remove ${d.text}`}><X className="h-3.5 w-3.5" /></button>
                       </span>
                     ))}
                   </div>
                 </div>
               )}
               <form className="mt-4 flex gap-2" onSubmit={(e) => { e.preventDefault(); addCustom(); }}>
-                <label htmlFor="custom-dhikr" className="sr-only">{isAr ? "اكتب ذكر خاص بيك" : "Add your own dhikr"}</label>
+                <label htmlFor="custom-dhikr" className="sr-only">{isAr ? "اكتب ذكرًا خاصًا بك" : "Add your own dhikr"}</label>
                 <input id="custom-dhikr" value={customText} onChange={(e) => setCustomText(e.target.value)} maxLength={120}
-                  placeholder={isAr ? "اكتب ذكر أو دعاء خاص بيك" : "Write your own dhikr or dua"}
+                  placeholder={isAr ? "اكتب ذكرًا أو دعاءً خاصًا بك" : "Write your own dhikr or dua"}
                   className="h-11 min-w-0 flex-1 rounded-xl border border-border bg-background px-3 text-sm font-bold outline-none focus:border-secondary" />
                 <button type="submit" disabled={customText.trim().length < 2} className="inline-flex h-11 shrink-0 items-center gap-1 rounded-xl bg-primary px-4 text-sm font-black text-primary-foreground disabled:opacity-40">
-                  <Plus className="h-4 w-4" /> {isAr ? "ضيف" : "Add"}
+                  <Plus className="h-4 w-4" /> {isAr ? "أضف" : "Add"}
                 </button>
               </form>
 
@@ -557,12 +557,12 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
               <div className="mt-6 flex flex-wrap gap-2 border-t border-border pt-5">
                 <button type="button" onClick={share} className="inline-flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
                   {copied ? <Check className="h-4 w-4 text-secondary" /> : <Share2 className="h-4 w-4" />}
-                  {copied ? (isAr ? "اتنسخ الرابط" : "Link copied") : isAr ? "شارك المسبحة، والدال على الخير كفاعله" : "Share the tasbih"}
+                  {copied ? (isAr ? "تم نسخ الرابط" : "Link copied") : isAr ? "شارك المسبحة، والدال على الخير كفاعله" : "Share the tasbih"}
                 </button>
                 {!isCustom && (
                   <button type="button" onClick={shareDhikr} className="inline-flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
                     {dhikrCopied ? <Check className="h-4 w-4 text-secondary" /> : <Share2 className="h-4 w-4" />}
-                    {dhikrCopied ? (isAr ? "اتنسخ" : "Copied") : isAr ? "ابعت الذكر ده لحد" : "Send this dhikr"}
+                    {dhikrCopied ? (isAr ? "تم النسخ" : "Copied") : isAr ? "أرسل هذا الذكر لمن تحب" : "Send this dhikr"}
                   </button>
                 )}
               </div>
@@ -598,7 +598,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
               {isAr ? "هذه السبحة هدية من مؤسسة اليسر الخيرية" : "This tasbih is a gift from Al-Yusr Charity Foundation"}
             </h2>
             <p className="relative mx-auto mt-3 max-w-xl text-sm leading-relaxed text-primary-foreground/80 md:text-base">
-              {isAr ? "استخدمها وشاركها مع أحبابك، ولكل من يذكر الله بيها أجر." : "Use it and share it with your loved ones; every remembrance carries reward."}
+              {isAr ? "استخدمها وشاركها مع أحبابك، ولك أجر كل من يذكر الله بها." : "Use it and share it with your loved ones — you share the reward of everyone who remembers Allah with it."}
             </p>
             <Link to="/about" className="relative mt-6 inline-flex items-center gap-2 rounded-2xl bg-orange-grad px-7 py-3 text-sm font-black text-accent-foreground shadow-cta transition hover:-translate-y-0.5 hover:opacity-95">
               {isAr ? "تعرّف علينا أكثر" : "Get to know us"}
@@ -627,12 +627,12 @@ function SummaryDialog({ isAr, tally, total, roomTitle: title, pageUrl, onClose 
     let alive = true;
     let objectUrl: string | null = null;
     drawMisbahaSummary({
-      title: title || (isAr ? "حصيلة ذكري النهارده" : "My dhikr today"),
+      title: title || (isAr ? "حصيلة ذكري اليوم" : "My dhikr today"),
       subtitle: day,
       lines,
       total,
       totalLabel: isAr ? "ذكر" : "dhikr",
-      footer: `${isAr ? "سبّح معانا:" : "Join in:"} ${pageUrl.replace(/^https?:\/\//, "")}`,
+      footer: `${isAr ? "سبّح معنا:" : "Join in:"} ${pageUrl.replace(/^https?:\/\//, "")}`,
       rtl: isAr,
       locale,
     })
@@ -653,7 +653,7 @@ function SummaryDialog({ isAr, tally, total, roomTitle: title, pageUrl, onClose 
   const shareImage = async () => {
     if (!blob) return;
     try {
-      await navigator.share({ files: [new File([blob], fileName, { type: "image/png" })], text: isAr ? `حصيلة ذكري النهارده${title ? ` — ${title}` : ""}. سبّح معانا: ${pageUrl}` : `My dhikr today${title ? ` — ${title}` : ""}. Join in: ${pageUrl}` });
+      await navigator.share({ files: [new File([blob], fileName, { type: "image/png" })], text: isAr ? `حصيلة ذكري اليوم${title ? ` — ${title}` : ""}. سبّح معنا: ${pageUrl}` : `My dhikr today${title ? ` — ${title}` : ""}. Join in: ${pageUrl}` });
     } catch { /* dismissed */ }
   };
 
@@ -667,7 +667,7 @@ function SummaryDialog({ isAr, tally, total, roomTitle: title, pageUrl, onClose 
         </ul>
         <div className="mt-3 overflow-hidden rounded-2xl bg-muted">
           {url ? <img src={url} alt={isAr ? "صورة حصيلة الذكر" : "Dhikr summary image"} className="block w-full" /> : (
-            <div className="grid aspect-[4/5] place-items-center text-sm text-muted-foreground">{failed ? (isAr ? "تعذر تجهيز الصورة" : "Could not create the image") : (isAr ? "بنجهّز الصورة..." : "Preparing...")}</div>
+            <div className="grid aspect-[4/5] place-items-center text-sm text-muted-foreground">{failed ? (isAr ? "تعذّر تجهيز الصورة" : "Could not create the image") : (isAr ? "جارٍ تجهيز الصورة..." : "Preparing...")}</div>
           )}
         </div>
         <div className="mt-3 grid gap-2">

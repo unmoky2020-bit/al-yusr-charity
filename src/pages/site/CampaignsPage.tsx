@@ -120,7 +120,7 @@ const CampaignsFAQ = ({ isRTL }: { isRTL: boolean }) => {
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
           {isRTL
-            ? "إجابات واضحة عن التبرع، الحملات، والتوثيق."
+            ? "إجابات واضحة عن التبرع والحملات والتوثيق."
             : "Clear answers about donating, campaigns, and documentation."}
         </p>
       </div>
@@ -219,7 +219,7 @@ export const CAMPAIGNS_DATA = [
     titleEn: "Arboun Khair — Freelancers",
     subtitleAr: "«اتصدق النهاردة.. وخليه عربون لرزق بكرة!»",
     subtitleEn: "'Donate today.. make it a pledge for tomorrow's blessing!'",
-    descAr: "المبادرة الأولى للفريلانسرز والمستقلين وأصحاب البيزنس لاستقطاع نسبة مرنة من أرباح كل مشروع (1% أو 5%) كزكاة للمهنة وبركة للرزق لدعم تيسير الزواج، الأيتام، والصدقات الجارية مع شارة بورتفوليو رقمية.",
+    descAr: "أول مبادرة للمستقلين (الفريلانسرز) وأصحاب الأعمال، تقوم على اقتطاع نسبة مرنة من أرباح كل مشروع (1% أو 5%) زكاةً للمهنة وبركةً في الرزق، لدعم تيسير الزواج والأيتام والصدقات الجارية، مع شارة رقمية تضيفها إلى معرض أعمالك.",
     descEn: "Egypt's #1 initiative for remote professionals & freelancers to dedicate project earnings into verified impact (orphans, brides, clean water) earning digital portfolio badges.",
     badgeAr: "مبادرة الفريلانسرز والمستقلين 🚀",
     badgeEn: "For Remote Professionals 🚀",
@@ -229,8 +229,8 @@ export const CAMPAIGNS_DATA = [
     priceFromAr: "سهم يبدأ من 150 ج",
     priceFromEn: "From 150 EGP",
     pillars: [
-      { ar: "تفريج ضغط وقلق الشغل وجلب البركة للرزق", en: "Relieves client stress and work fatigue" },
-      { ar: "شارة «مستقل داعم» رقمية لإضافتها بالبورتفوليو", en: "Digital Impact Freelancer badge" },
+      { ar: "تخفيف ضغط العمل وقلقه، وجلب البركة في الرزق", en: "Relieves client stress and work fatigue" },
+      { ar: "شارة «مستقل داعم» الرقمية لإضافتها إلى معرض أعمالك", en: "Digital Impact Freelancer badge" },
       { ar: "توجيه التبرع للأيتام وتيسير الزواج والأسقف", en: "Directly funds brides, orphans, and water" },
     ],
   },
@@ -242,7 +242,7 @@ export const CAMPAIGNS_DATA = [
     titleEn: "Athar Education Campaign",
     subtitleAr: "«شنطة وقلم النهاردة.. أثر يعيش ويغيّر بكرا»",
     subtitleEn: "'A bag and pen today.. an impact that transforms tomorrow'",
-    descAr: "موسم العودة للمدارس: كفالة شنط وأدوات مدرسية متكاملة، زي مدرسي جديد، سداد مصروفات دراسية لمنع تسرب أطفال الأيتام والأسر المتعففة، وتأسيس دور القرآن وحضانات نموذجية.",
+    descAr: "موسم العودة إلى المدارس: كفالة حقائب وأدوات مدرسية متكاملة، وزي مدرسي جديد، وسداد المصروفات الدراسية لمنع تسرّب الأيتام وأطفال الأسر المتعففة من التعليم، وتأسيس دور القرآن وحضانات نموذجية.",
     descEn: "Back-to-School season: equipping underprivileged and orphan students with durable backpacks, supplies, uniforms, tuition coverage, and running model Quranic pre-schools.",
     badgeAr: "موسم العودة للمدارس 🎒",
     badgeEn: "Back to School 🎒",
@@ -265,7 +265,7 @@ export const CAMPAIGNS_DATA = [
     titleEn: "Setr Winter Campaign",
     subtitleAr: "«مَن سَتَرَ مسلماً سَتَرَه الله في الدنيا والآخرة»",
     subtitleEn: "'Whoever covers a Muslim, Allah will cover them in both worlds'",
-    descAr: "دفء الشتاء لأهالينا المستحقين: أسقف بيتومين وخشب، أبواب وشبابيك، أسِرّة ومراتب، ألحفة فايبر، وكسوة شتوية للأطفال وكبار السن في الدقهلية وكل محافظات مصر، بالتكامل مع حملة مَرْكون.",
+    descAr: "دفء الشتاء لأهالينا المستحقين: أسقف من البيتومين والخشب، وأبواب وشبابيك، وأسِرّة ومراتب، وألحفة فايبر، وكسوة شتوية للأطفال وكبار السن في الدقهلية وكل محافظات مصر، بالتكامل مع حملة مَرْكون.",
     descEn: "Winter warmth for families in need: bitumen and wooden roofs, doors and windows, beds and mattresses, fibre blankets and winter clothing across Dakahlia and Egypt, in step with the Markoun campaign.",
     badgeAr: "موسم الشتاء ❄️",
     badgeEn: "Winter season ❄️",
@@ -288,9 +288,9 @@ export const CAMPAIGNS_DATA = [
     titleEn: "Markoun In-Kind Reuse",
     subtitleAr: "«كنزك المركون.. يبني حياة لغيرك!»",
     subtitleEn: "'Your stored surplus.. builds a new life for someone else!'",
-    descAr: "أول حملة مصرية تُحيي أسرة بالمركون في بيتك: إعادة تدوير وتأهيل الأثاث المنزلي، الأجهزة الكهربائية، الملابس، الصيدلية المستدامة، والكتب، مع خدمة استلام مجانية من باب البيت بسيارات المؤسسة.",
+    descAr: "أول حملة مصرية تُحيي أسرة بما هو مركون في بيتك: إعادة تدوير وتأهيل الأثاث المنزلي والأجهزة الكهربائية والملابس والكتب، والصيدلية المستدامة، مع خدمة استلام مجانية من باب البيت بسيارات المؤسسة.",
     descEn: "Egypt's premier in-kind reuse initiative: restoring surplus home furniture, working electronics, clothing, valid medications, and books with free doorstep pickup.",
-    badgeAr: "استلام من باب بيتك مجاناً 🚚",
+    badgeAr: "استلام من باب بيتك مجانًا 🚚",
     badgeEn: "Free Doorstep Pickup 🚚",
     image: markounPuzzle,
     category: "sustainability",
@@ -299,8 +299,8 @@ export const CAMPAIGNS_DATA = [
     priceFromEn: "Doorstep Pickup (01097000137)",
     pillars: [
       { ar: "أثاث وأجهزة كهربائية مفحوصة ومجددة", en: "Refurbished furniture & appliances" },
-      { ar: "صيدلية مستدامة للأدوية الفائضة مجاناً", en: "Valid-expiry community medicine" },
-      { ar: "مندوب المؤسسة يصلك لباب بيتك (01097000137)", en: "Doorstep pickup: 01097000137" },
+      { ar: "صيدلية مستدامة للأدوية الفائضة مجانًا", en: "Valid-expiry community medicine" },
+      { ar: "مندوب المؤسسة يصل إلى باب بيتك (01097000137)", en: "Doorstep pickup: 01097000137" },
     ],
   },
   {
@@ -311,7 +311,7 @@ export const CAMPAIGNS_DATA = [
     titleEn: "Dhill Summer & Water",
     subtitleAr: "«نُظِلّهم اليوم عسى أن يُظِلّنا الله يوم القيامة»",
     subtitleEn: "'Provide shade today, that Allah may shade us on the Day of Judgment'",
-    descAr: "إغاثة موجات الصيف الحارة والحر الشديد: أسقف خشبية معزولة ضد الحرارة والأمطار، وصلات مياه نقية للمنازل، خطوط مياه لقرى كاملة، ومراوح تبريد بالدقهلية ومحافظات مصر.",
+    descAr: "إغاثة في موجات الحر الشديد صيفًا: أسقف خشبية معزولة ضد الحرارة والأمطار، ووصلات مياه نقية للمنازل، وخطوط مياه لقرى كاملة، ومراوح تبريد في الدقهلية ومحافظات مصر.",
     descEn: "Protecting deserving families from severe summer heatwaves: insulated wooden roofs, clean household water taps, village water lines, and cooling fans.",
     badgeAr: "إغاثة موجات الحر وسقيا ماء ☀️",
     badgeEn: "Summer Heat & Clean Water ☀️",
@@ -334,7 +334,7 @@ export const CAMPAIGNS_DATA = [
     titleEn: "Ramadan Season of Giving",
     subtitleAr: "«رمضانك في اليسر إحسانٌ لا ينقطع»",
     subtitleEn: "'Your generosity with Al-Yusr is non-stop goodness'",
-    descAr: "كراتين رمضان الكبرى 25 كجم بالبروتين البلدي الطازج، مطبخ الوجبات الساخنة اليومية، ذبائح مزارع اليسر الوقفية، تيسير الزواج 'الفرحة فرحتين'، وكسوة العيد وزكاة الفطر.",
+    descAr: "كراتين رمضان الكبرى (25 كجم) بالبروتين البلدي الطازج، ومطبخ الوجبات الساخنة اليومية، وذبائح مزارع اليسر الوقفية، وتيسير الزواج «الفرحة فرحتين»، وكسوة العيد وزكاة الفطر.",
     descEn: "Comprehensive Ramadan giving: 25kg family boxes with fresh meat, daily hot iftar meals, endowment farm livestock, bride assistance, and timely Zakat disbursement.",
     badgeAr: "موسم العطاء والإفطار",
     badgeEn: "Ramadan Food & Zakat",
@@ -345,7 +345,7 @@ export const CAMPAIGNS_DATA = [
     priceFromEn: "95 EGP meal / 950 EGP box",
     pillars: [
       { ar: "كرتونة الخير 25 كجم غنية بالبروتين البلدي", en: "25kg food box with fresh meat" },
-      { ar: "مطبخ اليسر: وجبات إفطار ساخنة يومياً", en: "Daily hot iftar meals for travelers" },
+      { ar: "مطبخ اليسر: وجبات إفطار ساخنة يوميًا", en: "Daily hot iftar meals for travelers" },
       { ar: "تجهيز عرائس يتيمات وكسوة العيد وزكاة الفطر", en: "Bride support & orphan Eid outfits" },
     ],
   },
@@ -355,9 +355,9 @@ export const CAMPAIGNS_DATA = [
     path: "/food-box",
     titleAr: "الغذاء الشهري",
     titleEn: "Monthly Food",
-    subtitleAr: "«أطعِموا الطعام — سُفرة تكفي أسرة شهراً كاملاً»",
+    subtitleAr: "«أطعِموا الطعام — سُفرة تكفي أسرة شهرًا كاملًا»",
     subtitleEn: "'Feed the hungry: a table that lasts a family a whole month'",
-    descAr: "برنامج دائم يصل بالطعام إلى أسر الأيتام والمتعففين كل شهر: لحوم من ذبائح شهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام تُقدَّم إطعاماً أو كفارة صيام أو كفارة يمين.",
+    descAr: "برنامج دائم يصل بالطعام إلى أسر الأيتام والمتعففين كل شهر: لحوم من ذبائح شهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات تُقدَّم إطعامًا أو كفارة صيام أو كفارة يمين.",
     descEn: "A permanent programme bringing food to orphan and needy families every month: meat from monthly slaughters, a 14 kg carton of local staples, and cooked meals for feeding, fasting expiation or oath expiation.",
     badgeAr: "برنامج دائم · لحوم وكرتونة ووجبات",
     badgeEn: "Year-round · meat, carton & meals",
@@ -378,21 +378,21 @@ export const CAMPAIGNS_DATA = [
     path: "/qurbani",
     titleAr: "صكوك الأضاحي وضمان الجودة",
     titleEn: "Qurbani Meat Shares",
-    subtitleAr: "«الوحيدين في مصر بنديك ضمان جودة الأضحية»",
+    subtitleAr: "«نحن الوحيدون في مصر الذين نضمن لك جودة الأضحية»",
     subtitleEn: "'100% Quality Guaranteed fresh local Qurbani meat'",
-    descAr: "لحوم بلدي طازجة 100% من إنتاج مزارع اليسر الخيرية، مذبوحة شرعياً وتحت إشراف بيطري كامل وموزعة على الأسر الأشد احتياجاً مع توثيق لكل صك.",
+    descAr: "لحوم بلدي طازجة 100% من إنتاج مزارع اليسر الخيرية، مذبوحة شرعيًا تحت إشراف بيطري كامل، وموزعة على الأسر الأشد احتياجًا مع توثيق لكل صك.",
     descEn: "Premium livestock reared in our own endowment pastures, slaughtered strictly to Sharia with veterinary supervision and full photo proof.",
     badgeAr: "أضاحي ومزارع وقفية",
     badgeEn: "Qurbani & Farms",
     image: posterOdhy,
     category: "seasonal",
     featured: false,
-    priceFromAr: "من 1,400 ج للصك",
-    priceFromEn: "From 1,400 EGP",
+    priceFromAr: "من 14,000 ج للصك",
+    priceFromEn: "From 14,000 EGP",
     pillars: [
-      { ar: "لحم بلدي فاخر من مزارعنا بدون وسطاء", en: "Direct farm-reared local meat" },
+      { ar: "لحم بلدي فاخر من مزارعنا دون وسطاء", en: "Direct farm-reared local meat" },
       { ar: "ذبح شرعي ومعاينة دقيقة لكل رأس ماشية", en: "Strict Sharia compliance" },
-      { ar: "إشعار وتوثيق فوري بوصول لحومك لمستحقيها", en: "Verified donor delivery reports" },
+      { ar: "إشعار وتوثيق فوري بوصول لحومك إلى مستحقيها", en: "Verified donor delivery reports" },
     ],
   },
 ];
@@ -433,7 +433,7 @@ export const CampaignsPage = () => {
         }
         description={
           isRTL
-            ? "مؤسسة اليسر الخيرية — دليل كافة حملات ومبادرات اليسر للتنمية: حملة ظل (سقيا ماء وأسقف معزولة)، حملة ستر (دفء الشتاء)، حملة مركون (إعادة تدوير الأثاث والأجهزة والأدوية)، مبادرة عربون خير للفريلانسرز والمستقلين، وحملة أثر التعليمية بالدقهلية ومصر. مشهرة برقم 2665 لسنة 2019."
+            ? "مؤسسة اليسر الخيرية — دليل كافة حملات ومبادرات اليسر: حملة ظل (سقيا ماء وأسقف معزولة)، حملة ستر (دفء الشتاء)، حملة مركون (إعادة تدوير الأثاث والأجهزة والأدوية)، مبادرة عربون خير للفريلانسرز والمستقلين، وحملة أثر التعليمية بالدقهلية ومصر. مشهرة برقم 2665 لسنة 2019."
             : "Al-Yusr Charity Foundation — Discover all campaigns: Dhill (water & roofing), Setr (winter relief), Markoun (furniture & electronics reuse), Arboun Khair (for freelancers), Athar (education) & Ramadan Season in Dakahlia & Egypt."
         }
         path="/campaigns"
@@ -455,7 +455,7 @@ export const CampaignsPage = () => {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "NGO",
-            name: "مؤسسة اليسر الخيرية للتنمية",
+            name: "مؤسسة اليسر الخيرية",
             alternateName: ["اليسر", "مؤسسة اليسر", "جمعية اليسر", "Al-Yusr Charity", "Elyusr"],
             url: "https://elyusr.org/",
             logo: "https://elyusr.org/logo-512.png",
@@ -503,15 +503,15 @@ export const CampaignsPage = () => {
                 name: "كيف أطلب مندوب مؤسسة اليسر لاستلام التبرعات العينية من المنزل؟",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "يمكنك الاتصال مباشرة بالخط الساخن 01097000137 ليصلك مندوب مؤسسة اليسر بسيارات المؤسسة لفحص واستلام الأثاث، الأجهزة الكهربائية، والملابس وتجديدها لصالح الأسر الأكثر احتياجاً.",
+                  text: "يمكنك الاتصال مباشرة بالخط الساخن 01097000137 ليصلك مندوب مؤسسة اليسر بسيارات المؤسسة لفحص الأثاث والأجهزة الكهربائية والملابس واستلامها وتجديدها لصالح الأسر الأكثر احتياجًا.",
                 },
               },
               {
                 "@type": "Question",
-                name: "هل مؤسسة اليسر الخيرية مشهرة رسمياً؟",
+                name: "هل مؤسسة اليسر الخيرية مشهرة رسميًا؟",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "نعم، مؤسسة اليسر الخيرية للتنمية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي مع توثيق ميداني فوري وإيصالات رسمية لكافة التبرعات.",
+                  text: "نعم، مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي مع توثيق ميداني فوري وإيصالات رسمية لكافة التبرعات.",
                 },
               },
             ],
@@ -545,7 +545,7 @@ export const CampaignsPage = () => {
 
           <p className="mx-auto mt-2.5 max-w-2xl text-xs leading-relaxed text-primary-foreground/85 sm:text-sm md:text-base">
             {isRTL
-              ? "مبادرات نوعية مدروسة بعناية لتغطي كافة مسارات الخير: من الصدقات الجارية وسقيا الماء وتسقيف البيوت، لإعادة تدوير الأثاث والأجهزة، ودعم التعليم وتيسير الزواج."
+              ? "مبادرات نوعية مدروسة بعناية تغطي مسارات الخير كافة: من الصدقات الجارية وسقيا الماء وتسقيف البيوت، إلى إعادة تدوير الأثاث والأجهزة، ودعم التعليم وتيسير الزواج."
               : "Carefully structured initiatives spanning continuous charity, roof insulation, clean water, in-kind reuse of appliances & furniture, and student education."}
           </p>
 
@@ -566,7 +566,7 @@ export const CampaignsPage = () => {
               className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] px-6 py-2.5 text-xs font-black text-white shadow-lg transition hover:brightness-105"
             >
               <WhatsAppIcon className="h-4 w-4" />
-              {isRTL ? "استفسار ومندوب تبرعات" : "Inquiries & WhatsApp"}
+              {isRTL ? "استفسار وطلب مندوب" : "Inquiries & WhatsApp"}
             </a>
           </div>
 
@@ -604,7 +604,7 @@ export const CampaignsPage = () => {
 
           {/* Campaigns Grid — Using Exact AlternatingCard Motion from ServicesMap */}
           {!entitiesReady ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-label={isRTL ? "جاري التحميل" : "Loading"}>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-label={isRTL ? "جارٍ التحميل" : "Loading"}>
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="flex aspect-[4/5] min-h-[430px] flex-col justify-end gap-3 rounded-[1.75rem] bg-muted p-6">
                   <Skeleton className="h-7 w-3/5 bg-foreground/10" />
@@ -691,11 +691,11 @@ export const CampaignsPage = () => {
                   {isRTL ? "خدمة استلام التبرعات العينية" : "Doorstep In-Kind Pickup"}
                 </span>
                 <h3 className="text-xl font-black leading-tight sm:text-2xl md:text-3xl">
-                  {isRTL ? "عندك أثاث أو أجهزة أو ملابس مركونة؟" : "Have surplus furniture, appliances, or clothes?"}
+                  {isRTL ? "هل لديك أثاث أو أجهزة أو ملابس مركونة؟" : "Have surplus furniture, appliances, or clothes?"}
                 </h3>
                 <p className="text-xs sm:text-sm font-medium leading-relaxed text-primary-foreground/90 max-w-xl">
                   {isRTL
-                    ? "مندوب مؤسسة اليسر يصلك لباب البيت بسيارات المؤسسة لفحص واستلام التبرعات وتجديدها قبل تسليمها للأسر المستحقة."
+                    ? "يصل مندوب مؤسسة اليسر إلى باب بيتك بسيارات المؤسسة لفحص التبرعات واستلامها، ثم تُجدَّد قبل تسليمها إلى الأسر المستحقة."
                     : "Our official logistics vans collect items right at your doorstep, refurbishing them for validated deserving families."}
                 </p>
               </div>
@@ -735,8 +735,8 @@ export const CampaignsPage = () => {
       </section>
       {/* Cases that belong to our campaigns (live from the backend) */}
       <LinkedCasesSection filter={{ linkedTo: "campaign" }} showOwner variant="carousel" filterByOwner limit={30} isRTL={isRTL} className="bg-muted/30"
-        title={isRTL ? "حالات بتتجمع لها التبرعات في حملاتنا" : "Cases our campaigns are funding"}
-        subtitle={isRTL ? "اختار حالة بعينها وتابع تحديثاتها بالصور لحد ما تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
+        title={isRTL ? "حالات نجمع لها التبرعات ضمن حملاتنا" : "Cases our campaigns are funding"}
+        subtitle={isRTL ? "اختر حالة بعينها وتابع تحديثاتها بالصور حتى تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
     </PageLayout>
   );
 };

@@ -14,10 +14,10 @@ import { QURBANI_SEASON, daysUntilEid } from "@/data/qurbaniSeason";
 const PROGRAM_LABEL: Record<string, { ar: string; en: string }> = {
   odhya: { ar: "صك أضحية", en: "Qurbani share" },
   box: { ar: "كرتونة عزومة", en: "Food box" },
-  meat: { ar: "كيلو لحمة", en: "Kilo of meat" },
+  meat: { ar: "كيلو لحم", en: "Kilo of meat" },
   education: { ar: "كفالة تعليمية", en: "Education sponsorship" },
   water: { ar: "وصلة مياه", en: "Water line" },
-  bride: { ar: "جواز عروسة", en: "Bride preparation" },
+  bride: { ar: "جهاز عروس", en: "Bride preparation" },
   zakat: { ar: "زكاة مال", en: "Zakat" },
 };
 
@@ -54,24 +54,24 @@ const QurbaniCityView = ({ city }: { city: NonNullable<ReturnType<typeof getCity
 
   // City-level price tiers (EGP) — keep in sync with /donate.
   const TIERS = [
-    { id: "sheep",    ar: "خروف كامل",     en: "Whole sheep",   price: 7000,  serves: isAr ? "أسرة (3–5 أفراد)" : "1 family (3–5)" },
-    { id: "seventh",  ar: "سُبع عجل",      en: "1/7 of a cow",  price: 4500,  serves: isAr ? "نية شخص واحد" : "1 person's intention" },
-    { id: "cow",      ar: "عجل كامل",      en: "Whole cow",     price: 32000, serves: isAr ? "نية 7 أفراد + 5–7 أسر" : "7 intentions, 5–7 families" },
+    { id: "sheep",    ar: "خروف كامل",       en: "Whole sheep",       price: 14500, serves: isAr ? "أسرة (3–5 أفراد)" : "1 family (3–5)" },
+    { id: "seventh",  ar: "صك سُبع بقري",    en: "1/7 cow share",     price: 16000, serves: isAr ? "نية شخص واحد" : "1 person's intention" },
+    { id: "buffalo",  ar: "صك سُبع جاموسي",  en: "1/7 buffalo share", price: 14000, serves: isAr ? "نية شخص واحد" : "1 person's intention" },
   ];
 
   // City-specific FAQ — feeds FAQPage schema + on-page accordion.
   const FAQ = isAr ? [
-    { q: `إزاي أحجز صك أضحية في ${city.ar}؟`, a: `اضغط زر "احجز صك أضحية في ${city.ar}"، اختار الخروف أو سُبع العجل، وأكّد الدفع. هتستلم إيصال PDF فوراً ورقم تتبع.` },
-    { q: `إمتى بيتم توزيع لحوم الأضحية في ${city.ar}؟`, a: `نفس يوم العيد بالظبط — الذبح من فجر العيد، والتسليم لباب البيت في ${city.ar} قبل المغرب، مع صور وفيديو لكل صك.` },
-    { q: `إيه الفرق بينكم وبين جمعية الإصلاح أو رسالة في ${city.ar}؟`, a: `مؤسسة اليسر متخصصة في الدقهلية بس، فبنعرف القرى المحتاجة بيت بيت في ${city.ar}، وكل صك ليه رقم تتبع وصور توثيق.` },
-    { q: `هل بتوصلوا لقرى ${city.ar} البعيدة؟`, a: `أيوة. فريقنا الميداني يغطي مراكز ${city.ar} وقراها بالكامل، والتوصيل مجاني للأسر اللي مش قادرة تيجي.` },
-    { q: `سعر صك الأضحية في ${city.ar} كام؟`, a: `الخروف من 7,000 جنيه، سُبع العجل من 4,500 جنيه، والعجل الكامل من 32,000 جنيه. الأسعار قابلة للتحديث حسب السوق.` },
+    { q: `كيف أحجز صك أضحية في ${city.ar}؟`, a: `اضغط زر «احجز صك أضحية في ${city.ar}»، واختر الخروف أو صك السُّبع (بقري أو جاموسي)، ثم أكّد الدفع. سيصلك إيصال PDF فورًا مع رقم تتبّع.` },
+    { q: `متى تُوزَّع لحوم الأضحية في ${city.ar}؟`, a: `في يوم العيد نفسه؛ يبدأ الذبح بعد صلاة العيد، ويصل اللحم إلى باب البيت في ${city.ar} قبل المغرب، مع صور وفيديو لكل صك.` },
+    { q: `لماذا أختار مؤسسة اليسر لصك الأضحية في ${city.ar}؟`, a: `مؤسسة اليسر مؤسسة خيرية مصرية تعمل في محافظات مصر، ومقرها الرئيسي في المنصورة، ولها جذور عميقة في الدقهلية؛ لذلك نعرف القرى المحتاجة في ${city.ar} جيدًا، ولكل صك رقم تتبّع وصور توثيق.` },
+    { q: `هل تصلون إلى قرى ${city.ar} البعيدة؟`, a: `نعم، يغطي فريقنا الميداني مراكز ${city.ar} وقراها بالكامل، والتوصيل مجاني للأسر التي لا تستطيع الحضور.` },
+    { q: `كم سعر صك الأضحية في ${city.ar}؟`, a: `الخروف 14,500 جنيه، وصك سُبع بقري 16,000 جنيه، وصك سُبع جاموسي 14,000 جنيه. ويمكنك حجز أكثر من صك؛ فالعجل الكامل = 7 صكوك.` },
   ] : [
     { q: `How do I reserve a Qurbani share in ${city.en}?`, a: `Click "Reserve a share in ${city.en}", choose sheep or cow share, and confirm payment. You'll get a PDF receipt and tracking number instantly.` },
     { q: `When is the meat distributed in ${city.en}?`, a: `On Eid day itself — slaughter at dawn, delivery to the family's doorstep in ${city.en} before sunset, with photos and video for every share.` },
-    { q: `What makes Al-Yusr different in ${city.en}?`, a: `Al-Yusr is Dakahlia-only, so we know every needy village in ${city.en} personally, and every share has a tracking number with full documentation.` },
+    { q: `What makes Al-Yusr different in ${city.en}?`, a: `Al-Yusr is an Egyptian foundation working across Egypt's governorates, headquartered in Mansoura with deep roots in Dakahlia, so we know the needy villages in ${city.en} well, and every share has a tracking number with full documentation.` },
     { q: `Do you reach remote villages in ${city.en}?`, a: `Yes. Our field team covers all of ${city.en}'s districts and villages, with free delivery for families unable to travel.` },
-    { q: `How much is a Qurbani share in ${city.en}?`, a: `Sheep from EGP 7,000, 1/7 of a cow from EGP 4,500, whole cow from EGP 32,000. Subject to market price updates.` },
+    { q: `How much is a Qurbani share in ${city.en}?`, a: `Whole sheep EGP 14,500, 1/7 cow share EGP 16,000, 1/7 buffalo share EGP 14,000. You can book more than one share — a whole animal = 7 shares.` },
   ];
 
   return (
@@ -108,8 +108,8 @@ const QurbaniCityView = ({ city }: { city: NonNullable<ReturnType<typeof getCity
               offers: {
                 "@type": "AggregateOffer",
                 priceCurrency: "EGP",
-                lowPrice: "4500",
-                highPrice: "32000",
+                lowPrice: "14000",
+                highPrice: "16000",
                 offerCount: 3,
                 availability: QURBANI_SEASON.bookingOpen ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
                 validThrough: QURBANI_SEASON.eidDate.slice(0, 10),
@@ -149,7 +149,7 @@ const QurbaniCityView = ({ city }: { city: NonNullable<ReturnType<typeof getCity
             <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary/15 px-4 py-1.5 text-xs font-extrabold text-secondary">
               <Clock className="h-3.5 w-3.5" />
               {isAr
-                ? `باقي ${daysLeft} يوم على عيد الأضحى — احجز صك ${city.ar} قبل نفاد الكميات`
+                ? `الأيام المتبقية على عيد الأضحى: ${daysLeft} — احجز صك ${city.ar} قبل نفاد الكميات`
                 : `${daysLeft} days to Eid Al-Adha — reserve your ${city.en} share before slots fill`}
             </div>
           )}
@@ -214,7 +214,7 @@ const QurbaniCityView = ({ city }: { city: NonNullable<ReturnType<typeof getCity
               { I: Truck,       t: city.copy[lang].localNote },
               { I: Camera,      t: city.copy[lang].coverage },
               { I: CheckCircle2, t: isAr
-                  ? `كل صك أضحية في ${city.ar} بيتوثّق بالصور والفيديو ويصل لباب البيت يوم العيد.`
+                  ? `كل صك أضحية في ${city.ar} يوثَّق بالصور والفيديو، ويصل إلى باب البيت يوم العيد.`
                   : `Every Qurbani share in ${city.en} is documented and delivered on Eid day.` },
             ].map((b, i) => (
               <div key={i} className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
@@ -256,7 +256,7 @@ const QurbaniCityView = ({ city }: { city: NonNullable<ReturnType<typeof getCity
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-foreground/70">
             {isAr
-              ? "أسعار شفافة بدون رسوم خفية — نفس السعر لكل مدن الدقهلية. الحجز المبكر يضمن لك أحسن جودة."
+              ? "أسعار شفافة دون رسوم خفية، والسعر واحد في كل مدن الدقهلية. والحجز المبكر يضمن لك أفضل جودة."
               : "Transparent pricing, no hidden fees — same price across Dakahlia. Early booking guarantees best quality."}
           </p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
@@ -287,7 +287,7 @@ const QurbaniCityView = ({ city }: { city: NonNullable<ReturnType<typeof getCity
         <div className="container mx-auto max-w-5xl px-4">
           <div className="grid gap-4 md:grid-cols-3">
             {[
-              { I: ShieldCheck, t: isAr ? `مرخصة رسمياً برقم 2665 لسنة 2019 — وزارة التضامن` : "Officially licensed (2665/2019) — Ministry of Solidarity" },
+              { I: ShieldCheck, t: isAr ? `مرخّصة رسميًا برقم 2665 لسنة 2019 — وزارة التضامن` : "Officially licensed (2665/2019) — Ministry of Solidarity" },
               { I: Camera,      t: isAr ? `صور وفيديو لكل صك في ${city.ar}` : `Photo & video proof for every ${city.en} share` },
               { I: FileText,    t: isAr ? "إيصال PDF فوري + رقم تتبع لكل تبرع" : "Instant PDF receipt + tracking ID per donation" },
             ].map((b, i) => (

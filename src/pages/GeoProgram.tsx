@@ -36,7 +36,7 @@ const GeoProgram = () => {
   const path = `/geo/${geo.slug}/${prog.slug}`;
   const url = `https://elyusr.org${path}`;
   const waHref = `https://wa.me/201097000137?text=${encodeURIComponent(
-    isRTL ? `السلام عليكم، عايز أعرف تفاصيل ${prog.ar.name} في ${gName}.` : `Hi, tell me more about ${prog.en.name} in ${gName}.`,
+    isRTL ? `السلام عليكم، أودّ معرفة تفاصيل ${prog.ar.name} في ${gName}.` : `Hi, tell me more about ${prog.en.name} in ${gName}.`,
   )}`;
 
   // Sibling programs in the same governorate (for cross-linking & SEO).
@@ -53,7 +53,7 @@ const GeoProgram = () => {
 
   const steps = [
     { icon: ClipboardCheck, t: isRTL ? "بحث ميداني" : "Field assessment", d: isRTL ? `فريق ${gName} يزور الأسرة.` : `${gName} team visits the family.` },
-    { icon: Truck, t: isRTL ? "تسليم بكرامة" : "Dignified delivery", d: isRTL ? "نوصّل الاحتياج لباب البيت." : "We deliver to the doorstep." },
+    { icon: Truck, t: isRTL ? "تسليم بكرامة" : "Dignified delivery", d: isRTL ? "نوصل الاحتياجات حتى باب البيت." : "We deliver to the doorstep." },
     { icon: FileCheck2, t: isRTL ? "توثيق وتقرير" : "Proof & report", d: isRTL ? "تقرير مصوّر خلال 48 ساعة." : "Photo report within 48 hours." },
   ];
 
@@ -123,7 +123,7 @@ const GeoProgram = () => {
           <p className="mt-4 max-w-2xl text-base text-primary-foreground/85 md:text-lg">{c.intro}</p>
           {prog.priceFrom > 0 && (
             <span className="mt-4 inline-flex rounded-full bg-primary-foreground/10 px-3 py-1.5 text-xs font-extrabold text-primary-foreground ring-1 ring-secondary/30">
-              {isRTL ? `يبدأ من ${prog.priceFrom} ج لـ ${gName}` : `From ${prog.priceFrom} EGP in ${gName}`}
+              {isRTL ? `يبدأ من ${prog.priceFrom} ج في ${gName}` : `From ${prog.priceFrom} EGP in ${gName}`}
             </span>
           )}
           <div className="mt-6 flex flex-wrap gap-3">
@@ -143,7 +143,7 @@ const GeoProgram = () => {
       <section className="bg-background py-12 md:py-16">
         <div className="container mx-auto grid max-w-5xl gap-8 px-4 md:grid-cols-2">
           <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
-            <div className="mb-3 flex items-center gap-2 text-primary"><MapPin className="h-5 w-5 text-secondary" /><h2 className="text-lg font-black">{isRTL ? "ليه فريقنا في" : "Why our team in"} {gName}؟</h2></div>
+            <div className="mb-3 flex items-center gap-2 text-primary"><MapPin className="h-5 w-5 text-secondary" /><h2 className="text-lg font-black">{isRTL ? "لماذا فريقنا في" : "Why our team in"} {gName}؟</h2></div>
             <p className="text-sm leading-relaxed text-foreground/85">{c.whyHere}</p>
           </div>
           <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
@@ -155,7 +155,7 @@ const GeoProgram = () => {
         {/* 3-step local journey */}
         <div className="container mx-auto mt-10 max-w-5xl px-4">
           <h2 className="text-center text-xl font-black text-primary md:text-2xl">
-            {isRTL ? `كيف بنشتغل في ${gName}` : `How we work in ${gName}`}
+            {isRTL ? `كيف نعمل في ${gName}` : `How we work in ${gName}`}
           </h2>
           <ol className="mt-6 grid gap-3 sm:grid-cols-3">
             {steps.map(({ icon: Icon, t, d }, i) => (

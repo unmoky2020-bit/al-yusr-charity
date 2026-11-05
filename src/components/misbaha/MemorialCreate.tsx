@@ -72,21 +72,21 @@ export function MemorialCreate({ isAr, onCreated }: { isAr: boolean; onCreated: 
   };
 
   const preview = name.trim() ? roomTitle(kind, kind === "group" ? null : gender, name.trim(), isAr) : isAr ? meta.ar : meta.en;
-  const goalLabel = (n: number) => (n === 0 ? (isAr ? "من غير هدف" : "No goal") : n === 1_000_000 ? (isAr ? "مليون" : "1M") : fmt(n));
+  const goalLabel = (n: number) => (n === 0 ? (isAr ? "دون هدف" : "No goal") : n === 1_000_000 ? (isAr ? "مليون" : "1M") : fmt(n));
 
   return (
     <section id="memorial" className="scroll-mt-24 bg-muted/40 py-12 md:py-16" aria-labelledby="memorial-title">
       <div className={`container mx-auto grid gap-10 px-4 ${SHOW_PUBLIC_ROOMS ? "max-w-6xl lg:grid-cols-[1.1fr_1fr] lg:items-start" : "max-w-3xl"}`}>
         <div>
           <span className="inline-block rounded-full bg-secondary/20 px-3 py-1 text-xs font-black text-primary">{isAr ? "سبحة مشتركة" : "Shared tasbih"}</span>
-          <h2 id="memorial-title" className="mt-2 text-2xl font-black text-primary md:text-3xl">{isAr ? "اعمل سبحة يتشارك فيها الكل" : "Create a tasbih everyone can join"}</h2>
+          <h2 id="memorial-title" className="mt-2 text-2xl font-black text-primary md:text-3xl">{isAr ? "أنشئ سبحة يشارك فيها الجميع" : "Create a tasbih everyone can join"}</h2>
           <p className="mt-2 leading-relaxed text-muted-foreground">
-            {isAr ? "لروح حد غالي، أو بنية شفاء مريض، أو ذكر جماعي للعيلة. هتاخد رابط وصورة ستوري، وكل اللي يدخل يسبّح بيزوّد عدّاد واحد بتشوفوه كلكم." : "For a loved one who passed, for someone sick, or for a group. You get a link and a story image; everyone who joins adds to one shared count."}
+            {isAr ? "لروح شخص عزيز، أو بنية شفاء مريض، أو ذكرًا جماعيًا للعائلة. ستحصل على رابط وصورة للستوري، وكل من يدخل ويسبّح يزيد عدّادًا واحدًا تشاهدونه جميعًا." : "For a loved one who passed, for someone sick, or for a group. You get a link and a story image; everyone who joins adds to one shared count."}
           </p>
 
           <form onSubmit={submit} className="mt-5 space-y-5 rounded-3xl bg-card p-5 shadow-soft sm:p-6" noValidate>
             <fieldset>
-              <legend className="mb-2 text-sm font-black text-primary">{isAr ? "السبحة دي…" : "This tasbih is…"}</legend>
+              <legend className="mb-2 text-sm font-black text-primary">{isAr ? "هذه السبحة…" : "This tasbih is…"}</legend>
               <div className="grid gap-2 sm:grid-cols-3" role="radiogroup">
                 {MISBAHA_KINDS.map((k) => {
                   const Icon = KIND_ICON[k.id];
@@ -144,11 +144,11 @@ export function MemorialCreate({ isAr, onCreated }: { isAr: boolean; onCreated: 
             </fieldset>
 
             <div>
-              <label htmlFor="memorial-dhikr" className="text-sm font-black text-primary">{isAr ? "الذكر اللي بيظهر أول ما حد يفتح" : "Dhikr shown first"}</label>
+              <label htmlFor="memorial-dhikr" className="text-sm font-black text-primary">{isAr ? "الذكر الذي يظهر عند فتح السبحة" : "Dhikr shown first"}</label>
               <div className="mt-1">
                 <NiceSelect id="memorial-dhikr" dir={dir} value={toNice(dhikrId)} onChange={(v) => setDhikrId(fromNice(v))} ariaLabel={isAr ? "الذكر المقترح" : "Suggested dhikr"}
                   options={[
-                    { value: "", label: isAr ? "أذكار متنوّعة" : "Varied dhikr", hint: isAr ? "بتتغيّر مع كل ضغطة" : "changes with every tap" },
+                    { value: "", label: isAr ? "أذكار متنوّعة" : "Varied dhikr", hint: isAr ? "تتغيّر مع كل ضغطة" : "changes with every tap" },
                     ...DHIKR_CHOICES.map((id) => ALL_DHIKR.find((x) => x.id === id)).filter(Boolean).map((d) => ({ value: d!.id, label: isAr ? d!.text : d!.en })),
                   ]} />
               </div>
@@ -156,21 +156,21 @@ export function MemorialCreate({ isAr, onCreated }: { isAr: boolean; onCreated: 
 
             {/* What visitors will see */}
             <div className="rounded-2xl bg-[#06301c] p-4 text-center text-white" aria-live="polite">
-              <p className="text-[11px] font-black text-secondary">{isAr ? "هتظهر كده" : "Preview"}</p>
+              <p className="text-[11px] font-black text-secondary">{isAr ? "ستظهر هكذا" : "Preview"}</p>
               <p className="mt-1 text-lg font-black leading-snug">{preview}</p>
               <p className="mt-1 text-xs font-bold text-white/70">{roomTagline(kind, kind === "group" ? null : gender, isAr)}</p>
             </div>
 
             {error && <p className="text-sm font-bold text-destructive" role="alert">{error}</p>}
             <button type="submit" disabled={busy} className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary font-black text-primary-foreground transition hover:opacity-95 disabled:opacity-60">
-              <Plus className="h-4 w-4" /> {busy ? (isAr ? "بتتعمل..." : "Creating...") : isAr ? "اعمل السبحة وخُد الرابط" : "Create and get the link"}
+              <Plus className="h-4 w-4" /> {busy ? (isAr ? "جارٍ الإنشاء..." : "Creating...") : isAr ? "أنشئ السبحة واحصل على الرابط" : "Create and get the link"}
             </button>
-            <p className="text-[11px] font-semibold text-muted-foreground">{isAr ? (SHOW_PUBLIC_ROOMS ? "صفحة السبحة مش بتظهر في جوجل، وبتوصل للي معاه الرابط أو من القايمة هنا." : "صفحة السبحة مش بتظهر في جوجل، وبتوصل بس للي معاه الرابط.") : "Tasbih pages are not shown in search engines."}</p>
+            <p className="text-[11px] font-semibold text-muted-foreground">{isAr ? (SHOW_PUBLIC_ROOMS ? "صفحة السبحة لا تظهر في جوجل، ويصل إليها من لديه الرابط أو من خلال القائمة هنا." : "صفحة السبحة لا تظهر في جوجل، ولا يصل إليها إلا من لديه الرابط.") : "Tasbih pages are not shown in search engines."}</p>
           </form>
         </div>
 
         {SHOW_PUBLIC_ROOMS && <div>
-          <h3 className="text-lg font-black text-primary">{isAr ? "سبح بيتشارك فيها دلوقتي" : "Shared right now"}</h3>
+          <h3 className="text-lg font-black text-primary">{isAr ? "سبح يشارك فيها الناس الآن" : "Shared right now"}</h3>
           <div className="mt-3 flex flex-wrap gap-2" role="tablist">
             {(["all", ...MISBAHA_KINDS.map((k) => k.id)] as const).map((f) => (
               <button key={f} type="button" role="tab" aria-selected={filter === f} onClick={() => setFilter(f)}
@@ -182,7 +182,7 @@ export function MemorialCreate({ isAr, onCreated }: { isAr: boolean; onCreated: 
           {rooms === null ? (
             <div className="mt-3 grid gap-2 sm:grid-cols-2">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-[74px] animate-pulse rounded-2xl bg-card" />)}</div>
           ) : rooms.length === 0 ? (
-            <p className="mt-3 rounded-2xl border border-dashed border-border bg-card/50 p-5 text-sm text-muted-foreground">{isAr ? "أول سبحة هتعملها هتظهر هنا، وأي حد يقدر يدخل يشارك فيها." : "The first one you create will show here."}</p>
+            <p className="mt-3 rounded-2xl border border-dashed border-border bg-card/50 p-5 text-sm text-muted-foreground">{isAr ? "أول سبحة تنشئها ستظهر هنا، ويمكن لأي شخص الدخول والمشاركة فيها." : "The first one you create will show here."}</p>
           ) : (
             <ul className="mt-3 grid gap-2 sm:grid-cols-2">
               {rooms.map((r) => {

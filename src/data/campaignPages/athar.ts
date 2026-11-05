@@ -19,7 +19,7 @@ const athar: CampaignPageContent = {
       "التعليم هو الأثر الوحيد المتين الذي يكسر دائرة الفقر. تجهيزك لطالب اليوم استثمار مباشر في طفل ستتغير حياته وحياة أسرته.",
       "Education is the one lasting impact that breaks the cycle of poverty. Equipping a student today is a direct investment in a child and their family's future.",
     ),
-    donateLabel: l("اكفل طالباً الآن", "Sponsor a student"),
+    donateLabel: l("اكفل طالبًا الآن", "Sponsor a student"),
   },
 
   hadith: {
@@ -54,7 +54,7 @@ const athar: CampaignPageContent = {
         "Educational Aid — 'A backpack & pen today.. an impact that transforms tomorrow'",
       ),
       lead: l(
-        "نؤمن في مؤسسة اليسر أن التعليم هو السلاح الحقيقي لبناء الإنسان، والأثر الوحيد المتين الذي يكسر دائرة الفقر وينقل الأسر المستحقة إلى المستقبل. مساهمتك اليوم في تجهيز طالب هي استثمار مباشر في طفل ستتغير حياته للأبد.",
+        "نؤمن في مؤسسة اليسر أن التعليم هو السلاح الحقيقي لبناء الإنسان، والأثر الوحيد المتين الذي يكسر دائرة الفقر وينقل الأسر المستحقة إلى المستقبل. مساهمتك اليوم في تجهيز طالب استثمار مباشر في طفل ستتغير حياته إلى الأبد.",
         "Education is the true weapon to lift families out of poverty. Supporting a student with a backpack, school supplies, tuition, and uniforms is a direct investment in a child whose future will be rewritten.",
       ),
       items: [],
@@ -109,7 +109,7 @@ const athar: CampaignPageContent = {
     note: {
       title: l("كتاب ورسالة من طالب لطالب", "A book and a note, student to student"),
       lead: l(
-        "نجمع الكتب الدراسية بحالة جيدة، ويكتب الطالب المتبرع رسالة تشجيع بخط يده في أول صفحة، فتصل لزميله هديةً معنوية قبل أن تكون كتاباً.",
+        "نجمع الكتب الدراسية بحالة جيدة، ويكتب الطالب المتبرع رسالة تشجيع بخط يده في أول صفحة، فتصل لزميله هديةً معنوية قبل أن تكون كتابًا.",
         "We collect textbooks in good condition, and the donating student writes a note of encouragement on the first page: a gift of spirit before it is a book.",
       ),
       items: [
@@ -117,7 +117,7 @@ const athar: CampaignPageContent = {
           id: "example",
           title: l("الصفحة الأولى من كتاب متبرَّع به (مثال)", "First page of a donated book (example)"),
           desc: l(
-            "إلى صاحب هذا الكتاب الجديد: ذاكرت فيه السنة اللي فاتت ونجحت، وإن شاء الله تنجح وتتفوق. شد حيلك!",
+            "إلى صاحب هذا الكتاب الجديد: ذاكرت فيه العام الماضي ونجحت، وإن شاء الله تنجح وتتفوق. شدّ حيلك!",
             "To the new owner of this book: I studied from it last year and passed. You will too. Keep going!",
           ),
         },
@@ -136,7 +136,7 @@ const athar: CampaignPageContent = {
 
     /** Donate your books: 4 steps. */
     books: {
-      title: l("كتب العام الماضي تصنع أثراً هذا العام", "Last year's books, this year's impact"),
+      title: l("كتب العام الماضي تصنع أثرًا هذا العام", "Last year's books, this year's impact"),
       items: [
         { id: "gather", title: l("اجمع الكتب", "Gather the books"), desc: l("كتب دراسية بحالة جيدة من العام الماضي، لأي مرحلة.", "Last year's textbooks in good condition, any grade.") },
         { id: "write", title: l("اكتب رسالتك", "Write your note"), desc: l("رسالة تشجيع قصيرة بخطك في أول صفحة لزميلك الجديد.", "A short note of encouragement on the first page.") },
@@ -162,7 +162,7 @@ const athar: CampaignPageContent = {
         {
           id: "assess",
           title: l("حصر وبحث ميداني", "Field assessment"),
-          desc: l("يزور فريق البحث الاجتماعي الأسر والمدارس لتحديد الطلاب الأكثر احتياجاً والأيتام.", "Social researchers visit homes and schools to identify the students most in need."),
+          desc: l("يزور فريق البحث الاجتماعي الأسر والمدارس لتحديد الطلاب الأكثر احتياجًا والأيتام.", "Social researchers visit homes and schools to identify the students most in need."),
           extra: l("قبل الدراسة", "Before school"),
         },
         {
@@ -191,14 +191,14 @@ const athar: CampaignPageContent = {
     {
       q: l("ما هي مبادرة «أثر يتوارث» للكتب المدرسية؟", "What is the 'Inherited Impact' textbook initiative?"),
       a: l(
-        "مبادرة مبتكرة لجمع الكتب الدراسية المستعملة بحالة جيدة، ونطلب من الطالب المتبرع كتابة رسالة تشجيع بخط يده في أول صفحة لتصل كهدية معنوية لزميله غير القادر.",
+        "مبادرة مبتكرة لجمع الكتب الدراسية المستعملة بحالة جيدة، ونطلب من الطالب المتبرع كتابة رسالة تشجيع بخط يده في أول صفحة، لتصل هديةً معنوية إلى زميله غير القادر.",
         "An initiative recycling gently-used textbooks with an encouraging handwritten note from donor students to the recipient students.",
       ),
     },
     {
       q: l("ما هي الحضانات ودور التحفيظ التابعة للمؤسسة؟", "What nurseries does the foundation manage?"),
       a: l(
-        "تضم 3 مراكز تعليمية وتربوية نموذجية: 1) حضانة أبي بكر الصديق، 2) حضانة الفاروق عمر، 3) حضانة أَثَر (جاري الإعداد والتجهيز لتكون منارة تعليمية جديدة).",
+        "تضم 3 مراكز تعليمية وتربوية نموذجية: 1) حضانة أبي بكر الصديق، 2) حضانة الفاروق عمر، 3) حضانة أَثَر (قيد الإعداد والتجهيز لتكون منارة تعليمية جديدة).",
         "Three model early-learning centers: Abu Bakr Al-Siddiq, Al-Farouq Omar, and the newly developing Athar nursery.",
       ),
     },
@@ -212,12 +212,12 @@ const athar: CampaignPageContent = {
     {
       q: l("كم تكلفة كفالة طالب بالكامل للعام الدراسي؟", "What is the cost of full annual student sponsorship?"),
       a: l(
-        "تبلغ 1,850 جنيهاً شاملة الحقيبة المدرسية والأدوات (450 ج) والزي المدرسي (550 ج) وسداد المصروفات السنوية (850 ج)، ويمكنك أيضاً التبرع بأي جزء منفصل (حقيبة بـ 450 ج أو زي بـ 550 ج).",
+        "تبلغ 1,850 جنيهًا شاملة الحقيبة المدرسية والأدوات (450 ج) والزي المدرسي (550 ج) وسداد المصروفات السنوية (850 ج)، ويمكنك أيضًا التبرع بأي جزء منفصل (حقيبة بـ 450 ج أو زي بـ 550 ج).",
         "EGP 1,850 covering the backpack and supplies (450), uniform (550) and annual tuition (850).",
       ),
     },
     {
-      q: l("هل حملة أَثَر تكفل طلاباً في المنصورة والدقهلية؟", "Does the Athar campaign sponsor students in Mansoura and Dakahlia?"),
+      q: l("هل حملة أَثَر تكفل طلابًا في المنصورة والدقهلية؟", "Does the Athar campaign sponsor students in Mansoura and Dakahlia?"),
       a: l(
         "نعم. تعمل حملة أَثَر من مؤسسة اليسر في المنصورة وطلخا وقرى محافظة الدقهلية؛ يزور فريق البحث الاجتماعي الأسر والمدارس لتحديد الطلاب الأيتام وغير القادرين، ثم تُسلَّم الشنط والزي للطالب وتُسدَّد المصروفات لإدارة المدرسة مباشرة، مع تقارير مصورة للمتبرع.",
         "Yes. Al-Yusr's Athar campaign works in Mansoura, Talkha and the villages of Dakahlia governorate. Our social researchers visit homes and schools to identify orphans and students in need, then bags and uniforms are handed to the student and fees are paid directly to the school, with photo reports sent to the donor.",

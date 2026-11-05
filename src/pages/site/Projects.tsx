@@ -74,8 +74,8 @@ const Projects = () => {
   const programNamesAr = programs.map((p) => p.ar.name).join("، ");
   const programNamesEn = programs.map((p) => p.en.name).join(", ");
   const programsSeoDescription = isRTL
-    ? `برامج مؤسسة اليسر الخيرية بالمنصورة والدقهلية: ${programs.slice(0, 7).map((p) => p.ar.name).join("، ")} — بحث اجتماعي قبل الصرف وتوثيق بالصور.`
-    : `Al-Yusr Charity programs in Mansoura and Dakahlia: ${programs.slice(0, 7).map((p) => p.en.name).join(", ")} — social assessment before spending and photo documentation.`;
+    ? `برامج مؤسسة اليسر الخيرية في مصر، من المنصورة إلى محافظات مصر: ${programs.slice(0, 7).map((p) => p.ar.name).join("، ")} — بحث اجتماعي قبل الصرف وتوثيق بالصور.`
+    : `Al-Yusr Charity programs across Egypt, from Mansoura to every governorate: ${programs.slice(0, 7).map((p) => p.en.name).join(", ")} — social assessment before spending and photo documentation.`;
   // Selected governorate tag — filters the GEO section so the page isn't
   // overwhelmed by 11+ huge cards. Defaults to Dakahlia (our home turf).
   const [activeGeo, setActiveGeo] = useState<string>(
@@ -90,13 +90,13 @@ const Projects = () => {
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   const waMsg = encodeURIComponent(
     isRTL
-      ? "السلام عليكم، عايز أعرف أنسب برنامج للتبرع أو المساعدة مع مؤسسة اليسر."
+      ? "السلام عليكم، أريد أن أعرف أنسب برنامج للتبرع أو للمساعدة مع مؤسسة اليسر."
       : "Hello, I'd like to learn which Al-Yusr program is best for donation or support."
   );
   const waHref = `https://wa.me/201097000137?text=${waMsg}`;
   const highlights = [
     isRTL ? "بحث اجتماعي قبل الصرف" : "Social assessment before spending",
-    isRTL ? "تسليم بكرامة لباب البيت" : "Dignified doorstep delivery",
+    isRTL ? "تسليم بكرامة حتى باب البيت" : "Dignified doorstep delivery",
     isRTL ? "توثيق ومتابعة للأثر" : "Documented impact follow-up",
   ];
 
@@ -120,37 +120,37 @@ const Projects = () => {
     {
       slug: "odhya",
       icon: ShieldCheck,
-      ar: { t: "ضمان جودة الأضحية", d: "الوحيدون في مصر بمعاينة بيطرية مسبقة وذبح شرعي موثّق بالفيديو لكل صك." },
+      ar: { t: "ضمان جودة الأضحية", d: "الوحيدون في مصر الذين يقدّمون معاينة بيطرية مسبقة وذبحًا شرعيًا موثّقًا بالفيديو لكل صك." },
       en: { t: "Qurbani quality guarantee", d: "Only foundation in Egypt with pre-vet inspection and video-documented Shariah slaughter per voucher." },
     },
     {
       slug: "box",
       icon: Truck,
-      ar: { t: "كرتونة + لحمة بلدي", d: "كرتونة كاملة لشهر + كيلو لحمة من مزارعنا الوقفية مع كل تبرع — مش بس مواد جافة." },
+      ar: { t: "كرتونة + لحم بلدي", d: "كرتونة تكفي شهرًا كاملًا + كيلو لحم من مزارعنا الوقفية مع كل تبرع، لا مواد جافة فقط." },
       en: { t: "Food box + farm meat", d: "A full monthly box plus 1 kg of farm-fresh meat from our endowment farms with every donation." },
     },
     {
       slug: "water",
       icon: Droplets,
-      ar: { t: "صدقة جارية بسهم 200 ج", d: "بنفصل وصلة المياه لأسهم صغيرة عشان أي متبرع يقدر يساهم في مشروع ميداني كامل." },
+      ar: { t: "صدقة جارية بسهم 200 ج", d: "نقسّم تكلفة وصلة المياه إلى أسهم صغيرة حتى يستطيع أي متبرع المساهمة في مشروع ميداني كامل." },
       en: { t: "Lasting charity from 200 EGP", d: "We split each water line into micro-shares so any donor can participate in a real field project." },
     },
     {
       slug: "education",
       icon: GraduationCap,
-      ar: { t: "حملة سبتمبر السنوية", d: "بنفتح التسجيل قبل بداية الدراسة بأسابيع لنغطي مصاريف + زي + أدوات الطفل قبل اليوم الأول." },
+      ar: { t: "حملة سبتمبر السنوية", d: "نفتح التسجيل قبل بداية الدراسة بأسابيع لنغطي مصاريف الطفل وزيّه وأدواته قبل اليوم الأول." },
       en: { t: "Annual September drive", d: "Registration opens weeks before school so we cover tuition, uniform and supplies before day one." },
     },
     {
       slug: "bride",
       icon: HandHeart,
-      ar: { t: "تجهيز شقة كاملة بسهم 250 ج", d: "غرفة نوم وصالون ومطبخ وأجهزة — مشروع جماعي يحوّل تبرعك الصغير لجهاز عروسة كامل." },
+      ar: { t: "تجهيز شقة كاملة بسهم 250 ج", d: "غرفة نوم وصالون ومطبخ وأجهزة — مشروع جماعي يحوّل تبرعك الصغير إلى جهاز عروس كامل." },
       en: { t: "Full apartment from 250 EGP shares", d: "Bedroom, living room, kitchen and appliances — your small share becomes a complete bride trousseau." },
     },
     {
       slug: "shelter",
       icon: Home,
-      ar: { t: "تسقيف عازل بالبوتامين", d: "أسقف من البوتامين والخشب وأبواب وشبابيك آمنة — حملة من أكتوبر لفبراير لحماية الأسر من البرد." },
+      ar: { t: "تسقيف عازل بالبوتامين", d: "أسقف من البوتامين والخشب وأبواب وشبابيك آمنة — حملة من أكتوبر إلى فبراير لحماية الأسر من البرد." },
       en: { t: "Insulated bitumen roofing", d: "Bitumen and timber roofs with safe doors and windows — Oct–Feb drive protecting families from winter." },
     },
     {
@@ -195,14 +195,14 @@ const Projects = () => {
     }
     return isRTL
       ? [
-          { q: "ما هي أبواب التبرع المتاحة في مؤسسة اليسر؟", a: `برامجنا الحالية: ${programNamesAr}. ولكل موسم حملاته، وتلاقيها في صفحة «حملاتنا».` },
-          { q: "هل تبرعي يصل فعلًا للمستحقين؟", a: "نعم — كل تبرع يمر ببحث اجتماعي ميداني للأسر، يُسلَّم بكرامة لباب البيت، ويتم توثيقه بصور وفيديو يصلك عبر واتساب أو البريد بعد التنفيذ." },
-          { q: "هل أحصل على إيصال رسمي بالتبرع؟", a: "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري برقم مرجعي تقدر تتبع به الحالة من صفحة «تتبع التبرع»." },
-          { q: "إيه الفرق بين التبرع لبرنامج وبين التبرع لحالة موثّقة؟", a: "التبرع لبرنامج (مثل صك أضحية أو كرتونة عزومة) بيُوزَّع على أسر متعددة حسب الأكثر احتياجًا. التبرع لحالة موثّقة بيروح لحالة فردية بعينها مع متابعة نتيجتها." },
-          { q: "هل يمكنني تخصيص تبرعي لمحافظة معينة؟", a: "نعم. تركيزنا الأساسي محافظة الدقهلية بكل مدنها وقراها، وبنغطّي حالات أيضًا في كفر الشيخ والصعيد. اطلب التخصيص مع فريق واتساب 201097000137+." },
-          { q: "ما طرق الدفع المتاحة؟", a: "فيزا/ماستر كارد، Vodafone Cash، InstaPay، تحويل بنكي على CIB، أو دفع كاش عند ممثل المؤسسة في المنصورة." },
+          { q: "ما هي أبواب التبرع المتاحة في مؤسسة اليسر؟", a: `برامجنا الحالية: ${programNamesAr}. ولكل موسم حملاته، وتجدها في صفحة «حملاتنا».` },
+          { q: "هل تبرعي يصل فعلًا للمستحقين؟", a: "نعم. كل تبرع يمر ببحث اجتماعي ميداني للأسر، ثم يُسلَّم بكرامة حتى باب البيت، ويُوثَّق بصور وفيديو تصلك عبر واتساب أو البريد بعد التنفيذ." },
+          { q: "هل أحصل على إيصال رسمي بالتبرع؟", a: "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري برقم مرجعي يمكنك أن تتابع به حالة تبرعك من صفحة «تتبع التبرع»." },
+          { q: "ما الفرق بين التبرع لبرنامج والتبرع لحالة موثّقة؟", a: "التبرع لبرنامج (مثل صك أضحية أو كرتونة عزومة) يُوزَّع على أسر متعددة حسب الأشد احتياجًا، أما التبرع لحالة موثّقة فيذهب إلى حالة فردية بعينها مع متابعة نتيجتها." },
+          { q: "هل يمكنني تخصيص تبرعي لمحافظة معينة؟", a: "نعم. تركيزنا الأساسي محافظة الدقهلية بكل مدنها وقراها، ونغطي أيضًا حالات في كفر الشيخ والصعيد. اطلب التخصيص من فريقنا على واتساب 201097000137+." },
+          { q: "ما طرق الدفع المتاحة؟", a: "فيزا/ماستر كارد، Vodafone Cash، InstaPay، تحويل بنكي على CIB، أو دفع نقدي لدى ممثل المؤسسة في المنصورة." },
           { q: "هل المؤسسة مرخّصة رسميًا؟", a: "مؤسسة اليسر الخيرية مرخّصة من وزارة التضامن الاجتماعي تحت رقم إشهار 2665/2019، ومقرها الرئيسي بالمنصورة - الدقهلية." },
-          { q: "إزاي أتطوع أو أنضم لفريق العمل؟", a: "ادخل على صفحة حملات التطوع واختر حملة وقدّم على المقعد المناسب لمهاراتك. بنوفّر تدريب ميداني ومتابعة لكل متطوع جديد." },
+          { q: "كيف أتطوع أو أنضم إلى فريق العمل؟", a: "ادخل صفحة «تطوّع معنا» من القائمة، واختر المجال المناسب لمهاراتك، ثم قدّم طلبك. نوفّر تدريبًا ميدانيًا ومتابعة لكل متطوع جديد." },
         ]
       : [
           { q: "What donation programs does Al-Yusr offer?", a: `Our current programs: ${programNamesEn}. Seasonal campaigns are listed on the Campaigns page.` },
@@ -219,7 +219,7 @@ const Projects = () => {
   return (
     <PageLayout>
       <SEOHelmet
-        title={isRTL ? "برامج اليسر الخيرية بالدقهلية | غذاء علاج تعليم مياه سكن" : "Al-Yusr Programs in Dakahlia | Food, Health, Education, Water, Shelter"}
+        title={isRTL ? "برامج خيرية في مصر | إطعام وعلاج وكفالة أيتام ومياه — اليسر" : "Charity programs in Egypt | Food, Health, Orphans, Water — Al-Yusr"}
         description={programsSeoDescription}
         path="/programs"
       />
@@ -299,15 +299,15 @@ const Projects = () => {
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "HowTo",
-          name: isRTL ? "إزاي تتبرع لبرنامج اليسر الخيرية" : "How to donate to an Al-Yusr program",
+          name: isRTL ? "كيف تتبرع لبرامج اليسر الخيرية" : "How to donate to an Al-Yusr program",
           inLanguage: isRTL ? "ar-EG" : "en",
           totalTime: "PT3M",
           tool: [{ "@type": "HowToTool", name: isRTL ? "بطاقة بنكية أو محفظة إلكترونية" : "Bank card or e-wallet" }],
           step: [
-            { "@type": "HowToStep", position: 1, name: isRTL ? "اختر البرنامج" : "Pick a program", text: isRTL ? "اختر الباب اللي يناسب نيتك (غذاء، علاج، تعليم، أضحية، زكاة…) من قائمة البرامج." : "Choose the track that matches your intention from the programs list." },
-            { "@type": "HowToStep", position: 2, name: isRTL ? "حدّد المبلغ وادفع بأمان" : "Set amount and pay securely", text: isRTL ? "ادفع بفيزا، فودافون كاش، إنستا باي أو تحويل CIB — كله مشفّر وآمن." : "Pay with Visa, Vodafone Cash, InstaPay or CIB transfer — fully encrypted." },
-            { "@type": "HowToStep", position: 3, name: isRTL ? "نوصّل الخير لبيت الأسرة" : "We deliver to the family", text: isRTL ? "بعد بحث ميداني نوصّل الاحتياج لباب البيت في الدقهلية وكفر الشيخ." : "After field assessment we deliver to the doorstep across Dakahlia & Kafr El Sheikh." },
-            { "@type": "HowToStep", position: 4, name: isRTL ? "استلم التوثيق والإيصال" : "Receive proof & receipt", text: isRTL ? "يوصلك إيصال إلكتروني ورقم تتبّع وصور/فيديو للتسليم." : "You receive an e-receipt, tracking ID and delivery photos/video." },
+            { "@type": "HowToStep", position: 1, name: isRTL ? "اختر البرنامج" : "Pick a program", text: isRTL ? "اختر الباب الذي يناسب نيتك (غذاء، علاج، تعليم، أضحية، زكاة…) من قائمة البرامج." : "Choose the track that matches your intention from the programs list." },
+            { "@type": "HowToStep", position: 2, name: isRTL ? "حدّد المبلغ وادفع بأمان" : "Set amount and pay securely", text: isRTL ? "ادفع بفيزا أو فودافون كاش أو إنستا باي أو بتحويل على CIB، وكل المعاملات مشفّرة وآمنة." : "Pay with Visa, Vodafone Cash, InstaPay or CIB transfer — fully encrypted." },
+            { "@type": "HowToStep", position: 3, name: isRTL ? "نوصل الخير إلى بيت الأسرة" : "We deliver to the family", text: isRTL ? "بعد البحث الميداني نوصل الاحتياج إلى باب البيت في الدقهلية وكفر الشيخ." : "After field assessment we deliver to the doorstep across Dakahlia & Kafr El Sheikh." },
+            { "@type": "HowToStep", position: 4, name: isRTL ? "استلم التوثيق والإيصال" : "Receive proof & receipt", text: isRTL ? "يصلك إيصال إلكتروني ورقم تتبّع وصور أو فيديو للتسليم." : "You receive an e-receipt, tracking ID and delivery photos/video." },
           ],
         })}</script>
         {/* AboutPage — strengthens entity identity for AI engines */}
@@ -349,7 +349,7 @@ const Projects = () => {
             geo: { "@type": "GeoCoordinates", latitude: g.lat, longitude: g.lon },
           })),
           knowsAbout: programs.map((p) => p[lang].name),
-          slogan: isRTL ? "بنوصّل الخير بكرامة لكل بيت محتاج" : "Delivering aid with dignity to every family in need",
+          slogan: isRTL ? "نوصل الخير بكرامة إلى كل بيت محتاج" : "Delivering aid with dignity to every family in need",
         })}</script>
         {/* SpeakableSpecification — helps voice assistants summarise the page */}
         <script type="application/ld+json">{JSON.stringify({
@@ -385,12 +385,12 @@ const Projects = () => {
                 {isRTL ? "برامج اليسر… دعم متكامل يحسّن ظروف المعيشة" : "Al-Yusr programs for better living conditions"}
               </h1>
               <p className="mt-4 mx-auto lg:mx-0 max-w-2xl text-sm font-semibold leading-7 text-primary-foreground/85 md:text-base">
-                {isRTL ? "من كرتونة الأمل لفرصة علاج وتعليم ومياه وسكن آمن — بنوصل الخير للبيوت المحتاجة بعد تحقق ميداني وبكرامة كاملة." : "From a hope box to healthcare, education, water, and safer homes — we deliver support after field verification and with full dignity."}
+                {isRTL ? "من كرتونة الأمل إلى فرص العلاج والتعليم والمياه والسكن الآمن، نوصل الخير إلى البيوت المحتاجة بعد تحقق ميداني وبكرامة كاملة." : "From a hope box to healthcare, education, water, and safer homes — we deliver support after field verification and with full dignity."}
               </p>
               <div className="mt-6 flex flex-wrap justify-center lg:justify-start gap-3">
                 <Button asChild size="lg" className="bg-whatsapp text-whatsapp-foreground shadow-whatsapp hover:opacity-95">
                   <a href={waHref} target="_blank" rel="noopener" data-source="programs" data-label="programs-whatsapp-hero">
-                    <WhatsAppIcon className="h-5 w-5" aria-hidden />{isRTL ? "تواصل واتساب" : "WhatsApp us"}
+                    <WhatsAppIcon className="h-5 w-5" aria-hidden />{isRTL ? "تواصل عبر واتساب" : "WhatsApp us"}
                   </a>
                 </Button>
                 <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
@@ -417,20 +417,20 @@ const Projects = () => {
         <div className="container mx-auto max-w-6xl px-4">
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-              <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "إزاي بنشتغل" : "How it works"}
+              <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "كيف نعمل" : "How it works"}
             </span>
             <h2 id="programs-how" className="mt-3 text-2xl font-black text-primary md:text-4xl">
-              {isRTL ? "٤ خطوات من تبرعك لباب بيت الأسرة" : "4 steps from your donation to the family's door"}
+              {isRTL ? "٤ خطوات من تبرعك إلى باب بيت الأسرة" : "4 steps from your donation to the family's door"}
             </h2>
             <p className="mt-3 text-sm font-semibold leading-7 text-muted-foreground md:text-base">
-              {isRTL ? "كل خطوة موثّقة بصور وفيديو، ومراجعة من فريق ميداني في الدقهلية." : "Every step is documented with photos and video and reviewed by our Dakahlia field team."}
+              {isRTL ? "كل خطوة موثّقة بالصور والفيديو، ويراجعها فريق ميداني في الدقهلية." : "Every step is documented with photos and video and reviewed by our Dakahlia field team."}
             </p>
           </div>
           <ol className="mt-10 flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: HandHeart, n: "01", t: isRTL ? "اختر البرنامج" : "Pick a program", d: isRTL ? "من غذاء وعلاج لتعليم وأضحية وستر بيوت." : "From food and health to education, Qurbani and shelter.", stickyTop: "top-[80px]", zIndex: "z-10" },
+              { icon: HandHeart, n: "01", t: isRTL ? "اختر البرنامج" : "Pick a program", d: isRTL ? "من الغذاء والعلاج إلى التعليم والأضحية وستر البيوت." : "From food and health to education, Qurbani and shelter.", stickyTop: "top-[80px]", zIndex: "z-10" },
               { icon: ClipboardCheck, n: "02", t: isRTL ? "بحث اجتماعي" : "Field assessment", d: isRTL ? "فريق ميداني يزور الأسرة ويوثّق احتياجها." : "A field team visits the family and documents the need.", stickyTop: "top-[98px]", zIndex: "z-20" },
-              { icon: Truck, n: "03", t: isRTL ? "تسليم بكرامة" : "Dignified delivery", d: isRTL ? "نوصّل الاحتياج لباب البيت من غير تكلفة على الأسرة." : "We deliver to the doorstep at no cost to the family.", stickyTop: "top-[116px]", zIndex: "z-30" },
+              { icon: Truck, n: "03", t: isRTL ? "تسليم بكرامة" : "Dignified delivery", d: isRTL ? "نوصل الاحتياج إلى باب البيت دون أي تكلفة على الأسرة." : "We deliver to the doorstep at no cost to the family.", stickyTop: "top-[116px]", zIndex: "z-30" },
               { icon: FileCheck2, n: "04", t: isRTL ? "توثيق وتقرير" : "Proof & report", d: isRTL ? "صور وفيديو وإيصال إلكتروني برقم تتبّع." : "Photos, video and an e-receipt with a tracking ID.", stickyTop: "top-[134px]", zIndex: "z-40" },
             ].map(({ icon: Icon, n, t: title, d, stickyTop, zIndex }) => (
               <li
@@ -456,7 +456,7 @@ const Projects = () => {
           <div className="mt-10 grid grid-cols-2 gap-3 rounded-3xl border border-border bg-card p-4 text-center shadow-soft sm:grid-cols-4 md:p-6">
             {[
               { k: programsLoading ? "—" : String(programs.length), l: isRTL ? "برنامج موثّق" : "Verified programs" },
-              { k: "<8%", l: isRTL ? "مصاريف تشغيل" : "Operating costs" },
+              { k: "90%", l: isRTL ? "يصل إلى المستفيدين" : "Reaches beneficiaries" },
               { k: "100%", l: isRTL ? "توصيل لباب البيت" : "Doorstep delivery" },
               { k: "24/7", l: isRTL ? "دعم واتساب" : "WhatsApp support" },
             ].map(({ k, l }) => (
@@ -483,12 +483,12 @@ const Projects = () => {
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm font-semibold leading-7 text-muted-foreground md:text-base">
               {isRTL
-                ? "اختار الباب اللي يناسب نيتك — كل برنامج موثّق ومراجع ميدانيًا ومتاح بأسعار شفافة."
+                ? "اختر الباب الذي يناسب نيتك. كل برنامج موثّق ومُراجَع ميدانيًا، وأسعاره معلنة بشفافية."
                 : "Pick the cause that matches your intention — every program is field-verified with transparent pricing."}
             </p>
           </div>
           {programsLoading && (
-            <div className="w-full space-y-6 md:space-y-8" aria-busy="true" aria-label={isRTL ? "بنحمّل البرامج" : "Loading programs"}>
+            <div className="w-full space-y-6 md:space-y-8" aria-busy="true" aria-label={isRTL ? "جارٍ تحميل البرامج" : "Loading programs"}>
               {[0, 1, 2].map((i) => (
                 <div key={i} className={`flex ${i % 2 ? "lg:justify-end" : "lg:justify-start"}`}>
                   <div className={`flex w-full flex-col gap-4 overflow-hidden rounded-[28px] border border-primary/10 bg-card p-3 shadow-card md:flex-row lg:w-[90%] ${i % 2 ? "md:flex-row-reverse" : ""}`}>
@@ -507,7 +507,7 @@ const Projects = () => {
           )}
           {!programsLoading && programs.length === 0 && (
             <p className="mx-auto max-w-md rounded-2xl border border-dashed border-border p-6 text-center text-sm font-bold text-muted-foreground">
-              {isRTL ? "البرامج بتتحدّث دلوقتي. تقدر تتبرع للصندوق العام أو تكلّمنا واتساب." : "Programs are being updated. You can give to the general fund or WhatsApp us."}
+              {isRTL ? "يجري تحديث البرامج الآن. يمكنك التبرع للصندوق العام أو التواصل معنا عبر واتساب." : "Programs are being updated. You can give to the general fund or WhatsApp us."}
             </p>
           )}
           {!programsLoading && (
@@ -582,11 +582,11 @@ const Projects = () => {
           <div className="flex flex-col items-center gap-4 rounded-3xl border border-secondary/30 bg-card/90 p-6 text-center shadow-soft backdrop-blur md:flex-row md:justify-between md:p-8 md:text-start">
             <div>
               <h3 className="text-lg font-black text-primary md:text-xl">
-                {isRTL ? "محتار تختار أي برنامج؟" : "Not sure which program fits?"}
+                {isRTL ? "لم تحدد البرنامج المناسب بعد؟" : "Not sure which program fits?"}
               </h3>
               <p className="mt-1.5 text-sm font-semibold leading-6 text-muted-foreground">
                 {isRTL
-                  ? "اسألنا واتساب وفريق الاستشارات يرشدك لأكثر احتياج عاجل يناسب نيتك."
+                  ? "راسلنا عبر واتساب، وسيرشدك فريقنا إلى أكثر الاحتياجات إلحاحًا بما يناسب نيتك."
                   : "WhatsApp us and our advisory team will guide you to the most urgent fit for your intention."}
               </p>
             </div>
@@ -607,10 +607,10 @@ const Projects = () => {
               <MapPin className="h-3.5 w-3.5" /> {isRTL ? "تغطية جغرافية" : "Local coverage"}
             </span>
             <h2 id="programs-geo" className="mt-2 text-xl font-black text-primary md:text-2xl">
-              {isRTL ? "اختر برنامج لمدينتك" : "Pick a program in your city"}
+              {isRTL ? "اختر برنامجًا لمدينتك" : "Pick a program in your city"}
             </h2>
             <p className="mt-2 text-[13px] font-semibold leading-6 text-muted-foreground">
-              {isRTL ? "الدقهلية أولًا — تغطية كل المراكز والقرى." : "Dakahlia first — covering every district and village."}
+              {isRTL ? "الدقهلية أولًا، بتغطية كل مراكزها وقراها." : "Dakahlia first — covering every district and village."}
             </p>
           </div>
 
@@ -702,7 +702,7 @@ const Projects = () => {
             <h2>{isRTL ? "كل برامج اليسر في مدن وقرى الدقهلية" : "All Al-Yusr programs across Dakahlia cities and villages"}</h2>
             <p>
               {isRTL
-                ? "تغطية شاملة لبرامج الأضحية والكرتونة وزكاة المال وكفالة اليتيم والتعليم والمياه وتجهيز العرائس وستر البيوت في كل مدن وقرى محافظة الدقهلية: المنصورة، ميت غمر، بلقاس، دكرنس، شربين، أجا، السنبلاوين، طلخا، نبروه، المطرية، الجمالية، ميت سلسيل، بني عبيد، المنزلة. تبرع لكل مدينة بمؤسسة اليسر الخيرية."
+                ? "تغطية شاملة لبرامج الأضحية والكرتونة وزكاة المال وكفالة اليتيم والتعليم والمياه وتجهيز العرائس وستر البيوت في كل مدن وقرى محافظة الدقهلية: المنصورة، ميت غمر، بلقاس، دكرنس، شربين، أجا، السنبلاوين، طلخا، نبروه، المطرية، الجمالية، ميت سلسيل، بني عبيد، المنزلة. تبرّع لأي مدينة عبر مؤسسة اليسر الخيرية."
                 : "Comprehensive Al-Yusr coverage for Qurbani, food box, Zakat, orphan sponsorship, education, water, bride trousseau and home shelter across every Dakahlia city and village: Mansoura, Mit Ghamr, Belqas, Dikirnis, Sherbin, Aga, Sinbillawayn, Talkha, Nabaroh, Matareya, Gamalia, Mit Salsil, Bani Ubaid, Manzala."}
             </p>
             <ul>
@@ -760,7 +760,7 @@ const Projects = () => {
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
               {isRTL
-                ? "إجابات شفافة عن التوزيع، التوثيق، والإيصالات."
+                ? "إجابات شفافة عن التوزيع والتوثيق والإيصالات."
                 : "Transparent answers about distribution, documentation, and receipts."}
             </p>
           </div>
@@ -819,7 +819,7 @@ const Projects = () => {
           <p className="mt-6 text-center text-xs text-muted-foreground md:text-sm">
             {isRTL ? (
               <>
-                لسه عندك سؤال؟{" "}
+                هل لديك سؤال آخر؟{" "}
                 <a
                   href={waHref}
                   target="_blank"
@@ -828,9 +828,9 @@ const Projects = () => {
                   data-source="programs-faq"
                   data-label="faq-whatsapp"
                 >
-                  راسلنا على واتساب
+                  راسلنا عبر واتساب
                 </a>{" "}
-                أو شوف <Link to="/trust" className="font-extrabold text-primary hover:text-secondary" data-source="programs-faq" data-label="faq-trust">تقارير الشفافية</Link>.
+                أو اطّلع على <Link to="/trust" className="font-extrabold text-primary hover:text-secondary" data-source="programs-faq" data-label="faq-trust">تقارير الشفافية</Link>.
               </>
             ) : (
               <>
@@ -854,8 +854,8 @@ const Projects = () => {
 
       {/* Field cases across all programs (live from the backend; hidden when there are none) */}
       <LinkedCasesSection filter={{ linkedTo: "program" }} showOwner variant="carousel" filterByOwner limit={30} include={includeProgramCase} isRTL={isRTL} className="bg-muted/30"
-        title={isRTL ? "حالات بتتجمع لها التبرعات في برامجنا" : "Cases our programs are funding"}
-        subtitle={isRTL ? "اختار حالة بعينها وتابع تحديثاتها بالصور لحد ما تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
+        title={isRTL ? "حالات نجمع لها التبرعات ضمن برامجنا" : "Cases our programs are funding"}
+        subtitle={isRTL ? "اختر حالة بعينها وتابع تحديثاتها بالصور حتى تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
       {/* Bride trousseau call to action, closing the page */}
       <BrideTrousseau />
     </PageLayout>

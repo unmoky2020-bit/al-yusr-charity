@@ -8,7 +8,7 @@ const SETR: CampaignPageContent = {
     title: l("مَن سَتَرَ مسلماً", "Whoever covers a Muslim"),
     title2: l("سَتَرَه الله في الدنيا والآخرة", "Allah will cover them in both worlds"),
     lead: l(
-      "برد الشتاء يحرم الأطفال من النوم ويؤذي كبار السن. حملة سِتر تجعل تبرعك سقفاً يحمي، وفراشاً يرفع عن الأرض، وغطاءً يدفّي، ويكون لك ستراً وأجراً ممتداً.",
+      "برد الشتاء يحرم الأطفال من النوم ويؤذي كبار السن. حملة سِتر تجعل تبرعك سقفًا يحمي، وفراشًا يرفع عن الأرض، وغطاءً يُدفئ، ويكون لك سترًا وأجرًا ممتدًا.",
       "Winter cold keeps children awake and hurts the elderly. Setr turns your gift into a roof, a bed off the cold floor and a warm cover, and a lasting reward for you.",
     ),
     donateLabel: l("تبرّع لحملة سِتْر", "Donate to Setr"),
@@ -38,16 +38,16 @@ const SETR: CampaignPageContent = {
       title: l("ثلاث طبقات من الستر", "Three layers of covering"),
       lead: l("الدفء يبدأ من السقف وينتهي باللحاف.", "Warmth starts at the roof and ends with the blanket."),
       items: [
-        { id: "roof", title: l("سقفٌ يحمي", "A roof that protects"), desc: l("نبني ونعزل أسقف البيوت ضد مياه الأمطار والرياح، ونركّب أبواباً وشبابيك متينة تستر الأسرة وتغلق منافذ البرد.", "We build and insulate roofs against rain and wind, and fit sturdy doors and windows that keep the cold out.") },
-        { id: "bed", title: l("فراشٌ يرفع", "A bed that lifts"), desc: l("أسِرّة خشبية ومراتب مريحة ترفع الأطفال وكبار السن عن برودة الأرض، وتمنحهم نوماً صحياً.", "Wooden beds and mattresses that lift children and the elderly off the cold floor.") },
-        { id: "cover", title: l("غطاءٌ يدفّي", "Covers that warm"), desc: l("ألحفة فايبر عالية الجودة تمنح دفئاً سريعاً، وكسوة شتوية ثقيلة لأفراد الأسرة.", "High-quality fibre blankets for fast warmth, and heavy winter clothing for the family.") },
+        { id: "roof", title: l("سقفٌ يحمي", "A roof that protects"), desc: l("نبني ونعزل أسقف البيوت ضد مياه الأمطار والرياح، ونركّب أبوابًا وشبابيك متينة تستر الأسرة وتغلق منافذ البرد.", "We build and insulate roofs against rain and wind, and fit sturdy doors and windows that keep the cold out.") },
+        { id: "bed", title: l("فراشٌ يرفع", "A bed that lifts"), desc: l("أسِرّة خشبية ومراتب مريحة ترفع الأطفال وكبار السن عن برودة الأرض، وتمنحهم نومًا صحيًا.", "Wooden beds and mattresses that lift children and the elderly off the cold floor.") },
+        { id: "cover", title: l("غطاءٌ يُدفئ", "Covers that warm"), desc: l("ألحفة فايبر عالية الجودة تمنح دفئًا سريعًا، وكسوة شتوية ثقيلة لأفراد الأسرة.", "High-quality fibre blankets for fast warmth, and heavy winter clothing for the family.") },
       ],
     },
 
     checks: {
       title: l("زيارة ميدانية قبل كل تبرع", "A field visit before every gift"),
       lead: l(
-        "يزور فريق البحث الاجتماعي كل بيت ويعاينه على الطبيعة، ثم توثَّق الحالة وتعتمدها اللجنة المختصة، فيصل تبرعك لمن يحتاجه فعلاً.",
+        "يزور فريق البحث الاجتماعي كل بيت ويعاينه على الطبيعة، ثم توثَّق الحالة وتعتمدها اللجنة المختصة، فيصل تبرعك لمن يحتاجه فعلًا.",
         "Our social researchers visit and inspect every home; each case is documented and approved by a committee, so your gift reaches real need.",
       ),
       items: [
@@ -96,12 +96,12 @@ const SETR: CampaignPageContent = {
     cycle: {
       title: l("دورة لا يضيع فيها شيء", "A cycle where nothing goes to waste"),
       lead: l(
-        "حملة سِتر تعتمد على حملة مَرْكون للتبرعات العينية. الملابس المستعملة المستهلكة تماماً تتحول إلى مراتب قطن، والأسِرّة القديمة تُرمَّم ويُعاد توزيعها. هكذا نضمن كفاءة العمل، واستغلال التبرعات بالشكل الصحيح، ووصول الصدقة لمن يستحقها.",
+        "حملة سِتر تعتمد على حملة مَرْكون للتبرعات العينية. الملابس المستعملة المستهلكة تمامًا تتحول إلى مراتب قطن، والأسِرّة القديمة تُرمَّم ويُعاد توزيعها. هكذا نضمن كفاءة العمل، واستغلال التبرعات بالشكل الصحيح، ووصول الصدقة لمن يستحقها.",
         "Setr relies on the Markoun in-kind campaign. Fully worn-out clothes become cotton mattresses, and old beds are restored and redistributed. That keeps the work efficient, puts every donation to proper use, and gets charity to those who deserve it.",
       ),
       items: [
         { id: "good_clothes", title: l("ملابس بحالة جيدة", "Clothes in good condition"), desc: l("تُفرز وتُغسل وتُوزع كسوةً شتوية على الأسر المستحقة.", "Sorted, cleaned and distributed as winter clothing to families in need.") },
-        { id: "worn_clothes", title: l("ملابس مستهلكة تماماً", "Fully worn-out clothes"), desc: l("تتحول إلى حشو مراتب قطن جديدة تُصنع في ورشنا.", "Become the filling for new cotton mattresses made in our workshops.") },
+        { id: "worn_clothes", title: l("ملابس مستهلكة تمامًا", "Fully worn-out clothes"), desc: l("تتحول إلى حشو مراتب قطن جديدة تُصنع في ورشنا.", "Become the filling for new cotton mattresses made in our workshops.") },
         { id: "old_beds", title: l("أسِرّة قديمة", "Old beds"), desc: l("تُرمَّم وتُعاد صيانتها ثم توزَّع من جديد.", "Repaired, restored and distributed again.") },
       ],
     },
@@ -111,35 +111,35 @@ const SETR: CampaignPageContent = {
     {
       q: l("ما هي محاور حملة ستر الرئيسية؟", "What are the main pillars of the Setr campaign?"),
       a: l(
-        "تشمل 3 محاور متكاملة: 1) أسقف المنازل والأبواب والشبابيك، 2) الأسرة الخشبية والمراتب المريحة لرفع الأطفال عن الأرض، 3) الألحفة الفايبر الثقيلة والكسوة الشتوية المتكاملة.",
+        "تشمل 3 محاور متكاملة: 1) أسقف المنازل والأبواب والشبابيك، 2) الأسِرّة الخشبية والمراتب المريحة لرفع الأطفال عن الأرض، 3) الألحفة الفايبر الثقيلة والكسوة الشتوية المتكاملة.",
         "1) Roof insulation and doors/windows, 2) Wooden beds and comfortable mattresses, 3) Heavy fiber blankets and winter clothing.",
       ),
     },
     {
       q: l("متى تبدأ حملة ستر ومتى تنتهي؟", "When does the campaign run?"),
       a: l(
-        "تبدأ الحملة سنوياً في شهر أكتوبر (10) مع بداية الخريف لتجهيز المنازل قبل البرد، وتستمر حتى نهاية شهر فبراير (2) لتقديم الدعم الفوري والأغطية خلال موجات الصقيع.",
+        "تبدأ الحملة سنويًا في شهر أكتوبر (10) مع بداية الخريف لتجهيز المنازل قبل البرد، وتستمر حتى نهاية شهر فبراير (2) لتقديم الدعم الفوري والأغطية خلال موجات الصقيع.",
         "From October through February, starting before winter to seal homes and continuing throughout cold snaps.",
       ),
     },
     {
       q: l("كيف يتم تحديد الأسر المستحقة لحملة ستر؟", "How are eligible families chosen?"),
       a: l(
-        "يقوم فريق البحث الاجتماعي الميداني بزيارة المنازل ومعاينتها على الطبيعة (حالة السقف، وجود أبواب، أغطية، أسرة) وتوثيق الحالة واعتمادها من اللجنة المختصة.",
+        "يزور فريق البحث الاجتماعي الميداني المنازل ويعاينها على الطبيعة (حالة السقف، ووجود الأبواب والأغطية والأسِرّة)، ثم تُوثَّق الحالة وتعتمدها اللجنة المختصة.",
         "Our field social researchers visit and inspect each home (roof condition, doors, covers, beds), document the case and have it approved by the relevant committee.",
       ),
     },
     {
       q: l("هل يمكنني التبرع بسهم أو بجزء من الاحتياجات؟", "Can I donate a single item or a share?"),
       a: l(
-        "نعم. سهم حملة سِتر 500 ج ويوزَّع على أنشطة الحملة، أو بند بعينه: لحاف فايبر 450 ج، كسوة شتاء لطفل 700 ج، شباك 750 ج، باب 2,200 ج، سرير ومرتبة 3,200 ج، سقف بيتومين 6,500 ج، سقف خشب 17,000 ج. والكفالة الشتوية الشاملة لأسرة 10,000 ج وتشمل سقفاً وشباكاً وكسوة شتاء ومرتبة وسريراً.",
+        "نعم. يمكنك التبرع بسهم حملة سِتر (500 ج) ويوزَّع على أنشطة الحملة، أو ببند بعينه: لحاف فايبر 450 ج، كسوة شتاء لطفل 700 ج، شباك 750 ج، باب 2,200 ج، سرير ومرتبة 3,200 ج، سقف بيتومين 6,500 ج، سقف خشب 17,000 ج. والكفالة الشتوية الشاملة لأسرة 10,000 ج وتشمل سقفًا وشباكًا وكسوة شتاء ومرتبة وسريرًا.",
         "Yes. A Setr campaign share is EGP 500, spread across the campaign's activities. Or pick an item: blanket 450, child's winter clothes 700, window 750, door 2,200, bed and mattress 3,200, bitumen roof 6,500, wooden roof 17,000. The full family winter sponsorship is EGP 10,000 and includes a roof, window, winter clothes, mattress and bed.",
       ),
     },
     {
       q: l("ما علاقة حملة سِتر بحملة مَرْكون؟", "How is Setr linked to Markoun?"),
       a: l(
-        "سِتر تعتمد على التبرعات العينية لمَرْكون: الملابس بحالة جيدة توزَّع كسوة، والملابس المستهلكة تماماً تتحول إلى مراتب قطن، والأسِرّة القديمة تُرمَّم ويُعاد توزيعها. هكذا تُستغل التبرعات بالشكل الصحيح وتصل الصدقة لمن يستحقها.",
+        "سِتر تعتمد على التبرعات العينية لمَرْكون: الملابس بحالة جيدة توزَّع كسوة، والملابس المستهلكة تمامًا تتحول إلى مراتب قطن، والأسِرّة القديمة تُرمَّم ويُعاد توزيعها. هكذا تُستغل التبرعات بالشكل الصحيح وتصل الصدقة لمن يستحقها.",
         "Setr relies on Markoun's in-kind donations: clothes in good condition are distributed, fully worn-out clothes become cotton mattresses, and old beds are restored and redistributed.",
       ),
     },
@@ -153,7 +153,7 @@ const SETR: CampaignPageContent = {
     {
       q: l("كيف أتبرع لحملة سِتر من خارج مصر؟", "How can I donate to Setr from outside Egypt?"),
       a: l(
-        "يمكنك التبرع من أي دولة عبر صفحة التبرع بالبطاقة الائتمانية (فيزا/ماستركارد)، أو بالتحويل البنكي على الحسابات الرسمية للمؤسسة. ولأي استفسار راسلنا على واتساب +20 109 700 0137 ويصلك الإيصال وتوثيق التسليم على نفس الرقم.",
+        "يمكنك التبرع من أي دولة عبر صفحة التبرع بالبطاقة الائتمانية (فيزا/ماستركارد)، أو بالتحويل البنكي على الحسابات الرسمية للمؤسسة. ولأي استفسار راسلنا على واتساب +20 109 700 0137 ويصلك الإيصال وتوثيق التسليم على الرقم نفسه.",
         "You can give from any country through the donate page by credit card (Visa/Mastercard), or by bank transfer to the foundation's official accounts. For help, message us on WhatsApp at +20 109 700 0137; your receipt and delivery documentation reach you on the same number.",
       ),
     },
@@ -167,7 +167,7 @@ const SETR: CampaignPageContent = {
   ],
 
   cta: {
-    title: l("كل مساهمة منك هي لحاف يدفئ طفلاً أو جدار يستر أسرة — تبرع الآن", "Every contribution is a warm blanket or a sheltering roof — Donate now"),
+    title: l("كل مساهمة منك هي لحاف يدفئ طفلًا أو جدار يستر أسرة — تبرع الآن", "Every contribution is a warm blanket or a sheltering roof — Donate now"),
     sub: l("كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.", "Every EGP reaches the right hands — verified with photos, video and field follow-up."),
   },
 

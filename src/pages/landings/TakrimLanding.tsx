@@ -156,7 +156,7 @@ const TakrimHero = () => {
           <div className="min-w-0">
             <p className="flex items-center justify-center gap-3 text-sm font-bold text-secondary md:justify-start">
               <span aria-hidden className="h-px w-10 bg-secondary/70" />
-              {isAr ? "تكريم الإنسان · مؤسسة اليسر" : "Takrim · Al-Yusr Foundation"}
+              {isAr ? "تكريم الإنسان · مؤسسة اليسر" : "Takrim · Al-Yusr Charity Foundation"}
             </p>
 
             <h1 className="mt-4 text-center text-[1.75rem] font-black leading-[1.3] text-balance sm:text-4xl md:text-start lg:text-[3.1rem] lg:leading-[1.25]">

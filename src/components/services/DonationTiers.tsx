@@ -44,7 +44,7 @@ export const DonationTiers = ({ programSlug, tiers, title_ar, title_en }: Props)
           </h2>
           <p className="mt-3 text-muted-foreground md:text-lg">
             {isRTL
-              ? "كل باقة بتترجم تبرعك لأثر فعلي محسوب، مع خيارات دفع متعددة وآمنة."
+              ? "كل باقة تُترجم تبرعك إلى أثر فعلي محسوب، مع خيارات دفع متعددة وآمنة."
               : "Each package translates your donation into a concrete impact, with multiple secure payment options."}
           </p>
         </div>

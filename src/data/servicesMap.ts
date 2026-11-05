@@ -1,4 +1,4 @@
-/** Full services & resources map for Al-Yusr (Al-Islah) charity.
+/** Full services & resources map for Al-Yusr Charity Foundation.
  *  Structured into 3 service axes + 1 resources axis. */
 
 export type ServiceItem = { t: string; d?: string };
@@ -35,7 +35,7 @@ export const DONATE_SECTORS: Sector[] = [
     donate: "sector-odhya",
     title_ar: "صك الأضحية",
     title_en: "Udhiya voucher",
-    summary_ar: "أضحية موثّقة، توزيع لحوم على المستحقين",
+    summary_ar: "أضحية موثّقة وتوزيع اللحوم على المستحقين",
     summary_en: "Documented Udhiya — meat distributed to needy families",
     intro_ar: "صك أضحية مضمون يُذبح في موعده ويُوزَّع لحمه على الأسر المتعففة في الدقهلية وكفر الشيخ — موثّق بالصور والفيديو.",
     intro_en: "A guaranteed Udhiya voucher — slaughtered on time and distributed to needy families in Dakahlia & Kafr El Sheikh, documented with photos and video.",
@@ -50,14 +50,14 @@ export const DONATE_SECTORS: Sector[] = [
     title_en: "Food",
     summary_ar: "كرتونة، لحوم، وجبات ساخنة، خبز يومي",
     summary_en: "Food box, meat, hot meals, daily bread",
-    intro_ar: "تبرع مباشر — من كرتونة الـ25 كيلو إلى مطبخ اليسر ومخبز اليسر بالدقهلية.",
+    intro_ar: "تبرّع مباشر، من كرتونة الـ25 كيلو إلى مطبخ اليسر ومخبز اليسر بالدقهلية.",
     intro_en: "Direct giving — from the 25kg box to Al-Yusr kitchen and bakery in Dakahlia.",
     programs: [
       { slug: "box", title_ar: "كرتونة 25 كيلو", title_en: "25kg food box", desc_ar: "بقوليات ومعلبات وأساسيات شهرية لأسرة.", desc_en: "Pantry staples for a family for a month." },
       { slug: "kitchen", title_ar: "مطبخ اليسر — وجبة ساخنة", title_en: "Al-Yusr kitchen — hot meal", desc_ar: "وجبات يومية لمرافقي المرضى والصائمين.", desc_en: "Daily hot meals for hospital companions and fasting people." },
       { slug: "bakery", title_ar: "مخبز اليسر — خبز يومي", title_en: "Al-Yusr bakery — daily bread", desc_ar: "خبز ساخن مجاني للأسر المتعففة كل يوم.", desc_en: "Free hot bread for needy families every day." },
-      { slug: "qurbani", title_ar: "صك الأضحية", title_en: "Udhiya voucher", desc_ar: "صك أضحية موثّق بالصور والفيديو يُوزَّع لحمها على الأسر المتعففة في الدقهلية وكفر الشيخ.", desc_en: "A documented Udhiya voucher — meat distributed to needy families in Dakahlia & Kafr El Sheikh with photo & video proof.", href: "/qurbani" },
-      { slug: "general", title_ar: "لحوم المزرعة الوقفية", title_en: "Endowment farm meat", desc_ar: "أكثر من 2 طن لحوم سنويًا من المزرعة الوقفية للأسر المتعففة.", desc_en: "2+ tons of meat yearly from our endowment farm.", href: "/farm" },
+      { slug: "qurbani", title_ar: "صك الأضحية", title_en: "Udhiya voucher", desc_ar: "صك أضحية موثّق بالصور والفيديو، يُوزَّع لحمها على الأسر المتعففة في الدقهلية وكفر الشيخ.", desc_en: "A documented Udhiya voucher — meat distributed to needy families in Dakahlia & Kafr El Sheikh with photo & video proof.", href: "/qurbani" },
+      { slug: "general", title_ar: "لحوم المزرعة الوقفية", title_en: "Endowment farm meat", desc_ar: "أكثر من 5 أطنان من اللحوم سنويًا من المزرعة الوقفية للأسر المتعففة.", desc_en: "5+ tons of meat yearly from our endowment farm.", href: "/farm" },
     ],
   },
   {
@@ -67,7 +67,7 @@ export const DONATE_SECTORS: Sector[] = [
     title_en: "Health",
     summary_ar: "علاج، عمليات، أطراف صناعية، قوافل طبية",
     summary_en: "Treatment, surgeries, prosthetics, medical convoys",
-    intro_ar: "مجمع المنصورة الطبي ومركز الغسيل الكلوي بالمنزلة + قوافل ومشروع تحدّي الإعاقة.",
+    intro_ar: "مجمع المنصورة الطبي ومركز الغسيل الكلوي بالمنزلة، إلى جانب القوافل الطبية ومشروع تحدّي الإعاقة.",
     intro_en: "Mansoura Medical Complex, Manzala dialysis center, mobile medical convoys & Prosthetics program.",
     programs: [
       { slug: "treatment", title_ar: "سهم علاج وقوافل طبية", title_en: "Treatment & medical convoys", desc_ar: "دواء وعمليات وقوافل بيطرية وبشرية.", desc_en: "Medication, surgeries, vet & human convoys." },
@@ -79,12 +79,12 @@ export const DONATE_SECTORS: Sector[] = [
     donate: "sector-kafala",
     title_ar: "التكافل",
     title_en: "Family Care",
-    summary_ar: "كفالة أيتام، جواز عرايس",
+    summary_ar: "كفالة أيتام، تجهيز عرائس",
     summary_en: "Orphan sponsorship, bride trousseau",
     intro_ar: "354 يتيمًا تحت الكفالة و9 عرائس جُهّزن في 2025.",
     intro_en: "354 sponsored orphans and 9 brides equipped in 2025.",
     programs: [
-      { slug: "orphans", title_ar: "كفالة يتيم", title_en: "Sponsor an orphan", desc_ar: "كفالة شهرية شاملة تعليم وعلاج للأيتام.", desc_en: "Monthly sponsorship covering schooling & care." },
+      { slug: "orphans", title_ar: "كفالة يتيم", title_en: "Sponsor an orphan", desc_ar: "كفالة شهرية شاملة للتعليم والعلاج للأيتام.", desc_en: "Monthly sponsorship covering schooling & care." },
       { slug: "bride", title_ar: "جواز عروسة", title_en: "Bride trousseau", desc_ar: "أجهزة وأثاث ومفروشات لعروس يتيمة.", desc_en: "Appliances, furniture and linens for an orphan bride." },
     ],
   },
@@ -98,8 +98,8 @@ export const DONATE_SECTORS: Sector[] = [
     intro_ar: "حملة ستر لتسقيف 70 منزلًا في 2025 ومشروع سقيا الماء بـ100 وصلة منزلية.",
     intro_en: "Sotra campaign roofed 70 homes in 2025 and our Water program delivered 100 home connections.",
     programs: [
-      { slug: "shelter", title_ar: "حملة ستر — تسقيف وترميم", title_en: "Sotra — roofing & repair", desc_ar: "سقف وأبواب وشبابيك ومراتب ولحف.", desc_en: "Roofs, doors, windows, mattresses and quilts." },
-      { slug: "water", title_ar: "وصلة مياه نظيفة", title_en: "Clean water connection", desc_ar: "خطوط مياه رئيسية ووصلات بيت في القرى.", desc_en: "Main pipelines and home water taps for villages." },
+      { slug: "shelter", title_ar: "حملة ستر — تسقيف وترميم", title_en: "Sotra — roofing & repair", desc_ar: "أسقف وأبواب وشبابيك ومراتب وألحفة.", desc_en: "Roofs, doors, windows, mattresses and quilts." },
+      { slug: "water", title_ar: "وصلة مياه نظيفة", title_en: "Clean water connection", desc_ar: "خطوط مياه رئيسية ووصلات منزلية في القرى.", desc_en: "Main pipelines and home water taps for villages." },
     ],
   },
   {
@@ -109,10 +109,10 @@ export const DONATE_SECTORS: Sector[] = [
     title_en: "Education",
     summary_ar: "مصاريف، أدوات مدرسية، تعليم أيتام",
     summary_en: "Tuition, school supplies, orphan education",
-    intro_ar: "ادفع مصروفه وابني مستقبله — كفالة تعليمية حتى الجامعة وحلقات تحفيظ القرآن.",
+    intro_ar: "ادفع مصروفه وابنِ مستقبله: كفالة تعليمية حتى الجامعة وحلقات لتحفيظ القرآن.",
     intro_en: "Pay tuition, build a future — sponsorship up to university plus Quran circles.",
     programs: [
-      { slug: "education", title_ar: "ادفع مصروفه وابني مستقبله", title_en: "Pay tuition, build a future", desc_ar: "مصاريف وكتب وأدوات حتى الجامعة.", desc_en: "Tuition, books and supplies through university." },
+      { slug: "education", title_ar: "ادفع مصروفه وابنِ مستقبله", title_en: "Pay tuition, build a future", desc_ar: "المصروفات والكتب والأدوات حتى الجامعة.", desc_en: "Tuition, books and supplies through university." },
     ],
   },
   {
@@ -125,8 +125,8 @@ export const DONATE_SECTORS: Sector[] = [
     intro_ar: "تمكين الأسر المنتجة وحملة مَرْكون لتجديد وتوزيع الأجهزة والأثاث.",
     intro_en: "Empowering productive families and the Markoun refurbish-and-deliver campaign.",
     programs: [
-      { slug: "markoun", title_ar: "حملة مَرْكون", title_en: "Markoun campaign", desc_ar: "مرتبة، جهاز كهربائي بسيط، علاج شهري أو مرتب لأم معيلة.", desc_en: "Mattress, basic appliance, monthly meds or stipend for a widowed mother.", href: "/markoun" },
-      { slug: "farm", title_ar: "المزرعة الوقفية", title_en: "Endowment farm", desc_ar: "ادعم تطوير المزرعة الوقفية: أعلاف، رعاية بيطرية، توسعة الحظائر — لإنتاج لحوم سنوية للأسر المتعففة.", desc_en: "Support the endowment farm: feed, vet care and barn expansion — producing yearly meat for needy families.", href: "/farm" },
+      { slug: "markoun", title_ar: "حملة مَرْكون", title_en: "Markoun campaign", desc_ar: "مرتبة أو جهاز كهربائي بسيط أو علاج شهري أو راتب لأم معيلة.", desc_en: "Mattress, basic appliance, monthly meds or stipend for a widowed mother.", href: "/markoun" },
+      { slug: "farm", title_ar: "المزرعة الوقفية", title_en: "Endowment farm", desc_ar: "ادعم تطوير المزرعة الوقفية بالأعلاف والرعاية البيطرية وتوسعة الحظائر، لإنتاج لحوم سنوية للأسر المتعففة.", desc_en: "Support the endowment farm: feed, vet care and barn expansion — producing yearly meat for needy families.", href: "/farm" },
       { slug: "general", title_ar: "تبرع عام للتنمية", title_en: "General development donation", desc_ar: "يوجَّه لأكثر حالات التنمية إلحاحًا.", desc_en: "Directed to the most urgent development cases." },
     ],
   },
@@ -137,7 +137,7 @@ export const DONATE_SECTORS: Sector[] = [
     title_en: "Zakat",
     summary_ar: "زكاة المال على المصارف الشرعية",
     summary_en: "Zakat al-mal across the 8 legitimate channels",
-    intro_ar: "احسب زكاة مالك وادفعها للمستحقين فقط في الدقهلية وكفر الشيخ — بإشراف لجنة شرعية.",
+    intro_ar: "احسب زكاة مالك، وسنوصلها إلى مستحقيها فقط في الدقهلية وكفر الشيخ بإشراف لجنة شرعية.",
     intro_en: "Calculate and pay your Zakat to deserving recipients only in Dakahlia & Kafr El Sheikh — under a Sharia committee.",
     programs: [
       { slug: "zakat", title_ar: "زكاة المال", title_en: "Zakat al-mal", desc_ar: "تُصرف على المصارف الشرعية الثمانية.", desc_en: "Spent on the 8 Sharia-approved channels.", href: "/zakat" },
@@ -160,9 +160,9 @@ export const SERVICES_AXES_AR: Axis[] = [
         cta_en: "Support kitchen",
         items: [
           { t: "مطبخ اليسر — وجبات ساخنة يومية", d: "آلاف الوجبات الساخنة يوميًا للصائمين والمسافرين ومرافقي المرضى." },
-          { t: "إطعام رمضان", d: "إفطار وسحور وإفطار طريق." },
-          { t: "توزيع لحوم الأضاحي", d: "أكثر من 2 طن لحوم سنويًا للأسر المتعففة من مزارعنا الوقفية." },
-          { t: "كرتونة الـ 25 كيلو الرمضانية", d: "بقوليات ومعلبات وأساسيات بجودة بلدي طازجة." },
+          { t: "إطعام رمضان", d: "وجبات إفطار وسحور، وإفطار للمسافرين على الطريق." },
+          { t: "توزيع لحوم الأضاحي", d: "أكثر من 5 أطنان من اللحوم سنويًا للأسر المتعففة من مزارعنا الوقفية." },
+          { t: "كرتونة الـ 25 كيلو الرمضانية", d: "بقوليات ومعلبات وأساسيات بجودة «بلدي طازج»." },
           { t: "حفر الآبار وتوصيل المياه", d: "حفر آبار ومد خطوط مياه رئيسية ووصلات منزلية في القرى النائية." },
         ],
       },
@@ -201,19 +201,19 @@ export const SERVICES_AXES_AR: Axis[] = [
           { t: "تسقيف المنازل (بوتامين وخشب)", d: "حماية الأسر من تقلبات الجو ضمن حملة \"ستر\"." },
           { t: "توصيل المياه للمنازل" },
           { t: "تركيب الأبواب والشبابيك" },
-          { t: "اللحاف الفاير والمراتب والكسوة", d: "تدفئة الأسر في موسم الشتاء." },
+          { t: "ألحفة الفايبر والمراتب والكسوة", d: "تدفئة الأسر في موسم الشتاء." },
           { t: "أساسيات المنزل (أثاث وأجهزة)", d: "ضمن حملة \"مركون\" لتجديد الأجهزة." },
         ],
       },
       {
         id: "marriage",
-        title: "تيسير زواج اليتيمات — الفرحة بقت فرحتين",
+        title: "تيسير زواج اليتيمات — فرحتها فرحتان",
         intro: "تجهيز عرائس الأيتام بأفضل الخامات (9 عرائس في 2025).",
         href: "/programs/bride",
-        cta_ar: "جهّز عروسة",
+        cta_ar: "جهّز عروسًا",
         cta_en: "Sponsor a bride",
         items: [
-          { t: "أجهزة كهربائية (ثلاجة، غسالة، بتوجاز، أنبوبة)" },
+          { t: "أجهزة كهربائية (ثلاجة، غسالة، بوتاجاز، أنبوبة غاز)" },
           { t: "أثاث ومفروشات للعروس" },
           { t: "قطعة مطبخ حسب الحاجة" },
         ],
@@ -223,7 +223,7 @@ export const SERVICES_AXES_AR: Axis[] = [
         title: "رفيق النبي ﷺ — كفالة الأيتام",
         intro: "رعاية تربوية وتعليمية وصحية ومادية — 354 طالبًا تحت الكفالة في 2025.",
         href: "/programs/orphans",
-        cta_ar: "اكفل يتيم",
+        cta_ar: "اكفل يتيمًا",
         cta_en: "Sponsor an orphan",
         items: [
           { t: "كفالة شهرية للأيتام" },
@@ -276,7 +276,7 @@ export const SERVICES_AXES_AR: Axis[] = [
   {
     id: "medical",
     title: "الخدمات الطبية",
-    subtitle: "مجمع المنصورة الطبي والتعليمي ومركز الغسيل الكلوي بالمنزلة + قوافل طبية.",
+    subtitle: "مجمع المنصورة الطبي والتعليمي، ومركز الغسيل الكلوي بالمنزلة، والقوافل الطبية.",
     groups: [
       {
         id: "care",
@@ -310,7 +310,7 @@ export const SERVICES_AXES_AR: Axis[] = [
         cta_en: "Medical centers",
         items: [
           { t: "مجمع المنصورة الطبي والتعليمي", d: "مبنى من 4 طوابق يخدم أهالي الدقهلية." },
-          { t: "مركز غسيل كلوي بالمنزلة", d: "خدمة المناطق النائية بجلسات غسيل كلوي مجانية." },
+          { t: "مركز غسيل كلوي بالمنزلة", d: "جلسات غسيل كلوي مجانية لأهالي المناطق النائية." },
         ],
       },
       {
@@ -360,7 +360,7 @@ export const SERVICES_AXES_AR: Axis[] = [
       {
         id: "quran",
         title: "حلقات تحفيظ القرآن",
-        intro: "ركن مكتبة وحلقة تحفيظ في كل مسجد جديد بنبنيه.",
+        intro: "ركن مكتبة وحلقة تحفيظ في كل مسجد جديد نبنيه.",
         href: "/donate?intent=quran",
         cta_ar: "ادعم حلقات التحفيظ",
         cta_en: "Support Quran circles",
@@ -374,7 +374,7 @@ export const SERVICES_AXES_AR: Axis[] = [
   {
     id: "infra-projects",
     title: "المنشآت والمشاريع الكبرى",
-    subtitle: "بنية تحتية تخدم آلاف الأسر — مساجد، مياه، ومزارع وقفية.",
+    subtitle: "بنية تحتية تخدم آلاف الأسر: مساجد ومياه ومزارع وقفية.",
     groups: [
       {
         id: "mosques",
@@ -397,21 +397,21 @@ export const SERVICES_AXES_AR: Axis[] = [
         cta_ar: "ادعم سقيا الماء",
         cta_en: "Support water",
         items: [
-          { t: "مد خطوط مياه رئيسية بقطر 4 بوصة" },
-          { t: "100 وصلة مياه منزلية في 2025" },
-          { t: "خط مياه بطول 750م بالمنزلة (2023)" },
+          { t: "مد خطوط مياه رئيسية بقطر 4 بوصات" },
+          { t: "385 وصلة مياه منزلية في 2025" },
+          { t: "خط مياه بطول 750 مترًا بالمنزلة (2023)" },
           { t: "حفر آبار في الصعيد والمنيا" },
         ],
       },
       {
         id: "farm",
         title: "مزرعة اليسر الوقفية",
-        intro: "إنتاجنا الخاص يضمن جودة اللحم بلا وسطاء وبلا ربح.",
+        intro: "إنتاجنا الخاص يضمن جودة اللحم دون وسطاء ودون ربح.",
         href: "/farm",
         cta_ar: "زر المزرعة الوقفية",
         cta_en: "Visit endowment farm",
         items: [
-          { t: "ذبح أكثر من 3 طن لحم شهريًا في رمضان" },
+          { t: "ذبح أكثر من 3 أطنان من اللحم شهريًا في رمضان" },
           { t: "مواشي محصنة لصكوك الأضاحي" },
           { t: "أعلاف وإنتاج حيواني وقفي" },
         ],
@@ -467,7 +467,7 @@ export const RESOURCES_AR: Axis = {
       items: [
         { t: "سيارات ملاكي" },
         { t: "سيارات نقل وربع نقل" },
-        { t: "سيارات 7 راكب" },
+        { t: "سيارات 7 ركاب" },
         { t: "سيارات إسعاف" },
         { t: "تروسيكل" },
       ],
@@ -522,7 +522,7 @@ export const RESOURCES_AR: Axis = {
         { t: "أدوية ومستلزمات طبية" },
         { t: "أطراف صناعية وأجهزة تعويضية" },
         { t: "أجهزة تنفس صناعي" },
-        { t: "اسطوانات ومولّدات أكسجين" },
+        { t: "أسطوانات ومولّدات أكسجين" },
         { t: "أجهزة باي باب وسي باب" },
         { t: "أجهزة نبولايزر" },
         { t: "أجهزة قياس الضغط والسكر" },

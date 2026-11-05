@@ -280,22 +280,22 @@ export const EidJourney = () => {
   const chapters = [
     {
       key: "lonely",
-      tag: isAR ? "كانت لوحدها" : "She was alone",
-      title: isAR ? "ست غلبانة وظروفها صعبة" : "A struggling woman, hard days",
-      desc: isAR ? "أم وحدها، الأبواب موصدة، والأمل بعيد." : "A mother on her own, doors closed, hope distant.",
+      tag: isAR ? "كانت وحيدة" : "She was alone",
+      title: isAR ? "امرأة بسيطة وظروفها صعبة" : "A struggling woman, hard days",
+      desc: isAR ? "أم وحيدة، والأبواب موصدة، والأمل بعيد." : "A mother on her own, doors closed, hope distant.",
       Scene: SceneLonely,
     },
     {
       key: "surprise",
       tag: isAR ? "فجأة" : "Suddenly",
       title: isAR ? "دخلت السعادة" : "Happiness knocked at her door",
-      desc: isAR ? "طرقة باب… ونور دخل البيت من جديد." : "A knock at the door — and light filled the home.",
+      desc: isAR ? "طرقة باب… فدخل النور البيت من جديد." : "A knock at the door — and light filled the home.",
       Scene: SceneSurprise,
     },
     {
       key: "donate",
       tag: isAR ? "تبرعاتكم" : "Your donations",
-      title: isAR ? "سعدتهم وأبدعتم" : "You gave joy and grace",
+      title: isAR ? "أسعدتموهم وأبدعتم" : "You gave joy and grace",
       desc: isAR ? "أيادي خيّرة من كل مكان اجتمعت في قلب واحد." : "Generous hands from everywhere united in one heart.",
       Scene: SceneDonations,
     },
@@ -303,7 +303,7 @@ export const EidJourney = () => {
       key: "delivery",
       tag: isAR ? "وصلت كرتونة اليُسر" : "Yusr aid box arrived",
       title: isAR ? "كل صندوق مساعدات يحمل الأمل" : "Every aid box carries hope",
-      desc: isAR ? "شاحنة اليُسر تتحرك بأمانة لتسلّم صدقتك بيد بيد." : "Al-Yusr trucks deliver your charity hand to hand.",
+      desc: isAR ? "شاحنة اليُسر تتحرك بأمانة لتسلّم صدقتك يدًا بيد." : "Al-Yusr trucks deliver your charity hand to hand.",
       Scene: SceneTruck,
     },
     {
@@ -556,7 +556,7 @@ export const EidJourney = () => {
         <div data-eid="header" className="mx-auto max-w-2xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-primary-foreground/5 px-3 py-1 text-[11px] font-extrabold text-secondary backdrop-blur">
             <Sparkles className="h-3.5 w-3.5" />
-            {isAR ? "بدعمكم.. نصنع فرقًا حقيقيًا" : "With your support, real impact"}
+            {isAR ? "بدعمكم نصنع فرقًا حقيقيًا" : "With your support, real impact"}
           </span>
           <h2 id="eid-journey-title" className="mt-3 text-[1.6rem] font-black leading-[1.3] text-primary-foreground sm:text-3xl md:text-4xl">
             {isAR ? (
@@ -567,7 +567,7 @@ export const EidJourney = () => {
           </h2>
           <p className="mt-3 text-xs font-semibold text-primary-foreground/80 sm:text-sm md:text-base">
             {isAR
-              ? "خمس لقطات تحكي القصة كاملة — كل صندوق مساعدات من اليُسر يحمل الأمل ويغير حياة."
+              ? "خمس لقطات تحكي القصة كاملة — كل صندوق مساعدات من اليُسر يحمل الأمل ويغيّر حياة أسرة."
               : "Five scenes telling the full story — every Al-Yusr aid box carries hope and changes a life."}
           </p>
         </div>

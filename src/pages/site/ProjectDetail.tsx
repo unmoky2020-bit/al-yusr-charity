@@ -45,8 +45,8 @@ const ProjectDetail = () => {
         <Helmet><meta name="robots" content="noindex" /></Helmet>
         <section className="container mx-auto grid place-items-center px-4 py-24 text-center">
           <SearchX className="h-10 w-10 text-muted-foreground" />
-          <h1 className="mt-4 text-2xl font-black text-primary">{isAR ? "المشروع ده مش موجود" : "This project was not found"}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{isAR ? "ممكن يكون الرابط اتغير. تقدر تتصفح مشاريعنا من هنا." : "The link may have changed. Browse our projects instead."}</p>
+          <h1 className="mt-4 text-2xl font-black text-primary">{isAR ? "هذا المشروع غير موجود" : "This project was not found"}</h1>
+          <p className="mt-2 text-sm text-muted-foreground">{isAR ? "ربما تغيّر الرابط. يمكنك تصفّح مشاريعنا من هنا." : "The link may have changed. Browse our projects instead."}</p>
           <Button asChild className="mt-6"><Link to="/projects">{isAR ? "كل المشاريع" : "All projects"}</Link></Button>
         </section>
       </PageLayout>
@@ -158,7 +158,7 @@ const ProjectDetail = () => {
             <p className="mt-4 whitespace-pre-line text-sm leading-loose text-muted-foreground sm:text-base">{body || lede}</p>
           </div>
           <div>
-            <h2 className="text-2xl font-black text-primary sm:text-3xl">{isAR ? "اختار سهمك" : "Choose your share"}</h2>
+            <h2 className="text-2xl font-black text-primary sm:text-3xl">{isAR ? "اختر سهمك" : "Choose your share"}</h2>
             {project.packages.length ? (
               <ul className="mt-4 space-y-3">
                 {project.packages.map((p) => (
@@ -181,7 +181,7 @@ const ProjectDetail = () => {
               </ul>
             ) : (
               <div className="mt-4 rounded-2xl border border-dashed border-border p-6 text-center">
-                <p className="text-sm text-muted-foreground">{isAR ? "تقدر تتبرع للمشروع بأي مبلغ." : "You can give any amount to this project."}</p>
+                <p className="text-sm text-muted-foreground">{isAR ? "يمكنك التبرع للمشروع بأي مبلغ." : "You can give any amount to this project."}</p>
                 <Button asChild className="mt-4"><Link to={donateHref}>{isAR ? "تبرع الآن" : "Donate now"}</Link></Button>
               </div>
             )}
@@ -195,7 +195,7 @@ const ProjectDetail = () => {
         isRTL={isAR}
         className="bg-muted/30"
         title={isAR ? `حالات ضمن ${name}` : `Cases in ${name}`}
-        subtitle={isAR ? "اختار حالة بعينها، وتبرعك هيوصل لها هي وهتتابع تحديثاتها." : "Choose a specific case; your donation goes to it and you follow its updates."}
+        subtitle={isAR ? "اختر حالة بعينها، وسيصل تبرعك إليها مباشرة وتتابع تحديثاتها." : "Choose a specific case; your donation goes to it and you follow its updates."}
       />
 
       {/* FAQ category linked to the project (dashboard → المشروع → الأسئلة الشائعة) */}

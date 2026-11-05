@@ -34,9 +34,9 @@ const DEFAULT_SHARES: Share[] = [
 const AGE_MIN = 4;
 const AGE_MAX = 16;
 const AGES = Array.from({ length: AGE_MAX - AGE_MIN + 1 }, (_, i) => AGE_MIN + i);
-/** "من ٤ لـ ٦ سنين" / "Ages 4–6" (Arabic: سنين for 3–10, سنة above). */
+/** "من ٤ إلى ٦ سنوات" / "Ages 4–6" (Arabic: سنوات for 3–10, سنة above). */
 const ageRange = (from: number, to: number, isAr: boolean) =>
-  isAr ? `من ${from.toLocaleString("ar-EG")} لـ ${to.toLocaleString("ar-EG")} ${to <= 10 ? "سنين" : "سنة"}` : `Ages ${from}–${to}`;
+  isAr ? `من ${from.toLocaleString("ar-EG")} إلى ${to.toLocaleString("ar-EG")} ${to <= 10 ? "سنوات" : "سنة"}` : `Ages ${from}–${to}`;
 /** Position (0–100%) of an age on the ruler; a track spans from the start of `from` to the end of `to`. */
 const at = (age: number) => ((age - AGE_MIN) / (AGE_MAX - AGE_MIN + 1)) * 100;
 
@@ -79,7 +79,7 @@ const AgeJourney = ({ ctx }: { ctx: PageCtx }) => {
             </span>
           ))}
         </div>
-        <p className="text-center text-xs font-bold text-muted-foreground" dir={isAr ? "rtl" : "ltr"}>{isAr ? "السن بالسنين" : "Age in years"}</p>
+        <p className="text-center text-xs font-bold text-muted-foreground" dir={isAr ? "rtl" : "ltr"}>{isAr ? "العمر بالسنوات" : "Age in years"}</p>
       </div>
     </div>
   );
@@ -241,7 +241,7 @@ const NurseriesLanding = () => {
       titleEn={title.en}
       taglineAr={lead.ar}
       taglineEn={lead.en}
-      metaDescAr="حضانات اليسر التعليمية للأطفال من 4 إلى 6 سنوات ودور تحفيظ القرآن من 4 إلى 16 سنة: مناهج متخصصة تبنيها مؤسسة اليسر وتشرف عليها، فريق تربوي، ومسابقات قرآن."
+      metaDescAr="حضانات اليسر التعليمية للأطفال من 4 إلى 6 سنوات ودور تحفيظ القرآن من 4 إلى 16 سنة: مناهج متخصصة تعدّها مؤسسة اليسر وتشرف عليها، وفريق تربوي، ومسابقات قرآنية."
       metaDescEn="Al-Yusr learning nurseries for ages 4–6 and Qur'an houses for ages 4–16: specialised curricula built and supervised by Al-Yusr, an educational team, and Qur'an competitions."
       seo={{ title: { ar: "حضانات اليسر التعليمية ودور تحفيظ القرآن للأطفال | مؤسسة اليسر", en: "Al-Yusr learning nurseries & Qur'an houses" } }}
       heroImage={heroImage}

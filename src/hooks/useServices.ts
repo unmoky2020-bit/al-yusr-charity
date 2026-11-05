@@ -50,10 +50,10 @@ export function useServiceUpsert() {
       qc.invalidateQueries({ queryKey: KEYS.list });
       qc.invalidateQueries({ queryKey: KEYS.listAll });
       qc.setQueryData(KEYS.detail(saved.slug), saved);
-      toast({ title: " تم الحفظ بنجاح" });
+      toast({ title: "تم الحفظ بنجاح" });
     },
     onError: (err: Error) => {
-      toast({ title: " خطأ في الحفظ", description: err.message, variant: "destructive" });
+      toast({ title: "خطأ في الحفظ", description: err.message, variant: "destructive" });
     },
   });
 }
@@ -69,7 +69,7 @@ export function useServiceToggleActive() {
       qc.invalidateQueries({ queryKey: KEYS.listAll });
     },
     onError: (err: Error) => {
-      toast({ title: " خطأ", description: err.message, variant: "destructive" });
+      toast({ title: "خطأ", description: err.message, variant: "destructive" });
     },
   });
 }
@@ -82,10 +82,10 @@ export function useServiceDelete() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: KEYS.list });
       qc.invalidateQueries({ queryKey: KEYS.listAll });
-      toast({ title: " تم الحذف" });
+      toast({ title: "تم الحذف" });
     },
     onError: (err: Error) => {
-      toast({ title: " خطأ في الحذف", description: err.message, variant: "destructive" });
+      toast({ title: "خطأ في الحذف", description: err.message, variant: "destructive" });
     },
   });
 }

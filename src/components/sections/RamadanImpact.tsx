@@ -84,7 +84,7 @@ export const RamadanImpact = () => {
       img: mealsImg,
       icon: Utensils,
       tag: isAR ? "إفطار صائم" : "Iftar Share",
-      title: isAR ? "وجبة الإفطار مش مجرد أكل" : "Iftar isn't just a meal",
+      title: isAR ? "وجبة الإفطار ليست مجرد طعام" : "Iftar isn't just a meal",
       desc:  isAR ? "ثواب إفطار صائم كامل — وأنت في بيتك. سعر السهم 250 جنيه." : "The full reward of feeding a fasting person — share = 250 EGP.",
       cta:   { href: "/donate?cause=iftar", label: isAR ? "تبرّع بسهم إفطار" : "Donate an iftar share" },
     },
@@ -93,8 +93,8 @@ export const RamadanImpact = () => {
       icon: Package,
       tag: isAR ? "كرتونة رمضان" : "Ramadan Box",
       title: isAR ? "كرتونة رمضان — إحسان لا ينقطع" : "Ramadan box — endless kindness",
-      desc:  isAR ? "احتياج أسرة كاملة لشهر كريم بسعر بسيط، تصل لباب البيت." : "A full family's monthly needs delivered to their door.",
-      cta:   { href: "/donate?cause=ramadan-box", label: isAR ? "كفّل كرتونة" : "Sponsor a box" },
+      desc:  isAR ? "احتياجات أسرة كاملة طوال الشهر الكريم بسعر بسيط، تصل إلى باب البيت." : "A full family's monthly needs delivered to their door.",
+      cta:   { href: "/donate?cause=ramadan-box", label: isAR ? "اكفل كرتونة" : "Sponsor a box" },
     },
   ];
 
@@ -161,14 +161,14 @@ export const RamadanImpact = () => {
           </span>
           <h2 className="mt-3 text-[1.6rem] font-black leading-[1.3] text-primary-foreground sm:text-3xl md:text-4xl">
             {isAR ? (
-              <>أبواب خير كتيرة — <span className="text-gradient-lime">اختر اللي يلمس قلبك</span></>
+              <>أبواب خير كثيرة — <span className="text-gradient-lime">اختر ما يلمس قلبك</span></>
             ) : (
               <>Many doors of giving — <span className="text-gradient-lime">pick what moves your heart</span></>
             )}
           </h2>
           <p className="mt-3 text-xs font-semibold text-primary-foreground/80 sm:text-sm md:text-base">
             {isAR
-              ? "كل مشروع موثّق بالصور، يصل لمستحقيه بأمانة في الدقهلية وكل مصر."
+              ? "كل مشروع موثّق بالصور، ويصل إلى مستحقيه بأمانة في الدقهلية وكل مصر."
               : "Every cause photo-documented and delivered honestly across Dakahlia and Egypt."}
           </p>
           {/* Inline trust badges */}
@@ -288,7 +288,7 @@ export const RamadanImpact = () => {
             </h3>
             <p className="mx-auto mt-3 max-w-xl text-xs font-semibold text-primary-foreground/85 sm:text-sm md:text-base">
               {isAR
-                ? "كل جنيه يصل لمستحقيه في الدقهلية وكل مصر، بشفافية كاملة وتوثيق بالصور."
+                ? "كل جنيه يصل إلى مستحقيه في الدقهلية وكل مصر، بشفافية كاملة وتوثيق بالصور."
                 : "Every pound reaches its rightful recipients, fully transparent with photo proof."}
             </p>
 

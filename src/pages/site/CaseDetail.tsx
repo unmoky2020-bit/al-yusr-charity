@@ -36,16 +36,16 @@ const URG: Record<Urgency, { ar: string; en: string; tone: string }> = {
 
 type StepKey = JourneyStepRow["step_key"];
 const STEP_META: Record<StepKey, { ar: string; en: string; Icon: typeof CheckCircle2 }> = {
-  created: { ar: "اتسجلت الحالة", en: "Case created", Icon: FileText },
+  created: { ar: "سُجّلت الحالة", en: "Case created", Icon: FileText },
   paid: { ar: "وصل تبرع", en: "Payment received", Icon: CheckCircle2 },
   received: { ar: "استلمنا التبرع", en: "Donation received", Icon: CheckCircle2 },
   in_processing: { ar: "قيد التجهيز", en: "In processing", Icon: Package },
-  executing: { ar: "جاري التنفيذ", en: "Executing", Icon: Package },
-  delivered: { ar: "اتسلّمت", en: "Delivered", Icon: Truck },
-  documented: { ar: "اتوثّقت", en: "Documented", Icon: FileCheck },
+  executing: { ar: "جارٍ التنفيذ", en: "Executing", Icon: Package },
+  delivered: { ar: "سُلّمت", en: "Delivered", Icon: Truck },
+  documented: { ar: "وُثّقت", en: "Documented", Icon: FileCheck },
   completed: { ar: "اكتملت", en: "Completed", Icon: CheckCircle2 },
   failed: { ar: "متعثّرة", en: "Failed", Icon: AlertCircle },
-  refunded: { ar: "اتردّ المبلغ", en: "Refunded", Icon: AlertCircle },
+  refunded: { ar: "رُدّ المبلغ", en: "Refunded", Icon: AlertCircle },
 };
 
 const KIND_LABEL: Record<CaseMediaKind, { ar: string; en: string }> = {
@@ -238,12 +238,12 @@ const CaseDetail = () => {
   if (!c) {
     return (
       <PageLayout>
-        <SEOHelmet title={isRTL ? "الحالة مش موجودة | مؤسسة اليسر" : "Case not found | Al-Yusr"} description="" path={`/cases/${ref ?? ""}`} noindex />
+        <SEOHelmet title={isRTL ? "الحالة غير موجودة | مؤسسة اليسر" : "Case not found | Al-Yusr"} description="" path={`/cases/${ref ?? ""}`} noindex />
         <div className="container mx-auto max-w-xl px-4 py-20 text-center">
           <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-secondary/15 text-primary"><Heart className="h-7 w-7" /></div>
-          <h1 className="text-2xl font-black text-primary">{isRTL ? "الحالة دي مش متاحة" : "This case isn't available"}</h1>
+          <h1 className="text-2xl font-black text-primary">{isRTL ? "هذه الحالة غير متاحة" : "This case isn't available"}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            {isRTL ? "ممكن تكون اتقفلت أو لسه بتتراجع. شوف الحالات اللي محتاجة دعم دلوقتي." : "It may be closed or still under review. See the cases that need support now."}
+            {isRTL ? "ربما أُغلقت أو ما زالت قيد المراجعة. تصفّح الحالات التي تحتاج إلى دعم الآن." : "It may be closed or still under review. See the cases that need support now."}
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
             <Button asChild className="rounded-xl bg-orange-grad font-black text-accent-foreground"><Link to="/cases">{isRTL ? "كل الحالات" : "All cases"}</Link></Button>
@@ -269,14 +269,14 @@ const CaseDetail = () => {
         : null;
   const place = [c.city, c.governorate].filter(Boolean).join("، ");
   const coverImg = c.cover_image_url || "/images/cases/case-placeholder.svg";
-  const story = c.story || (isRTL ? "تفاصيل الحالة بتتحدّث." : "Story is being updated.");
+  const story = c.story || (isRTL ? "جارٍ تحديث تفاصيل الحالة." : "Story is being updated.");
   const longStory = story.length > STORY_CLAMP;
   const egp = isRTL ? "ج.م" : "EGP";
   const caseUrl = `${base}/cases/${c.ref_code}`;
   const shareText = isRTL
     ? f.done
-      ? `الحالة دي اكتملت بفضل الله ❤️ «${c.title}» — شوف التوثيق:`
-      : `«${c.title}» باقي ${formatNumberEN(f.remaining)} ج وتكتمل. شارك بأي مبلغ أو ابعتها لحد يقدر يساعد:`
+      ? `اكتملت هذه الحالة بفضل الله ❤️ «${c.title}»، شاهد التوثيق:`
+      : `«${c.title}» يتبقى لها ${formatNumberEN(f.remaining)} ج لتكتمل. شارك بأي مبلغ أو أرسلها لمن يستطيع المساعدة:`
     : f.done
       ? `This case is fully funded ❤️ "${c.title}" — see the proof:`
       : `"${c.title}" needs ${formatNumberEN(f.remaining)} EGP more. Give or pass it on:`;
@@ -335,7 +335,7 @@ const CaseDetail = () => {
     <PageLayout>
       <SEOHelmet
         title={`${c.title} — ${isRTL ? "حالة" : "Case"} ${c.ref_code} | ${isRTL ? "اليسر" : "Al-Yusr"}`}
-        description={(f.done ? (isRTL ? "اكتملت بفضل الله. " : "Fully funded. ") : isRTL ? `باقي ${formatNumberEN(f.remaining)} ج. ` : `${formatNumberEN(f.remaining)} EGP to go. `) + story.slice(0, 130)}
+        description={(f.done ? (isRTL ? "اكتملت بفضل الله. " : "Fully funded. ") : isRTL ? `المتبقي ${formatNumberEN(f.remaining)} ج. ` : `${formatNumberEN(f.remaining)} EGP to go. `) + story.slice(0, 130)}
         path={`/cases/${c.ref_code}`}
         image={c.cover_image_url ?? undefined}
       />
@@ -401,14 +401,14 @@ const CaseDetail = () => {
               <div className="mx-auto mt-6 max-w-md rounded-2xl bg-white/10 p-4 ring-1 ring-white/10 lg:mx-0">
                 <div className="flex items-end justify-between gap-3 text-start">
                   <span>
-                    <span className="block text-[11px] font-bold text-white/70">{f.done ? (isRTL ? "اتجمع" : "Raised") : isRTL ? "باقي" : "To go"}</span>
+                    <span className="block text-[11px] font-bold text-white/70">{f.done ? (isRTL ? "جُمع" : "Raised") : isRTL ? "المتبقي" : "To go"}</span>
                     <span className="text-2xl font-black tabular-nums">{formatNumberEN(f.done ? f.raised : f.remaining)} <span className="text-sm">{egp}</span></span>
                   </span>
                   <span className="text-3xl font-black tabular-nums text-[#a3e635]">{f.pct}%</span>
                 </div>
                 <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/20"><div className="h-full rounded-full bg-[#a3e635]" style={{ width: `${f.pct}%` }} /></div>
                 <p className="mt-2 text-start text-xs font-bold text-white/70">
-                  {isRTL ? `اتجمع ${formatNumberEN(f.raised)} من ${formatNumberEN(f.need)} ${egp}` : `${formatNumberEN(f.raised)} of ${formatNumberEN(f.need)} ${egp} raised`}
+                  {isRTL ? `جُمع ${formatNumberEN(f.raised)} من ${formatNumberEN(f.need)} ${egp}` : `${formatNumberEN(f.raised)} of ${formatNumberEN(f.need)} ${egp} raised`}
                 </p>
                 {!f.done && (
                   <a href="#donate-box" className="mt-3 flex h-11 items-center justify-center gap-2 rounded-xl bg-orange-grad text-sm font-black text-accent-foreground shadow-cta transition hover:opacity-95">
@@ -429,11 +429,11 @@ const CaseDetail = () => {
               <DonateBox c={c} isRTL={isRTL} days={days} />
               <div className="mt-4 rounded-3xl border border-border bg-card p-5 shadow-soft">
                 <p className="mb-3 text-sm font-black text-primary">
-                  {isRTL ? (f.done ? "شارك الخبر الحلو" : "مش هتقدر تتبرع؟ شاركها") : f.done ? "Share the good news" : "Can't give? Share it"}
+                  {isRTL ? (f.done ? "شارك الخبر السعيد" : "لا تستطيع التبرع؟ شاركها") : f.done ? "Share the good news" : "Can't give? Share it"}
                 </p>
                 <CaseShare url={caseUrl} title={c.title} text={shareText} refCode={c.ref_code} isRTL={isRTL} />
                 <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
-                  {isRTL ? "مشاركة واحدة في جروب العيلة ممكن تقفل الحالة." : "One share in a family group can close a case."}
+                  {isRTL ? "مشاركة واحدة في مجموعة العائلة قد تكون سببًا في اكتمال الحالة." : "One share in a family group can close a case."}
                 </p>
               </div>
             </div>
@@ -457,8 +457,8 @@ const CaseDetail = () => {
             <section aria-label={isRTL ? "ضمانات الحالة" : "Assurances"} className="grid gap-3 sm:grid-cols-3">
               {[
                 { Icon: ShieldCheck, ar: ["بحث ميداني", "باحث زار الحالة وراجع أوراقها"], en: ["Field verified", "A researcher visited and checked papers"] },
-                { Icon: Building, ar: ["دفع مباشر", "للمستشفى أو المورد، مش كاش"], en: ["Paid directly", "To the hospital or supplier"] },
-                { Icon: FileCheck, ar: ["توثيق بالصور", "كل خطوة بتتنشر هنا"], en: ["Photo proof", "Every step is posted here"] },
+                { Icon: Building, ar: ["دفع مباشر", "للمستشفى أو المورد، لا نقدًا"], en: ["Paid directly", "To the hospital or supplier"] },
+                { Icon: FileCheck, ar: ["توثيق بالصور", "تُنشر كل خطوة هنا"], en: ["Photo proof", "Every step is posted here"] },
               ].map(({ Icon, ar, en }) => (
                 <div key={ar[0]} className="flex items-start gap-3 rounded-2xl border border-border/70 bg-muted/30 p-4">
                   <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-secondary/20 text-primary"><Icon className="h-[18px] w-[18px]" /></span>
@@ -534,7 +534,7 @@ const CaseDetail = () => {
                 {visibleCount < media.length && (
                   <div className="mt-4 grid place-items-center">
                     <Button variant="outline" onClick={() => setVisibleCount((v) => v + PAGE_SIZE)} className="rounded-xl font-black">
-                      {isRTL ? `اعرض أكتر (${media.length - visibleCount})` : `Load more (${media.length - visibleCount})`}
+                      {isRTL ? `اعرض المزيد (${media.length - visibleCount})` : `Load more (${media.length - visibleCount})`}
                     </Button>
                   </div>
                 )}
@@ -576,7 +576,7 @@ const CaseDetail = () => {
               ) : (
                 <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-6 text-center">
                   <p className="text-sm font-bold text-muted-foreground">
-                    {isRTL ? "أول ما التنفيذ يبدأ هننشر هنا كل خطوة بالتاريخ والصور." : "As soon as work starts, every step is posted here with dates and photos."}
+                    {isRTL ? "فور بدء التنفيذ سننشر هنا كل خطوة بالتاريخ والصور." : "As soon as work starts, every step is posted here with dates and photos."}
                   </p>
                 </div>
               )}
@@ -591,7 +591,7 @@ const CaseDetail = () => {
         include={notThis}
         variant="carousel"
         isRTL={isRTL}
-        title={isRTL ? "حالات تانية محتاجة دعمك" : "Other cases that need you"}
+        title={isRTL ? "حالات أخرى تحتاج إلى دعمك" : "Other cases that need you"}
         className="bg-muted/30"
       />
 
@@ -608,7 +608,7 @@ const CaseDetail = () => {
               <span className="grid h-8 w-8 place-items-center rounded-full bg-[#06301c]">{f.pct}%</span>
             </span>
             <div className="min-w-0 flex-1">
-              <div className="truncate text-[11px] font-bold text-white/75">{isRTL ? "باقي للاكتمال" : "Still needed"}</div>
+              <div className="truncate text-[11px] font-bold text-white/75">{isRTL ? "المتبقي للاكتمال" : "Still needed"}</div>
               <div className="truncate text-sm font-black">{formatNumberEN(f.remaining)} {egp}</div>
             </div>
             <Link to={`/donate?case=${encodeURIComponent(c.ref_code)}`} tabIndex={showBar ? 0 : -1} data-source="case-detail-bar" data-label={`case-${c.ref_code}`}
@@ -688,10 +688,10 @@ function DonateBox({ c, isRTL, days }: { c: CaseRow; isRTL: boolean; days: numbe
         <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-full bg-secondary/25 text-primary"><CheckCircle2 className="h-7 w-7" /></div>
         <h2 className="text-lg font-black text-primary">{isRTL ? "الحالة اكتملت بفضل الله" : "This case is fully funded"}</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          {isRTL ? `اتجمع ${formatNumberEN(f.raised)} ${egp}. جزاكم الله خيراً — التوثيق بيتنشر تحت.` : `${formatNumberEN(f.raised)} ${egp} raised. Thank you — the proof is posted below.`}
+          {isRTL ? `جُمع ${formatNumberEN(f.raised)} ${egp}. جزاكم الله خيرًا، والتوثيق منشور بالأسفل.` : `${formatNumberEN(f.raised)} ${egp} raised. Thank you — the proof is posted below.`}
         </p>
         <Button asChild className="mt-5 h-12 w-full rounded-2xl bg-orange-grad font-black text-accent-foreground shadow-cta">
-          <Link to="/cases" data-source="case-detail" data-label="case-done-next">{isRTL ? "ساعد في حالة تانية" : "Help another case"} <Arrow className="h-4 w-4" /></Link>
+          <Link to="/cases" data-source="case-detail" data-label="case-done-next">{isRTL ? "ساعد في حالة أخرى" : "Help another case"} <Arrow className="h-4 w-4" /></Link>
         </Button>
       </div>
     );
@@ -706,10 +706,10 @@ function DonateBox({ c, isRTL, days }: { c: CaseRow; isRTL: boolean; days: numbe
           <span className="grid h-16 w-16 place-items-center rounded-full bg-card text-lg font-black text-primary">{f.pct}%</span>
         </span>
         <div className="min-w-0">
-          <div className="text-xs font-bold text-muted-foreground">{isRTL ? "باقي لاكتمال الحالة" : "Still needed"}</div>
+          <div className="text-xs font-bold text-muted-foreground">{isRTL ? "المتبقي لاكتمال الحالة" : "Still needed"}</div>
           <div className="text-2xl font-black tabular-nums text-primary">{formatNumberEN(f.remaining)} <span className="text-sm">{egp}</span></div>
           <div className="text-xs font-bold text-muted-foreground">
-            {isRTL ? `اتجمع ${formatNumberEN(f.raised)} من ${formatNumberEN(f.need)}` : `${formatNumberEN(f.raised)} of ${formatNumberEN(f.need)} raised`}
+            {isRTL ? `جُمع ${formatNumberEN(f.raised)} من ${formatNumberEN(f.need)}` : `${formatNumberEN(f.raised)} of ${formatNumberEN(f.need)} raised`}
           </div>
         </div>
       </div>
@@ -717,12 +717,12 @@ function DonateBox({ c, isRTL, days }: { c: CaseRow; isRTL: boolean; days: numbe
       {days !== null && days >= 0 && (
         <div className={`mt-4 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-black ${days <= 7 ? "bg-destructive/10 text-destructive" : "bg-muted text-primary"}`}>
           <Clock className="h-4 w-4" />
-          {days === 0 ? (isRTL ? "النهارده آخر يوم للحالة" : "Today is the last day") : isRTL ? `باقي ${days} يوم على الموعد المطلوب` : `${days} days to the deadline`}
+          {days === 0 ? (isRTL ? "اليوم آخر يوم للحالة" : "Today is the last day") : isRTL ? `المتبقي على الموعد المطلوب: ${days} يوم` : `${days} days to the deadline`}
         </div>
       )}
 
       <fieldset className="mt-5">
-        <legend className="mb-2 text-sm font-black text-primary">{isRTL ? "اختار مبلغ" : "Choose an amount"}</legend>
+        <legend className="mb-2 text-sm font-black text-primary">{isRTL ? "اختر مبلغًا" : "Choose an amount"}</legend>
         <div className="grid grid-cols-3 gap-2">
           {amounts.map((a) => (
             <button key={a} type="button" aria-pressed={!custom && amount === a} onClick={() => { setAmount(a); setCustom(""); }}
@@ -734,17 +734,17 @@ function DonateBox({ c, isRTL, days }: { c: CaseRow; isRTL: boolean; days: numbe
         {closing && (
           <button type="button" aria-pressed={!custom && amount === closing} onClick={() => { setAmount(closing); setCustom(""); }}
             className={`mt-2 flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border text-sm font-black transition ${!custom && amount === closing ? "border-accent bg-accent text-accent-foreground" : "border-dashed border-accent/60 text-accent hover:bg-accent/10"}`}>
-            <HandCoins className="h-4 w-4" /> {isRTL ? `كمّل الحالة كلها — ${formatNumberEN(closing)} ${egp}` : `Complete the case — ${formatNumberEN(closing)} ${egp}`}
+            <HandCoins className="h-4 w-4" /> {isRTL ? `أكمل الحالة كلها — ${formatNumberEN(closing)} ${egp}` : `Complete the case — ${formatNumberEN(closing)} ${egp}`}
           </button>
         )}
         <label className="relative mt-2 block">
-          <span className="sr-only">{isRTL ? "مبلغ تاني" : "Other amount"}</span>
+          <span className="sr-only">{isRTL ? "مبلغ آخر" : "Other amount"}</span>
           <input inputMode="numeric" value={custom} onChange={(e) => setCustom(e.target.value.replace(/[^\d]/g, "").slice(0, 7))}
-            placeholder={isRTL ? "أو اكتب مبلغ تاني" : "Or type another amount"}
+            placeholder={isRTL ? "أو اكتب مبلغًا آخر" : "Or type another amount"}
             className="h-11 w-full rounded-xl border border-border bg-background pe-12 ps-3 text-sm font-bold outline-none focus:border-primary focus:ring-2 focus:ring-secondary/40" />
           <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">{egp}</span>
         </label>
-        {custom && !valid && <p className="mt-1 text-xs font-bold text-destructive">{isRTL ? "أقل مبلغ 10 جنيه" : "Minimum is 10 EGP"}</p>}
+        {custom && !valid && <p className="mt-1 text-xs font-bold text-destructive">{isRTL ? "أقل مبلغ 10 جنيهات" : "Minimum is 10 EGP"}</p>}
       </fieldset>
 
       <Button type="button" onClick={go} disabled={!valid}
@@ -753,7 +753,7 @@ function DonateBox({ c, isRTL, days }: { c: CaseRow; isRTL: boolean; days: numbe
       </Button>
       <p className="mt-3 flex items-center justify-center gap-1.5 text-[11px] font-bold text-muted-foreground">
         <ShieldCheck className="h-3.5 w-3.5 text-secondary" />
-        {isRTL ? "دفع آمن · تبرعك بيتسجل باسم الحالة" : "Secure payment · recorded against this case"}
+        {isRTL ? "دفع آمن · يُسجَّل تبرعك باسم الحالة" : "Secure payment · recorded against this case"}
       </p>
     </div>
   );
@@ -763,7 +763,7 @@ function DonateBox({ c, isRTL, days }: { c: CaseRow; isRTL: boolean; days: numbe
 function DetailSkeleton() {
   const glass = "bg-white/10";
   return (
-    <div aria-busy="true" aria-label="جاري التحميل">
+    <div aria-busy="true" aria-label="جارٍ التحميل">
       <div className="bg-[#06301c]">
         <div className="container mx-auto max-w-6xl px-4 pb-8 pt-6 md:pb-12 md:pt-8">
           <Skeleton className={`mx-auto h-9 w-72 max-w-full rounded-full lg:mx-0 ${glass}`} />

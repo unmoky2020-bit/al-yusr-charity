@@ -183,7 +183,7 @@ const Inner = () => {
     const save = async () => {
       try {
         await updateProfile(user!.id, { name: form.name, email: form.email, phone: form.phone });
-        toast({ title: lang === "ar" ? " تم الحفظ" : " Saved" });
+        toast({ title: lang === "ar" ? "تم الحفظ" : "Saved" });
       } catch { /* AuthContext already showed the server error */ }
     };
     const onLogout = () => { logout(); navigate("/"); };
@@ -264,7 +264,7 @@ const Inner = () => {
             <Breadcrumbs items={[{ name: lang === "ar" ? "الرئيسية" : "Home", href: "/" }, { name: lang === "ar" ? "لوحتي" : "Dashboard" }]} />
           </div>
           <div className="mt-4">
-            <p className="text-sm text-primary-foreground/70">{lang === "ar" ? "أهلاً" : "Welcome"}</p>
+            <p className="text-sm text-primary-foreground/70">{lang === "ar" ? "أهلًا" : "Welcome"}</p>
             <h1 className="text-3xl font-black md:text-4xl">{user!.name}</h1>
           </div>
         </div>
@@ -308,7 +308,7 @@ const Inner = () => {
                     {lang === "ar" ? "ابدأ رحلتك مع اليسر" : "Start your Al-Yusr journey"}
                   </h3>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    {lang === "ar" ? "بمجرد تقديمك لتبرع، ستبدأ في رؤية قصص وتحديثات مخصصة من الميدان." : "Once you donate, you'll start seeing personalized stories and updates from the field."}
+                    {lang === "ar" ? "بمجرد أن تتبرع، ستبدأ في رؤية قصص وتحديثات مخصصة لك من الميدان." : "Once you donate, you'll start seeing personalized stories and updates from the field."}
                   </p>
                 </div>
               ) : (

@@ -60,13 +60,13 @@ export const PAGE_GALLERIES: Record<PageGalleryKey, PageGalleryMeta> = {
   zakat: {
     titleAr: "معرض الصور المتحرك في صفحة الزكاة",
     pages: [{ path: "/zakat", labelAr: "الزكاة" }],
-    hintAr: "أول 5 صور بتظهر في المعرض المتحرك والباقي تحته. العنوان القصير بيظهر كاسم المجال (مثلاً: الغذاء).",
+    hintAr: "تظهر أول 5 صور في المعرض المتحرك والباقي أسفله، ويظهر العنوان القصير اسمًا للمجال (مثلًا: الغذاء).",
     captions: true,
     defaults: [
       img("program-food.jpg", "كرتونة العزومة في بيت أسرة بالدقهلية", "Family Box delivered in Dakahlia", { ar: "الغذاء", en: "Food" }),
       img("program-health.webp", "قافلة طبية مجانية لقرى الدقهلية", "Free medical convoy in Dakahlia villages", { ar: "الصحة", en: "Health" }),
       img("program-orphans.jpg", "كفالة يتيم — ابتسامة من قلب الميدان", "Orphan sponsorship — smiles from the field", { ar: "الأيتام", en: "Orphans" }),
-      img("brand-truck.jpg", "شاحنة اليسر بتوزّع الخير من المنصورة", "Al-Yusr truck distributing aid from Mansoura", { ar: "المطبخ", en: "Kitchen" }),
+      img("brand-truck.jpg", "شاحنة اليسر توزّع الخير من المنصورة", "Al-Yusr truck distributing aid from Mansoura", { ar: "المطبخ", en: "Kitchen" }),
       img("family-hope.webp", "أسرة استلمت تبرعك… ودعت لك", "A family that received your gift — and prayed for you", { ar: "الأثر", en: "Impact" }),
       img("brand-poster-classroom.webp", "ادفع مصروفه — فصل في مدرسة بطلخا", "Pay His Tuition — a class in Talkha", { ar: "التعليم", en: "Education" }),
       img("brand-bags.jpg", "تجهيز شُنط الغذاء قبل التوزيع", "Food bags prepared before distribution", { ar: "الغذاء", en: "Food" }),

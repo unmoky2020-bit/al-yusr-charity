@@ -83,7 +83,7 @@ export function LinkedCasesSection({
           </Button>
         </div>
         {filterByOwner && owners.length > 1 && (
-          <div className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]" role="group" aria-label={isRTL ? "اختار البرنامج" : "Choose a program"}>
+          <div className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]" role="group" aria-label={isRTL ? "اختر البرنامج" : "Choose a program"}>
             {[{ key: null as string | null, label: isRTL ? "الكل" : "All", n: cases?.length ?? 0 }, ...owners.map(([o, n]) => ({ key: o as string | null, label: o, n }))].map((chip) => {
               const active = owner === chip.key;
               return (

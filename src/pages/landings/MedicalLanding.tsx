@@ -121,7 +121,7 @@ const MedicalHero = () => {
           <div className="text-center md:text-start">
             <p className="flex items-center justify-center gap-3 text-sm font-bold text-secondary md:justify-start">
               <span aria-hidden className="h-px w-10 bg-secondary/70" />
-              {isAr ? "المشروع الطبي · مؤسسة اليسر" : "The medical project · Al-Yusr Foundation"}
+              {isAr ? "المشروع الطبي · مؤسسة اليسر" : "The medical project · Al-Yusr Charity Foundation"}
             </p>
             <h1 className="mt-4 text-[1.8rem] font-black leading-[1.3] text-balance sm:text-4xl lg:text-[3.2rem] lg:leading-[1.22]">
               {isAr ? "المشروع الطبي: حتى لا يتأخر علاج مريض بسبب التكلفة" : "The medical project: so no patient's treatment waits on cost"}
@@ -722,7 +722,7 @@ const ConvoysSection = () => {
           <label htmlFor="convoy-days" className="mt-5 block text-xs font-bold text-primary-foreground/70">{isAr ? "حرّك المؤشر لتغيير المدة (من 3 إلى 10 أيام)" : "Drag to change the length (3 to 10 days)"}</label>
           <input id="convoy-days" type="range" min={3} max={10} value={days} onChange={(e) => setDays(Number(e.target.value))} className="mt-2 w-full accent-[hsl(var(--secondary))]" dir="ltr" />
           <p className="mt-4 text-sm leading-relaxed text-primary-foreground/80">
-            {isAr ? `في قافلة من ${days} أيام، يقدّم الأطباء الكشف والعلاج بالمجان طوال الأيام كلها.` : `In a ${days}-day convoy, the doctors give free check-ups and treatment every day.`}
+            {isAr ? `في قافلة من ${days} أيام، يقدّم الأطباء الكشف والعلاج بالمجان طوال أيامها.` : `In a ${days}-day convoy, the doctors give free check-ups and treatment every day.`}
           </p>
         </div>
       </div>
@@ -784,7 +784,7 @@ const MedicalLanding = () => {
     taglineEn="A complex serving 43 villages, free prescriptions, help with surgery, scans and tests, rehabilitation for children with disabilities, and convoys to remote villages."
     metaDescAr="المشروع الطبي من مؤسسة اليسر: مجمع اليسر الطبي بالحفير يخدم 43 قرية بين الدقهلية وكفر الشيخ، صرف روشتات بالمجان، عمليات جراحية، أشعة وتحاليل، تحدّي الإعاقة، وقوافل طبية."
     metaDescEn="Al-Yusr's medical project: the El-Hafir complex serving 43 villages between Dakahlia and Kafr El-Sheikh, free prescriptions, surgery, scans and tests, disability support and medical convoys."
-    seo={{ title: { ar: "المشروع الطبي: مجمع اليسر الطبي وروشتات وعمليات وقوافل | مؤسسة اليسر", en: "The medical project: complex, prescriptions, surgery & convoys | Al-Yusr" } }}
+    seo={{ title: { ar: "علاج المرضى غير القادرين في مصر: عمليات وروشتات وأشعة | اليسر", en: "The medical project: complex, prescriptions, surgery & convoys | Al-Yusr" } }}
     heroImage={heroImage}
     heroAlt="طبيب من مؤسسة اليسر مع مريض أثناء صرف العلاج"
     hero={<MedicalHero />}

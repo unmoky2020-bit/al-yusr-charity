@@ -53,10 +53,10 @@ export function CaseShare({
       await navigator.clipboard.writeText(shareUrl("copy"));
       setCopied(true);
       sent("copy");
-      toast.success(isRTL ? "اتنسخ رابط الحالة" : "Case link copied");
+      toast.success(isRTL ? "تم نسخ رابط الحالة" : "Case link copied");
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error(isRTL ? "مقدرناش ننسخ الرابط، انسخه من شريط العنوان" : "Couldn't copy, use the address bar");
+      toast.error(isRTL ? "تعذّر نسخ الرابط، يُرجى نسخه من شريط العنوان" : "Couldn't copy, use the address bar");
     }
   };
   const native = async () => {

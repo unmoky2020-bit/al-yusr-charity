@@ -94,7 +94,7 @@ export function SimpleDonateHero({
         </h1>
         <p className="mt-3 text-sm text-primary-foreground/85 md:text-base">
           {lang === "ar"
-            ? "اختر برنامجك من الشريط بالأسفل، أو اضغط (تبرع عام) ودعنا نوصلها للأشد احتياجًا."
+            ? "اختر برنامجك من الشريط بالأسفل، أو اختر «تبرع عام» ليصل تبرعك إلى الأشد احتياجًا."
             : "Pick a program from the strip below, or choose General and we'll route it to the most urgent need."}
         </p>
       </div>
@@ -182,7 +182,7 @@ export function SimpleDonateHero({
           })}
           {items.length === 0 && (
             <div className="grid w-full place-items-center px-6 py-10 text-sm text-primary-foreground/70">
-              {isAR ? "لا توجد برامج في هذه الفئة حالياً" : "No programs in this filter yet"}
+              {isAR ? "لا توجد برامج في هذه الفئة حاليًا" : "No programs in this filter yet"}
             </div>
           )}
         </div>

@@ -43,7 +43,7 @@ const IMPACT_STATS = ["families", "governorates", "jobs", "middlemen"];
 const Farm = () => {
   const { c, t, isAr: isRTL, project, stat, section } = useProjectPage(PROJECT_SLUG, FARM_DEFAULTS);
   const base = "https://elyusr.org";
-  const wa = `https://wa.me/201097000137?text=${encodeURIComponent(isRTL ? "السلام عليكم، عايز أعرف تفاصيل المزرعة الوقفية والأضحية." : "Hi, I want to know more about the endowment farm and Qurbani.")}`;
+  const wa = `https://wa.me/201097000137?text=${encodeURIComponent(isRTL ? "السلام عليكم، أريد معرفة تفاصيل المزرعة الوقفية والأضحية." : "Hi, I want to know more about the endowment farm and Qurbani.")}`;
 
   /** "4 طن", "100%", "1,200 أسرة". A stat with no number shows nothing. */
   const statText = (st?: StatItem) => {
@@ -69,7 +69,7 @@ const Farm = () => {
     <PageLayout>
       <SEOHelmet
         title={isRTL ? "مزارع اليسر الوقفية بالدقهلية | صك أضحية ولحوم بلدي بدون وسطاء — المنصورة" : "Al-Yusr Endowment Farm in Dakahlia | Qurbani & local meat, zero middlemen — Mansoura"}
-        description={isRTL ? "مزارع اليسر الوقفية بتوفر لحوم بلدي طازجة وماشية محصنة لصكوك الأضحية والمواسم الخيرية في المنصورة، وعائد إنتاجها بيكبّر الوقف ويموّل الخير." : "Al-Yusr's waqf farm in Dakahlia supplies fresh local meat and certified livestock for Qurbani and seasonal aid in Mansoura, and its income grows the waqf."}
+        description={isRTL ? "توفّر مزارع اليسر الوقفية لحومًا بلدية طازجة وماشية محصّنة لصكوك الأضحية والمواسم الخيرية في المنصورة، ويُنمّي عائد إنتاجها الوقف ويموّل الخير." : "Al-Yusr's waqf farm in Dakahlia supplies fresh local meat and certified livestock for Qurbani and seasonal aid in Mansoura, and its income grows the waqf."}
         path="/farm"
         image={heroImg}
       />
@@ -113,7 +113,7 @@ const Farm = () => {
             },
             {
               "@type": "HowTo",
-              name: isRTL ? "إزاي تحجز صك أضحية من مزارع اليسر الوقفية" : "How to reserve a Qurbani share from Al-Yusr endowment farm",
+              name: isRTL ? "كيف تحجز صك أضحية من مزارع اليسر الوقفية" : "How to reserve a Qurbani share from Al-Yusr endowment farm",
               step: (journey?.items ?? []).map((s, i) => ({ "@type": "HowToStep", position: i + 1, name: t(s.title), text: t(s.desc) })),
             },
             {
@@ -224,7 +224,7 @@ const Farm = () => {
         <div className="container mx-auto max-w-6xl px-4">
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-primary">
-              <RefreshCw className="h-3.5 w-3.5" /> {isRTL ? "إزاي الوقف بيشتغل؟" : "How does the waqf work?"}
+              <RefreshCw className="h-3.5 w-3.5" /> {isRTL ? "كيف يعمل الوقف؟" : "How does the waqf work?"}
             </span>
             <h2 className="mt-3 text-2xl font-black text-primary md:text-4xl">{t(cycle?.title)}</h2>
             <p className="mt-3 text-muted-foreground md:text-lg">{t(cycle?.lead)}</p>
@@ -274,7 +274,7 @@ const Farm = () => {
               </div>
               <p className="mt-3 text-sm leading-relaxed text-foreground/80">{t(section("kind")?.lead)}</p>
               <Link to="/projects#project-kinds" className="mt-3 inline-block text-xs font-bold text-secondary hover:underline">
-                {isRTL ? "اعرف أكتر عن أنواع مشاريع اليسر" : "More about Al-Yusr project types"}
+                {isRTL ? "اعرف أكثر عن أنواع مشاريع اليسر" : "More about Al-Yusr project types"}
               </Link>
             </aside>
             <div className="flex flex-col justify-between rounded-3xl bg-primary p-6 text-primary-foreground sm:p-8">
@@ -450,7 +450,7 @@ const Farm = () => {
       {project && (
         <LinkedCasesSection filter={{ projectId: project.id }} isRTL={isRTL} className="bg-background"
           title={isRTL ? "حالات ضمن المزرعة الوقفية" : "Cases in the waqf farm"}
-          subtitle={isRTL ? "اختار حالة بعينها وتابع تحديثاتها." : "Pick a specific case and follow its updates."} />
+          subtitle={isRTL ? "اختر حالة بعينها وتابع تحديثاتها." : "Pick a specific case and follow its updates."} />
       )}
 
       {/* Proof gallery (real field photos) */}
@@ -464,7 +464,7 @@ const Farm = () => {
         <LocalFAQ
           donateHref="/qurbani"
           title={isRTL ? "أسئلة شائعة عن صك الأضحية في الدقهلية" : "Qurbani share FAQs — Dakahlia"}
-          intro={isRTL ? "إجابات سريعة للأسئلة اللي بنسمعها كل يوم من أهالي المنصورة وميت غمر وطلخا وبلقاس قبل العيد." : "Fast answers we hear every day from families across Mansoura, Mit Ghamr, Talkha and Belqas before Eid."}
+          intro={isRTL ? "إجابات سريعة عن الأسئلة التي نسمعها كل يوم من أهالي المنصورة وميت غمر وطلخا وبلقاس قبل العيد." : "Fast answers we hear every day from families across Mansoura, Mit Ghamr, Talkha and Belqas before Eid."}
           items={c.faq.map((f) => ({ q: t(f.q), a: t(f.a) }))}
         />
       )}

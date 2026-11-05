@@ -226,7 +226,7 @@ export const FieldConvoysGallery = ({
           <h2 className="mt-3 text-2xl font-black text-primary md:text-4xl">{heading}</h2>
           <p className="mt-3 text-muted-foreground">
             {isAR
-              ? "صور من قلب الميدان — موسم الأضحى 2024 و2025 وقوافل الإغاثة 2026 — كل صك بنوثّقه بصور وفيديو ونرسلهم للمتبرع مع الحفاظ على كرامة الأسرة."
+              ? "صور من قلب الميدان — موسم الأضحى 2024 و2025 وقوافل الإغاثة 2026 — نوثّق كل صك بالصور والفيديو ونرسلها إلى المتبرع مع الحفاظ على كرامة الأسرة."
               : "Straight from the field — Qurbani 2024, 2025 and 2026 relief convoys. Every voucher is documented and shared with the donor while preserving family dignity."}
           </p>
           <div className="mt-3 flex flex-wrap justify-center gap-2 text-[11px] font-extrabold">
@@ -291,7 +291,7 @@ export const FieldConvoysGallery = ({
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button asChild variant="outline">
-            <Link to="/gallery">{isAR ? "كل معرض الصور" : "Full gallery"}</Link>
+            <Link to="/gallery">{isAR ? "معرض الصور كاملًا" : "Full gallery"}</Link>
           </Button>
           <Button asChild className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
             <Link to="/farm"><Heart className="h-4 w-4" />{isAR ? "ادعم المزرعة الوقفية" : "Support the endowment farm"}</Link>

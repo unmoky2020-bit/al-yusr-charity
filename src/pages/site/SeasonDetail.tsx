@@ -21,7 +21,7 @@ const SeasonDetail = () => {
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
   const wa = `https://wa.me/201097000137?text=${encodeURIComponent(
-    isAr ? `أرغب بالتبرع/الاستفسار عن: ${season.titleAr}` : `I want to donate / ask about: ${season.titleEn}`,
+    isAr ? `أرغب في التبرع أو الاستفسار عن: ${season.titleAr}` : `I want to donate / ask about: ${season.titleEn}`,
   )}`;
 
   const url = `https://elyusr.org/seasons/${season.slug}`;
@@ -44,7 +44,7 @@ const SeasonDetail = () => {
           "@type": "DonateAction",
           name: isAr ? season.titleAr : season.titleEn,
           description: isAr ? season.descriptionAr : season.descriptionEn,
-          recipient: { "@type": "NGO", name: "مؤسسة اليسر للتنمية", url: "https://elyusr.org/", areaServed: ["Dakahlia", "Mansoura"] },
+          recipient: { "@type": "NGO", name: "مؤسسة اليسر الخيرية", url: "https://elyusr.org/", areaServed: ["Dakahlia", "Mansoura"] },
           target: `https://elyusr.org${season.donateHref}`,
           actionStatus: enabled ? "https://schema.org/ActiveActionStatus" : "https://schema.org/CompletedActionStatus",
         })}</script>
@@ -89,11 +89,11 @@ const SeasonDetail = () => {
                   </Button>
                 ) : (
                   <span className="inline-flex items-center gap-2 rounded-2xl border border-border bg-muted/50 px-4 py-2.5 text-sm font-extrabold text-muted-foreground">
-                    <Lock className="h-4 w-4" /> {isAr ? "الحملة مغلقة حالياً — قريباً بإذن الله" : "Campaign currently closed — coming soon"}
+                    <Lock className="h-4 w-4" /> {isAr ? "الحملة مغلقة حاليًا، وتعود قريبًا بإذن الله" : "Campaign currently closed — coming soon"}
                   </span>
                 )}
                 <Button asChild size="lg" variant="outline">
-                  <a href={wa} target="_blank" rel="noopener"><MessageCircle className="h-5 w-5" />{isAr ? "استفسر واتساب" : "Ask on WhatsApp"}</a>
+                  <a href={wa} target="_blank" rel="noopener"><MessageCircle className="h-5 w-5" />{isAr ? "استفسر عبر واتساب" : "Ask on WhatsApp"}</a>
                 </Button>
               </div>
             </div>
@@ -148,7 +148,7 @@ const SeasonDetail = () => {
               {isAr ? "اختر تبرعك" : "Choose your donation"}
             </h2>
             <p className="mx-auto mt-2 max-w-xl text-center text-sm text-muted-foreground">
-              {isAr ? "كل مبلغ يصل لمستحقه — موثّق بالصور والفيديو وتوصيل مجاني." : "Every amount reaches the right hands — documented with proof & free delivery."}
+              {isAr ? "كل مبلغ يصل إلى مستحقه موثّقًا بالصور والفيديو، مع توصيل مجاني." : "Every amount reaches the right hands — documented with proof & free delivery."}
             </p>
             <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {season.pricing.map((pr, i) => (
@@ -176,7 +176,7 @@ const SeasonDetail = () => {
                     </Link>
                   ) : (
                     <span className="mt-3 inline-flex items-center gap-1 text-[12px] font-bold text-muted-foreground">
-                      <Lock className="h-3 w-3" /> {isAr ? "غير متاح حالياً" : "Currently unavailable"}
+                      <Lock className="h-3 w-3" /> {isAr ? "غير متاح حاليًا" : "Currently unavailable"}
                     </span>
                   )}
                 </div>
@@ -194,9 +194,9 @@ const SeasonDetail = () => {
           </h2>
           <ol className="mx-auto mt-8 grid max-w-3xl gap-4">
             {[
-              { ar: "تبرع أونلاين بالفيزا أو المحفظة الإلكترونية — استلام فوري.", en: "Donate online via card or e-wallet — instant receipt." },
+              { ar: "تبرّع أونلاين بالبطاقة أو المحفظة الإلكترونية، مع إيصال فوري.", en: "Donate online via card or e-wallet — instant receipt." },
               { ar: "تحويل بنكي على حسابات اليسر الرسمية المرخّصة.", en: "Bank transfer to Al-Yusr official licensed accounts." },
-              { ar: "تواصل واتساب لخدمة التبرع الميداني (استلام من البيت).", en: "WhatsApp our team for on-site collection from your home." },
+              { ar: "تواصل معنا عبر واتساب لخدمة التبرع الميداني (الاستلام من البيت).", en: "WhatsApp our team for on-site collection from your home." },
             ].map((s, i) => (
               <li key={i} className="relative rounded-2xl border border-border bg-card p-5 shadow-soft">
                 <span className="absolute -top-3 start-5 rounded-full bg-accent px-3 py-1 text-xs font-black text-accent-foreground">{i + 1}</span>
@@ -215,7 +215,7 @@ const SeasonDetail = () => {
               { ar: "ترخيص ٢٦٦٥/٢٠١٩", en: "License 2665/2019" },
               { ar: "توثيق صور وفيديو", en: "Photo & video proof" },
               { ar: "توصيل مجاني للباب", en: "Free doorstep delivery" },
-              { ar: "مصاريف إدارية أقل من ٨٪", en: "Admin costs under 8%" },
+              { ar: "٩٠٪ من تبرعك يصل إلى المستفيدين", en: "90% reaches beneficiaries" },
             ].map((t) => (
               <li key={t.en} className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border bg-background px-3 py-2 text-center">
                 <ShieldCheck className="h-3.5 w-3.5 text-secondary" />

@@ -65,6 +65,15 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/about" />
   </url>
   <url>
+    <loc>https://elyusr.org/charity-mansoura</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/charity-mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/charity-mansoura?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/charity-mansoura" />
+  </url>
+  <url>
     <loc>https://elyusr.org/contact</loc>
     <lastmod>2026-11-05</lastmod>
     <changefreq>monthly</changefreq>
@@ -972,6 +981,33 @@
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/cases/CASE-92759" />
     <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/cases/CASE-92759?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/cases/CASE-92759" />
+  </url>
+  <url>
+    <loc>https://elyusr.org/cases/CASE-51988</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/cases/CASE-51988" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/cases/CASE-51988?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/cases/CASE-51988" />
+  </url>
+  <url>
+    <loc>https://elyusr.org/cases/CASE-29013</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/cases/CASE-29013" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/cases/CASE-29013?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/cases/CASE-29013" />
+  </url>
+  <url>
+    <loc>https://elyusr.org/cases/CASE-70423</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/cases/CASE-70423" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/cases/CASE-70423?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/cases/CASE-70423" />
   </url>
   <url>
     <loc>https://elyusr.org/geo/dakahlia/odhya</loc>

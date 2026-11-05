@@ -8,8 +8,8 @@ export const WhyUs = () => {
   const { t, lang } = useLang();
   const waMsg = encodeURIComponent(
     lang === "ar"
-      ? "السلام عليكم، حابب أعرف أكتر عن مؤسسة اليسر وطرق التبرع 🌿"
-      : "Hello, I'd like to know more about Al-Yusr Foundation and how to donate."
+      ? "السلام عليكم، أودّ معرفة المزيد عن مؤسسة اليسر وطرق التبرع 🌿"
+      : "Hello, I'd like to know more about Al-Yusr Charity Foundation and how to donate."
   );
   const items = t.why.items;
   const isOdd = items.length % 2 === 1;

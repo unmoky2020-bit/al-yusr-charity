@@ -74,7 +74,7 @@ const CopyRow = ({ label, value, isAr }: { label: string; value: string; isAr: b
         className={`inline-flex h-10 shrink-0 items-center gap-1.5 rounded-lg px-3 text-xs font-black transition-colors ${copied ? "bg-primary text-primary-foreground" : "bg-secondary/20 text-primary hover:bg-secondary/35"}`}
       >
         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-        {copied ? (isAr ? "اتنسخ" : "Copied") : (isAr ? "نسخ" : "Copy")}
+        {copied ? (isAr ? "تم النسخ" : "Copied") : (isAr ? "نسخ" : "Copy")}
       </button>
     </div>
   );
@@ -126,7 +126,7 @@ export const Donate = () => {
     if (selected.manual) {
       // The transfer details are shown right here; the donor sends the transfer receipt on WhatsApp.
       const msg = isAr
-        ? `السلام عليكم، حوّلت ${fmt(amount)} جنيه تبرع عام عن طريق ${selected.ar}، ومرفق صورة التحويل.`
+        ? `السلام عليكم، حوّلت ${fmt(amount)} جنيه تبرعًا عامًّا عن طريق ${selected.ar}، ومرفق صورة التحويل.`
         : `Hello, I transferred ${amount} EGP as a general donation via ${selected.en}. The transfer receipt is attached.`;
       window.open(`https://wa.me/201097000137?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
       return;
@@ -183,7 +183,7 @@ export const Donate = () => {
     : !selected.manual && !phoneOk
       ? (isAr ? "اكتب رقم موبايلك للمتابعة" : "Enter your mobile number to continue")
     : selected.manual
-      ? (isAr ? "حوّلت؟ ابعت صورة التحويل على واتساب" : "Transferred? Send the receipt on WhatsApp")
+      ? (isAr ? "حوّلت؟ أرسل صورة التحويل عبر واتساب" : "Transferred? Send the receipt on WhatsApp")
       : (isAr ? `ادفع ${fmt(amount)} جنيه الآن` : `Pay ${fmt(amount)} EGP now`);
 
   return (
@@ -219,7 +219,7 @@ export const Donate = () => {
                 })}
               </div>
               <label htmlFor="quick-custom" className="mt-3 block text-xs font-bold text-muted-foreground">
-                {isAr ? "أو اكتب مبلغاً آخر" : "Or enter another amount"}
+                {isAr ? "أو اكتب مبلغًا آخر" : "Or enter another amount"}
               </label>
               <div className="relative mt-1.5">
                 <input
@@ -274,7 +274,7 @@ export const Donate = () => {
             {/* 3. Manual transfer: the details to copy, right here */}
             {selected.manual && (
               <fieldset className="mt-7">
-                <legend className="text-sm font-black text-primary">{isAr ? "٣. حوّل على" : "3. Transfer to"}</legend>
+                <legend className="text-sm font-black text-primary">{isAr ? "٣. حوّل إلى" : "3. Transfer to"}</legend>
                 <div className="mt-3 space-y-2.5 rounded-2xl bg-muted/40 p-3 sm:p-4">
                   {destinations.length > 0 ? (
                     destinations.map((d, i) => (
@@ -288,19 +288,19 @@ export const Donate = () => {
                     ))
                   ) : (
                     <p className="text-sm font-bold text-muted-foreground">
-                      {isAr ? "بيانات التحويل مش متاحة دلوقتي. كلمنا على واتساب ونبعتها لك." : "Transfer details are not available right now. Message us on WhatsApp."}
+                      {isAr ? "بيانات التحويل غير متاحة الآن. تواصل معنا عبر واتساب وسنرسلها إليك." : "Transfer details are not available right now. Message us on WhatsApp."}
                     </p>
                   )}
                   <CopyRow label={isAr ? "المبلغ" : "Amount"} value={String(amount)} isAr={isAr} />
                   <ol className="list-inside list-decimal space-y-1 pt-1 text-xs font-bold leading-relaxed text-muted-foreground">
                     <li>{isAr ? "انسخ الرقم وحوّل المبلغ من تطبيقك." : "Copy the number and transfer the amount from your app."}</li>
-                    <li>{isAr ? "ابعت لنا صورة التحويل على واتساب علشان نأكد تبرعك ونبعت لك الإيصال." : "Send us the receipt on WhatsApp so we confirm your donation and send a receipt."}</li>
+                    <li>{isAr ? "أرسل إلينا صورة التحويل عبر واتساب لنؤكد تبرعك ونرسل إليك الإيصال." : "Send us the receipt on WhatsApp so we confirm your donation and send a receipt."}</li>
                   </ol>
                 </div>
                 <p className="mt-2 text-center text-xs text-muted-foreground">
-                  {isAr ? "عايز تسجّل بياناتك وتختار برنامج معيّن؟ " : "Want to register your details or pick a programme? "}
+                  {isAr ? "تريد تسجيل بياناتك واختيار برنامج معيّن؟ " : "Want to register your details or pick a programme? "}
                   <Link to={`/donate?${new URLSearchParams({ amount: String(amount), method, utm_source: "home", utm_medium: "quick_donate" }).toString()}`} className="font-bold text-primary underline underline-offset-2 hover:text-accent">
-                    {isAr ? "كمّل في صفحة التبرع" : "Continue on the donation page"}
+                    {isAr ? "أكمِل في صفحة التبرع" : "Continue on the donation page"}
                   </Link>
                 </p>
               </fieldset>
@@ -332,7 +332,7 @@ export const Donate = () => {
                       autoComplete="name"
                       value={donorName}
                       onChange={(e) => setDonorName(e.target.value)}
-                      placeholder={isAr ? "سيبه فاضي للتبرع كفاعل خير" : "Leave empty to give anonymously"}
+                      placeholder={isAr ? "اتركه فارغًا للتبرع باسم فاعل خير" : "Leave empty to give anonymously"}
                       className="h-12 w-full rounded-xl border-2 border-border bg-background px-4 text-base font-bold transition-colors focus:border-primary focus:outline-none"
                     />
                   </label>

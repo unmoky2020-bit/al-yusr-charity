@@ -132,7 +132,7 @@ export const ServicePage = ({ config }: { config: ServicePageConfig }) => {
                 <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
                   <a href={wa} target="_blank" rel="noopener">
                     <WhatsAppIcon className="h-5 w-5" />
-                    {isRTL ? "تواصل واتساب" : "Talk on WhatsApp"}
+                    {isRTL ? "تواصل عبر واتساب" : "Talk on WhatsApp"}
                   </a>
                 </Button>
               </div>
@@ -170,7 +170,7 @@ export const ServicePage = ({ config }: { config: ServicePageConfig }) => {
         <div className="container mx-auto max-w-6xl px-4">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-2xl font-black text-primary md:text-4xl">
-              {isRTL ? "إيه اللي بيمزنا؟" : "What makes us different?"}
+              {isRTL ? "ما الذي يميزنا؟" : "What makes us different?"}
             </h2>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -242,10 +242,10 @@ export const ServicePage = ({ config }: { config: ServicePageConfig }) => {
       <section className="bg-gradient-to-br from-primary/5 to-secondary/5 pt-12 pb-24 sm:pb-28 md:pb-32">
         <div className="container mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl font-black text-primary md:text-3xl">
-            {isRTL ? "خليك سبب في الأثر" : "Be the reason behind the impact"}
+            {isRTL ? "كن سببًا في الأثر" : "Be the reason behind the impact"}
           </h2>
           <p className="mt-3 text-muted-foreground">
-            {isRTL ? "كل تبرع مهما كان حجمه بيغيّر حياة." : "Every gift — no matter the size — changes a life."}
+            {isRTL ? "كل تبرع، مهما كان حجمه، يغيّر حياة." : "Every gift — no matter the size — changes a life."}
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-2.5">
             <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">

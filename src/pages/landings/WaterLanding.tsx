@@ -108,7 +108,7 @@ const WaterLanding = () => {
       taglineEn={c.hero.lead.en}
       metaDescAr="تبرع لمشروع سقيا الماء من مؤسسة اليسر: توصيل مياه شرب نظيفة للبيوت وفلاتر للقرى في الدقهلية. أمان لصحة الأطفال وكبار السن وصدقة جارية."
       metaDescEn="Support Al-Yusr's clean water project: home water connections and filters for villages in Dakahlia. Safety for children and elders, and ongoing charity."
-      seo={{ title: { ar: "سقيا الماء وتوصيل مياه نظيفة للبيوت | صدقة جارية — مؤسسة اليسر", en: "Clean water connections | Ongoing charity — Al-Yusr" } }}
+      seo={{ title: { ar: "توصيل مياه نظيفة للبيوت في مصر | وصلة مياه صدقة جارية — اليسر", en: "Clean water connections in Egypt | Ongoing charity — Al-Yusr" } }}
       heroImage={heroImage}
       heroAlt="توصيل مياه شرب نظيفة لبيت أسرة مستحقة من مؤسسة اليسر"
       main={<WaterMain ctx={ctx} />}

@@ -136,9 +136,9 @@ const ProgramDetail = () => {
   const defaultSteps =
     isRTL
       ? [
-          { icon: HandHeart, t: "اختيار الحالة", d: "بحث ميداني للأسر الأكثر استحقاقاً في الدقهلية ومحافظات مصر." },
+          { icon: HandHeart, t: "اختيار الحالة", d: "بحث ميداني للأسر الأكثر استحقاقًا في الدقهلية ومحافظات مصر." },
           { icon: ShieldCheck, t: "التحقق والاعتماد", d: "مراجعة شرعية ومحاسبية لكل عملية لضمان الشفافية الكاملة." },
-          { icon: Truck, t: "التنفيذ والتسليم", d: "تسليم بكرامة لباب البيت بواسطة فريق متطوعينا المعتمدين." },
+          { icon: Truck, t: "التنفيذ والتسليم", d: "تسليم يحفظ الكرامة حتى باب البيت على يد فريق متطوعينا المعتمدين." },
           { icon: Camera, t: "التوثيق", d: "تقرير مصوّر وفيديوهات تصلك بعد التنفيذ مباشرة." },
         ]
       : [
@@ -160,8 +160,8 @@ const ProgramDetail = () => {
   const genericFaqs =
     isRTL
       ? [
-          { q: "هل تبرعي يصل فعلاً للمستحقين؟", a: "نعم — كل تبرع موثّق بالصور والفيديو، ومراجع من فريقنا المحاسبي المستقل." },
-          { q: "هل أحصل على إيصال رسمي؟", a: "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك ورقم تتبع للحالة." },
+          { q: "هل يصل تبرعي فعلًا إلى المستحقين؟", a: "نعم، كل تبرع موثّق بالصور والفيديو، ويراجعه فريقنا المحاسبي المستقل." },
+          { q: "هل أحصل على إيصال رسمي؟", a: "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري على بريدك، مع رقم لتتبّع الحالة." },
           { q: "هل يمكنني تخصيص محافظة معينة؟", a: "نعم، يمكنك تخصيص تبرعك لمحافظة الدقهلية أو أي محافظة أخرى نعمل بها." },
           { q: "ما طرق الدفع المتاحة؟", a: "فيزا/ماستر كارد، Vodafone Cash، InstaPay، وتحويل بنكي على CIB." },
         ]
@@ -389,7 +389,7 @@ const ProgramDetail = () => {
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/25 border border-secondary/40 px-3.5 py-1 text-xs font-black text-black shadow-xs">
-              <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "ليه البرنامج ده" : "Why this program"}
+              <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "لماذا هذا البرنامج؟" : "Why this program"}
             </span>
             <h2 className="mt-3 text-2xl font-black text-primary md:text-3xl">
               {isRTL ? "مزايا البرنامج" : "Program highlights"}
@@ -419,14 +419,14 @@ const ProgramDetail = () => {
           <div className="container mx-auto max-w-5xl px-4">
             <div className="mx-auto mb-8 max-w-2xl text-center">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/25 border border-secondary/40 px-3.5 py-1 text-xs font-black text-black shadow-xs">
-                <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "اختر الجزء اللي يلمس قلبك" : "Pick the part that moves your heart"}
+                <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "اختر الجزء الأقرب إلى قلبك" : "Pick the part that moves your heart"}
               </span>
               <h2 className="mt-3 text-xl font-black text-primary md:text-3xl">
                 {isRTL ? "ادعم البرنامج بالكامل" : "Support the whole program"}
               </h2>
               <p className="mt-2 text-sm text-muted-foreground md:text-base">
                 {isRTL
-                  ? "تبرع واحد موحّد للبرنامج كله بأي مبلغ تختاره — يوزّع على كل أنشطته واحتياجاته."
+                  ? "تبرّع واحد للبرنامج كله بالمبلغ الذي تختاره، يُوزَّع على جميع أنشطته واحتياجاته."
                   : "One unified donation to the entire program at any amount you choose — distributed across all its activities."}
               </p>
             </div>
@@ -523,7 +523,7 @@ const ProgramDetail = () => {
             </h2>
             <p className="mt-3 text-sm text-muted-foreground md:text-base">
               {isRTL
-                ? "كل خطوة موثّقة وكل قرش يصل لمن يستحق — هكذا نعمل في اليسر."
+                ? "كل خطوة موثّقة، وكل قرش يصل إلى من يستحقه؛ هكذا نعمل في اليسر."
                 : "Every step is documented and every pound reaches those who deserve it — this is how Al-Yusr works."}
             </p>
           </div>
@@ -614,11 +614,11 @@ const ProgramDetail = () => {
               <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "رحلة البرنامج" : "Program journey"}
             </span>
             <h2 className="mt-3 text-2xl font-black text-primary md:text-3xl">
-              {isRTL ? "٤ مراحل من تبرعك لباب البيت" : "4 stages from your donation to the family's door"}
+              {isRTL ? "٤ مراحل من تبرعك حتى باب البيت" : "4 stages from your donation to the family's door"}
             </h2>
             <p className="mt-3 text-sm text-muted-foreground md:text-base">
               {isRTL
-                ? "كل مرحلة موثّقة بتقرير ميداني وصور قبل ما ندفع لباب البيت."
+                ? "كل مرحلة موثّقة بتقرير ميداني وصور حتى يصل تبرعك إلى باب البيت."
                 : "Every stage is logged in a field report with photos before we move to delivery."}
             </p>
           </div>
@@ -626,10 +626,10 @@ const ProgramDetail = () => {
             {(impactItems?.length
               ? impactItems.slice(0, 4).map((it, i) => ({ Icon: [HandHeart, Search, PackageCheck, ClipboardCheck][i], n: String(i + 1).padStart(2, "0"), t: it.t, d: it.d }))
               : [
-              { Icon: HandHeart, n: "01", t: isRTL ? "تبرعك" : "Your donation", d: isRTL ? "اختر مبلغ ودفع آمن عبر فيزا أو محفظة أو إنستا باي." : "Pick an amount, pay securely via card, wallet or InstaPay." },
-              { Icon: Search, n: "02", t: isRTL ? "بحث ميداني" : "Field assessment", d: isRTL ? "زيارة بيت الأسرة وتحقق من الاستحقاق." : "Home visit and eligibility verification." },
-              { Icon: PackageCheck, n: "03", t: isRTL ? "تجهيز وتنفيذ" : "Prepare & execute", d: isRTL ? "تجهيز الاحتياج بجودة سوبر ماركت." : "Prepared at supermarket-grade quality." },
-              { Icon: ClipboardCheck, n: "04", t: isRTL ? "تسليم وتقرير" : "Deliver & report", d: isRTL ? "تسليم لباب البيت + تقرير مصوّر وإيصال." : "Doorstep delivery + photo report and e-receipt." },
+              { Icon: HandHeart, n: "01", t: isRTL ? "تبرعك" : "Your donation", d: isRTL ? "اختر المبلغ وادفع بأمان عبر فيزا أو المحفظة الإلكترونية أو إنستاباي." : "Pick an amount, pay securely via card, wallet or InstaPay." },
+              { Icon: Search, n: "02", t: isRTL ? "بحث ميداني" : "Field assessment", d: isRTL ? "زيارة بيت الأسرة والتحقق من استحقاقها." : "Home visit and eligibility verification." },
+              { Icon: PackageCheck, n: "03", t: isRTL ? "تجهيز وتنفيذ" : "Prepare & execute", d: isRTL ? "تجهيز الاحتياجات بجودة منتجات السوبر ماركت." : "Prepared at supermarket-grade quality." },
+              { Icon: ClipboardCheck, n: "04", t: isRTL ? "تسليم وتقرير" : "Deliver & report", d: isRTL ? "تسليم حتى باب البيت، مع تقرير مصوّر وإيصال." : "Doorstep delivery + photo report and e-receipt." },
             ]).map(({ Icon, n, t: title, d }, i) => (
               <li key={n}>
                 <motion.div
@@ -669,12 +669,12 @@ const ProgramDetail = () => {
                 </span>
                 <h3 className="mt-3 text-xl font-black leading-tight md:text-3xl">
                   {isRTL
-                    ? `تبرعك لـ "${content.name}" بيوصل لأسرة فعليّة خلال أيام`
+                    ? `تبرعك لـ«${content.name}» يصل إلى أسرة حقيقية خلال أيام`
                     : `Your donation to "${content.name}" reaches a real family within days`}
                 </h3>
                 <p className="mt-2 text-sm font-semibold leading-7 text-primary-foreground/85 md:text-base">
                   {isRTL
-                    ? "كل جنيه بيُصرف بعد بحث اجتماعي ميداني، وبيوصلك تقرير مصوّر بعد التنفيذ."
+                    ? "كل جنيه يُصرف بعد بحث اجتماعي ميداني، ويصلك تقرير مصوّر بعد التنفيذ."
                     : "Every EGP is spent after field assessment, and you receive a photo report after execution."}
                 </p>
               </div>
@@ -705,14 +705,14 @@ const ProgramDetail = () => {
             </h2>
             <p className="mt-3 text-sm text-muted-foreground md:text-base">
               {isRTL
-                ? "مش وعود — ده الالتزام اللي بنشتغل بيه قبل وأثناء وبعد كل عملية صرف."
+                ? "ليست وعودًا، بل التزام نعمل به قبل كل عملية صرف وأثناءها وبعدها."
                 : "Not promises — this is the commitment we operate by before, during, and after every distribution."}
             </p>
           </div>
           <div className="mx-auto mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { Icon: FileCheck2, t: isRTL ? "بحث اجتماعي قبل الصرف" : "Social assessment first", d: isRTL ? "زيارة ميدانية وتحقق من الاستحقاق قبل أي تنفيذ." : "Field visit and eligibility verification before any spend." },
-              { Icon: BadgeCheck, t: isRTL ? "موافق للشريعة 100%" : "100% Shariah-compliant", d: isRTL ? "إشراف شرعي على الزكاة والأضحية والصدقات." : "Shariah oversight on Zakat, Qurbani, and Sadaqah." },
+              { Icon: BadgeCheck, t: isRTL ? "متوافق مع الشريعة 100%" : "100% Shariah-compliant", d: isRTL ? "إشراف شرعي على الزكاة والأضحية والصدقات." : "Shariah oversight on Zakat, Qurbani, and Sadaqah." },
               { Icon: Camera, t: isRTL ? "توثيق بالصور والفيديو" : "Photo & video documentation", d: isRTL ? "تقرير مصوّر يصلك بعد التسليم." : "A photo report is shared with you after delivery." },
               { Icon: Receipt, t: isRTL ? "إيصال إلكتروني فوري" : "Instant electronic receipt", d: isRTL ? "إيصال برقم مرجعي لتتبع الحالة." : "Receipt with a reference code to track the case." },
             ].map((c, i) => (
@@ -729,7 +729,7 @@ const ProgramDetail = () => {
             {[
               { Icon: ShieldCheck, t: isRTL ? "شفافية كاملة" : "Full transparency", d: isRTL ? "تقارير مالية مراجعة." : "Audited financial reports." },
               { Icon: Camera, t: isRTL ? "توثيق مصوّر" : "Photo documentation", d: isRTL ? "صور وفيديو لكل تنفيذ." : "Photo/video for every execution." },
-              { Icon: Truck, t: isRTL ? "تسليم لباب البيت" : "Doorstep delivery", d: isRTL ? "بكرامة وبدون انتظار طويل." : "Dignified — no long queues." },
+              { Icon: Truck, t: isRTL ? "تسليم حتى باب البيت" : "Doorstep delivery", d: isRTL ? "بكرامة ودون انتظار طويل." : "Dignified — no long queues." },
             ].map((c, i) => (
               <div key={i} className="flex items-start gap-3 rounded-2xl bg-card p-4 shadow-soft">
                 <c.Icon className="mt-0.5 h-6 w-6 shrink-0 text-secondary" />
@@ -760,7 +760,7 @@ const ProgramDetail = () => {
       {program.apiId && (
         <LinkedCasesSection filter={{ programId: program.apiId }} isRTL={isRTL}
           title={isRTL ? `حالات ضمن ${content.name}` : `Cases in ${content.name}`}
-          subtitle={isRTL ? "اختار حالة بعينها، وتبرعك هيوصل لها هي وهتتابع تحديثاتها." : "Choose a specific case; your donation goes to it and you follow its updates."} />
+          subtitle={isRTL ? "اختر حالة بعينها، وسيصل تبرعك إليها وحدها، وستتابع تحديثاتها." : "Choose a specific case; your donation goes to it and you follow its updates."} />
       )}
 
       {/* FAQ */}
@@ -853,11 +853,11 @@ const ProgramDetail = () => {
         ariaLabel={{ ar: `دعم ${content.name}`, en: `Support ${content.name}` }}
         title={{ ar: `ادعم ${content.name}`, en: `Support ${content.name}` }}
         description={{
-          ar: content.tagline || "كل تبرع بيوصل لأسرة محتاجة في الدقهلية ومحافظات مصر.",
+          ar: content.tagline || "كل تبرع يصل إلى أسرة محتاجة في الدقهلية ومحافظات مصر.",
           en: content.tagline || "Every donation reaches a family in need across Egypt.",
         }}
         ctaLabel={{ ar: "تبرع الآن", en: "Donate now" }}
-        waText={isRTL ? `السلام عليكم، عايز أعرف تفاصيل ${content.name}.` : `Hi, I'd like details on ${content.name}.`}
+        waText={isRTL ? `السلام عليكم، أودّ معرفة تفاصيل ${content.name}.` : `Hi, I'd like details on ${content.name}.`}
       />
     </PageLayout>
   );

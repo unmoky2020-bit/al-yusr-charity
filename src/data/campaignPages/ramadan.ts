@@ -67,7 +67,7 @@ const ramadan: CampaignPageContent = {
       title: l("ستّ عطايا في شهر واحد", "Six gifts in one month"),
       items: [
         { id: "box", title: l("كرتونة الخير (25 كجم)", "The 25 kg blessing box"), desc: l("سفرة تكفي الأسرة الشهر: أرز وزيت وسكر ومكرونة وبقوليات وشاي وصلصة وسمن، مع بروتين طازج من مزارعنا.", "A month's pantry: rice, oil, sugar, pasta, legumes, tea, sauce and ghee, with fresh protein from our farms.") },
-        { id: "kitchen", title: l("مطبخ اليسر للإفطار", "Al-Yusr iftar kitchen"), desc: l("آلاف الوجبات الساخنة يومياً لعابري السبيل ومرافقي المرضى والأسر المتعففة في بيوتها.", "Thousands of hot meals daily for travellers, patients' companions and families at home.") },
+        { id: "kitchen", title: l("مطبخ اليسر للإفطار", "Al-Yusr iftar kitchen"), desc: l("آلاف الوجبات الساخنة يوميًا لعابري السبيل ومرافقي المرضى والأسر المتعففة في بيوتها.", "Thousands of hot meals daily for travellers, patients' companions and families at home.") },
         { id: "meat", title: l("ذبائح المزارع الوقفية", "Endowment farm meat"), desc: l("أكثر من 2 طن لحوم في رمضان من إنتاج مزارعنا الخيرية، طازجة ومضمونة.", "Over 2 tons of fresh meat each Ramadan from our charitable farms.") },
         { id: "brides", title: l("الفرحة فرحتين", "Double joy"), desc: l("تجهيز العرائس اليتيمات وغير القادرات، لتجتمع فرحة الزواج وفرحة العيد.", "Trousseaus for orphan brides, so the joy of marriage meets the joy of Eid.") },
         { id: "eid", title: l("كسوة العيد وكعك الفرحة", "Eid clothes and cookies"), desc: l("ملابس عيد جديدة للأطفال الأيتام وعلب كعك للأسر، ليعيش كل طفل فرحة العيد كاملة.", "New Eid clothes for orphans and cookies for families, so every child has a full Eid.") },
@@ -79,23 +79,23 @@ const ramadan: CampaignPageContent = {
       title: l("مع الهلال حتى العيد", "From the crescent to Eid"),
       items: [
         { id: "shaban", extra: l("شعبان", "Sha'ban"), title: l("التجهيز المبكر", "Early preparation"), desc: l("شراء السلع وتعبئة الكراتين وإعداد قوائم المستحقين، لتصل الكرتونة قبل أول يوم صيام.", "Buying, packing and finalising recipient lists so boxes arrive before the first fast.") },
-        { id: "ramadan", extra: l("رمضان", "Ramadan"), title: l("طوال الشهر", "All month"), desc: l("تشغيل المطبخ يومياً، وقوافل التوزيع تصل لقرى الدقهلية وكفر الشيخ والشرقية حتى باب البيت.", "The kitchen runs daily and convoys reach villages in Dakahlia, Kafr El Sheikh and Sharqia.") },
+        { id: "ramadan", extra: l("رمضان", "Ramadan"), title: l("طوال الشهر", "All month"), desc: l("تشغيل المطبخ يوميًا، وقوافل التوزيع تصل لقرى الدقهلية وكفر الشيخ والشرقية حتى باب البيت.", "The kitchen runs daily and convoys reach villages in Dakahlia, Kafr El Sheikh and Sharqia.") },
         { id: "eid", extra: l("العشر الأواخر والعيد", "Last ten days & Eid"), title: l("ختام الشهر", "Closing the month"), desc: l("صرف زكاة الفطر، وتوزيع كسوة العيد والكعك على الأيتام، ومسابقات القرآن الكريم.", "Zakat al-Fitr, Eid clothes and cookies for orphans, and Quran competitions.") },
       ],
     },
     /** Hadith figure label (title) + iftar counter card (item: heading + subline; `{n}` is replaced by the iftar price). */
     feed: {
-      title: l("فطّر صائماً", "Feed a fasting person"),
+      title: l("فطّر صائمًا", "Feed a fasting person"),
       items: [
-        { id: "counter", title: l("كم صائماً تفطّر؟", "How many will you feed?"), desc: l("الوجبة الساخنة بـ {n} جنيه من مطبخ اليسر", "A hot meal from the Al-Yusr kitchen is {n} EGP") },
+        { id: "counter", title: l("كم صائمًا تفطّر؟", "How many will you feed?"), desc: l("الوجبة الساخنة بـ {n} جنيه من مطبخ اليسر", "A hot meal from the Al-Yusr kitchen is {n} EGP") },
       ],
     },
     fitr: {
       title: l("زكاة الفطر", "Zakat al-Fitr"),
       lead: l("أخرجها عنك وعمّن تعول، ونوصلها في وقتها", "Give it for yourself and your dependants; we deliver it on time"),
       items: [
-        { id: "everyone", title: l("تُخرج عن كل فرد في الأسرة، صغيراً كان أو كبيراً.", "It is due for every member of the household, young or old."), desc: l("", "") },
-        { id: "timing", title: l("نحصر الأسر المستحقة مسبقاً، ونوزعها في العشر الأواخر حتى صباح العيد قبل الصلاة.", "We list eligible families in advance and distribute during the last ten days until Eid morning, before the prayer."), desc: l("", "") },
+        { id: "everyone", title: l("تُخرج عن كل فرد في الأسرة، صغيرًا كان أو كبيرًا.", "It is due for every member of the household, young or old."), desc: l("", "") },
+        { id: "timing", title: l("نحصر الأسر المستحقة مسبقًا، ونوزعها في العشر الأواخر حتى صباح العيد قبل الصلاة.", "We list eligible families in advance and distribute during the last ten days until Eid morning, before the prayer."), desc: l("", "") },
         { id: "channels", title: l("تُصرف في مصارفها الشرعية، ولا تُخلط بالصدقات العامة.", "It is spent on its legitimate recipients and never mixed with general charity."), desc: l("", "") },
       ],
     },
@@ -111,42 +111,42 @@ const ramadan: CampaignPageContent = {
     {
       q: l("ما هي مكونات كرتونة رمضان في مؤسسة اليسر؟", "What are the contents of Al-Yusr's Ramadan Box?"),
       a: l(
-        "كرتونة متكاملة تزن حوالي 25 كجم من السلع الأساسية البلدي (أرز، زيت، سكر، مكرونة، لوبيا، فاصوليا، شاي، صلصة، سمن) ويُرفق معها لحوم طازجة من مزارعنا لتكفي الأسرة شهراً كاملاً.",
+        "كرتونة متكاملة تزن حوالي 25 كجم من السلع الأساسية البلدي (أرز، زيت، سكر، مكرونة، لوبيا، فاصوليا، شاي، صلصة، سمن) ويُرفق معها لحوم طازجة من مزارعنا لتكفي الأسرة شهرًا كاملًا.",
         "A 25kg box containing premium rice, oil, sugar, pasta, legumes, tea, sauce, and ghee, accompanied by fresh meat from our endowment farms.",
       ),
     },
     {
       q: l("أين توزع وجبات الإفطار الساخنة؟", "Where are hot iftar meals distributed?"),
       a: l(
-        "توزع يومياً لعابري السبيل والمسافرين ومرافقي المرضى في المستشفيات الحكومية، بالإضافة إلى وجبات ساخنة تصل لمنازل الأسر المتعففة في المنصورة وقرى الدقهلية.",
+        "تُوزَّع يوميًا على عابري السبيل والمسافرين ومرافقي المرضى في المستشفيات الحكومية، بالإضافة إلى وجبات ساخنة تصل إلى منازل الأسر المتعففة في المنصورة وقرى الدقهلية.",
         "To hospital patient companions, stranded travelers, and directly to the doors of deserving families across Mansoura and Delta villages.",
       ),
     },
     {
       q: l("كيف تضمن المؤسسة وصول زكاة الفطر في موعدها الشرعي؟", "How is Zakat Al-Fitr distributed on time?"),
       a: l(
-        "يتم حصر الأسر وتحديد احتياجاتها مسبقاً، ويتم إخراج وتوزيع زكاة الفطر خلال العشر الأواخر وحتى صباح يوم العيد قبل الصلاة تماماً كما تنص الشريعة.",
+        "نحصر الأسر ونحدد احتياجاتها مسبقًا، ثم نُخرج زكاة الفطر ونوزعها خلال العشر الأواخر وحتى صباح يوم العيد قبل الصلاة، كما تنص الشريعة.",
         "Distributed during the last ten days of Ramadan and completed before Eid prayer according to Sharia guidelines.",
       ),
     },
     {
       q: l("هل يمكنني التبرع بتجهيز عروسة يتيمة في رمضان؟", "Can I sponsor an orphan bride's trousseau in Ramadan?"),
       a: l(
-        "نعم، مبادرة 'الفرحة فرحتين' تتيح لك التبرع بسهم أو كفالة جهاز عروسة يتيمة كامل لتدخل الفرحة عليها مع حلول العيد.",
+        "نعم، مبادرة «الفرحة فرحتين» تتيح لك التبرع بسهم أو كفالة جهاز عروسة يتيمة كاملًا، لتدخل الفرحة عليها مع حلول العيد.",
         "Yes. The 'Double Joy' initiative lets you give a share, or sponsor a complete trousseau, for an orphan bride so her joy arrives with Eid.",
       ),
     },
     {
       q: l("هل توزع كرتونة رمضان في المنصورة والدقهلية؟", "Is the Ramadan box distributed in Mansoura and Dakahlia?"),
       a: l(
-        "نعم، تنطلق قوافل التوزيع من المنصورة إلى قرى الدقهلية وكفر الشيخ والشرقية، وتصل الكرتونة إلى باب بيت الأسرة المستحقة بعد حصرها مسبقاً، ويُوثَّق التوزيع بالصور والفيديو.",
+        "نعم، تنطلق قوافل التوزيع من المنصورة إلى قرى الدقهلية وكفر الشيخ والشرقية، وتصل الكرتونة إلى باب بيت الأسرة المستحقة بعد حصرها مسبقًا، ويُوثَّق التوزيع بالصور والفيديو.",
         "Yes. Distribution convoys set out from Mansoura to villages across Dakahlia, Kafr El Sheikh and Sharqia, delivering the box to the door of each pre-listed family, with photo and video documentation.",
       ),
     },
     {
       q: l("متى تُخرج زكاة الفطر مع مؤسسة اليسر؟", "When should I pay Zakat al-Fitr with Al-Yusr?"),
       a: l(
-        "يمكنك إخراجها عبر صفحة التبرع في أي وقت خلال شهر رمضان، وتتولى المؤسسة صرفها للأسر المستحقة في الدقهلية والمنصورة خلال العشر الأواخر وحتى صباح العيد قبل الصلاة.",
+        "يمكنك إخراجها عبر صفحة التبرع في أي وقت خلال شهر رمضان، وتتولى المؤسسة صرفها على الأسر المستحقة في الدقهلية والمنصورة خلال العشر الأواخر وحتى صباح العيد قبل الصلاة.",
         "You can pay it through the donation page at any time during Ramadan; the Foundation hands it to eligible families in Dakahlia and Mansoura during the last ten days and until Eid morning, before the prayer.",
       ),
     },
@@ -181,7 +181,7 @@ const ramadan: CampaignPageContent = {
       label: l("معرض الصور", "Gallery"),
       items: [
         img("yusr-ramadan-box.png", "كرتونة الخير الكبرى من اليسر 25 كيلو", "Al-Yusr 25 kg Ramadan box"),
-        img("yusr-meals.webp", "تجهيز وجبات الإفطار الساخنة يومياً", "Daily hot iftar prep"),
+        img("yusr-meals.webp", "تجهيز وجبات الإفطار الساخنة يوميًا", "Daily hot iftar prep"),
         img("farm-hero.jpg", "لحوم بلدي طازجة من المزارع الوقفية", "Endowment farm meat"),
         img("yusr-distribution-1.webp", "قوافل التوزيع الرمضانية في قرى الدقهلية", "Ramadan aid convoys"),
       ],

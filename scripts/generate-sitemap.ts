@@ -50,6 +50,8 @@ const staticEntries: Entry[] = [
   { path: "/zakat", changefreq: "weekly", priority: "0.85" },
   { path: "/blog", changefreq: "weekly", priority: "0.6" },
   { path: "/about", changefreq: "monthly", priority: "0.7" },
+  // Local guide: «مؤسسة خيرية في المنصورة»
+  { path: "/charity-mansoura", changefreq: "monthly", priority: "0.8" },
   { path: "/contact", changefreq: "monthly", priority: "0.7" },
   { path: "/stories", changefreq: "weekly", priority: "0.7" },
   { path: "/projects", changefreq: "weekly", priority: "0.85" },

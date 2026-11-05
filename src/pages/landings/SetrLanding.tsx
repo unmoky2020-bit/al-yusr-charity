@@ -170,8 +170,8 @@ const SetrMain = () => {
       {/* Warm a home */}
       <section className="bg-[hsl(195_30%_97%)] py-16 md:py-24">
         <div className="container mx-auto max-w-6xl px-4">
-          <p className="text-sm font-black text-accent">{isAr ? "دفّي بيت" : "Warm a home"}</p>
-          <h2 className="mt-2 text-3xl font-black text-primary md:text-4xl">{isAr ? "اختر ما يدفّي أسرة هذا الشتاء" : "Choose what warms a family this winter"}</h2>
+          <p className="text-sm font-black text-accent">{isAr ? "دفّئ بيتًا" : "Warm a home"}</p>
+          <h2 className="mt-2 text-3xl font-black text-primary md:text-4xl">{isAr ? "اختر ما يدفئ أسرة هذا الشتاء" : "Choose what warms a family this winter"}</h2>
 
           <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
             <fieldset className="rounded-2xl border border-border bg-card p-4 sm:p-6">
@@ -205,7 +205,7 @@ const SetrMain = () => {
                     </span>
                     <span className="flex-1">
                       <span className="block text-base font-black text-primary">{isAr ? "سقف للبيت" : "A roof for the house"}</span>
-                      <span className="block text-xs font-bold text-accent">{hasRoof ? `+${fmtNum(roof.deg, isAr)}° ${isAr ? "دفء" : "warmth"}` : (isAr ? "البيت له سقف واحد: اختر نوعه" : "One roof per house: pick its type")}</span>
+                      <span className="block text-xs font-bold text-accent">{hasRoof ? `+${fmtNum(roof.deg, isAr)}° ${isAr ? "دفء" : "warmth"}` : (isAr ? "للبيت سقف واحد: اختر نوعه" : "One roof per house: pick its type")}</span>
                     </span>
                     <span className="font-mono text-lg font-black tabular-nums text-primary">{hasRoof ? fmtNum(amount(roof.priceId), isAr) : ""}</span>
                   </label>
@@ -250,7 +250,7 @@ const SetrMain = () => {
                 aria-disabled={total === 0}
                 className={`mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-orange-grad text-base font-black text-accent-foreground shadow-cta transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${total === 0 ? "pointer-events-none opacity-50" : ""}`}
               >
-                <Heart className="h-5 w-5" /> {isAr ? "دفّي البيت وتبرّع" : "Warm it and donate"}
+                <Heart className="h-5 w-5" /> {isAr ? "دفّئ البيت وتبرّع" : "Warm it and donate"}
               </Link>
             </div>
           </div>
@@ -334,7 +334,7 @@ const SetrMain = () => {
       {priority && (
         <section className="bg-[hsl(195_30%_97%)] py-16 md:py-20">
           <div className="container mx-auto max-w-6xl px-4">
-            <p className="text-sm font-black text-accent">{isAr ? "لمن نصل أولاً؟" : "Who comes first"}</p>
+            <p className="text-sm font-black text-accent">{isAr ? "لمن نصل أولًا؟" : "Who comes first"}</p>
             <h2 className="mt-2 text-3xl font-black text-primary md:text-4xl">{t(priority.title)}</h2>
             <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {priority.items.map((g) => {
@@ -371,7 +371,7 @@ const SetrMain = () => {
               })}
             </ol>
             <p className="mt-6 text-sm text-foreground/70">
-              {isAr ? "التنفيذ بواسطة متطوعينا مع نجارين وبنائين محترفين، وكل تسليم موثّق بالصور والفيديو ويصلك تقريره." : "Built by our volunteers with professional carpenters and masons; every delivery is documented and reported to you."}
+              {isAr ? "ينفّذ العمل متطوعونا مع نجارين وبنّائين محترفين، وكل تسليم موثّق بالصور والفيديو ويصلك تقريره." : "Built by our volunteers with professional carpenters and masons; every delivery is documented and reported to you."}
             </p>
           </div>
         </section>
@@ -398,7 +398,7 @@ const SetrMain = () => {
               })}
             </ol>
             <Link to="/donate/track" className="mt-8 inline-flex min-h-[44px] items-center text-sm font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-accent">
-              {isAr ? "تتبّع تبرعاً سابقاً" : "Track a previous donation"}
+              {isAr ? "تتبّع تبرعًا سابقًا" : "Track a previous donation"}
             </Link>
           </div>
         </section>
@@ -464,9 +464,9 @@ const SetrLanding = () => {
       path="/setr"
       titleAr="حملة سِتْر — «مَن سَتَرَ مسلمًا في الدنيا، سَتَرَهُ الله في الدنيا والآخرة»"
       titleEn="Setr Campaign — 'Whoever covers a Muslim in this world, Allah will cover them in this world and the Hereafter'"
-      taglineAr="حين يصبح الشتاء عبئاً صعباً على المستحقين؛ برد الشتاء القارص يحرم الأطفال الصغار من النوم ويؤذي كبار السن. حملة ستر جاءت لتجعل من تبرعك غطاءً دافئاً وجداراً ساتراً يحمي أهالينا ويكون لك ستراً وأجراً ممتداً في الدارين."
+      taglineAr="يصبح الشتاء عبئًا ثقيلًا على الأسر المستحقة؛ فبرده القارس يحرم الأطفال من النوم ويؤذي كبار السن. وجاءت حملة ستر لتجعل من تبرعك غطاءً دافئًا وجدارًا ساترًا يحمي أهالينا، ويكون لك سترًا وأجرًا ممتدًا في الدنيا والآخرة."
       taglineEn="When winter becomes a harsh burden on needy families: freezing cold that keeps children awake. The Setr campaign provides roofs, warm fiber blankets, heavy clothing, beds and mattresses across Egyptian villages."
-      metaDescAr="شارك في حملة سِتر مع مؤسسة اليسر: أسقف بيوت عازلة، أبواب وشبابيك، أسرة ومراتب، ألحفة فايبر، وكسوة شتاء للأطفال وكبار السن بالدقهلية ومحافظات مصر."
+      metaDescAr="شارك في حملة سِتر مع مؤسسة اليسر: أسقف عازلة للبيوت، وأبواب وشبابيك، وأسِرّة ومراتب، وألحفة فايبر، وكسوة شتاء للأطفال وكبار السن بالدقهلية ومحافظات مصر."
       metaDescEn="Join Al-Yusr's Setr Winter Campaign: home roofing, doors & windows, beds & mattresses, fiber blankets, and winter clothing for children and elderly in Egypt."
       heroImage={posterWater}
       heroAlt="حملة ستر — تسقيف بيوت وألحفة فايبر وكسوة شتوية للأسر المستحقة"

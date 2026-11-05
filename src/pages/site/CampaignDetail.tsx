@@ -182,7 +182,7 @@ const CampaignDetail = () => {
                   <Input placeholder={lang === "ar" ? "مهاراتك (مفصولة بفاصلة)" : "Your skills (comma separated)"} value={form.skills} onChange={(e) => setForm({ ...form, skills: e.target.value })} />
                   <textarea className="min-h-[80px] w-full rounded-md border border-input bg-background p-3 text-sm" placeholder={lang === "ar" ? "ملاحظات" : "Notes"} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
                   <Button type="submit" disabled={submitting} className="h-12 w-full bg-orange-grad font-extrabold text-accent-foreground">
-                    {submitting ? (lang === "ar" ? "جاري الإرسال…" : "Sending…") : (lang === "ar" ? "أرسل الطلب" : "Submit application")}
+                    {submitting ? (lang === "ar" ? "جارٍ الإرسال…" : "Sending…") : (lang === "ar" ? "أرسل الطلب" : "Submit application")}
                   </Button>
                   <p className="text-[11px] text-muted-foreground">{lang === "ar" ? "سيتواصل معك فريقنا للتأكيد." : "Our team will contact you to confirm."}</p>
                 </form>

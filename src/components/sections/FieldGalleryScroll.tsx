@@ -34,12 +34,12 @@ const IMAGES: Cell[] = [
   { src: food,    href: "/programs/box",        ar: "كرتونة العزومة في بيت أسرة بالدقهلية",    en: "Family Box delivered in Dakahlia",        axisAr: "الغذاء",   axisEn: "Food" },
   { src: health,  href: "/programs/treatment",  ar: "قافلة طبية مجانية لقرى الدقهلية",          en: "Free medical convoy in Dakahlia villages", axisAr: "الصحة",    axisEn: "Health" },
   { src: orphans, href: "/programs/orphans",    ar: "كفالة يتيم — ابتسامة من قلب الميدان",      en: "Orphan sponsorship — smiles from the field", axisAr: "الأيتام", axisEn: "Orphans" },
-  { src: truck,   href: "/programs/kitchen",    ar: "شاحنة اليسر بتوزّع الخير من المنصورة",     en: "Al-Yusr truck distributing aid from Mansoura", axisAr: "المطبخ", axisEn: "Kitchen" },
+  { src: truck,   href: "/programs/kitchen",    ar: "شاحنة اليسر توزّع الخير من المنصورة",     en: "Al-Yusr truck distributing aid from Mansoura", axisAr: "المطبخ", axisEn: "Kitchen" },
   { src: family,  href: "/about",               ar: "أسرة استلمت تبرعك… ودعت لك",                en: "A family that received your gift — and prayed for you", axisAr: "الأثر", axisEn: "Impact" },
   // Extra rows below the cinematic scroll
   { src: classroom,      href: "/programs/education", ar: "ادفع مصروفه — فصل في مدرسة بطلخا",    en: "Pay His Tuition — a class in Talkha",   axisAr: "التعليم", axisEn: "Education" },
-  { src: bags,           href: "/programs/box",       ar: "تجهيز شُنط الغذاء قبل التوزيع",        en: "Food bags prepared before distribution", axisAr: "الغذاء",  axisEn: "Food" },
-  { src: girl,           href: "/programs/orphans",   ar: "بنت يتيمة استلمت كفالتها الشهرية",     en: "An orphan girl received her monthly sponsorship", axisAr: "الأيتام", axisEn: "Orphans" },
+  { src: bags,           href: "/programs/box",       ar: "تجهيز حقائب الغذاء قبل التوزيع",        en: "Food bags prepared before distribution", axisAr: "الغذاء",  axisEn: "Food" },
+  { src: girl,           href: "/programs/orphans",   ar: "طفلة يتيمة تسلّمت كفالتها الشهرية",     en: "An orphan girl received her monthly sponsorship", axisAr: "الأيتام", axisEn: "Orphans" },
   { src: farm,           href: "/programs/odhya",     ar: "مزرعة الأضاحي — كشف بيطري قبل الذبح",  en: "Sacrifice farm — vet check before slaughter", axisAr: "الأضحية", axisEn: "Qurbani" },
   { src: volunteerField, href: "/volunteer",          ar: "متطوعو اليسر في قرى الدقهلية",          en: "Al-Yusr volunteers in Dakahlia villages", axisAr: "التطوع", axisEn: "Volunteer" },
 ];
@@ -123,26 +123,26 @@ export const FieldGalleryScroll = ({ galleryKey }: { galleryKey?: PageGalleryKey
         </span>
         <h2 className="mt-4 text-3xl font-black leading-[1.15] text-primary md:text-5xl">
           {isRTL ? (
-            <>تبرعك بيتحوّل لـ <span className="text-accent">حكاية حقيقية</span> في الدقهلية</>
+            <>تبرعك يتحوّل إلى <span className="text-accent">حكاية حقيقية</span> في الدقهلية</>
           ) : (
             <>Your gift becomes a <span className="text-accent">real story</span> in Dakahlia</>
           )}
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-sm font-semibold text-primary/75 md:text-base">
           {isRTL
-            ? "اسحب لتحت وشوف بنفسك صور الميدان من المنصورة وقرى الدقهلية — كل لقطة بتقول إن أمانتك وصلت."
+            ? "مرّر لأسفل وشاهد بنفسك صور الميدان من المنصورة وقرى الدقهلية — كل لقطة تقول إن أمانتك وصلت."
             : "Scroll down and see real field shots from Mansoura & Dakahlia villages — every frame proves your trust arrived."}
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <Button asChild size="lg" className="bg-orange-grad font-extrabold text-accent-foreground shadow-cta hover:opacity-95">
             <Link to="/donate">
               <Heart className="h-5 w-5" />
-              {isRTL ? "تبرّع وكن جزء من الحكاية" : "Donate & join the story"}
+              {isRTL ? "تبرّع وكن جزءًا من الحكاية" : "Donate & join the story"}
               <Arrow className="h-4 w-4" />
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="border-2 border-primary/20 bg-card font-extrabold text-primary hover:border-secondary hover:bg-secondary/10">
-            <Link to="/about">{isRTL ? "اعرف اليسر أكتر" : "About Al-Yusr"}</Link>
+            <Link to="/about">{isRTL ? "تعرّف على اليسر أكثر" : "About Al-Yusr"}</Link>
           </Button>
         </div>
       </header>
@@ -181,7 +181,7 @@ export const FieldGalleryScroll = ({ galleryKey }: { galleryKey?: PageGalleryKey
                       {isRTL ? img.ar : img.en}
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-full bg-orange-grad px-2.5 py-1 text-[10px] font-black text-accent-foreground shadow-cta">
-                      {isRTL ? "اعرف أكتر" : "Learn more"} <Arrow className="h-3 w-3" />
+                      {isRTL ? "اعرف أكثر" : "Learn more"} <Arrow className="h-3 w-3" />
                     </span>
                   </span>
                 </Link>
@@ -201,10 +201,10 @@ export const FieldGalleryScroll = ({ galleryKey }: { galleryKey?: PageGalleryKey
               {isRTL ? "لقطات حية موثقة" : "Live Documented Shots"}
             </div>
             <h3 className="mt-1.5 text-xl font-black text-primary sm:text-2xl md:text-3xl">
-              {isRTL ? "صور تانية من الميدان" : "More from the field"}
+              {isRTL ? "صور أخرى من الميدان" : "More from the field"}
             </h3>
             <p className="mt-0.5 text-xs font-semibold text-muted-foreground sm:text-sm">
-              {isRTL ? "كل صورة بتاخدك مباشرة على صفحة البرنامج المسؤول عنها." : "Every photo links directly to its program page."}
+              {isRTL ? "كل صورة تنقلك مباشرة إلى صفحة البرنامج المسؤول عنها." : "Every photo links directly to its program page."}
             </p>
           </div>
 

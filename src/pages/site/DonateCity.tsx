@@ -19,7 +19,7 @@ const PROGRAM_LABELS: Record<string, { ar: string; en: string; href: string }> =
   box: { ar: "كرتونة العزومة", en: "Family Food Box", href: "/programs/box" },
   orphan: { ar: "كفالة يتيم", en: "Sponsor an Orphan", href: "/programs/orphan" },
   water: { ar: "وصلات المياه", en: "Clean Water", href: "/programs/water" },
-  bride: { ar: "جواز عرائس", en: "Brides Trousseau", href: "/programs/bride" },
+  bride: { ar: "تجهيز العرائس", en: "Brides Trousseau", href: "/programs/bride" },
   education: { ar: "تعليم وأيتام", en: "Education", href: "/programs/education" },
   health: { ar: "علاج مرضى", en: "Medical Aid", href: "/programs/health" },
   zakat: { ar: "الزكاة", en: "Zakat", href: "/zakat" },
@@ -40,36 +40,36 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
   mansoura: {
     ar: {
       intro:
-        "مؤسسة اليسر الخيرية مقرها الرئيسي في المنصورة، عاصمة الدقهلية. بنخدم آلاف الأسر الفقيرة في المنصورة وقراها وكفور الدقهلية كل سنة، عبر برامج موثقة بالكامل: تبرعك بيوصل لباب البيت بمعاينة قبل التسليم وصور وفيديو بعد كل عملية. كل جنيه بيتسجل، وكل أسرة بيتم زيارتها قبل اعتمادها.",
+        "مؤسسة اليسر الخيرية مقرها الرئيسي في المنصورة، عاصمة الدقهلية. نخدم آلاف الأسر الفقيرة في المنصورة وقراها وكفور الدقهلية كل عام، عبر برامج موثقة بالكامل: يصل تبرعك إلى باب البيت بعد معاينة قبل التسليم، مع صور وفيديو بعد كل عملية. كل جنيه يُسجَّل، وكل أسرة نزورها قبل اعتمادها.",
       longIntro: [
-        "في قلب المنصورة، وعلى بُعد دقائق من جامعة المنصورة وكوبري طلخا، يقف فريق اليسر يوميًا لخدمة الأسر الأكثر احتياجًا في عواصم الدقهلية وكفورها. من حي الجامعة وتوريل وميت حدر، إلى شارع الجمهورية والسكة الجديدة، نعرف العائلات بالاسم — مش بالأرقام. كل تبرع جنيه بيتحوّل إلى كرتونة عزومة، أو صك أضحية، أو علاج طفل، أو سقف بيت لأسرة بتنام تحت السما.",
-        "اليسر مش جمعية بتنقل فلوس، إحنا فريق ميداني مقيم في المنصورة طول السنة. عندنا قاعدة بيانات لأكتر من 3200 أسرة محتاجة تم التحقق منها بزيارات منزلية ومعاينات اجتماعية. كل أسرة بتدخل قاعدتنا بعد ما يتم التأكد من وضعها الاقتصادي والصحي والاجتماعي بالتعاون مع شيوخ الجوامع والوحدات المحلية ومديرية التضامن الاجتماعي بالدقهلية.",
-        "تبرعك في المنصورة بيشتغل على 3 محاور: إغاثة فورية (أكل، علاج، إيواء)، تنمية مستدامة (تعليم، تدريب، مشاريع صغيرة)، وكرامة إنسانية (جواز عرايس، تجهيز بيوت، كفالة أيتام). 95% من قيمة تبرعك بتوصل للأسرة — والباقي بيغطي تكاليف التشغيل والتوثيق والمتابعة الميدانية."
+        "في قلب المنصورة، وعلى بُعد دقائق من جامعة المنصورة وكوبري طلخا، يقف فريق اليسر يوميًا لخدمة الأسر الأكثر احتياجًا في مدن الدقهلية وكفورها. من حي الجامعة وتوريل وميت حدر، إلى شارع الجمهورية والسكة الجديدة، نعرف العائلات بأسمائها لا بأرقامها. كل جنيه تتبرع به يتحوّل إلى كرتونة عزومة، أو صك أضحية، أو علاج طفل، أو سقف بيت لأسرة تنام تحت السماء.",
+        "اليسر ليست جمعية تنقل الأموال فحسب؛ نحن فريق ميداني مقيم في المنصورة طوال العام. لدينا قاعدة بيانات لأكثر من 3200 أسرة محتاجة تم التحقق منها بزيارات منزلية ومعاينات اجتماعية، ولا تدخل أي أسرة قاعدتنا إلا بعد التأكد من وضعها الاقتصادي والصحي والاجتماعي، بالتعاون مع أئمة المساجد والوحدات المحلية ومديرية التضامن الاجتماعي بالدقهلية.",
+        "يعمل تبرعك في المنصورة على 3 محاور: إغاثة فورية (غذاء، علاج، إيواء)، وتنمية مستدامة (تعليم، تدريب، مشاريع صغيرة)، وكرامة إنسانية (تجهيز العرائس، تجهيز البيوت، كفالة الأيتام). يصل 90% من قيمة تبرعك إلى الأسرة، و6% مصاريف لوجستية ونقل وتجهيز، و4% رواتب وإدارة."
       ],
       why: [
-        "فريق ميداني مقيم في المنصورة — مش وسيط، إحنا اللي بنوزع",
-        "تعاون رسمي مع مديرية التضامن الاجتماعي وشيوخ الجوامع",
+        "فريق ميداني مقيم في المنصورة؛ لسنا وسطاء، بل نوزّع بأنفسنا",
+        "تعاون رسمي مع مديرية التضامن الاجتماعي وأئمة المساجد",
         "توثيق بالصور والفيديو لكل أسرة وكل عملية تسليم",
         "تقارير شهرية للمتبرعين الدائمين بالأرقام والأسماء",
-        "بدون عمولات وسطاء — 95% من تبرعك بيوصل للأسرة",
+        "دون عمولات وسطاء؛ 90% من تبرعك يصل إلى الأسرة",
         "مقر دائم في المنصورة لاستقبال المتبرعين والمتطوعين",
         "خط ساخن 24/7 للرد على استفسارات المتبرعين والأسر",
-        "تبرع آمن بفيزا، فودافون كاش، انستاباي، أو تحويل بنكي معفى من الضرائب",
+        "تبرع آمن بفيزا أو فودافون كاش أو إنستاباي أو بتحويل بنكي معفى من الضرائب",
       ],
       neighborhoods: [
         { name: "حي الجامعة وتوريل", note: "خدمة طلاب جامعة المنصورة المغتربين والأسر منخفضة الدخل" },
-        { name: "ميت حدر والمشاية", note: "كرتونة عزومة شهرية لأكتر من 180 أسرة" },
+        { name: "ميت حدر والمشاية", note: "كرتونة عزومة شهرية لأكثر من 180 أسرة" },
         { name: "كفور المنصورة الريفية", note: "وصلات مياه نظيفة وترميم بيوت طينية" },
-        { name: "شربين وطلخا والمتفرعات", note: "كفالة أيتام وعلاج مرضى الفشل الكلوي" },
+        { name: "شربين وطلخا وتوابعهما", note: "كفالة أيتام وعلاج مرضى الفشل الكلوي" },
         { name: "وسط البلد والسكة الجديدة", note: "نقطة استلام التبرعات العينية وصكوك الأضحية" },
-        { name: "حي الزهور والثورة", note: "حملات جواز العرايس وتجهيز بيوت اليتامى" },
+        { name: "حي الزهور والثورة", note: "حملات تيسير زواج العرائس وتجهيز بيوت الأيتام" },
       ],
       steps: [
-        { t: "اختر برنامجك", d: "كرتونة، يتيم، أضحية، علاج، سقف بيت — اختار اللي قلبك مرتاح ليه." },
+        { t: "اختر برنامجك", d: "كرتونة، أو كفالة يتيم، أو أضحية، أو علاج، أو سقف بيت؛ اختر ما يطمئن إليه قلبك." },
         { t: "ادفع بأمان", d: "فيزا/ماستر، فودافون كاش، انستاباي، أو تحويل بنكي. إيصال فوري." },
-        { t: "بنزور الأسرة", d: "فريقنا في المنصورة بيختار الأسرة الأنسب ويعمل معاينة قبل التسليم." },
-        { t: "بيوصل بنفس اليوم", d: "في غالب الحالات بنسلم في ٢٤–٤٨ ساعة داخل المنصورة." },
-        { t: "تستلم التوثيق", d: "صور وفيديو وتقرير مكتوب على واتساب أو إيميلك خلال أسبوع." },
+        { t: "نزور الأسرة", d: "يختار فريقنا في المنصورة الأسرة الأنسب ويُجري معاينة قبل التسليم." },
+        { t: "يصل في اليوم نفسه", d: "في أغلب الحالات نسلّم خلال ٢٤–٤٨ ساعة داخل المنصورة." },
+        { t: "استلم التوثيق", d: "صور وفيديو وتقرير مكتوب عبر واتساب أو بريدك الإلكتروني خلال أسبوع." },
       ],
       impact: [
         { n: "3,200+", label: "أسرة في المنصورة وقراها" },
@@ -77,7 +77,7 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         { n: "120", label: "يتيم تحت الكفالة" },
         { n: "45", label: "حالة علاج عاجلة سنويًا" },
         { n: "32", label: "وصلة مياه في كفور المنصورة" },
-        { n: "1,400+", label: "صك أضحية وُزّع في عيد ٢٠٢٥" },
+        { n: "1,400+", label: "كرتونة غذائية وُزّعت في ٢٠٢٥" },
       ],
       testimonials: [
         { quote: "وصلت الكرتونة بتاعتي لأسرة عم محمد في ميت حدر بنفس اليوم اللي تبرعت فيه، وبعت لي صور التسليم على الواتس. ده أول مرة أحس إن فلوس التبرع بتوصل فعلاً.", author: "أحمد خ.", role: "متبرع شهري — القاهرة" },
@@ -88,52 +88,52 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         "فودافون كاش وإنستاباي للتبرعات السريعة",
         "فيزا وماستر كارد عبر بوابة دفع آمنة (Kashier)",
         "تحويل بنكي على حساب المؤسسة الرسمي بالدقهلية",
-        "استلام كاش من المقر الرئيسي في المنصورة",
-        "تبرع بالكرتونة أو الأضحية عينيًا — بنستلم من بيتك",
+        "تسليم التبرع نقدًا في المقر الرئيسي بالمنصورة",
+        "تبرع بالكرتونة أو الأضحية عينيًا، ونستلمها من بيتك",
       ],
       faq: [
         {
-          q: "إزاي أتبرع لأسرة في المنصورة بالتحديد؟",
-          a: "اختر التبرع من الصفحة دي أو من /donate وحدد البرنامج (كرتونة، يتيم، أضحية…). بنخصص تبرعك تلقائيًا لأقرب أسرة محتاجة في المنصورة أو القرى التابعة لها.",
+          q: "كيف أتبرع لأسرة في المنصورة تحديدًا؟",
+          a: "تبرّع من هذه الصفحة أو من /donate وحدد البرنامج (كرتونة، يتيم، أضحية…)، وسنخصص تبرعك تلقائيًا لأقرب أسرة محتاجة في المنصورة أو القرى التابعة لها.",
         },
         {
-          q: "هل اليسر مرخصة في الدقهلية؟",
+          q: "هل مؤسسة اليسر مرخّصة في الدقهلية؟",
           a: "نعم، مؤسسة اليسر الخيرية مرخصة من وزارة التضامن الاجتماعي ومسجلة رسميًا في محافظة الدقهلية. كل التبرعات معفاة من ضريبة الدخل بموجب قانون الجمعيات الأهلية.",
         },
         {
-          q: "ممكن أزور المؤسسة في المنصورة؟",
-          a: "أكيد. مقرنا في المنصورة مفتوح لاستقبال المتبرعين والمتطوعين. اتواصل معانا من /contact لحجز موعد زيارة أو معاينة الأسر.",
+          q: "هل يمكنني زيارة المؤسسة في المنصورة؟",
+          a: "بالتأكيد. مقرنا في المنصورة مفتوح لاستقبال المتبرعين والمتطوعين. تواصل معنا من /contact لحجز موعد للزيارة أو لمعاينة الأسر.",
         },
         {
           q: "كم تكلفة كفالة يتيم في المنصورة شهريًا؟",
-          a: "كفالة اليتيم في المنصورة تبدأ من 500 جنيه شهريًا، وبتشمل مصاريف أساسية (طعام، تعليم، علاج). بتستلم تقرير شهري بصور الطفل وأخباره.",
+          a: "كفالة اليتيم في المنصورة تبدأ من 500 جنيه شهريًا، وتشمل المصاريف الأساسية (طعام، تعليم، علاج)، ويصلك تقرير شهري بصور الطفل وأخباره.",
         },
         {
-          q: "ممكن أتطوع في المنصورة؟",
-          a: "نعم، فريق التطوع في المنصورة بيرحب بكل من يحب يساعد. سجل من /volunteer وهنتواصل معاك لتحديد دورك المناسب.",
+          q: "هل يمكنني التطوع في المنصورة؟",
+          a: "نعم، يرحّب فريق التطوع في المنصورة بكل من يحب المساعدة. سجّل من /volunteer وسنتواصل معك لتحديد الدور المناسب لك.",
         },
-        { q: "ايه هي طرق الدفع المتاحة للمتبرعين في المنصورة؟", a: "بنقبل فيزا وماستر كارد عبر بوابة دفع آمنة، فودافون كاش، إنستاباي، تحويل بنكي على حساب المؤسسة الرسمي، واستلام كاش من المقر الرئيسي. كل التبرعات بتطلع إيصال إلكتروني فوري." },
-        { q: "كم سعر كرتونة العزومة في المنصورة؟", a: "كرتونة العزومة الأساسية ٤٥٠ جنيه وفيها ١٢ صنف يكفي أسرة من ٤–٥ أفراد لمدة شهر. الكرتونة الكبيرة ٧٥٠ جنيه وفيها ٢٠ صنف ولحوم." },
-        { q: "إزاي أتأكد إن تبرعي وصل فعلاً للأسرة؟", a: "بتستلم خلال أسبوع كحد أقصى: صور التسليم، فيديو قصير، اسم الأسرة المستفيدة، وتقرير حالتها. كل ده بيوصلك على واتساب أو إيميل أو من خلال صفحتك في الموقع لو متبرع مسجّل." },
-        { q: "هل بتستلموا تبرعات عينية في المنصورة؟", a: "أكيد — ملابس، أثاث، أجهزة كهربائية، مواد غذائية، كتب مدرسية. بنبعت سيارة المؤسسة تستلم من بيتك في المنصورة وضواحيها مجانًا." },
-        { q: "هل في حملات أضحية وزكاة في المنصورة؟", a: "نعم. صكوك الأضحية بتبدأ تنزل قبل العيد بشهر، والزكاة بنوزعها على مدار السنة على ٧ مصارف شرعية. تابع /qurbani و /zakat لكل التفاصيل." },
-        { q: "هل التبرع لليسر معفي من الضرائب؟", a: "نعم، التبرعات للجمعيات المشهرة في وزارة التضامن (ومنها اليسر) معفاة من ضريبة الدخل بحد أقصى ١٠٪ من صافي الربح للشركات و٢٠٪ للأفراد طبقًا للقانون المصري." },
+        { q: "ما طرق الدفع المتاحة للمتبرعين في المنصورة؟", a: "نقبل فيزا وماستر كارد عبر بوابة دفع آمنة، وفودافون كاش، وإنستاباي، والتحويل البنكي على حساب المؤسسة الرسمي، والدفع نقدًا في المقر الرئيسي. ويصدر لكل تبرع إيصال إلكتروني فوري." },
+        { q: "كم سعر كرتونة العزومة في المنصورة؟", a: "سعر كرتونة العزومة الأساسية ٤٥٠ جنيهًا، وتضم ١٢ صنفًا تكفي أسرة من ٤–٥ أفراد لمدة شهر. أما الكرتونة الكبيرة فسعرها ٧٥٠ جنيهًا، وتضم ٢٠ صنفًا ولحومًا." },
+        { q: "كيف أتأكد أن تبرعي وصل فعلًا إلى الأسرة؟", a: "يصلك خلال أسبوع على الأكثر: صور التسليم، وفيديو قصير، واسم الأسرة المستفيدة، وتقرير عن حالتها، عبر واتساب أو البريد الإلكتروني أو صفحتك على الموقع إن كنت متبرعًا مسجّلًا." },
+        { q: "هل تستلمون تبرعات عينية في المنصورة؟", a: "بالتأكيد: ملابس، وأثاث، وأجهزة كهربائية، ومواد غذائية، وكتب مدرسية. نرسل سيارة المؤسسة لتستلمها من بيتك في المنصورة وضواحيها مجانًا." },
+        { q: "هل توجد حملات للأضحية والزكاة في المنصورة؟", a: "نعم. يبدأ طرح صكوك الأضحية قبل العيد بشهر، ونوزّع الزكاة على مدار العام على مصارفها الشرعية الثمانية. تابع /qurbani و/zakat لمعرفة كل التفاصيل." },
+        { q: "هل التبرع لليسر معفى من الضرائب؟", a: "نعم، التبرعات للجمعيات المشهرة لدى وزارة التضامن (ومنها اليسر) معفاة من ضريبة الدخل بحد أقصى ١٠٪ من صافي الربح للشركات و٢٠٪ للأفراد وفقًا للقانون المصري." },
       ],
     },
     en: {
       intro:
-        "Al-Yusr Foundation is headquartered in Mansoura, capital of Dakahlia governorate. We serve thousands of low-income families across Mansoura, its surrounding villages, and the kafr districts of Dakahlia every year through fully-documented programs. Your donation reaches the family's doorstep with pre-delivery inspection and full photo/video proof after every operation.",
+        "Al-Yusr Charity Foundation is headquartered in Mansoura, capital of Dakahlia governorate. We serve thousands of low-income families across Mansoura, its surrounding villages, and the kafr districts of Dakahlia every year through fully-documented programs. Your donation reaches the family's doorstep with pre-delivery inspection and full photo/video proof after every operation.",
       longIntro: [
         "In the heart of Mansoura, minutes from Mansoura University and Talkha bridge, the Al-Yusr team works daily to serve the most vulnerable families across Dakahlia's districts and villages. From the University quarter, Toreel and Mit Hadar, to Gomhoria street and El-Sekka El-Gedida, we know our families by name — not by numbers. Every pound becomes a food box, a Qurbani share, a child's surgery, or a roof for a family sleeping under the open sky.",
         "Al-Yusr is not a money-transfer charity. We are a year-round field team based in Mansoura with a verified database of 3,200+ families, vetted through home visits and social assessments in coordination with mosque imams, local councils and Dakahlia's Ministry of Social Solidarity.",
-        "Your donation in Mansoura works on 3 axes: immediate relief (food, medical, shelter), sustainable development (education, training, micro-projects) and human dignity (bride trousseaus, orphan sponsorship, home renovation). 95% of every pound reaches the family — the rest covers operations, documentation and field follow-up.",
+        "Your donation in Mansoura works on 3 axes: immediate relief (food, medical, shelter), sustainable development (education, training, micro-projects) and human dignity (bride trousseaus, orphan sponsorship, home renovation). 90% of every pound reaches the family, 6% covers logistics, transport and preparation, and 4% covers salaries and administration.",
       ],
       why: [
         "Field team based in Mansoura — we deliver, not middlemen",
         "Official partnership with Dakahlia Social Solidarity Directorate and mosque imams",
         "Photo & video documentation of every family and every delivery",
         "Monthly reports to recurring donors with names and amounts",
-        "No broker commissions — 95% of your donation reaches the family",
+        "No broker commissions — 90% of your donation reaches the family",
         "Permanent Mansoura office welcoming donors and volunteers",
         "24/7 hotline for donor and beneficiary inquiries",
         "Secure payment via Visa, Vodafone Cash, InstaPay or tax-exempt bank transfer",
@@ -159,7 +159,7 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         { n: "120", label: "Orphans under sponsorship" },
         { n: "45", label: "Urgent medical cases yearly" },
         { n: "32", label: "Water lines in Mansoura kafrs" },
-        { n: "1,400+", label: "Qurbani shares delivered Eid 2025" },
+        { n: "1,400+", label: "Food boxes delivered in 2025" },
       ],
       testimonials: [
         { quote: "My food box reached Uncle Mohamed's family in Mit Hadar the same day I donated, with delivery photos sent on WhatsApp. First time I truly felt my donation arrived.", author: "Ahmed K.", role: "Monthly donor — Cairo" },
@@ -180,7 +180,7 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         },
         {
           q: "Is Al-Yusr licensed in Dakahlia?",
-          a: "Yes, Al-Yusr Foundation is licensed by the Ministry of Social Solidarity and officially registered in Dakahlia governorate. All donations are tax-deductible under Egypt's NGO law.",
+          a: "Yes, Al-Yusr Charity Foundation is licensed by the Ministry of Social Solidarity and officially registered in Dakahlia governorate. All donations are tax-deductible under Egypt's NGO law.",
         },
         {
           q: "Can I visit the foundation in Mansoura?",
@@ -198,7 +198,7 @@ const RICH_COPY: Record<string, { ar: RichLang; en: RichLang }> = {
         { q: "How much is a food box in Mansoura?", a: "Standard food box is EGP 450 (12 items, feeds a family of 4–5 for a month). Large box is EGP 750 (20 items including meat)." },
         { q: "How can I verify my donation reached the family?", a: "Within a week you receive: delivery photos, a short video, the beneficiary family name, and a status report — via WhatsApp, email or your donor dashboard if registered." },
         { q: "Do you accept in-kind donations in Mansoura?", a: "Absolutely — clothes, furniture, appliances, food, school supplies. Our truck collects from your home in Mansoura and surroundings free of charge." },
-        { q: "Do you run Qurbani and Zakat campaigns in Mansoura?", a: "Yes. Qurbani vouchers open one month before Eid; Zakat is distributed year-round across the 7 sharia categories. See /qurbani and /zakat for details." },
+        { q: "Do you run Qurbani and Zakat campaigns in Mansoura?", a: "Yes. Qurbani vouchers open one month before Eid; Zakat is distributed year-round across the 8 sharia categories. See /qurbani and /zakat for details." },
         { q: "Are donations to Al-Yusr tax-exempt?", a: "Yes, donations to Ministry-registered NGOs (including Al-Yusr) are tax-deductible up to 10% of net profit for companies and 20% for individuals under Egyptian tax law." },
       ],
     },
@@ -248,7 +248,7 @@ const DonateCity = () => {
       {
         "@type": ["NGO", "LocalBusiness"],
         "@id": `https://elyusr.org/donate/${city}#org`,
-        name: lang === "ar" ? `مؤسسة اليسر الخيرية — ${cityName}` : `Al-Yusr Charitable Foundation — ${cityName}`,
+        name: lang === "ar" ? `مؤسسة اليسر الخيرية — ${cityName}` : `Al-Yusr Charity Foundation — ${cityName}`,
         url: `https://elyusr.org/donate/${city}`,
         areaServed: {
           "@type": "City",
@@ -337,7 +337,7 @@ const DonateCity = () => {
             {[
               { icon: Users, n: cityData.families.toLocaleString(), label: lang === "ar" ? "أسرة مخدومة" : "Families served" },
               { icon: Truck, n: "100%", label: lang === "ar" ? "توصيل موثق" : "Verified delivery" },
-              { icon: ShieldCheck, n: "95%", label: lang === "ar" ? "للمستفيد مباشرة" : "Direct to family" },
+              { icon: ShieldCheck, n: "90%", label: lang === "ar" ? "للمستفيد مباشرة" : "Direct to family" },
               { icon: Award, n: "12+", label: lang === "ar" ? "سنة خبرة محلية" : "Years of local work" },
             ].map((s, i) => (
               <div key={i} className="rounded-2xl bg-white/10 p-4 text-center backdrop-blur">
@@ -354,11 +354,11 @@ const DonateCity = () => {
       <section className="bg-background py-12 md:py-16">
         <div className="container mx-auto max-w-4xl px-4">
           <h2 className="mb-2 text-center text-2xl font-black text-primary md:text-3xl">
-            {lang === "ar" ? `ليه تتبرع لـ ${cityName} عن طريق اليسر؟` : `Why donate to ${cityName} through Al-Yusr?`}
+            {lang === "ar" ? `لماذا تتبرع لـ ${cityName} عن طريق اليسر؟` : `Why donate to ${cityName} through Al-Yusr?`}
           </h2>
           <p className="mx-auto mb-8 max-w-2xl text-center text-sm text-muted-foreground">
             {lang === "ar"
-              ? "كل برامجنا في الدقهلية موثقة بالصور والفيديو، ومراقبة شهريًا من المتبرعين الدائمين."
+              ? "كل برامجنا في الدقهلية موثقة بالصور والفيديو، ويتابعها المتبرعون الدائمون شهريًا."
               : "All our Dakahlia programs are documented with photos & video, audited monthly by recurring donors."}
           </p>
           <ul className="grid gap-3 sm:grid-cols-2">
@@ -408,7 +408,7 @@ const DonateCity = () => {
         <section className="bg-background py-12 md:py-16">
           <div className="container mx-auto max-w-5xl px-4">
             <h2 className="mb-2 text-center text-2xl font-black text-primary md:text-3xl">
-              {lang === "ar" ? `أحياء وقرى ${cityName} اللي بنخدمها` : `${cityName} districts & villages we serve`}
+              {lang === "ar" ? `أحياء وقرى ${cityName} التي نخدمها` : `${cityName} districts & villages we serve`}
             </h2>
             <p className="mx-auto mb-8 max-w-2xl text-center text-sm text-muted-foreground">
               {lang === "ar" ? "تغطية ميدانية يومية لكل حي وكفر داخل دائرة المنصورة." : "Daily field coverage of every district and kafr in greater Mansoura."}
@@ -433,7 +433,7 @@ const DonateCity = () => {
         <section className="bg-secondary/10 py-12 md:py-16">
           <div className="container mx-auto max-w-5xl px-4">
             <h2 className="mb-8 text-center text-2xl font-black text-primary md:text-3xl">
-              {lang === "ar" ? `إزاي بيوصل تبرعك في ${cityName}؟` : `How your donation reaches ${cityName}`}
+              {lang === "ar" ? `كيف يصل تبرعك في ${cityName}؟` : `How your donation reaches ${cityName}`}
             </h2>
             <ol className="grid gap-4 md:grid-cols-5">
               {copy.steps.map((s, i) => (
@@ -453,7 +453,7 @@ const DonateCity = () => {
         <section className="bg-background py-12 md:py-16">
           <div className="container mx-auto max-w-5xl px-4">
             <h2 className="mb-8 text-center text-2xl font-black text-primary md:text-3xl">
-              {lang === "ar" ? `كلام متبرعين ومستفيدين من ${cityName}` : `Voices from donors & families in ${cityName}`}
+              {lang === "ar" ? `آراء متبرعين ومستفيدين من ${cityName}` : `Voices from donors & families in ${cityName}`}
             </h2>
             <div className="grid gap-4 md:grid-cols-3">
               {copy.testimonials.map((t, i) => (
@@ -479,7 +479,7 @@ const DonateCity = () => {
               {lang === "ar" ? `طرق التبرع المتاحة في ${cityName}` : `Donation methods available in ${cityName}`}
             </h2>
             <p className="mx-auto mb-8 max-w-2xl text-center text-sm text-muted-foreground">
-              {lang === "ar" ? "اختر الطريقة الأنسب — كلها آمنة ومعتمدة وبتطلع إيصال فوري." : "Pick what suits you — all secure, certified and instantly receipted."}
+              {lang === "ar" ? "اختر الطريقة الأنسب لك؛ جميعها آمنة ومعتمدة، وتُصدر إيصالًا فوريًا." : "Pick what suits you — all secure, certified and instantly receipted."}
             </p>
             <ul className="grid gap-3 sm:grid-cols-2">
               {copy.payments.map((p, i) => (
@@ -526,7 +526,7 @@ const DonateCity = () => {
                   </h3>
                   <p className="mt-1 text-xs text-muted-foreground">
                     {lang === "ar"
-                      ? `تبرعات موثقة لأسر ${cityName} المحتاجة. التسليم في نفس اليوم.`
+                      ? `تبرعات موثقة لأسر ${cityName} المحتاجة. التسليم في اليوم نفسه.`
                       : `Verified donations to families in ${cityName}. Same-day delivery.`}
                   </p>
                   <div className="mt-3 inline-flex items-center gap-1 text-xs font-black text-accent">
@@ -594,7 +594,7 @@ const DonateCity = () => {
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm opacity-90 md:text-base">
             {lang === "ar"
-              ? "تبرعك الليلة يوصل بكرة الصبح. توثيق كامل بالصور والفيديو."
+              ? "تبرعك الليلة يصل صباح الغد، مع توثيق كامل بالصور والفيديو."
               : "Your donation tonight is delivered tomorrow morning. Full photo/video documentation."}
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">

@@ -30,7 +30,7 @@ export const BrandPalette = () => {
         <div className="relative mx-auto w-full max-w-md">
           <div className="absolute -inset-6 rounded-[3rem] bg-secondary/20 blur-2xl" aria-hidden />
           <div className="relative overflow-hidden rounded-[2.5rem] border-4 border-secondary shadow-card">
-            <img src={girl} alt={isRTL ? "طفلة من بطل قصة اليسر" : "Child portrait — Al-Yusr story"} className="h-full w-full object-cover" loading="lazy" />
+            <img src={girl} alt={isRTL ? "طفلة من أبطال قصة اليسر" : "Child portrait — Al-Yusr story"} className="h-full w-full object-cover" loading="lazy" />
           </div>
           <div className="absolute -bottom-6 -end-6 grid h-28 w-28 place-items-center rounded-full border-4 border-secondary bg-primary p-3 shadow-cta md:h-36 md:w-36">
             <img src={logo} alt="Al-Yusr logo" className="h-full w-full object-contain" />
@@ -43,11 +43,11 @@ export const BrandPalette = () => {
             {isRTL ? "نظام الألوان" : "Brand palette"}
           </span>
           <h2 className="mt-4 text-3xl font-black text-primary md:text-4xl">
-            {isRTL ? "ثلاث ألوان · رسالة واحدة" : "Three colors · one message"}
+            {isRTL ? "ثلاثة ألوان · رسالة واحدة" : "Three colors · one message"}
           </h2>
           <p className="mt-3 text-muted-foreground md:text-lg">
             {isRTL
-              ? "ألوان حديثة و عطوفة و متجانسة، تعبر عن قوة المؤسسة، أمل المستفيد، ودفء العطاء."
+              ? "ألوان حديثة ودافئة ومتجانسة، تعبّر عن قوة المؤسسة وأمل المستفيد ودفء العطاء."
               : "Modern, kind, and cohesive — expressing institutional strength, beneficiary hope, and the warmth of giving."}
           </p>
 

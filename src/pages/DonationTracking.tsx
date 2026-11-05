@@ -163,8 +163,8 @@ const DonationTracking = () => {
           {!record && !notFound && !routeRef && (
             <div className="mt-8 grid gap-4 rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-soft md:grid-cols-3">
               {[
-                { icon: Search,      ar: "أدخل رقم العملية",   en: "Enter the reference",   subAr: "هتلاقيه في رسالة التأكيد أو الإيصال",      subEn: "You will find it in the confirmation message or receipt" },
-                { icon: ShieldCheck, ar: "متابعة دورية",        en: "Periodic updates",      subAr: "بنحدّث الحالة كل 30 ثانية تلقائيًا",        subEn: "Status auto-refreshes every 30 seconds" },
+                { icon: Search,      ar: "أدخل رقم العملية",   en: "Enter the reference",   subAr: "تجده في رسالة التأكيد أو الإيصال",      subEn: "You will find it in the confirmation message or receipt" },
+                { icon: ShieldCheck, ar: "متابعة دورية",        en: "Periodic updates",      subAr: "نحدّث الحالة تلقائيًا كل 30 ثانية",        subEn: "Status auto-refreshes every 30 seconds" },
                 { icon: Mail,        ar: "إيصال رسمي",          en: "Official receipt",      subAr: "يظهر بعد اعتماد الدفع",                     subEn: "Available once payment is confirmed" },
               ].map((it) => (
                 <div key={it.ar} className="rounded-2xl border border-border/70 bg-muted/30 p-5">
@@ -188,12 +188,12 @@ const DonationTracking = () => {
                       {record.status === "completed"  && (lang === "ar" ? "مكتمل ✓" : "Completed ✓")}
                       {record.status === "failed"     && (lang === "ar" ? "فشلت العملية" : "Failed")}
                       {record.status === "pending"    && (lang === "ar" ? "بانتظار تأكيد الدفع" : "Awaiting payment confirmation")}
-                      {record.status === "processing" && (lang === "ar" ? "جاري المعالجة..." : "Processing...")}
+                      {record.status === "processing" && (lang === "ar" ? "جارٍ المعالجة..." : "Processing...")}
                     </h2>
                     {record.status === "pending" && (
                       <p className="mt-2 max-w-prose text-xs text-muted-foreground">
                         {lang === "ar"
-                          ? "تم تسجيل طلب تبرعك. سيتأكّد الحالة فور وصول الحوالة (Vodafone Cash / تحويل بنكي) أو دفعك إلكترونيًا. للاستفسار راسلنا على واتساب."
+                          ? "تم تسجيل طلب تبرعك، وستُؤكَّد الحالة فور وصول الحوالة (Vodafone Cash / تحويل بنكي) أو إتمام دفعك إلكترونيًا. للاستفسار، راسلنا على واتساب."
                           : "Your donation request was recorded. The status will update once we receive your transfer (Vodafone Cash / bank) or your online payment clears. Contact us on WhatsApp for help."}
                       </p>
                     )}
@@ -284,7 +284,7 @@ const DonationTracking = () => {
                       rel="noopener noreferrer"
                       className="inline-flex h-10 items-center gap-2 rounded-xl bg-secondary px-4 text-sm font-black text-secondary-foreground shadow-soft hover:opacity-95"
                     >
-                      <MessageCircle className="h-4 w-4" /> {lang === "ar" ? "تواصل واتساب" : "WhatsApp us"}
+                      <MessageCircle className="h-4 w-4" /> {lang === "ar" ? "تواصل عبر واتساب" : "WhatsApp us"}
                     </a>
                     {record.status === "failed" && (
                       <Link to="/donate" className="inline-flex h-10 items-center gap-2 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta hover:opacity-95">
@@ -301,7 +301,7 @@ const DonationTracking = () => {
                   {record.status !== "completed" && (
                     <div className="mt-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs font-bold text-amber-900 dark:text-amber-200">
                       {lang === "ar"
-                        ? "ملاحظة: هذا الإيصال مبدئي برقم مرجعي معتمد وجاري مطابقة وتأكيد الدفع نهائياً من قبل الإدارة المالية لمؤسسة اليسر."
+                        ? "ملاحظة: هذا إيصال مبدئي برقم مرجعي معتمد، وتعمل الإدارة المالية لمؤسسة اليسر على مطابقة الدفع وتأكيده نهائيًا."
                         : "Note: This is a preliminary verified receipt. Final confirmation is being processed by Al-Yusr Financial Admin."}
                     </div>
                   )}

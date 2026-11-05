@@ -1,18 +1,18 @@
 {
   "/donate": {
-    "ar": { "title": "تبرع الآن | مؤسسة اليسر الخيرية", "description": "تبرع أونلاين بالبطاقة أو المحفظة أو إنستاباي أو تحويل بنكي، واحصل على رقم تتبع وتوثيق بالصور لوصول تبرعك." },
-    "en": { "title": "Donate now | Al-Yusr Charity Foundation", "description": "Give online by card, wallet, InstaPay or bank transfer, and get a tracking number and photo proof of delivery." }
+    "ar": { "title": "تبرع أونلاين في مصر | مؤسسة اليسر الخيرية", "description": "تبرع من أي مكان في مصر بالبطاقة أو المحفظة أو إنستاباي أو تحويل بنكي، واحصل على رقم تتبع وتوثيق بالصور لوصول تبرعك." },
+    "en": { "title": "Donate online in Egypt | Al-Yusr Charity Foundation", "description": "Give from anywhere in Egypt by card, wallet, InstaPay or bank transfer, and get a tracking number and photo proof of delivery." }
   },
   "/cases": {
     "ar": { "title": "حالات إنسانية عاجلة | مؤسسة اليسر الخيرية", "description": "حالات موثقة ميدانيًا محتاجة دعم عاجل: علاج، سكن، غذاء، تعليم. اختار حالة وتابع تحديثاتها لحد ما تكتمل." },
     "en": { "title": "Urgent verified cases | Al-Yusr Charity Foundation", "description": "Field-verified cases that need urgent support: medical care, housing, food, education. Pick a case and follow its updates." }
   },
   "/programs": {
-    "ar": { "title": "برامج الخير | مؤسسة اليسر الخيرية", "description": "كفالة الأيتام، الزكاة، صكوك الأضاحي، الغذاء الشهري، سقيا الماء والتعليم — برامج دائمة بتوثيق كامل لكل تبرع." },
-    "en": { "title": "Charity programs | Al-Yusr Charity Foundation", "description": "Orphan sponsorship, zakat, qurbani, monthly food, clean water and education — ongoing programs with full proof for every gift." }
+    "ar": { "title": "برامج خيرية في مصر | إطعام وعلاج وكفالة أيتام ومياه — اليسر", "description": "كفالة الأيتام، الزكاة، صكوك الأضاحي، الإطعام والغذاء الشهري، توصيل المياه والتعليم في مصر — برامج دائمة بتوثيق كامل لكل تبرع." },
+    "en": { "title": "Charity programs in Egypt | Al-Yusr Charity Foundation", "description": "Orphan sponsorship, zakat, qurbani, monthly food, clean water and education — ongoing programs with full proof for every gift." }
   },
   "/projects": {
-    "ar": { "title": "مشاريع اليسر التنموية | صدقة جارية", "description": "بناء المساجد، المزرعة الوقفية، سقيا الماء، تسقيف البيوت، جهاز العرائس وسيارات تكريم الإنسان — صدقة جارية أجرها مستمر." },
+    "ar": { "title": "مشاريع صدقة جارية في مصر | مساجد، توصيل مياه، وقف — اليسر", "description": "بناء المساجد، المزرعة الوقفية، سقيا الماء، تسقيف البيوت، جهاز العرائس وسيارات تكريم الإنسان — صدقة جارية أجرها مستمر." },
     "en": { "title": "Al-Yusr development projects | Ongoing charity", "description": "Mosques, a waqf farm, clean water, home roofing, orphan brides and mortuary vans — sadaqah jariyah with lasting reward." }
   },
   "/campaigns": {
@@ -28,8 +28,12 @@
     "en": { "title": "Privacy policy | Al-Yusr Charity Foundation", "description": "How we collect, protect and use donor data, your rights to access, correct and delete it, and giving anonymously." }
   },
   "/about": {
-    "ar": { "title": "من نحن | مؤسسة اليسر الخيرية", "description": "مؤسسة أهلية مصرية منذ 2019 تعمل في كل محافظات مصر: كفالة الأيتام، الغذاء، العلاج، التعليم، السكن والمياه." },
-    "en": { "title": "About us | Al-Yusr Charity Foundation", "description": "An Egyptian NGO since 2019 working across Egypt: orphans, food, medical care, education, housing and water." }
+    "ar": { "title": "من نحن | مؤسسة اليسر الخيرية — مؤسسة خيرية في مصر", "description": "مؤسسة أهلية مصرية منذ 2019 تعمل في محافظات مصر، ومقرها الرئيسي في المنصورة: كفالة الأيتام، الغذاء، العلاج، التعليم، السكن والمياه." },
+    "en": { "title": "About us | Al-Yusr Charity Foundation — Egypt", "description": "An Egyptian NGO since 2019 working across Egypt, headquartered in Mansoura: orphans, food, medical care, education, housing and water." }
+  },
+  "/charity-mansoura": {
+    "ar": { "title": "مؤسسة خيرية في المنصورة | مؤسسة اليسر الخيرية", "description": "مؤسسة اليسر الخيرية مشهرة برقم 2665/2019، مقرها في المنصورة وتعمل في محافظات مصر. تبرع بالمال أو الزكاة أو الأضحية أو الملابس والأثاث المستعمل، مع توثيق لكل تبرع." },
+    "en": { "title": "Charity in Mansoura, Egypt | Al-Yusr Charity Foundation", "description": "Al-Yusr Charity Foundation (No. 2665/2019) is headquartered in Mansoura and works across Egypt. Give money, zakat, qurbani or used clothes and furniture — with proof for every gift." }
   },
   "/contact": {
     "ar": { "title": "تواصل معنا | مؤسسة اليسر الخيرية", "description": "واتساب وهاتف +20 109 700 0137، التحويل البنكي CIB، وزيارة المقر — فريقنا بيرد عليك بسرعة." },
@@ -52,8 +56,8 @@
     "en": { "title": "Track your donation | Al-Yusr Charity Foundation", "description": "Enter your tracking number to see your donation's progress and delivery photos — no login needed." }
   },
   "/zakat": {
-    "ar": { "title": "حاسبة الزكاة وإخراجها | مؤسسة اليسر الخيرية", "description": "احسب زكاة مالك وذهبك وأخرجها لأسر مستحقة موثقة." },
-    "en": { "title": "Zakat calculator | Al-Yusr Charity Foundation", "description": "Calculate the zakat on your money and gold and give it to verified families." }
+    "ar": { "title": "حاسبة زكاة المال بسعر الذهب اليوم في مصر | مؤسسة اليسر", "description": "احسب زكاة مالك وذهبك وأخرجها لأسر مستحقة موثقة في المنصورة والدقهلية ومحافظات مصر." },
+    "en": { "title": "Zakat calculator Egypt | Al-Yusr Charity Foundation", "description": "Calculate the zakat on your money and gold and give it to verified families." }
   },
   "/setr": {
     "ar": { "title": "حملة سِتر — دفء الشتاء | مؤسسة اليسر الخيرية", "description": "تسقيف بيوت، أبواب وشبابيك، أسرة ومراتب، ألحفة وكسوة شتاء للأسر المستحقة." },
@@ -64,7 +68,7 @@
     "en": { "title": "Funeral washing, shrouding & vans in Mansoura | Takrim — Al-Yusr", "description": "Washing, shrouding and funeral van service inside Mansoura, free for families in need, expanding to Cairo next." }
   },
   "/water": {
-    "ar": { "title": "سقيا الماء وتوصيل مياه نظيفة للبيوت | مؤسسة اليسر", "description": "وصلات مياه شرب نظيفة وفلاتر للقرى في الدقهلية: أمان لصحة الأطفال وكبار السن وراحة للأسر — صدقة جارية." },
+    "ar": { "title": "توصيل مياه نظيفة للبيوت في مصر | وصلة مياه صدقة جارية — اليسر", "description": "وصلات مياه شرب نظيفة وفلاتر للقرى في الدقهلية: أمان لصحة الأطفال وكبار السن وراحة للأسر — صدقة جارية." },
     "en": { "title": "Clean water connections | Al-Yusr Charity Foundation", "description": "Clean home water connections and village filters in Dakahlia: safety for children and elders — ongoing charity." }
   },
   "/nurseries": {
@@ -72,11 +76,11 @@
     "en": { "title": "Al-Yusr learning nurseries & Qur'an houses", "description": "Learning nurseries for ages 4–6 and Qur'an houses for ages 4–16, with curricula built and supervised by Al-Yusr, an educational team and Qur'an competitions." }
   },
   "/mosques": {
-    "ar": { "title": "بناء مسجد وإعادة إعمار المساجد وفرشها | مؤسسة اليسر", "description": "ساهم مع مؤسسة اليسر في بناء مسجد جديد في القرى المحرومة، أو في إعادة إعمار مسجد قائم بترميمه وفرشه وتجهيزه. صدقة جارية بأجر كل صلاة." },
+    "ar": { "title": "التبرع لبناء مسجد في مصر وإعمار المساجد | مؤسسة اليسر", "description": "ساهم مع مؤسسة اليسر في بناء مسجد جديد في القرى المحرومة، أو في إعادة إعمار مسجد قائم بترميمه وفرشه وتجهيزه. صدقة جارية بأجر كل صلاة." },
     "en": { "title": "Build or restore a mosque | Al-Yusr", "description": "Help Al-Yusr build new mosques in underserved villages, or restore, carpet and equip standing ones. Ongoing charity with the reward of every prayer." }
   },
   "/medical": {
-    "ar": { "title": "المساعدات الطبية: روشتات وعمليات وأشعة وتحاليل وأطراف صناعية | مؤسسة اليسر", "description": "مجمعات اليسر الطبية، صرف روشتات، عمليات جراحية، أشعة وتحاليل، أطراف صناعية وكراسي متحركة، وتحدّي الإعاقة في الدقهلية والمنصورة." },
+    "ar": { "title": "علاج المرضى غير القادرين في مصر: عمليات وروشتات وأشعة | اليسر", "description": "مجمعات اليسر الطبية، صرف روشتات، عمليات جراحية، أشعة وتحاليل، أطراف صناعية وكراسي متحركة، وتحدّي الإعاقة في الدقهلية والمنصورة." },
     "en": { "title": "Medical aid: prescriptions, surgery, scans, tests & prosthetics | Al-Yusr", "description": "Al-Yusr medical complexes, prescriptions, surgeries, scans and lab tests, prosthetic limbs and disability support in Dakahlia." }
   },
   "/ten-days": {
@@ -96,19 +100,19 @@
     "en": { "title": "Athar campaign — education | Al-Yusr Charity Foundation", "description": "School bags, uniforms, fees and books for students in need." }
   },
   "/ramadan": {
-    "ar": { "title": "موسم الخير — رمضان | مؤسسة اليسر الخيرية", "description": "كرتونة الخير، إفطار صائم، زكاة الفطر وكسوة العيد." },
+    "ar": { "title": "كرتونة رمضان وإفطار صائم في مصر | موسم الخير — اليسر", "description": "كرتونة رمضان (كرتونة الخير)، إفطار صائم، زكاة الفطر وكسوة العيد للأسر المستحقة في مصر مع مؤسسة اليسر الخيرية." },
     "en": { "title": "Ramadan season | Al-Yusr Charity Foundation", "description": "Food boxes, iftar meals, zakat al-fitr and Eid clothing." }
   },
   "/markoun": {
-    "ar": { "title": "حملة مَرْكون — التبرع العيني | مؤسسة اليسر الخيرية", "description": "تبرع بالأثاث والأجهزة والملابس والكتب مع استلام مجاني من البيت." },
-    "en": { "title": "Markoun — in-kind donations | Al-Yusr Charity Foundation", "description": "Donate furniture, appliances, clothes and books with free doorstep pickup." }
+    "ar": { "title": "التبرع بالملابس المستعملة والأثاث في المنصورة | مَرْكون", "description": "تبرع بالملابس المستعملة والأثاث والأجهزة والكتب مع استلام مجاني من البيت في المنصورة والدقهلية — حملة مَرْكون من مؤسسة اليسر." },
+    "en": { "title": "Donate used clothes & furniture in Mansoura | Markoun — Al-Yusr", "description": "Donate used clothes, furniture, appliances and books with free doorstep pickup in Mansoura and Dakahlia — Al-Yusr's Markoun campaign." }
   },
   "/arboun": {
     "ar": { "title": "مبادرة عربون خير للمستقلين | مؤسسة اليسر الخيرية", "description": "خصص نسبة من أرباح كل مشروع صدقةً — مبادرة للفريلانسرز والمستقلين." },
     "en": { "title": "Arboun Kheir for freelancers | Al-Yusr Charity Foundation", "description": "Give a share of every project's earnings as charity — an initiative for freelancers." }
   },
   "/food-box": {
-    "ar": { "title": "الغذاء الشهري — لحوم وكرتونة ووجبات | مؤسسة اليسر الخيرية", "description": "لحوم من ذبائح شهرية، كرتونة 14 كيلو، ووجبات إطعام تصلح كفارة صيام أو يمين." },
+    "ar": { "title": "إطعام وكرتونة غذاء شهرية في مصر | الغذاء الشهري — اليسر", "description": "لحوم من ذبائح شهرية، كرتونة 14 كيلو، ووجبات إطعام تصلح كفارة صيام أو يمين." },
     "en": { "title": "Monthly food — meat, boxes and meals | Al-Yusr Charity Foundation", "description": "Monthly meat, a 14 kg staples box, and meals valid for fasting or oath expiation." }
   },
   "/farm": {

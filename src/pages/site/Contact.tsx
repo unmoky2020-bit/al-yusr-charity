@@ -179,13 +179,13 @@ const Contact = () => {
     e.preventDefault();
     if (hp) return;
     if (Date.now() - startedAt.current < 3000) {
-      toast({ title: isRTL ? "خد وقتك في كتابة رسالتك " : "Please take a moment to fill the form " });
+      toast({ title: isRTL ? "يُرجى التمهّل قليلًا في كتابة رسالتك" : "Please take a moment to fill the form " });
       return;
     }
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
       const first = Object.values(parsed.error.flatten().fieldErrors)[0]?.[0];
-      toast({ title: isRTL ? " من فضلك راجع البيانات" : " Please review the form", description: first });
+      toast({ title: isRTL ? "يُرجى مراجعة البيانات" : " Please review the form", description: first });
       return;
     }
     try {
@@ -212,8 +212,8 @@ const Contact = () => {
       track("contact_submit", { fbEvent: "Lead", payload: { ref } });
       toast({
         title: ref
-          ? (isRTL ? ` تم استلام رسالتك (${ref}) — هنرد عليك خلال 24 ساعة` : `✅ Message received (${ref}) — we'll reply within 24 hours`)
-          : (isRTL ? " تم استلام رسالتك — هنرد عليك خلال 24 ساعة" : "✅ Message received — we'll reply within 24 hours"),
+          ? (isRTL ? `تم استلام رسالتك (${ref})، وسنرد عليك خلال 24 ساعة` : `✅ Message received (${ref}) — we'll reply within 24 hours`)
+          : (isRTL ? "تم استلام رسالتك، وسنرد عليك خلال 24 ساعة" : "✅ Message received — we'll reply within 24 hours"),
       });
       setForm({ name: "", email: "", phone: "", message: "", section: "general" });
     } catch (err) {
@@ -231,7 +231,7 @@ const Contact = () => {
       toast({
         title: isRTL ? "تعذّر إرسال الرسالة" : "Couldn't send your message",
         description: isRTL
-          ? "حصلت مشكلة في الاتصال بالخادم. تقدر تبعت نفس الرسالة على واتساب من الزر اللي تحت."
+          ? "حدثت مشكلة في الاتصال بالخادم. يمكنك إرسال الرسالة نفسها عبر واتساب من الزر أدناه."
           : "We couldn't reach the server. You can send the same message on WhatsApp using the button below.",
         variant: "destructive",
       });
@@ -244,7 +244,7 @@ const Contact = () => {
     <PageLayout>
       <SEOHelmet
         title={isRTL ? "تواصل معنا — جمعيات خيرية بالمنصورة والدقهلية | مؤسسة اليسر" : "Contact Us — charity support in Mansoura and Dakahlia | Al-Yusr"}
-        description={isRTL ? "تواصل مع فريق اليسر للاستفسار عن التبرع أو التطوع أو دعم الأسر المحتاجة عبر صدقات، زكاة، أضاحي، وكفالات مع توثيق مباشر." : "Contact the Al-Yusr team for donation questions, volunteering, or support for needy families through sadaqah, zakat, qurbani, and sponsorship with direct documentation."}
+        description={isRTL ? "تواصل مع فريق اليسر للاستفسار عن التبرع أو التطوع أو دعم الأسر المحتاجة عبر الصدقات والزكاة والأضاحي والكفالات مع توثيق مباشر." : "Contact the Al-Yusr team for donation questions, volunteering, or support for needy families through sadaqah, zakat, qurbani, and sponsorship with direct documentation."}
         path="/contact"
         keywords={isRTL ? "تواصل معنا, جمعيات خيرية بالمنصورة, جمعيات خيرية بالدقهلية, تبرع, اليسر, واتساب, حساب بنكي, صدقات, زكاة, أضاحي, كفالة أيتام, تطوع" : "contact us, charity in Mansoura, charity in Dakahlia, donate, al-yusr, WhatsApp, sadaqah, zakat, qurbani, volunteer"}
       />
@@ -267,7 +267,7 @@ const Contact = () => {
           {/* Main title */}
           <h1 className="mt-3 text-3xl font-black leading-tight sm:text-4xl md:text-5xl">
             {isRTL ? (
-              <>كلامك أمانة عندنا <span className="text-gradient-lime">رد خلال ٢٤ ساعة</span></>
+              <>رسالتك أمانة عندنا <span className="text-gradient-lime">نرد خلال ٢٤ ساعة</span></>
             ) : (
               <>Your message is a trust <span className="text-gradient-lime">reply within 24 hours</span></>
             )}
@@ -275,7 +275,7 @@ const Contact = () => {
 
           <p className="mx-auto mt-2.5 max-w-2xl text-xs leading-relaxed text-primary-foreground/85 sm:text-sm md:text-base">
             {isRTL
-              ? "سواء عاوز تتبرّع، تقترح حالة، تتطوّع، أو حتى تطمّن على كرتونة وصلت — فريقنا متاح كل يوم من ٩ ص حتى ٦ م."
+              ? "سواء أردت أن تتبرّع، أو تقترح حالة، أو تتطوّع، أو تطمئن على وصول كرتونة، ففريقنا متاح كل يوم من ٩ ص حتى ٦ م."
               : "Whether you want to donate, suggest a case, volunteer, or confirm a delivery — our team is here daily 9am–6pm."}
           </p>
 
@@ -293,7 +293,7 @@ const Contact = () => {
               className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-6 py-2.5 text-xs font-black text-primary-foreground backdrop-blur transition hover:bg-white/20"
             >
               <Mail className="h-4 w-4" />
-              {isRTL ? "راسلنا بالإيميل" : "Email us"}
+              {isRTL ? "راسلنا بالبريد الإلكتروني" : "Email us"}
             </a>
           </div>
 
@@ -325,7 +325,7 @@ const Contact = () => {
                     </span>
                   </div>
                   <h2 className="mt-1 text-xl font-black text-foreground sm:text-2xl">
-                    {isRTL ? "كل تفاصيل الاتصال تحت إيدك" : "All contact details within reach"}
+                    {isRTL ? "كل تفاصيل الاتصال بين يديك" : "All contact details within reach"}
                   </h2>
                 </div>
                 <span className="inline-flex items-center self-start sm:self-auto rounded-full bg-secondary/15 px-3.5 py-1.5 text-[11px] font-black uppercase tracking-wider text-primary ring-1 ring-secondary/30 shadow-xs">
@@ -334,7 +334,7 @@ const Contact = () => {
               </div>
               <p className="relative mt-2.5 text-xs sm:text-sm leading-relaxed text-muted-foreground">
                 {isRTL
-                  ? "من الإيميل والواتساب للمكالمات والزيارات الميدانية — فريقنا مستعد يتابع طلبك ويضمن وصول التبرعات بأسرع وأوضح شكل وبكل أمانة."
+                  ? "من البريد الإلكتروني وواتساب إلى المكالمات والزيارات الميدانية، فريقنا مستعد لمتابعة طلبك وضمان وصول التبرعات بأسرع الطرق وأوضحها، وبكل أمانة."
                   : "From email and WhatsApp to calls and field visits — our team is ready to follow up your request and ensure donations arrive fastest and most transparently."}
               </p>
             </div>
@@ -510,7 +510,7 @@ const Contact = () => {
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm font-black text-foreground">
-                      {isRTL ? "مؤسسة موثّقة ومرخّصة رسمياً" : "Officially Licensed & Verified"}
+                      {isRTL ? "مؤسسة موثّقة ومرخّصة رسميًا" : "Officially Licensed & Verified"}
                     </span>
                     <span className="rounded-full bg-secondary/15 px-2.5 py-0.5 text-[10px] font-black text-primary">
                       {isRTL ? "منذ 2019" : "Since 2019"}
@@ -518,7 +518,7 @@ const Contact = () => {
                   </div>
                   <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                     {isRTL
-                      ? "إشهار رقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي. كل تبرع موثق بالصور والفيديو وكل رسالة بترد عليها بأمانة تامة."
+                      ? "إشهار رقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي. كل تبرع موثّق بالصور والفيديو، وكل رسالة نرد عليها بأمانة تامة."
                       : "Registered NGO #2665 (2019) under the Ministry of Social Solidarity. Every donation is verified and documented."}
                   </p>
                 </div>
@@ -539,13 +539,13 @@ const Contact = () => {
             {/* Form header */}
             <div className="relative">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-primary ring-1 ring-secondary/30">
-                <Heart className="h-3 w-3 text-secondary fill-secondary" /> {isRTL ? "نحن نسمعك دائماً" : "We're listening"}
+                <Heart className="h-3 w-3 text-secondary fill-secondary" /> {isRTL ? "نحن نسمعك دائمًا" : "We're listening"}
               </span>
               <h2 className="mt-3 text-2xl font-black text-foreground sm:text-3xl">
-                {isRTL ? "ابعتلنا رسالتك" : "Send us your message"}
+                {isRTL ? "أرسل إلينا رسالتك" : "Send us your message"}
               </h2>
               <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground">
-                {isRTL ? "هنرد عليك خلال 24 ساعة عمل — وعد صادق بأمانة." : "We'll reply within 24 working hours — promise."}
+                {isRTL ? "سنرد عليك خلال 24 ساعة عمل، وهذا وعد منا." : "We'll reply within 24 working hours — promise."}
               </p>
             </div>
 
@@ -636,18 +636,18 @@ const Contact = () => {
               className="mx-auto mt-6 flex h-12 w-full max-w-[320px] items-center justify-center gap-2 rounded-full bg-orange-grad text-sm font-extrabold text-accent-foreground shadow-cta transition-all hover:opacity-95 hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60"
             >
               <Send className="h-4 w-4" />
-              {sending ? (isRTL ? "جاري الإرسال..." : "Sending...") : (isRTL ? "إرسال الرسالة الآن" : "Send message now")}
+              {sending ? (isRTL ? "جارٍ الإرسال..." : "Sending...") : (isRTL ? "إرسال الرسالة الآن" : "Send message now")}
             </Button>
 
             <div className="mt-3.5 flex items-center justify-center gap-1.5 text-[11px] font-bold text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5 text-secondary shrink-0" />
-              <span>{isRTL ? "بياناتك مشفرة ومحمية ولا تتم مشاركتها نهائياً" : "Your data is strictly confidential and protected"}</span>
+              <span>{isRTL ? "بياناتك مشفّرة ومحمية، ولا نشاركها مع أي جهة" : "Your data is strictly confidential and protected"}</span>
             </div>
 
             {whatsAppFallback && (
               <div role="alert" className="mx-auto mt-4 max-w-md rounded-2xl border border-destructive/30 bg-destructive/5 p-4 text-center">
                 <p className="text-xs font-bold text-destructive">
-                  {isRTL ? "لم تصل رسالتك للخادم. ابعتها لنا على واتساب بضغطة واحدة:" : "Your message didn't reach our server. Send it on WhatsApp in one tap:"}
+                  {isRTL ? "لم تصل رسالتك إلى الخادم. أرسلها إلينا عبر واتساب بضغطة واحدة:" : "Your message didn't reach our server. Send it on WhatsApp in one tap:"}
                 </p>
                 <a
                   href={whatsAppFallback}
@@ -724,7 +724,7 @@ const Contact = () => {
         <LocalFAQ
           items={contactFaqItems}
           title={isRTL ? "أسئلة شائعة حول التواصل والزيارة" : "Contact & Visit FAQs"}
-          intro={isRTL ? "إجابات على أهم الاستفسارات عن مواعيد العمل، مكاتب المؤسسة، ومندوبي التحصيل." : "Frequently asked questions regarding working hours, headquarters, and delegates."}
+          intro={isRTL ? "إجابات عن أهم الاستفسارات حول مواعيد العمل ومكاتب المؤسسة ومندوبي التحصيل." : "Frequently asked questions regarding working hours, headquarters, and delegates."}
           id="contact-faqs"
         />
       )}

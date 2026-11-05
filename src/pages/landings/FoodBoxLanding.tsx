@@ -97,7 +97,7 @@ const FoodHero = () => {
               </span>
               <span className="food-tag rounded-xl bg-accent px-4 py-2 text-accent-foreground shadow-cta" style={{ animationDelay: "120ms" }}>
                 <span className="block text-2xl font-black leading-none tabular-nums">{fmtNum(1, isAr)}</span>
-                <span className="block text-[11px] font-bold">{isAr ? "كيلو لحمة شهرياً" : "kg of meat monthly"}</span>
+                <span className="block text-[11px] font-bold">{isAr ? "كيلو لحم شهريًا" : "kg of meat monthly"}</span>
               </span>
               <span className="food-tag rounded-xl bg-primary-foreground px-4 py-2 text-primary shadow-cta" style={{ animationDelay: "240ms" }}>
                 <span className="block text-2xl font-black leading-none tabular-nums">{fmtNum(amount("meal"), isAr)}</span>
@@ -257,7 +257,7 @@ const FoodMain = () => {
             <figure className="relative overflow-hidden rounded-2xl bg-muted shadow-card">
               <img src={meatPlates} alt={isAr ? "أطباق لحم ذبيحة الشهر مقسّمة للأسر" : "Plates of the month's slaughter meat portioned for families"} loading="lazy" className="aspect-[4/3] w-full object-cover object-[50%_45%] lg:aspect-square" />
               <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 pt-12 text-sm font-bold text-white">
-                {isAr ? "كيلو لكل أسرة، طازج في يوم الذبح" : "One kilo per family, fresh on slaughter day"}
+                {isAr ? "كيلو لكل أسرة، طازج يوم الذبح" : "One kilo per family, fresh on slaughter day"}
               </figcaption>
             </figure>
             <div>
@@ -364,7 +364,7 @@ const FoodMain = () => {
               const hot = i === 1;
               return (
                 <article key={tier.id} className={`relative flex flex-col rounded-2xl p-6 ${hot ? "bg-primary text-primary-foreground shadow-card ring-2 ring-secondary" : "border border-border bg-card"}`}>
-                  {hot && <span className="absolute -top-3 start-6 rounded-full bg-secondary px-3 py-1 text-xs font-black text-secondary-foreground">{isAr ? "الأكثر اختياراً" : "Most chosen"}</span>}
+                  {hot && <span className="absolute -top-3 start-6 rounded-full bg-secondary px-3 py-1 text-xs font-black text-secondary-foreground">{isAr ? "الأكثر اختيارًا" : "Most chosen"}</span>}
                   <h3 className={`text-lg font-black ${hot ? "" : "text-primary"}`}>{t(tier.title)}</h3>
                   <p className={`mt-2 text-4xl font-black tabular-nums ${hot ? "text-secondary" : "text-primary"}`}>
                     {fmtNum(p.amount, isAr)} <span className={`text-sm font-bold ${hot ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{isAr ? "جنيه" : "EGP"}</span>
@@ -449,7 +449,7 @@ const FoodBoxLanding = () => {
       titleEn={seo?.title.en ?? ""}
       taglineAr={seo?.lead?.ar ?? ""}
       taglineEn={seo?.lead?.en ?? ""}
-      metaDescAr="برنامج الغذاء الشهري من مؤسسة اليسر: لحوم من ذبائح شهرية، كرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام تصلح كفارة صيام أو كفارة يمين. توصيل لباب البيت في المنصورة والدقهلية وكل مصر، بتوثيق بالصور."
+      metaDescAr="برنامج الغذاء الشهري من مؤسسة اليسر: لحوم من ذبائح شهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام تصلح لكفارة الصيام أو كفارة اليمين. توصيل حتى باب البيت في المنصورة والدقهلية وكل مصر، مع التوثيق بالصور."
       metaDescEn="Al-Yusr's monthly food programme: meat from monthly slaughters, a 14 kg carton of local staples, and cooked meals for feeding, fasting expiation or oath expiation. Doorstep delivery in Mansoura, Dakahlia and all Egypt, with photo proof."
       heroImage={images("hero")[0]?.src ?? heroCarton}
       heroAlt="الغذاء الشهري — كرتونة ١٤ كيلو ولحوم الذبائح الشهرية ووجبات الإطعام"

@@ -180,7 +180,7 @@ const DhillMain = () => {
               </p>
               <p className="mt-1 text-xl font-black">
                 {shares > 1
-                  ? (isAr ? `${fmtNum(shares, true)} سهماً = ${fullLabel}` : `${shares} shares = ${fullLabel.toLowerCase()}`)
+                  ? (isAr ? `${fmtNum(shares, true)} سهمًا = ${fullLabel}` : `${shares} shares = ${fullLabel.toLowerCase()}`)
                   : fullLabel}
               </p>
               <div className="mt-6 grid grid-cols-8 gap-1.5" aria-hidden>
@@ -195,8 +195,8 @@ const DhillMain = () => {
               <p className="mt-5 flex items-center gap-2 text-sm text-primary-foreground/80">
                 <span className="h-3 w-3 shrink-0 rounded-[3px] bg-accent" aria-hidden />
                 {shares > 1
-                  ? (isAr ? "سهمك يكتمل مع أسهم غيرك من المتبرعين، ونسلّم الحالة فور اكتمالها." : "Your share joins other donors' shares; we deliver as soon as the unit is complete.")
-                  : (isAr ? "تتسلمها الأسرة مركّبة وجاهزة." : "Delivered to the family installed and ready.")}
+                  ? (isAr ? "يكتمل سهمك مع أسهم غيرك من المتبرعين، ونسلّم الحالة فور اكتمالها." : "Your share joins other donors' shares; we deliver as soon as the unit is complete.")
+                  : (isAr ? "تتسلّمها الأسرة مركّبة وجاهزة." : "Delivered to the family installed and ready.")}
               </p>
             </div>
           </div>
@@ -225,7 +225,7 @@ const DhillMain = () => {
             ))}
             <li>
               <a href={waHref(isAr, "صدقة جارية في حملة ظل", "an ongoing-charity water tap")} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-[44px] items-center gap-2 text-sm font-black text-secondary underline underline-offset-4 hover:text-primary-foreground">
-                <WhatsAppIcon className="h-4 w-4" /> {isAr ? "أرسل الاسم على واتساب" : "Send the name on WhatsApp"}
+                <WhatsAppIcon className="h-4 w-4" /> {isAr ? "أرسل الاسم عبر واتساب" : "Send the name on WhatsApp"}
               </a>
             </li>
           </ol>
@@ -298,7 +298,7 @@ const DhillLanding = () => {
       titleEn={seo?.title.en ?? ""}
       taglineAr={seo?.lead?.ar ?? ""}
       taglineEn={seo?.lead?.en ?? ""}
-      metaDescAr="شارك في حملة ظِل مع مؤسسة اليسر: أسقف منازل خشبية معزولة، وصلات مياه نقية للمنازل (سهم 500 ج)، خطوط مياه للقرى، أبواب وشبابيك، ومراوح تبريد بالدقهلية وكفر الشيخ والشرقية وكل مصر."
+      metaDescAr="شارك في حملة ظِلّ مع مؤسسة اليسر: أسقف خشبية معزولة للمنازل، ووصلات مياه نقية للمنازل (سهم 500 ج)، وخطوط مياه للقرى، وأبواب وشبابيك، ومراوح تبريد بالدقهلية وكفر الشيخ والشرقية وكل مصر."
       metaDescEn="Join Al-Yusr's Dhill Campaign: insulated wooden roofs, clean water connections (EGP 500 share), village water lines, doors & windows, and cooling fans across Dakahlia, Kafr El Sheikh and Egypt."
       heroImage={images("hero")[0]?.src ?? yusrWater}
       heroAlt="حملة ظل — وصلات مياه وأسقف خشبية ومراوح للأسر المستحقة"

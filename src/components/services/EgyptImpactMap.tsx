@@ -41,7 +41,7 @@ const GOVERNORATES = [
     name_en: "Dakahlia · Mansoura",
     role_ar: "المقر الرئيسي والمجمع الطبي",
     role_en: "Headquarters & Medical Complex",
-    desc_ar: "إدارة المؤسسة العامة، مجمع عيادات اليسر التخصصية، وصرف المساعدات الشهرية المباشرة للأسر.",
+    desc_ar: "الإدارة العامة للمؤسسة، ومجمع عيادات اليسر التخصصية، وصرف المساعدات الشهرية المباشرة للأسر.",
     desc_en: "Main administrative HQ, specialized medical clinics, and monthly direct family stipends.",
     icon: Building2,
     badge_ar: "المقر الرئيسي",
@@ -67,7 +67,7 @@ const GOVERNORATES = [
     name_en: "Kafr El-Sheikh · Hafir",
     role_ar: "مشروع سكن كريم وترميم البيوت",
     role_en: "Dignified Shelter & Home Restoration",
-    desc_ar: "تسقيف المنازل بالخشب والعوازل، بناء دورات المياه، وإعادة تأهيل بيوت الأسر المستحقة.",
+    desc_ar: "تسقيف المنازل بالخشب والعوازل، وبناء دورات المياه، وإعادة تأهيل بيوت الأسر المستحقة.",
     desc_en: "Roofing, sanitation, and winterization for impoverished rural homes.",
     icon: Home,
     badge_ar: "إيواء وترميم",
@@ -126,7 +126,7 @@ export const EgyptImpactMap = () => {
     <section
       id="impact"
       className="relative z-10 isolate overflow-hidden bg-background py-16 md:py-24"
-      aria-label={isRTL ? "موقع ومقر مؤسسة اليسر الخيرية" : "Al-Yusr Foundation Location & Headquarters"}
+      aria-label={isRTL ? "موقع ومقر مؤسسة اليسر الخيرية" : "Al-Yusr Charity Foundation Location & Headquarters"}
       dir={isRTL ? "rtl" : "ltr"}
     >
       {/* Decorative calm background ambiance */}
@@ -179,7 +179,7 @@ export const EgyptImpactMap = () => {
 
           <p className="mx-auto mt-4 max-w-2xl text-xs sm:text-sm md:text-base font-medium leading-relaxed text-muted-foreground">
             {isRTL
-              ? "أبوابنا مفتوحة دائماً لاستقبالكم في مقرنا الرئيسي بالمنصورة لتسليم الصدقات، استلام إيصالات التبرع الرسمية، أو التعرف عن قرب على مسارات أثرنا الميداني في محافظات مصر."
+              ? "أبوابنا مفتوحة دائماً لاستقبالكم في مقرنا الرئيسي بالمنصورة لتسليم الصدقات، واستلام إيصالات التبرع الرسمية، أو التعرف عن قرب على مسارات أثرنا الميداني في محافظات مصر."
               : "Our doors are open to welcome you at our headquarters in Mansoura to deliver donations, receive official receipts, or explore our verified field impact across Egyptian governorates."}
           </p>
 
@@ -249,7 +249,7 @@ export const EgyptImpactMap = () => {
               {/* Verified Embedded Google Map */}
               <div className="relative min-h-[380px] sm:min-h-[440px] flex-1 w-full bg-muted/20">
                 <iframe
-                  title={isRTL ? "موقع مقر مؤسسة اليسر على خرائط جوجل" : "Al-Yusr Foundation Headquarters on Google Maps"}
+                  title={isRTL ? "موقع مقر مؤسسة اليسر على خرائط جوجل" : "Al-Yusr Charity Foundation Headquarters on Google Maps"}
                   src={GOOGLE_MAPS_EMBED_SRC}
                   className="h-full min-h-[380px] sm:min-h-[440px] w-full border-0"
                   allowFullScreen
@@ -469,12 +469,12 @@ export const EgyptImpactMap = () => {
                   </span>
 
                   <h3 className="mt-4 text-xl font-black leading-snug">
-                    {isRTL ? "كل جنيه يوثق في مكانه بالصوت والصورة" : "Every donation is documented on the ground"}
+                    {isRTL ? "كل جنيه يُوثَّق في مكانه بالصوت والصورة" : "Every donation is documented on the ground"}
                   </h3>
 
                   <p className="mt-3 text-xs font-medium leading-relaxed text-primary-foreground/80">
                     {isRTL
-                      ? "فِرقنا الميدانية مقيمة وموجودة داخل القرى والمراكز لتحديد المستحقين ببحث اجتماعي دقيق، وتسليم الأمانات إلى مستحقيها بكرامة."
+                      ? "فِرقنا الميدانية مقيمة داخل القرى والمراكز لتحديد المستحقين ببحث اجتماعي دقيق، وتسليم الأمانات إلى مستحقيها بكرامة."
                       : "Our field teams reside in local villages to conduct social research and deliver your trust with absolute dignity."}
                   </p>
                 </div>

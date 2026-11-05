@@ -21,10 +21,10 @@ const arboun: CampaignPageContent = {
     title: l("اتصدق النهاردة..", "Donate Today.."),
     title2: l("وخليه عربون لرزق بكرة!", "A Pledge for Tomorrow's Barakah!"),
     lead: l(
-      "مبادرة «عربون خير» بتجمع مجتمع الفريلانسرز والمستقلين عشان يستثمروا جزء بسيط من أرباح مشاريعهم في الآخرة. طهّر رزقك، تخلص من ضغط وقلق الشغل، وسيب أثر حقيقي يكفل يتيم، أو ييسر زواج، أو يبني صدقة جارية.",
+      "تجمع مبادرة «عربون خير» مجتمع الفريلانسرز والمستقلين ليستثمروا جزءًا بسيطًا من أرباح مشاريعهم في الآخرة. طهّر رزقك، وتخلّص من ضغط العمل وقلقه، واترك أثرًا حقيقيًا يكفل يتيمًا، أو ييسّر زواجًا، أو يبني صدقة جارية.",
       "Arboun Khair unites freelancers and remote professionals to invest a flexible fraction of their project earnings in lasting charity. Cleanse your income, alleviate work anxiety, and leave a verified footprint that supports orphans, brides, and clean water.",
     ),
-    donateLabel: l("طلّع عربون خيرك الآن", "Pledge Share"),
+    donateLabel: l("قدّم عربون خيرك الآن", "Pledge Share"),
   },
 
   hadith: {
@@ -35,21 +35,21 @@ const arboun: CampaignPageContent = {
   prices: [
     {
       id: "share_starter",
-      label: l("عربون خير سهم بسيط (مشروع صغير)", "Starter Project Share"),
+      label: l("عربون خير — سهم بسيط (مشروع صغير)", "Starter Project Share"),
       amount: 150,
-      note: l("سهم سريع يفتح أبواب البركة لوجبة ساخنة أو مساهمة دواء لأسرة متعففة", ""),
+      note: l("سهم سريع يفتح أبواب البركة بوجبة ساخنة أو مساهمة في دواء لأسرة متعففة", ""),
     },
     {
       id: "share_standard",
       label: l("عربون خير (مشروع متوسط 1%)", "Standard Share (1%)"),
       amount: 450,
-      note: l("اقتطاع رمزي 1% من قيمة المشروع يكفل شنطة مدرسية وزي متكامل لطفل", ""),
+      note: l("اقتطاع رمزي بنسبة 1% من قيمة المشروع يكفل حقيبة مدرسية وزيًّا متكاملًا لطفل", ""),
     },
     {
       id: "share_orphan_education",
       label: l("سهم كفالة يتيم ودعم تعليم", "Orphan Education Share"),
       amount: 750,
-      note: l("كفالة تعليمية ومصروفات مدرسية لمنع تسرب طفل يتيم من التعليم", ""),
+      note: l("كفالة تعليمية ومصروفات مدرسية تمنع تسرّب طفل يتيم من التعليم", ""),
     },
     {
       id: "share_bride",
@@ -75,17 +75,17 @@ const arboun: CampaignPageContent = {
 
   sections: {
     pillars: {
-      title: l("ليه تشارك في «عربون خير»؟", "Why Join Arboun Khair?"),
+      title: l("لماذا تشارك في «عربون خير»؟", "Why Join Arboun Khair?"),
       lead: l(
-        "أثر الصدقة المباشر على راحة بالك، استقرار عملك الحر، وبركة رزقك اليوم وغداً.",
+        "أثر الصدقة المباشر في راحة بالك، واستقرار عملك الحر، وبركة رزقك اليوم وغدًا.",
         "The direct impact of charity on your peace of mind, career stability, and barakah.",
       ),
       items: [
         {
           id: "pillar_peace",
-          title: l("علاج القلق وضغط الشغل", "Relieving Stress & Work Anxiety"),
+          title: l("تخفيف القلق وضغط العمل", "Relieving Stress & Work Anxiety"),
           desc: l(
-            "الكلاينت مابيردش؟ التعديلات مابتخلصش؟ وخايف من فترات ركود السوق؟ الصدقة بتطمن القلب، بتشيل ضغط التفكير، وبتيسر المشاريع المعقدة وتفتح أبواب رزق غير متوقعة من حيث لا تحتسب.",
+            "العميل لا يرد؟ التعديلات لا تنتهي؟ وتخشى فترات ركود السوق؟ الصدقة تُطمئن القلب، وتخفف ضغط التفكير، وتيسّر المشاريع المعقدة، وتفتح أبواب رزق من حيث لا تحتسب.",
             "Client delays? Endless revisions? Market slowdown fears? Charity brings peace of mind, removes mental fatigue, and unlocks unexpected doors of provision.",
           ),
           extra: l(
@@ -97,11 +97,11 @@ const arboun: CampaignPageContent = {
           id: "pillar_skill_zakat",
           title: l("زكاة مهنتك وشكر النعمة", "Zakat on Professional Skill"),
           desc: l(
-            "مهارتك وسرعتك على اللابتوب وفهمك للأدوات الحديثة رزق ونعمة عظيمة. شكر النعمة دي إنك تطلع منها جزء لله، عشان ربنا يحفظ صحتك ووقتك وتركيزك ويديم عليك الشغف والتفوق.",
+            "مهارتك وسرعتك على اللابتوب وفهمك للأدوات الحديثة رزق ونعمة عظيمة، وشكر هذه النعمة أن تُخرج منها جزءًا لله، ليحفظ الله صحتك ووقتك وتركيزك، ويديم عليك الشغف والتفوق.",
             "Your tech craft, speed, and digital intellect are divine gifts. Giving back expresses genuine gratitude, preserving your mental clarity, eyesight, and health.",
           ),
           extra: l(
-            "«لئن شكرتم لأزيدنكم» — شكر نعمة المهارة والتقنية يزيدك تفوقاً",
+            "«لئن شكرتم لأزيدنكم» — شكر نعمة المهارة والتقنية يزيدك تفوقًا",
             "«If you are grateful, I will surely increase you in favor»",
           ),
         },
@@ -109,7 +109,7 @@ const arboun: CampaignPageContent = {
           id: "pillar_eternal_roi",
           title: l("استثمار مضمون لا ينقطع", "Guaranteed Eternal ROI"),
           desc: l(
-            "العميل بيستثمر في الدنيا بالبروجكت اللي معاك، استثمر أنت في الآخرة بجزء من أرباح نفس البروجكت لضمان رصيد حسنات دائم وأثر ينفعك ويستر أسر متعففة.",
+            "العميل يستثمر في الدنيا بالمشروع الذي تعمل عليه، فاستثمر أنت في الآخرة بجزء من أرباح المشروع نفسه، لتضمن رصيد حسنات دائمًا وأثرًا ينفعك ويستر أسرًا متعففة.",
             "Clients invest in transient milestones; you invest a fraction in eternity, securing ongoing deeds that shelter vulnerable families and build sustainable legacy.",
           ),
           extra: l(
@@ -140,7 +140,7 @@ const arboun: CampaignPageContent = {
           id: "pillar_skill_zakat",
           title: l("تطهير المال والمهارة", "Skill Zakat & Growth"),
           desc: l(
-            "تطهير أرباحك وتأمين مالك من أي عوائق أو نقص مفاجئ · حفظ العافية والتركيز وسلامة الظهر والعينين من إرهاق الشاشات · استمرار الشغف والتوفيق في اقتناص مشاريع أعلى قيمة ودخلاً",
+            "تطهير أرباحك وتأمين مالك من أي عوائق أو نقص مفاجئ · حفظ العافية والتركيز وسلامة الظهر والعينين من إرهاق الشاشات · استمرار الشغف والتوفيق في اقتناص مشاريع أعلى قيمة ودخلًا",
             "Purifying earnings and safeguarding income from sudden setbacks · Protecting health, physical ergonomics, and vision from screen burnout · Sustaining drive and landing higher-tier global clients",
           ),
           extra: l("اختر سهم التبرع", "Choose Share"),
@@ -149,7 +149,7 @@ const arboun: CampaignPageContent = {
           id: "pillar_eternal_roi",
           title: l("عائد استثماري أبدي (Eternal ROI)", "Guaranteed Eternal ROI"),
           desc: l(
-            "تحويل كل تسليم ميلستون إلى رصيد دائم من الحسنات الجارية · كفالة أيتام وتوفير مياه نظيفة وبناء أسقف تستمر سنين طويلة · ربط نجاحك التقني بقضايا مجتمعية نبيلة تترك أثراً لا يزول",
+            "تحويل كل تسليم ميلستون إلى رصيد دائم من الحسنات الجارية · كفالة أيتام وتوفير مياه نظيفة وبناء أسقف تدوم سنوات طويلة · ربط نجاحك التقني بقضايا مجتمعية نبيلة تترك أثرًا لا يزول",
             "Turning every client milestone into perpetual ongoing charity · Sponsoring orphan schooling, clean water, and secure house roofs · Connecting your technical career with real-life humanitarian impact",
           ),
           extra: l("تبرع الآن للمبادرة", "Donate Now"),
@@ -166,11 +166,11 @@ const arboun: CampaignPageContent = {
     shares: {
       title: l("اختر سهمك من أرباح مشروعك الأخير", "Choose Your Project Share"),
       lead: l(
-        "مفيش حد أدنى.. كل سهم مخصص لمصرف خيري حقيقي وموثق بالصور والفيديو.",
+        "لا يوجد حد أدنى، وكل سهم مخصص لمصرف خيري حقيقي وموثّق بالصور والفيديو.",
         "No minimum required. Each share directly funds verified field aid with reports.",
       ),
       items: [
-        { id: "share_starter", title: l("بركة الشغل", "Blessing"), desc: l("", "") },
+        { id: "share_starter", title: l("بركة العمل", "Blessing"), desc: l("", "") },
         { id: "share_standard", title: l("شائع بين المستقلين", "Popular"), desc: l("", "") },
         { id: "share_orphan_education", title: l("أثر مستمر", "Education"), desc: l("", "") },
         { id: "share_bride", title: l("أجهزة معمرة", "Appliances"), desc: l("", "") },
@@ -182,15 +182,15 @@ const arboun: CampaignPageContent = {
     steps: {
       title: l("كيف تنضم للمبادرة؟", "How to Join?"),
       lead: l(
-        "من أول ضغطة زرار لاستلام أرباحك وحتى وصول تقرير التوثيق الميداني.",
+        "من أول ضغطة زر لاستلام أرباحك حتى وصول تقرير التوثيق الميداني.",
         "From withdrawing your client milestone to receiving your verified field report.",
       ),
       items: [
         {
           id: "step_withdraw",
-          title: l("الخطوة الأولى: قفّل البروجكت واستلم أرباحك", "Step 1: Withdraw Your Earnings"),
+          title: l("الخطوة الأولى: أنهِ المشروع واستلم أرباحك", "Step 1: Withdraw Your Earnings"),
           desc: l(
-            "زرار الـ Withdraw أو استلام الحوالة البنكية هو البداية. أول ما فلوس مشروعك تنزل في حسابك البنكي أو فودافون كاش أو InstaPay، افتح صفحة عربون خير.",
+            "البداية من زر الـ Withdraw أو استلام الحوالة البنكية؛ فبمجرد أن تصل أموال مشروعك إلى حسابك البنكي أو فودافون كاش أو InstaPay، افتح صفحة عربون خير.",
             "Once your client milestone or withdrawal clears into your bank or wallet, open the Arboun Khair page.",
           ),
         },
@@ -198,15 +198,15 @@ const arboun: CampaignPageContent = {
           id: "step_pledge",
           title: l("الخطوة الثانية: حدد عربون الخير", "Step 2: Set Your Contribution"),
           desc: l(
-            "اختار النسبة اللي تريحك من أرباح المشروع (حتى لو 1% أو 5%).. مفيش حد أدنى، الأهم هو النية والاستمرارية وربط نجاحك بالعطاء وشكر النعمة.",
+            "اختر النسبة التي تريحك من أرباح المشروع (ولو 1% أو 5%). لا يوجد حد أدنى؛ فالأهم هو النية والاستمرارية وربط نجاحك بالعطاء وشكر النعمة.",
             "Select a comfortable portion (1%, 5%, or any fixed sum). No minimum required — consistency and pure intent are what matter.",
           ),
         },
         {
           id: "step_track",
-          title: l("الخطوة الثالثة: سيب أثرك وتابع تقريرك", "Step 3: Track Real Ground Impact"),
+          title: l("الخطوة الثالثة: اترك أثرك وتابع تقريرك", "Step 3: Track Real Ground Impact"),
           desc: l(
-            "بضغطة زرار، تبرعك بيتحول فوراً لمشاريع تنموية حقيقية على الأرض (تيسير زواج، كفالة أيتام، أسقف ومياه)، وهيوصلك إيصال رسمي وتقارير موثقة بصور وفيديو.",
+            "بضغطة زر يتحول تبرعك فورًا إلى مشاريع تنموية حقيقية على الأرض (تيسير زواج، كفالة أيتام، أسقف ومياه)، ويصلك إيصال رسمي وتقارير موثقة بالصور والفيديو.",
             "With one click, your donation is directed to verified grassroots aid (orphan education, brides, clean water) with official receipts and donor reports.",
           ),
         },
@@ -216,8 +216,8 @@ const arboun: CampaignPageContent = {
     faq_intro: {
       title: l("أسئلة شائعة حول مبادرة عربون خير", "Frequently Asked Questions"),
       lead: l(
-        "إجابات دقيقة ومباشرة عن زكاة العمل الحر، العملات، والتبرع والشارة.",
-        "Precise answers about freelance zakt, currencies, and portfolio badges.",
+        "إجابات دقيقة ومباشرة عن زكاة العمل الحر والعملات والتبرع والشارة.",
+        "Precise answers about freelance zakat, currencies, and portfolio badges.",
       ),
       items: [],
     },
@@ -235,7 +235,7 @@ const arboun: CampaignPageContent = {
         { id: "mission_badge", title: l("رسالة المبادرة", "Core Mission"), desc: l("", "") },
         {
           id: "sticky_bar",
-          title: l("خلي البروجكت الجاي بدايته بركة.. طـلّع عربون خيرك الآن", "Start your next client project with barakah — donate your pledge"),
+          title: l("اجعل بداية مشروعك القادم بركة… قدّم عربون خيرك الآن", "Start your next client project with barakah — donate your pledge"),
           desc: l("تبرع بعربون مشروعك", "Pledge Now"),
         },
       ],
@@ -244,30 +244,30 @@ const arboun: CampaignPageContent = {
 
   faq: [
     {
-      q: l("إيه هي مبادرة عربون خير للفريلانسرز؟", "What is the Arboun Khair Freelancers Initiative?"),
+      q: l("ما مبادرة عربون خير للفريلانسرز؟", "What is the Arboun Khair Freelancers Initiative?"),
       a: l(
-        "مبادرة مبتكرة تشجع الشباب المشتغلين في العمل الحر (الفريلانس) والعمل عن بُعد على استقطاع نسبة مرنة من أرباح كل مشروع يتم تسليمه (مثل 1% أو 5%)، وتوجيهها كصدقة لدعم الأسر المحتاجة، بهدف جلب البركة وعلاج قلق وضغط الشغل مع شارة رقمية للبورتفوليو.",
+        "مبادرة مبتكرة تشجع الشباب العاملين في العمل الحر (الفريلانس) والعمل عن بُعد على اقتطاع نسبة مرنة من أرباح كل مشروع يسلّمونه (مثل 1% أو 5%)، وتوجيهها صدقةً لدعم الأسر المحتاجة، بهدف جلب البركة وتخفيف قلق العمل وضغطه، مع شارة رقمية للبورتفوليو.",
         "An innovative initiative encouraging freelancers and remote professionals to dedicate a flexible portion of their project earnings (1% or 5%) to verified charity, inviting barakah and peace of mind.",
       ),
     },
     {
-      q: l("هل في حد أدنى للتبرع من أرباح المشاريع؟", "Is there a minimum donation amount?"),
+      q: l("هل يوجد حد أدنى للتبرع من أرباح المشاريع؟", "Is there a minimum donation amount?"),
       a: l(
-        "لا يوجد أي حد أدنى. يمكنك التبرع بأي مبلغ أو نسبة تراها مناسبة من أرباح مشروعك (مثل 1% أو 5% أو 50 جنيهاً). الهدف هو الاستمرارية وجعل الصدقة عادة تطمئن قلبك وترتبط بنجاحك المهني.",
+        "لا يوجد أي حد أدنى. يمكنك التبرع بأي مبلغ أو نسبة تراها مناسبة من أرباح مشروعك (مثل 1% أو 5% أو 50 جنيهًا). الهدف هو الاستمرارية وجعل الصدقة عادة تطمئن قلبك وترتبط بنجاحك المهني.",
         "No minimum required. You can contribute whatever fits your project budget (e.g. 1%, 5%, or 50 EGP). Consistency and pure intent are what count.",
       ),
     },
     {
       q: l("كيف يؤثر التبرع على عملي كفريلانسر؟", "How does donating benefit my career as a freelancer?"),
       a: l(
-        "إخراج الصدقات يُعد 'زكاة للمهنة' وسبباً مباشراً في استنزال البركة، تخفيف ضغوط العمل، تبديد الخوف من ركود السوق، وتيسير التعامل مع العملاء، تصديقاً لقول النبي ﷺ: «ما نقص مال من صدقة».",
+        "يُعد إخراج الصدقات «زكاةً للمهنة» وسببًا مباشرًا في استنزال البركة، وتخفيف ضغوط العمل، وتبديد الخوف من ركود السوق، وتيسير التعامل مع العملاء، تصديقًا لقول النبي ﷺ: «ما نقص مال من صدقة».",
         "Charity cleanses earnings, alleviates burnout and work anxiety, and invites continuous professional opportunities.",
       ),
     },
     {
       q: l("أين تذهب تبرعات مبادرة عربون خير؟", "Where do Arboun Khair donations go?"),
       a: l(
-        "يتم توجيه التبرعات لتنفيذ مشاريع حقيقية على الأرض تحت إشراف مؤسسة اليسر الخيرية (مشهرة برقم 2665 لسنة 2019)، وتشمل: تيسير زواج الفتيات اليتيمات بأجهزة معمرة، كفالة الأيتام والتعليم، الصدقات الجارية (أسقف ومياه)، والإغاثة الغذائية مع توثيق فوري.",
+        "تُوجَّه التبرعات لتنفيذ مشاريع حقيقية على الأرض تحت إشراف مؤسسة اليسر الخيرية (مشهرة برقم 2665 لسنة 2019)، وتشمل: تيسير زواج الفتيات اليتيمات بأجهزة معمّرة، وكفالة الأيتام وتعليمهم، والصدقات الجارية (أسقف ومياه)، والإغاثة الغذائية، مع توثيق فوري.",
         "Directly into verified grassroots projects by Al-Yusr Charity (License No. 2665 of 2019): orphan education, bride trousseau, insulated roofs, clean water connections, and food aid.",
       ),
     },
@@ -277,7 +277,7 @@ const arboun: CampaignPageContent = {
         "Can I donate in foreign currencies if I work with international clients?",
       ),
       a: l(
-        "نعم بالتأكيد. إذا كنت تتلقى أرباحك بالدولار، اليورو، الريال السعودي، أو أي عملة أخرى، يمكنك تحويل تبرعك بكل سهولة عبر بوابات الدفع الإلكترونية الآمنة المتاحة على موقعنا بواسطة بطاقات Visa و Mastercard.",
+        "نعم، بالتأكيد. إذا كنت تتلقى أرباحك بالدولار، اليورو، الريال السعودي، أو أي عملة أخرى، يمكنك تحويل تبرعك بكل سهولة عبر بوابات الدفع الإلكترونية الآمنة المتاحة على موقعنا بواسطة بطاقات Visa و Mastercard.",
         "Yes. Our secure gateway supports international currencies and major cards effortlessly.",
       ),
     },
@@ -308,7 +308,7 @@ const arboun: CampaignPageContent = {
   ],
 
   cta: {
-    title: l("«قفل بروجكتك الجاي.. استثمر في الآخرة»", "«Close your next deal.. Invest in the Hereafter»"),
+    title: l("«أنهِ مشروعك القادم… واستثمر في الآخرة»", "«Close your next deal.. Invest in the Hereafter»"),
     sub: l(
       "عربون خير يبارك في رزقك ويفتح أبواب التوفيق لكل صفقة جديدة",
       "A pledge of goodness that sanctifies your income and blesses your work",
@@ -319,18 +319,18 @@ const arboun: CampaignPageContent = {
   images: {
     gallery: {
       label: l("معرض الصور في آخر الصفحة", "Gallery at the end of the page"),
-      hint: l("الصور اللي بتلف في آخر الصفحة، وعلى كل صورة عنوان قصير.", "The rotating pictures at the end of the page, each with a short title."),
+      hint: l("الصور المتتابعة في آخر الصفحة، ولكل صورة عنوان قصير.", "The rotating pictures at the end of the page, each with a short title."),
       captions: true,
       items: [
         img("poster-education.png", "دعم تعليم أطفال الأسر المستحقة والأيتام بالحقائب والزي المدرسي", "Supporting education for orphan children with backpacks and supplies", l("كفالة تعليم أيتام", "Orphan education")),
         img("markoun-furniture.webp", "تيسير زواج الفتيات اليتيمات بأجهزة معمرة وأثاث منزلي", "Providing household appliances for orphan brides", l("تيسير زواج عرائس", "Brides' marriage aid")),
         img("yusr-distribution-1.webp", "قوافل الخير الميدانية لتسقيف البيوت وسقيا الماء بالقرى", "Field aid convoys for clean water and roofing across Egypt", l("سقيا ماء وأسقف معزولة", "Water and roofs")),
-        img("yusr-meals.webp", "الإغاثة الغذائية والوجبات الساخنة للأسر الأشد احتياجاً", "Food relief and hot meals for vulnerable families", l("سلال إطعام شهرية", "Monthly food baskets")),
+        img("yusr-meals.webp", "الإغاثة الغذائية والوجبات الساخنة للأسر الأشد احتياجًا", "Food relief and hot meals for vulnerable families", l("سلال إطعام شهرية", "Monthly food baskets")),
       ],
     },
     video_poster: {
       label: l("غلاف الفيديو", "Video cover"),
-      hint: l("الصورة اللي بتظهر قبل ما الفيديو يشتغل.", "Shown before the video plays."),
+      hint: l("الصورة التي تظهر قبل تشغيل الفيديو.", "Shown before the video plays."),
       max: 1,
       items: [img("poster-education.png", "مبادرة عربون خير من مؤسسة اليسر", "Al-Yusr Arboun Khair initiative")],
     },

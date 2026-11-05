@@ -20,13 +20,13 @@ import { track } from "@/lib/track";
 
 const PAGE = 12;
 const SORTS: { key: CaseSort; ar: string; en: string }[] = [
-  { key: "urgent", ar: "الأكثر احتياجاً", en: "Most urgent" },
+  { key: "urgent", ar: "الأكثر احتياجًا", en: "Most urgent" },
   { key: "closest", ar: "الأقرب للاكتمال", en: "Closest to goal" },
   { key: "newest", ar: "الأحدث", en: "Newest" },
-  { key: "remaining", ar: "الأكبر متبقياً", en: "Largest gap" },
+  { key: "remaining", ar: "الأكبر متبقيًا", en: "Largest gap" },
 ];
 const STATUSES: { key: CaseStatusFilter; ar: string; en: string }[] = [
-  { key: "open", ar: "محتاجة دعم", en: "Need support" },
+  { key: "open", ar: "تحتاج إلى دعم", en: "Need support" },
   { key: "done", ar: "اكتملت", en: "Funded" },
   { key: "all", ar: "الكل", en: "All" },
 ];
@@ -141,7 +141,7 @@ const Cases = () => {
         title={isRTL ? "حالات إنسانية موثّقة — تبرع لحالة محددة | مؤسسة اليسر" : "Verified Cases — Donate to a Specific Case | Al-Yusr Charity"}
         description={
           isRTL
-            ? "اختار حالة بعينها من حالات العلاج والسكن والزواج والأيتام في الدقهلية. كل حالة ببحث ميداني، وتشوف المتجمع والمتبقي والتحديثات بالصور لحد ما تتقفل."
+            ? "اختر حالة بعينها من حالات العلاج والسكن والزواج والأيتام في الدقهلية. لكل حالة بحث ميداني، وتتابع المبلغ المُجمَّع والمتبقي والتحديثات بالصور حتى تُغلق."
             : "Fund a specific verified case in Dakahlia, Egypt — medical, housing, marriage and orphan care. Field-researched, with live progress and photo updates until closed."
         }
         path="/cases"
@@ -162,18 +162,18 @@ const Cases = () => {
             <Breadcrumbs items={[{ name: isRTL ? "الرئيسية" : "Home", href: "/" }, { name: isRTL ? "الحالات" : "Cases" }]} />
           </div>
           <h1 className="text-3xl font-black leading-tight md:text-5xl">
-            {isRTL ? "اختار حالة… وتابع أثرك بعينك" : "Pick a case — and watch your impact"}
+            {isRTL ? "اختر حالة… وتابع أثرك بعينك" : "Pick a case — and watch your impact"}
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-primary-foreground/90 md:text-base">
             {isRTL
-              ? "كل حالة هنا اتعمل لها بحث ميداني واتراجعت أوراقها. بندفع للمستشفى أو المورد مباشرة، ونحدّث الصفحة بالصور لحد ما الحالة تتقفل."
+              ? "أجرينا لكل حالة هنا بحثًا ميدانيًا وراجعنا أوراقها. ندفع للمستشفى أو المورد مباشرة، ونحدّث الصفحة بالصور حتى تُغلق الحالة."
               : "Every case is field-researched and document-checked. We pay the hospital or supplier directly and post photo updates until the case is closed."}
           </p>
 
           <div className="mx-auto mt-6 grid max-w-3xl grid-cols-3 gap-2 sm:gap-3">
             {[
-              { v: loading ? "—" : formatNumberEN(stats.open), l: isRTL ? "حالة محتاجة دعم" : "cases need support", Icon: Heart },
-              { v: loading ? "—" : formatNumberEN(Math.round(stats.remaining)), l: isRTL ? `${egp} متبقي لاكتمالها` : `${egp} still needed`, Icon: HandCoins },
+              { v: loading ? "—" : formatNumberEN(stats.open), l: isRTL ? "حالة تحتاج إلى دعم" : "cases need support", Icon: Heart },
+              { v: loading ? "—" : formatNumberEN(Math.round(stats.remaining)), l: isRTL ? `${egp} متبقية لاكتمالها` : `${egp} still needed`, Icon: HandCoins },
               { v: loading ? "—" : formatNumberEN(stats.done), l: isRTL ? "حالة اكتملت" : "cases funded", Icon: CheckCircle2 },
             ].map(({ v, l, Icon }) => (
               <div key={l} className="rounded-2xl border border-white/15 bg-white/10 px-2 py-3 backdrop-blur-md">
@@ -244,7 +244,7 @@ const Cases = () => {
                 className="h-40 w-full object-cover sm:h-auto sm:w-64" />
               <div className="flex flex-1 flex-col justify-center gap-2 p-5">
                 <span className="inline-flex w-fit items-center gap-1 rounded-full bg-secondary/25 px-2.5 py-1 text-[11px] font-black text-primary">
-                  <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "قربت تكتمل" : "Almost there"}
+                  <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "قاربت على الاكتمال" : "Almost there"}
                 </span>
                 <h2 className="text-lg font-black leading-snug text-primary group-hover:text-accent md:text-xl">{nearlyThere.c.title}</h2>
                 <div className="h-2 overflow-hidden rounded-full bg-primary/10">
@@ -252,12 +252,12 @@ const Cases = () => {
                 </div>
                 <p className="text-sm font-bold text-muted-foreground">
                   {isRTL
-                    ? <>اتجمع {nearlyThere.f.pct}% — باقي <b className="text-primary">{formatNumberEN(nearlyThere.f.remaining)} {egp}</b> بس وتتقفل الحالة.</>
+                    ? <>جُمع {nearlyThere.f.pct}%، ويتبقى <b className="text-primary">{formatNumberEN(nearlyThere.f.remaining)} {egp}</b> فقط لتكتمل الحالة.</>
                     : <>{nearlyThere.f.pct}% raised — only <b className="text-primary">{formatNumberEN(nearlyThere.f.remaining)} {egp}</b> to close it.</>}
                 </p>
               </div>
               <span className="flex items-center justify-center gap-1.5 bg-orange-grad px-6 py-3 text-sm font-black text-accent-foreground sm:w-44">
-                {isRTL ? "كمّلها" : "Finish it"} <Arrow className="h-4 w-4" />
+                {isRTL ? "أكملها" : "Finish it"} <Arrow className="h-4 w-4" />
               </span>
             </Link>
           )}
@@ -271,12 +271,12 @@ const Cases = () => {
               </div>
               <h2 className="text-lg font-black text-primary">
                 {rows.length
-                  ? isRTL ? "مفيش حالات بالاختيار ده" : "No cases match these filters"
-                  : isRTL ? "مفيش حالات منشورة دلوقتي" : "No published cases right now"}
+                  ? isRTL ? "لا توجد حالات تطابق هذا الاختيار" : "No cases match these filters"
+                  : isRTL ? "لا توجد حالات منشورة الآن" : "No published cases right now"}
               </h2>
               <p className="mt-1.5 text-sm text-muted-foreground">
                 {isRTL
-                  ? "تقدر تتبرع للصندوق العام، وفريقنا بيوجهه لأشد الحالات احتياجاً أول ما تتراجع."
+                  ? "يمكنك التبرع للصندوق العام، وسيوجّهه فريقنا إلى أشد الحالات احتياجًا فور مراجعتها."
                   : "You can give to the general fund — our team directs it to the most urgent verified cases."}
               </p>
               <div className="mt-5 flex flex-wrap justify-center gap-2">
@@ -306,7 +306,7 @@ const Cases = () => {
               {shown < list.length && (
                 <div className="mt-8 grid place-items-center">
                   <Button variant="outline" onClick={() => setShown((n) => n + PAGE)} className="h-11 rounded-xl px-6 font-black">
-                    {isRTL ? `اعرض حالات أكتر (${formatNumberEN(list.length - shown)})` : `Show more (${formatNumberEN(list.length - shown)})`}
+                    {isRTL ? `اعرض حالات أكثر (${formatNumberEN(list.length - shown)})` : `Show more (${formatNumberEN(list.length - shown)})`}
                   </Button>
                 </div>
               )}
@@ -317,16 +317,16 @@ const Cases = () => {
           <div className="mt-16 rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-soft md:p-10">
             <div className="mx-auto mb-8 max-w-2xl text-center">
               <span className="mb-2 inline-block rounded-full bg-secondary/15 px-3.5 py-1 text-xs font-black text-primary">
-                {isRTL ? "إزاي تبرعك بيوصل" : "How your gift arrives"}
+                {isRTL ? "كيف يصل تبرعك" : "How your gift arrives"}
               </span>
-              <h2 className="text-xl font-black text-primary md:text-3xl">{isRTL ? "من البحث لحد التوثيق" : "From field visit to proof"}</h2>
+              <h2 className="text-xl font-black text-primary md:text-3xl">{isRTL ? "من البحث حتى التوثيق" : "From field visit to proof"}</h2>
             </div>
             <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                { Icon: FileText, ar: ["بحث ميداني", "باحث بيزور البيت ويراجع التقارير والأوراق قبل نشر أي حالة."], en: ["Field research", "A researcher visits and checks every document before a case is published."] },
-                { Icon: Building, ar: ["دفع مباشر", "بندفع للمستشفى أو المورد مباشرة، مش كاش لإيد حد."], en: ["Direct payment", "We pay the hospital or supplier directly, never loose cash."] },
-                { Icon: Clock, ar: ["تحديثات أول بأول", "كل خطوة بتتنشر في صفحة الحالة بالتاريخ والصور."], en: ["Live updates", "Each step is posted on the case page with dates and photos."] },
-                { Icon: ShieldCheck, ar: ["توثيق الإغلاق", "لما الحالة تكتمل بننشر التوثيق في صفحتها عشان تتطمن."], en: ["Closing proof", "When a case is funded we publish the proof on its page."] },
+                { Icon: FileText, ar: ["بحث ميداني", "يزور الباحث البيت ويراجع التقارير والأوراق قبل نشر أي حالة."], en: ["Field research", "A researcher visits and checks every document before a case is published."] },
+                { Icon: Building, ar: ["دفع مباشر", "ندفع للمستشفى أو المورد مباشرة، لا نقدًا في يد أحد."], en: ["Direct payment", "We pay the hospital or supplier directly, never loose cash."] },
+                { Icon: Clock, ar: ["تحديثات أول بأول", "تُنشر كل خطوة في صفحة الحالة بالتاريخ والصور."], en: ["Live updates", "Each step is posted on the case page with dates and photos."] },
+                { Icon: ShieldCheck, ar: ["توثيق الإغلاق", "عندما تكتمل الحالة ننشر التوثيق في صفحتها لتطمئن."], en: ["Closing proof", "When a case is funded we publish the proof on its page."] },
               ].map(({ Icon, ar, en }, i) => (
                 <li key={i} className="relative rounded-2xl border border-border/50 bg-muted/40 p-5">
                   <span className="absolute end-4 top-4 text-3xl font-black text-primary/10">{i + 1}</span>
@@ -339,9 +339,9 @@ const Cases = () => {
           </div>
 
           <div className="mx-auto mt-12 max-w-3xl px-4 py-6 text-center">
-            <h2 className="text-xl font-black text-primary md:text-2xl">{isRTL ? "تعرف حد محتاج؟" : "Know someone in need?"}</h2>
+            <h2 className="text-xl font-black text-primary md:text-2xl">{isRTL ? "هل تعرف شخصًا محتاجًا؟" : "Know someone in need?"}</h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              {isRTL ? "ابعتلنا بياناته، وفريق البحث هيتواصل ويزوره قبل أي نشر." : "Send us their details — our team will reach out and visit before anything is published."}
+              {isRTL ? "أرسل إلينا بياناته، وسيتواصل معه فريق البحث ويزوره قبل أي نشر." : "Send us their details — our team will reach out and visit before anything is published."}
             </p>
             <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
               <Button asChild size="lg" variant="outline" className="h-12 rounded-2xl border-primary/20 px-6 font-black">

@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 /** A grid of cards (blog list, programs, gallery…). */
 export function CardGridSkeleton({ count = 6, className = "" }: { count?: number; className?: string }) {
   return (
-    <div className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${className}`} aria-busy="true" aria-label="جاري التحميل">
+    <div className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${className}`} aria-busy="true" aria-label="جارٍ التحميل">
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="overflow-hidden rounded-3xl border border-border/70 bg-card">
           <Skeleton className="aspect-[16/10] w-full rounded-none" />
@@ -27,7 +27,7 @@ export function CardGridSkeleton({ count = 6, className = "" }: { count?: number
 /** A detail page: hero band + body column (article, program, case). */
 export function DetailPageSkeleton() {
   return (
-    <div aria-busy="true" aria-label="جاري التحميل">
+    <div aria-busy="true" aria-label="جارٍ التحميل">
       <div className="bg-primary/90 py-14">
         <div className="container mx-auto grid gap-8 px-4 md:grid-cols-2 md:items-center">
           <div className="space-y-4">
@@ -52,7 +52,7 @@ export function DetailPageSkeleton() {
 /** A dashboard form while its record loads. */
 export function FormSkeleton({ sections = 3 }: { sections?: number }) {
   return (
-    <div className="space-y-4" aria-busy="true" aria-label="جاري التحميل">
+    <div className="space-y-4" aria-busy="true" aria-label="جارٍ التحميل">
       <Skeleton className="h-20 w-full rounded-3xl" />
       {Array.from({ length: sections }).map((_, i) => (
         <div key={i} className="space-y-3 rounded-3xl border border-border/70 bg-card p-5">
@@ -71,7 +71,7 @@ export function FormSkeleton({ sections = 3 }: { sections?: number }) {
 /** A campaign / project landing page: poster hero, a stats strip and a row of option cards. */
 export function LandingPageSkeleton() {
   return (
-    <div aria-busy="true" aria-label="جاري التحميل">
+    <div aria-busy="true" aria-label="جارٍ التحميل">
       <div className="bg-primary py-12 md:py-16">
         <div className="container mx-auto grid gap-10 px-4 md:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] md:items-center">
           <div className="space-y-4">

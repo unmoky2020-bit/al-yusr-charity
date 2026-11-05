@@ -127,7 +127,7 @@ export function tafqeetEGP(num: number): string {
     parts.push(convertGroup(remainder));
   }
 
-  return `فقط ${parts.join(" و")} جنيهاً مصرياً لا غير`;
+  return `فقط ${parts.join(" و")} جنيهًا مصريًا لا غير`;
 }
 
 /**
@@ -404,7 +404,7 @@ export async function downloadReceiptPdf(data: ReceiptData): Promise<void> {
                 <!-- تفاصيل المبلغ والأرقام والتفقيط -->
                 <td style="text-align: right; direction: rtl; vertical-align: middle;">
                   <div style="font-size: 11.5px; font-weight: 800; color: #d1fae5; margin-bottom: 2px;">
-                    المبلغ الإجمالي المتبرع به
+                    إجمالي مبلغ التبرع
                   </div>
                   <div style="margin-top: 2px; direction: rtl; text-align: right;">
                     <span style="font-size: 30px; font-weight: 900; color: #ffffff; line-height: 1;">${amountNumberStr}</span>
@@ -559,7 +559,7 @@ export async function downloadReceiptPdf(data: ReceiptData): Promise<void> {
                     <span style="font-size: 12px; font-weight: 900; color: #064e3b;">توثيق رسمي وقانوني</span>
                   </div>
                   <div style="font-size: 10px; color: #334155; line-height: 1.6; font-weight: 700;">
-                    هذا الإيصال مُعتمد إلكترونياً من قبل مؤسسة اليسر الخيرية ولا يحتاج إلى توقيع خطي، ومسجل رسمياً بالسجلات المالية للمؤسسة بموجب ترخيص وزارة التضامن الاجتماعي رقم 2665 لسنة 2019.
+                    هذا الإيصال معتمد إلكترونيًا من مؤسسة اليسر الخيرية ولا يحتاج إلى توقيع خطي، وهو مسجل رسميًا في السجلات المالية للمؤسسة بموجب ترخيص وزارة التضامن الاجتماعي رقم 2665 لسنة 2019.
                   </div>
                 </td>
 
@@ -586,7 +586,7 @@ export async function downloadReceiptPdf(data: ReceiptData): Promise<void> {
           <!-- القسم السابع والأخير: الفوتر الرسمي المتناسق في أسفل الإيصال -->
           <div style="border-top: 1.5px solid #e2e8f0; padding-top: 10px; text-align: center;">
             <div style="font-size: 11px; font-weight: 900; color: #064e3b; margin-bottom: 2px;">
-              مؤسسة اليسر الخيرية — معاً نصل بصدقتك لمن يستحق
+              مؤسسة اليسر الخيرية — معًا نوصل صدقتك إلى من يستحقها
             </div>
             <div style="font-size: 9px; font-weight: 700; color: #64748b;">
               المقر الرئيسي: المنصورة، الدقهلية، جمهورية مصر العربية | هاتف: 01097000137 | https://elyusr.org

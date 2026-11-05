@@ -36,10 +36,10 @@ const CityProgram = () => {
   const districts = DISTRICTS_BY_CITY[cityObj.slug] || [];
 
   const headline = isRTL
-    ? `${pName} في ${cName} — توصيل لباب البيت`
+    ? `${pName} في ${cName} — توصيل حتى باب البيت`
     : `${pName} in ${cName} — doorstep delivery`;
   const intro = isRTL
-    ? `فريق مؤسسة اليسر الخيرية في ${cName} بيوصّل ${pName} للأسر المستحقة بعد بحث ميداني وتوثيق كامل بالصور والفيديو. ${cityObj.highlight.ar}.`
+    ? `فريق مؤسسة اليسر الخيرية في ${cName} يوصل ${pName} إلى الأسر المستحقة بعد بحث ميداني وتوثيق كامل بالصور والفيديو. ${cityObj.highlight.ar}.`
     : `Al-Yusr Charity's ${cName} team delivers ${pName} to verified families with full photo/video documentation. ${cityObj.highlight.en}.`;
 
   // SEO-tuned head (title ≤ 60, description ≤ 160) — different from on-page H1
@@ -47,13 +47,13 @@ const CityProgram = () => {
     ? `${pName} في ${cName} — اليسر الخيرية`
     : `${pName} in ${cName} — Al-Yusr Charity`;
   const seoDescription = isRTL
-    ? `تبرّع بـ${pName} في ${cName} مع توثيق صور/فيديو وتوصيل لباب البيت. مؤسسة اليسر الخيرية — مرخّصة 2665/2019.`
+    ? `تبرّع بـ${pName} في ${cName} مع توثيق بالصور والفيديو وتوصيل حتى باب البيت. مؤسسة اليسر الخيرية — مرخّصة 2665/2019.`
     : `Donate ${pName} in ${cName} with photo/video proof and doorstep delivery. Al-Yusr Charity — licensed (2665/2019).`;
 
   const path = `/dakahlia/${cityObj.slug}/${prog.slug}`;
   const url = `https://elyusr.org${path}`;
   const waHref = `https://wa.me/201097000137?text=${encodeURIComponent(
-    isRTL ? `السلام عليكم، عايز تفاصيل ${pName} في ${cName}.` : `Hi, tell me about ${pName} in ${cName}.`,
+    isRTL ? `السلام عليكم، أودّ معرفة تفاصيل ${pName} في ${cName}.` : `Hi, tell me about ${pName} in ${cName}.`,
   )}`;
 
   const siblings = cityObj.programs
@@ -67,15 +67,15 @@ const CityProgram = () => {
 
   const steps = [
     { icon: ClipboardCheck, t: isRTL ? "بحث ميداني" : "Field check", d: isRTL ? `زيارة الأسرة في ${cName}.` : `Family visit in ${cName}.` },
-    { icon: Truck, t: isRTL ? "تسليم بكرامة" : "Dignified delivery", d: isRTL ? "لباب البيت بدون انتظار." : "To the doorstep." },
+    { icon: Truck, t: isRTL ? "تسليم بكرامة" : "Dignified delivery", d: isRTL ? "حتى باب البيت دون انتظار." : "To the doorstep." },
     { icon: FileCheck2, t: isRTL ? "توثيق" : "Proof", d: isRTL ? "تقرير مصوّر خلال 48 ساعة." : "Photo report within 48h." },
   ];
 
   const faqs = isRTL
     ? [
-        { q: `إزاي أتبرع بـ${pName} في ${cName}؟`, a: `اختار البرنامج من الموقع، حدد المبلغ، وادفع بأمان. فريقنا في ${cName} هيتواصل معاك بعد التسليم بتوثيق كامل.` },
-        { q: `هل ${pName} بيوصل لكل قرى ${cName}؟`, a: `أيوه، بنغطّي ${cityObj.copy.ar.coverage}` },
-        { q: `إيه ضمان جودة ${pName} في ${cName}؟`, a: `كل خطوة موثّقة بالصور والفيديو، والمؤسسة مرخّصة بإشهار رقم 2665/2019.` },
+        { q: `كيف أتبرع بـ${pName} في ${cName}؟`, a: `اختر البرنامج من الموقع، وحدّد المبلغ، وادفع بأمان. وسيتواصل معك فريقنا في ${cName} بعد التسليم بتوثيق كامل.` },
+        { q: `هل يصل ${pName} إلى كل قرى ${cName}؟`, a: `نعم، نغطي ${cityObj.copy.ar.coverage}` },
+        { q: `ما ضمان جودة ${pName} في ${cName}؟`, a: `كل خطوة موثّقة بالصور والفيديو، والمؤسسة مرخّصة بإشهار رقم 2665/2019.` },
       ]
     : [
         { q: `How do I donate ${pName} in ${cName}?`, a: `Pick the program, set an amount, and pay securely. Our ${cName} team will follow up with full proof.` },
@@ -165,7 +165,7 @@ const CityProgram = () => {
             <p className="mt-3 max-w-2xl text-sm leading-7 text-primary-foreground/85 md:text-base">{intro}</p>
             {prog.priceFrom > 0 && (
               <span className="mt-4 inline-flex rounded-full bg-primary-foreground/10 px-3 py-1.5 text-xs font-extrabold ring-1 ring-secondary/30">
-                {isRTL ? `يبدأ من ${prog.priceFrom} ج لـ ${cName}` : `From ${prog.priceFrom} EGP in ${cName}`}
+                {isRTL ? `يبدأ من ${prog.priceFrom} ج في ${cName}` : `From ${prog.priceFrom} EGP in ${cName}`}
               </span>
             )}
             <div className="mt-5 flex flex-wrap gap-2.5">
@@ -185,7 +185,7 @@ const CityProgram = () => {
       <section className="bg-background py-10 md:py-14">
         <div className="container mx-auto grid max-w-5xl gap-5 px-4 md:grid-cols-2">
           <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-            <h2 className="flex items-center gap-2 text-base font-black text-primary"><MapPin className="h-5 w-5 text-secondary" />{isRTL ? `ليه ${pName} في ${cName}؟` : `Why ${pName} in ${cName}?`}</h2>
+            <h2 className="flex items-center gap-2 text-base font-black text-primary"><MapPin className="h-5 w-5 text-secondary" />{isRTL ? `لماذا ${pName} في ${cName}؟` : `Why ${pName} in ${cName}?`}</h2>
             <p className="mt-2 text-sm leading-7 text-foreground/85">{isRTL ? cityObj.copy.ar.localNote : cityObj.copy.en.localNote}</p>
           </div>
           <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">

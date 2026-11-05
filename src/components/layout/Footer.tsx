@@ -29,7 +29,7 @@ export const Footer = () => {
     e.preventDefault();
     const value = email.trim();
     if (!value || !/^\S+@\S+\.\S+$/.test(value)) {
-      setSubscribeError(isRTL ? "اكتب إيميل صحيح، زي name@example.com" : "Enter a valid email, like name@example.com");
+      setSubscribeError(isRTL ? "اكتب بريدًا إلكترونيًا صحيحًا، مثل name@example.com" : "Enter a valid email, like name@example.com");
       return;
     }
     setSubscribeError(null);
@@ -45,12 +45,12 @@ export const Footer = () => {
       if (import.meta.env.DEV) console.error(err);
       const status = (err as { status?: number } | null)?.status;
       const msg = status === 422
-        ? (isRTL ? "الإيميل ده مش صحيح. راجعه وجرّب تاني." : "That email doesn't look right. Check it and try again.")
+        ? (isRTL ? "هذا البريد الإلكتروني غير صحيح. راجعه وحاول مرة أخرى." : "That email doesn't look right. Check it and try again.")
         : status === 429
-          ? (isRTL ? "محاولات كتير ورا بعض. جرّب كمان دقيقة." : "Too many tries. Try again in a minute.")
+          ? (isRTL ? "محاولات كثيرة متتالية. حاول مرة أخرى بعد دقيقة." : "Too many tries. Try again in a minute.")
           : status === 404 || status === 405 || status === 401
-            ? (isRTL ? "الاشتراك في النشرة بيتجهّز على السيرفر. جرّب تاني قريب." : "Newsletter sign-up is being set up. Please try again soon.")
-            : (isRTL ? "مقدرناش نسجّل اشتراكك دلوقتي. جرّب تاني." : "We couldn't save your subscription. Try again.");
+            ? (isRTL ? "نعمل حاليًا على تجهيز الاشتراك في النشرة. حاول مرة أخرى قريبًا." : "Newsletter sign-up is being set up. Please try again soon.")
+            : (isRTL ? "لم نتمكن من تسجيل اشتراكك الآن. حاول مرة أخرى." : "We couldn't save your subscription. Try again.");
       setSubscribeError(msg);
       toast.error(msg);
     } finally {
@@ -116,14 +116,14 @@ export const Footer = () => {
                 </span>
                 <h2 className="mt-4 text-2xl font-black leading-[1.2] text-primary sm:text-3xl md:text-[2.25rem]">
                   {isRTL ? (
-                    <>سارع بحجز <span className="text-accent">صك أضحيتك</span> قبل ما يخلص الوقت</>
+                    <>سارع بحجز <span className="text-accent">صك أضحيتك</span> قبل انتهاء الوقت</>
                   ) : (
                     <>Reserve <span className="text-accent">your Qurbani</span> before time runs out</>
                   )}
                 </h2>
                 <p className="mx-auto mt-3 max-w-xl text-sm font-semibold text-primary/75 md:mx-0 md:text-base">
                   {isRTL
-                    ? "كل صك بيتعاين قبل الذبح ويتوثّق بالصور والفيديو — لراحة بال كاملة."
+                    ? "كل صك يُعايَن قبل الذبح ويُوثَّق بالصور والفيديو، لتطمئن تمامًا."
                     : "Every share is inspected pre-slaughter and documented with photo & video — for full peace of mind."}
                 </p>
 
@@ -188,7 +188,7 @@ export const Footer = () => {
                       </h3>
                       <p className="mt-1 text-sm leading-relaxed text-[#0b4429]/70">
                         {isRTL
-                          ? "شارك إيميلك ليصلك الأعمال والصدقات المطلوبة أسبوعيًا."
+                          ? "شاركنا بريدك الإلكتروني لتصلك كل أسبوع الأعمال والصدقات المطلوبة."
                           : "Share your email to get the week's good deeds and needed charity."}
                       </p>
                     </div>
@@ -201,11 +201,11 @@ export const Footer = () => {
                       {isRTL ? "نشرة اليسر · كل أسبوعين" : "The Al-Yusr letter · every two weeks"}
                     </p>
                     <h3 className="mt-2 text-[1.5rem] font-black leading-snug md:text-[1.9rem]">
-                      {isRTL ? "رسالة من الميدان توصل بريدك" : "A letter from the field, in your inbox"}
+                      {isRTL ? "رسالة من الميدان تصل إلى بريدك" : "A letter from the field, in your inbox"}
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-[#0b4429]/65 md:text-[15px]">
                       {isRTL
-                        ? "صور التوزيع، والحالات اللي اكتملت بتبرعاتكم، والحملة الجاية قبل ما تبدأ."
+                        ? "صور التوزيع، والحالات التي اكتملت بتبرعاتكم، والحملة القادمة قبل أن تبدأ."
                         : "Photos from distributions, cases your gifts completed, and the next campaign before it starts."}
                     </p>
                   </div>
@@ -213,7 +213,7 @@ export const Footer = () => {
                 )}
 
                 <form onSubmit={handleSubscribe} className="relative w-full" noValidate>
-                  <label htmlFor="newsletter-email" className="sr-only">{isRTL ? "إيميلك" : "Your email"}</label>
+                  <label htmlFor="newsletter-email" className="sr-only">{isRTL ? "بريدك الإلكتروني" : "Your email"}</label>
                   <div className={`flex flex-col gap-2 rounded-2xl bg-white p-1.5 shadow-[0_10px_30px_-18px_rgba(6,48,28,0.45)] ring-1 transition sm:flex-row sm:items-center ${subscribeError ? "ring-destructive/50" : "ring-[#0b4429]/10 focus-within:ring-2 focus-within:ring-[#8cc63f]/70"}`}>
                     <span className="hidden ps-3 text-[#0b4429]/35 sm:block" aria-hidden><Mail className="h-5 w-5" /></span>
                     <input
@@ -236,7 +236,7 @@ export const Footer = () => {
                       disabled={subscribing}
                       className="group inline-flex h-12 shrink-0 items-center justify-center gap-2.5 rounded-xl bg-gradient-to-l from-[#f58220] to-[#ff9a3c] pe-2 ps-5 text-[15px] font-black text-white shadow-[0_12px_24px_-12px_rgba(245,130,32,0.9)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_28px_-12px_rgba(245,130,32,0.95)] active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f58220] focus-visible:ring-offset-2 disabled:translate-y-0 disabled:opacity-60 ltr:bg-gradient-to-r"
                     >
-                      {subscribing ? (isRTL ? "بيتبعت..." : "Sending...") : (isRTL ? "اشترك مجانًا" : "Subscribe free")}
+                      {subscribing ? (isRTL ? "جارٍ الإرسال..." : "Sending...") : (isRTL ? "اشترك مجانًا" : "Subscribe free")}
                       <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/20 transition group-hover:bg-white/30">
                         <Send className="h-4 w-4 transition group-hover:-translate-y-px rtl:-scale-x-100" />
                       </span>
@@ -256,16 +256,16 @@ export const Footer = () => {
                   <div>
                     <h3 className="text-lg font-black leading-tight sm:text-xl md:text-2xl">
                       {emailSent
-                        ? (isRTL ? "اتسجّلت. فاضل خطوة واحدة" : "You're on the list. One step left")
-                        : (isRTL ? "اشتراكك اتسجّل" : "Your subscription is saved")}
+                        ? (isRTL ? "تم تسجيلك. بقيت خطوة واحدة" : "You're on the list. One step left")
+                        : (isRTL ? "تم تسجيل اشتراكك" : "Your subscription is saved")}
                     </h3>
                     <p className="mt-1 text-sm text-[#0b4429]/70">
                       {emailSent
                         ? (isRTL
-                          ? "بعتنالك إيميل تأكيد. افتحه واضغط على الرابط علشان النشرة توصلك. لو مش لاقيه، بص في الـ Spam."
+                          ? "أرسلنا إليك رسالة تأكيد. افتحها واضغط على الرابط لتصلك النشرة. وإن لم تجدها، فراجع مجلد الرسائل غير المرغوب فيها (Spam)."
                           : "We sent you a confirmation email. Open it and click the link. If you can't find it, check spam.")
                         : (isRTL
-                          ? "هيوصلك إيميل تأكيد قريب، اضغط على الرابط اللي فيه علشان تبدأ النشرة توصلك."
+                          ? "ستصلك قريبًا رسالة تأكيد؛ اضغط على الرابط الذي فيها لتبدأ النشرة في الوصول إليك."
                           : "A confirmation email is on its way soon; click its link to start receiving the letter.")}
                     </p>
                   </div>
@@ -284,7 +284,7 @@ export const Footer = () => {
                     onClick={() => setSubscribed(false)}
                     className="inline-flex h-10 items-center rounded-xl bg-white px-3.5 text-xs font-bold text-[#0b4429] ring-1 ring-[#0b4429]/15 hover:ring-[#0b4429]/40"
                   >
-                    {isRTL ? "سجّل بريد تاني" : "Add another email"}
+                    {isRTL ? "سجّل بريدًا آخر" : "Add another email"}
                   </button>
                 </div>
               </div>

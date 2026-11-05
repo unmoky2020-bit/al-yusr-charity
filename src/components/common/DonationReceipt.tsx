@@ -75,7 +75,7 @@ export const DonationReceipt = ({ d }: { d: DonationRecord }) => {
         footerMoto: "مؤسسة اليسر الخيرية — معاً نصل بصدقتك لمن يستحق",
         footerContact: "المقر الرئيسي: المنصورة، الدقهلية، جمهورية مصر العربية | هاتف: 01097000137 | https://elyusr.org",
         download: "تحميل إيصال PDF",
-        downloading: "جاري إنشاء PDF...",
+        downloading: "جارٍ إنشاء ملف PDF...",
       }
     : {
         title: "Certified Electronic Donation Receipt",

@@ -62,11 +62,11 @@ export default function NotFound() {
 
           {/* Heading & Subtitle */}
           <h2 className="mt-2 text-2xl font-black text-primary md:text-4xl">
-            {isAr ? "عذرًا.. هذه الصفحة غير موجودة" : "Oops.. Page Not Found"}
+            {isAr ? "عذرًا، هذه الصفحة غير موجودة" : "Oops.. Page Not Found"}
           </h2>
           <p className="mx-auto mt-3 max-w-md text-sm font-extrabold leading-relaxed text-muted-foreground md:text-base">
             {isAr
-              ? "ربما اتبعت رابطًا قديماً أو كتبت العنوان بشكل خاطئ. يمكنك العودة للرئيسية أو استكشاف برامجنا الخيرية."
+              ? "ربما اتبعت رابطًا قديمًا أو كتبت العنوان بشكل خاطئ. يمكنك العودة للرئيسية أو استكشاف برامجنا الخيرية."
               : "You may have followed an old link or typed the address wrong. You can return home or explore our charity programs."}
           </p>
 

@@ -12,9 +12,9 @@ const FOOD: CampaignPageContent = {
   hero: {
     eyebrow: l("الغذاء الشهري · برنامج دائم طوال العام", "Monthly food · a year-round programme"),
     title: l("أطعِموا الطعام", "Feed the hungry"),
-    title2: l("سُفرة تكفي أسرة شهراً كاملاً", "A table that lasts a family a whole month"),
+    title2: l("سُفرة تكفي أسرة شهرًا كاملًا", "A table that lasts a family a whole month"),
     lead: l(
-      "برنامج الغذاء الشهري يضمن لأسر الأيتام والمتعففين ثلاثة أشياء كل شهر: لحوم من ذبائحنا الشهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام مطبوخة تصلح إطعاماً أو كفارة صيام أو كفارة يمين. كل ذلك يصل إلى باب البيت بكرامة وبتوثيق كامل.",
+      "برنامج الغذاء الشهري يضمن لأسر الأيتام والمتعففين ثلاثة أشياء كل شهر: لحوم من ذبائحنا الشهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام مطبوخة تصلح إطعامًا أو كفارة صيام أو كفارة يمين. كل ذلك يصل إلى باب البيت بكرامة وبتوثيق كامل.",
       "Our monthly food programme guarantees families three things every month: meat from our monthly slaughters, a 14 kg carton of local staples, and cooked meals that can be given as feeding, as a fasting expiation or as an oath expiation. All delivered to the door with dignity and full documentation.",
     ),
     donateLabel: l("أطعِم أسرة هذا الشهر", "Feed a family this month"),
@@ -30,14 +30,14 @@ const FOOD: CampaignPageContent = {
 
   prices: [
     { id: "meat_share", label: l("سهم لحوم الذبائح الشهرية", "Monthly slaughter meat share"), amount: 350, note: l("يشترك في ذبيحة الشهر ويوزَّع لحمها على الأسر", "Joins the month's slaughter; the meat goes to families") },
-    { id: "meat_kg", label: l("كيلو لحمة بلدي لأسرة", "1 kg of local meat for a family"), amount: 450 },
-    { id: "carton", label: l("كرتونة غذاء ١٤ كيلو", "14 kg food carton"), amount: 700, note: l("مكونات بلدي تكفي أسرة شهراً", "Local staples that last a family a month") },
-    { id: "full", label: l("سُفرة الشهر: كرتونة + لحمة", "Month's table: carton + meat"), amount: 1100, note: l("كرتونة ١٤ كيلو وكيلو لحمة من ذبيحة الشهر", "A 14 kg carton plus 1 kg of meat from the month's slaughter") },
+    { id: "meat_kg", label: l("كيلو لحم بلدي لأسرة", "1 kg of local meat for a family"), amount: 450 },
+    { id: "carton", label: l("كرتونة غذاء ١٤ كيلو", "14 kg food carton"), amount: 700, note: l("مكونات بلدي تكفي أسرة شهرًا", "Local staples that last a family a month") },
+    { id: "full", label: l("سُفرة الشهر: كرتونة + لحم", "Month's table: carton + meat"), amount: 1100, note: l("كرتونة ١٤ كيلو وكيلو لحم من ذبيحة الشهر", "A 14 kg carton plus 1 kg of meat from the month's slaughter") },
     { id: "full_3", label: l("كفالة سُفرة ٣ شهور", "3-month table sponsorship"), amount: 3300 },
     { id: "full_year", label: l("كفالة سُفرة سنة كاملة", "Full-year table sponsorship"), amount: 13200, note: l("أسرة واحدة، اثنتا عشرة سُفرة", "One family, twelve months of food") },
     { id: "meal", label: l("وجبة إطعام مطبوخة", "A cooked meal"), amount: 75, note: l("أرز ولحم أو دجاج وخضار وخبز", "Rice, meat or chicken, vegetables and bread") },
     { id: "kaffara_yameen", label: l("كفارة يمين: إطعام عشرة مساكين", "Oath expiation: feeding ten poor people"), amount: 750, note: l("عشر وجبات كاملة لعشرة مساكين", "Ten full meals for ten poor people") },
-    { id: "kaffara_siyam", label: l("كفارة صيام: إطعام ستين مسكيناً", "Fasting expiation: feeding sixty poor people"), amount: 4500, note: l("ستون وجبة كاملة لستين مسكيناً", "Sixty full meals for sixty poor people") },
+    { id: "kaffara_siyam", label: l("كفارة صيام: إطعام ستين مسكينًا", "Fasting expiation: feeding sixty poor people"), amount: 4500, note: l("ستون وجبة كاملة لستين مسكينًا", "Sixty full meals for sixty poor people") },
     { id: "fidya", label: l("فدية صيام عن يوم", "Fasting fidya for one day"), amount: 75, note: l("إطعام مسكين عن كل يوم لمن لا يستطيع الصوم", "One poor person fed for each day missed") },
   ],
 
@@ -51,7 +51,7 @@ const FOOD: CampaignPageContent = {
         "Monthly Food — slaughter meat, a 14 kg carton and meals for feeding and expiations",
       ),
       lead: l(
-        "برنامج دائم من مؤسسة اليسر يصل بالطعام إلى أسر الأيتام والمتعففين كل شهر: لحوم من ذبائح شهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات مطبوخة تُقدَّم إطعاماً أو كفارة صيام أو كفارة يمين، في الدقهلية والمنصورة وكافة محافظات مصر.",
+        "برنامج دائم من مؤسسة اليسر يصل بالطعام إلى أسر الأيتام والمتعففين كل شهر: لحوم من ذبائح شهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات مطبوخة تُقدَّم إطعامًا أو كفارة صيام أو كفارة يمين، في الدقهلية والمنصورة وكافة محافظات مصر.",
         "A permanent Al-Yusr programme bringing food to orphan and needy families every month: meat from monthly slaughters, a 14 kg carton of local staples, and cooked meals offered as feeding, fasting expiation or oath expiation, across Dakahlia, Mansoura and all of Egypt.",
       ),
       items: [],
@@ -85,21 +85,21 @@ const FOOD: CampaignPageContent = {
     /** The three parts of the programme. title = name, extra = one-line tag, desc = explanation. */
     pillars: {
       title: l("ثلاثة أركان لسُفرة الشهر", "Three parts of the month's table"),
-      lead: l("لحم وكرتونة ووجبة: ما تحتاجه أسرة لتأكل بكرامة شهراً كاملاً.", "Meat, a carton and a meal: what a family needs to eat with dignity for a month."),
+      lead: l("لحم وكرتونة ووجبة: ما تحتاجه أسرة لتأكل بكرامة شهرًا كاملًا.", "Meat, a carton and a meal: what a family needs to eat with dignity for a month."),
       items: [
         {
           id: "meat",
           title: l("لحوم الذبائح الشهرية", "Monthly slaughter meat"),
           extra: l("ذبيحة كل شهر", "A slaughter every month"),
           desc: l(
-            "كل شهر نذبح في المزرعة الوقفية بإشراف بيطري، ونقطّع اللحم ونعبّئه كيلو لكل أسرة، ويصل طازجاً في يوم الذبح نفسه إلى بيوت لا يدخلها اللحم إلا في العيد.",
+            "كل شهر نذبح في المزرعة الوقفية بإشراف بيطري، ونقطّع اللحم ونعبّئه كيلو لكل أسرة، ويصل طازجًا في يوم الذبح نفسه إلى بيوت لا يدخلها اللحم إلا في العيد.",
             "Every month we slaughter at the endowment farm under veterinary supervision, portion the meat into 1 kg packs, and deliver it fresh on the same day to homes that otherwise see meat only at Eid.",
           ),
         },
         {
           id: "carton",
           title: l("كرتونة ١٤ كيلو بلدي", "14 kg carton of local staples"),
-          extra: l("مكونات بلدي تكفي شهراً", "Local staples for a month"),
+          extra: l("مكونات بلدي تكفي شهرًا", "Local staples for a month"),
           desc: l(
             "أرز ومكرونة ودقيق وسكر وزيت وفول وعدس وسمنة بلدي وصلصة وشاي وملح: ١٤ كيلو من المكونات الأساسية التي تطبخ منها الأم سفرة كل يوم طوال الشهر.",
             "Rice, pasta, flour, sugar, oil, fava beans, lentils, local ghee, tomato paste, tea and salt: 14 kg of the staples a mother cooks from every day of the month.",
@@ -110,7 +110,7 @@ const FOOD: CampaignPageContent = {
           title: l("وجبات الإطعام والكفارات", "Meals for feeding and expiations"),
           extra: l("إطعام · كفارة صيام · كفارة يمين", "Feeding · fasting expiation · oath expiation"),
           desc: l(
-            "وجبة مطبوخة كاملة من أرز ولحم أو دجاج وخضار وخبز، تُقدَّم إطعاماً للمساكين، أو تُنفَّذ بها كفارة الصيام وكفارة اليمين وفدية الصيام بالعدد الشرعي، ويصلك توثيقها.",
+            "وجبة مطبوخة كاملة من أرز ولحم أو دجاج وخضار وخبز، تُقدَّم إطعامًا للمساكين، أو تُنفَّذ بها كفارة الصيام وكفارة اليمين وفدية الصيام بالعدد الشرعي، ويصلك توثيقها.",
             "A full cooked meal of rice, meat or chicken, vegetables and bread, given as feeding for the poor, or used to carry out fasting and oath expiations and the fasting fidya in the required number, with documentation sent to you.",
           ),
         },
@@ -126,7 +126,7 @@ const FOOD: CampaignPageContent = {
       extraLabel: l("الوزن بالكيلو (رقم فقط، مثال 1.5)", "Weight in kg (number only, e.g. 1.5)"),
       title: l("ماذا في كرتونة الـ ١٤ كيلو؟", "What is in the 14 kg carton?"),
       lead: l(
-        "نختار مكونات بلدي من السوق المحلي بكميات واقعية تكفي أسرة من خمسة أفراد شهراً كاملاً، ونعبّئها في مخازن المؤسسة بالمنصورة.",
+        "نختار مكونات بلدي من السوق المحلي بكميات واقعية تكفي أسرة من خمسة أفراد شهرًا كاملًا، ونعبّئها في مخازن المؤسسة بالمنصورة.",
         "We choose local staples from the local market in realistic quantities for a family of five for a full month, and pack them at the foundation's warehouse in Mansoura.",
       ),
       items: [
@@ -148,7 +148,7 @@ const FOOD: CampaignPageContent = {
     meat: {
       title: l("من الذبيحة إلى السُّفرة في يوم واحد", "From the slaughter to the table in one day"),
       lead: l(
-        "اللحم عندنا ليس صنفاً إضافياً؛ هو ما يفتقده أطفال هذه البيوت أكثر من أي شيء. لذلك نذبح كل شهر، لا في المواسم فقط.",
+        "اللحم عندنا ليس صنفًا إضافيًا؛ هو ما يفتقده أطفال هذه البيوت أكثر من أي شيء. لذلك نذبح كل شهر، لا في المواسم فقط.",
         "For us meat is not an extra; it is what the children of these homes miss most. So we slaughter every month, not only in the seasons.",
       ),
       items: [
@@ -180,13 +180,13 @@ const FOOD: CampaignPageContent = {
           id: "kaffara_yameen",
           title: l("كفارة اليمين", "Oath expiation"),
           extra: l("إطعام عشرة مساكين من أوسط ما تطعمون أهليكم (المائدة: ٨٩)", "Feeding ten poor people from the average of what you feed your families (Quran 5:89)"),
-          desc: l("من حلف يميناً ثم حنث فيها فكفارته إطعام عشرة مساكين. نقدّم عشر وجبات كاملة لعشرة مساكين مختلفين وتصلك صور التسليم.", "Whoever swears an oath and then breaks it owes the feeding of ten poor people. We serve ten full meals to ten different poor people and send you the delivery photos."),
+          desc: l("من حلف يمينًا ثم حنث فيها فكفارته إطعام عشرة مساكين. نقدّم عشر وجبات كاملة لعشرة مساكين مختلفين وتصلك صور التسليم.", "Whoever swears an oath and then breaks it owes the feeding of ten poor people. We serve ten full meals to ten different poor people and send you the delivery photos."),
         },
         {
           id: "kaffara_siyam",
           title: l("كفارة الصيام", "Fasting expiation"),
-          extra: l("إطعام ستين مسكيناً لمن لم يستطع صيام شهرين متتابعين (متفق عليه)", "Feeding sixty poor people for one unable to fast two consecutive months (agreed upon)"),
-          desc: l("كفارة إفساد صوم رمضان بالجماع لمن عجز عن صيام شهرين متتابعين. نقدّم ستين وجبة كاملة لستين مسكيناً. أما من أفطر لكبر أو مرض لا يُرجى برؤه ففديته إطعام مسكين عن كل يوم.", "The expiation for breaking a Ramadan fast through intercourse, for one unable to fast two consecutive months. We serve sixty full meals to sixty poor people. For one who cannot fast due to old age or chronic illness, the fidya is one poor person fed per day."),
+          extra: l("إطعام ستين مسكينًا لمن لم يستطع صيام شهرين متتابعين (متفق عليه)", "Feeding sixty poor people for one unable to fast two consecutive months (agreed upon)"),
+          desc: l("كفارة إفساد صوم رمضان بالجماع لمن عجز عن صيام شهرين متتابعين. نقدّم ستين وجبة كاملة لستين مسكينًا. أما من أفطر لكبر أو مرض لا يُرجى برؤه ففديته إطعام مسكين عن كل يوم.", "The expiation for breaking a Ramadan fast through intercourse, for one unable to fast two consecutive months. We serve sixty full meals to sixty poor people. For one who cannot fast due to old age or chronic illness, the fidya is one poor person fed per day."),
         },
       ],
     },
@@ -194,7 +194,7 @@ const FOOD: CampaignPageContent = {
     /** Sponsorship tiers. title = tier name, desc = what it covers. Amounts come from prices full / full_3 / full_year. */
     sponsor: {
       title: l("اكفل سُفرة أسرة", "Sponsor a family's table"),
-      lead: l("كرتونة ١٤ كيلو وكيلو لحمة من ذبيحة الشهر، للأسرة نفسها كل شهر، وتقرير شهري يصلك.", "A 14 kg carton and 1 kg of meat from the month's slaughter, for the same family every month, with a monthly report sent to you."),
+      lead: l("كرتونة ١٤ كيلو وكيلو لحم من ذبيحة الشهر، للأسرة نفسها كل شهر، وتقرير شهري يصلك.", "A 14 kg carton and 1 kg of meat from the month's slaughter, for the same family every month, with a monthly report sent to you."),
       items: [
         { id: "full", title: l("شهر واحد", "One month"), desc: l("سُفرة شهر كاملة لأسرة من خمسة أفراد.", "A full month's table for a family of five.") },
         { id: "full_3", title: l("ثلاثة شهور", "Three months"), desc: l("نخصّص لك أسرة بعينها ونرسل لك ملفها مجهّل البيانات.", "We assign you a specific family and send its anonymised file.") },
@@ -248,28 +248,28 @@ const FOOD: CampaignPageContent = {
     {
       q: l("ما الذي يشمله برنامج الغذاء الشهري؟", "What does the monthly food programme include?"),
       a: l(
-        "ثلاثة أركان: لحوم من ذبائح شهرية تُذبح في المزرعة الوقفية ويُوزَّع منها كيلو لكل أسرة، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي (أرز ومكرونة ودقيق وسكر وزيت وفول وعدس وسمنة وصلصة وشاي وملح)، ووجبات إطعام مطبوخة تُقدَّم إطعاماً أو كفارة صيام أو كفارة يمين.",
+        "ثلاثة أركان: لحوم من ذبائح شهرية تُذبح في المزرعة الوقفية ويُوزَّع منها كيلو لكل أسرة، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي (أرز ومكرونة ودقيق وسكر وزيت وفول وعدس وسمنة وصلصة وشاي وملح)، ووجبات إطعام مطبوخة تُقدَّم إطعامًا أو كفارة صيام أو كفارة يمين.",
         "Three parts: meat from monthly slaughters at the endowment farm, 1 kg per family; a 14 kg carton of local staples (rice, pasta, flour, sugar, oil, fava beans, lentils, ghee, tomato paste, tea and salt); and cooked meals offered as feeding, fasting expiation or oath expiation.",
       ),
     },
     {
       q: l("ما محتويات كرتونة الـ ١٤ كيلو بالضبط؟", "What exactly is in the 14 kg carton?"),
       a: l(
-        "أرز ٣ كيلو، مكرونة ٢ كيلو، دقيق ٢ كيلو، سكر ٢ كيلو، زيت ١٫٥ لتر، فول كيلو، عدس كيلو، سمنة بلدي نصف كيلو، صلصة نصف كيلو، شاي ربع كيلو، ملح ربع كيلو. الإجمالي ١٤ كيلو تكفي أسرة من خمسة أفراد شهراً كاملاً.",
+        "أرز ٣ كيلو، مكرونة ٢ كيلو، دقيق ٢ كيلو، سكر ٢ كيلو، زيت ١٫٥ لتر، فول كيلو، عدس كيلو، سمنة بلدي نصف كيلو، صلصة نصف كيلو، شاي ربع كيلو، ملح ربع كيلو. الإجمالي ١٤ كيلو تكفي أسرة من خمسة أفراد شهرًا كاملًا.",
         "3 kg rice, 2 kg pasta, 2 kg flour, 2 kg sugar, 1.5 L oil, 1 kg fava beans, 1 kg lentils, 0.5 kg local ghee, 0.5 kg tomato paste, 0.25 kg tea and 0.25 kg salt. A total of 14 kg, enough for a family of five for a full month.",
       ),
     },
     {
       q: l("من أين تأتي اللحوم ومتى تُذبح؟", "Where does the meat come from and when is it slaughtered?"),
       a: l(
-        "من المزرعة الوقفية لمؤسسة اليسر بالدقهلية. نذبح في بداية كل شهر بإشراف طبيب بيطري، ونقطّع اللحم ونعبّئه كيلو لكل أسرة، ويُوزَّع طازجاً في يوم الذبح نفسه.",
+        "من المزرعة الوقفية لمؤسسة اليسر بالدقهلية. نذبح في بداية كل شهر بإشراف طبيب بيطري، ونقطّع اللحم ونعبّئه كيلو لكل أسرة، ويُوزَّع طازجًا في يوم الذبح نفسه.",
         "From Al-Yusr's endowment farm in Dakahlia. We slaughter at the start of every month under a veterinarian's supervision, portion the meat into 1 kg packs per family, and distribute it fresh the same day.",
       ),
     },
     {
       q: l("ما الفرق بين الإطعام وكفارة الصيام وكفارة اليمين؟", "What is the difference between feeding, fasting expiation and oath expiation?"),
       a: l(
-        "الإطعام صدقة بأي عدد من الوجبات. كفارة اليمين لمن حلف وحنث: إطعام عشرة مساكين من أوسط ما تطعمون أهليكم (المائدة: ٨٩)، وننفّذها بعشر وجبات كاملة لعشرة مساكين. كفارة الصيام لمن أفسد صوم رمضان بالجماع وعجز عن صيام شهرين متتابعين: إطعام ستين مسكيناً، وننفّذها بستين وجبة. أما من لا يستطيع الصوم لكبر أو مرض مزمن ففديته إطعام مسكين عن كل يوم. وفي الحالات الخاصة نرجو مراجعة دار الإفتاء أو أهل العلم، ونحن ننفّذ الإطعام ونوثّقه لك.",
+        "الإطعام صدقة بأي عدد من الوجبات. كفارة اليمين لمن حلف وحنث: إطعام عشرة مساكين من أوسط ما تطعمون أهليكم (المائدة: ٨٩)، وننفّذها بعشر وجبات كاملة لعشرة مساكين. كفارة الصيام لمن أفسد صوم رمضان بالجماع وعجز عن صيام شهرين متتابعين: إطعام ستين مسكينًا، وننفّذها بستين وجبة. أما من لا يستطيع الصوم لكبر أو مرض مزمن ففديته إطعام مسكين عن كل يوم. وفي الحالات الخاصة نرجو مراجعة دار الإفتاء أو أهل العلم، ونحن ننفّذ الإطعام ونوثّقه لك.",
         "Feeding is a charity of any number of meals. The oath expiation, for one who swears and breaks an oath, is feeding ten poor people from the average of what you feed your family (Quran 5:89); we carry it out with ten full meals for ten poor people. The fasting expiation, for one who broke a Ramadan fast through intercourse and cannot fast two consecutive months, is feeding sixty poor people; we carry it out with sixty meals. One who cannot fast due to old age or chronic illness owes a fidya of one poor person fed per day. For particular cases please consult Dar al-Ifta or a scholar; we carry out the feeding and document it for you.",
       ),
     },
@@ -290,28 +290,28 @@ const FOOD: CampaignPageContent = {
     {
       q: l("هل أستطيع كفالة أسرة بعينها كل شهر؟", "Can I sponsor a specific family every month?"),
       a: l(
-        "نعم. كفالة السُّفرة لثلاثة شهور أو سنة تخصَّص لأسرة بعينها، ونرسل لك ملفها مجهّل البيانات حفاظاً على كرامتها، وتقريراً شهرياً بصور التسليم على واتساب أو البريد.",
+        "نعم. كفالة السُّفرة لثلاثة شهور أو سنة تخصَّص لأسرة بعينها، ونرسل لك ملفها مجهّل البيانات حفاظًا على كرامتها، وتقريرًا شهريًا بصور التسليم على واتساب أو البريد.",
         "Yes. A three-month or full-year table sponsorship is assigned to a specific family; we send you its anonymised file, to protect its dignity, and a monthly report with delivery photos on WhatsApp or email.",
       ),
     },
     {
       q: l("هل يجوز دفع زكاة المال في الغذاء الشهري؟", "Can I pay Zakat through the monthly food programme?"),
       a: l(
-        "نعم. اللحوم والكرتونة والوجبات تصل إلى الفقراء والمساكين، وهم من مصارف الزكاة الثمانية، ونصدر لك إيصال زكاة موثقاً. أما الكفارات فتُدفع من غير مال الزكاة.",
+        "نعم. اللحوم والكرتونة والوجبات تصل إلى الفقراء والمساكين، وهم من مصارف الزكاة الثمانية، ونصدر لك إيصال زكاة موثقًا. أما الكفارات فتُدفع من غير مال الزكاة.",
         "Yes. The meat, carton and meals reach the poor and needy, who are among the eight categories of Zakat recipients, and we issue a verified Zakat receipt. Expiations, however, must be paid from money other than Zakat.",
       ),
     },
     {
       q: l("كيف أتبرع من خارج مصر؟", "How can I donate from outside Egypt?"),
       a: l(
-        "عبر صفحة التبرع بالبطاقة الائتمانية (فيزا/ماستركارد) من أي دولة، أو بالتحويل البنكي على الحسابات الرسمية للمؤسسة. ولأي استفسار راسلنا على واتساب +20 109 700 0137 ويصلك الإيصال والتوثيق على نفس الرقم.",
+        "عبر صفحة التبرع بالبطاقة الائتمانية (فيزا/ماستركارد) من أي دولة، أو بالتحويل البنكي على الحسابات الرسمية للمؤسسة. ولأي استفسار راسلنا على واتساب +20 109 700 0137 ويصلك الإيصال والتوثيق على الرقم نفسه.",
         "Through the donate page by credit card (Visa/Mastercard) from any country, or by bank transfer to the foundation's official accounts. For help, message us on WhatsApp at +20 109 700 0137; your receipt and documentation reach you on the same number.",
       ),
     },
   ],
 
   cta: {
-    title: l("سُفرة واحدة منك تُطعِم أسرة شهراً كاملاً — تبرّع الآن", "One table from you feeds a family for a whole month — donate now"),
+    title: l("سُفرة واحدة منك تُطعِم أسرة شهرًا كاملًا — تبرّع الآن", "One table from you feeds a family for a whole month — donate now"),
     sub: l("لحم وكرتونة ووجبة، تصل إلى باب البيت بكرامة، وتوثيقها يصل إليك.", "Meat, a carton and a meal, delivered to the door with dignity, and the proof delivered to you."),
   },
 
@@ -320,7 +320,7 @@ const FOOD: CampaignPageContent = {
     hero: {
       label: l("صورة أعلى الصفحة", "Hero image"),
       max: 1,
-      items: [img("hero-carton-opened.webp", "كرتونة الغذاء الشهرية ١٤ كيلو مع كيلو لحمة من ذبيحة الشهر", "The 14 kg monthly food carton with 1 kg of meat from the month's slaughter")],
+      items: [img("hero-carton-opened.webp", "كرتونة الغذاء الشهرية ١٤ كيلو مع كيلو لحم من ذبيحة الشهر", "The 14 kg monthly food carton with 1 kg of meat from the month's slaughter")],
     },
     gallery: {
       label: l("معرض الصور", "Gallery"),

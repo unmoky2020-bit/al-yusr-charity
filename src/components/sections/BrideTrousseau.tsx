@@ -47,14 +47,14 @@ export const BrideTrousseau = () => {
   }, [isAR]);
 
   const wa = "https://wa.me/201097000137?text=" + encodeURIComponent(
-    isAR ? "السلام عليكم، حابب أعرف تكلفة أجهزة جهاز عروسة (تلاجة/بوتاجاز)" : "Hi, I'd like to know the cost of bride trousseau appliances",
+    isAR ? "السلام عليكم، أرغب في معرفة تكلفة أجهزة جهاز العروس (ثلاجة/بوتاجاز)" : "Hi, I'd like to know the cost of bride trousseau appliances",
   );
 
   const points = [
-    { icon: Home,       t: isAR ? "بيت مسلم بيتبني" : "Building a Muslim home", d: isAR ? "بتساهم في بداية أسرة كاملة" : "You help start a whole family" },
-    { icon: Heart,      t: isAR ? "أثر بيفضل سنين" : "A lasting gift",          d: isAR ? "كل لقمة بتتطبخ في بيتها" : "In every meal cooked in her home" },
+    { icon: Home,       t: isAR ? "بيت مسلم يُبنى" : "Building a Muslim home", d: isAR ? "تساهم في بداية أسرة كاملة" : "You help start a whole family" },
+    { icon: Heart,      t: isAR ? "أثر يبقى سنين" : "A lasting gift",          d: isAR ? "في كل لقمة تُطبخ في بيتها" : "In every meal cooked in her home" },
     { icon: ShieldCheck,t: isAR ? "ستر يتيمة" : "Sheltering an orphan",      d: isAR ? "«ومن ستر مسلمًا ستره الله» متفق عليه" : "“Whoever shelters a Muslim, Allah shelters him”" },
-    { icon: Gift,       t: isAR ? "تسليم موثّق" : "Documented delivery",     d: isAR ? "بعد بحث ميداني، وبنبعتلك صور التسليم" : "After a field visit, with delivery photos" },
+    { icon: Gift,       t: isAR ? "تسليم موثّق" : "Documented delivery",     d: isAR ? "بعد بحث ميداني، ونرسل إليك صور التسليم" : "After a field visit, with delivery photos" },
   ];
 
   return (
@@ -71,7 +71,7 @@ export const BrideTrousseau = () => {
               areaServed: { "@type": "AdministrativeArea", name: "Dakahlia, Egypt" },
               provider: { "@type": "NGO", name: "Al-Yusr Charity Foundation", url: "https://elyusr.org" },
               description: isAR
-                ? "ساهم في شراء أجهزة (تلاجة/بوتاجاز) لعروسة يتيمة في الدقهلية بعد بحث ميداني وتسليم موثّق."
+                ? "ساهم في شراء أجهزة (ثلاجة/بوتاجاز) لعروس يتيمة في الدقهلية بعد بحث ميداني وتسليم موثّق."
                 : "Sponsor appliances for an orphan bride in Dakahlia after a field visit, with documented delivery.",
               url: "https://elyusr.org/programs#bride-trousseau",
             },
@@ -89,7 +89,7 @@ export const BrideTrousseau = () => {
           <div className="absolute -inset-3 rounded-[2.5rem] bg-secondary/15 blur-2xl" aria-hidden />
           <img
             src={bride}
-            alt={isAR ? "عروسة يتيمة في يوم زفافها" : "Orphan bride on her wedding day"}
+            alt={isAR ? "عروس يتيمة في يوم زفافها" : "Orphan bride on her wedding day"}
             loading="lazy"
             decoding="async"
             width={900}
@@ -110,7 +110,7 @@ export const BrideTrousseau = () => {
           </h2>
           <p className="mt-3 text-[13px] font-semibold leading-relaxed text-primary-foreground/85 md:text-base">
             {isAR
-              ? "تخيّل لما تساهم في شراء (تلاجة أو بوتاجاز) لعروسة يتيمة؛ كل لقمة بتطبخها، وكل حياة أولادها في المستقبل، هي أرباح بتنزل في رصيدك. أنت مش بتشتري أجهزة، أنت بتستثمر في بناء أسرة مسلمة بفضل الله ثم بفضل تبرعك."
+              ? "تخيّل أن تساهم في شراء ثلاجة أو بوتاجاز لعروس يتيمة؛ فكل لقمة تطبخها، وحياة أولادها في المستقبل، أرباح تُضاف إلى رصيدك. أنت لا تشتري أجهزة، بل تستثمر في بناء أسرة مسلمة بفضل الله ثم بفضل تبرعك."
               : "Help buy a fridge or stove for an orphan bride — every meal she cooks and every life of her future children becomes a credit in your record. You're not buying appliances, you're investing in a Muslim family."}
           </p>
 
@@ -144,7 +144,7 @@ export const BrideTrousseau = () => {
           </div>
 
           <p className="mt-3 text-[11px] font-bold text-secondary/90">
-            {isAR ? "كل جهاز بيتسلّم للعروسة بعد بحث ميداني، وبتوصلك صور التسليم." : "Every appliance is delivered after a field visit, with photos sent to you."}
+            {isAR ? "يُسلَّم كل جهاز للعروس بعد بحث ميداني، وتصلك صور التسليم." : "Every appliance is delivered after a field visit, with photos sent to you."}
           </p>
         </div>
       </div>

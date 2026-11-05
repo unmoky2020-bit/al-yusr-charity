@@ -204,7 +204,7 @@ const RamadanMain = () => {
             <p className="mt-2 text-sm text-foreground/75 sm:text-base">{t(feedCard?.desc).replace("{n}", fmtNum(IFTAR, isAr))}</p>
             <Counter isAr={isAr} value={meals} setValue={setMeals} min={1} max={1000} step={5} labelAr="وجبة" labelEn="meals" />
             <Link to={amountHref(DONATE, meals * IFTAR)} className="mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-orange-grad font-black text-accent-foreground shadow-cta transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
-              <Heart className="h-5 w-5" /> {isAr ? `فطّر ${fmtNum(meals, true)} صائماً بـ ${fmtNum(meals * IFTAR, true)} جنيه` : `Feed ${meals} for ${fmtNum(meals * IFTAR, false)} EGP`}
+              <Heart className="h-5 w-5" /> {isAr ? `فطّر ${fmtNum(meals, true)} صائمًا بـ ${fmtNum(meals * IFTAR, true)} جنيه` : `Feed ${meals} for ${fmtNum(meals * IFTAR, false)} EGP`}
             </Link>
           </div>
         </div>
@@ -295,7 +295,7 @@ const RamadanLanding = () => {
       titleEn={`Ramadan Season — '${c.hero.title.en} ${c.hero.title2.en}'`}
       taglineAr={c.hero.lead.ar}
       taglineEn={c.hero.lead.en}
-      metaDescAr="شارك في موسم رمضان مع مؤسسة اليسر: كرتونة الخير (25 كيلو بلدي)، مطبخ وجبات الإفطار الساخنة، ذبائح مزارعنا الوقفية، تيسير الزواج 'الفرحة فرحتين'، كسوة العيد، وزكاة المال والفطر."
+      metaDescAr="شارك في موسم رمضان مع مؤسسة اليسر: كرتونة الخير (25 كيلو بلدي)، ومطبخ وجبات الإفطار الساخنة، وذبائح مزارعنا الوقفية، وتيسير الزواج «الفرحة فرحتين»، وكسوة العيد، وزكاة المال والفطر."
       metaDescEn="Support Al-Yusr's Ramadan Season: 25kg family boxes, hot iftar kitchen, endowment farm meat, bride support, orphan Eid clothing, and Zakat distribution in Egypt."
       heroImage={images("hero")[0]?.src ?? yusrRamadanBox}
       heroAlt="كرتونة رمضان 25 كيلو من مؤسسة اليسر مع لحوم بلدي"

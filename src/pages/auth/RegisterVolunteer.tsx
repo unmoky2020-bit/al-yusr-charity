@@ -33,7 +33,7 @@ const RegisterVolunteer = () => {
       toast({ title: isAR ? "البريد مسجل بالفعل" : "Email already exists", variant: "destructive" });
       return;
     }
-    toast({ title: isAR ? " تم استلام طلبك" : " Application received", description: isAR ? "فريق اليسر هيراجع طلبك خلال 48 ساعة." : "Our team will review within 48 hours.", });
+    toast({ title: isAR ? " تم استلام طلبك" : " Application received", description: isAR ? "سيراجع فريق اليسر طلبك خلال 48 ساعة." : "Our team will review within 48 hours.", });
     nav("/login");
   };
 
@@ -43,7 +43,7 @@ const RegisterVolunteer = () => {
     <PageLayout>
       <SEOHelmet noindex
         title={isAR ? "انضم لفريق المتطوعين | مؤسسة اليسر الخيرية" : "Join our volunteer team | Al-Yusr Charity"}
-        description={isAR ? "انضم لفريق متطوعي مؤسسة اليسر في الدقهلية. ساعة من وقتك تفرّح بيت كامل." : "Join Al-Yusr volunteers in Dakahlia. One hour of yours brings joy to a whole home."}
+        description={isAR ? "انضم لفريق متطوعي مؤسسة اليسر في الدقهلية. ساعة من وقتك تُدخل الفرحة على بيت كامل." : "Join Al-Yusr volunteers in Dakahlia. One hour of yours brings joy to a whole home."}
         path="/register/volunteer"
       />
       <section className="bg-muted/30 pt-8 sm:pt-12 pb-36 sm:pb-44 md:pt-16 md:pb-52">
@@ -64,7 +64,7 @@ const RegisterVolunteer = () => {
               </div>
               <p className="text-xs sm:text-sm font-black text-primary">
                 {isAR
-                  ? "حابب تتعرف على مسارات وقصص ووعود التطوع أولاً؟"
+                  ? "هل تودّ أن تتعرّف أولًا على مسارات التطوع وقصصه ووعوده؟"
                   : "Want to explore volunteer tracks & stories first?"}
               </p>
             </div>
@@ -86,7 +86,7 @@ const RegisterVolunteer = () => {
                 {isAR ? "انضم لفريق المتطوعين" : "Join our volunteer team"}
               </h1>
               <p className="mt-2 text-sm text-muted-foreground">
-                {isAR ? "املأ بياناتك وفريق اليسر هيتواصل معاك خلال 48 ساعة" : "Fill in your details and our team will reach out within 48h"}
+                {isAR ? "املأ بياناتك، وسيتواصل معك فريق اليسر خلال 48 ساعة" : "Fill in your details and our team will reach out within 48h"}
               </p>
             </div>
 

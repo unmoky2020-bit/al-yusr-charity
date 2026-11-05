@@ -99,8 +99,8 @@ const AxisDetail = () => {
         <Helmet><meta name="robots" content="noindex" /></Helmet>
         <section className="container mx-auto grid place-items-center px-4 py-24 text-center">
           <SearchX className="h-10 w-10 text-muted-foreground" />
-          <h1 className="mt-4 text-2xl font-black text-primary">{isAR ? "المحور ده مش موجود" : "This pillar was not found"}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{isAR ? "ممكن يكون الرابط اتغير. تقدر تتصفح برامجنا من هنا." : "The link may have changed. Browse our programs instead."}</p>
+          <h1 className="mt-4 text-2xl font-black text-primary">{isAR ? "هذا المحور غير موجود" : "This pillar was not found"}</h1>
+          <p className="mt-2 text-sm text-muted-foreground">{isAR ? "ربما تغيّر الرابط. يمكنك تصفّح برامجنا من هنا." : "The link may have changed. Browse our programs instead."}</p>
           <Button asChild className="mt-6"><Link to="/programs">{isAR ? "كل البرامج" : "All programs"}</Link></Button>
         </section>
       </PageLayout>
@@ -220,7 +220,7 @@ const AxisDetail = () => {
       {features.length > 0 && (
         <section className="py-12 md:py-16">
           <div className="container mx-auto max-w-5xl px-4">
-            <h2 className="text-center text-2xl font-black text-primary md:text-3xl">{isAR ? "إيه اللي بنقدّمه في المحور ده؟" : "What we deliver"}</h2>
+            <h2 className="text-center text-2xl font-black text-primary md:text-3xl">{isAR ? "ماذا نقدّم في هذا المحور؟" : "What we deliver"}</h2>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2">
               {features.map((f) => (
                 <li key={f} className="flex items-start gap-3 rounded-2xl bg-card p-4 shadow-soft">
@@ -246,7 +246,7 @@ const AxisDetail = () => {
             <CardGridSkeleton count={3} className="mt-5" />
           ) : programs.length === 0 ? (
             <p className="mt-5 rounded-2xl bg-card p-6 text-center text-sm text-muted-foreground shadow-soft">
-              {isAR ? "مفيش برامج متاحة في المحور ده حاليًا — تقدر تتبرع للمحور مباشرة." : "No programs are open in this pillar right now — you can donate to the pillar directly."}
+              {isAR ? "لا توجد برامج متاحة في هذا المحور حاليًا، ويمكنك التبرع للمحور مباشرة." : "No programs are open in this pillar right now — you can donate to the pillar directly."}
             </p>
           ) : (
             <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -278,7 +278,7 @@ const AxisDetail = () => {
         showOwner
         isRTL={isAR}
         title={isAR ? `حالات ضمن ${fullTitle}` : `Cases in the ${fullTitle}`}
-        subtitle={isAR ? "اختار حالة بعينها، وتبرعك هيوصل لها هي وهتتابع تحديثاتها." : "Choose a specific case; your donation goes to it and you follow its updates."}
+        subtitle={isAR ? "اختر حالة بعينها، وسيصل تبرعك إليها مباشرة وتتابع تحديثاتها." : "Choose a specific case; your donation goes to it and you follow its updates."}
       />
 
       {/* FAQ of the category linked in the dashboard (axis → «الأسئلة الشائعة») */}

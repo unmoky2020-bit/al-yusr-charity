@@ -34,7 +34,7 @@ const Campaigns = () => {
               {lang === "ar" ? "حملات التطوع المفتوحة" : "Open volunteer campaigns"}
             </h1>
             <p className="mt-2 text-sm text-primary-foreground/85">
-              {lang === "ar" ? "اختر حملة وانضم للفريق — كل مقعد فرق." : "Pick a campaign and join the team."}
+              {lang === "ar" ? "اختر حملة وانضم إلى الفريق، فكل مقعد يصنع فرقًا." : "Pick a campaign and join the team."}
             </p>
           </header>
         </div>

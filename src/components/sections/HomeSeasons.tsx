@@ -44,10 +44,10 @@ export const HomeSeasons = () => {
       tag: isRTL ? "موسم الشتاء" : "Winter season",
       title: isRTL ? "حملة ستر" : "Ster campaign",
       text: isRTL
-        ? "«من ستر مسلمًا ستره الله». لحاف فايبر، أسقف منازل، مراتب، كسوة شتاء، سراير، أبواب وشبابيك تحبس الريح."
+        ? "«من ستر مسلمًا ستره الله». لحاف فايبر، وأسقف منازل، ومراتب، وكسوة شتاء، وأسرّة، وأبواب ونوافذ تصدّ الريح."
         : "Fiber blankets, roofs, mattresses, winter clothes, beds, doors & windows that hold back the cold.",
       bullets: isRTL
-        ? ["لحاف فايبر + كسوة شتاء", "ترميم أسقف وأبواب وشبابيك", "سراير ومراتب لكل أسرة"]
+        ? ["لحاف فايبر + كسوة شتاء", "ترميم أسقف وأبواب ونوافذ", "أسرّة ومراتب لكل أسرة"]
         : ["Fiber blankets + winter clothing", "Roofs, doors & windows repaired", "Beds & mattresses for each family"],
       months: isRTL ? "أكتوبر — فبراير" : "Oct — Feb",
       accent: "bg-primary text-primary-foreground",
@@ -116,8 +116,8 @@ export const HomeSeasons = () => {
       tag: isRTL ? "موسم الأضاحي" : "Qurbani season",
       title: isRTL ? "تيسير الأضاحي — بدون استغلال" : "Qurbani — no exploitation",
       text: isRTL
-        ? "من مزارع اليسر الوقفية: مواشي محصّنة بأعلى تصفية. سعر السوق بدون ربح، مقابل ٥ كجم للفقراء — +٢ طن سنويًا."
-        : "From our Waqf farms: vaccinated cattle, market price with no markup, 5kg back to the poor — 2+ tons yearly.",
+        ? "من مزارع اليسر الوقفية: مواشي محصّنة بأعلى تصفية. سعر السوق بدون ربح، مقابل ٥ كجم للفقراء — +٥ أطنان سنويًا."
+        : "From our Waqf farms: vaccinated cattle, market price with no markup, 5kg back to the poor — 5+ tons yearly.",
       bullets: isRTL
         ? ["مواشي وقفية محصّنة بأعلى تصفية", "سعر السوق — بدون ربح للمؤسسة", "٥ كجم من الصك للفقراء"]
         : ["Waqf-raised vaccinated cattle", "Market price — zero markup", "5 kg from each share to the poor"],
@@ -134,10 +134,10 @@ export const HomeSeasons = () => {
       tag: isRTL ? "العودة للمدارس" : "Back to school",
       title: isRTL ? "الجهل هو الفقر الأول" : "Ignorance is the first poverty",
       text: isRTL
-        ? "شنطة مدرسية لكل طالب مستحق، أدوات كاملة، زي مدرسي جديد، ودفع المصروفات الدراسية."
+        ? "حقيبة مدرسية لكل طالب مستحق، وأدوات كاملة، وزي مدرسي جديد، وسداد المصروفات الدراسية."
         : "School bags, full supplies, new uniforms, and tuition fees paid for students in need.",
       bullets: isRTL
-        ? ["شنطة مدرسية + أدوات كاملة", "زي مدرسي جديد", "سداد مصروفات دراسية"]
+        ? ["حقيبة مدرسية + أدوات كاملة", "زي مدرسي جديد", "سداد مصروفات دراسية"]
         : ["School bag + full supplies", "Brand-new uniforms", "Tuition fees paid"],
       months: isRTL ? "أغسطس — سبتمبر" : "Aug — Sep",
       accent: "bg-accent text-accent-foreground",
@@ -179,11 +179,11 @@ export const HomeSeasons = () => {
             {isRTL ? "مواسم الخير" : "Seasons of good"}
           </span>
           <h2 className="mt-3 text-2xl font-black leading-tight text-foreground sm:text-3xl md:text-4xl">
-            {isRTL ? "بنشتغل طول السنة… كل موسم له حملته" : "We work all year — every season, its own campaign"}
+            {isRTL ? "نعمل طوال العام… ولكل موسم حملته" : "We work all year — every season, its own campaign"}
           </h2>
           <p className="mx-auto mt-2.5 max-w-[56ch] text-[13.5px] leading-relaxed text-muted-foreground sm:text-sm md:text-[15px]">
             {isRTL
-              ? "ست مواسم، ست حملات متكاملة، أثر يدوم ٣٦٥ يوم — والترتيب حسب الموسم الحالي."
+              ? "ستة مواسم، وست حملات متكاملة، وأثر يدوم ٣٦٥ يومًا — مرتبة حسب الموسم الحالي."
               : "Six seasons, six integrated campaigns, impact that lasts 365 days — sorted by what's current."}
           </p>
         </header>

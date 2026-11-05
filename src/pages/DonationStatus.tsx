@@ -255,7 +255,7 @@ export default function DonationStatus() {
                   </Button>
                 </div>
                 <p className="mt-4 text-center text-xs text-muted-foreground">
-                  {lang === "ar" ? "نحدّث الحالة تلقائيًا كل بضع ثوان." : "We auto-refresh every few seconds."}
+                  {lang === "ar" ? "نحدّث الحالة تلقائيًا كل بضع ثوانٍ." : "We auto-refresh every few seconds."}
                 </p>
               </div>
             ) : (
@@ -305,7 +305,7 @@ export default function DonationStatus() {
 
                 {(tx.status === "pending" || tx.status === "processing") && (
                   <p className="mt-4 text-center text-xs text-muted-foreground">
-                    {lang === "ar" ? "نحدّث الحالة تلقائيًا كل بضع ثوان." : "We auto-refresh every few seconds."}
+                    {lang === "ar" ? "نحدّث الحالة تلقائيًا كل بضع ثوانٍ." : "We auto-refresh every few seconds."}
                   </p>
                 )}
               </>

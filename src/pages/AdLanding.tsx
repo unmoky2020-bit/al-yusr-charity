@@ -148,11 +148,11 @@ const AdLanding = () => {
       <section className="bg-background py-10 md:py-14">
         <div className="container mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-xl font-black text-primary md:text-2xl">
-            {isAr ? "تبرعك يصل خلال أيام، موثّق بالاسم والصورة" : "Your donation lands in days — documented"}
+            {isAr ? "تبرعك يصل خلال أيام، موثّقًا بالاسم والصورة" : "Your donation lands in days — documented"}
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
             {isAr
-              ? "نحوّل تبرعك إلى أثر فعلي: غذاء، علاج، تعليم وكساء. كل خطوة موثّقة في تقاريرنا الميدانية."
+              ? "نحوّل تبرعك إلى أثر فعلي: غذاء وعلاج وتعليم وكساء. كل خطوة موثّقة في تقاريرنا الميدانية."
               : "We convert your gift into real impact: food, treatment, education, and clothing — every step documented."}
           </p>
           <div className="mt-6">

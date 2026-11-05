@@ -102,7 +102,7 @@ export function PaymobCheckoutModal({
             معاملتك مشفرة وفق معايير PCI-DSS المصرفية (فيزا، ماستركارد، ميزة)
           </span>
           <span className="hidden md:inline text-[10px] text-muted-foreground">
-            لا يتم حفظ أي بيانات لكارتك لدينا
+            لا نحتفظ بأي بيانات خاصة ببطاقتك
           </span>
         </div>
 
@@ -112,10 +112,10 @@ export function PaymobCheckoutModal({
             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-card/95">
               <Loader2 className="h-8 w-8 animate-spin text-secondary" />
               <p className="text-xs sm:text-sm font-bold text-primary">
-                جاري الاتصال الآمن بسيرفر Paymob...
+                جارٍ الاتصال الآمن بخادم Paymob...
               </p>
               <p className="text-[11px] text-muted-foreground">
-                يرجى الانتظار لحظات لفتح شاشة إدخال بيانات الكارت
+                يُرجى الانتظار لحظات حتى تُفتح شاشة إدخال بيانات البطاقة
               </p>
             </div>
           )}

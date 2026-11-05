@@ -29,7 +29,7 @@ const RegisterDonor = () => {
       toast({ title: lang === "ar" ? "البريد مسجل بالفعل" : "Email already exists", variant: "destructive" });
       return;
     }
-    toast({ title: lang === "ar" ? " أهلاً بك في عائلة اليسر" : " Welcome to the Al-Yusr family" });
+    toast({ title: lang === "ar" ? " أهلًا بك في عائلة اليسر" : " Welcome to the Al-Yusr family" });
     nav("/profile");
   };
 

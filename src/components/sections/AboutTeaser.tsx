@@ -37,9 +37,9 @@ export const AboutTeaser = () => {
   /** Two dated milestones, then a mark (not a number) for the journey that continues. */
   const stops = isRTL
     ? [
-        { y: "2000", t: "البداية: فريق للخير", d: "فريق اجتمع على خدمة الأسر المستحقة، وبنى خبرته في الميدان." },
+        { y: "2000", t: "البداية: فريق للخير", d: "فريق اجتمع على خدمة الأسر المستحقة، واكتسب خبرته من العمل الميداني." },
         { y: "2019", t: "الإشهار الرسمي", d: "مؤسسة مشهرة برقم 2665 بوزارة التضامن الاجتماعي." },
-        { y: null, t: "والمسيرة مستمرة", d: "المؤسسة بتتوسع وبتدوم بانضمامك لينا أو بتبرعك." },
+        { y: null, t: "والمسيرة مستمرة", d: "تتوسع المؤسسة ويستمر عطاؤها بانضمامك إلينا أو بتبرعك." },
       ]
     : [
         { y: "2000", t: "The start: a team for good", d: "A team that came together to serve families in need and built its field experience." },
@@ -55,11 +55,11 @@ export const AboutTeaser = () => {
             <ShieldCheck className="h-4 w-4" /> {isRTL ? "من نحن" : "Who we are"}
           </p>
           <h2 className="mt-2 text-3xl font-black leading-[1.3] md:text-4xl">
-            {isRTL ? "بدأنا فريقًا للخير، وكبرنا مؤسسة مشهرة" : "We began as a team for good and grew into a registered foundation"}
+            {isRTL ? "بدأنا فريقًا للخير، ثم أصبحنا مؤسسة مشهرة" : "We began as a team for good and grew into a registered foundation"}
           </h2>
           <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-primary-foreground/85 md:mx-0">
             {isRTL
-              ? "اليسر بدأت فريق اجتمع على عمل الخير وخدمة الأسر المستحقة. ومع اتساع العمل اتأسست مؤسسة مشهرة رسميًا من وزارة التضامن الاجتماعي برقم 2665 لسنة 2019، علشان الخير يكبر بنظام وحوكمة وشفافية. والمسيرة لسه مستمرة."
+              ? "بدأت اليسر فريقًا اجتمع على عمل الخير وخدمة الأسر المستحقة. ومع اتساع العمل تأسست مؤسسة مشهرة رسميًا بوزارة التضامن الاجتماعي برقم 2665 لسنة 2019، لكي ينمو الخير بنظام وحوكمة وشفافية. وما زالت المسيرة مستمرة."
               : "Al-Yusr began as a team that came together to do good and serve families in need. As the work grew, it became a foundation officially registered with the Ministry of Social Solidarity (No. 2665, 2019), so the good could grow with order, governance and transparency. The journey continues."}
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-x-6 md:justify-start">
@@ -111,7 +111,7 @@ export const AboutTeaser = () => {
                 <p className="mt-1 text-xs leading-relaxed text-primary-foreground/75 sm:text-sm">{s.d}</p>
                 {!s.y && (
                   <div className="mt-2 flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs font-black sm:text-sm">
-                    <Link to="/volunteer" className="text-secondary underline decoration-secondary/50 underline-offset-4 hover:decoration-secondary">{isRTL ? "انضم لينا" : "Join us"}</Link>
+                    <Link to="/volunteer" className="text-secondary underline decoration-secondary/50 underline-offset-4 hover:decoration-secondary">{isRTL ? "انضم إلينا" : "Join us"}</Link>
                     <Link to="/donate" className="text-secondary underline decoration-secondary/50 underline-offset-4 hover:decoration-secondary">{isRTL ? "تبرّع" : "Give"}</Link>
                   </div>
                 )}

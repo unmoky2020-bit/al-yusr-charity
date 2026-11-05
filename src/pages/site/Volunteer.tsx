@@ -103,7 +103,7 @@ const Volunteer = () => {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (form.name.trim().length < 2 || form.phone.trim().length < 8) {
-      toast({ title: isRTL ? "من فضلك راجع البيانات المطلوبة" : "Please review the form" });
+      toast({ title: isRTL ? "يُرجى مراجعة البيانات المطلوبة" : "Please review the form" });
       return;
     }
     setSending(true);
@@ -132,7 +132,7 @@ const Volunteer = () => {
   return (
     <PageLayout>
       <SEOHelmet
-        title={isRTL ? "تطوع مع اليسر في الدقهلية والمنصورة | وقتك وخبرتك تصنع الأثر" : "Volunteer in Dakahlia & Mansoura - your time, effort & expertise is enough | Al-Yusr"}
+        title={isRTL ? "تطوع مع اليسر في الدقهلية والمنصورة | وقتك وخبرتك يصنعان الأثر" : "Volunteer in Dakahlia & Mansoura - your time, effort & expertise is enough | Al-Yusr"}
         description={isRTL ? "تطوع مع مؤسسة اليسر في قوافل التوزيع وزيارات الحالات والقوافل الطبية والإعلام والدعم التقني. لا تحتاج إلى التبرع بالمال؛ وقتك وخبرتك يكفيان لصناعة أثر حقيقي." : "Volunteer with Al-Yusr in Dakahlia: distribution convoys, case visits, medical convoys, media, tech support. You do not need to donate - your time, effort and expertise are enough."}
         path="/volunteer"
       />
@@ -280,7 +280,7 @@ const Volunteer = () => {
             </h2>
             <p className="mx-auto mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">
               {isRTL
-                ? "هتنزل مع فريقنا، هتسلم الخير بإيدك، وهتشوف فرحة الناس قدامك. ساعة من وقتك ممكن تفرّح بيت كامل."
+                ? "ستنزل مع فريقنا إلى الميدان، وتسلّم الخير بيدك، وترى فرحة الناس أمامك. ساعة من وقتك قد تُدخل الفرحة على بيت كامل."
                 : "You'll go out with our team, hand-deliver aid yourself, and see the joy of people in front of you. One hour of your time can bring joy to a whole home."}
             </p>
           </div>
@@ -288,8 +288,8 @@ const Volunteer = () => {
           {/* 4 benefit cards (from programs.ts volunteer entry) */}
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { I: HandHeart, ar: "تنزل مع فريقنا للميدان", en: "Field work with our team" },
-              { I: Heart,     ar: "تسلم الخير بإيدك للأسر", en: "Hand-deliver aid to families" },
+              { I: HandHeart, ar: "تنزل مع فريقنا إلى الميدان", en: "Field work with our team" },
+              { I: Heart,     ar: "تسلّم الخير بيدك للأسر", en: "Hand-deliver aid to families" },
               { I: BadgeCheck, ar: "شهادة تطوع رسمية", en: "Official volunteer certificate" },
               { I: BookOpen, ar: "تدريب مجاني على العمل الخيري", en: "Free training in charitable work" },
             ].map((b, i) => (
@@ -319,12 +319,12 @@ const Volunteer = () => {
               <div className="space-y-3 text-sm leading-[1.7] text-muted-foreground md:text-base">
                 <p className="font-extrabold text-primary">
                   {isRTL
-                    ? "في بيوت كتير في المنصورة مستنية حد يوصلها الخير، وممكن تكون أنت السبب في الفرحة دي."
+                    ? "هناك بيوت كثيرة في المنصورة تنتظر من يوصل إليها الخير، وقد تكون أنت سبب هذه الفرحة."
                     : "Many homes in Mansoura await someone to deliver kindness — and you could be the reason for that joy."}
                 </p>
                 <p>
                   {isRTL
-                    ? "ابعتلنا رسالة على الخاص وفريقنا هيتواصل معاك ويقولك خطوات الانضمام لفريق المتطوعين."
+                    ? "أرسل إلينا رسالة خاصة، وسيتواصل معك فريقنا ليوضح لك خطوات الانضمام إلى فريق المتطوعين."
                     : "Send us a message and our team will reach out to guide you through joining the volunteer team."}
                 </p>
               </div>

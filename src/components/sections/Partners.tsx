@@ -19,10 +19,10 @@ export const Partners = () => {
             {lang === "ar" ? "شركاء النجاح" : "Our partners"}
           </span>
           <h2 className="mt-3 text-3xl font-black text-primary md:text-4xl">
-            {lang === "ar" ? "بنبني الأثر مع شركاء نثق فيهم" : "We build impact with trusted partners"}
+            {lang === "ar" ? "نبني الأثر مع شركاء نثق بهم" : "We build impact with trusted partners"}
           </h2>
           <p className="mt-3 text-sm text-muted-foreground md:text-base">
-            {lang === "ar" ? "تعاوننا مع جهات حكومية وأكاديمية ومدنية يضمن وصول كل تبرع لمستحقه." : "Our partnerships with government, academic and civic bodies ensure every donation reaches its rightful recipient."}
+            {lang === "ar" ? "تعاوننا مع جهات حكومية وأكاديمية ومدنية يضمن وصول كل تبرع إلى مستحقه." : "Our partnerships with government, academic and civic bodies ensure every donation reaches its rightful recipient."}
           </p>
         </div>
 

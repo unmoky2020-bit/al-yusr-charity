@@ -12,28 +12,28 @@ const STEPS: { icon: LucideIcon; ar: string; en: string; bodyAr: string; bodyEn:
     icon: HandCoins,
     ar: "تبرعك للوقف",
     en: "Your gift to the waqf",
-    bodyAr: "تبرعك بيتحوّل لأصل ثابت في مزرعة اليسر: رؤوس ماشية وأعلاف وتجهيزات. الأصل ده ما بيتصرفش ولا بيخلص، هو اللي بيفضل يشتغل.",
+    bodyAr: "يتحوّل تبرعك إلى أصل ثابت في مزرعة اليسر: رؤوس ماشية وأعلاف وتجهيزات. هذا الأصل لا يُنفَق ولا ينفد، بل يظل يعمل ويُنتج.",
     bodyEn: "Your gift becomes a lasting asset at the Al-Yusr farm: livestock, feed and equipment. The asset is never spent; it keeps working.",
   },
   {
     icon: Sprout,
     ar: "تربية ورعاية",
     en: "Raising and care",
-    bodyAr: "الماشية بتتربّى على أعلاف بلدي طبيعية وتحت إشراف بيطري، بتطعيمات وسجل لكل رأس، لحد ما توصل لوزنها.",
+    bodyAr: "تُربّى الماشية على أعلاف بلدية طبيعية وتحت إشراف بيطري، مع تطعيمات وسجل لكل رأس، حتى تصل إلى الوزن المناسب.",
     bodyEn: "Livestock is raised on natural local feed under veterinary care, vaccinated and recorded head by head, until it reaches its weight.",
   },
   {
     icon: Beef,
     ar: "الإنتاج",
     en: "Production",
-    bodyAr: "إنتاج المزرعة بيغطي صكوك الأضحية ولحوم المواسم الخيرية، والباقي بيتباع علشان المزرعة تدخّل موارد.",
+    bodyAr: "يغطي إنتاج المزرعة صكوك الأضحية ولحوم المواسم الخيرية، ويُباع الباقي لتوفير موارد للمزرعة.",
     bodyEn: "The farm's output covers Qurbani shares and seasonal charity meat; the rest is sold so the farm earns income.",
   },
   {
     icon: RefreshCw,
-    ar: "العائد بيرجع",
+    ar: "العائد يعود",
     en: "Returns flow back",
-    bodyAr: "عائد الإنتاج بيتقسم على تلات حاجات، وبعدها الدورة بتبدأ من جديد وهي أكبر من الأول.",
+    bodyAr: "يُقسَّم عائد الإنتاج على ثلاثة أوجه، ثم تبدأ الدورة من جديد وهي أكبر من قبل.",
     bodyEn: "The returns are split three ways, and then the cycle starts again, bigger than before.",
   },
 ];
@@ -95,7 +95,7 @@ export const WaqfCycle = ({ steps, returns }: CycleText = {}) => {
           ))}
         </svg>
         <div className="absolute inset-[30%] grid place-items-center rounded-full bg-primary p-3 text-center text-primary-foreground shadow-card">
-          <span className="text-sm font-black leading-snug sm:text-base">{isAr ? "وقف بيكبر كل سنة" : "A waqf that grows every year"}</span>
+          <span className="text-sm font-black leading-snug sm:text-base">{isAr ? "وقف يكبر كل عام" : "A waqf that grows every year"}</span>
         </div>
         {STEPS.map((s, i) => {
           const Icon = s.icon;

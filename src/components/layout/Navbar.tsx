@@ -100,7 +100,7 @@ export const Navbar = () => {
   type MoreLink = { to: string; ar: string; en: string; descAr: string; descEn: string; Icon: LucideIcon; group: "about" | "give" };
   const moreLinks: MoreLink[] = [
     { to: "/trust", ar: "الشفافية", en: "Transparency", descAr: "تقارير وأرقام الصرف", descEn: "Reports and spending", Icon: ShieldCheck, group: "about" },
-    { to: "/about#achievements", ar: "إنجازاتنا", en: "Our achievements", descAr: "اللي اتعمل بتبرعاتكم", descEn: "What your gifts did", Icon: Trophy, group: "about" },
+    { to: "/about#achievements", ar: "إنجازاتنا", en: "Our achievements", descAr: "ما تحقق بتبرعاتكم", descEn: "What your gifts did", Icon: Trophy, group: "about" },
     { to: "/gallery", ar: "معرض الصور", en: "Gallery", descAr: "صور من الميدان", descEn: "Photos from the field", Icon: Images, group: "about" },
     { to: "/faqs", ar: "الأسئلة الشائعة", en: "FAQs", descAr: "الزكاة والتبرع والإيصالات", descEn: "Zakat, giving, receipts", Icon: HelpCircle, group: "about" },
     { to: "/donate/track", ar: "تتبع تبرعك", en: "Track donation", descAr: "برقم التبرع", descEn: "With your reference", Icon: SearchCheck, group: "give" },
@@ -111,14 +111,14 @@ export const Navbar = () => {
 
   // Primary navigation (always in the bar on desktop; sizes tighten on 1024–1280 px so nothing overlaps).
   const links: { to: string; label: string; highlight?: boolean; wide?: boolean; Icon?: LucideIcon; descAr?: string; descEn?: string }[] = [
-    { to: "/about",     label: t.nav.about, wide: true, Icon: Info, descAr: "مين إحنا وإزاي بنشتغل", descEn: "Who we are" },
+    { to: "/about",     label: t.nav.about, wide: true, Icon: Info, descAr: "من نحن وكيف نعمل", descEn: "Who we are" },
     { to: "/programs",  label: lang === "ar" ? "برامجنا" : "Programs" },
     { to: "/projects",  label: lang === "ar" ? "مشاريعنا" : "Projects", wide: true, Icon: FolderKanban, descAr: "مشاريع الخير الكبيرة", descEn: "Our larger projects" },
     { to: "/campaigns", label: lang === "ar" ? "حملاتنا" : "Campaigns" },
     { to: "/misbaha",   label: lang === "ar" ? "المسبحة" : "Tasbih" },
     { to: "/cases",     label: lang === "ar" ? "الحالات" : "Cases" },
     { to: "/blog",      label: lang === "ar" ? "المدونة" : "Blog", wide: true, Icon: BookOpen, descAr: "قصص ومقالات", descEn: "Stories and articles" },
-    { to: "/contact",   label: t.nav.contact, wide: true, Icon: Phone, descAr: "واتساب وتليفون وعنوان", descEn: "WhatsApp, phone, address" },
+    { to: "/contact",   label: t.nav.contact, wide: true, Icon: Phone, descAr: "واتساب وهاتف وعنوان", descEn: "WhatsApp, phone, address" },
   ];
 
   const isActive = (to: string) => {
@@ -196,7 +196,7 @@ export const Navbar = () => {
                   {(["about", "give"] as const).map((g) => (
                     <div key={g}>
                       <p className="px-2 pb-1 text-[11px] font-black text-muted-foreground">
-                        {g === "about" ? (lang === "ar" ? "اعرف عننا" : "About us") : lang === "ar" ? "طرق تانية للخير" : "More ways to give"}
+                        {g === "about" ? (lang === "ar" ? "تعرّف علينا" : "About us") : lang === "ar" ? "طرق أخرى للخير" : "More ways to give"}
                       </p>
                       <div className="grid gap-0.5">
                         {moreLinks.filter((m) => m.group === g).map((m) => (

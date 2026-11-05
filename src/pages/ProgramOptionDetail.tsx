@@ -176,7 +176,7 @@ const ProgramOptionDetail = () => {
           {[
             { Icon: ShieldCheck, t: isRTL ? "شفافية كاملة" : "Full transparency", d: isRTL ? "تقارير مالية مراجعة." : "Audited reports." },
             { Icon: Camera, t: isRTL ? "توثيق مصوّر" : "Photo proof", d: isRTL ? "صور وفيديو لكل تنفيذ." : "Photos & videos." },
-            { Icon: Truck, t: isRTL ? "تسليم لباب البيت" : "Doorstep delivery", d: isRTL ? "بكرامة وسرعة." : "Dignified & fast." },
+            { Icon: Truck, t: isRTL ? "تسليم حتى باب البيت" : "Doorstep delivery", d: isRTL ? "بكرامة وسرعة." : "Dignified & fast." },
           ].map((c, i) => (
             <div key={i} className="flex items-start gap-3 rounded-2xl bg-card p-4 shadow-soft">
               <c.Icon className="mt-0.5 h-6 w-6 shrink-0 text-secondary" />
@@ -207,7 +207,7 @@ const ProgramOptionDetail = () => {
           <div className="container mx-auto max-w-4xl px-4">
             <div className="mx-auto max-w-2xl text-center">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-                <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "ليه تتبرع لهذا الخيار" : "Why donate to this item"}
+                <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "لماذا تتبرع لهذا الخيار؟" : "Why donate to this item"}
               </span>
               <h2 className="mt-3 text-2xl font-black text-primary md:text-3xl">{isRTL ? "مزايا التبرع" : "Benefits"}</h2>
             </div>
@@ -265,7 +265,7 @@ const ProgramOptionDetail = () => {
           <div className="container mx-auto max-w-5xl px-4">
             <div className="mx-auto mb-8 max-w-2xl text-center">
               <h2 className="text-2xl font-black text-primary md:text-3xl">{isRTL ? "خيارات أخرى في نفس البرنامج" : "Other options in this program"}</h2>
-              <p className="mt-2 text-sm text-muted-foreground">{isRTL ? "اختار اللي يلمس قلبك من أجزاء البرنامج." : "Pick the part that moves your heart."}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{isRTL ? "اختر من أجزاء البرنامج ما هو أقرب إلى قلبك." : "Pick the part that moves your heart."}</p>
               <Link to={`/programs/${slug}`} className="mt-3 inline-flex items-center gap-1 text-sm font-extrabold text-accent hover:underline">
                 {isRTL ? "كل الخيارات" : "All options"} <Arrow className="h-4 w-4" />
               </Link>
@@ -313,11 +313,11 @@ const ProgramOptionDetail = () => {
         ariaLabel={{ ar: `دعم ${title}`, en: `Support ${title}` }}
         title={{ ar: `ادعم ${title}`, en: `Support ${title}` }}
         description={{
-          ar: "كل تبرع بيوصل لأسرة محتاجة موثّقة بالصور والفيديو.",
+          ar: "كل تبرع يصل إلى أسرة محتاجة، موثّقًا بالصور والفيديو.",
           en: "Every donation reaches a verified family with photo & video documentation.",
         }}
         ctaLabel={{ ar: "تبرع الآن", en: "Donate now" }}
-        waText={isRTL ? `السلام عليكم، عايز أعرف تفاصيل ${title}.` : `Hi, I'd like details on ${title}.`}
+        waText={isRTL ? `السلام عليكم، أودّ معرفة تفاصيل ${title}.` : `Hi, I'd like details on ${title}.`}
       />
       {program?.apiId && (
         <LinkedCasesSection filter={{ programId: program.apiId }} isRTL={isRTL}

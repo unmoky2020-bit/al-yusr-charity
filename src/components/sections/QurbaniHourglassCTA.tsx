@@ -21,7 +21,7 @@ export const QurbaniHourglassCTA = () => {
     ? [
         { icon: ShieldCheck, label: "موثّق" },
         { icon: Eye, label: "شفاف" },
-        { icon: Gem, label: "إحترافي" },
+        { icon: Gem, label: "احترافي" },
       ]
     : [
         { icon: ShieldCheck, label: "Verified" },
@@ -31,16 +31,14 @@ export const QurbaniHourglassCTA = () => {
 
   const tiers = isRTL
     ? [
-        { icon: iconCow,   name: "جاموسي", weight: "وزن الصك ٣٠ ك صافي", price: "١٤٠٠٠ جنيه" },
-        { icon: iconCow,   name: "بقري",   weight: "وزن الصك ٣٠ ك صافي", price: "١٦٠٠٠ جنيه" },
-        { icon: iconSheep, name: "خروف",   weight: "وزن ٥٠–٦٠ ك قائم",   price: "١٥٠٠–١٤٠٠ جنيه" },
-        { icon: iconCow,   name: "بقري",   weight: "وزن الصك ٣٥–٣٧ صافي", price: "١٨٠٠٠ جنيه" },
+        { icon: iconSheep, name: "خروف",            weight: "خروف كامل",         price: "١٤٬٥٠٠ جنيه" },
+        { icon: iconCow,   name: "صك سُبع بقري",    weight: "سُبع (١/٧) بقرة",    price: "١٦٬٠٠٠ جنيه" },
+        { icon: iconCow,   name: "صك سُبع جاموسي",  weight: "سُبع (١/٧) جاموسة",  price: "١٤٬٠٠٠ جنيه" },
       ]
     : [
-        { icon: iconCow,   name: "Buffalo", weight: "30 kg net per share",  price: "EGP 14,000" },
-        { icon: iconCow,   name: "Cow",     weight: "30 kg net per share",  price: "EGP 16,000" },
-        { icon: iconSheep, name: "Sheep",   weight: "50–60 kg live",        price: "EGP 1,400–1,500" },
-        { icon: iconCow,   name: "Cow",     weight: "35–37 kg net",         price: "EGP 18,000" },
+        { icon: iconSheep, name: "Sheep",            weight: "Whole sheep",        price: "EGP 14,500" },
+        { icon: iconCow,   name: "1/7 cow share",    weight: "One seventh of a cow",     price: "EGP 16,000" },
+        { icon: iconCow,   name: "1/7 buffalo share", weight: "One seventh of a buffalo", price: "EGP 14,000" },
       ];
 
   const onCta = (label: string) =>
@@ -67,7 +65,7 @@ export const QurbaniHourglassCTA = () => {
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm font-bold text-primary-foreground/85 md:mx-0 md:text-base">
             {isRTL
-              ? "الأسعار شاملة كل النفقات المتعلقة بالصك. الحجز برقم الهاتف والبطاقة، ويصلك مندوب لو حابب."
+              ? "الأسعار شاملة كل النفقات المتعلقة بالصك. الحجز برقم الهاتف والبطاقة، ويمكن أن يصلك مندوب إن رغبت."
               : "Prices include every share-related cost. Book by phone & national ID — a rep can reach your door."}
           </p>
 
@@ -89,7 +87,7 @@ export const QurbaniHourglassCTA = () => {
             </Button>
             <Button asChild size="lg" className="bg-[#25D366] text-white hover:bg-[#1ebe5b]">
               <a
-                href={`https://wa.me/201097000137?text=${encodeURIComponent(isRTL ? "حابب أحجز صك أضحية مع مؤسسة اليسر" : "I'd like to book a Qurbani share with Al-Yusr")}`}
+                href={`https://wa.me/201097000137?text=${encodeURIComponent(isRTL ? "أودّ حجز صك أضحية مع مؤسسة اليسر" : "I'd like to book a Qurbani share with Al-Yusr")}`}
                 target="_blank" rel="noopener noreferrer" dir="ltr"
                 onClick={() => onCta("whatsapp")}
               >

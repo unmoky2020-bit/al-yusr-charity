@@ -66,7 +66,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
   const [copied, setCopied] = useState(false);
 
   const wa = `https://wa.me/201097000137?text=${encodeURIComponent(
-    isAr ? `السلام عليكم، حابب استفسر عن تبرع ${p.titleAr}.` : `Hi, I would like to inquire about ${p.titleEn}.`
+    isAr ? `السلام عليكم، أرغب في الاستفسار عن التبرع لـ${p.titleAr}.` : `Hi, I would like to inquire about ${p.titleEn}.`
   )}`;
 
   const pageUrl = `https://elyusr.org${p.path}`;
@@ -78,7 +78,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(pageUrl).then(() => {
         setCopied(true);
-        toast.success(isAr ? "تم نسخ رابط الحملة للمشاركة " : "Campaign link copied ");
+        toast.success(isAr ? "تم نسخ رابط الحملة للمشاركة" : "Campaign link copied ");
         setTimeout(() => setCopied(false), 2000);
       }).catch(() => {});
     }
@@ -119,7 +119,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
   return (
     <PageLayout>
       <SEOHelmet
-        title={(isAr ? p.seo?.title?.ar : p.seo?.title?.en) || (isAr ? `${p.titleAr} | مؤسسة اليسر — الدقهلية والمنصورة وكافة محافظات مصر` : `${p.titleEn} | Al-Yusr Charity Foundation — Egypt`)}
+        title={(isAr ? p.seo?.title?.ar : p.seo?.title?.en) || (isAr ? `${p.titleAr} | مؤسسة اليسر الخيرية في مصر` : `${p.titleEn} | Al-Yusr Charity Foundation — Egypt`)}
         description={(isAr ? p.seo?.description?.ar : p.seo?.description?.en) || (isAr ? p.metaDescAr : p.metaDescEn)}
         path={p.path}
         image={p.heroImage}
@@ -130,8 +130,8 @@ export const CampaignLandingShell = (p: LandingProps) => {
           "@graph": [
             {
               "@type": "NGO",
-              name: "مؤسسة اليسر للتنمية",
-              alternateName: ["مؤسسة اليسر الخيرية", "جمعية اليسر", "Al-Yusr Charity Foundation"],
+              name: "مؤسسة اليسر الخيرية",
+              alternateName: ["مؤسسة اليسر", "جمعية اليسر", "Al-Yusr Charity Foundation"],
               url: "https://elyusr.org/",
               logo: "https://elyusr.org/logo-512.png",
               telephone: "+201097000137",
@@ -142,7 +142,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
               "@type": "DonateAction",
               name: isAr ? p.titleAr : p.titleEn,
               description: isAr ? p.metaDescAr : p.metaDescEn,
-              recipient: { "@type": "NGO", name: "مؤسسة اليسر للتنمية", url: "https://elyusr.org/" },
+              recipient: { "@type": "NGO", name: "مؤسسة اليسر الخيرية", url: "https://elyusr.org/" },
               target: `https://elyusr.org${p.donateHref}`,
             },
             {
@@ -167,7 +167,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
         <p>{isAr ? p.metaDescAr : p.metaDescEn}</p>
         <p>
           {isAr
-            ? "مؤسسة اليسر الخيرية للتنمية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع."
+            ? "مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع."
             : "Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors."}
         </p>
       </div>
@@ -255,7 +255,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
               { icon: ShieldCheck, ar: "ترخيص ٢٦٦٥/٢٠١٩", en: "License 2665/2019" },
               { icon: FileCheck2,  ar: "توثيق صور وفيديو", en: "Photo & video proof" },
               { icon: Truck,       ar: "توصيل مجاني للباب", en: "Free doorstep delivery" },
-              { icon: CheckCircle2,ar: "مصاريف إدارية أقل من ٨٪", en: "Admin costs under 8%" },
+              { icon: CheckCircle2,ar: "٩٠٪ من تبرعك يصل إلى المستفيدين", en: "90% reaches beneficiaries" },
             ].map(({ icon: Icon, ar, en }) => (
               <li key={en} className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border bg-background px-3 py-2 text-center shadow-soft">
                 <Icon className="h-3.5 w-3.5 text-secondary" />
@@ -292,7 +292,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
       <section className="py-12 md:py-16">
         <div className="container mx-auto max-w-6xl px-4">
           <h2 className="text-center text-2xl font-black text-primary md:text-3xl">
-            {isAr ? "ليه تختار اليسر لهذه الحملة؟" : "Why choose Al-Yusr for this campaign?"}
+            {isAr ? "لماذا تختار اليسر لهذه الحملة؟" : "Why choose Al-Yusr for this campaign?"}
           </h2>
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {p.pillars.map((pl, i) => (
@@ -357,8 +357,8 @@ export const CampaignLandingShell = (p: LandingProps) => {
       {/* Cases linked to this campaign in the dashboard (renders nothing when there are none). */}
       {campaignId && (
         <LinkedCasesSection filter={{ campaignId }} isRTL={isAr} className="bg-muted/30"
-          title={isAr ? "حالات بتتجمع لها التبرعات في الحملة دي" : "Cases this campaign is funding"}
-          subtitle={isAr ? "اختار حالة بعينها وتابع تحديثاتها بالصور لحد ما تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
+          title={isAr ? "حالات تُجمع لها التبرعات في هذه الحملة" : "Cases this campaign is funding"}
+          subtitle={isAr ? "اختر حالة بعينها وتابع تحديثاتها بالصور حتى تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
       )}
 
       {/* Related links */}
@@ -400,7 +400,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
             </Button>
           </div>
           <p className="mt-5 text-sm text-primary-foreground/80">
-            {isAr ? "تبرعك يوصل بعناية ومتابعة ميدانية." : "Your support arrives with care and field follow-up."}
+            {isAr ? "تبرعك يصل بعناية ومتابعة ميدانية." : "Your support arrives with care and field follow-up."}
           </p>
         </div>
       </section>

@@ -124,7 +124,7 @@ const MosquesMain = ({ ctx }: { ctx: PageCtx }) => {
                     href={`#${anchor}`}
                     className={`mt-6 inline-flex w-fit items-center rounded-full px-5 py-2.5 text-sm font-black transition-opacity hover:opacity-90 ${i === 0 ? "bg-secondary text-primary" : "bg-primary text-primary-foreground"}`}
                   >
-                    {isAr ? "اختار سهمك" : "Choose a share"}
+                    {isAr ? "اختر سهمك" : "Choose a share"}
                   </a>
                 </article>
               );
@@ -234,7 +234,7 @@ const MosquesLanding = () => {
       taglineEn={lead.en}
       metaDescAr="ساهم مع مؤسسة اليسر في بناء مسجد جديد في القرى المحرومة، أو في إعادة إعمار مسجد قائم بترميمه وفرشه وتجهيزه. صدقة جارية بأجر كل صلاة."
       metaDescEn="Help Al-Yusr build new mosques in underserved villages, or restore, carpet and equip standing ones. Ongoing charity with the reward of every prayer."
-      seo={{ title: { ar: "بناء مسجد وإعادة إعمار المساجد وفرشها | مؤسسة اليسر", en: "Build or restore a mosque | Al-Yusr" } }}
+      seo={{ title: { ar: "التبرع لبناء مسجد في مصر وإعمار المساجد | مؤسسة اليسر", en: "Build or restore a mosque | Al-Yusr" } }}
       heroImage={heroImage}
       heroAlt={title.ar}
       main={<MosquesMain ctx={ctx} />}

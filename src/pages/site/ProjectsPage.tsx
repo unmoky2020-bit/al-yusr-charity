@@ -84,7 +84,7 @@ const donateHref = (p: ProjectItem) => p.donateUrl ?? `/donate?project=${encodeU
 const CODE_PROJECTS: ProjectItem[] = [
   {
     id: 0, slug: "nurseries", ar: "حضانات اليسر ودور تحفيظ القرآن", en: "Al-Yusr nurseries & Qur'an houses",
-    descAr: "حضانات تعليمية للأطفال من ٤ لـ ٦ سنين، ودور تحفيظ قرآن من ٤ لـ ١٦ سنة، بمناهج متخصصة بنبنيها ونشرف عليها، ومسابقات قرآن.",
+    descAr: "حضانات تعليمية للأطفال من ٤ إلى ٦ سنوات، ودور لتحفيظ القرآن من ٤ إلى ١٦ سنة، بمناهج متخصصة نُعدّها ونشرف عليها، إلى جانب مسابقات القرآن.",
     descEn: "Learning nurseries for ages 4–6 and Qur'an houses for ages 4–16, with curricula we build and supervise, and Qur'an competitions.",
     image: nurseriesImg, priceFrom: 0, sharesCount: 0, casesCount: 0,
     icon: BookOpen, bgGradient: "from-emerald-950 via-slate-950/85 to-transparent", accentColor: "#0f766e",
@@ -138,7 +138,7 @@ const ProjectsPage = () => {
       <SEOHelmet
         title={
           isAR
-            ? "مشاريع اليسر | مساجد، وقف، سقيا ماء، غسل وتكفين ونقل موتى، حضانات وتحفيظ قرآن"
+            ? "مشاريع صدقة جارية في مصر | مساجد، توصيل مياه، وقف — اليسر"
             : "Al-Yusr Development Projects | Mosques, Waqf, Water, Shelter, Marriage Aid"
         }
         description={
@@ -175,7 +175,7 @@ const ProjectsPage = () => {
         <div className="relative z-10 container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-16 sm:py-24 text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary/20 px-4 py-1.5 text-xs font-black text-secondary mb-5 shadow-xs backdrop-blur-xs">
             <Building2 className="h-4 w-4" />
-            {isAR ? "أصول بتفضل تنتج خير" : "Assets that keep producing good"}
+            {isAR ? "أصول يدوم عطاؤها" : "Assets that keep producing good"}
           </span>
 
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight tracking-tight drop-shadow-sm">
@@ -184,7 +184,7 @@ const ProjectsPage = () => {
 
           <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg text-white/90 max-w-3xl mx-auto leading-relaxed drop-shadow-xs">
             {isAR
-              ? "هدفنا إن الخير ما يخلصش بانتهاء التبرع. كل مشروع أصل بيفضل يشتغل سنين: يا إما بيدخّل موارد بتتصرف على أنشطة المؤسسة، يا إما بيسيب أثر بيغيّر حياة الناس، وفي الحالتين أجره صدقة جارية ليك ما دام قايم."
+              ? "هدفنا ألّا ينتهي الخير بانتهاء التبرع؛ فكل مشروع أصل يظل يعمل سنوات: إما أن يدرّ موارد تُصرف على أنشطة المؤسسة، وإما أن يترك أثرًا يغيّر حياة الناس، وفي الحالتين يبقى أجره صدقة جارية لك ما دام قائمًا."
               : "Our aim is good that does not end when the donation does. Each project is an asset that keeps working for years: it either earns income for the foundation's work or leaves an impact that changes lives, and either way its reward is ongoing charity for you."}
           </p>
 
@@ -418,11 +418,11 @@ const ProjectsPage = () => {
         <div className="container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-2xl font-black leading-tight text-primary sm:text-4xl">
-              {isAR ? "مشاريعنا نوعين، والاتنين خير مستمر" : "Two kinds of projects, both lasting good"}
+              {isAR ? "مشاريعنا نوعان، وكلاهما خير مستمر" : "Two kinds of projects, both lasting good"}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
               {isAR
-                ? "فيه مشاريع خدمية بتدخّل موارد بتتصرف على أنشطة المؤسسة، وفيه مشاريع هدفها الأثر في المجتمع. وأحيانًا المشروع الواحد بيجمع الاتنين."
+                ? "بعض مشاريعنا خدمية تدرّ موارد تُصرف على أنشطة المؤسسة، وبعضها هدفه الأثر المباشر في المجتمع، وقد يجمع المشروع الواحد بين الأمرين."
                 : "Some projects provide services whose income funds the foundation's work; others exist for their impact on the community. Some do both."}
             </p>
           </div>
@@ -443,8 +443,8 @@ const ProjectsPage = () => {
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { href: "/takrim", icon: Truck, ar: "تكريم الإنسان", en: "Takrim", subAr: "غسل وتكفين ونقل الموتى في المنصورة، والقاهرة قريبًا", subEn: "Funeral washing, shrouding and transport in Mansoura, Cairo next" },
-              { href: "/water", icon: Droplets, ar: "سقيا الماء", en: "Clean water", subAr: "افتح الحنفية وشوف إزاي المية النظيفة بتغيّر حياة بيت", subEn: "Open the tap and see how clean water changes a home" },
-              { href: "/nurseries", icon: BookOpen, ar: "حضانات اليسر ودور التحفيظ", en: "Nurseries & Qur'an houses", subAr: "حضانات من ٤ لـ ٦ سنين ودور تحفيظ من ٤ لـ ١٦ سنة", subEn: "Nurseries for ages 4–6, Qur'an houses for ages 4–16" },
+              { href: "/water", icon: Droplets, ar: "سقيا الماء", en: "Clean water", subAr: "افتح الحنفية وشاهد كيف تغيّر المياه النظيفة حياة بيت", subEn: "Open the tap and see how clean water changes a home" },
+              { href: "/nurseries", icon: BookOpen, ar: "حضانات اليسر ودور التحفيظ", en: "Nurseries & Qur'an houses", subAr: "حضانات من ٤ إلى ٦ سنوات ودور تحفيظ من ٤ إلى ١٦ سنة", subEn: "Nurseries for ages 4–6, Qur'an houses for ages 4–16" },
               { href: "/medical", icon: Stethoscope, ar: "المساعدات الطبية", en: "Medical aid", subAr: "روشتات وعمليات وأشعة وتحاليل وأطراف صناعية", subEn: "Prescriptions, surgery, scans, tests and prosthetics" },
             ].map((l) => {
               const LIcon = l.icon;
@@ -485,7 +485,7 @@ const ProjectsPage = () => {
 
                 <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto lg:mx-0">
                   {isAR
-                    ? "على عكس المساعدات الآنية، تبني المشاريع التنموية أصولاً وبنى تحتية تنفع القرى والمجتمعات لعقود طويلة. مسجد يُعمَّر، وبئر ارتوازي يسقي الآلاف، وسقف صلب يحمي عائلات من قسوة الشتاء، ومزرعة تدر عائداً سنوياً مستداماً للفقراء."
+                    ? "على عكس المساعدات الآنية، تبني المشاريع التنموية أصولًا وبنى تحتية تنفع القرى والمجتمعات لعقود طويلة. مسجد يُعمَّر، وبئر ارتوازي يسقي الآلاف، وسقف صلب يحمي عائلات من قسوة الشتاء، ومزرعة تدرّ عائدًا سنويًا مستدامًا للفقراء."
                     : "Unlike temporary relief, development projects build permanent infrastructure serving communities for decades. A mosque remains, a deep well quenches thousands, a sturdy roof protects families, and an endowment farm feeds orphans sustainably."}
                 </p>
               </div>
@@ -497,12 +497,12 @@ const ProjectsPage = () => {
                     icon: Building2,
                     titleAr: "بنية تحتية دائمة",
                     titleEn: "Lasting Infrastructure",
-                    descAr: "عقوداً من الأثر المتواصل في حياة القرى",
+                    descAr: "عقود من الأثر المتواصل في حياة القرى",
                     descEn: "Decades of uninterrupted community benefit",
                   },
                   {
                     icon: ShieldCheck,
-                    titleAr: "هدف مالي وشفاف",
+                    titleAr: "هدف مالي واضح وشفاف",
                     titleEn: "Transparent Tracking",
                     descAr: "تتبّع تقدم التنفيذ برقم الحالة والقرية",
                     descEn: "Track real progress with case ref & location",
@@ -555,7 +555,7 @@ const ProjectsPage = () => {
                       icon: FileCheck2,
                       titleAr: "إشراف هندسي وتنفيذي مباشر",
                       titleEn: "Direct Engineering Oversight",
-                      descAr: "تنفيذ رسمي خاضع لمعايير هندسية متينة بدون وسطاء تجاريين لضمان بقاء الأثر.",
+                      descAr: "تنفيذ رسمي وفق معايير هندسية متينة، دون وسطاء تجاريين، لضمان بقاء الأثر.",
                       descEn: "Licensed execution ensuring structural longevity with zero intermediaries.",
                     },
                     {
@@ -569,7 +569,7 @@ const ProjectsPage = () => {
                       icon: Compass,
                       titleAr: "ربط بحالات وقرى محددة",
                       titleEn: "Linked to Real Locations",
-                      descAr: "كل سهم يوجه لحالة وقرية بعينها يمكنك معرفة تفاصيلها وموقعها الميداني بالدقهلية.",
+                      descAr: "كل سهم يُوجَّه إلى حالة وقرية بعينها، ويمكنك معرفة تفاصيلها وموقعها الميداني في الدقهلية.",
                       descEn: "Every share is assigned to a specific verified village or family.",
                     },
                   ].map((p, idx) => {
@@ -598,7 +598,7 @@ const ProjectsPage = () => {
                 <div>
                   <div className="flex items-center justify-between pb-3 border-b border-border/60 mb-3">
                     <p className="text-sm font-black text-primary">
-                      {isAR ? "اختر مشروعك وابدأ فوراً:" : "Choose a Project to Support:"}
+                      {isAR ? "اختر مشروعك وابدأ فورًا:" : "Choose a Project to Support:"}
                     </p>
                     <span className="text-[11px] font-bold text-muted-foreground">
                       {PROJECTS.length} {isAR ? "مشاريع نشطة" : "Active"}
@@ -641,7 +641,7 @@ const ProjectsPage = () => {
                   <p className="text-[11px] text-muted-foreground flex items-center justify-center gap-1.5 font-bold">
                     <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
                     {isAR
-                      ? "جميع التبرعات مقيدة ومعتمدة بوزارة التضامن الاجتماعي"
+                      ? "جميع التبرعات مقيّدة ومعتمدة لدى وزارة التضامن الاجتماعي"
                       : "Official licensed charity under the Ministry of Social Solidarity"}
                   </p>
                 </div>
@@ -666,7 +666,7 @@ const ProjectsPage = () => {
                   </h4>
                   <p className="text-xs sm:text-sm md:text-base text-white/85 leading-relaxed max-w-2xl">
                     {isAR
-                      ? "بناء مسجد بالكامل، محطة تنقية مياه قروية، أو مجمع تسقيف متكامل باسمك أو صدقة جارية لروح فقيد، مع لوحة تذكارية رسمية باسم الواقف وتقارير تنفيذ دورية موثقة بالفيديو."
+                      ? "بناء مسجد بالكامل، أو محطة تنقية مياه في قرية، أو مجمع تسقيف متكامل، باسمك أو صدقةً جارية عن روح فقيد، مع لوحة تذكارية رسمية باسم الواقف وتقارير تنفيذ دورية موثّقة بالفيديو."
                       : "Sponsor a full mosque, water plant, or village roofing cluster with dedicated plaque and verified milestone reports."}
                   </p>
                 </div>
@@ -680,7 +680,7 @@ const ProjectsPage = () => {
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl bg-secondary px-8 py-4 text-sm sm:text-base font-black text-slate-950 shadow-xl shadow-secondary/30 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <PhoneCall className="h-4.5 w-4.5" />
-                    {isAR ? "استشارة مسؤول كبار المشروعات" : "Contact Major Projects"}
+                    {isAR ? "تواصل مع مسؤول المشروعات الكبرى" : "Contact Major Projects"}
                   </a>
                 </div>
               </div>
@@ -722,7 +722,7 @@ const ProjectsPage = () => {
       {/* Cases that belong to our projects (live from the backend) */}
       <LinkedCasesSection filter={{ linkedTo: "project" }} showOwner variant="carousel" filterByOwner limit={30} isRTL={isAR} className="bg-muted/30"
         title={isAR ? "حالات ميدانية ضمن مشاريعنا" : "Field cases in our projects"}
-        subtitle={isAR ? "كل حالة اتعمل لها بحث ميداني، وتبرعك ليها بيروح لنفس المشروع." : "Every case is field-verified; your donation goes to the same project."} />
+        subtitle={isAR ? "أُجري لكل حالة بحث ميداني، وتبرعك لها يذهب إلى المشروع نفسه." : "Every case is field-verified; your donation goes to the same project."} />
 
       <section className="pt-10 sm:pt-14 pb-16 sm:pb-20 bg-primary relative overflow-hidden">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_60%_50%,theme(colors.secondary.DEFAULT)_0%,transparent_60%)] pointer-events-none" />
@@ -733,12 +733,12 @@ const ProjectsPage = () => {
           </span>
 
           <h2 className="text-2xl sm:text-4xl font-black text-white mb-4 leading-tight">
-            {isAR ? "اختر مشروعك الآن وابدأ أثراً لا ينقطع" : "Choose Your Project & Begin Your Everlasting Impact"}
+            {isAR ? "اختر مشروعك الآن وابدأ أثرًا لا ينقطع" : "Choose Your Project & Begin Your Everlasting Impact"}
           </h2>
 
           <p className="text-sm sm:text-base text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
             {isAR
-              ? "يمكنك التبرع لعدة مشاريع بأسهم متنوعة في معاملة تبرع واحدة عبر فيزا، ميزة، فودافون كاش، محافظ الهاتف، أو المندوب الميداني حتى باب منزلك."
+              ? "يمكنك التبرع لعدة مشاريع بأسهم متنوعة في معاملة تبرع واحدة عبر فيزا أو ميزة أو فودافون كاش أو محافظ الهاتف، أو عبر المندوب الميداني حتى باب منزلك."
               : "Donate to multiple projects with various shares in one checkout using Visa, Meeza, mobile wallets, or our home representative."}
           </p>
 
@@ -747,7 +747,7 @@ const ProjectsPage = () => {
               to="/donate?type=project"
               className="inline-flex items-center gap-2.5 rounded-2xl bg-secondary px-8 py-3.5 text-sm sm:text-base font-black text-slate-950 shadow-xl shadow-secondary/30 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98]"
             >
-              {isAR ? "انتقل لصفحة التبرع" : "Go to Donation Page"}
+              {isAR ? "انتقل إلى صفحة التبرع" : "Go to Donation Page"}
               <Arrow className="h-4 w-4" />
             </Link>
             <Link
