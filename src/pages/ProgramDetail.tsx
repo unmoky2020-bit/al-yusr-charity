@@ -752,6 +752,7 @@ const ProgramDetail = () => {
         <FieldConvoysGallery
           variant={program.slug === "odhya" ? "qurbani" : "all"}
           donateHref={`/donate?program=${program.slug}`}
+          galleryKey={program.slug === "odhya" ? "qurbani" : "programs"}
         />
       )}
 

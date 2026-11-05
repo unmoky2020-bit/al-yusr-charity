@@ -9,4 +9,5 @@ export const PROJECT_LANDINGS: Record<string, string> = {
   medical: "/medical",
   takrim: "/takrim",
   nurseries: "/nurseries",
+  mosques: "/mosques",
 };

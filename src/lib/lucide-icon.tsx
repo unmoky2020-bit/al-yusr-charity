@@ -49,6 +49,13 @@ export const STAT_ICON_NAMES = [
 
 export type StatIconName = (typeof STAT_ICON_NAMES)[number];
 
+/** Generic names the backend uses for icons (e.g. the About page's trust items) → a lucide icon. */
+const ALIASES: Record<string, LucideIcon> = {
+  certificate: BadgeCheck, license: BadgeCheck, verified: BadgeCheck,
+  finance: FileCheck2, audit: FileCheck2, accounting: FileCheck2, report: FileCheck2,
+  location: MapPin, money: Coins, health: Stethoscope, education: GraduationCap, food: Utensils, water: Droplets,
+};
+
 /** Resolve a lucide icon by name with a safe fallback. Accepts PascalCase, kebab-case or lowercase. */
 export function getLucideIcon(name?: string | null): LucideIcon {
   if (!name) return Sparkles;
@@ -56,7 +63,7 @@ export function getLucideIcon(name?: string | null): LucideIcon {
   if (direct) return direct;
   const norm = name.toLowerCase().replace(/[-_\s]/g, "");
   const hit = Object.keys(ICONS).find((k) => k.toLowerCase() === norm);
-  return hit ? ICONS[hit] : Sparkles;
+  return hit ? ICONS[hit] : ALIASES[norm] ?? Sparkles;
 }
 
 /** All icon names available in this build (PascalCase), for the admin picker. */

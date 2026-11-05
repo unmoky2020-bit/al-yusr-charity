@@ -4,31 +4,15 @@ import { Helmet } from "react-helmet-async";
 import { Camera, MapPin, ShieldCheck, Heart, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
+import { FIELD_CONVOYS, type FieldConvoyItem } from "@/data/fieldConvoys";
+import { pageImageUrl } from "@/data/pageImages";
+import { usePageGallery, type PageGalleryKey } from "@/data/pageGalleries";
 
-import q24Tray from "@/assets/field/qurbani-2024-meat-tray.jpg";
-import q24Cattle from "@/assets/field/qurbani-2024-cattle-truck.jpg";
-import q24Pack from "@/assets/field/qurbani-2024-packing-area.jpg";
-import q24Pen from "@/assets/field/qurbani-2024-cattle-pen.jpg";
-import q25A from "@/assets/field/qurbani-2025-prep-a.jpg";
-import q25B from "@/assets/field/qurbani-2025-prep-b.jpg";
-import q25C from "@/assets/field/qurbani-2025-prep-c.jpg";
-import c26Road from "@/assets/field/convoy-2026-fuwah-road.jpg";
-import c26Pickup from "@/assets/field/convoy-2026-pickup-loaded.jpg";
-import c26Night from "@/assets/field/convoy-2026-night-delivery.jpg";
-import c26Day from "@/assets/field/convoy-2026-day-distribution.jpg";
-import c26NightHand from "@/assets/field/convoy-2026-night-handover.jpg";
-import c26Elder from "@/assets/field/convoy-2026-elder-handover.jpg";
 
 export type FieldConvoyVariant = "qurbani" | "farm" | "all";
 
-type Item = {
-  src: string;
-  ar: string;
-  en: string;
-  year: "2024" | "2025" | "2026";
-  tag: "qurbani" | "convoy";
-  city: string;
-};
+/** A tile: `src` is a ready URL; `year` / `city` are "" for pictures chosen in the dashboard. */
+type Item = FieldConvoyItem;
 
 const MarqueeRow = ({
   rowItems,
@@ -83,13 +67,17 @@ const MarqueeRow = ({
                 {isAR ? g.ar : g.en}
               </p>
               <div className="mt-1 flex items-center gap-1.5 text-[10px] font-extrabold text-white/85">
-                <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 backdrop-blur">
-                  <MapPin className="h-2.5 w-2.5" />
-                  {isAR ? g.city : (cityLabelEn[g.city] || g.city)}
-                </span>
-                <span className="rounded-full bg-secondary/80 px-2 py-0.5 font-mono text-secondary-foreground">
-                  {g.year}
-                </span>
+                {g.city && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 backdrop-blur">
+                    <MapPin className="h-2.5 w-2.5" />
+                    {isAR ? g.city : (cityLabelEn[g.city] || g.city)}
+                  </span>
+                )}
+                {g.year && (
+                  <span className="rounded-full bg-secondary/80 px-2 py-0.5 font-mono text-secondary-foreground">
+                    {g.year}
+                  </span>
+                )}
               </div>
             </div>
           </Link>
@@ -99,22 +87,6 @@ const MarqueeRow = ({
   );
 };
 
-const ALL: Item[] = [
-  { src: c26Elder,      year: "2026", tag: "convoy",  city: "المنصورة",      ar: "متطوع اليسر يسلّم كرتونة العزومة لسيدة كبيرة في السن بكرامة — المنصورة 2026", en: "Al-Yusr volunteer hands a food box to an elderly woman with dignity — Mansoura 2026" },
-  { src: c26NightHand,  year: "2026", tag: "convoy",  city: "الدقهلية",      ar: "تسليم أكياس مساعدات لسيدة مستحقة من سيارة اليسر ليلًا بقرى الدقهلية 2026",   en: "Night handover of relief bags to an eligible woman from the Al-Yusr van — Dakahlia villages 2026" },
-  { src: c26Day,        year: "2026", tag: "convoy",  city: "كفر الشيخ",     ar: "توزيع نهاري لكراتين العزومة على أهالي قرى كفر الشيخ — قافلة اليسر فبراير 2026", en: "Daytime food-box distribution to Kafr El-Sheikh village residents — Al-Yusr convoy Feb 2026" },
-  { src: c26Night,      year: "2026", tag: "convoy",  city: "الدقهلية",      ar: "متطوع اليسر يسلّم المساعدات لأسرة متعففة ليلًا — قرى الدقهلية 2026",       en: "Al-Yusr volunteer delivering aid to a family at night — Dakahlia villages 2026" },
-  { src: c26Pickup,     year: "2026", tag: "convoy",  city: "المنصورة",      ar: "سيارة اليسر محملة بكراتين العزومة وأكياس الإغاثة 2026",                    en: "Al-Yusr van loaded with food boxes and relief bags — 2026" },
-  { src: c26Road,       year: "2026", tag: "convoy",  city: "كفر الشيخ",     ar: "قافلة اليسر 2026 في طريقها من المنصورة لكفر الشيخ ورشيد",                en: "Al-Yusr 2026 convoy heading from Mansoura toward Kafr El-Sheikh & Rasheed" },
-  { src: q24Tray,       year: "2024", tag: "qurbani", city: "المنصورة",      ar: "صكوك أضحية اليسر 2024 — لحم بلدي طازج من المزرعة الوقفية بالدقهلية",   en: "Al-Yusr Qurbani 2024 — fresh local meat from the Dakahlia endowment farm" },
-  { src: q24Cattle,     year: "2024", tag: "qurbani", city: "المنصورة",      ar: "ماشية الأضحية 2024 محصنة بالكامل قبل النقل للمسلخ بالمنصورة",            en: "Vaccinated Qurbani cattle 2024 en route to the Mansoura slaughterhouse" },
-  { src: q24Pack,       year: "2024", tag: "qurbani", city: "الدقهلية",      ar: "تجهيز وتغليف لحوم الأضحية 2024 بإشراف بيطري بالدقهلية",                  en: "Hygienic Qurbani 2024 cutting & packaging under vet supervision" },
-  { src: q24Pen,        year: "2024", tag: "qurbani", city: "المنصورة",      ar: "حظيرة معاينة ماشية الأضحية 2024 — متطوعو اليسر وإشراف بيطري قبل الذبح بالمنصورة", en: "Qurbani 2024 livestock inspection pen — Al-Yusr volunteers and vet supervision before slaughter in Mansoura" },
-  { src: q25A,          year: "2025", tag: "qurbani", city: "المنصورة",      ar: "صك أضحية اليسر 2025 جاهز للتسليم لأسرة مستحقة بالمنصورة",                en: "Al-Yusr Qurbani 2025 share ready for delivery to a Mansoura family" },
-  { src: q25B,          year: "2025", tag: "qurbani", city: "الدقهلية",      ar: "توزيع لحوم أضحية 2025 على أسر الدقهلية في يوم العيد",                    en: "Qurbani 2025 meat distribution to Dakahlia families on Eid day" },
-  { src: q25C,          year: "2025", tag: "qurbani", city: "المنصورة",      ar: "توثيق صك أضحية 2025 — صور وفيديو لكل متبرع",                              en: "Qurbani 2025 voucher documentation — photos & video for every donor" },
-];
-
 /**
  * Field-convoy & Qurbani proof gallery shared between /farm and /qurbani.
  * Lazy images, fixed aspect to avoid CLS, ImageGallery JSON-LD,
@@ -123,21 +95,29 @@ const ALL: Item[] = [
 export const FieldConvoysGallery = ({
   variant = "all",
   donateHref = "/donate?program=odhya",
+  galleryKey,
 }: {
   variant?: FieldConvoyVariant;
   donateHref?: string;
+  /** Dashboard gallery (معارض صور الصفحات) that replaces the built-in photos once it has pictures. */
+  galleryKey?: PageGalleryKey;
 }) => {
   const { lang } = useLang();
   const isAR = lang === "ar";
   const base = "https://elyusr.org";
+  const custom = usePageGallery(galleryKey);
 
-  const variantItems = ALL.filter((i) =>
-    variant === "all" ? true : variant === "qurbani" ? i.tag === "qurbani" : true,
-  );
+  const variantItems = useMemo<Item[]>(() => {
+    if (custom) {
+      const tag = variant === "qurbani" ? "qurbani" : "convoy";
+      return custom.map((g) => ({ src: g.src, ar: g.altAr, en: g.altEn, year: "", tag, city: "" }));
+    }
+    return FIELD_CONVOYS.filter((i) => (variant === "qurbani" ? i.tag === "qurbani" : true)).map((i) => ({ ...i, src: pageImageUrl(i.src) }));
+  }, [custom, variant]);
 
   const cities = useMemo(() => {
     const set = new Set<string>();
-    variantItems.forEach((i) => set.add(i.city));
+    variantItems.forEach((i) => { if (i.city) set.add(i.city); });
     return Array.from(set);
   }, [variantItems]);
 
@@ -222,9 +202,9 @@ export const FieldConvoysGallery = ({
           about: isAR ? "صك أضحية وقوافل اليسر بالدقهلية" : "Qurbani share & Al-Yusr Dakahlia convoys",
           image: variantItems.map((i) => ({
             "@type": "ImageObject",
-            contentUrl: `${base}${i.src}`,
+            contentUrl: i.src.startsWith("http") ? i.src : `${base}${i.src}`,
             caption: isAR ? i.ar : i.en,
-            contentLocation: { "@type": "Place", name: isAR ? i.city : (cityLabelEn[i.city] || i.city) },
+            ...(i.city ? { contentLocation: { "@type": "Place", name: isAR ? i.city : (cityLabelEn[i.city] || i.city) } } : {}),
             creditText: "Al-Yusr Charity Foundation",
             copyrightNotice: "© Al-Yusr Charity Foundation",
             creator: { "@type": "Organization", name: "Al-Yusr Charity Foundation", url: "https://elyusr.org/" },
@@ -379,11 +359,13 @@ export const FieldConvoysGallery = ({
                 {isAR ? current.ar : current.en}
               </p>
               <div className="flex shrink-0 items-center gap-2 text-[11px] font-extrabold">
-                <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1">
-                  <MapPin className="h-3 w-3" />
-                  {isAR ? current.city : (cityLabelEn[current.city] || current.city)}
-                </span>
-                <span className="rounded-full bg-white/10 px-2.5 py-1 font-mono">{current.year}</span>
+                {current.city && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1">
+                    <MapPin className="h-3 w-3" />
+                    {isAR ? current.city : (cityLabelEn[current.city] || current.city)}
+                  </span>
+                )}
+                {current.year && <span className="rounded-full bg-white/10 px-2.5 py-1 font-mono">{current.year}</span>}
               </div>
             </div>
 

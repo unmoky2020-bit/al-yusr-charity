@@ -48,6 +48,7 @@ import { DAKAHLIA_CITIES } from "@/data/dakahliaCities";
 import { TagsRail } from "@/components/common/TagsRail";
 import { programHref } from "@/data/programLandings";
 import { isListedProgram } from "@/data/programScope";
+import { useListingHero } from "@/data/listingHeroes";
 // Accordion imports kept for other uses
 import {
   Accordion,
@@ -60,6 +61,8 @@ const Projects = () => {
   const { lang, t } = useLang();
   const isRTL = lang === "ar";
   const reduce = useReducedMotion();
+  // Dashboard → البرامج → «صورة أعلى الصفحة» (default: the programs banner).
+  const heroImg = useListingHero("programs");
   // Published backend programs (static copy only when the API is unreachable).
   const { programs: allPrograms, isLoading: programsLoading } = usePrograms();
   // One list, from the backend: campaigns and projects have their own pages and are never repeated here.
@@ -360,10 +363,16 @@ const Projects = () => {
         })}</script>
       </Helmet>
 
-      <section className="pattern-hero-luxe hero-pattern-fade text-primary-foreground">
+      <section className="pattern-hero-luxe hero-pattern-fade relative overflow-hidden text-primary-foreground">
+        {/* Background picture (dashboard → البرامج → «صورة أعلى الصفحة») under a brand gradient */}
+        {/* `!absolute`: .pattern-hero-luxe makes its direct children position:relative */}
+        <div className="pointer-events-none !absolute inset-0" aria-hidden>
+          <img src={heroImg} alt="" className="h-full w-full object-cover" fetchpriority="high" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/75 via-primary/55 to-primary/90" />
+        </div>
         {/* Brand leaf tile overlay — same SVG motif used on Bride Trousseau hero */}
-        <div className="brand-leaf-tile pointer-events-none absolute inset-0 opacity-50" aria-hidden />
-        <div className="container mx-auto px-4 py-12 md:py-16">
+        <div className="brand-leaf-tile pointer-events-none absolute inset-0 opacity-30" aria-hidden />
+        <div className="container relative mx-auto px-4 py-12 md:py-16">
           <div className="flex justify-center text-primary-foreground/80">
             <Breadcrumbs items={[{ name: isRTL ? "الرئيسية" : "Home", href: "/" }, { name: isRTL ? "البرامج" : "Programs" }]} />
           </div>

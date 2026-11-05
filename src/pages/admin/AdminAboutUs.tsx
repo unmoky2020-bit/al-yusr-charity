@@ -717,7 +717,7 @@ export default function AdminAboutUs() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-muted/40 p-4 rounded-2xl border border-border/70">
               <div>
                 <h3 className="text-sm font-extrabold text-foreground">{isRTL ? "إحصائيات وأرقام الأثر" : "Impact Numbers & Statistics"}</h3>
-                <p className="text-xs text-muted-foreground">{isRTL ? "الأرقام الإجمالية التي تظهر في بطاقات صفحة من نحن" : "Key metrics displayed in about us stats cards"}</p>
+                <p className="text-xs text-muted-foreground">{isRTL ? "الإنجازات اللي بتظهر في أعلى صفحة من نحن — أضف أو عدّل أو احذف" : "Achievements shown at the top of the About page"}</p>
               </div>
               <Button
                 variant="outline"
@@ -735,10 +735,10 @@ export default function AdminAboutUs() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 rounded-2xl border border-secondary/40 bg-secondary/5 p-4">
               <div className="sm:col-span-3">
-                <h4 className="text-sm font-extrabold text-foreground">عنوان قسم «الإنجازات» في صفحة من نحن</h4>
+                <h4 className="text-sm font-extrabold text-foreground">الإنجازات في أعلى صفحة من نحن</h4>
                 <p className="text-xs text-muted-foreground">
-                  غيّر السنة كل سنة. لو سبت العنوان فاضي هيظهر «إنجازات السنة». كروت الأرقام نفسها بتتعدل من{" "}
-                  <a href="/admin/site-stats" className="font-bold text-primary underline">إحصائيات الموقع ← الإنجازات</a>.
+                  الأرقام اللي تحت هي الإنجازات اللي بتظهر في أول الصفحة (ده المكان الوحيد اللي بتظهر فيه). غيّر السنة كل سنة،
+                  ولو سبت العنوان فاضي هيظهر «إحصائيات عام السنة — موثّقة بالميدان…».
                 </p>
               </div>
               <div className="space-y-1">

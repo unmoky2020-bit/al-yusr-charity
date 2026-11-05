@@ -1,4 +1,5 @@
 import { l, type CampaignPageContent } from "./types";
+import { img } from "@/data/pageImages";
 
 /**
  * Default content for the Dhill campaign landing page (/dhill).
@@ -248,6 +249,24 @@ const DHILL: CampaignPageContent = {
       "كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.",
       "Every pound reaches those who deserve it — documented with photos, video and field follow-up.",
     ),
+  },
+
+  /** Pictures (dashboard → الصور). */
+  images: {
+    hero: {
+      label: l("صورة أعلى الصفحة", "Hero image"),
+      max: 1,
+      items: [img("yusr-water.png", "حملة ظل — وصلات مياه وأسقف للأسر المستحقة", "Dhill — water and roofs for families")],
+    },
+    gallery: {
+      label: l("معرض الصور", "Gallery"),
+      items: [
+        img("yusr-water.png", "وصلة مياه نقية مع موتور وخزان لأسرة مستحقة", "Water connection with pump and tank"),
+        img("poster-water.png", "تسقيف خشبي معزول يحمي البيت من حر الصيف", "Insulated wooden roof"),
+        img("yusr-distribution-1.webp", "توزيع مراوح ووسائل تبريد لبيوت القرى", "Fans for village homes"),
+        img("yusr-meals.webp", "قوافل السقيا الميدانية في قرى مصر", "Field water convoys"),
+      ],
+    },
   },
 };
 

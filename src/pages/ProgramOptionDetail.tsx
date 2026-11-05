@@ -233,6 +233,7 @@ const ProgramOptionDetail = () => {
         <FieldConvoysGallery
           variant={slug === "odhya" ? "qurbani" : "all"}
           donateHref={donateHref}
+          galleryKey={slug === "odhya" ? "qurbani" : "programs"}
         />
       )}
 

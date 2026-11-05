@@ -1,4 +1,5 @@
 import { l, type CampaignPageContent } from "./types";
+import { img } from "@/data/pageImages";
 
 /**
  * Default content for the first ten days of Dhul Hijjah page (/ten-days).
@@ -93,6 +94,16 @@ const ashr: CampaignPageContent = {
   cta: {
     title: l("ما تفوّتش أحبّ الأيام إلى الله", "Don't miss the days most beloved to Allah"),
     sub: l("صدقة صغيرة كل يوم من العشر بتفرق مع أسرة محتاجة، وبتفرق في ميزانك.", "A small charity every day of the ten makes a difference to a family in need, and to your scale of deeds."),
+  },
+
+  /** Pictures (dashboard → الصور). */
+  images: {
+    hero: {
+      label: l("الصورة الرئيسية", "Main image"),
+      hint: l("بتظهر في قسم الأضحية جوه الصفحة وعند مشاركة الرابط.", "Shown in the Qurbani section and when the link is shared."),
+      max: 1,
+      items: [img("qurbani-hero-trays.webp", "لحوم أضاحي اليسر جاهزة للتوزيع على الأسر", "Al-Yusr Qurbani meat ready for distribution")],
+    },
   },
 };
 

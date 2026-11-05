@@ -36,6 +36,7 @@ import { publicUrls } from "@/lib/publicUrls";
 import { getProjectPageMeta, parsePageContent, projectPageColumn } from "@/data/projectPages";
 import { mergeCampaignContent, type CampaignPageContent } from "@/data/campaignPages/types";
 import { CtaPanel, HadithPanel, HeroPanel, SectionsPanel, StatsPanel } from "@/components/admin/CampaignPageContentEditor";
+import { PageImagesPanel } from "@/components/admin/PageImagesPanel";
 
 const triggerCls = "rounded-xl px-3 py-2 text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs";
 
@@ -392,7 +393,7 @@ export default function AdminProjectDetail() {
           {pageMeta && pageContent && (
             <TabsContent value="page" className="space-y-4" dir="rtl">
               <SectionCard icon={<Sparkles className="h-4 w-4 text-primary" />} title={`محتوى صفحة ${pageMeta.name.ar}`} actions={pendingBadge(["page_content"])}
-                description={`النصوص اللي بتظهر في ${pageMeta.path}. الصورة الرئيسية = صورة الغلاف، والأسهم = باقات المساهمة، والأسئلة = تبويب الأسئلة الشائعة.`}>
+                description={`النصوص اللي بتظهر في ${pageMeta.path}. الصور في قسم «صور الصفحة» تحت، والأسهم = باقات المساهمة، والأسئلة = تبويب الأسئلة الشائعة.`}>
                 <div className="flex flex-wrap gap-2">
                   <Button variant="outline" size="sm" asChild><a href={pageMeta.path} target="_blank" rel="noopener noreferrer" className="gap-1"><Eye className="h-3.5 w-3.5" /> عرض الصفحة</a></Button>
                   {pageDefaults && (
@@ -403,7 +404,13 @@ export default function AdminProjectDetail() {
                 </div>
               </SectionCard>
               <HeroPanel value={pageContent} onChange={setPageContent} isAr />
-              <StatsPanel value={pageContent} onChange={setPageContent} isAr />
+              <SectionCard icon={<ImageIcon className="h-4 w-4 text-primary" />} title="صور الصفحة"
+                description={<>الصورة الرئيسية هي نفسها صورة الغلاف في «البيانات الأساسية» (تتغير من هنا أو من هناك). المعرض: ارفع صور أو اختارها من المكتبة ورتّبها. معرض آخر صفحة المزرعة والمشروع الطبي من <a href="/admin/page-galleries" className="font-bold text-primary underline">معارض صور الصفحات</a>.</>}>
+                <ImageUrlField label="الصورة الرئيسية (أعلى الصفحة)" value={form.cover_image} onChange={(v) => set("cover_image", v)} aspect="wide" collection="programs"
+                  hint={form.cover_image ? undefined : "مفيش صورة غلاف — الصفحة بتعرض صورتها الافتراضية."} />
+                <PageImagesPanel value={pageContent} onChange={setPageContent} defaults={pageDefaults} />
+              </SectionCard>
+              {pageContent.stats.length > 0 && <StatsPanel value={pageContent} onChange={setPageContent} isAr />}
               <SectionsPanel value={pageContent} onChange={setPageContent} isAr />
               <HadithPanel value={pageContent} onChange={setPageContent} isAr />
               <CtaPanel value={pageContent} onChange={setPageContent} isAr />

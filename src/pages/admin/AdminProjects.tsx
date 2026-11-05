@@ -4,6 +4,7 @@ import {
   FolderKanban, Plus, Pencil, Trash2, Search, Tag, Users, ArrowUpRight,
 } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
+import { ListingHeroImageButton } from "@/components/admin/ListingHeroImageButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -135,6 +136,7 @@ export default function AdminProjects() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            <ListingHeroImageButton pageKey="projects" />
             <Button
               asChild
               className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-sm"

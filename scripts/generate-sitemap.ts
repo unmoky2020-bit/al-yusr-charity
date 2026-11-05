@@ -74,6 +74,7 @@ const staticEntries: Entry[] = [
   { path: "/takrim", changefreq: "monthly", priority: "0.8" },
   { path: "/water", changefreq: "monthly", priority: "0.8" },
   { path: "/nurseries", changefreq: "monthly", priority: "0.8" },
+  { path: "/mosques", changefreq: "monthly", priority: "0.8" },
   { path: "/medical", changefreq: "monthly", priority: "0.8" },
   { path: "/ten-days", changefreq: "weekly", priority: "0.8" },
   { path: "/misbaha", changefreq: "monthly", priority: "0.7" },

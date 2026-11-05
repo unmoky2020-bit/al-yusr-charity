@@ -8,10 +8,6 @@ import SETR_DEFAULTS from "@/data/campaignPages/setr";
 import { HadithBlock } from "@/components/campaigns/HadithBlock";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import posterWater from "@/assets/poster-water.png";
-import yusrDistribution from "@/assets/yusr-distribution-1.webp";
-import yusrMeals from "@/assets/yusr-meals.webp";
-import markounFurniture from "@/assets/markoun-poster-furniture.webp";
-import markounClothes from "@/assets/markoun-poster-clothes.webp";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("setr");
@@ -47,13 +43,6 @@ const iconFor = (map: Record<string, Icon>, id: string, fallback: Icon): Icon =>
 /** Typical-feeling cold index per month (0 mild → 1 coldest) for the season chart, keyed by month item id. */
 const MONTH_COLD: Record<string, number> = { oct: 0.2, nov: 0.45, dec: 0.75, jan: 1, feb: 0.7 };
 const MONTH_COLD_BY_INDEX = [0.2, 0.45, 0.75, 1, 0.7];
-
-const GALLERY = [
-  { src: posterWater, altAr: "بناء وعزل سقف منزل لحماية أسرة من أمطار الشتاء", altEn: "Insulating a roof against winter rain" },
-  { src: yusrDistribution, altAr: "توزيع ألحفة فايبر وكسوة شتوية للأطفال", altEn: "Distributing blankets and winter clothes" },
-  { src: markounFurniture, altAr: "أسِرّة ومراتب ترفع الأطفال عن الأرض", altEn: "Beds and mattresses for children" },
-  { src: yusrMeals, altAr: "قوافل الدفء الميدانية في قرى الدقهلية", altEn: "Winter field convoys" },
-];
 
 /** Deterministic drop layout (no Math.random, so renders are stable). */
 const DROPS = Array.from({ length: 26 }, (_, i) => ({
@@ -155,7 +144,8 @@ const SetrHero = () => {
 };
 
 const SetrMain = () => {
-  const { c, t, isAr, price, amount, section } = useCampaignPage("setr", SETR_DEFAULTS);
+  const { c, t, isAr, price, amount, section, images } = useCampaignPage("setr", SETR_DEFAULTS);
+  const galleryImgs = images("gallery");
   const [picked, setPicked] = useState<Record<string, boolean>>({ blanket: true });
   const [hasRoof, setHasRoof] = useState(false);
   const [roofId, setRoofId] = useState<(typeof ROOFS)[number]["id"]>("bitumen");
@@ -458,7 +448,7 @@ const SetrMain = () => {
       <section className="bg-background py-16 md:py-20">
         <div className="container mx-auto max-w-6xl px-4">
           <h2 className="text-3xl font-black text-primary md:text-4xl">{isAr ? "من شتاء العام الماضي" : "From last winter"}</h2>
-          <div className="mt-8"><BentoGallery items={[GALLERY[1], GALLERY[0], { src: markounClothes, altAr: "كسوة شتوية ثقيلة للأطفال وكبار السن", altEn: "Heavy winter clothing" }, GALLERY[2]]} isAr={isAr} /></div>
+          <div className="mt-8"><BentoGallery items={galleryImgs} isAr={isAr} /></div>
         </div>
       </section>
     </>

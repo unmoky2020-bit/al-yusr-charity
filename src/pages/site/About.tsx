@@ -41,6 +41,7 @@ import {
   Briefcase,
   Layers,
   Award,
+  Check,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { useQuery } from "@tanstack/react-query";
@@ -63,7 +64,7 @@ import imgJourneyMain from "@/assets/field/convoy-2026-day-distribution.jpg";
 import imgJourneyTeam from "@/assets/contact-hero-volunteers.jpg";
 import { useSiteStats } from "@/hooks/useSiteStats";
 import { getLucideIcon } from "@/lib/lucide-icon";
-import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, type AboutUsAchievementsMeta, resolveStorageUrl, getApiToken } from "@/data/laravelApi";
+import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, resolveStorageUrl, getApiToken } from "@/data/laravelApi";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
@@ -456,10 +457,11 @@ const About = () => {
               </div>
             </div>
 
-            {/* Quick Stats Panel — 2 columns on mobile */}
+            {/* Achievements — the only place the figures show (dashboard → من نحن → الأرقام والإحصائيات). */}
             <div
+              id="achievements"
               data-reveal
-              className="reveal-up relative mx-auto mt-12 max-w-5xl rounded-[2rem] border border-secondary/25 bg-[hsl(150_45%_8%/0.85)] p-4 shadow-[0_30px_80px_-40px_hsl(150_60%_5%/0.9)] backdrop-blur-md sm:p-5 md:mt-14 md:p-6"
+              className="reveal-up relative mx-auto mt-12 max-w-5xl scroll-mt-24 rounded-[2rem] border border-secondary/25 bg-[hsl(150_45%_8%/0.85)] p-4 shadow-[0_30px_80px_-40px_hsl(150_60%_5%/0.9)] backdrop-blur-md sm:p-5 md:mt-14 md:p-6"
             >
               <h2 className="sr-only">{isRTL ? `إحصائيات ${statsYear ? `عام ${statsYear}` : "الأثر"}` : `${statsYear || "Our"} impact numbers`}</h2>
               <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-4">
@@ -751,9 +753,6 @@ const About = () => {
           </div>
         </section>
 
-        {/* 2025 ACHIEVEMENTS (2 cards per row on mobile) */}
-        <AchievementsSection isRTL={isRTL} meta={aboutData.achievements} />
-
         {/* TESTIMONIAL / SLOGAN */}
         <section className="bg-primary text-primary-foreground py-16 md:py-20">
           <div className="container mx-auto max-w-4xl px-4 text-center">
@@ -784,7 +783,7 @@ const About = () => {
                 {isRTL ? "مبادرات نوعية مدروسة تعمل طوال العام في كل جوانب الحياة:" : "Continuous year-round programs touching every facet of life:"}
               </p>
             </div>
-            <div className="mt-10 grid gap-3.5 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
               {(() => {
                 // Edited in the dashboard (من نحن ← الأنشطة الدائمة); the default list covers an unreachable API.
                 const source = Array.isArray(aboutData.programs) && aboutData.programs.length > 0 ? aboutData.programs : ABOUT_US_DEFAULT_DATA.programs;
@@ -797,22 +796,22 @@ const About = () => {
                   href: p.href && p.href.startsWith("/") ? p.href : "/programs",
                 }));
 
+                // Green brand tiles with orange icons (dashboard → من نحن → الأنشطة الدائمة).
                 return items.map((a, i) => (
                   <Link
                     key={i}
                     to={a.href}
                     data-reveal
-                    className="reveal-up flex items-center gap-2.5 sm:gap-3 rounded-2xl border border-border bg-card p-3.5 sm:p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-secondary/60 hover:shadow-card"
+                    className="reveal-up group relative flex flex-col items-center overflow-hidden rounded-3xl bg-primary p-4 text-center text-primary-foreground shadow-card ring-1 ring-primary/10 transition hover:-translate-y-1 hover:shadow-cta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:p-6"
                   >
-                    <div className="grid h-10 w-10 sm:h-11 sm:w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary">
-                      <a.I className="h-5 w-5 text-secondary" />
-                    </div>
-                    <span className="min-w-0">
-                      <span className="block text-xs sm:text-sm font-extrabold text-primary truncate">{isRTL ? a.ar : a.en}</span>
-                      {(isRTL ? a.dAr : a.dEn) && (
-                        <span className="mt-0.5 hidden sm:block text-[11px] leading-snug text-muted-foreground line-clamp-2">{isRTL ? a.dAr : a.dEn}</span>
-                      )}
+                    <span aria-hidden className="pointer-events-none absolute inset-0 leaf-bg opacity-15" />
+                    <span className="relative grid h-12 w-12 place-items-center rounded-2xl bg-accent/15 ring-1 ring-accent/40 transition group-hover:bg-accent sm:h-14 sm:w-14">
+                      <a.I className="h-6 w-6 text-accent transition group-hover:text-accent-foreground sm:h-7 sm:w-7" strokeWidth={2} />
                     </span>
+                    <span className="relative mt-3 block text-sm font-black leading-snug sm:text-base">{isRTL ? a.ar : a.en}</span>
+                    {(isRTL ? a.dAr : a.dEn) && (
+                      <span className="relative mt-1.5 hidden text-xs leading-relaxed text-primary-foreground/75 line-clamp-3 sm:block">{isRTL ? a.dAr : a.dEn}</span>
+                    )}
                   </Link>
                 ));
               })()}
@@ -831,14 +830,22 @@ const About = () => {
                 ? "مشهرة رسمياً من وزارة التضامن الاجتماعي مع تقارير محاسبية سنوية وإشراف كامل."
                 : "Officially registered by the Ministry of Social Solidarity with certified annual accounting."}
             </p>
-            <div className="mt-10 grid gap-4 md:grid-cols-3">
+            <div className="mt-12 grid gap-10 sm:grid-cols-3 sm:gap-6">
               {certs.map((c, i) => (
-                <div key={i} data-reveal className="reveal-up rounded-3xl border border-border bg-card p-6 text-center shadow-soft">
-                  <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-secondary/15 text-primary">
-                    <c.I className="h-7 w-7 text-secondary" />
+                <div key={i} data-reveal className="reveal-up flex flex-col items-center text-center">
+                  {/* Verified seal: glowing ring + check badge */}
+                  <div className="cert-seal relative grid h-28 w-28 place-items-center rounded-full sm:h-32 sm:w-32" style={{ animationDelay: `${i * 0.6}s` }}>
+                    <span aria-hidden className="cert-seal-ring absolute inset-0 rounded-full" />
+                    <span className="relative grid h-[84%] w-[84%] place-items-center rounded-full bg-primary shadow-card ring-4 ring-background">
+                      <c.I className="h-10 w-10 text-secondary sm:h-11 sm:w-11" strokeWidth={1.75} />
+                    </span>
+                    <span className="absolute bottom-1 end-1 grid h-9 w-9 place-items-center rounded-full bg-accent text-accent-foreground shadow-cta ring-4 ring-background sm:h-10 sm:w-10">
+                      <Check className="h-5 w-5" strokeWidth={3.5} />
+                      <span className="sr-only">{isRTL ? "موثّق" : "Verified"}</span>
+                    </span>
                   </div>
-                  <h3 className="mt-3 font-black text-primary">{c.t}</h3>
-                  <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground font-medium">{c.d}</p>
+                  <h3 className="mt-5 text-base font-black text-primary sm:text-lg">{c.t}</h3>
+                  <p className="mt-1.5 max-w-xs text-xs font-medium leading-relaxed text-muted-foreground sm:text-sm">{c.d}</p>
                 </div>
               ))}
             </div>
@@ -1065,75 +1072,3 @@ const About = () => {
   );
 };
 export default About;
-
-/* ---------------- Dynamic Achievements (2 cards per row on mobile) ---------------- */
-const FALLBACK_ACHIEVEMENTS = [
-  { n: "1,400", ar: "كرتونة رمضان", en: "Ramadan boxes" },
-  { n: "+3,000", ar: "كرتونة غذائية", en: "Food boxes" },
-  { n: "122", ar: "سقف منزل", en: "Homes roofed" },
-  { n: "385", ar: "وصلة مياه نقية", en: "Water taps" },
-  { n: "4 طن", ar: "لحوم ودواجن موزعة", en: "Tons of meat" },
-  { n: "9", ar: "عرايس تم تيسير زواجهن", en: "Brides married" },
-  { n: "354", ar: "طالب — مساعدات تعليم", en: "Education aid" },
-  { n: "365", ar: "يوم عطاء بدون توقف", en: "Days of non-stop giving" },
-];
-
-const AchievementsSection = ({ isRTL, meta }: { isRTL: boolean; meta?: AboutUsAchievementsMeta }) => {
-  const year = meta?.year ? String(meta.year) : "";
-  const title = isRTL
-    ? meta?.title_ar || (year ? `إنجازات ${year}` : "إنجازاتنا")
-    : meta?.title_en || (year ? `${year} Achievements` : "Our Achievements");
-  const { data, loading } = useSiteStats("achievements");
-  const stats = !loading && data.length > 0 ? data : FALLBACK_ACHIEVEMENTS;
-  return (
-    <section id="achievements" className="pattern-programs relative scroll-mt-24 overflow-x-clip py-16 md:py-24">
-      <div className="container relative mx-auto max-w-6xl px-4">
-        <div className="mx-auto max-w-3xl text-center">
-          <span data-reveal className="reveal-up inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 text-[11px] font-bold text-accent">
-            <BadgeCheck className="h-3.5 w-3.5" /> {isRTL ? "إنجازات موثقة بالأرقام" : "Documented Figures"}
-          </span>
-          <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-4xl">
-            {title}
-          </h2>
-          <p data-reveal className="reveal-up mt-3 text-muted-foreground text-sm sm:text-base">
-            {isRTL ? "أرقام حقيقية موثّقة من الميدان — وكل سنة الأثر بيكبر في كل أنحاء مصر." : "Real, documented field achievements expanding across Egypt."}
-          </p>
-        </div>
-
-        {/* 2 columns on mobile, 4 columns on desktop */}
-        <div className="mt-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {stats.map((s, i) => {
-            if (loading || !data.length) {
-              const a = s as typeof FALLBACK_ACHIEVEMENTS[number];
-              return (
-                <div key={i} data-reveal className="reveal-up rounded-2xl border border-border bg-card p-4 sm:p-5 text-center shadow-soft transition hover:-translate-y-1 hover:shadow-card">
-                  <div className="font-mono text-xl sm:text-2xl md:text-3xl font-black text-secondary">{a.n}</div>
-                  <div className="mt-1 text-xs sm:text-sm font-extrabold text-primary">{isRTL ? a.ar : a.en}</div>
-                </div>
-              );
-            }
-
-            const stat = s as typeof data[number];
-            const Icon = getLucideIcon(stat.icon_name);
-            const suffix = (isRTL ? stat.suffix_ar : stat.suffix_en) || "";
-            const display = stat.value_text && stat.value_text.trim().length > 0
-              ? stat.value_text
-              : (typeof stat.value_number === "number" ? `${stat.value_number.toLocaleString()}${suffix}` : "—");
-            const label = (isRTL ? stat.label_ar : stat.label_en) || stat.label_ar || stat.label_en;
-            return (
-              <div key={stat.id} data-reveal className="reveal-up flex items-center gap-2.5 sm:gap-3 rounded-2xl border border-border bg-card p-3.5 sm:p-5 text-start shadow-soft transition hover:-translate-y-1 hover:shadow-card">
-                <div className="grid h-10 w-10 sm:h-12 sm:w-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-secondary/15 text-primary">
-                  {stat.image_url ? <img src={stat.image_url} alt="" className="h-full w-full object-cover" loading="lazy" /> : <Icon className="h-5 w-5 text-secondary" />}
-                </div>
-                <div className="min-w-0">
-                  <div className="font-mono text-lg sm:text-xl md:text-2xl font-black text-secondary truncate">{display}</div>
-                  <div className="mt-0.5 text-xs sm:text-sm font-extrabold text-primary truncate">{label}</div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-};

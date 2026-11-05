@@ -1,4 +1,5 @@
 import { l, type CampaignPageContent } from "./types";
+import { img } from "@/data/pageImages";
 
 /**
  * Default (code) content for the Markoun campaign page (/markoun).
@@ -253,6 +254,27 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
   cta: {
     title: l("عندك مركون في بيتك؟ (أثاث · أجهزة · ملابس · أدوية · كتب)", "Have surplus items at home?"),
     sub: l("استلام مجاني من باب بيتك بكتابة كلمة «تبرع»", "Free doorstep pickup by texting 'Donate'"),
+  },
+
+  /** Pictures (dashboard → الصور). */
+  images: {
+    hero: {
+      label: l("صورة أعلى الصفحة", "Hero image"),
+      max: 1,
+      items: [img("markoun-poster-furniture.webp", "بوستر حملة مركون - مؤسسة اليسر الخيرية", "Markoun campaign poster")],
+    },
+    gallery: {
+      label: l("معرض صور توثيق الميدان", "Field proof gallery"),
+      items: [
+        img("markoun-poster-furniture.webp", "بوستر حملة مركون", "Markoun poster"),
+        img("markoun-furniture.webp", "تسليم وفرش أثاث لأسرة متعففة", "Furniture delivery"),
+        img("asas-marqun.jpg", "أثاث بعد الصيانة في الورش", "Refurbished furniture"),
+        img("markoun-poster-clothes.webp", "المركون في دولابك ستر لغيرك", "Clothing drive"),
+        img("markoun-poster-delivery.png", "سيارات اليسر لاستلام المركون", "Pickup vans"),
+        img("markoun-poster-meds.png", "كنوز مركونة في البيوت", "Surplus treasures"),
+        img("markoun-poster-medbottle.png", "رعاية صحية وتكافل", "Health support"),
+      ],
+    },
   },
 };
 

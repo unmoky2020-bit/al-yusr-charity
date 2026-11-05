@@ -9,9 +9,6 @@ import { useProjectPage } from "@/hooks/useProjectPage";
 import type { L } from "@/data/campaignPages/types";
 import NURSERIES_DEFAULTS from "@/data/projectPages/nurseries";
 import heroChild from "@/assets/hero-child.jpg";
-import programEducation from "@/assets/program-education.jpg";
-import posterEducation from "@/assets/poster-education.png";
-import axisEducation from "@/assets/axis-education.jpg";
 
 /**
  * /nurseries — an introduction to Al-Yusr's education project (not an enrolment page):
@@ -49,13 +46,6 @@ const TRACK_LAYOUT: Record<string, { icon: LucideIcon; from: number; to: number;
   quran: { icon: BookOpen, from: 4, to: 16, bar: "bg-primary", pointsKey: "quran_points" },
 };
 const PILLAR_ICONS: Record<string, LucideIcon> = { curricula: Layers, supervision: ClipboardCheck, team: Users, contests: Trophy };
-
-const GALLERY = [
-  { src: programEducation, altAr: "أطفال في فصل تعليمي بحضانات اليسر", altEn: "Children in an Al-Yusr nursery classroom" },
-  { src: axisEducation, altAr: "حلقة تحفيظ قرآن للأطفال في دور اليسر", altEn: "A children's Qur'an circle" },
-  { src: posterEducation, altAr: "تعليم الأطفال في مؤسسة اليسر", altEn: "Children's education at Al-Yusr" },
-  { src: heroChild, altAr: "طفل من أطفال حضانات اليسر", altEn: "A child at an Al-Yusr nursery" },
-];
 
 type PageCtx = ReturnType<typeof useProjectPage>;
 
@@ -96,8 +86,9 @@ const AgeJourney = ({ ctx }: { ctx: PageCtx }) => {
 };
 
 const NurseriesMain = ({ ctx }: { ctx: PageCtx }) => {
-  const { c, t, isAr, section } = ctx;
+  const { c, t, isAr, section, images } = ctx;
   const shares = useEntityShares(SOURCE.kind, SOURCE.slug, DEFAULT_SHARES);
+  const gallery = images("gallery");
   const facts = section("facts");
   const tracks = section("tracks");
   const pillars = section("pillars");
@@ -210,12 +201,14 @@ const NurseriesMain = ({ ctx }: { ctx: PageCtx }) => {
         </div>
       </section>
 
-      <section className="bg-muted/30 py-12 md:py-16">
-        <div className="container mx-auto max-w-6xl px-4">
-          <h2 className="mb-8 text-center text-2xl font-black text-primary md:text-3xl">{t(section("gallery")?.title)}</h2>
-          <BentoGallery items={GALLERY} isAr={isAr} />
-        </div>
-      </section>
+      {gallery.length > 0 && (
+        <section className="bg-muted/30 py-12 md:py-16">
+          <div className="container mx-auto max-w-6xl px-4">
+            <h2 className="mb-8 text-center text-2xl font-black text-primary md:text-3xl">{t(section("gallery")?.title)}</h2>
+            <BentoGallery items={gallery} isAr={isAr} />
+          </div>
+        </section>
+      )}
     </>
   );
 };

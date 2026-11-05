@@ -4,6 +4,7 @@ import {
   BookOpen, Plus, Pencil, Trash2, Loader2, Search, ExternalLink, Tag, Users,
 } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
+import { ListingHeroImageButton } from "@/components/admin/ListingHeroImageButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -151,6 +152,7 @@ export default function AdminPrograms() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            <ListingHeroImageButton pageKey="programs" />
             <Button
               onClick={() => nav('/admin/programs/new')}
               className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-sm"

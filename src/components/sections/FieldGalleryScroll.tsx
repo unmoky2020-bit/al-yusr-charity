@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Heart, Camera, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BentoCell, BentoGrid, ContainerScroll } from "@/components/ui/hero-gallery-scroll-animation";
 import { useLang } from "@/i18n/LangContext";
+import { usePageGallery, type PageGalleryKey } from "@/data/pageGalleries";
 
 import food from "@/assets/program-food.jpg";
 import health from "@/assets/program-health.webp";
@@ -43,15 +44,38 @@ const IMAGES: Cell[] = [
   { src: volunteerField, href: "/volunteer",          ar: "متطوعو اليسر في قرى الدقهلية",          en: "Al-Yusr volunteers in Dakahlia villages", axisAr: "التطوع", axisEn: "Volunteer" },
 ];
 
-const heroCells = IMAGES.slice(0, 5);
-const extraCells = IMAGES.slice(5);
+/**
+ * Cells from the dashboard gallery (معارض صور الصفحات → الزكاة), or the built-in ones while nothing is
+ * saved. A chosen picture keeps the link of the built-in cell at its position; its short title is the
+ * pillar label («من الميدان» when empty).
+ */
+function useCells(galleryKey: PageGalleryKey | undefined): Cell[] {
+  const custom = usePageGallery(galleryKey);
+  return useMemo(
+    () =>
+      custom
+        ? custom.map((g, i) => ({
+            src: g.src,
+            href: IMAGES[i]?.href ?? "/programs",
+            ar: g.altAr,
+            en: g.altEn,
+            axisAr: g.tagAr || "من الميدان",
+            axisEn: g.tagEn || "From the field",
+          }))
+        : IMAGES,
+    [custom],
+  );
+}
 
 /**
  * Cinematic scroll-triggered bento gallery: real field images that scale + slide
  * into a five-cell mosaic as the user scrolls. Tied to brand identity & links to
  * the donation flow + about page.
  */
-export const FieldGalleryScroll = () => {
+export const FieldGalleryScroll = ({ galleryKey }: { galleryKey?: PageGalleryKey } = {}) => {
+  const cells = useCells(galleryKey);
+  const heroCells = cells.slice(0, 5);
+  const extraCells = cells.slice(5);
   const { lang } = useLang();
   const isRTL = lang === "ar";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;

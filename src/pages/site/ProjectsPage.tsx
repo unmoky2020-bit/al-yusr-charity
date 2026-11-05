@@ -33,7 +33,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { PROJECT_KINDS } from "@/components/campaigns/ProjectKind";
 
 // ── Images ──
-import heroImg from "@/assets/hands-sprout.jpg";
+import { useListingHero } from "@/data/listingHeroes";
 import nurseriesImg from "@/assets/program-education.jpg";
 import { PROJECT_LANDINGS } from "@/data/projectLandings";
 
@@ -112,6 +112,8 @@ function ProjectsGridSkeleton() {
 const ProjectsPage = () => {
   const { lang } = useLang();
   const isAR = lang === "ar";
+  // Dashboard → المشاريع → «صورة أعلى الصفحة» (default: the projects banner).
+  const heroImg = useListingHero("projects");
   const Arrow = isAR ? ArrowLeft : ArrowRight;
 
   const { projects: cards, isLoading } = useProjectCards();
@@ -162,10 +164,10 @@ const ProjectsPage = () => {
             src={heroImg}
             alt=""
             aria-hidden
-            className="h-full w-full object-cover opacity-60"
+            className="h-full w-full object-cover"
           />
-          {/* Subtle balanced gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/95" />
+          {/* Gradient overlay: keeps the white text readable over any picture */}
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/75 via-primary/50 to-primary/90" />
           <div className="absolute -top-24 -start-24 h-96 w-96 rounded-full bg-secondary/15 blur-3xl pointer-events-none" />
           <div className="absolute -bottom-24 -end-24 h-96 w-96 rounded-full bg-secondary/10 blur-3xl pointer-events-none" />
         </div>

@@ -1,4 +1,5 @@
 import { l, type CampaignPageContent } from "./types";
+import { img } from "@/data/pageImages";
 
 /**
  * Default editable content for /arboun (مبادرة عربون خير — للفريلانسرز والمستقلين).
@@ -312,6 +313,27 @@ const arboun: CampaignPageContent = {
       "عربون خير يبارك في رزقك ويفتح أبواب التوفيق لكل صفقة جديدة",
       "A pledge of goodness that sanctifies your income and blesses your work",
     ),
+  },
+
+  /** Pictures (dashboard → الصور). */
+  images: {
+    gallery: {
+      label: l("معرض الصور في آخر الصفحة", "Gallery at the end of the page"),
+      hint: l("الصور اللي بتلف في آخر الصفحة، وعلى كل صورة عنوان قصير.", "The rotating pictures at the end of the page, each with a short title."),
+      captions: true,
+      items: [
+        img("poster-education.png", "دعم تعليم أطفال الأسر المستحقة والأيتام بالحقائب والزي المدرسي", "Supporting education for orphan children with backpacks and supplies", l("كفالة تعليم أيتام", "Orphan education")),
+        img("markoun-furniture.webp", "تيسير زواج الفتيات اليتيمات بأجهزة معمرة وأثاث منزلي", "Providing household appliances for orphan brides", l("تيسير زواج عرائس", "Brides' marriage aid")),
+        img("yusr-distribution-1.webp", "قوافل الخير الميدانية لتسقيف البيوت وسقيا الماء بالقرى", "Field aid convoys for clean water and roofing across Egypt", l("سقيا ماء وأسقف معزولة", "Water and roofs")),
+        img("yusr-meals.webp", "الإغاثة الغذائية والوجبات الساخنة للأسر الأشد احتياجاً", "Food relief and hot meals for vulnerable families", l("سلال إطعام شهرية", "Monthly food baskets")),
+      ],
+    },
+    video_poster: {
+      label: l("غلاف الفيديو", "Video cover"),
+      hint: l("الصورة اللي بتظهر قبل ما الفيديو يشتغل.", "Shown before the video plays."),
+      max: 1,
+      items: [img("poster-education.png", "مبادرة عربون خير من مؤسسة اليسر", "Al-Yusr Arboun Khair initiative")],
+    },
   },
 };
 

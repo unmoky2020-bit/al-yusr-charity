@@ -36,12 +36,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { toast } from "sonner";
 
 import posterFurniture from "@/assets/markoun-poster-furniture.webp";
-import posterClothes from "@/assets/markoun-poster-clothes.webp";
-import posterMeds from "@/assets/markoun-poster-meds.png";
-import posterDelivery from "@/assets/markoun-poster-delivery.png";
-import posterMedBottle from "@/assets/markoun-poster-medbottle.png";
-import markounFurniture from "@/assets/markoun-furniture.webp";
-import asasMarqun from "@/assets/asas-marqun.jpg";
 import { HadithBlock } from "@/components/campaigns/HadithBlock";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import MARKOUN_DEFAULTS from "@/data/campaignPages/markoun";
@@ -70,7 +64,9 @@ const ADVANTAGE_ICONS: Record<string, LucideIcon> = {
 const MarkounLanding = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
-  const { c, t, section } = useCampaignPage("markoun", MARKOUN_DEFAULTS);
+  const { c, t, section, images } = useCampaignPage("markoun", MARKOUN_DEFAULTS);
+  const heroImg = images("hero")[0];
+  const gallery = images("gallery");
   const pillars = section("pillars")?.items ?? [];
   const advantages = section("advantages")?.items ?? [];
   const steps = section("steps")?.items ?? [];
@@ -133,7 +129,7 @@ const MarkounLanding = () => {
         title={c.seo?.title?.[isRTL ? "ar" : "en"] || (isRTL ? "حملة مَرْكون — أول حملة مصرية تُحيي أُسرة بالمركون في بيتك | مؤسسة اليسر الخيرية" : "Markoun Campaign — What's Idle at Home is Life for Another | Al-Yusr")}
         description={c.seo?.description?.[isRTL ? "ar" : "en"] || (isRTL ? "حملة مَرْكُون: كنزك المركون يبني حياة لغيرك. أول حملة مصرية منظمة لإعادة استخدام الأثاث المنزلي، الأجهزة الكهربائية، الملابس، الصيدلية المستدامة، والكتب. مندوبنا يصلك لباب بيتك مجاناً بالمنصورة والدقهلية: 01097000137." : "Markoun Campaign: Egypt's premier in-kind reuse initiative. Repurposing surplus furniture, electronics, clothing, medicine, and books with free doorstep pickup across Mansoura & Dakahlia.")}
         path="/markoun"
-        image={posterFurniture}
+        image={heroImg?.src ?? posterFurniture}
         keywords={
           isRTL
             ? "حملة مركون, تبرع بالاثاث المنزلي المنصورة, تبرع بالأجهزة الكهربائية المستعملة, تبرع بالملابس المستعملة الدقهلية, صيدلية خيرية مجانية المنصورة, مندوب استلام تبرعات من المنزل, مؤسسة اليسر الخيرية, جمعية اليسر المنصورة"
@@ -257,8 +253,8 @@ const MarkounLanding = () => {
             <div className="relative lg:col-span-5">
               <div className="relative mx-auto max-w-md overflow-hidden rounded-[2.5rem] border-4 border-white/20 bg-card shadow-2xl">
                 <img
-                  src={posterFurniture}
-                  alt={isRTL ? "بوستر حملة مركون - مؤسسة اليسر الخيرية" : "Markoun Campaign Poster"}
+                  src={heroImg?.src ?? posterFurniture}
+                  alt={heroImg ? (isRTL ? heroImg.altAr : heroImg.altEn) : ""}
                   className="h-full w-full object-cover"
                   loading="eager"
                 />
@@ -522,15 +518,9 @@ const MarkounLanding = () => {
           </div>
 
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-            {[
-              { src: posterFurniture, title: isRTL ? "بوستر حملة مركون" : "Markoun poster" },
-              { src: markounFurniture, title: isRTL ? "تسليم وفرش أثاث لأسرة متعففة" : "Furniture delivery" },
-              { src: asasMarqun, title: isRTL ? "أثاث بعد الصيانة في الورش" : "Refurbished furniture" },
-              { src: posterClothes, title: isRTL ? "المركون في دولابك ستر لغيرك" : "Clothing drive" },
-              { src: posterDelivery, title: isRTL ? "سيارات اليسر لاستلام المركون" : "Pickup vans" },
-              { src: posterMeds, title: isRTL ? "كنوز مركونة في البيوت" : "Surplus treasures" },
-              { src: posterMedBottle, title: isRTL ? "رعاية صحية وتكافل" : "Health support" },
-            ].map((img, idx) => (
+            {gallery.map((g, idx) => {
+              const img = { src: g.src, title: isRTL ? g.altAr : g.altEn };
+              return (
               <figure
                 key={idx}
                 className="group relative aspect-square overflow-hidden rounded-2xl border border-border bg-card shadow-soft"
@@ -546,7 +536,8 @@ const MarkounLanding = () => {
                   {img.title}
                 </figcaption>
               </figure>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

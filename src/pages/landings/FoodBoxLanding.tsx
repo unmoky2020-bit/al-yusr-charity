@@ -7,11 +7,8 @@ import { HadithBlock } from "@/components/campaigns/HadithBlock";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import FOOD_DEFAULTS from "@/data/campaignPages/food";
 import heroCarton from "@/assets/hero-carton-opened.webp";
-import cartonStack from "@/assets/brand-carton-stack.png";
 import meatPlates from "@/assets/poster-meat.webp";
 import mealsBoxes from "@/assets/yusr-orphans-meals.webp";
-import iftarTrays from "@/assets/yusr-meals.webp";
-import doorstep from "@/assets/program-food-new.jpg";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("food");
@@ -40,13 +37,6 @@ const TRUST_ICONS: Record<string, LucideIcon> = { ngo: ShieldCheck, docs: FileCh
 /** Segment colours of the carton weight bar, cycled in order. */
 const BAR_COLOURS = ["bg-secondary", "bg-accent", "bg-primary", "bg-[hsl(42_80%_60%)]", "bg-[hsl(152_45%_35%)]", "bg-[hsl(18_75%_55%)]"];
 
-const GALLERY = [
-  { src: doorstep, altAr: "تسليم كرتونة الغذاء الشهرية على باب أسرة بالمنصورة", altEn: "Monthly food carton delivered to a family's door in Mansoura" },
-  { src: meatPlates, altAr: "لحوم ذبيحة الشهر مقسّمة كيلو لكل أسرة", altEn: "The month's slaughter meat portioned 1 kg per family" },
-  { src: cartonStack, altAr: "كراتين الغذاء في مخزن المؤسسة قبل التوزيع", altEn: "Food cartons at the foundation's warehouse before distribution" },
-  { src: iftarTrays, altAr: "وجبات مطبوخة من مطبخ اليسر جاهزة للتوزيع", altEn: "Cooked meals from the Al-Yusr kitchen ready for distribution" },
-];
-
 const PriceButton = ({ to, label, amount, isAr, primary = false }: { to: string; label: string; amount: number; isAr: boolean; primary?: boolean }) => {
   const Arrow = isAr ? ArrowLeft : ArrowRight;
   return (
@@ -68,7 +58,8 @@ const PriceButton = ({ to, label, amount, isAr, primary = false }: { to: string;
 };
 
 const FoodHero = () => {
-  const { c, t, isAr, section, amount } = useCampaignPage(SLUG, FOOD_DEFAULTS);
+  const { c, t, isAr, section, amount, images } = useCampaignPage(SLUG, FOOD_DEFAULTS);
+  const heroImg = images("hero")[0];
   const trust = section("trust")?.items ?? [];
   // The carton's weight is the sum of its (editable) ingredients; 14 is the design figure if the list is empty.
   const cartonKg = (section("carton")?.items ?? []).reduce((s, it) => s + (Number.parseFloat(it.extra?.en || it.extra?.ar || "0") || 0), 0) || 14;
@@ -97,7 +88,7 @@ const FoodHero = () => {
           </div>
 
           <div className="relative mx-auto w-full max-w-md">
-            <img src={heroCarton} alt={isAr ? "كرتونة الغذاء الشهرية ١٤ كيلو مع كيلو لحمة من ذبيحة الشهر" : "The 14 kg monthly food carton with 1 kg of meat from the month's slaughter"} loading="eager" width={1520} height={1013} className="relative w-full rounded-2xl object-cover shadow-card ring-1 ring-primary-foreground/15" />
+            <img src={heroImg?.src ?? heroCarton} alt={heroImg ? (isAr ? heroImg.altAr : heroImg.altEn) : ""} loading="eager" width={1520} height={1013} className="relative w-full rounded-2xl object-cover shadow-card ring-1 ring-primary-foreground/15" />
             {/* The two numbers a donor remembers */}
             <div className="absolute -bottom-4 start-3 flex gap-2 sm:-bottom-5 sm:start-4">
               <span className="food-tag rounded-xl bg-secondary px-4 py-2 text-secondary-foreground shadow-cta">
@@ -132,7 +123,8 @@ const FoodHero = () => {
 };
 
 const FoodMain = () => {
-  const { c, t, isAr, price, amount, section } = useCampaignPage(SLUG, FOOD_DEFAULTS);
+  const { c, t, isAr, price, amount, section, images } = useCampaignPage(SLUG, FOOD_DEFAULTS);
+  const galleryImgs = images("gallery");
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
   const hadith2 = section("hadith2")?.items[0];
@@ -438,7 +430,7 @@ const FoodMain = () => {
       <section className="bg-background py-16 md:py-20">
         <div className="container mx-auto max-w-6xl px-4">
           <h2 className="text-3xl font-black text-primary md:text-4xl">{t(section("gallery")?.title)}</h2>
-          <div className="mt-8"><BentoGallery items={GALLERY} isAr={isAr} /></div>
+          <div className="mt-8"><BentoGallery items={galleryImgs} isAr={isAr} /></div>
         </div>
       </section>
     </>
@@ -446,7 +438,7 @@ const FoodMain = () => {
 };
 
 const FoodBoxLanding = () => {
-  const { c, section } = useCampaignPage(SLUG, FOOD_DEFAULTS);
+  const { c, section, images } = useCampaignPage(SLUG, FOOD_DEFAULTS);
   const seo = section("seo");
   return (
     <CampaignLandingShell
@@ -459,7 +451,7 @@ const FoodBoxLanding = () => {
       taglineEn={seo?.lead?.en ?? ""}
       metaDescAr="برنامج الغذاء الشهري من مؤسسة اليسر: لحوم من ذبائح شهرية، كرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام تصلح كفارة صيام أو كفارة يمين. توصيل لباب البيت في المنصورة والدقهلية وكل مصر، بتوثيق بالصور."
       metaDescEn="Al-Yusr's monthly food programme: meat from monthly slaughters, a 14 kg carton of local staples, and cooked meals for feeding, fasting expiation or oath expiation. Doorstep delivery in Mansoura, Dakahlia and all Egypt, with photo proof."
-      heroImage={heroCarton}
+      heroImage={images("hero")[0]?.src ?? heroCarton}
       heroAlt="الغذاء الشهري — كرتونة ١٤ كيلو ولحوم الذبائح الشهرية ووجبات الإطعام"
       hero={<FoodHero />}
       main={<FoodMain />}

@@ -7,9 +7,6 @@ import { Crescent, Lantern, Star8, NightSky } from "@/components/campaigns/Ramad
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import RAMADAN_DEFAULTS from "@/data/campaignPages/ramadan";
 import yusrRamadanBox from "@/assets/yusr-ramadan-box.png";
-import yusrMeals from "@/assets/yusr-meals.webp";
-import yusrDistribution from "@/assets/yusr-distribution-1.webp";
-import farmHero from "@/assets/farm-hero.jpg";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("ramadan");
@@ -32,13 +29,6 @@ const STAT_ICONS: Record<string, typeof Package> = {
   sadaqa: Droplets,
 };
 const WIDE_STATS = new Set(["boxes", "sadaqa"]);
-
-const GALLERY = [
-  { src: yusrRamadanBox, altAr: "كرتونة الخير الكبرى من اليسر 25 كيلو", altEn: "Al-Yusr 25 kg Ramadan box" },
-  { src: yusrMeals, altAr: "تجهيز وجبات الإفطار الساخنة يومياً", altEn: "Daily hot iftar prep" },
-  { src: farmHero, altAr: "لحوم بلدي طازجة من المزارع الوقفية", altEn: "Endowment farm meat" },
-  { src: yusrDistribution, altAr: "قوافل التوزيع الرمضانية في قرى الدقهلية", altEn: "Ramadan aid convoys" },
-];
 
 const MoonIcon = ({ phase }: { phase: "new" | "half" | "full" }) => (
   <svg viewBox="0 0 40 40" className="h-10 w-10" aria-hidden>
@@ -64,7 +54,8 @@ const Counter = ({ isAr, value, setValue, min, max, step, labelAr, labelEn }: { 
 );
 
 const RamadanHero = () => {
-  const { c, t, isAr } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
+  const { c, t, isAr, images } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
+  const heroImg = images("hero")[0];
   const live = useAfterLoad();
   return (
     <section className="ramadan-night relative overflow-hidden text-primary-foreground">
@@ -95,7 +86,7 @@ const RamadanHero = () => {
             {["-top-3 -start-3", "-top-3 -end-3", "-bottom-3 -start-3", "-bottom-3 -end-3"].map((pos) => (
               <Star8 key={pos} className={`absolute h-6 w-6 text-[hsl(var(--gold))] ${pos}`} />
             ))}
-            <img src={yusrRamadanBox} alt={isAr ? "كرتونة رمضان 25 كيلو من مؤسسة اليسر" : "Al-Yusr 25 kg Ramadan box"} loading="eager" className="w-full rounded-lg object-cover" />
+            <img src={heroImg?.src ?? yusrRamadanBox} alt={heroImg ? (isAr ? heroImg.altAr : heroImg.altEn) : ""} loading="eager" className="w-full rounded-lg object-cover" />
           </div>
         </div>
       </div>
@@ -104,7 +95,8 @@ const RamadanHero = () => {
 };
 
 const RamadanMain = () => {
-  const { c, t, isAr, price, amount, section } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
+  const { c, t, isAr, price, amount, section, images } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
+  const galleryImgs = images("gallery");
   const Arrow = isAr ? ArrowLeft : ArrowRight;
   const [people, setPeople] = useState(4);
   const [meals, setMeals] = useState(10);
@@ -285,7 +277,7 @@ const RamadanMain = () => {
       <section className="bg-background py-16 md:py-20">
         <div className="container mx-auto max-w-6xl px-4">
           <h2 className="text-3xl font-black text-primary md:text-4xl">{isAr ? "من رمضان الماضي" : "From last Ramadan"}</h2>
-          <div className="mt-8"><BentoGallery items={GALLERY} isAr={isAr} /></div>
+          <div className="mt-8"><BentoGallery items={galleryImgs} isAr={isAr} /></div>
         </div>
       </section>
     </>
@@ -293,7 +285,7 @@ const RamadanMain = () => {
 };
 
 const RamadanLanding = () => {
-  const { c } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
+  const { c, images } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
   return (
     <CampaignLandingShell
       slug="ramadan"
@@ -305,7 +297,7 @@ const RamadanLanding = () => {
       taglineEn={c.hero.lead.en}
       metaDescAr="شارك في موسم رمضان مع مؤسسة اليسر: كرتونة الخير (25 كيلو بلدي)، مطبخ وجبات الإفطار الساخنة، ذبائح مزارعنا الوقفية، تيسير الزواج 'الفرحة فرحتين'، كسوة العيد، وزكاة المال والفطر."
       metaDescEn="Support Al-Yusr's Ramadan Season: 25kg family boxes, hot iftar kitchen, endowment farm meat, bride support, orphan Eid clothing, and Zakat distribution in Egypt."
-      heroImage={yusrRamadanBox}
+      heroImage={images("hero")[0]?.src ?? yusrRamadanBox}
       heroAlt="كرتونة رمضان 25 كيلو من مؤسسة اليسر مع لحوم بلدي"
       hero={<RamadanHero />}
       main={<RamadanMain />}

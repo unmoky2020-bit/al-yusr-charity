@@ -295,7 +295,7 @@ const QurbaniLanding = () => {
       </section>
 
       {/* Real-field proof gallery — Qurbani 2024 / 2025 + 2026 convoys */}
-      <FieldConvoysGallery variant="qurbani" donateHref="/donate?program=odhya" />
+      <FieldConvoysGallery variant="qurbani" donateHref="/donate?program=odhya" galleryKey="qurbani" />
 
       {/* FAQ */}
       <section id="faq" className="scroll-mt-24 bg-background py-16 md:py-20">

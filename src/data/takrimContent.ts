@@ -2,13 +2,13 @@
  * Takrim landing-page content.
  *
  * The top section (title, description, image) and the donation shares are edited in the dashboard on the
- * program record with slug "takrim" (`/programs`). This module maps that record to the page's shape and
+ * backend project "takrim" (`/projects`, or a program "takrim" if one is added). This module maps that record to the page's shape and
  * keeps bilingual static fallbacks so the page renders the same when the API is unreachable or the
  * content source is "static".
  */
 import takrimVan from "@/assets/takrim-van.jpg";
 import { fetchProgramRecords, programSlugOf } from "@/data/sources/programs";
-import { type ApiRecord, image, num, pick, useSourced } from "@/data/sources/_shared";
+import { type ApiRecord, fetchPublicList, image, normalizeSlug, num, pick, useSourced } from "@/data/sources/_shared";
 
 export type TakrimText = { ar: string; en: string };
 
@@ -96,18 +96,46 @@ export function resolveTakrimContent(record?: ApiRecord): TakrimContent {
 
 const DEFAULT_CONTENT: TakrimContent = resolveTakrimContent();
 
-/** The public /programs records, read through the same content-source switch as the programs adapter. */
+/** The program record "takrim", if the dashboard ever gets one (it takes precedence over the project). */
 export function findTakrimRecord(records: ApiRecord[] | undefined): ApiRecord | undefined {
   return records?.find((r) => programSlugOf(r) === "takrim");
 }
 
+/** The backend project "takrim" (المشاريع → سيارات تكريم الإنسان): the live source of the donation shares. */
+export function findTakrimProject(records: ApiRecord[] | undefined): ApiRecord | undefined {
+  return records?.find((r) => normalizeSlug(r.slug) === "takrim");
+}
+
+type TakrimRecords = { programs: ApiRecord[]; projects: ApiRecord[] };
+
+async function fetchTakrimRecords(): Promise<TakrimRecords> {
+  const settle = (p: Promise<ApiRecord[]>) => p.catch((): ApiRecord[] => []);
+  const [programs, projects] = await Promise.all([
+    settle(fetchProgramRecords()),
+    settle(fetchPublicList("/projects", { per_page: 100 })),
+  ]);
+  return { programs, projects };
+}
+
+/**
+ * Pick the record that drives the page: the "takrim" program when one exists, otherwise the "takrim"
+ * project. The project's name/description are not page copy, so only its packages and cover image
+ * (= the hero image, dashboard → المشاريع → الصورة) are used; the title and description keep their defaults.
+ */
+export function resolveTakrimFromRecords(raw: TakrimRecords): TakrimContent {
+  const program = findTakrimRecord(raw.programs);
+  if (program) return resolveTakrimContent(program);
+  const project = findTakrimProject(raw.projects);
+  return resolveTakrimContent(project ? { donation_packages: project.donation_packages, image: project.cover_image } : undefined);
+}
+
 /** Top section + shares of the Takrim landing page (static defaults in "static" mode / on error). */
 export function useTakrimContent(): TakrimContent {
-  const { data } = useSourced<ApiRecord[], TakrimContent>(
-    ["programs"],
-    fetchProgramRecords,
+  const { data } = useSourced<TakrimRecords, TakrimContent>(
+    ["takrim-records"],
+    fetchTakrimRecords,
     DEFAULT_CONTENT,
-    (records) => resolveTakrimContent(findTakrimRecord(records)),
+    resolveTakrimFromRecords,
   );
   return data;
 }

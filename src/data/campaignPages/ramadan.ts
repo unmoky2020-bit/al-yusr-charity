@@ -1,4 +1,5 @@
 import { l, type CampaignPageContent } from "./types";
+import { img } from "@/data/pageImages";
 
 /**
  * Default content for the Ramadan season landing page (/ramadan).
@@ -167,6 +168,24 @@ const ramadan: CampaignPageContent = {
       "كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.",
       "Every EGP reaches the right hands — verified with photos, video and field follow-up.",
     ),
+  },
+
+  /** Pictures (dashboard → الصور). */
+  images: {
+    hero: {
+      label: l("صورة أعلى الصفحة", "Hero image"),
+      max: 1,
+      items: [img("yusr-ramadan-box.png", "كرتونة رمضان 25 كيلو من مؤسسة اليسر", "Al-Yusr 25 kg Ramadan box")],
+    },
+    gallery: {
+      label: l("معرض الصور", "Gallery"),
+      items: [
+        img("yusr-ramadan-box.png", "كرتونة الخير الكبرى من اليسر 25 كيلو", "Al-Yusr 25 kg Ramadan box"),
+        img("yusr-meals.webp", "تجهيز وجبات الإفطار الساخنة يومياً", "Daily hot iftar prep"),
+        img("farm-hero.jpg", "لحوم بلدي طازجة من المزارع الوقفية", "Endowment farm meat"),
+        img("yusr-distribution-1.webp", "قوافل التوزيع الرمضانية في قرى الدقهلية", "Ramadan aid convoys"),
+      ],
+    },
   },
 };
 

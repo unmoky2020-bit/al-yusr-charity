@@ -5,6 +5,7 @@ import { apiFetch, getApiToken } from "@/data/laravelApi";
 import { getCampaignPageMeta } from "@/data/campaignPages/index";
 import { campaignPagesApi } from "@/data/campaignPages/api";
 import { mergeCampaignContent, type CampaignPageContent, type L } from "@/data/campaignPages/types";
+import { resolveImages } from "@/data/pageImages";
 
 type Pkg = { key?: string | null; name_ar: string; name_en?: string; amount: number; is_active?: boolean; sort_order?: number };
 
@@ -137,6 +138,8 @@ export function useCampaignPage(slug: string, defaults: CampaignPageContent) {
   const amount = (id: string, fallback = 0) => price(id)?.amount ?? fallback;
   const stat = (id: string) => c.stats.find((s) => s.id === id);
   const section = (key: string) => c.sections[key];
+  /** Pictures of a slot (dashboard → الصور), ready for <img>; empty when the page has no such slot. */
+  const images = (key: string) => resolveImages(c.images?.[key]?.items);
 
-  return { c, t, isAr, price, amount, stat, section };
+  return { c, t, isAr, price, amount, stat, section, images };
 }

@@ -18,7 +18,7 @@ import {
   type CampaignRecord,
   type CampaignSeo,
 } from "@/data/api/donationCampaignsAdminApi";
-import type { CampaignPageContent, FaqItem } from "./types";
+import { imagesColumn, type CampaignPageContent, type FaqItem } from "./types";
 // Call-time only (index.ts re-exports this module): no top-level use, so the import cycle is harmless.
 import { getCampaignPageMeta } from "./index";
 import { fetchFaqs } from "@/data/faqsApi";
@@ -76,7 +76,9 @@ export function toCampaignColumns(content: CampaignPageContent): {
   seo: CampaignSeo | null;
   faqs: CampaignFaq[];
 } {
-  const { prices: _prices, faq, seo, ...page } = content;
+  const { prices: _prices, faq, seo, images, ...rest } = content;
+  // Pictures: only each slot's list is stored (labels and limits stay in the page code).
+  const page = (images ? { ...rest, images: imagesColumn(images) } : rest) as CampaignPageContentColumn;
   return {
     page_content: page,
     seo: seo ?? null,

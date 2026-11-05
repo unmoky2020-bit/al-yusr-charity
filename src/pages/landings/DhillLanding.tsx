@@ -8,9 +8,6 @@ import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import DHILL_DEFAULTS from "@/data/campaignPages/dhill";
 import yusrWater from "@/assets/yusr-water.png";
-import yusrDistribution from "@/assets/yusr-distribution-1.webp";
-import yusrMeals from "@/assets/yusr-meals.webp";
-import posterWater from "@/assets/poster-water.png";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("dhill");
@@ -31,15 +28,9 @@ const isTrackId = (id: string): id is TrackId => id in TRACK_META;
 
 const TRUST_ICONS: Record<string, LucideIcon> = { ngo: ShieldCheck, docs: FileCheck2, areas: MapPin };
 
-const GALLERY = [
-  { src: yusrWater, altAr: "وصلة مياه نقية مع موتور وخزان لأسرة مستحقة", altEn: "Water connection with pump and tank" },
-  { src: posterWater, altAr: "تسقيف خشبي معزول يحمي البيت من حر الصيف", altEn: "Insulated wooden roof" },
-  { src: yusrDistribution, altAr: "توزيع مراوح ووسائل تبريد لبيوت القرى", altEn: "Fans for village homes" },
-  { src: yusrMeals, altAr: "قوافل السقيا الميدانية في قرى مصر", altEn: "Field water convoys" },
-];
-
 const DhillHero = () => {
-  const { c, t, isAr, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const { c, t, isAr, section, images } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const heroImg = images("hero")[0];
   const trust = section("trust")?.items ?? [];
   return (
     <section className="dhill-hero relative overflow-hidden bg-[hsl(152_65%_9%)] text-primary-foreground">
@@ -70,7 +61,7 @@ const DhillHero = () => {
             <HeroActions isAr={isAr} donateHref={DONATE} donateLabel={t(c.hero.donateLabel)} wa={waHref(isAr, "حملة ظل", "the Dhill campaign")} className="mt-8 justify-center md:justify-start" />
           </div>
           <div className="relative mx-auto w-full max-w-sm">
-            <img src={yusrWater} alt={isAr ? "حملة ظل — وصلات مياه وأسقف للأسر المستحقة" : "Dhill — water and roofs for families"} loading="eager" className="relative w-full rounded-2xl object-cover shadow-card ring-1 ring-primary-foreground/15" />
+            <img src={heroImg?.src ?? yusrWater} alt={heroImg ? (isAr ? heroImg.altAr : heroImg.altEn) : ""} loading="eager" className="relative w-full rounded-2xl object-cover shadow-card ring-1 ring-primary-foreground/15" />
           </div>
         </div>
 
@@ -90,7 +81,8 @@ const DhillHero = () => {
 };
 
 const DhillMain = () => {
-  const { c, t, isAr, price, amount, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const { c, t, isAr, price, amount, section, images } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const gallery = images("gallery");
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
   const tracksSection = section("tracks");
@@ -282,18 +274,20 @@ const DhillMain = () => {
       </section>
 
       {/* Field documentation */}
-      <section className="bg-background py-16 md:py-20">
-        <div className="container mx-auto max-w-6xl px-4">
-          <h2 className="text-3xl font-black text-primary md:text-4xl">{t(section("gallery")?.title)}</h2>
-          <div className="mt-8"><BentoGallery items={GALLERY} isAr={isAr} /></div>
-        </div>
-      </section>
+      {gallery.length > 0 && (
+        <section className="bg-background py-16 md:py-20">
+          <div className="container mx-auto max-w-6xl px-4">
+            <h2 className="text-3xl font-black text-primary md:text-4xl">{t(section("gallery")?.title)}</h2>
+            <div className="mt-8"><BentoGallery items={gallery} isAr={isAr} /></div>
+          </div>
+        </section>
+      )}
     </>
   );
 };
 
 const DhillLanding = () => {
-  const { c, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const { c, section, images } = useCampaignPage("dhill", DHILL_DEFAULTS);
   const seo = section("seo");
   return (
     <CampaignLandingShell
@@ -306,7 +300,7 @@ const DhillLanding = () => {
       taglineEn={seo?.lead?.en ?? ""}
       metaDescAr="شارك في حملة ظِل مع مؤسسة اليسر: أسقف منازل خشبية معزولة، وصلات مياه نقية للمنازل (سهم 500 ج)، خطوط مياه للقرى، أبواب وشبابيك، ومراوح تبريد بالدقهلية وكفر الشيخ والشرقية وكل مصر."
       metaDescEn="Join Al-Yusr's Dhill Campaign: insulated wooden roofs, clean water connections (EGP 500 share), village water lines, doors & windows, and cooling fans across Dakahlia, Kafr El Sheikh and Egypt."
-      heroImage={yusrWater}
+      heroImage={images("hero")[0]?.src ?? yusrWater}
       heroAlt="حملة ظل — وصلات مياه وأسقف خشبية ومراوح للأسر المستحقة"
       hero={<DhillHero />}
       main={<DhillMain />}

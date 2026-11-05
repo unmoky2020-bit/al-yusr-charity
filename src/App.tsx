@@ -86,6 +86,7 @@ const AdminCampaignResults = lazy(() => import("./pages/admin/AdminCampaignResul
 const AdminSiteStats = lazy(() => import("./pages/admin/AdminSiteStats.tsx"));
 const AdminReports = lazy(() => import("./pages/admin/AdminReports.tsx"));
 const AdminGallery = lazy(() => import("./pages/admin/AdminGallery.tsx"));
+const AdminPageGalleries = lazy(() => import("./pages/admin/AdminPageGalleries.tsx"));
 const AdminMediaLibrary = lazy(() => import("./pages/admin/AdminMediaLibrary.tsx"));
 const AdminNotifications = lazy(() => import("./pages/admin/AdminNotifications.tsx"));
 const AdminInbox = lazy(() => import("./pages/admin/AdminInbox.tsx"));
@@ -125,6 +126,7 @@ const ArbounLanding = lazy(() => import("./pages/landings/ArbounLanding.tsx"));
 const TakrimLanding = lazy(() => import("./pages/landings/TakrimLanding.tsx"));
 const WaterLanding = lazy(() => import("./pages/landings/WaterLanding.tsx"));
 const NurseriesLanding = lazy(() => import("./pages/landings/NurseriesLanding.tsx"));
+const MosquesLanding = lazy(() => import("./pages/landings/MosquesLanding.tsx"));
 const MedicalLanding = lazy(() => import("./pages/landings/MedicalLanding.tsx"));
 const AshrLanding = lazy(() => import("./pages/landings/AshrLanding.tsx"));
 const Misbaha = lazy(() => import("./pages/site/Misbaha.tsx"));
@@ -323,6 +325,7 @@ const App = () => (
                   <Route path="/takrim" element={<TakrimLanding />} />
                   <Route path="/water" element={<WaterLanding />} />
                   <Route path="/nurseries" element={<NurseriesLanding />} />
+                  <Route path="/mosques" element={<MosquesLanding />} />
                   <Route path="/medical" element={<MedicalLanding />} />
                   <Route path="/ten-days" element={<CampaignPageGate slug="ashr"><AshrLanding /></CampaignPageGate>} />
                   <Route path="/ashr" element={<Navigate to="/ten-days" replace />} />
@@ -401,6 +404,7 @@ const App = () => (
                   <Route path="/admin/campaign-results" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignResults /></RequireAuth>} />
                   <Route path="/admin/site-stats" element={<RequireAuth roles={["admin", "editor"]}><AdminSiteStats /></RequireAuth>} />
                   <Route path="/admin/gallery" element={<RequireAuth roles={["admin"]}><AdminGallery /></RequireAuth>} />
+                  <Route path="/admin/page-galleries" element={<RequireAuth roles={["admin", "editor"]}><AdminPageGalleries /></RequireAuth>} />
                   <Route path="/admin/media" element={<RequireAuth roles={["admin", "editor"]}><AdminMediaLibrary /></RequireAuth>} />
                   <Route path="/admin/inbox" element={<RequireAuth roles={["admin", "editor"]}><AdminInbox /></RequireAuth>} />
                   <Route path="/admin/notifications" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminNotifications /></RequireAuth>} />

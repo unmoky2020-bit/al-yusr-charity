@@ -1,4 +1,5 @@
 import { l, type CampaignPageContent } from "./types";
+import { img } from "@/data/pageImages";
 
 /**
  * Default (code) content for the monthly food programme page (/food-box).
@@ -312,6 +313,24 @@ const FOOD: CampaignPageContent = {
   cta: {
     title: l("سُفرة واحدة منك تُطعِم أسرة شهراً كاملاً — تبرّع الآن", "One table from you feeds a family for a whole month — donate now"),
     sub: l("لحم وكرتونة ووجبة، تصل إلى باب البيت بكرامة، وتوثيقها يصل إليك.", "Meat, a carton and a meal, delivered to the door with dignity, and the proof delivered to you."),
+  },
+
+  /** Pictures (dashboard → الصور). */
+  images: {
+    hero: {
+      label: l("صورة أعلى الصفحة", "Hero image"),
+      max: 1,
+      items: [img("hero-carton-opened.webp", "كرتونة الغذاء الشهرية ١٤ كيلو مع كيلو لحمة من ذبيحة الشهر", "The 14 kg monthly food carton with 1 kg of meat from the month's slaughter")],
+    },
+    gallery: {
+      label: l("معرض الصور", "Gallery"),
+      items: [
+        img("program-food-new.jpg", "تسليم كرتونة الغذاء الشهرية على باب أسرة بالمنصورة", "Monthly food carton delivered to a family's door in Mansoura"),
+        img("poster-meat.webp", "لحوم ذبيحة الشهر مقسّمة كيلو لكل أسرة", "The month's slaughter meat portioned 1 kg per family"),
+        img("brand-carton-stack.png", "كراتين الغذاء في مخزن المؤسسة قبل التوزيع", "Food cartons at the foundation's warehouse before distribution"),
+        img("yusr-meals.webp", "وجبات مطبوخة من مطبخ اليسر جاهزة للتوزيع", "Cooked meals from the Al-Yusr kitchen ready for distribution"),
+      ],
+    },
   },
 };
 

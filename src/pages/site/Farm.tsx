@@ -454,7 +454,7 @@ const Farm = () => {
       )}
 
       {/* Proof gallery (real field photos) */}
-      <FieldConvoysGallery variant="all" donateHref="/programs/odhya" />
+      <FieldConvoysGallery variant="all" donateHref="/programs/odhya" galleryKey="farm" />
 
       {/* FAQ: the FAQ category linked to the project in the dashboard, else the page defaults */}
       {project?.faqCategorySlug ? (

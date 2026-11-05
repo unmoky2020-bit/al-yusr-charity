@@ -1,4 +1,5 @@
 import { l, type CampaignPageContent } from "./types";
+import { img } from "@/data/pageImages";
 
 /** Default (code) content for the Setr winter campaign page. Ids and section keys are fixed by `SetrLanding.tsx`. */
 const SETR: CampaignPageContent = {
@@ -168,6 +169,19 @@ const SETR: CampaignPageContent = {
   cta: {
     title: l("كل مساهمة منك هي لحاف يدفئ طفلاً أو جدار يستر أسرة — تبرع الآن", "Every contribution is a warm blanket or a sheltering roof — Donate now"),
     sub: l("كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.", "Every EGP reaches the right hands — verified with photos, video and field follow-up."),
+  },
+
+  /** Pictures (dashboard → الصور). */
+  images: {
+    gallery: {
+      label: l("معرض الصور", "Gallery"),
+      items: [
+        img("yusr-distribution-1.webp", "توزيع ألحفة فايبر وكسوة شتوية للأطفال", "Distributing blankets and winter clothes"),
+        img("poster-water.png", "بناء وعزل سقف منزل لحماية أسرة من أمطار الشتاء", "Insulating a roof against winter rain"),
+        img("markoun-poster-clothes.webp", "كسوة شتوية ثقيلة للأطفال وكبار السن", "Heavy winter clothing"),
+        img("markoun-poster-furniture.webp", "أسِرّة ومراتب ترفع الأطفال عن الأرض", "Beds and mattresses for children"),
+      ],
+    },
   },
 };
 

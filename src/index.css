@@ -1274,3 +1274,32 @@ img, video, svg, canvas {
   .cs-track { height: calc(var(--cs-n, 1) * 100svh); }
   .cs-pin { height: 100svh; max-height: 100svh; }
 }
+
+/* About → «اعتماد وثقة رسمية»: verified seals. A lime/orange ring turns slowly behind each seal and the
+   seal breathes a soft glow, so the badges read as "confirmed". Still when reduced motion is asked. */
+.cert-seal::before {
+  content: "";
+  position: absolute; inset: -6px;
+  border-radius: 9999px;
+  box-shadow: 0 0 0 8px hsl(var(--secondary) / 0.12), 0 0 44px 10px hsl(var(--secondary) / 0.45);
+  opacity: 0.35;
+  animation: cert-glow 3.2s ease-in-out infinite;
+  animation-delay: inherit;
+  pointer-events: none;
+}
+.cert-seal-ring {
+  background: conic-gradient(from 0deg, hsl(var(--secondary)), hsl(var(--accent)), hsl(var(--secondary) / 0.15), hsl(var(--secondary)));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+  animation: cert-spin 9s linear infinite;
+  will-change: transform;
+}
+@keyframes cert-spin { to { transform: rotate(360deg); } }
+/* Opacity/scale only: runs on the compositor, no repaint per frame. */
+@keyframes cert-glow {
+  0%, 100% { opacity: 0.35; transform: scale(0.96); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cert-seal::before, .cert-seal-ring { animation: none; }
+}

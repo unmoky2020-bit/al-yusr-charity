@@ -22,7 +22,7 @@ import { ProjectKindNote } from "@/components/campaigns/ProjectKind";
 import { useLang } from "@/i18n/LangContext";
 import { useTakrimContent, type TakrimShare } from "@/data/takrimContent";
 
-const DONATE = "/donate?program=takrim";
+const DONATE = "/donate?project=takrim";
 const PHONE = "+201097000137";
 const PHONE_DISPLAY = "+20 109 700 0137";
 

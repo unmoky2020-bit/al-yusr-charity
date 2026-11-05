@@ -22,6 +22,18 @@ export type SectionItem = { id: string; title: L; desc: L; extra?: L };
 export type Section = { title: L; lead?: L; items: SectionItem[]; dynamic?: boolean; extraLabel?: L };
 export type FaqItem = { q: L; a: L };
 
+/**
+ * One picture on a landing page. `src` is an uploaded image URL, or `asset:<file>` for a picture bundled
+ * with the site (the code defaults, see src/data/pageImages.ts): those names stay valid across builds.
+ */
+export type PageImage = { src: string; alt: L; caption?: L };
+/**
+ * A picture slot of a page (its main image, a gallery…). The dashboard replaces `items`; `label`, `hint`,
+ * `max` and `captions` (the page shows a short caption per picture) are fixed by the page code.
+ * `max: 1` = a single image.
+ */
+export type ImageSlot = { label: L; hint?: L; max?: number; captions?: boolean; items: PageImage[] };
+
 export interface CampaignPageContent {
   hero: { eyebrow: L; title: L; title2: L; lead: L; donateLabel: L };
   hadith: { text: L; source: L };
@@ -33,6 +45,8 @@ export interface CampaignPageContent {
   sections: Record<string, Section>;
   faq: FaqItem[];
   cta: { title: L; sub: L };
+  /** Picture slots keyed by a stable key (e.g. "hero", "gallery"). Pages without pictures leave it out. */
+  images?: Record<string, ImageSlot>;
   /** Optional SEO override (dashboard "SEO & Meta" tab). Empty strings mean "use the page's static meta". */
   seo?: { title: L; description: L; keywords: L; canonical?: string; noindex?: boolean; nofollow?: boolean };
 }
@@ -70,6 +84,39 @@ function mergeDynamicItems(defaults: SectionItem[], saved: unknown): SectionItem
   }
   return out;
 }
+
+const EMPTY_L: L = { ar: "", en: "" };
+
+/**
+ * Pictures of one slot: the saved list replaces the defaults when it holds at least one valid picture
+ * (an empty or unreadable list keeps the defaults, so a page is never left without its pictures).
+ */
+function mergeImageItems(d: ImageSlot, saved: unknown): PageImage[] {
+  const raw = saved && typeof saved === "object" ? (saved as { items?: unknown }).items : undefined;
+  if (!Array.isArray(raw)) return d.items;
+  const out: PageImage[] = [];
+  for (const it of raw) {
+    if (!it || typeof it !== "object") continue;
+    const src = typeof (it as PageImage).src === "string" ? (it as PageImage).src.trim() : "";
+    if (!src) continue;
+    const alt = mergeL(EMPTY_L, (it as PageImage).alt);
+    const caption = isL((it as PageImage).caption) ? (it as PageImage).caption : undefined;
+    out.push({ src, alt, ...(caption ? { caption } : {}) });
+  }
+  if (!out.length) return d.items;
+  return d.max ? out.slice(0, d.max) : out;
+}
+
+/** What is stored for the picture slots: only each slot's pictures (labels and limits stay in the code). */
+export function imagesColumn(images: CampaignPageContent["images"]): Record<string, { items: PageImage[] }> | undefined {
+  if (!images) return undefined;
+  const out: Record<string, { items: PageImage[] }> = {};
+  for (const [k, slot] of Object.entries(images)) out[k] = { items: slot.items };
+  return out;
+}
+
+/** True when the page has picture slots (the dashboard shows its «الصور» tab only then). */
+export const hasImageSlots = (c: CampaignPageContent | null | undefined) => !!c?.images && Object.keys(c.images).length > 0;
 
 /** Deep-merge a saved override onto the code defaults. Unknown ids/keys in the override are ignored (except in dynamic sections). */
 export function mergeCampaignContent(defaults: CampaignPageContent, saved: unknown): CampaignPageContent {
@@ -114,6 +161,11 @@ export function mergeCampaignContent(defaults: CampaignPageContent, saved: unkno
       }
     : defaults.seo;
 
+  const si = (s.images && typeof s.images === "object" ? s.images : {}) as Record<string, unknown>;
+  const images = defaults.images
+    ? Object.fromEntries(Object.entries(defaults.images).map(([k, d]) => [k, { ...d, items: mergeImageItems(d, si[k]) }]))
+    : undefined;
+
   const faqOk = Array.isArray(s.faq) && s.faq.length > 0 && s.faq.every((f) => f && isL((f as FaqItem).q) && isL((f as FaqItem).a));
 
   return {
@@ -141,6 +193,7 @@ export function mergeCampaignContent(defaults: CampaignPageContent, saved: unkno
     sections,
     faq: faqOk ? (s.faq as FaqItem[]) : defaults.faq,
     cta: { title: mergeL(defaults.cta.title, sc.title), sub: mergeL(defaults.cta.sub, sc.sub) },
+    ...(images ? { images } : {}),
     ...(seo ? { seo } : {}),
   };
 }

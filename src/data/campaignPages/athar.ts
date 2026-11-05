@@ -1,4 +1,5 @@
 import { l, type CampaignPageContent } from "./types";
+import { img } from "@/data/pageImages";
 
 /**
  * Default content for the Athar (education) campaign page — /athar.
@@ -247,6 +248,24 @@ const athar: CampaignPageContent = {
       "كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.",
       "Every EGP reaches the right hands — verified with photos, video and field follow-up.",
     ),
+  },
+
+  /** Pictures (dashboard → الصور). */
+  images: {
+    hero: {
+      label: l("صورة أعلى الصفحة", "Hero image"),
+      max: 1,
+      items: [img("poster-education.png", "حملة أثر — شنط وأدوات مدرسية للطلاب المستحقين", "Athar — school bags for students")],
+    },
+    gallery: {
+      label: l("معرض الصور", "Gallery"),
+      items: [
+        img("brand-poster-classroom.webp", "توزيع الحقائب المدرسية على طلاب قرى طلخا والمنصورة", "Distributing school bags in Dakahlia"),
+        img("poster-education.png", "الشنط والأدوات والزي المدرسي جاهزة للتسليم", "Bags and supplies ready"),
+        img("axis-education.jpg", "فصل دراسي في حضانة تعليمية تابعة لليسر", "Al-Yusr nursery classroom"),
+        img("yusr-distribution-1.webp", "قوافل دعم الطلاب الأيتام في الدقهلية", "Student support convoy"),
+      ],
+    },
   },
 };
 

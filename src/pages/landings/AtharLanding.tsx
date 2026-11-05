@@ -8,9 +8,6 @@ import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import ATHAR_DEFAULTS from "@/data/campaignPages/athar";
 import posterEdu from "@/assets/poster-education.png";
-import classroom from "@/assets/brand-poster-classroom.webp";
-import yusrDistribution from "@/assets/yusr-distribution-1.webp";
-import axisEdu from "@/assets/axis-education.jpg";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("athar");
@@ -24,15 +21,9 @@ const DEDICATE_IDS = ["dedicate_student", "dedicate_nursery"] as const;
 /** Open / in-preparation flag per nursery item id (kept in code; the dashboard edits the names). */
 const NURSERY_LIVE: Record<string, boolean> = { abu_bakr: true, farouq_omar: true, athar: false };
 
-const GALLERY = [
-  { src: classroom, altAr: "توزيع الحقائب المدرسية على طلاب قرى طلخا والمنصورة", altEn: "Distributing school bags in Dakahlia" },
-  { src: posterEdu, altAr: "الشنط والأدوات والزي المدرسي جاهزة للتسليم", altEn: "Bags and supplies ready" },
-  { src: axisEdu, altAr: "فصل دراسي في حضانة تعليمية تابعة لليسر", altEn: "Al-Yusr nursery classroom" },
-  { src: yusrDistribution, altAr: "قوافل دعم الطلاب الأيتام في الدقهلية", altEn: "Student support convoy" },
-];
-
 const AtharHero = () => {
-  const { c, t, isAr } = useCampaignPage("athar", ATHAR_DEFAULTS);
+  const { c, t, isAr, images } = useCampaignPage("athar", ATHAR_DEFAULTS);
+  const heroImg = images("hero")[0];
   return (
     <section className="athar-paper relative overflow-hidden text-foreground">
       <div className="container relative mx-auto max-w-6xl px-4 pb-16 pt-10 md:pb-24 md:pt-14">
@@ -50,7 +41,7 @@ const AtharHero = () => {
           <figure className="athar-photo relative mx-auto w-full max-w-sm">
             <span aria-hidden className="athar-tape absolute -top-3 start-8 z-10 h-7 w-24 -rotate-6" />
             <span aria-hidden className="athar-tape absolute -bottom-3 end-8 z-10 h-7 w-24 rotate-3" />
-            <img src={posterEdu} alt={isAr ? "حملة أثر — شنط وأدوات مدرسية للطلاب المستحقين" : "Athar — school bags for students"} loading="eager" className="w-full rounded-md bg-card object-cover p-3 shadow-card" />
+            <img src={heroImg?.src ?? posterEdu} alt={heroImg ? (isAr ? heroImg.altAr : heroImg.altEn) : ""} loading="eager" className="w-full rounded-md bg-card object-cover p-3 shadow-card" />
           </figure>
         </div>
       </div>
@@ -59,7 +50,8 @@ const AtharHero = () => {
 };
 
 const AtharMain = () => {
-  const { c, t, isAr, price, amount, section } = useCampaignPage("athar", ATHAR_DEFAULTS);
+  const { c, t, isAr, price, amount, section, images } = useCampaignPage("athar", ATHAR_DEFAULTS);
+  const galleryImgs = images("gallery");
   const [picked, setPicked] = useState<Record<string, boolean>>({ bag: true, uniform: true, tuition: false });
   const [students, setStudents] = useState(1);
   const perStudent = useMemo(() => KIT_IDS.reduce((s, id) => s + (picked[id] ? amount(id) : 0), 0), [picked, amount]);
@@ -274,7 +266,7 @@ const AtharMain = () => {
       <section className="bg-background py-16 md:py-20">
         <div className="container mx-auto max-w-6xl px-4">
           <h2 className="text-3xl font-black text-primary md:text-4xl">{t(gallery?.title)}</h2>
-          <div className="mt-8"><BentoGallery items={GALLERY} isAr={isAr} /></div>
+          <div className="mt-8"><BentoGallery items={galleryImgs} isAr={isAr} /></div>
         </div>
       </section>
     </>
@@ -282,7 +274,7 @@ const AtharMain = () => {
 };
 
 const AtharLanding = () => {
-  const { c, section } = useCampaignPage("athar", ATHAR_DEFAULTS);
+  const { c, section, images } = useCampaignPage("athar", ATHAR_DEFAULTS);
   const page = section("page");
   return (
     <CampaignLandingShell
@@ -295,7 +287,7 @@ const AtharLanding = () => {
       taglineEn={page?.lead?.en ?? ""}
       metaDescAr="شارك في حملة أَثَر التعليمية مع مؤسسة اليسر: شنط وأدوات مدرسية، زي مدرسي، سداد مصروفات، مبادرة تدوير الكتب 'أثر يتوارث'، ودور تحفيظ القرآن وحضانات نموذجية بالدقهلية."
       metaDescEn="Join Al-Yusr's Athar Education Campaign: school bags, supplies, uniforms, tuition sponsorship, textbook recycling, and Quranic pre-schools across Dakahlia, Egypt."
-      heroImage={posterEdu}
+      heroImage={images("hero")[0]?.src ?? posterEdu}
       heroAlt="حملة أثر التعليمية - شنط وأدوات مدرسية وكفالة مصاريف للطلاب المستحقين"
       hero={<AtharHero />}
       main={<AtharMain />}

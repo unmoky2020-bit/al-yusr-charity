@@ -71,6 +71,10 @@
     "ar": { "title": "حضانات اليسر التعليمية ودور تحفيظ القرآن للأطفال | مؤسسة اليسر", "description": "حضانات تعليمية للأطفال من 4 إلى 6 سنوات ودور تحفيظ القرآن من 4 إلى 16 سنة، بمناهج متخصصة تبنيها مؤسسة اليسر وتشرف عليها، وفريق تربوي ومسابقات قرآن." },
     "en": { "title": "Al-Yusr learning nurseries & Qur'an houses", "description": "Learning nurseries for ages 4–6 and Qur'an houses for ages 4–16, with curricula built and supervised by Al-Yusr, an educational team and Qur'an competitions." }
   },
+  "/mosques": {
+    "ar": { "title": "بناء مسجد وإعادة إعمار المساجد وفرشها | مؤسسة اليسر", "description": "ساهم مع مؤسسة اليسر في بناء مسجد جديد في القرى المحرومة، أو في إعادة إعمار مسجد قائم بترميمه وفرشه وتجهيزه. صدقة جارية بأجر كل صلاة." },
+    "en": { "title": "Build or restore a mosque | Al-Yusr", "description": "Help Al-Yusr build new mosques in underserved villages, or restore, carpet and equip standing ones. Ongoing charity with the reward of every prayer." }
+  },
   "/medical": {
     "ar": { "title": "المساعدات الطبية: روشتات وعمليات وأشعة وتحاليل وأطراف صناعية | مؤسسة اليسر", "description": "مجمعات اليسر الطبية، صرف روشتات، عمليات جراحية، أشعة وتحاليل، أطراف صناعية وكراسي متحركة، وتحدّي الإعاقة في الدقهلية والمنصورة." },
     "en": { "title": "Medical aid: prescriptions, surgery, scans, tests & prosthetics | Al-Yusr", "description": "Al-Yusr medical complexes, prescriptions, surgeries, scans and lab tests, prosthetic limbs and disability support in Dakahlia." }

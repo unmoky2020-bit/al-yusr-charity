@@ -11,8 +11,9 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    // HMR shares the dev server's own port. Pinning it to 8080 made a second dev server (or any app
+    // already on 8080) answer the page with "426 Upgrade Required".
     hmr: {
-      port: 8080,
       overlay: false,
     },
     proxy: {

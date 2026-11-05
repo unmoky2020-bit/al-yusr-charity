@@ -1,4 +1,5 @@
 import { l, type CampaignPageContent } from "@/data/campaignPages/types";
+import { img } from "@/data/pageImages";
 
 /**
  * Default content of the nurseries & Qur'an houses page (/nurseries). The layout lives in
@@ -162,6 +163,19 @@ const NURSERIES: CampaignPageContent = {
   cta: {
     title: l("ساهم في تربية جيل متعلّم وحافظ للقرآن", "Help raise an educated generation that holds the Qur'an"),
     sub: l("", ""),
+  },
+
+  /** Pictures (dashboard → الصور). The hero image is the project's cover image. */
+  images: {
+    gallery: {
+      label: l("معرض صور الحضانات ودور التحفيظ", "Nurseries gallery"),
+      items: [
+        img("program-education.jpg", "أطفال في فصل تعليمي بحضانات اليسر", "Children in an Al-Yusr nursery classroom"),
+        img("axis-education.jpg", "حلقة تحفيظ قرآن للأطفال في دور اليسر", "A children's Qur'an circle"),
+        img("poster-education.png", "تعليم الأطفال في مؤسسة اليسر", "Children's education at Al-Yusr"),
+        img("hero-child.jpg", "طفل من أطفال حضانات اليسر", "A child at an Al-Yusr nursery"),
+      ],
+    },
   },
 };
 

@@ -28,23 +28,31 @@ import { CampaignLandingShell } from "@/components/sections/CampaignLandingShell
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { ProjectKindNote } from "@/components/campaigns/ProjectKind";
 import { BentoGallery } from "@/components/campaigns/shared";
+import { PAGE_GALLERIES, usePageGallery } from "@/data/pageGalleries";
+import { resolveImages } from "@/data/pageImages";
 import { useInView } from "@/hooks/useInView";
 import { useLang } from "@/i18n/LangContext";
 import { entityDonateHref, findShare, shareDonateHref, useEntityShares, type Share } from "@/data/entityShares";
-import { COMPLEX_SHARES, CONVOY_SHARES, DISABILITY_SHARES, MEDICAL_SOURCES, TREATMENT_SHARES } from "@/data/medicalShares";
+import { useProjectDetail } from "@/data/sources/projects";
+import { COMPLEX_SHARES, CONVOY_SHARES, DISABILITY_SHARES, MEDICAL_SOURCES, SECTION_WORDS, sectionShares, TREATMENT_SHARES } from "@/data/medicalShares";
 import heroHealth from "@/assets/program-health.webp";
-import prostheticsImg from "@/assets/Prosthetics.jpg";
-import medicineImg from "@/assets/axis-health.jpg";
 
 /**
  * /medical — «المشروع الطبي»: one long page, every section open, in this order:
- *   complex (project "medical") → prescriptions, surgeries, radiology & labs (program "treatment")
- *   → overcoming disability (program "prosthetics") → medical convoys (program "medical-convoys").
- * Each section sells the packages of its backend record (editable in the dashboard); prices are shown
+ *   complex → prescriptions, surgeries, radiology & labs → overcoming disability → medical convoys.
+ * Every section sells packages of the backend project "medical" (editable in the dashboard); prices are shown
  * as «يبدأ من» and the donor can pick several shares before opening the donate form.
  */
 
 type Bi = { ar: string; en: string };
+/** Hero image: the medical project's cover image (dashboard → المشاريع → المجمعات الطبية → الصورة), else the site photo. */
+const useMedicalHeroImage = () => {
+  const { project } = useProjectDetail("medical");
+  return project?.image && project.image !== "/placeholder.svg" ? project.image : heroHealth;
+};
+const MEDICAL_GALLERY_DEFAULTS = resolveImages(PAGE_GALLERIES.medical.defaults);
+/** Stable empty fallback, so a section can tell "no project packages" from its own defaults. */
+const NO_SHARES: Share[] = [];
 const t = (isAr: boolean, v: Bi) => (isAr ? v.ar : v.en);
 const fmt = (n: number) => n.toLocaleString("en-US");
 
@@ -93,6 +101,7 @@ const Point = ({ children, dark = false }: { children: ReactNode; dark?: boolean
 const MedicalHero = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const heroImage = useMedicalHeroImage();
   const stats: { v: string; l: Bi }[] = [
     { v: "43", l: { ar: "قرية يخدمها المجمع", en: "villages served" } },
     { v: "2", l: { ar: "غرفتا عمليات", en: "operating rooms" } },
@@ -124,7 +133,7 @@ const MedicalHero = () => {
             </p>
           </div>
           <figure className="mx-auto w-full max-w-md rounded-[20px] bg-primary-foreground/10 p-2 ring-1 ring-primary-foreground/15">
-            <img src={heroHealth} alt={isAr ? "طبيب من فريق اليسر مع مريض أثناء صرف العلاج" : "An Al-Yusr doctor with a patient"} loading="eager" className="aspect-[4/3] w-full rounded-2xl object-cover" />
+            <img src={heroImage} alt={isAr ? "طبيب من فريق اليسر مع مريض أثناء صرف العلاج" : "An Al-Yusr doctor with a patient"} loading="eager" className="aspect-[4/3] w-full rounded-2xl object-cover" />
           </figure>
         </div>
 
@@ -619,7 +628,7 @@ const DisabilitySection = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
   const src = MEDICAL_SOURCES.disability;
-  const shares = useEntityShares(src.kind, src.slug, DISABILITY_SHARES);
+  const shares = sectionShares(useEntityShares(src.kind, src.slug, NO_SHARES), SECTION_WORDS.disability, DISABILITY_SHARES);
   const [open, setOpen] = useState(0);
   return (
     <Section id="disability" n={5}>
@@ -671,7 +680,7 @@ const ConvoysSection = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
   const src = MEDICAL_SOURCES.convoys;
-  const shares = useEntityShares(src.kind, src.slug, CONVOY_SHARES);
+  const shares = sectionShares(useEntityShares(src.kind, src.slug, NO_SHARES), SECTION_WORDS.convoys, CONVOY_SHARES);
   const [days, setDays] = useState(5);
   const carries: { icon: LucideIcon; label: Bi; body: Bi }[] = [
     { icon: Users, label: { ar: "مجموعة من الأطباء", en: "A group of doctors" }, body: { ar: "تجتمع في القافلة تخصصات مختلفة لتغطي احتياجات أهل القرية.", en: "Different specialties travel together to cover the village's needs." } },
@@ -727,18 +736,13 @@ const ConvoysSection = () => {
 const FromTheField = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const gallery = usePageGallery("medical") ?? MEDICAL_GALLERY_DEFAULTS;
   return (
     <section className="bg-muted/40 py-14 md:py-20">
       <div className="container mx-auto max-w-6xl px-4">
         <h2 className="mb-8 text-center text-2xl font-black text-primary md:text-3xl">{isAr ? "من الميدان" : "From the field"}</h2>
-        <BentoGallery
-          isAr={isAr}
-          items={[
-            { src: heroHealth, altAr: "طبيب من فريق اليسر يطمئن على مريض أثناء صرف العلاج", altEn: "An Al-Yusr doctor checking on a patient while medicine is handed out" },
-            { src: prostheticsImg, altAr: "شاب بطرف صناعي من مشروع تحدّي الإعاقة مع الطبيب المعالج", altEn: "A young man with a prosthetic limb from the Overcoming Disability programme" },
-            { src: medicineImg, altAr: "تسليم كرتونة أدوية لمريضة كبيرة في السن", altEn: "Handing a box of medicines to an elderly patient" },
-          ]}
-        />
+        {/* Dashboard → معارض صور الصفحات → «من الميدان» في المشروع الطبي (defaults in data/pageGalleries.ts). */}
+        <BentoGallery isAr={isAr} items={gallery} />
         <div className="mx-auto mt-10 max-w-4xl">
           <ProjectKindNote
             kinds={["impact"]}
@@ -767,7 +771,9 @@ const MedicalMain = () => {
   );
 };
 
-const MedicalLanding = () => (
+const MedicalLanding = () => {
+  const heroImage = useMedicalHeroImage();
+  return (
   <CampaignLandingShell
     slug="medical"
     path="/medical"
@@ -779,7 +785,7 @@ const MedicalLanding = () => (
     metaDescAr="المشروع الطبي من مؤسسة اليسر: مجمع اليسر الطبي بالحفير يخدم 43 قرية بين الدقهلية وكفر الشيخ، صرف روشتات بالمجان، عمليات جراحية، أشعة وتحاليل، تحدّي الإعاقة، وقوافل طبية."
     metaDescEn="Al-Yusr's medical project: the El-Hafir complex serving 43 villages between Dakahlia and Kafr El-Sheikh, free prescriptions, surgery, scans and tests, disability support and medical convoys."
     seo={{ title: { ar: "المشروع الطبي: مجمع اليسر الطبي وروشتات وعمليات وقوافل | مؤسسة اليسر", en: "The medical project: complex, prescriptions, surgery & convoys | Al-Yusr" } }}
-    heroImage={heroHealth}
+    heroImage={heroImage}
     heroAlt="طبيب من مؤسسة اليسر مع مريض أثناء صرف العلاج"
     hero={<MedicalHero />}
     main={<MedicalMain />}
@@ -817,6 +823,7 @@ const MedicalLanding = () => (
     bottomSubAr="كل سهم يصل إلى مريض بعينه: دواء، أو أشعة، أو عملية، أو جلسة تأهيل لطفل."
     bottomSubEn="Every share reaches a real patient: medicine, a scan, surgery or a rehabilitation session for a child."
   />
-);
+  );
+};
 
 export default MedicalLanding;

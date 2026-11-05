@@ -137,7 +137,8 @@ const DayPlanner = () => {
 };
 
 const AshrMain = () => {
-  const { c, t, isAr, section } = useCampaignPage(SLUG, ASHR_DEFAULTS);
+  const { c, t, isAr, section, images } = useCampaignPage(SLUG, ASHR_DEFAULTS);
+  const mainImg = images("hero")[0];
   const why = section("why");
   const arafah = section("arafah");
   const qurbani = section("qurbani");
@@ -209,7 +210,7 @@ const AshrMain = () => {
           )}
           {qurbani && (
             <article className="flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft">
-              <img src={heroImg} alt={isAr ? "لحوم أضاحي اليسر جاهزة للتوزيع على الأسر" : "Al-Yusr Qurbani meat ready for distribution"} loading="lazy" className="aspect-[16/9] w-full object-cover" />
+              <img src={mainImg?.src ?? heroImg} alt={mainImg ? (isAr ? mainImg.altAr : mainImg.altEn) : ""} loading="lazy" className="aspect-[16/9] w-full object-cover" />
               <div className="flex flex-1 flex-col p-8">
                 <h2 className="text-2xl font-black text-primary md:text-3xl">{t(qurbani.title)}</h2>
                 <p className="mt-3 flex-1 text-base leading-loose text-muted-foreground">{t(qurbani.lead)}</p>
@@ -226,7 +227,7 @@ const AshrMain = () => {
 };
 
 const AshrLanding = () => {
-  const { c } = useCampaignPage(SLUG, ASHR_DEFAULTS);
+  const { c, images } = useCampaignPage(SLUG, ASHR_DEFAULTS);
   return (
     <CampaignLandingShell
       slug={SLUG}
@@ -238,7 +239,7 @@ const AshrLanding = () => {
       taglineEn={c.hero.lead.en}
       metaDescAr="صدقات العشر الأوائل من ذي الحجة مع مؤسسة اليسر: صدقة يومية طوال العشر، إفطار صائم يوم عرفة، لحوم بلدي، سقيا ماء، وصك أضحية يوم النحر، بتوثيق كامل في الدقهلية ومصر."
       metaDescEn="Charity in the first ten days of Dhul Hijjah with Al-Yusr: a daily charity, iftar on the day of Arafah, local meat, water and a Qurbani share on Eid day, fully documented."
-      heroImage={heroImg}
+      heroImage={images("hero")[0]?.src ?? heroImg}
       heroAlt="صدقات العشر الأوائل من ذي الحجة مع مؤسسة اليسر"
       hero={<AshrHero />}
       main={<AshrMain />}

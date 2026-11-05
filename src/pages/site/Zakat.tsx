@@ -702,7 +702,7 @@ const Zakat = () => {
           )}
         </div>
       </div>
-      <FieldGalleryScroll />
+      <FieldGalleryScroll galleryKey="zakat" />
     </PageLayout>
   );
 };
