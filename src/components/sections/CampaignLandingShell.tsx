@@ -31,6 +31,8 @@ export type LandingProps = {
   gallery?: { src: string; altAr: string; altEn: string }[];
   pricing?: { labelAr: string; labelEn: string; amount: number; tagAr?: string; tagEn?: string }[];
   faq: { ar: FAQItem[]; en: FAQItem[] };
+  /** FAQ category from the dashboard; `faq` above is the fallback while it is empty or unreachable. */
+  faqCategorySlug?: string;
   donateHref: string;
   donateLabelAr?: string;
   donateLabelEn?: string;
@@ -375,7 +377,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
         </section>
       )}
 
-      <LocalFAQ items={isAr ? p.faq.ar : p.faq.en} donateHref={p.donateHref} id={`${p.slug}-faq`} />
+      <LocalFAQ items={isAr ? p.faq.ar : p.faq.en} categorySlug={p.faqCategorySlug} donateHref={p.donateHref} id={`${p.slug}-faq`} />
 
       {/* Final CTA — 2 buttons side by side in one single row on mobile & desktop */}
       <section className={`relative overflow-hidden pt-14 pb-28 sm:pb-36 md:pt-16 md:pb-44 text-primary-foreground ${p.finalCtaClassName ?? "pattern-hero-luxe"}`}>

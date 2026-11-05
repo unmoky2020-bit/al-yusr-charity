@@ -17,6 +17,7 @@ export type ProjectPageMeta = {
 
 export const PROJECT_PAGES: ProjectPageMeta[] = [
   { projectSlug: "waqf", path: "/farm", name: l("المزرعة الوقفية", "Waqf farm"), load: () => import("./farm").then((m) => m.default) },
+  { projectSlug: "nurseries", path: "/nurseries", name: l("الحضانات ودور التحفيظ", "Nurseries & Qur'an houses"), load: () => import("./nurseries").then((m) => m.default) },
 ];
 
 export const getProjectPageMeta = (projectSlug: string | null | undefined) =>
