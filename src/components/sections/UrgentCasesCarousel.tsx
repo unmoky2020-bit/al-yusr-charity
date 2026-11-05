@@ -48,7 +48,7 @@ export const UrgentCasesCarousel = () => {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-destructive/60 motion-reduce:animate-none" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-destructive" />
               </span>
-              {isRTL ? (cases.length >= 3 && cases.length <= 10 ? `${cases.length} حالات تحتاج إلى المساعدة الآن` : `${cases.length} حالة تحتاج إلى المساعدة الآن`) : `${cases.length} cases need help now`}
+              {isRTL ? `${cases.length} حالة تحتاج إلى المساعدة الآن` : `${cases.length} cases need help now`}
             </span>
             <h2 id="urgent-cases-title" className="mt-2 text-2xl font-black text-primary md:text-[2.1rem] md:leading-tight">{title}</h2>
             {subtitle && <p className="mt-2 text-sm text-muted-foreground md:text-base">{subtitle}</p>}

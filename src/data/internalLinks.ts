@@ -12,17 +12,17 @@ export type LinkRule = {
 
 /** Order matters: more specific rules first. */
 export const INTERNAL_LINK_RULES: LinkRule[] = [
-  { match: /صك\s*الأضحية/, href: "/qurbani", ar: "صك الأضحية" },
+  { match: /صك\s*الأضحية/, href: "/programs/qurbani", ar: "صك الأضحية" },
   { match: /كرتونة\s*العزومة|كرتونة\s*رمضان|كرتونة\s*غذائية/, href: "/programs/box", ar: "كرتونة العزومة" },
   { match: /كفالة\s*يتيم|الأيتام/, href: "/programs/orphans", ar: "كفالة يتيم" },
   { match: /زكاة\s*المال|حاسبة\s*الزكاة/, href: "/donate?type=zakat", ar: "احسب زكاتك" },
   { match: /زكاة\s*الفطر/, href: "/donate?type=zakat-fitr", ar: "زكاة الفطر" },
-  { match: /قافلة\s*طبية|قوافل\s*طبية|علاج|أدوية/, href: "/programs/treatment", ar: "برنامج الصحة" },
+  { match: /قافلة\s*طبية|قوافل\s*طبية|علاج|أدوية/, href: "/programs/health", ar: "برنامج الصحة" },
   { match: /مطبخ\s*اليسر|وجبة\s*ساخنة|إفطار\s*صائم/, href: "/programs/kitchen", ar: "مطبخ اليسر" },
   { match: /ادفع\s*مصروفه|كفالة\s*تعليمية|وقفية\s*التعليم/, href: "/programs/education", ar: "ادفع مصروفه" },
   { match: /سقيا\s*الماء|وصلة\s*مياه/, href: "/programs/water", ar: "سقيا الماء" },
   { match: /ستر\s*وتسقيف|ترميم/, href: "/programs/shelter", ar: "ستر وتسقيف" },
-  { match: /تيسير\s*زواج|جواز\s*عروسة/, href: "/programs/bride", ar: "تيسير زواج" },
+  { match: /تيسير\s*زواج|جواز\s*عروسة/, href: "/programs/marriage", ar: "تيسير زواج" },
   { match: /شفافية|تقرير\s*سنوي/, href: "/about#transparency", ar: "شفافية اليسر" },
   { match: /مين\s*احنا|عن\s*اليسر|مؤسسة\s*اليسر/, href: "/about", ar: "مؤسسة اليسر" },
   { match: /تبرع|تبرعك|ساهم/, href: "/donate", ar: "تبرع الآن" },
