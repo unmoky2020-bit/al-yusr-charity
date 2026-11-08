@@ -7,6 +7,7 @@
  *           page shows «البرنامج غير متاح حالياً»; static copies never add programs or fill backend fields.
  */
 import { programs as STATIC_PROGRAMS, type ProgramContent } from "@/data/programs";
+import { apiFetch } from "@/data/laravelApi";
 import { CONTENT_SOURCE, type ContentSource } from "@/lib/contentSource";
 import {
   type ApiRecord,
@@ -108,12 +109,17 @@ export function mapApiProgram(raw: ApiRecord, fallback?: ProgramContent): Progra
     items(key, l)
       .map((x) => ({ t: pick(x.title) ?? "", d: pick(x.description, x.text) ?? "" }))
       .filter((x) => x.t || x.d);
+  const qa = (key: string, l: "ar" | "en") =>
+    items(key, l)
+      .map((x) => ({ q: pick(x.question, x.title) ?? "", a: pick(x.answer, x.description, x.text) ?? "" }))
+      .filter((x) => x.q && x.a);
   const bilingual = <T,>(ar: T[], en: T[]) => (ar.length ? { ar, en: en.length ? en : ar } : undefined);
   const sections = {
     benefits: bilingual(texts("benefits", "ar"), texts("benefits", "en")),
     steps: bilingual(pairs("how_it_works", "ar"), pairs("how_it_works", "en")),
     details: bilingual(texts("details", "ar"), texts("details", "en")),
     impact: bilingual(pairs("impact", "ar"), pairs("impact", "en")),
+    faq: bilingual(qa("faq", "ar"), qa("faq", "en")),
   };
   if (Object.values(sections).some(Boolean)) out.sections = sections;
 
@@ -170,4 +176,32 @@ export function usePrograms(): { programs: ProgramContent[]; isLoading: boolean 
 export function useProgram(slug: string | undefined): { program: ProgramContent | undefined; isLoading: boolean } {
   const { programs, isLoading } = usePrograms();
   return { program: slug ? programs.find((p) => p.slug === slug) : undefined, isLoading };
+}
+
+/**
+ * GET /programs/{id}. The single-program response carries what the list leaves out: page sections
+ * («أقسام الصفحة»), donation packages, long content, benefits, SEO fields and the linked FAQ category.
+ */
+export async function fetchProgramRecord(id: number): Promise<ApiRecord | null> {
+  const res = await apiFetch<unknown>(`/programs/${id}`, { method: "GET", ttlMs: 60_000 });
+  const rec = res && typeof res === "object" && !Array.isArray(res) && "data" in (res as ApiRecord) ? (res as ApiRecord).data : res;
+  return rec && typeof rec === "object" && !Array.isArray(rec) ? (rec as ApiRecord) : null;
+}
+
+/**
+ * One program for its own page: found in the list by slug, then completed from its single record
+ * (sections, packages, content), so what the dashboard saves is what the page shows.
+ */
+export function useProgramDetail(slug: string | undefined): { program: ProgramContent | undefined; programs: ProgramContent[]; isLoading: boolean } {
+  const { programs, isLoading } = usePrograms();
+  const listed = slug ? programs.find((p) => p.slug === slug) : undefined;
+  const id = listed?.apiId;
+  const { data: detailed, isLoading: detailLoading } = useSourced<ApiRecord | null, ProgramContent | null>(
+    ["program", id ?? 0],
+    () => fetchProgramRecord(id as number),
+    null,
+    (rec) => (rec && isPublicRecord(rec) ? mapApiProgram(rec) : null),
+    { enabled: !!id },
+  );
+  return { program: detailed ?? listed, programs, isLoading: isLoading || detailLoading };
 }

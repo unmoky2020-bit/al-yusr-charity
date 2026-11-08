@@ -107,8 +107,9 @@ async function poll() {
       emit({ unread: res.unread_count });
     }
   } catch (e) {
-    // Signed out / token expired: stop polling until a screen subscribes again.
-    if (e instanceof ApiError && e.status === 401) stopPolling();
+    // Signed out / token expired / an account without notifications: stop polling until a screen
+    // subscribes again (the public header mounts the bell for every signed-in visitor).
+    if (e instanceof ApiError && (e.status === 401 || e.status === 403)) stopPolling();
   } finally {
     schedule();
   }

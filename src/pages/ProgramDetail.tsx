@@ -33,7 +33,7 @@ import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
-import { usePrograms } from "@/data/sources/programs";
+import { useProgramDetail } from "@/data/sources/programs";
 import { track } from "@/lib/track";
 import { BrideTrousseau } from "@/components/sections/BrideTrousseau";
 import { RelatedContentLinks } from "@/components/common/RelatedContentLinks";
@@ -97,8 +97,8 @@ const ProgramDetail = () => {
   const ALIAS_OF: Record<string, string> = { satr: "shelter", food: "box" };
   const aliasRedirect = slug && ALIAS_OF[slug] ? ALIAS_OF[slug] : undefined;
   // Published backend programs (static only when the API is unreachable); see src/data/sources/programs.ts.
-  const { programs, isLoading: programsLoading } = usePrograms();
-  const program = slug ? programs.find((p) => p.slug === slug) : undefined;
+  // The list finds the program; its single record adds the dashboard sections, packages and content.
+  const { program, programs, isLoading: programsLoading } = useProgramDetail(slug);
   const reduce = useReducedMotion();
   const isRTL = lang === "ar";
   // Program FAQ: own questions -> linked FAQ category -> "programs" category (see src/data/programFaqs.ts).
@@ -154,7 +154,7 @@ const ProgramDetail = () => {
     { id: "how-it-works", label: isRTL ? "كيف يعمل البرنامج" : "How it works" },
     { id: "details", label: isRTL ? "التفاصيل" : "Details" },
     { id: "impact", label: isRTL ? "الأثر" : "Impact" },
-    { id: "testimonials", label: isRTL ? "آراء المتبرعين" : "Donor stories" },
+    { id: "testimonials", label: isRTL ? "التزامنا" : "Our commitment" },
     { id: "faq", label: isRTL ? "أسئلة شائعة" : "FAQ" },
     { id: "related", label: isRTL ? "برامج مشابهة" : "Related" },
   ];
@@ -189,6 +189,11 @@ const ProgramDetail = () => {
   const benefits = program.sections?.benefits?.[lang]?.length ? program.sections.benefits[lang] : content.benefits;
   const longContent = program.sections?.details?.[lang]?.length ? program.sections.details[lang] : content.longContent;
   const impactItems = program.sections?.impact?.[lang];
+  // A section with nothing to say is left out (and out of the in-page nav) until the dashboard fills it.
+  const hiddenSections = new Set<string>([
+    ...(benefits.length ? [] : ["benefits"]),
+    ...(longContent.length ? [] : ["details"]),
+  ]);
 
   const genericFaqs =
     isRTL
@@ -204,7 +209,9 @@ const ProgramDetail = () => {
           { q: "Can I designate a specific governorate?", a: "Yes, you can designate your donation to Dakahlia or any governorate we operate in." },
           { q: "What payment methods are supported?", a: "Visa/Mastercard, Vodafone Cash, InstaPay, and bank transfer to CIB." },
         ];
-  const faqs = linkedFaqs.length ? linkedFaqs : genericFaqs;
+  // Program FAQ: the page's own «الأسئلة الشائعة» section → the linked FAQ category → the generic set.
+  const sectionFaqs = program.sections?.faq?.[lang];
+  const faqs = sectionFaqs?.length ? sectionFaqs : linkedFaqs.length ? linkedFaqs : genericFaqs;
 
   return (
     <PageLayout>
@@ -385,7 +392,7 @@ const ProgramDetail = () => {
           <TagsRail
             source={`program-${program.slug}-toc`}
             ariaLabel={isRTL ? "روابط سريعة داخل الصفحة" : "On-page quick links"}
-            items={toc.map((s) => ({ id: s.id, label: s.label, href: `#${s.id}` }))}
+            items={toc.filter((s) => !hiddenSections.has(s.id)).map((s) => ({ id: s.id, label: s.label, href: `#${s.id}` }))}
           />
         </div>
       </div>
@@ -406,6 +413,7 @@ const ProgramDetail = () => {
       </section>
 
       {/* Benefits */}
+      {benefits.length > 0 && (
       <section
         id="benefits"
         data-source={`program-${program.slug}-benefits`}
@@ -433,6 +441,7 @@ const ProgramDetail = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* Donation options = the program's shares (backend donation_packages) */}
       {subOptions.length > 0 && (
@@ -571,6 +580,7 @@ const ProgramDetail = () => {
       </section>
 
       {/* Long content */}
+      {longContent.length > 0 && (
       <section
         id="details"
         data-source={`program-${program.slug}-details`}
@@ -627,6 +637,7 @@ const ProgramDetail = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* Impact stats */}
       <section

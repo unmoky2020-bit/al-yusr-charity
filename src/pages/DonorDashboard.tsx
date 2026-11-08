@@ -1,11 +1,14 @@
 import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Heart, TrendingUp, Users, Settings, Target,
   ReceiptText, ArrowRight, ArrowLeft, Sparkles, CheckCircle2,
   CreditCard, Wallet, Smartphone, LogOut, Trash2, Truck, PackageCheck, Wallet2, Hourglass, ChevronDown, ChevronUp,
+  Bell, CheckCheck, Inbox,
 } from "lucide-react";
+import { useNotifications } from "@/hooks/useNotifications";
+import { NotificationItem } from "@/components/notifications/NotificationItem";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -19,7 +22,9 @@ import { listMyDonations, listCaseDocuments } from "@/data/casesApi";
 import { formatServerImageUrl } from "@/data/laravelApi";
 import { toast } from "@/hooks/use-toast";
 
-type Tab = "impact" | "donations" | "account";
+type Tab = "impact" | "donations" | "notifications" | "account";
+const TABS: Tab[] = ["impact", "donations", "notifications", "account"];
+const isTab = (v: string | null): v is Tab => !!v && (TABS as string[]).includes(v);
 
 /** Steps reflect the lifecycle: pending → paid (received) → distributed → completed (spent). */
 type StepKey = "pending" | "received" | "processing" | "delivered";
@@ -106,7 +111,11 @@ const Inner = () => {
   const { user, updateProfile, logout, removeUser } = useAuth();
   const navigate = useNavigate();
   const Arrow = lang === "ar" ? ArrowLeft : ArrowRight;
-  const [tab, setTab] = useState<Tab>("impact");
+  // `?tab=` opens a tab directly (the header bell links to ?tab=notifications).
+  const [params, setParams] = useSearchParams();
+  const tab: Tab = isTab(params.get("tab")) ? (params.get("tab") as Tab) : "impact";
+  const setTab = (t: Tab) => setParams(t === "impact" ? {} : { tab: t }, { replace: true });
+  const notifications = useNotifications();
   const [donations, setDonations] = useState<DonationRecord[]>([]);
   const [dbDonations, setDbDonations] = useState<Awaited<ReturnType<typeof listMyDonations>>>([]);
   const [openRef, setOpenRef] = useState<string | null>(null);
@@ -164,14 +173,16 @@ const Inner = () => {
       .filter((d) => d.status === "completed")
       .reduce((s, d) => s + d.amount, 0);
     const total = localTotal + dbTotal;
-    const families = Math.floor(total / 350);
-    const meals = Math.floor(total / 25);
-    return { total, families, meals, count: localOnly.length + dbDonations.length };
+    // Real counts only: the site never estimates families or meals from an amount.
+    const delivered = dbDonations.filter((d) => d.payment_status === "completed").length
+      + localOnly.filter((d) => d.status === "completed").length;
+    return { total, delivered, count: localOnly.length + dbDonations.length };
   }, [localOnly, dbDonations]);
 
   const tabs: { id: Tab; ar: string; en: string; icon: typeof Heart }[] = [
     { id: "impact", ar: "أثرك", en: "Impact", icon: TrendingUp },
     { id: "donations", ar: "تبرعاتي", en: "Donations", icon: Heart },
+    { id: "notifications", ar: "الإشعارات", en: "Notifications", icon: Bell },
     { id: "account", ar: "الحساب", en: "Account", icon: Settings },
   ];
 
@@ -282,6 +293,9 @@ const Inner = () => {
                   active ? "bg-primary text-primary-foreground shadow-soft" : "text-muted-foreground hover:bg-muted"
                 }`}>
                 <Icon className="me-1.5 inline h-3.5 w-3.5" />{t[lang]}
+                {t.id === "notifications" && notifications.unreadCount > 0 && (
+                  <span className="ms-1.5 rounded-full bg-rose-600 px-1.5 py-0.5 text-[10px] font-black text-white">{notifications.unreadCount}</span>
+                )}
               </button>
             );
           })}
@@ -294,9 +308,9 @@ const Inner = () => {
           {tab === "impact" && (
             <div className="space-y-6">
               <div className="grid gap-4 sm:grid-cols-3">
-                <KpiCard label={lang === "ar" ? "إجمالي تبرعاتك" : "Total donated"} value={`${impact.total.toLocaleString()} EGP`} icon={Heart} color="orange" />
-                <KpiCard label={lang === "ar" ? "أسر استفادت" : "Families helped"} value={impact.families.toString()} icon={Users} color="lime" />
-                <KpiCard label={lang === "ar" ? "وجبات وُزّعت" : "Meals distributed"} value={impact.meals.toLocaleString()} icon={Sparkles} color="primary" />
+                <KpiCard label={lang === "ar" ? "ما وصل إلى مستحقيه" : "Delivered so far"} value={`${impact.total.toLocaleString()} EGP`} icon={Heart} color="orange" />
+                <KpiCard label={lang === "ar" ? "عدد تبرعاتك" : "Your donations"} value={impact.count.toString()} icon={Users} color="lime" />
+                <KpiCard label={lang === "ar" ? "تبرعات اكتمل تسليمها" : "Completed deliveries"} value={impact.delivered.toString()} icon={Sparkles} color="primary" />
               </div>
 
               {localOnly.length + dbDonations.length === 0 ? (
@@ -488,6 +502,40 @@ const Inner = () => {
                   <Button asChild className="mt-4 bg-orange-grad text-accent-foreground shadow-cta">
                     <Link to="/donate"><Heart className="h-4 w-4" /> {lang === "ar" ? "ابدأ تبرعك الأول" : "Make your first donation"}</Link>
                   </Button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {tab === "notifications" && (
+            <div className="rounded-3xl bg-card shadow-soft">
+              <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4 md:px-6">
+                <div>
+                  <h3 className="text-lg font-extrabold text-primary">{lang === "ar" ? "إشعاراتك" : "Your notifications"}</h3>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    {lang === "ar"
+                      ? "تصلك هنا أخبار تبرعاتك: تأكيد الدفع، ومراحل التنفيذ، وصور التسليم."
+                      : "Updates on your donations land here: payment confirmation, delivery steps and handover photos."}
+                  </p>
+                </div>
+                {notifications.unreadCount > 0 && (
+                  <Button size="sm" variant="outline" onClick={() => void notifications.markAllRead()} className="shrink-0 rounded-full">
+                    <CheckCheck className="me-1 h-4 w-4" />{lang === "ar" ? "تعليم الكل كمقروء" : "Mark all read"}
+                  </Button>
+                )}
+              </div>
+              {!notifications.loaded ? (
+                <p className="p-8 text-center text-sm text-muted-foreground">{lang === "ar" ? "جارٍ التحميل…" : "Loading…"}</p>
+              ) : notifications.items.length === 0 ? (
+                <div className="flex flex-col items-center gap-2 p-10 text-center text-sm text-muted-foreground">
+                  <Inbox className="h-9 w-9 opacity-50" />
+                  {lang === "ar" ? "لا توجد إشعارات بعد. سنخبرك هنا بكل خطوة في رحلة تبرعك." : "No notifications yet. Every step of your donation will show up here."}
+                </div>
+              ) : (
+                <div className="divide-y divide-border">
+                  {notifications.items.map((n) => (
+                    <NotificationItem key={n.id} n={n} onOpen={(x) => { void notifications.markRead(x.id); }} onDelete={(x) => { void notifications.remove(x.id); }} />
+                  ))}
                 </div>
               )}
             </div>

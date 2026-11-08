@@ -9,6 +9,7 @@ import { Logo } from "@/components/common/Logo";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { prefetchHandlers } from "@/lib/prefetch";
+import { NotificationsBell } from "@/components/common/NotificationsBell";
 
 export const Navbar = () => {
   const { t, lang, setLang } = useLang();
@@ -217,6 +218,12 @@ export const Navbar = () => {
             <Languages className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-accent" />
             {lang === "ar" ? "EN" : "AR"}
           </button>
+          {user ? (
+            <NotificationsBell
+              allHref={user.roles.includes("donor") ? "/dashboard?tab=notifications" : "/admin/notifications"}
+              buttonClassName={`rounded-full ${ghostBtn}`}
+            />
+          ) : null}
           {user ? (
             <Link to={user.roles.includes("donor") ? "/dashboard" : "/profile"} data-label="nav-account" {...prefetchHandlers(user.roles.includes("donor") ? "/dashboard" : "/profile")} className={`hidden h-10 items-center gap-1.5 rounded-full border px-3.5 text-sm font-bold transition sm:inline-flex ${ghostBtn}`}>
               <UserIcon className="h-4 w-4" />
