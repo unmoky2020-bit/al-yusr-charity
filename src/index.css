@@ -1325,3 +1325,28 @@ img, video, svg, canvas {
 @media (prefers-reduced-motion: reduce) {
   .cert-seal::before, .cert-seal-ring { animation: none; }
 }
+
+/* Loading mark shared by the boot splash (index.html) and PageLoadingState. */
+@keyframes yusr-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.94); opacity: .82; } }
+@keyframes yusr-slide { 0% { transform: translateX(-110%); } 100% { transform: translateX(260%); } }
+
+/* Toast close button: inside the toast on the reading end (left in Arabic, right in English),
+   centred vertically, never on top of the status icon. */
+[data-sonner-toaster] [data-sonner-toast] { padding-inline-end: 2.75rem; }
+[data-sonner-toaster] [data-sonner-toast] [data-close-button] {
+  left: auto;
+  right: auto;
+  inset-inline-end: 0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: hsl(var(--muted-foreground));
+}
+[data-sonner-toaster] [data-sonner-toast] [data-close-button]:hover {
+  background: hsl(var(--muted));
+  color: hsl(var(--foreground));
+}

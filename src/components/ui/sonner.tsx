@@ -1,19 +1,21 @@
-import { useTheme } from "next-themes";
 import { Toaster as Sonner, toast } from "sonner";
+import { useLang } from "@/i18n/LangContext";
 import { CheckCircle2, AlertTriangle, AlertCircle, Info } from "lucide-react";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
+/** The site's only toaster: language-aware direction, close button on the reading end (see index.css). */
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
+  const { lang } = useLang();
 
   return (
     <Sonner
-      theme={theme as ToasterProps["theme"]}
+      theme="light"
       position="top-center"
       offset={16}
-      duration={2600}
-      dir="rtl"
+      duration={3200}
+      dir={lang === "ar" ? "rtl" : "ltr"}
+      closeButton
       visibleToasts={3}
       icons={{
         success: <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-emerald-600 dark:text-emerald-400 shrink-0" />,
@@ -23,7 +25,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       className="toaster group z-[99999] pointer-events-none"
       toastOptions={{
-        duration: 2600,
+        duration: 3200,
         style: {
           zIndex: 99999,
           pointerEvents: "auto",

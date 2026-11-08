@@ -85,19 +85,9 @@ export const StickyQurbaniCTA = ({
       role="region"
       aria-label={ariaLabel ? ariaLabel[isAr ? "ar" : "en"] : (isAr ? "إشعار تبرع" : "Donation notice")}
     >
-      <div className="relative mx-auto max-w-5xl rounded-2xl border border-secondary/40 bg-primary/95 p-3 pt-10 shadow-2xl backdrop-blur sm:pt-3 md:p-4 md:pt-4">
-        {/* Close button — pinned top-left on every viewport */}
-        <button
-          type="button"
-          aria-label={isAr ? "إخفاء" : "Dismiss"}
-          onClick={() => { setOpen(false); sessionStorage.setItem(dismissKey, "1"); }}
-          className="absolute left-2 top-2 grid h-8 w-8 place-items-center rounded-full text-primary-foreground/70 hover:bg-primary-foreground/10 hover:text-primary-foreground"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
+      <div className="relative mx-auto max-w-5xl rounded-2xl border border-secondary/40 bg-primary/95 p-3 shadow-2xl backdrop-blur md:p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 pe-9 sm:pe-0">
             <div className="text-sm font-black text-primary-foreground md:text-base">
               {title ? title[isAr ? "ar" : "en"] : (isAr ? `حجز صكوك أضحية ${QURBANI_SEASON.year} يُفتح قريبًا` : `Qurbani ${QURBANI_SEASON.year} booking opens soon`)}
             </div>
@@ -124,6 +114,16 @@ export const StickyQurbaniCTA = ({
               </a>
             </Button>
           </div>
+
+          {/* Close: top corner on the reading end on phones, last item of the row from sm up */}
+          <button
+            type="button"
+            aria-label={isAr ? "إخفاء" : "Dismiss"}
+            onClick={() => { setOpen(false); sessionStorage.setItem(dismissKey, "1"); }}
+            className="absolute end-2 top-2 grid h-8 w-8 shrink-0 place-items-center rounded-full text-primary-foreground/70 transition hover:bg-primary-foreground/10 hover:text-primary-foreground sm:static sm:order-last"
+          >
+            <X className="h-4 w-4" aria-hidden />
+          </button>
         </div>
       </div>
     </div>

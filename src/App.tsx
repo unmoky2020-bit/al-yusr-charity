@@ -3,12 +3,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation, useNavigationType, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LangProvider } from "@/i18n/LangContext";
 import { AuthProvider } from "@/auth/AuthContext";
 import { bindAnchorClickTracker, track } from "@/lib/track";
 import { PageLoadingState } from "@/components/common/PageLoadingState";
+import { PageLayout } from "@/components/layout/PageLayout";
 const Index = lazy(() => import("./pages/Index.tsx"));
 import { SmoothScroll } from "@/components/common/SmoothScroll";
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
@@ -274,18 +274,27 @@ const LegacyBlogSeoRedirect = () => {
   );
 };
 
+/**
+ * While a page's code loads: the same loader as the page gates, inside the site header for public
+ * pages (so the header never disappears between pages) and on its own for the dashboard.
+ */
+function RouteFallback() {
+  const { pathname } = useLocation();
+  if (pathname.startsWith("/admin")) return <PageLoadingState />;
+  return <PageLayout><PageLoadingState /></PageLayout>;
+}
+
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <LangProvider>
         <AuthProvider>
           <TooltipProvider>
-            <Toaster />
             <Sonner />
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <SmoothScroll />
               <RouteTracker />
-              <Suspense fallback={<PageLoadingState />}>
+              <Suspense fallback={<RouteFallback />}>
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/programs" element={<Projects />} />

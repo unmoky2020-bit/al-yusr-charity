@@ -177,6 +177,19 @@
     }
   </script>
 
+  <!-- Boot splash: one calm loading screen until the first page is ready (src/lib/bootSplash.ts).
+       It mirrors PageLoadingState so the hand-over to the app is invisible. -->
+  <style>
+    #boot-splash{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:hsl(60 33% 98%);transition:opacity .35s ease}
+    #boot-splash.is-hidden{opacity:0;pointer-events:none}
+    #boot-splash .bs-mark{display:grid;justify-items:center;gap:16px}
+    #boot-splash img{width:64px;height:64px;border-radius:9999px;animation:yusr-pulse 1.6s ease-in-out infinite}
+    #boot-splash .bs-bar{position:relative;display:block;width:112px;height:3px;border-radius:9999px;background:hsl(152 65% 18% / .1);overflow:hidden}
+    #boot-splash .bs-bar::after{content:"";position:absolute;top:0;bottom:0;width:40%;border-radius:inherit;background:hsl(152 65% 18%);animation:yusr-slide 1.2s ease-in-out infinite}
+    @keyframes yusr-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.94);opacity:.82}}
+    @keyframes yusr-slide{0%{transform:translateX(-110%)}100%{transform:translateX(260%)}}
+    @media (prefers-reduced-motion:reduce){#boot-splash img,#boot-splash .bs-bar::after{animation:none}}
+  </style>
 </head>
 
 <body>
@@ -186,6 +199,8 @@
   <noscript><img height="1" width="1" style="display:none" alt=""
     src="https://www.facebook.com/tr?id=1156274720394557&ev=PageView&noscript=1" /></noscript>
   <!-- End Meta Pixel Code -->
+  <div id="boot-splash" aria-hidden="true"><div class="bs-mark"><img src="/icons/icon-144.png" alt="" width="64" height="64" /><span class="bs-bar"></span></div></div>
+  <noscript><style>#boot-splash{display:none}</style></noscript>
   <div id="root"></div>
   <noscript>
     <!-- Static semantic fallback for search bots, AI search agents, and crawlers with JS disabled -->

@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
+import { releaseBootSplashWhenReady } from "./lib/bootSplash";
 
 if (typeof window !== "undefined") {
   try {
@@ -22,5 +23,7 @@ if (typeof window !== "undefined") {
   } catch {}
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+const root = document.getElementById("root")!;
+releaseBootSplashWhenReady(root);
+createRoot(root).render(<App />);
 
