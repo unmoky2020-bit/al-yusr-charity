@@ -18,6 +18,19 @@ const CACHE_TTL = 300; // seconds; the API caches 5 minutes too
 const DYNAMIC = '#^/(cases|programs|axes|stories|blog)/[^/]+$#';
 const ROOMS_API = 'https://api.elyusr.org/api/v1/misbaha-rooms/';
 const MISBAHA_ROOM = '#^/misbaha/([a-z0-9]{4,24})$#';
+/*
+ | Templated local pages (same text, another place name) stay reachable but out of search, except
+ | the home city: src/data/seoIndexable.ts has the same rule (a test keeps the two in step).
+ */
+const NOINDEX_LOCAL = '#^/(?:geo/[^/]+/[^/]+|dakahlia/(?!mansoura/)[^/]+/[^/]+|qurbani/(?!mansoura$|confirm$)[^/]+)$#';
+/* Account and confirmation pages never belong in search. */
+const NOINDEX_PAGES = '#^/(?:login|register(?:/[a-z]+)?|forgot-password|profile|dashboard|donate/track|donation/status|qurbani/confirm)$#';
+/*
+ | Sections whose pages come from the API or the app (programs, articles, cases…). Any other path
+ | without an entry in seo-static.json is not a page of the site (a typo, an old link): crawlers get
+ | noindex instead of a copy of the homepage, which Search Console reports as a soft 404.
+ */
+const APP_SECTIONS = '#^/(?:programs|blog|cases|stories|axes|campaigns|services|projects|donate|qurbani|dakahlia|geo|misbaha|seasons|volunteer)/#';
 
 $index = @file_get_contents(__DIR__ . '/index.html');
 if ($index === false) {
@@ -38,11 +51,16 @@ try {
     } else {
         $page = static_page($path, $lang);
     }
+    $unknown = $page === null && $path !== '/' && ! preg_match(APP_SECTIONS, $path);
+    if ($unknown || preg_match(NOINDEX_LOCAL, $path) || preg_match(NOINDEX_PAGES, $path)) {
+        $page = ['robots' => 'noindex,follow'] + ($page ?? []);
+    }
 
     http_response_code($status === 404 ? 404 : 200);
     header('Content-Type: text/html; charset=UTF-8');
     header('Cache-Control: no-cache');
-    echo $page ? render($index, $page, $path, $lang) : $index;
+    // Every page gets its canonical and the crawlable links, even one without its own entry yet.
+    echo render($index, $page ?? [], $path, $lang);
 } catch (Throwable $e) {
     header('Content-Type: text/html; charset=UTF-8');
     echo $index;
@@ -211,17 +229,26 @@ function render(string $html, array $p, string $path, string $lang): string
     $image = (string) ($p['image'] ?? '') ?: SITE . '/og-cover.jpg?v=2026.1';
 
     // Replace the defaults of index.html (they carry data-rh, so react-helmet takes them over later).
-    $set = [
-        '#<title[^>]*>.*?</title>#s' => '<title data-rh="true">' . e($title) . '</title>',
-        '#<meta\b[^>]*\bname="description"[^>]*>#s' => '<meta data-rh="true" name="description" content="' . e($desc) . '" />',
-    ];
-    foreach (['og:title' => $title, 'og:description' => $desc, 'og:url' => $canonical, 'og:image' => $image,
-              'og:image:secure_url' => $image, 'og:image:alt' => $title, 'og:type' => $p['type'] ?? 'website'] as $prop => $val) {
+    // A page without its own title keeps the defaults; the canonical and links below are always set.
+    $set = [];
+    if ($title !== '') {
+        $set['#<title[^>]*>.*?</title>#s'] = '<title data-rh="true">' . e($title) . '</title>';
+        foreach (['og:title' => $title, 'og:image:alt' => $title] as $prop => $val) {
+            $set['#<meta\b[^>]*\bproperty="' . preg_quote($prop, '#') . '"[^>]*>#s'] = '<meta data-rh="true" property="' . $prop . '" content="' . e($val) . '" />';
+        }
+        foreach (['twitter:title' => $title, 'twitter:image:alt' => $title] as $name => $val) {
+            $set['#<meta\b[^>]*\bname="' . preg_quote($name, '#') . '"[^>]*>#s'] = '<meta data-rh="true" name="' . $name . '" content="' . e($val) . '" />';
+        }
+    }
+    if ($desc !== '') {
+        $set['#<meta\b[^>]*\bname="description"[^>]*>#s'] = '<meta data-rh="true" name="description" content="' . e($desc) . '" />';
+        $set['#<meta\b[^>]*\bproperty="og:description"[^>]*>#s'] = '<meta data-rh="true" property="og:description" content="' . e($desc) . '" />';
+        $set['#<meta\b[^>]*\bname="twitter:description"[^>]*>#s'] = '<meta data-rh="true" name="twitter:description" content="' . e($desc) . '" />';
+    }
+    foreach (['og:url' => $canonical, 'og:image' => $image, 'og:image:secure_url' => $image, 'og:type' => $p['type'] ?? 'website'] as $prop => $val) {
         $set['#<meta\b[^>]*\bproperty="' . preg_quote($prop, '#') . '"[^>]*>#s'] = '<meta data-rh="true" property="' . $prop . '" content="' . e((string) $val) . '" />';
     }
-    foreach (['twitter:title' => $title, 'twitter:description' => $desc, 'twitter:image' => $image, 'twitter:image:alt' => $title] as $name => $val) {
-        $set['#<meta\b[^>]*\bname="' . preg_quote($name, '#') . '"[^>]*>#s'] = '<meta data-rh="true" name="' . $name . '" content="' . e((string) $val) . '" />';
-    }
+    $set['#<meta\b[^>]*\bname="twitter:image"[^>]*>#s'] = '<meta data-rh="true" name="twitter:image" content="' . e($image) . '" />';
     if (! empty($p['robots'])) {
         $set['#<meta\b[^>]*\bname="robots"[^>]*>#s'] = '<meta data-rh="true" name="robots" content="' . e((string) $p['robots']) . '" />';
     }
@@ -240,30 +267,33 @@ function render(string $html, array $p, string $path, string $lang): string
     }
     $html = str_replace('</head>', $head . "\n</head>", $html);
 
-    // Readable snapshot for crawlers that do not run JavaScript (replaced by the app on start).
-    if (! empty($p['h1'])) {
-        $dir = $lang === 'en' ? 'ltr' : 'rtl';
-        $body = '<main dir="' . $dir . '" style="max-width:760px;margin:40px auto;padding:0 16px;font-family:system-ui,sans-serif;line-height:1.8;color:#0E3B2E">'
-            . '<h1>' . e($p['h1']) . '</h1>';
-        if (! empty($p['image'])) {
-            $body .= '<img src="' . e($p['image']) . '" alt="' . e($p['h1']) . '" style="max-width:100%;height:auto;border-radius:12px" />';
-        }
-        if (! empty($p['summary'])) {
-            $body .= '<p>' . e(mb_substr((string) $p['summary'], 0, 1200)) . '</p>';
-        }
-        if (! empty($p['facts']) && is_array($p['facts'])) {
-            $body .= '<ul>';
-            foreach ($p['facts'] as $k => $v) {
-                $body .= '<li><strong>' . e((string) $k) . ':</strong> ' . e((string) $v) . '</li>';
-            }
-            $body .= '</ul>';
-        }
-        if (! empty($p['donate_url'])) {
-            $body .= '<p><a href="' . e($p['donate_url']) . '">' . ($lang === 'en' ? 'Donate now' : 'تبرع الآن') . '</a></p>';
-        }
-        $body .= site_links($path, $lang) . '</main>';
-        $html = preg_replace('#<div id="root">\s*</div>#', '<div id="root">' . str_replace(['\\', '$'], ['\\\\', '\\$'], $body) . '</div>', $html, 1);
+    // Readable snapshot for crawlers that do not run JavaScript (replaced by the app on start):
+    // the page's heading and summary when known, and always the links to the rest of the site.
+    $h1 = (string) ($p['h1'] ?? '') ?: trim((string) preg_split('/\s[|—–]\s/u', $title)[0]);
+    $summary = (string) ($p['summary'] ?? '') ?: $desc;
+    $body = '<main dir="' . ($lang === 'en' ? 'ltr' : 'rtl') . '" style="max-width:760px;margin:40px auto;padding:0 16px;font-family:system-ui,sans-serif;line-height:1.8;color:#0E3B2E">'
+        . ($h1 !== '' ? '<h1>' . e($h1) . '</h1>' : '');
+    if (! empty($p['image'])) {
+        $body .= '<img src="' . e($p['image']) . '" alt="' . e($h1) . '" style="max-width:100%;height:auto;border-radius:12px" />';
     }
+    if ($summary !== '') {
+        $body .= '<p>' . e(mb_substr($summary, 0, 1200)) . '</p>';
+    }
+    foreach (array_slice((array) ($p['sections'] ?? []), 0, 12) as $section) {
+        $body .= '<h2>' . e((string) $section) . '</h2>';
+    }
+    if (! empty($p['facts']) && is_array($p['facts'])) {
+        $body .= '<ul>';
+        foreach ($p['facts'] as $k => $v) {
+            $body .= '<li><strong>' . e((string) $k) . ':</strong> ' . e((string) $v) . '</li>';
+        }
+        $body .= '</ul>';
+    }
+    if (! empty($p['donate_url'])) {
+        $body .= '<p><a href="' . e($p['donate_url']) . '">' . ($lang === 'en' ? 'Donate now' : 'تبرع الآن') . '</a></p>';
+    }
+    $body .= site_links($path, $lang) . '</main>';
+    $html = preg_replace('#<div id="root">\s*</div>#', '<div id="root">' . str_replace(['\\', '$'], ['\\\\', '\\$'], $body) . '</div>', $html, 1);
 
     return $html;
 }

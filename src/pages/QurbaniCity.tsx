@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { Heart, MapPin, Users, ShieldCheck, Camera, Truck, Phone, CheckCircle2, Clock, Award, FileText } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
+import { isIndexedCity } from "@/data/seoIndexable";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
@@ -76,7 +77,7 @@ const QurbaniCityView = ({ city }: { city: NonNullable<ReturnType<typeof getCity
 
   return (
     <PageLayout>
-      <SEOHelmet title={title} description={desc} path={`/qurbani/${city.slug}`} />
+      <SEOHelmet title={title} description={desc} path={`/qurbani/${city.slug}`} noindex={!isIndexedCity(city.slug)} />
       <SiteSchemas />
       <BreadcrumbSchema items={[
         { name: isAr ? "الرئيسية" : "Home", url: "https://elyusr.org/" },

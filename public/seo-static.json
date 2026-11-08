@@ -1,134 +1,1668 @@
 {
-  "/donate": {
-    "ar": { "title": "تبرع أونلاين في مصر | مؤسسة اليسر الخيرية", "description": "تبرع من أي مكان في مصر بالبطاقة أو المحفظة أو إنستاباي أو تحويل بنكي، واحصل على رقم تتبع وتوثيق بالصور لوصول تبرعك." },
-    "en": { "title": "Donate online in Egypt | Al-Yusr Charity Foundation", "description": "Give from anywhere in Egypt by card, wallet, InstaPay or bank transfer, and get a tracking number and photo proof of delivery." }
+ "/": {
+  "ar": {
+   "title": "مؤسسة اليسر الخيرية بالمنصورة | أمانة في العطاء وأثرٌ يدوم",
+   "description": "مؤسسة اليسر الخيرية — مؤسسة خيرية مصرية مشهرة برقم 2665، تعمل في محافظات مصر ومقرها الرئيسي في المنصورة. نوصل تبرعاتكم وزكاتكم إلى مستحقيها بأمانة وتوثيق…",
+   "h1": "معًا نصل بصدقتك لمن يستحق",
+   "summary": "يصل تبرعك إلى أسرة مستحقة بأيدي متطوعينا الموثوقين، بسرعة وشفافية وبأعلى معايير الأمانة، ونُطلعك على أثر كل مساهمة خطوة بخطوة. تبرعك استثمار لآخرتك وطمأنينة في دنياك؛ موثّق وأثره ظاهر أمامك. وبتبرع بسيط تفتح باب أمل لأسرة كاملة، فكن أنت السبب. بدأت اليسر فريقًا اجتمع على عمل الخير وخدمة الأسر المستحقة. ومع اتساع العمل تأسست مؤسسة مشهرة رسميًا بوزارة التضامن الاجتماعي برقم 2665 لسنة 2019، لكي ينمو الخير بنظام وحوكمة وشفافية. وما زالت المسيرة مستمرة.",
+   "sections": [
+    "خيرك يوصل وأجرك يستمر",
+    "بدأنا فريقًا للخير، ثم أصبحنا مؤسسة مشهرة",
+    "محاور رسالتنا",
+    "كل تبرع منك يصنع فارقًا حقيقيًا في حياة أسرة مستحقة",
+    "حملات تصنع الأثر",
+    "قوة · إحسان · أمانة",
+    "شرفنا بزيارتك في مقر مؤسسة اليسر",
+    "كل أبواب الخير … حواليك",
+    "بيوت تغيّرت بخيركم",
+    "تبرع بسهولة وأمان"
+   ]
   },
-  "/cases": {
-    "ar": { "title": "حالات إنسانية عاجلة | مؤسسة اليسر الخيرية", "description": "حالات موثقة ميدانيًا محتاجة دعم عاجل: علاج، سكن، غذاء، تعليم. اختار حالة وتابع تحديثاتها لحد ما تكتمل." },
-    "en": { "title": "Urgent verified cases | Al-Yusr Charity Foundation", "description": "Field-verified cases that need urgent support: medical care, housing, food, education. Pick a case and follow its updates." }
-  },
-  "/programs": {
-    "ar": { "title": "برامج خيرية في مصر | إطعام وعلاج وكفالة أيتام ومياه — اليسر", "description": "كفالة الأيتام، الزكاة، صكوك الأضاحي، الإطعام والغذاء الشهري، توصيل المياه والتعليم في مصر — برامج دائمة بتوثيق كامل لكل تبرع." },
-    "en": { "title": "Charity programs in Egypt | Al-Yusr Charity Foundation", "description": "Orphan sponsorship, zakat, qurbani, monthly food, clean water and education — ongoing programs with full proof for every gift." }
-  },
-  "/projects": {
-    "ar": { "title": "مشاريع صدقة جارية في مصر | مساجد، توصيل مياه، وقف — اليسر", "description": "بناء المساجد، المزرعة الوقفية، سقيا الماء، تسقيف البيوت، جهاز العرائس وسيارات تكريم الإنسان — صدقة جارية أجرها مستمر." },
-    "en": { "title": "Al-Yusr development projects | Ongoing charity", "description": "Mosques, a waqf farm, clean water, home roofing, orphan brides and mortuary vans — sadaqah jariyah with lasting reward." }
-  },
-  "/campaigns": {
-    "ar": { "title": "حملات ومبادرات اليسر | مؤسسة اليسر الخيرية", "description": "حملات موسمية ودائمة: ظل، ستر، أثر، موسم الخير، مركون، عربون خير والغذاء الشهري." },
-    "en": { "title": "Al-Yusr campaigns | Al-Yusr Charity Foundation", "description": "Seasonal and ongoing campaigns: Dhill, Setr, Athar, Ramadan, Markoun, Arboun Kheir and monthly food." }
-  },
-  "/trust": {
-    "ar": { "title": "الشفافية في مؤسسة اليسر الخيرية", "description": "مؤسسة أهلية مشهرة برقم 2665 لسنة 2019: رقم تتبع لكل تبرع، توثيق بالصور والفيديو، ودفع آمن لا نحتفظ فيه ببيانات بطاقتك." },
-    "en": { "title": "Transparency at Al-Yusr Charity Foundation", "description": "Licensed NGO No. 2665/2019: a tracking number for every donation, photo and video proof, and secure payment that never stores your card." }
-  },
-  "/privacy": {
-    "ar": { "title": "سياسة الخصوصية | مؤسسة اليسر الخيرية", "description": "إزاي بنجمع بيانات المتبرعين ونحميها ونستخدمها، وحقوقك في الاطلاع والتصحيح والحذف، والتبرع كفاعل خير." },
-    "en": { "title": "Privacy policy | Al-Yusr Charity Foundation", "description": "How we collect, protect and use donor data, your rights to access, correct and delete it, and giving anonymously." }
-  },
-  "/about": {
-    "ar": { "title": "من نحن | مؤسسة اليسر الخيرية — مؤسسة خيرية في مصر", "description": "مؤسسة أهلية مصرية منذ 2019 تعمل في محافظات مصر، ومقرها الرئيسي في المنصورة: كفالة الأيتام، الغذاء، العلاج، التعليم، السكن والمياه." },
-    "en": { "title": "About us | Al-Yusr Charity Foundation — Egypt", "description": "An Egyptian NGO since 2019 working across Egypt, headquartered in Mansoura: orphans, food, medical care, education, housing and water." }
-  },
-  "/charity-mansoura": {
-    "ar": { "title": "مؤسسة خيرية في المنصورة | مؤسسة اليسر الخيرية", "description": "مؤسسة اليسر الخيرية مشهرة برقم 2665/2019، مقرها في المنصورة وتعمل في محافظات مصر. تبرع بالمال أو الزكاة أو الأضحية أو الملابس والأثاث المستعمل، مع توثيق لكل تبرع." },
-    "en": { "title": "Charity in Mansoura, Egypt | Al-Yusr Charity Foundation", "description": "Al-Yusr Charity Foundation (No. 2665/2019) is headquartered in Mansoura and works across Egypt. Give money, zakat, qurbani or used clothes and furniture — with proof for every gift." }
-  },
-  "/contact": {
-    "ar": { "title": "تواصل معنا | مؤسسة اليسر الخيرية", "description": "واتساب وهاتف +20 109 700 0137، التحويل البنكي CIB، وزيارة المقر — فريقنا بيرد عليك بسرعة." },
-    "en": { "title": "Contact us | Al-Yusr Charity Foundation", "description": "WhatsApp and phone +20 109 700 0137, CIB bank transfer, and our head office — our team replies fast." }
-  },
-  "/faqs": {
-    "ar": { "title": "الأسئلة الشائعة | مؤسسة اليسر الخيرية", "description": "إجابات عن التبرع والزكاة والأضاحي وتتبع التبرع وطرق الدفع والتوثيق." },
-    "en": { "title": "FAQs | Al-Yusr Charity Foundation", "description": "Answers about donating, zakat, qurbani, tracking your donation, payment methods and proof." }
-  },
-  "/blog": {
-    "ar": { "title": "مدونة اليسر | أدلة الزكاة والأضحية وقصص الأثر", "description": "مقالات عن الزكاة والأضحية ورمضان والصدقة الجارية، وأخبار الحملات وتقارير الأثر." },
-    "en": { "title": "Al-Yusr blog | Zakat, qurbani and impact stories", "description": "Guides on zakat, qurbani, Ramadan and ongoing charity, plus campaign news and impact reports." }
-  },
-  "/stories": {
-    "ar": { "title": "قصص الأثر — حكايات حقيقية من أسر وصلها خيركم | مؤسسة اليسر", "description": "قصص حقيقية موثّقة لأسر وأطفال في الدقهلية ومحافظات مصر اتغيّرت حياتهم بتبرعاتكم: إطعام، علاج، تعليم، سكن وجهاز عرائس." },
-    "en": { "title": "Impact stories — real families your giving reached | Al-Yusr", "description": "Documented, real stories of families and children across Egypt whose lives changed thanks to your donations." }
-  },
-  "/donate/track": {
-    "ar": { "title": "تتبع تبرعك | مؤسسة اليسر الخيرية", "description": "اكتب رقم التتبع وشوف مرحلة تنفيذ تبرعك وصور التسليم بدون تسجيل دخول." },
-    "en": { "title": "Track your donation | Al-Yusr Charity Foundation", "description": "Enter your tracking number to see your donation's progress and delivery photos — no login needed." }
-  },
-  "/zakat": {
-    "ar": { "title": "حاسبة زكاة المال بسعر الذهب اليوم في مصر | مؤسسة اليسر", "description": "احسب زكاة مالك وذهبك وأخرجها لأسر مستحقة موثقة في المنصورة والدقهلية ومحافظات مصر." },
-    "en": { "title": "Zakat calculator Egypt | Al-Yusr Charity Foundation", "description": "Calculate the zakat on your money and gold and give it to verified families." }
-  },
-  "/setr": {
-    "ar": { "title": "حملة سِتر — دفء الشتاء | مؤسسة اليسر الخيرية", "description": "تسقيف بيوت، أبواب وشبابيك، أسرة ومراتب، ألحفة وكسوة شتاء للأسر المستحقة." },
-    "en": { "title": "Setr winter campaign | Al-Yusr Charity Foundation", "description": "Roofs, doors and windows, beds, blankets and winter clothing for families in need." }
-  },
-  "/takrim": {
-    "ar": { "title": "غسل وتكفين ونقل الموتى في المنصورة | تكريم الإنسان — مؤسسة اليسر", "description": "خدمة غسل وتكفين الميت وسيارات نقل الموتى داخل المنصورة، بدون مقابل للأسر غير القادرة، والمرحلة القادمة القاهرة." },
-    "en": { "title": "Funeral washing, shrouding & vans in Mansoura | Takrim — Al-Yusr", "description": "Washing, shrouding and funeral van service inside Mansoura, free for families in need, expanding to Cairo next." }
-  },
-  "/water": {
-    "ar": { "title": "توصيل مياه نظيفة للبيوت في مصر | وصلة مياه صدقة جارية — اليسر", "description": "وصلات مياه شرب نظيفة وفلاتر للقرى في الدقهلية: أمان لصحة الأطفال وكبار السن وراحة للأسر — صدقة جارية." },
-    "en": { "title": "Clean water connections | Al-Yusr Charity Foundation", "description": "Clean home water connections and village filters in Dakahlia: safety for children and elders — ongoing charity." }
-  },
-  "/nurseries": {
-    "ar": { "title": "حضانات اليسر التعليمية ودور تحفيظ القرآن للأطفال | مؤسسة اليسر", "description": "حضانات تعليمية للأطفال من 4 إلى 6 سنوات ودور تحفيظ القرآن من 4 إلى 16 سنة، بمناهج متخصصة تبنيها مؤسسة اليسر وتشرف عليها، وفريق تربوي ومسابقات قرآن." },
-    "en": { "title": "Al-Yusr learning nurseries & Qur'an houses", "description": "Learning nurseries for ages 4–6 and Qur'an houses for ages 4–16, with curricula built and supervised by Al-Yusr, an educational team and Qur'an competitions." }
-  },
-  "/mosques": {
-    "ar": { "title": "التبرع لبناء مسجد في مصر وإعمار المساجد | مؤسسة اليسر", "description": "ساهم مع مؤسسة اليسر في بناء مسجد جديد في القرى المحرومة، أو في إعادة إعمار مسجد قائم بترميمه وفرشه وتجهيزه. صدقة جارية بأجر كل صلاة." },
-    "en": { "title": "Build or restore a mosque | Al-Yusr", "description": "Help Al-Yusr build new mosques in underserved villages, or restore, carpet and equip standing ones. Ongoing charity with the reward of every prayer." }
-  },
-  "/medical": {
-    "ar": { "title": "علاج المرضى غير القادرين في مصر: عمليات وروشتات وأشعة | اليسر", "description": "مجمعات اليسر الطبية، صرف روشتات، عمليات جراحية، أشعة وتحاليل، أطراف صناعية وكراسي متحركة، وتحدّي الإعاقة في الدقهلية والمنصورة." },
-    "en": { "title": "Medical aid: prescriptions, surgery, scans, tests & prosthetics | Al-Yusr", "description": "Al-Yusr medical complexes, prescriptions, surgeries, scans and lab tests, prosthetic limbs and disability support in Dakahlia." }
-  },
-  "/ten-days": {
-    "ar": { "title": "صدقات العشر الأوائل من ذي الحجة | مؤسسة اليسر", "description": "صدقة يومية طوال العشر، إفطار صائم يوم عرفة، لحوم بلدي، سقيا ماء، وصك أضحية يوم النحر مع مؤسسة اليسر." },
-    "en": { "title": "Charity in the first ten days of Dhul Hijjah | Al-Yusr", "description": "A daily charity, iftar on the day of Arafah, local meat, water and a Qurbani share with Al-Yusr." }
-  },
-  "/misbaha": {
-    "ar": { "title": "المسبحة الإلكترونية | صلاة على النبي وتسبيح واستغفار — مؤسسة اليسر", "description": "مسبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وفضل كل ذكر، واعمل سبحة مشتركة لروح حد غالي أو بنية شفاء مريض.", "image": "https://elyusr.org/og/misbaha.jpg?v=2026.11" },
-    "en": { "title": "Digital tasbih | Al-Yusr", "description": "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter and the virtue of each dhikr.", "image": "https://elyusr.org/og/misbaha.jpg?v=2026.11" }
-  },
-  "/dhill": {
-    "ar": { "title": "حملة ظِلّ — سقيا الماء | مؤسسة اليسر الخيرية", "description": "وصلات مياه نظيفة وأسقف للأسر المستحقة — صدقة جارية." },
-    "en": { "title": "Dhill campaign — clean water | Al-Yusr Charity Foundation", "description": "Clean water connections and roofs for families in need — ongoing charity." }
-  },
-  "/athar": {
-    "ar": { "title": "حملة أَثَر — دعم التعليم | مؤسسة اليسر الخيرية", "description": "حقائب وزي مدرسي ومصروفات وكتب للطلاب غير القادرين." },
-    "en": { "title": "Athar campaign — education | Al-Yusr Charity Foundation", "description": "School bags, uniforms, fees and books for students in need." }
-  },
-  "/ramadan": {
-    "ar": { "title": "كرتونة رمضان وإفطار صائم في مصر | موسم الخير — اليسر", "description": "كرتونة رمضان (كرتونة الخير)، إفطار صائم، زكاة الفطر وكسوة العيد للأسر المستحقة في مصر مع مؤسسة اليسر الخيرية." },
-    "en": { "title": "Ramadan season | Al-Yusr Charity Foundation", "description": "Food boxes, iftar meals, zakat al-fitr and Eid clothing." }
-  },
-  "/markoun": {
-    "ar": { "title": "التبرع بالملابس المستعملة والأثاث في المنصورة | مَرْكون", "description": "تبرع بالملابس المستعملة والأثاث والأجهزة والكتب مع استلام مجاني من البيت في المنصورة والدقهلية — حملة مَرْكون من مؤسسة اليسر." },
-    "en": { "title": "Donate used clothes & furniture in Mansoura | Markoun — Al-Yusr", "description": "Donate used clothes, furniture, appliances and books with free doorstep pickup in Mansoura and Dakahlia — Al-Yusr's Markoun campaign." }
-  },
-  "/arboun": {
-    "ar": { "title": "مبادرة عربون خير للمستقلين | مؤسسة اليسر الخيرية", "description": "خصص نسبة من أرباح كل مشروع صدقةً — مبادرة للفريلانسرز والمستقلين." },
-    "en": { "title": "Arboun Kheir for freelancers | Al-Yusr Charity Foundation", "description": "Give a share of every project's earnings as charity — an initiative for freelancers." }
-  },
-  "/food-box": {
-    "ar": { "title": "إطعام وكرتونة غذاء شهرية في مصر | الغذاء الشهري — اليسر", "description": "لحوم من ذبائح شهرية، كرتونة 14 كيلو، ووجبات إطعام تصلح كفارة صيام أو يمين." },
-    "en": { "title": "Monthly food — meat, boxes and meals | Al-Yusr Charity Foundation", "description": "Monthly meat, a 14 kg staples box, and meals valid for fasting or oath expiation." }
-  },
-  "/farm": {
-    "ar": { "title": "المزرعة الوقفية | مؤسسة اليسر الخيرية", "description": "وقف إنتاجي تتوزع ثماره على الأسر والأيتام كل سنة — صدقة جارية لا تنقطع." },
-    "en": { "title": "The waqf farm | Al-Yusr Charity Foundation", "description": "A productive endowment whose harvest goes to families and orphans every year." }
-  },
-  "/charity-mansoura": {
-    "ar": {"title": "جمعية خيرية في المنصورة | مؤسسة اليسر الخيرية", "description": "مؤسسة اليسر جمعية خيرية مشهرة برقم 2665 مقرها المنصورة (تقسيم خطاب). اتبرع أونلاين بأمان، أو اطلب مساعدة، أو اتبرع بملابس وأثاث يتستلموا من بيتك.", "h1": "جمعية خيرية في المنصورة: مؤسسة اليسر الخيرية", "summary": "مؤسسة اليسر الخيرية مؤسسة أهلية مشهرة برقم 2665 لسنة 2019 من وزارة التضامن الاجتماعي، مقرها في المنصورة (تقسيم خطاب، بجوار وكالة المنصورة). بنوصّل التبرعات لأسر محتاجة في المنصورة ومراكز وقرى الدقهلية: كفالة أيتام، وغذاء شهري، وعلاج، وسقيا ماء، وصكوك أضحية. تقدر تتبرع أونلاين بالكارت عن طريق كاشير أو بالتحويل وتاخد رقم تتبع لكل تبرع، أو تتبرع بملابس وأثاث وأجهزة ومندوبنا يستلمها من بيتك، أو تتطوع معانا. ولو محتاج مساعدة، ابعتلنا على واتساب اسمك ومنطقتك ونوع المساعدة.", "facts": {"العنوان": "المنصورة، تقسيم خطاب، بجوار وكالة المنصورة، أمام المصرية الكندية للمطابخ، الدقهلية", "المواعيد": "السبت – الخميس: 10 ص – 9 م (الجمعة إجازة)", "التليفون وواتساب": "0109 700 0137", "الإشهار": "مشهرة برقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي"}, "donate_url": "https://elyusr.org/donate"},
-    "en": {"title": "Charity in Mansoura | Al-Yusr Charity Foundation", "description": "Al-Yusr is a registered charity (No. 2665) based in Mansoura. Donate online securely, ask for help, or give clothes and furniture picked up from your home.", "h1": "A charity in Mansoura: Al-Yusr Charity Foundation", "summary": "Al-Yusr Charity Foundation is an NGO registered under No. 2665 of 2019 with the Ministry of Social Solidarity, based in Mansoura (Khattab District, next to Mansoura Agency). We deliver donations to families in need across Mansoura and Dakahlia: orphan sponsorship, monthly food, medical care, clean water and qurbani. Donate online by card through Kashier or by transfer and get a tracking number for every gift, give clothes, furniture and appliances picked up from your home, or volunteer with us. If you need help, send your name, area and the help you need on WhatsApp.", "facts": {"Address": "Mansoura, Khattab District, next to Mansoura Agency, opposite Egyptian Canadian Kitchens, Dakahlia", "Hours": "Sat – Thu: 10am – 9pm (closed Friday)", "Phone & WhatsApp": "+20 109 700 0137", "Registration": "NGO No. 2665 of 2019 — Ministry of Social Solidarity"}, "donate_url": "https://elyusr.org/donate"}
-  },
-  "/charity-egypt": {
-    "ar": {"title": "جمعية خيرية مشهرة في مصر | اتبرع أونلاين — مؤسسة اليسر", "description": "مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019. اتبرع أونلاين من أي محافظة في مصر بالكارت أو المحفظة أو إنستاباي، وتابع تبرعك برقم تتبع.", "h1": "جمعية خيرية مصرية مشهرة: اتبرع من أي محافظة", "summary": "مؤسسة اليسر الخيرية مؤسسة أهلية مشهرة برقم 2665 لسنة 2019 من وزارة التضامن الاجتماعي، ومقرها في المنصورة. تقدر تتبرع أونلاين من أي محافظة في مصر بالكارت (فيزا وماستركارد) عن طريق بوابة كاشير، أو بالمحافظ الإلكترونية أو إنستاباي أو التحويل البنكي، وكل تبرع بياخد رقم تتبع وإيصال. أغلب شغلنا في محافظة الدقهلية بمراكزها وقراها، ومجمع اليسر الطبي في الحفير بيخدم قرى بين الدقهلية وكفر الشيخ، وبعض المشاريع بتوصل لمحافظات تانية.", "facts": {"الإشهار": "مشهرة برقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي", "طرق الدفع": "الكارت عبر كاشير، المحافظ الإلكترونية، إنستاباي، التحويل البنكي", "المقر": "المنصورة، تقسيم خطاب، بجوار وكالة المنصورة، الدقهلية", "التليفون وواتساب": "0109 700 0137"}, "donate_url": "https://elyusr.org/donate"},
-    "en": {"title": "Registered Egyptian charity | Donate online — Al-Yusr", "description": "Al-Yusr Charity Foundation is registered under No. 2665 of 2019. Donate online from any governorate in Egypt by card, wallet or InstaPay, and follow your gift with a tracking number.", "h1": "A registered Egyptian charity: give from anywhere in Egypt", "summary": "Al-Yusr Charity Foundation is an NGO registered under No. 2665 of 2019 with the Ministry of Social Solidarity, based in Mansoura. You can give online from any governorate in Egypt by card (Visa and Mastercard) through the Kashier gateway, or by mobile wallet, InstaPay or bank transfer, and every gift gets a tracking number and a receipt. Most of our work is in Dakahlia's towns and villages; the El-Hafir medical complex serves villages between Dakahlia and Kafr El-Sheikh, and some projects reach other governorates.", "facts": {"Registration": "NGO No. 2665 of 2019 — Ministry of Social Solidarity", "Payment methods": "Card through Kashier, mobile wallets, InstaPay, bank transfer", "Office": "Mansoura, Khattab District, next to Mansoura Agency, Dakahlia", "Phone & WhatsApp": "+20 109 700 0137"}, "donate_url": "https://elyusr.org/donate"}
-  },
-  "/donate-from-abroad": {
-    "ar": {"title": "التبرع لمصر من الخارج | مؤسسة اليسر الخيرية", "description": "عايش برا مصر؟ اتبرع لمؤسسة اليسر الخيرية (مشهرة برقم 2665) بالكارت أونلاين من أي بلد أو بتحويل بنكي دولي، وتابع تبرعك برقم تتبع.", "h1": "اتبرع لمصر من برا مصر", "summary": "للمصريين في الخارج وللإخوة العرب: تقدر تتبرع لمؤسسة اليسر الخيرية، المشهرة برقم 2665 لسنة 2019، من أي بلد. بالكارت أونلاين (فيزا أو ماستركارد) عن طريق بوابة كاشير، والمبلغ بالجنيه المصري وبنكك بيحوّله لعملتك، أو بتحويل بنكي دولي بعد ما تطلب بيانات الحساب (IBAN وSWIFT) على واتساب. كل تبرع بياخد رقم تتبع تتابعه بيه من أي مكان، وتقدر تطلّع زكاة مالك أو صك أضحية في مصر وانت برا.", "facts": {"بالكارت": "فيزا أو ماستركارد من أي بلد عبر كاشير", "تحويل بنكي دولي": "بيانات الحساب (IBAN وSWIFT) على واتساب +20 109 700 0137", "المواعيد بتوقيت القاهرة": "السبت – الخميس: 10 ص – 9 م (الجمعة إجازة)", "الإشهار": "مشهرة برقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي"}, "donate_url": "https://elyusr.org/donate"},
-    "en": {"title": "Donate to Egypt from abroad | Al-Yusr Charity Foundation", "description": "Living outside Egypt? Give to Al-Yusr Charity Foundation (registered No. 2665) by card from any country or by international bank transfer, and follow your gift with a tracking number.", "h1": "Donate to Egypt from abroad", "summary": "For Egyptians abroad and Arab donors: you can give to Al-Yusr Charity Foundation, registered under No. 2665 of 2019, from any country. Pay by card online (Visa or Mastercard) through the Kashier gateway — amounts are in Egyptian pounds and your bank converts them — or by international bank transfer once you ask for the account details (IBAN and SWIFT) on WhatsApp. Every gift gets a tracking number you can check from anywhere, and you can pay zakat or a qurbani in Egypt from abroad.", "facts": {"By card": "Visa or Mastercard from any country through Kashier", "International transfer": "Account details (IBAN and SWIFT) on WhatsApp +20 109 700 0137", "Hours, Cairo time": "Sat – Thu: 10am – 9pm (closed Friday)", "Registration": "NGO No. 2665 of 2019 — Ministry of Social Solidarity"}, "donate_url": "https://elyusr.org/donate"}
+  "en": {
+   "title": "Al-Yusr Charity Foundation | Compassionate Giving &…",
+   "description": "Licensed Egyptian NGO 2665, working across Egypt and headquartered in Mansoura. Delivering your zakat and donations with integrity, verified transparency and…",
+   "h1": "Together We Deliver Your Charity To Those in Need",
+   "summary": "Your donation reaches a deserving family today through our trusted volunteers — fast, transparent, and documented with care. Every gift is tracked with its impact shown step by step. Your donation is your investment in the hereafter and your peace in this life — documented and visible in impact. A simple gift opens a door of hope for a whole family. Be the reason. Every donation tracked, every impact visible",
+   "sections": [
+    "Your good arrives Your reward continues",
+    "We began as a team for good and grew into a registered foundation",
+    "Our Work Axes",
+    "Every donation makes a real difference in a deserving family's life",
+    "Campaigns that make impact",
+    "Strength · Excellence · Trust",
+    "Welcome to Al-Yusr Headquarters",
+    "Every door of good … around you",
+    "Homes your giving changed",
+    "Donate easily & safely"
+   ]
   }
+ },
+ "/about": {
+  "ar": {
+   "title": "من نحن | مؤسسة اليسر الخيرية — مؤسسة خيرية في مصر",
+   "description": "مؤسسة اليسر الخيرية مؤسسة مصرية تعمل في محافظات مصر، ومقرها الرئيسي في المنصورة. تعرّف على رسالتها ومشاريعها الموثقة في رعاية الأيتام والإغاثة والتنمية.",
+   "h1": "مؤسسة اليسر الخيرية",
+   "summary": "مؤسسة غير ربحية أُشهرت عام 2019 بوزارة التضامن الاجتماعي، هدفها أن تصل الصدقة إلى مستحقيها في المنصورة والدقهلية وسائر محافظات مصر. بعد أكثر من عشر سنوات في العمل الخيري، كان لا بد من كيان منظم ومرخّص يجمع أعمالنا ويضبط جمع التبرعات وتوزيعها؛ مؤسسة قادرة على تغيير مفهوم العمل الخيري، ويكبر أثرها مع كل مبادرة. الإشهار الرسمي هو نقطة البداية فقط. ما يميز اليسر منظومة عمل متكاملة تضمن أن تصل كل صدقة إلى من يستحقها، وأن ترى بنفسك أين ذهب تبرعك.",
+   "sections": [
+    "إحصائيات الأثر",
+    "قصتنا",
+    "لسنا مجرد مؤسسة مشهرة رسمياً",
+    "رؤيتنا لعام 2030",
+    "لماذا تثق بنا؟",
+    "نزرع اليوم… ليثمر غدًا في كل بيت في مصر",
+    "قيمنا",
+    "أنشطتنا الدائمة",
+    "اعتماد وثقة رسمية",
+    "رحلتنا وتاريخنا"
+   ]
+  },
+  "en": {
+   "title": "About Us | Al-Yusr Charity Foundation — Egypt",
+   "description": "Al-Yusr Charity Foundation is an Egyptian foundation working across Egypt, headquartered in Mansoura. Learn about our mission and verified projects.",
+   "h1": "Al-Yusr Charity Foundation",
+   "summary": "Non-profit foundation established in 2019, registered with the Ministry of Social Solidarity. Our mission is to deliver charity directly to those who truly deserve it across Egypt. Al-Yusr Charity Foundation was born after more than a decade of direct grassroots volunteering across Egyptian villages, officially incorporated in 2019 (#2665) to maximize donation impact with transparency. We seek to create sustainable impact and improve beneficiaries' quality of life.",
+   "sections": [
+    "Our impact numbers",
+    "Our Story",
+    "More than an officially registered NGO",
+    "Vision 2030 Roadmap",
+    "Why trust Al-Yusr?",
+    "We plant today — to bloom tomorrow in every home across Egypt",
+    "Our Values",
+    "Our Ongoing Activities",
+    "Official Accreditation",
+    "Our Journey & Milestones"
+   ]
+  }
+ },
+ "/arboun": {
+  "ar": {
+   "title": "عربون خير — مبادرة اليسر للمستقلين | مؤسسة اليسر الخيرية",
+   "description": "استقطع نسبة من مشروعك القادم لكفالة يتيم أو تيسير زواج. مبادرة اليسر الخيرية الأولى للمستقلين والفريلانسرز في مصر، مشهرة برقم 2665.",
+   "h1": "اتصدق النهاردة.. وخليه عربون لرزق بكرة!",
+   "summary": "تجمع مبادرة «عربون خير» مجتمع الفريلانسرز والمستقلين ليستثمروا جزءًا بسيطًا من أرباح مشاريعهم في الآخرة. طهّر رزقك، وتخلّص من ضغط العمل وقلقه، واترك أثرًا حقيقيًا يكفل يتيمًا، أو ييسّر زواجًا، أو يبني صدقة جارية. أثر الصدقة المباشر في راحة بالك، واستقرار عملك الحر، وبركة رزقك اليوم وغدًا. العميل لا يرد؟ التعديلات لا تنتهي؟ وتخشى فترات ركود السوق؟ الصدقة تُطمئن القلب، وتخفف ضغط التفكير، وتيسّر المشاريع المعقدة، وتفتح أبواب رزق من حيث لا تحتسب.",
+   "sections": [
+    "لماذا تشارك في «عربون خير»؟",
+    "اتصدق النهاردة..",
+    "وخليه عربون لبركة بكرة",
+    "اختر سهمك من أرباح مشروعك الأخير",
+    "احسب عربون خيرك، ليبارك الله في رزقك",
+    "كيف تنضم للمبادرة؟",
+    "أين يذهب عربون خيرك على الأرض؟",
+    "«أنهِ مشروعك القادم… واستثمر في الآخرة»",
+    "أسئلة شائعة حول مبادرة عربون خير"
+   ]
+  },
+  "en": {
+   "title": "Arboun Khair Initiative | Al-Yusr Charity Foundation",
+   "description": "Pledge a portion of your next project to sponsor an orphan or support a marriage. Al-Yusr's first giving initiative for freelancers & independents in Egypt.",
+   "h1": "Donate Today.. A Pledge for Tomorrow's Barakah!",
+   "summary": "Arboun Khair unites freelancers and remote professionals to invest a flexible fraction of their project earnings in lasting charity. Cleanse your income, alleviate work anxiety, and leave a verified footprint that supports orphans, brides, and clean water. The direct impact of charity on your peace of mind, career stability, and barakah. Client delays? Endless revisions? Market slowdown fears? Charity brings peace of mind, removes mental fatigue, and unlocks unexpected doors of provision.",
+   "sections": [
+    "Why Join Arboun Khair?",
+    "اتصدق النهاردة..",
+    "وخليه عربون لبركة بكرة",
+    "Choose Your Project Share",
+    "Calculate Your Pledge & Bless Your Work",
+    "How to Join?",
+    "Where Does Your Pledge Go?",
+    "«Close your next deal.. Invest in the Hereafter»",
+    "Frequently Asked Questions"
+   ]
+  }
+ },
+ "/athar": {
+  "ar": {
+   "title": "المساعدات التعليمية — «شنطة وقلم النهاردة.. أثر يعيش…",
+   "description": "شارك في حملة أَثَر التعليمية مع مؤسسة اليسر: شنط وأدوات مدرسية، زي مدرسي، سداد المصروفات الدراسية، ومبادرة تدوير الكتب «أثر يتوارث»، ودور تحفيظ القرآن وحضانات…",
+   "h1": "شنطة وقلم النهاردة أثرٌ يعيش ويغيّر بكرا",
+   "summary": "نؤمن في مؤسسة اليسر أن التعليم هو السلاح الحقيقي لبناء الإنسان، والأثر الوحيد المتين الذي يكسر دائرة الفقر وينقل الأسر المستحقة إلى المستقبل. مساهمتك اليوم في تجهيز طالب استثمار مباشر في طفل ستتغير حياته إلى الأبد. شارك في حملة أَثَر التعليمية مع مؤسسة اليسر: شنط وأدوات مدرسية، زي مدرسي، سداد المصروفات الدراسية، ومبادرة تدوير الكتب «أثر يتوارث»، ودور تحفيظ القرآن وحضانات نموذجية بالدقهلية. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "المساعدات التعليمية — «شنطة وقلم النهاردة.. أثر يعيش ويغيّر بكرا»",
+    "اختر ما يحتاجه الطالب هذا العام",
+    "خمس طرق نصنع بها الأثر",
+    "كتاب ورسالة من طالب لطالب",
+    "كتب العام الماضي تصنع أثرًا هذا العام",
+    "علمٌ يُنتفع به باسم من تحب",
+    "على مدار العام الدراسي",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "شنطة وقلم النهاردة.. خطوة لتخريج طبيب أو مهندس يرفع أهله ويخدم مجتمعه"
+   ]
+  },
+  "en": {
+   "title": "Educational Aid — 'A backpack & pen today.. an impact that…",
+   "description": "Join Al-Yusr's Athar Education Campaign: school bags, supplies, uniforms, tuition sponsorship, textbook recycling, and Quranic pre-schools across Dakahlia,…",
+   "h1": "A bag and a pen today an impact that changes tomorrow",
+   "summary": "Education is the true weapon to lift families out of poverty. Supporting a student with a backpack, school supplies, tuition, and uniforms is a direct investment in a child whose future will be rewritten. Join Al-Yusr's Athar Education Campaign: school bags, supplies, uniforms, tuition sponsorship, textbook recycling, and Quranic pre-schools across Dakahlia, Egypt. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Educational Aid — 'A backpack & pen today.. an impact that transforms tomorrow'",
+    "Pick what a student needs this year",
+    "Five ways we make an impact",
+    "A book and a note, student to student",
+    "Last year's books, this year's impact",
+    "Beneficial knowledge, in a loved one's name",
+    "Across the school year",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "A bag and pen today.. a step toward graduating a doctor or engineer tomorrow"
+   ]
+  }
+ },
+ "/blog": {
+  "ar": {
+   "title": "مدونة اليسر — أدلة الزكاة والصدقة والتبرع في مصر",
+   "description": "أدلة عملية للمتبرع: حساب الزكاة، الصدقة الجارية، الكفارات والفدية، كفالة اليتيم، وإزاي تتأكد إن تبرعك وصل — مع قصص أثر حقيقية من مؤسسة اليسر.",
+   "h1": "مدونة اليسر: أدلة المتبرع وقصص الأثر",
+   "summary": "إجابات واضحة عن الزكاة والصدقة والكفارات، وتحديثات حقيقية من الميدان في المنصورة والدقهلية. حملة الدفء الشتوية لتوزيع البطاطين والملابس على الأسر في قرى الدقهلية. في عز الصيف، شربة ماء نظيفة لأسرة كاملة تعني حياة صحية وكرامة. شارك في حملة \"ظل\" لسقيا المياه مع مؤسسة اليسر.",
+   "sections": [
+    "تبرع بالملابس الشتوية 2026 — حملة دفء لقرى الدقهلية",
+    "نروي عطشهم في الدنيا — حملة ظل لسقيا الماء في عز الصيف",
+    "أثاثك القديم له قصة — تبرّع بمَرْكون وغيّر حياة أسرة كاملة",
+    "أكبر 5 أخطاء في التبرع أونلاين 2026 — وكيف تتجنبها",
+    "تطوير حملة مَرْكون 2026 — من المركون في بيتك إلى كرامة الأسرة",
+    "تبرعات الشركات في المنصورة 2026 — شراكات وأثر مستدام",
+    "حالات عاجلة في المنصورة 2026 — كيف نتعامل وكيف تساعد",
+    "صلاة عيد الأضحى في مسجد الصديق بالمنصورة",
+    "صك الأضاحي وفعاليات الذبح والتوزيع في المنصورة",
+    "قرى الدقهلية المحرومة — خريطة المساعدات 2026"
+   ]
+  },
+  "en": {
+   "title": "Al-Yusr Blog — Zakat, Sadaqa & Giving Guides in Egypt",
+   "description": "Practical guides for donors: zakat, ongoing charity, kaffara and fidya, orphan sponsorship, how to verify your donation arrived — plus real impact stories.",
+   "h1": "Al-Yusr Blog: donor guides & impact stories",
+   "summary": "Clear answers on zakat, sadaqa and kaffara, plus real field updates from Mansoura and Dakahlia. Winter warmth campaign distributing blankets and clothing to families across Dakahlia villages. A cold, clean drink of water can restore dignity and health. Join Al-Yusr's Shade campaign to install household water connections.",
+   "sections": [
+    "Winter Clothing Donation 2026 — Warmth Campaign for Dakahlia Villages",
+    "Quenching Thirst — Shade Campaign for Clean Water (Summer 2026)",
+    "Give Your Furniture a New Story — Markoun Furniture Drive 2026",
+    "Top 5 Mistakes in Online Donation 2026 — How to Avoid Them",
+    "Markoun 2026 Evolution — From Stored Home Items to Family Dignity",
+    "Corporate Donations in Mansoura 2026 — Partnerships & Sustainable Impact",
+    "Urgent Cases in Mansoura 2026 — How We Handle Them and How You Help",
+    "Eid Prayer at Al-Siddiq Mosque, Mansoura",
+    "Udhiyah & Distribution Activities in Mansoura",
+    "Underserved Dakahlia Villages — 2026 Aid Map"
+   ]
+  }
+ },
+ "/campaigns": {
+  "ar": {
+   "title": "اليسر — دليل حملات ومبادرات مؤسسة اليسر الخيرية | تبرعك…",
+   "description": "مؤسسة اليسر الخيرية — دليل كافة حملات ومبادرات اليسر: حملة ظل (سقيا ماء وأسقف معزولة)، حملة ستر (دفء الشتاء)، حملة مركون (إعادة تدوير الأثاث والأجهزة…",
+   "h1": "حملات ومبادرات اليسر",
+   "summary": "مبادرات نوعية مدروسة بعناية تغطي مسارات الخير كافة: من الصدقات الجارية وسقيا الماء وتسقيف البيوت، إلى إعادة تدوير الأثاث والأجهزة، ودعم التعليم وتيسير الزواج. يصل مندوب مؤسسة اليسر إلى باب بيتك بسيارات المؤسسة لفحص التبرعات واستلامها، ثم تُجدَّد قبل تسليمها إلى الأسر المستحقة. إجابات واضحة عن التبرع والحملات والتوثيق.",
+   "sections": [
+    "أسئلة شائعة عن الحملات"
+   ]
+  },
+  "en": {
+   "title": "Al-Yusr Charity Campaigns & Initiatives Hub | Make Real…",
+   "description": "Al-Yusr Charity Foundation — Discover all campaigns: Dhill (water & roofing), Setr (winter relief), Markoun (furniture & electronics reuse), Arboun Khair (for…",
+   "h1": "Al-Yusr Campaigns & Initiatives",
+   "summary": "Carefully structured initiatives spanning continuous charity, roof insulation, clean water, in-kind reuse of appliances & furniture, and student education. Our official logistics vans collect items right at your doorstep, refurbishing them for validated deserving families. Clear answers about donating, campaigns, and documentation.",
+   "sections": [
+    "Campaign FAQs"
+   ]
+  }
+ },
+ "/cases": {
+  "ar": {
+   "title": "حالات إنسانية موثّقة — تبرع لحالة محددة | مؤسسة اليسر",
+   "description": "اختر حالة بعينها من حالات العلاج والسكن والزواج والأيتام في الدقهلية. لكل حالة بحث ميداني، وتتابع المبلغ المُجمَّع والمتبقي والتحديثات بالصور حتى تُغلق.",
+   "h1": "اختر حالة… وتابع أثرك بعينك",
+   "summary": "أجرينا لكل حالة هنا بحثًا ميدانيًا وراجعنا أوراقها. ندفع للمستشفى أو المورد مباشرة، ونحدّث الصفحة بالصور حتى تُغلق الحالة. يمكنك التبرع للصندوق العام، وسيوجّهه فريقنا إلى أشد الحالات احتياجًا فور مراجعتها. يزور الباحث البيت ويراجع التقارير والأوراق قبل نشر أي حالة.",
+   "sections": [
+    "لا توجد حالات منشورة الآن",
+    "من البحث حتى التوثيق",
+    "هل تعرف شخصًا محتاجًا؟"
+   ]
+  },
+  "en": {
+   "title": "Verified Cases — Donate to a Specific Case | Al-Yusr Charity",
+   "description": "Fund a specific verified case in Dakahlia, Egypt — medical, housing, marriage and orphan care. Field-researched, with live progress and photo updates until…",
+   "h1": "Pick a case — and watch your impact",
+   "summary": "Every case is field-researched and document-checked. We pay the hospital or supplier directly and post photo updates until the case is closed. You can give to the general fund — our team directs it to the most urgent verified cases. A researcher visits and checks every document before a case is published.",
+   "sections": [
+    "No published cases right now",
+    "From field visit to proof",
+    "Know someone in need?"
+   ]
+  }
+ },
+ "/charity-egypt": {
+  "ar": {
+   "title": "جمعية خيرية مشهرة في مصر | اتبرع أونلاين — مؤسسة اليسر",
+   "description": "مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019. اتبرع أونلاين من أي محافظة في مصر بالكارت أو المحفظة أو إنستاباي، وتابع تبرعك برقم تتبع.",
+   "h1": "جمعية خيرية مصرية مشهرة: اتبرع من أي محافظة",
+   "summary": "مؤسسة اليسر الخيرية مؤسسة أهلية مشهرة برقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي، ومقرها في المنصورة. تقدر تتبرع أونلاين من أي محافظة، وتبرعك بيوصل لأسر محتاجة في الدقهلية والمحافظات اللي مشاريعنا بتوصلها. 4 طرق، وكلها من صفحة التبرع. اختار المشروع والمبلغ، وبعدها طريقة الدفع. برامج دايمة بتتحدّث من لوحة التحكم، وتقدر تتابع أي واحد فيها.",
+   "sections": [
+    "اتبرع إزاي من أي محافظة؟",
+    "مشاريع تقدر تتبرع لها من أي مكان",
+    "تبرعك بيوصل فين؟",
+    "أسئلة عن التبرع لجمعية خيرية في مصر"
+   ]
+  },
+  "en": {
+   "title": "Registered Egyptian charity | Donate online — Al-Yusr",
+   "description": "Al-Yusr Charity Foundation is registered under No. 2665 of 2019. Donate online from any governorate in Egypt by card, wallet or InstaPay, and follow your gift…",
+   "h1": "A registered Egyptian charity: give from anywhere in Egypt",
+   "summary": "Al-Yusr Charity Foundation is an NGO registered under No. 2665 of 2019, based in Mansoura. You can give online from any governorate, and your gift reaches families in need in Dakahlia and the governorates our projects reach. Four ways, all on the donate page: choose the cause and the amount, then how to pay. Ongoing programs updated from our dashboard; follow any of them.",
+   "sections": [
+    "How to give from anywhere in Egypt",
+    "Causes you can give to from anywhere",
+    "Where does your gift go?",
+    "Questions about giving to a charity in Egypt"
+   ]
+  }
+ },
+ "/charity-mansoura": {
+  "ar": {
+   "title": "جمعية خيرية في المنصورة | مؤسسة اليسر الخيرية",
+   "description": "مؤسسة اليسر جمعية خيرية مشهرة برقم 2665 مقرها المنصورة (تقسيم خطاب). اتبرع أونلاين بأمان، أو اطلب مساعدة، أو اتبرع بملابس وأثاث يتستلموا من بيتك.",
+   "h1": "جمعية خيرية في المنصورة: مؤسسة اليسر الخيرية",
+   "summary": "مؤسسة أهلية مشهرة برقم 2665 لسنة 2019، مقرها في المنصورة (تقسيم خطاب، بجوار وكالة المنصورة). بنوصّل تبرعك لأسر محتاجة في المنصورة وقرى الدقهلية، ولو محتاج مساعدة تقدر تتواصل معانا مباشرة. برامج دايمة تقدر تتبرع لأي واحد فيها وتتابعه. فريق اليسر وسيارة تكريم الإنسان بيوصلوا لك داخل مدينة المنصورة: غسل وتكفين على السنة، ونقل للمسجد وبعدين للمقابر. الخدمة مجانية لكل الناس.",
+   "sections": [
+    "بيانات الجمعية في المنصورة",
+    "بنعمل إيه في المنصورة والدقهلية",
+    "خدمات مجانية من اليسر في المنصورة وحواليها",
+    "إزاي تختار جمعية خيرية في المنصورة تثق فيها؟",
+    "محتاج مساعدة؟",
+    "بنخدم المنصورة وكل مراكز الدقهلية",
+    "أسئلة عن الجمعيات الخيرية في المنصورة"
+   ]
+  },
+  "en": {
+   "title": "Charity in Mansoura | Al-Yusr Charity Foundation",
+   "description": "Al-Yusr is a registered charity (No. 2665) based in Mansoura. Donate online securely, ask for help, or give clothes and furniture picked up from your home.",
+   "h1": "A charity in Mansoura: Al-Yusr Charity Foundation",
+   "summary": "A registered NGO (No. 2665 of 2019) based in Mansoura (Khattab District, next to Mansoura Agency). We deliver your gifts to families in need across Mansoura and Dakahlia, and if you need help you can reach us directly. Ongoing programs you can give to and follow. Al-Yusr's team and the Takrim van come to you inside Mansoura: washing and shrouding per the Sunnah, then to the mosque and the cemetery. Free for everyone.",
+   "sections": [
+    "Our details in Mansoura",
+    "What we do in Mansoura and Dakahlia",
+    "Free services from Al-Yusr in and around Mansoura",
+    "How to choose a charity in Mansoura you can trust",
+    "Do you need help?",
+    "Mansoura and every Dakahlia district",
+    "Questions about charities in Mansoura"
+   ]
+  }
+ },
+ "/contact": {
+  "ar": {
+   "title": "تواصل معنا — جمعيات خيرية بالمنصورة والدقهلية | مؤسسة اليسر",
+   "description": "تواصل مع فريق اليسر للاستفسار عن التبرع أو التطوع أو دعم الأسر المحتاجة عبر الصدقات والزكاة والأضاحي والكفالات مع توثيق مباشر.",
+   "h1": "رسالتك أمانة عندنا نرد خلال ٢٤ ساعة",
+   "summary": "سواء أردت أن تتبرّع، أو تقترح حالة، أو تتطوّع، أو تطمئن على وصول كرتونة، ففريقنا متاح من السبت إلى الخميس، من 10 صباحًا حتى 9 مساءً. من البريد الإلكتروني وواتساب إلى المكالمات والزيارات الميدانية، فريقنا مستعد لمتابعة طلبك وضمان وصول التبرعات بأسرع الطرق وأوضحها، وبكل أمانة. إشهار رقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي. كل تبرع موثّق بالصور والفيديو، وكل رسالة نرد عليها بأمانة تامة.",
+   "sections": [
+    "كل تفاصيل الاتصال بين يديك",
+    "أرسل إلينا رسالتك",
+    "المنصورة · تقسيم خطاب",
+    "أسئلة شائعة حول التواصل والزيارة"
+   ]
+  },
+  "en": {
+   "title": "Contact Us — charity support in Mansoura and Dakahlia |…",
+   "description": "Contact the Al-Yusr team for donation questions, volunteering, or support for needy families through sadaqah, zakat, qurbani, and sponsorship with direct…",
+   "h1": "Your message is a trust reply within 24 hours",
+   "summary": "Whether you want to donate, suggest a case, volunteer, or confirm a delivery — our team is here Saturday to Thursday, 10am–9pm. From email and WhatsApp to calls and field visits — our team is ready to follow up your request and ensure donations arrive fastest and most transparently. Registered NGO #2665 (2019) under the Ministry of Social Solidarity. Every donation is verified and documented.",
+   "sections": [
+    "All contact details within reach",
+    "Send us your message",
+    "Mansoura · Khattab District",
+    "Contact & Visit FAQs"
+   ]
+  }
+ },
+ "/dakahlia/mansoura/box": {
+  "ar": {
+   "title": "غذاء شهري — كرتونة + لحمة في المنصورة — اليسر الخيرية",
+   "description": "تبرّع بـغذاء شهري — كرتونة + لحمة في المنصورة مع توثيق بالصور والفيديو وتوصيل حتى باب البيت. مؤسسة اليسر الخيرية — مرخّصة 2665/2019.",
+   "h1": "غذاء شهري — كرتونة + لحمة في المنصورة — توصيل حتى باب البيت",
+   "summary": "فريق مؤسسة اليسر الخيرية في المنصورة يوصل غذاء شهري — كرتونة + لحمة إلى الأسر المستحقة بعد بحث ميداني وتوثيق كامل بالصور والفيديو. المقر الرئيسي — كل البرامج نشطة. يتعاون فريق اليسر في المنصورة مع أئمة المساجد والوحدات المحلية لتحديد الأسر المستحقة فعلًا، ونسلّم اللحم طازجًا في يوم الذبح نفسه. تغطية كاملة لقرى ومراكز المنصورة داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+   "sections": [
+    "لماذا غذاء شهري — كرتونة + لحمة في المنصورة؟",
+    "نطاق التوصيل",
+    "أسئلة شائعة",
+    "برامج أخرى في المنصورة",
+    "غذاء شهري — كرتونة + لحمة في مدن أخرى بالدقهلية"
+   ]
+  },
+  "en": {
+   "title": "Monthly Food — Box + Meat in Mansoura — Al-Yusr Charity",
+   "description": "Donate Monthly Food — Box + Meat in Mansoura with photo/video proof and doorstep delivery. Al-Yusr Charity — licensed (2665/2019).",
+   "h1": "Monthly Food — Box + Meat in Mansoura — doorstep delivery",
+   "summary": "Al-Yusr Charity's Mansoura team delivers Monthly Food — Box + Meat to verified families with full photo/video documentation. HQ — all programs active. Our Mansoura team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day. Full coverage of Mansoura villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+   "sections": [
+    "Why Monthly Food — Box + Meat in Mansoura?",
+    "Delivery coverage",
+    "FAQ",
+    "Other programs in Mansoura",
+    "Monthly Food — Box + Meat in other Dakahlia cities"
+   ]
+  }
+ },
+ "/dakahlia/mansoura/education": {
+  "ar": {
+   "title": "ادفع مصروفه وابنِ مستقبله في المنصورة — اليسر الخيرية",
+   "description": "تبرّع بـادفع مصروفه وابنِ مستقبله في المنصورة مع توثيق بالصور والفيديو وتوصيل حتى باب البيت. مؤسسة اليسر الخيرية — مرخّصة 2665/2019.",
+   "h1": "ادفع مصروفه وابنِ مستقبله في المنصورة — توصيل حتى باب البيت",
+   "summary": "فريق مؤسسة اليسر الخيرية في المنصورة يوصل ادفع مصروفه وابنِ مستقبله إلى الأسر المستحقة بعد بحث ميداني وتوثيق كامل بالصور والفيديو. المقر الرئيسي — كل البرامج نشطة. يتعاون فريق اليسر في المنصورة مع أئمة المساجد والوحدات المحلية لتحديد الأسر المستحقة فعلًا، ونسلّم اللحم طازجًا في يوم الذبح نفسه. تغطية كاملة لقرى ومراكز المنصورة داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+   "sections": [
+    "لماذا ادفع مصروفه وابنِ مستقبله في المنصورة؟",
+    "نطاق التوصيل",
+    "أسئلة شائعة",
+    "برامج أخرى في المنصورة",
+    "ادفع مصروفه وابنِ مستقبله في مدن أخرى بالدقهلية"
+   ]
+  },
+  "en": {
+   "title": "Education — Build His Future in Mansoura — Al-Yusr Charity",
+   "description": "Donate Education — Build His Future in Mansoura with photo/video proof and doorstep delivery. Al-Yusr Charity — licensed (2665/2019).",
+   "h1": "Education — Build His Future in Mansoura — doorstep delivery",
+   "summary": "Al-Yusr Charity's Mansoura team delivers Education — Build His Future to verified families with full photo/video documentation. HQ — all programs active. Our Mansoura team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day. Full coverage of Mansoura villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+   "sections": [
+    "Why Education — Build His Future in Mansoura?",
+    "Delivery coverage",
+    "FAQ",
+    "Other programs in Mansoura",
+    "Education — Build His Future in other Dakahlia cities"
+   ]
+  }
+ },
+ "/dakahlia/mansoura/odhya": {
+  "ar": {
+   "title": "صك الأضحية في المنصورة — اليسر الخيرية",
+   "description": "تبرّع بـصك الأضحية في المنصورة مع توثيق بالصور والفيديو وتوصيل حتى باب البيت. مؤسسة اليسر الخيرية — مرخّصة 2665/2019.",
+   "h1": "صك الأضحية في المنصورة — توصيل حتى باب البيت",
+   "summary": "فريق مؤسسة اليسر الخيرية في المنصورة يوصل صك الأضحية إلى الأسر المستحقة بعد بحث ميداني وتوثيق كامل بالصور والفيديو. المقر الرئيسي — كل البرامج نشطة. يتعاون فريق اليسر في المنصورة مع أئمة المساجد والوحدات المحلية لتحديد الأسر المستحقة فعلًا، ونسلّم اللحم طازجًا في يوم الذبح نفسه. تغطية كاملة لقرى ومراكز المنصورة داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+   "sections": [
+    "لماذا صك الأضحية في المنصورة؟",
+    "نطاق التوصيل",
+    "أسئلة شائعة",
+    "برامج أخرى في المنصورة",
+    "صك الأضحية في مدن أخرى بالدقهلية"
+   ]
+  },
+  "en": {
+   "title": "Qurbani Voucher in Mansoura — Al-Yusr Charity",
+   "description": "Donate Qurbani Voucher in Mansoura with photo/video proof and doorstep delivery. Al-Yusr Charity — licensed (2665/2019).",
+   "h1": "Qurbani Voucher in Mansoura — doorstep delivery",
+   "summary": "Al-Yusr Charity's Mansoura team delivers Qurbani Voucher to verified families with full photo/video documentation. HQ — all programs active. Our Mansoura team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day. Full coverage of Mansoura villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+   "sections": [
+    "Why Qurbani Voucher in Mansoura?",
+    "Delivery coverage",
+    "FAQ",
+    "Other programs in Mansoura",
+    "Qurbani Voucher in other Dakahlia cities"
+   ]
+  }
+ },
+ "/dhill": {
+  "ar": {
+   "title": "حملة ظِلّ — «نُظِلّهم اليوم عسى أن يُظِلّنا الله يوم…",
+   "description": "شارك في حملة ظِلّ مع مؤسسة اليسر: أسقف خشبية معزولة للمنازل، ووصلات مياه نقية للمنازل (سهم 500 ج)، وخطوط مياه للقرى، وأبواب وشبابيك، ومراوح تبريد بالدقهلية…",
+   "h1": "نُظِلّهم اليوم عسى أن يُظِلّنا الله",
+   "summary": "كيف ننجو من حرّ يوم القيامة؟ إذا كنا لا نتحمل حرارة الصيف في الدنيا، فكيف ننجو في الآخرة؟ جاءت حملة ظِلّ لتكون ظلًا وبردًا لأهالينا المستحقين من الفقراء والمساكين، وصدقة جارية وظلًا لك يوم القيامة. شارك في حملة ظِلّ مع مؤسسة اليسر: أسقف خشبية معزولة للمنازل، ووصلات مياه نقية للمنازل (سهم 500 ج)، وخطوط مياه للقرى، وأبواب وشبابيك، ومراوح تبريد بالدقهلية وكفر الشيخ والشرقية وكل مصر. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "حملة ظِلّ — «نُظِلّهم اليوم عسى أن يُظِلّنا الله يوم القيامة»",
+    "سقف، أو ماء، أو نسمة هواء",
+    "اجعل وصلة الماء أجرًا لا ينقطع عن والديك",
+    "من الحرّ إلى الظل",
+    "أين نترك أثرًا؟",
+    "من الميدان",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "اكسب ظِلًا يوم القيامة — تبرع لسقف أو وصلة مياه الآن"
+   ]
+  },
+  "en": {
+   "title": "Dhill Campaign — 'Provide shade today, that Allah may…",
+   "description": "Join Al-Yusr's Dhill Campaign: insulated wooden roofs, clean water connections (EGP 500 share), village water lines, doors & windows, and cooling fans across…",
+   "h1": "We shade them today that Allah may shade us",
+   "summary": "How do we find shade on the Day of Judgment? The Dhill campaign provides roofing, clean water taps, fans and cold drinks for needy families in Egypt — an ongoing charity and shade for your hereafter. Join Al-Yusr's Dhill Campaign: insulated wooden roofs, clean water connections (EGP 500 share), village water lines, doors & windows, and cooling fans across Dakahlia, Kafr El Sheikh and Egypt. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Dhill Campaign — 'Provide shade today, that Allah may shade us on the Day of Resurrection'",
+    "A roof, water, or a breeze",
+    "Make a water tap a lasting reward for your parents",
+    "From heat to shade",
+    "Where we work",
+    "From the field",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "Earn shade on the Day of Judgment — support a roof or water tap"
+   ]
+  }
+ },
+ "/donate": {
+  "ar": {
+   "title": "تبرع أونلاين في مصر | مؤسسة اليسر الخيرية",
+   "description": "تبرع بأمان من أي مكان في مصر لمؤسسة اليسر الخيرية (مقرها المنصورة) عبر بوابة كاشير أو فودافون كاش أو إنستاباي، مع رقم تتبع لكل تبرع.",
+   "h1": "تبرّع الآن وابدأ الأثر",
+   "summary": "اختر برنامجك من الشريط بالأسفل، أو اختر «تبرع عام» ليصل تبرعك إلى الأشد احتياجًا. اختر البرنامج وطريقة الدفع الأنسب لك في خطوات يسيرة، ودعنا نوصل صدقتك وأثر تبرعك لمن يستحق بأمان وشفافية تامة. اختر البرنامج وحدد المبلغ الذي يناسبك، أو أضف أكثر من برنامج لتوزيع تبرعك",
+   "sections": [
+    "تبرع بسهولة وأمان",
+    "1. اختيار البرنامج ومبلغ التبرع"
+   ]
+  },
+  "en": {
+   "title": "Donate online in Egypt | Al-Yusr Charity",
+   "description": "Donate safely from anywhere in Egypt to Al-Yusr (headquartered in Mansoura) via Kashier, Vodafone Cash or InstaPay, with a tracking number for every gift.",
+   "h1": "Donate Now, Start the Impact",
+   "summary": "Pick a program from the strip below, or choose General and we'll route it to the most urgent need. Choose your preferred program and convenient payment method, and let us deliver your charitable impact with full trust and transparency. Choose a program, set your amount, or add multiple programs to distribute your donation",
+   "sections": [
+    "Donate easily & safely",
+    "1. Choose Program & Donation Amount"
+   ]
+  }
+ },
+ "/donate-from-abroad": {
+  "ar": {
+   "title": "التبرع لمصر من الخارج | مؤسسة اليسر الخيرية",
+   "description": "عايش برا مصر؟ اتبرع لمؤسسة اليسر الخيرية (مشهرة برقم 2665) بالكارت أونلاين من أي بلد أو بتحويل بنكي دولي، وتابع تبرعك برقم تتبع.",
+   "h1": "اتبرع لمصر من برا مصر",
+   "summary": "للمصريين في الخليج وأوروبا وأمريكا وأي مكان، وللإخوة العرب: تبرعك بيوصل لأسر محتاجة في مصر عن طريق مؤسسة مشهرة برقم 2665 لسنة 2019، وتقدر تتابعه برقم تتبع. من صفحة التبرع. المبالغ على الموقع بالجنيه المصري. فيزا أو ماستركارد من أي بنك في أي بلد، على بوابة كاشير.",
+   "sections": [
+    "خطوات التبرع من برا مصر",
+    "تبرعات تقدر تعملها من أي بلد",
+    "تتواصل معانا إزاي من برا",
+    "أسئلة عن التبرع لمصر من الخارج"
+   ]
+  },
+  "en": {
+   "title": "Donate to Egypt from abroad | Al-Yusr Charity Foundation",
+   "description": "Living outside Egypt? Give to Al-Yusr Charity Foundation (registered No. 2665) by card from any country or by international bank transfer, and follow your…",
+   "h1": "Donate to Egypt from abroad",
+   "summary": "For Egyptians in the Gulf, Europe, America and everywhere, and for Arab donors: your gift reaches families in need in Egypt through a foundation registered under No. 2665 of 2019, and you can follow it with a tracking number. On the donate page. Amounts on the site are in Egyptian pounds. Visa or Mastercard from any bank in any country, through the Kashier gateway.",
+   "sections": [
+    "How to give from abroad, step by step",
+    "Causes you can give to from any country",
+    "Reaching us from abroad",
+    "Questions about giving to Egypt from abroad"
+   ]
+  }
+ },
+ "/donate/mansoura": {
+  "ar": {
+   "title": "تبرع في المنصورة — دعم أسر محتاجة في الدقهلية | جمعيات…",
+   "description": "تبرع لأسر المنصورة المحتاجة عبر مؤسسة اليسر: توزيع صدقات، كرتونة عزومة، كفالة يتيم، صكوك أضحية، ومساعدات موثقة بالصور والفيديو في الدقهلية.",
+   "h1": "تبرع في المنصورة",
+   "summary": "مؤسسة اليسر الخيرية مقرها الرئيسي في المنصورة، عاصمة الدقهلية. نخدم آلاف الأسر الفقيرة في المنصورة وقراها وكفور الدقهلية كل عام، عبر برامج موثقة بالكامل: يصل تبرعك إلى باب البيت بعد معاينة قبل التسليم، مع صور وفيديو بعد كل عملية. كل جنيه يُسجَّل، وكل أسرة نزورها قبل اعتمادها. كل برامجنا في الدقهلية موثقة بالصور والفيديو، ويتابعها المتبرعون الدائمون شهريًا. في قلب المنصورة، وعلى بُعد دقائق من جامعة المنصورة وكوبري طلخا، يقف فريق اليسر يوميًا لخدمة الأسر الأكثر احتياجًا في مدن الدقهلية وكفورها. من حي الجامعة وتوريل وميت حدر، إلى شارع الجمهورية والسكة الجديدة، نعرف العائلات بأسمائها لا بأرقامها. كل جنيه تتبرع به يتحوّل إلى كرتونة عزومة، أو صك أضحية، أو علاج طفل، أو سقف بيت لأسرة تنام تحت السماء",
+   "sections": [
+    "لماذا تتبرع لـ المنصورة عن طريق اليسر؟",
+    "أحياء وقرى المنصورة التي نخدمها",
+    "كيف يصل تبرعك في المنصورة؟",
+    "طرق التبرع المتاحة في المنصورة",
+    "البرامج المتاحة في المنصورة",
+    "أسئلة شائعة عن التبرع في المنصورة",
+    "أسرة في المنصورة تنتظر تبرعك"
+   ]
+  },
+  "en": {
+   "title": "Donate in Mansoura — support needy families in Dakahlia |…",
+   "description": "Donate to needy families in Mansoura through Al-Yusr: sadaqah distribution, food boxes, orphan sponsorship, qurbani shares, and documented aid with photos and…",
+   "h1": "Donate in Mansoura",
+   "summary": "Al-Yusr Charity Foundation is headquartered in Mansoura, capital of Dakahlia governorate. We serve thousands of low-income families across Mansoura, its surrounding villages, and the kafr districts of Dakahlia every year through fully-documented programs. Your donation reaches the family's doorstep with pre-delivery inspection and full photo/video proof after every operation. All our Dakahlia programs are documented with photos & video, audited monthly by recurring donors. In the heart of Mansoura, minutes from Mansoura University and Talkha bridge, the Al-Yusr team works daily to serve the most vulnerable families across Dakahlia's districts and villages. From the University quarter, Toreel",
+   "sections": [
+    "Why donate to Mansoura through Al-Yusr?",
+    "Mansoura districts & villages we serve",
+    "How your donation reaches Mansoura",
+    "Donation methods available in Mansoura",
+    "Programs active in Mansoura",
+    "FAQ — Donating in Mansoura",
+    "A family in Mansoura is waiting for your donation"
+   ]
+  }
+ },
+ "/donate/track": {
+  "ar": {
+   "title": "تتبع تبرعك | مؤسسة اليسر الخيرية",
+   "description": "اكتب رقم التتبع وشوف مرحلة تنفيذ تبرعك وصور التسليم بدون تسجيل دخول."
+  },
+  "en": {
+   "title": "Track your donation | Al-Yusr Charity Foundation",
+   "description": "Enter your tracking number to see your donation's progress and delivery photos — no login needed."
+  }
+ },
+ "/faqs": {
+  "ar": {
+   "title": "مركز الأسئلة الشائعة | مؤسسة اليسر الخيرية",
+   "description": "دليلك الشامل والموثق للإجابة عن جميع الأسئلة المتعلقة بالتبرعات، البرامج، كرتونة الغذاء، صكوك الأضاحي، الزكاة، وحملة مركون والتطوع في مصر.",
+   "h1": "كل ما يدور في بالك عن التبرع واليسر... إجابته هنا",
+   "summary": "إجابات دقيقة وشفافة وموثقة لكل ما يخص تبرعاتك، مصارف أموالك، وطرق الوصول للمستحقين في الدقهلية ومحافظات مصر. الأسئلة الأكثر شيوعًا عن مؤسسة اليسر، والأثر المباشر للتبرعات، وطرق الدفع. الترخيص الرسمي، المقرات، الإعفاء الضريبي، التطوع والتحقق الميداني.",
+   "sections": [
+    "الصفحة الرئيسية",
+    "صفحة من نحن",
+    "صفحة البرامج والمشاريع",
+    "صفحة تواصل معنا",
+    "صفحة كل الحملات",
+    "صفحة حملة مَرْكون",
+    "صفحة صكوك الأضاحي",
+    "صفحة الزكاة والصدقات",
+    "صفحة الشفافية والتقارير",
+    "حملة ظل — أسقف ووصلات مياه"
+   ]
+  },
+  "en": {
+   "title": "FAQ Center | Al-Yusr Charity Foundation",
+   "description": "Comprehensive guide to all questions regarding donations, programs, Qurbani, Zakat, and volunteering with Al-Yusr Charity Foundation.",
+   "h1": "Clear answers about Al-Yusr & your donations",
+   "summary": "Verified and transparent answers regarding your donations, field assessment, and delivery to deserving families. Most common questions about Al-Yusr foundation and direct donation impact. Official registration, headquarters, tax exemption, volunteering, and verification.",
+   "sections": [
+    "Home Page",
+    "About Us",
+    "Programs & Projects",
+    "Contact Us",
+    "All Campaigns",
+    "Markoun Campaign",
+    "Qurbani Shares",
+    "Zakat & Charity",
+    "Trust & Transparency",
+    "Zell Campaign"
+   ]
+  }
+ },
+ "/farm": {
+  "ar": {
+   "title": "مزارع اليسر الوقفية بالدقهلية | صك أضحية ولحوم بلدي بدون…",
+   "description": "توفّر مزارع اليسر الوقفية لحومًا بلدية طازجة وماشية محصّنة لصكوك الأضحية والمواسم الخيرية في المنصورة، ويُنمّي عائد إنتاجها الوقف ويموّل الخير.",
+   "h1": "مزرعة اليسر الوقفية بالدقهلية وقف إنتاجي يُطعم الأسر ويموّل الخير",
+   "summary": "نربّي ماشية بلدي محصّنة على أفضل الأعلاف، فيصل إنتاجها لحمًا طازجًا بكرامة إلى الأسر المستحقة، ويكبّر عائدُ بيعه الوقفَ ويموّل أنشطة المؤسسة. تخدم مزرعة اليسر الوقفية الدقهلية الشرقية والمنصورة وميت غمر وطلخا وكفر الشيخ: صك أضحية مرخّص، ومعاينة قبل الذبح، وتوثيق بالصور والفيديو لكل أسرة مستفيدة. اختر مدينتك أو البرنامج المناسب، وكل تبرع موثَّق بالكامل:",
+   "sections": [
+    "صك أضحية اليسر في المنصورة",
+    "لماذا المزرعة الوقفية؟",
+    "جنيه يتحوّل إلى أصل، وأصل يُثمر خيرًا كل سنة",
+    "صك أضحية من مزرعتنا مباشرة",
+    "رحلة الماشية… من المزرعة إلى بيت المستحق",
+    "وقف يكبر… وأثر يتضاعف كل سنة",
+    "كل جنيه في الصك له مكان شفاف",
+    "صكّك… يدخل بيتًا محتاجًا",
+    "صور حقيقية من مزرعة اليسر وقوافل التوزيع بالدقهلية",
+    "أسئلة شائعة عن صك الأضحية في الدقهلية"
+   ]
+  },
+  "en": {
+   "title": "Al-Yusr Endowment Farm in Dakahlia | Qurbani & local meat,…",
+   "description": "Al-Yusr's waqf farm in Dakahlia supplies fresh local meat and certified livestock for Qurbani and seasonal aid in Mansoura, and its income grows the waqf.",
+   "h1": "Al-Yusr waqf farm in Dakahlia A productive waqf that feeds families and funds good work",
+   "summary": "We raise vaccinated local livestock on premium feed. Its output brings fresh meat to families in need, and income from its sale grows the waqf and funds the foundation. Al-Yusr's waqf farm serves East Dakahlia, Mansoura, Mit Ghamr, Talkha and Kafr El Sheikh: licensed Qurbani shares, pre-slaughter inspection and photo and video proof for every family. Pick your city or programme; every donation is fully documented:",
+   "sections": [
+    "Al-Yusr Qurbani in Mansoura",
+    "Why a waqf farm?",
+    "A pound becomes an asset, and the asset yields good every year",
+    "Qurbani directly from our farm",
+    "From farm to family: the livestock journey",
+    "A waqf that grows, an impact that multiplies every year",
+    "Every pound of the share has a transparent place",
+    "Your share reaches a home in need",
+    "Real photos from Al-Yusr endowment farm and Dakahlia distribution convoys",
+    "Qurbani share FAQs — Dakahlia"
+   ]
+  }
+ },
+ "/food-box": {
+  "ar": {
+   "title": "الغذاء الشهري — لحوم الذبائح الشهرية وكرتونة ١٤ كيلو…",
+   "description": "برنامج الغذاء الشهري من مؤسسة اليسر: لحوم من ذبائح شهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام تصلح لكفارة الصيام أو كفارة اليمين. توصيل…",
+   "h1": "أطعِموا الطعام سُفرة تكفي أسرة شهرًا كاملًا",
+   "summary": "برنامج دائم من مؤسسة اليسر يصل بالطعام إلى أسر الأيتام والمتعففين كل شهر: لحوم من ذبائح شهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات مطبوخة تُقدَّم إطعامًا أو كفارة صيام أو كفارة يمين، في الدقهلية والمنصورة وكافة محافظات مصر. برنامج الغذاء الشهري من مؤسسة اليسر: لحوم من ذبائح شهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام تصلح لكفارة الصيام أو كفارة اليمين. توصيل حتى باب البيت في المنصورة والدقهلية وكل مصر، مع التوثيق بالصور. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات",
+   "sections": [
+    "الغذاء الشهري — لحوم الذبائح الشهرية وكرتونة ١٤ كيلو ووجبات الإطعام والكفارات",
+    "ثلاثة أركان لسُفرة الشهر",
+    "ماذا في كرتونة الـ ١٤ كيلو؟",
+    "من الذبيحة إلى السُّفرة في يوم واحد",
+    "وجبة واحدة، ثلاث نيّات",
+    "اكفل سُفرة أسرة",
+    "رحلة تبرعك",
+    "أين نُطعِم؟",
+    "من الميدان",
+    "حملات وبرامج ذات صلة"
+   ]
+  },
+  "en": {
+   "title": "Monthly Food — slaughter meat, a 14 kg carton and meals…",
+   "description": "Al-Yusr's monthly food programme: meat from monthly slaughters, a 14 kg carton of local staples, and cooked meals for feeding, fasting expiation or oath…",
+   "h1": "Feed the hungry A table that lasts a family a whole month",
+   "summary": "A permanent Al-Yusr programme bringing food to orphan and needy families every month: meat from monthly slaughters, a 14 kg carton of local staples, and cooked meals offered as feeding, fasting expiation or oath expiation, across Dakahlia, Mansoura and all of Egypt. Al-Yusr's monthly food programme: meat from monthly slaughters, a 14 kg carton of local staples, and cooked meals for feeding, fasting expiation or oath expiation. Doorstep delivery in Mansoura, Dakahlia and all Egypt, with photo proof. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates",
+   "sections": [
+    "Monthly Food — slaughter meat, a 14 kg carton and meals for feeding and expiations",
+    "Three parts of the month's table",
+    "What is in the 14 kg carton?",
+    "From the slaughter to the table in one day",
+    "One meal, three intentions",
+    "Sponsor a family's table",
+    "Your donation's journey",
+    "Where we feed",
+    "From the field",
+    "Related programs & campaigns"
+   ]
+  }
+ },
+ "/gallery": {
+  "ar": {
+   "title": "معرض الصور — لحظات حقيقية من الميدان | مؤسسة اليسر",
+   "description": "صور حقيقية من توزيعات وحملات مؤسسة اليسر الخيرية في الدقهلية ومحافظات مصر.",
+   "h1": "معرض الصور",
+   "summary": "لحظات صادقة من الميدان — كل صورة تعكس أمانة العمل وحرارة الخير. ابدأ تبرعك اليوم وكن جزءًا من قصة ميدانٍ يلامس الأسر ويغيّر الحياة في الدقهلية.",
+   "sections": [
+    "كل صورة هنا كانت ممكنة بفضل من اختار أن يشارك"
+   ]
+  },
+  "en": {
+   "title": "Photo Gallery — Real moments from the field | Al-Yusr",
+   "description": "Real photos from Al-Yusr's distributions and campaigns across Dakahlia and Egypt.",
+   "h1": "Photo gallery",
+   "summary": "Honest moments from the field — every image captures care, dignity, and real impact. Start your donation today and become part of a field story that reaches families and changes lives in Dakahlia.",
+   "sections": [
+    "Every image here became possible because someone chose to care"
+   ]
+  }
+ },
+ "/khabia": {
+  "ar": {
+   "title": "الخبيئة — صدقة لا يعلمها إلا الله | مؤسسة اليسر الخيرية في…",
+   "description": "اطلب حصّالة الخبيئة من مؤسسة اليسر — صدقة جارية يومية في بيتك بالدقهلية والمنصورة وميت غمر وطلخا وكفر الشيخ. يوصلها مندوب اليسر ويستلمها مجانًا، مع توثيق كامل.",
+   "h1": "الخبيئة — صدقة لا يعلمها إلا الله",
+   "summary": "حصّالة صغيرة في بيتك بالمنصورة أو ميت غمر، تضع فيها كل يوم ما تيسّر: جنيهًا أو خمسة أو عشرة. يوصلها مندوب اليسر إليك مجانًا، ويمر لاستلامها كل فترة. أنت تنوي، ونحن نوصل. اطلب حصّالة الخبيئة من مؤسسة اليسر — صدقة جارية يومية في بيتك بالدقهلية والمنصورة وميت غمر وطلخا وكفر الشيخ. يوصلها مندوب اليسر ويستلمها مجانًا، مع توثيق كامل. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "الخبيئة — صدقة لا يعلمها إلا الله",
+    "لماذا تختار اليسر لهذه الحملة؟",
+    "كيف تتم العملية خطوة بخطوة",
+    "نماذج توثيق ميدانية",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "ابدأ صدقتك الجارية اليوم"
+   ]
+  },
+  "en": {
+   "title": "Al-Khabiaa — Sadaqah only Allah knows | Al-Yusr Charity…",
+   "description": "Request your Al-Khabiaa sadaqah can from Al-Yusr — daily ongoing charity at home across Dakahlia, Mansoura, Mit Ghamr, Talkha and Kafr El Sheikh. Free…",
+   "h1": "Al-Khabiaa — Sadaqah only Allah knows",
+   "summary": "A small donation can that lives in your home in Mansoura or Mit Ghamr. Drop in whatever you can each day — 1, 5 or 10 EGP. Al-Yusr brings it free and collects it periodically. You intend, we deliver. Request your Al-Khabiaa sadaqah can from Al-Yusr — daily ongoing charity at home across Dakahlia, Mansoura, Mit Ghamr, Talkha and Kafr El Sheikh. Free delivery and pickup. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Al-Khabiaa — Sadaqah only Allah knows",
+    "Why choose Al-Yusr for this campaign?",
+    "How it works — step by step",
+    "Field documentation",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "Start your ongoing sadaqah today"
+   ]
+  }
+ },
+ "/markoun": {
+  "ar": {
+   "title": "التبرع بالملابس المستعملة والأثاث في المنصورة | مَرْكون",
+   "description": "حملة مَرْكُون: كنزك المركون يبني حياة لغيرك. أول حملة مصرية منظمة لإعادة استخدام الأثاث المنزلي والأجهزة الكهربائية والملابس والأدوية والكتب. يصلك مندوبنا حتى…",
+   "h1": "كنزك المركون.. يبني حياة لغيرك!",
+   "summary": "في زوايا بيوتنا الكثير من الأشياء التي لم نَعد نستخدمها، لكنها بالنسبة لأسر أخرى تُمثّل حلمًا طال انتظاره. نحن لا نجمع مجرد أغراض فائضة، بل نعيد صياغة الأمل وننقل الدفء والاستقرار من بيوتكم إلى بيوت أهالينا المستحقين. «اجعل من كركبة بيتك.. خطوة لعمار بيت غيرك» تتحرك حملة مركون بشكل شامل لتغطية كافة الاحتياجات الأساسية لعيش حياة كريمة عبر خمسة محاور رئيسية:",
+   "sections": [
+    "خمسة مسارات شاملة لتغطية كافة الاحتياجات الأساسية للحياة الكريمة",
+    "لماذا تتبرع لـ «مركون»؟",
+    "خطوات بسيطة ليصلك مندوبنا",
+    "ثقتكم هي المحرك الأساسي لكل خطوة خير",
+    "صور وتوثيق من ورش التجديد وبيوت أهالينا",
+    "كل ما تريد معرفته عن حملة مَرْكون"
+   ]
+  },
+  "en": {
+   "title": "Donate used clothes & furniture in Mansoura | Markoun —…",
+   "description": "Markoun Campaign: Egypt's premier in-kind reuse initiative. Repurposing surplus furniture, electronics, clothing, medicine, and books with free doorstep…",
+   "h1": "What's idle in your home.. builds a new life for another!",
+   "summary": "In every home there are idle belongings that represent a lifelong dream for struggling families. We don't just collect surplus items; we restore hope and transfer comfort directly into deserving households. 'Transform household clutter into comfort for another home' Markoun operates across five key tracks to fulfill every aspect of dignified living:",
+   "sections": [
+    "Five Core Tracks Covering All Essential Needs",
+    "Why Donate to Markoun?",
+    "Simple Steps to Participate",
+    "Your trust drives every step of impact",
+    "Photos from Workshops & Homes",
+    "Frequently Asked Questions"
+   ]
+  }
+ },
+ "/medical": {
+  "ar": {
+   "title": "علاج المرضى غير القادرين في مصر: عمليات وروشتات وأشعة |…",
+   "description": "المشروع الطبي من مؤسسة اليسر: مجمع اليسر الطبي بالحفير يخدم 43 قرية بين الدقهلية وكفر الشيخ، صرف روشتات بالمجان، عمليات جراحية، أشعة وتحاليل، تحدّي الإعاقة،…",
+   "h1": "المشروع الطبي: حتى لا يتأخر علاج مريض بسبب التكلفة",
+   "summary": "مجمع طبي يخدم 43 قرية، وروشتات بالمجان، ومشاركة في العمليات والأشعة والتحاليل، وتأهيل للأطفال ذوي الإعاقة، وقوافل طبية للقرى البعيدة. المشروع الطبي من مؤسسة اليسر: مجمع اليسر الطبي بالحفير يخدم 43 قرية بين الدقهلية وكفر الشيخ، صرف روشتات بالمجان، عمليات جراحية، أشعة وتحاليل، تحدّي الإعاقة، وقوافل طبية. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "المشروع الطبي: مجمع اليسر الطبي والعلاج وتحدّي الإعاقة والقوافل",
+    "مركز طبي لـ 43 قرية لم يكن فيها مركز واحد",
+    "روشتات تُصرف بالمجان، بمتابعة الأطباء الصيادلة",
+    "المشاركة في العمليات الجراحية",
+    "التشخيص الصحيح أول خطوة في العلاج",
+    "نساند الأطفال ذوي الإعاقة ليتحركوا ويتعلموا ويعيشوا بثقة",
+    "حين لا يستطيع المريض الوصول، يصل إليه الطبيب",
+    "من الميدان",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة"
+   ]
+  },
+  "en": {
+   "title": "The medical project: complex, prescriptions, surgery &…",
+   "description": "Al-Yusr's medical project: the El-Hafir complex serving 43 villages between Dakahlia and Kafr El-Sheikh, free prescriptions, surgery, scans and tests,…",
+   "h1": "The medical project: so no patient's treatment waits on cost",
+   "summary": "A complex serving 43 villages, free prescriptions, help with surgery, scans and tests, rehabilitation for children with disabilities, and convoys to remote villages. Al-Yusr's medical project: the El-Hafir complex serving 43 villages between Dakahlia and Kafr El-Sheikh, free prescriptions, surgery, scans and tests, disability support and medical convoys. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "The medical project: Al-Yusr Medical Complex, treatment, disability support and convoys",
+    "A medical centre for 43 villages that had none",
+    "Free prescriptions, followed up by pharmacists",
+    "Sharing the cost of surgery",
+    "A correct diagnosis is the first step of treatment",
+    "Helping children with disabilities move, learn and live with confidence",
+    "When patients cannot reach a doctor, the doctor reaches them",
+    "From the field",
+    "Related programs & campaigns",
+    "Frequently Asked Questions"
+   ]
+  }
+ },
+ "/misbaha": {
+  "ar": {
+   "title": "المسبحة الإلكترونية | صلاة على النبي وتسبيح واستغفار —…",
+   "description": "مسبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وهدف يومي وفضل كل ذكر من الأحاديث الصحيحة. وأنشئ سبحة مشتركة لروح من تحب وشاركها.",
+   "h1": "المسبحة الإلكترونية",
+   "summary": "قل الذكر واضغط على المسبحة. يتغيّر الذكر مع كل ضغطة لتجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، ويمكنك أن تختار ذكرًا واحدًا إن أردت. يُحفظ عدّادك على جهازك طوال اليوم، ويبدأ من جديد مع كل يوم. قل الآن (اضغط على المسبحة أو زر المسافة) لروح شخص عزيز، أو بنية شفاء مريض، أو ذكرًا جماعيًا للعائلة. ستحصل على رابط وصورة للستوري، وكل من يدخل ويسبّح يزيد عدّادًا واحدًا تشاهدونه جميعًا.",
+   "sections": [
+    "أنشئ سبحة يشارك فيها الجميع",
+    "هذه السبحة هدية من مؤسسة اليسر الخيرية"
+   ]
+  },
+  "en": {
+   "title": "Digital tasbih | Salawat, tasbih & istighfar — Al-Yusr",
+   "description": "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter, daily goal and the virtue of each dhikr. Create a shared tasbih for a loved one…",
+   "h1": "Digital tasbih",
+   "summary": "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count stays on this device for the day and starts fresh each new day. O Allah, send prayers and peace upon our Prophet Muhammad Next: Glory be to Allah and praise be to Him",
+   "sections": [
+    "Create a tasbih everyone can join",
+    "This tasbih is a gift from Al-Yusr Charity Foundation"
+   ]
+  }
+ },
+ "/mosques": {
+  "ar": {
+   "title": "التبرع لبناء مسجد في مصر وإعمار المساجد | مؤسسة اليسر",
+   "description": "ساهم مع مؤسسة اليسر في بناء مسجد جديد في القرى المحرومة، أو في إعادة إعمار مسجد قائم بترميمه وفرشه وتجهيزه. صدقة جارية بأجر كل صلاة.",
+   "h1": "عمارة بيوت الله: بناء مسجد أو إعادة إعماره",
+   "summary": "في قرى كثيرة يكون المسجد الوحيد مشروخ السقف أو بلا فرش، وفي قرى أخرى لا يوجد مسجد أصلًا. مع اليسر يمكنك المشاركة في بناء مسجد جديد من الأساس، أو في ترميم مسجد قائم وفرشه وتجهيزه، ويجري أجرك مع كل صلاة فيه. ساهم مع مؤسسة اليسر في بناء مسجد جديد في القرى المحرومة، أو في إعادة إعمار مسجد قائم بترميمه وفرشه وتجهيزه. صدقة جارية بأجر كل صلاة. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "عمارة بيوت الله: بناء مسجد أو إعادة إعماره",
+    "المشروع قسمان، فاختر ما يناسبك",
+    "أسهم بناء مسجد جديد",
+    "أسهم إعادة الإعمار والفرش",
+    "كيف نعمل",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "ابنِ لك بيتًا في الجنة"
+   ]
+  },
+  "en": {
+   "title": "Build or restore a mosque | Al-Yusr",
+   "description": "Help Al-Yusr build new mosques in underserved villages, or restore, carpet and equip standing ones. Ongoing charity with the reward of every prayer.",
+   "h1": "Building God's houses: a new mosque, or bringing one back to life",
+   "summary": "In many villages the only mosque has a cracked roof or a bare floor, and some villages have no mosque at all. With Al-Yusr you can help build a new mosque from the ground up, or restore, carpet and equip one that stands, with reward that continues with every prayer in it. Help Al-Yusr build new mosques in underserved villages, or restore, carpet and equip standing ones. Ongoing charity with the reward of every prayer. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Building God's houses: a new mosque, or bringing one back to life",
+    "Two parts — choose where you give",
+    "Shares in a new mosque",
+    "Shares in restoring and furnishing",
+    "How we work",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "Build yourself a house in Paradise"
+   ]
+  }
+ },
+ "/nurseries": {
+  "ar": {
+   "title": "حضانات اليسر التعليمية ودور تحفيظ القرآن للأطفال | مؤسسة…",
+   "description": "حضانات اليسر التعليمية للأطفال من 4 إلى 6 سنوات ودور تحفيظ القرآن من 4 إلى 16 سنة: مناهج متخصصة تعدّها مؤسسة اليسر وتشرف عليها، وفريق تربوي، ومسابقات قرآنية.",
+   "h1": "حضانات اليسر التعليمية ودور تحفيظ القرآن",
+   "summary": "حضانات تعليمية للأطفال من ٤ إلى ٦ سنوات، ودور تحفيظ قرآن من ٤ إلى ١٦ سنة، بمناهج متخصصة نبنيها ونشرف عليها بأنفسنا، وفريق تربوي قوي، ومسابقات قرآن تكرّم الحفّاظ. حضانات اليسر التعليمية للأطفال من 4 إلى 6 سنوات ودور تحفيظ القرآن من 4 إلى 16 سنة: مناهج متخصصة تعدّها مؤسسة اليسر وتشرف عليها، وفريق تربوي، ومسابقات قرآنية. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "حضانات اليسر التعليمية ودور تحفيظ القرآن",
+    "المشروع جزءان يكمّل أحدهما الآخر",
+    "رحلة الطفل معنا من ٤ إلى ١٦ سنة",
+    "ما الذي يميّز حضانات ودور اليسر؟",
+    "ساهم في حضانات ودور اليسر",
+    "من حضاناتنا ودورنا",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "ساهم في تربية جيل متعلّم وحافظ للقرآن"
+   ]
+  },
+  "en": {
+   "title": "Al-Yusr learning nurseries & Qur'an houses",
+   "description": "Al-Yusr learning nurseries for ages 4–6 and Qur'an houses for ages 4–16: specialised curricula built and supervised by Al-Yusr, an educational team, and…",
+   "h1": "Al-Yusr learning nurseries and Qur'an houses",
+   "summary": "Learning nurseries for ages 4–6 and Qur'an houses for ages 4–16, with specialised curricula we build and supervise ourselves, a strong educational team, and Qur'an competitions that honour memorisers. Al-Yusr learning nurseries for ages 4–6 and Qur'an houses for ages 4–16: specialised curricula built and supervised by Al-Yusr, an educational team, and Qur'an competitions. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Al-Yusr learning nurseries and Qur'an houses",
+    "Two parts that complete each other",
+    "A child's journey with us, from 4 to 16",
+    "What sets Al-Yusr's nurseries and Qur'an houses apart",
+    "Support Al-Yusr's nurseries and Qur'an houses",
+    "From our nurseries and Qur'an houses",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "Help raise an educated generation that holds the Qur'an"
+   ]
+  }
+ },
+ "/privacy": {
+  "ar": {
+   "title": "سياسة الخصوصية وحماية البيانات | مؤسسة اليسر الخيرية",
+   "description": "كيف تجمع مؤسسة اليسر الخيرية بيانات المتبرعين وتحميها: دفع آمن عبر بوابات مرخّصة دون تخزين بيانات البطاقات، والتبرع باسم فاعل خير، وحقوقك وفق القانون 151 لسنة…",
+   "h1": "سياسة الخصوصية وحماية البيانات",
+   "summary": "آخر تحديث: 29 أكتوبر 2026 — متوافقة مع قانون حماية البيانات الشخصية المصري رقم 151 لسنة 2020 لا نخزّن بيانات بطاقتك، ولا نبيع بياناتك، ويمكنك التبرع باسم «فاعل خير» وطلب حذف بياناتك في أي وقت. مؤسسة اليسر الخيرية مؤسسة أهلية مصرية مشهرة لدى وزارة التضامن الاجتماعي برقم 2665 لسنة 2019. ونحن المسؤولون عن البيانات التي تُدخلها في موقع elyusr.org وفي قنوات التواصل الرسمية الخاصة بنا.",
+   "sections": [
+    "1. من نحن؟",
+    "2. البيانات التي نجمعها",
+    "3. كيف نستخدم بياناتك؟",
+    "4. التبرع باسم «فاعل خير»",
+    "5. الكوكيز وأدوات القياس",
+    "6. الإشعارات (Web Push)",
+    "7. مع من نشارك بياناتك؟",
+    "8. إلى متى نحتفظ بالبيانات؟",
+    "9. أمان البيانات",
+    "10. حقوقك"
+   ]
+  },
+  "en": {
+   "title": "Privacy Policy & Data Protection | Al-Yusr Charity",
+   "description": "How Al-Yusr Charity collects and protects donor data: secure payment via licensed gateways with no stored card data, anonymous giving, and your rights under…",
+   "h1": "Privacy Policy & Data Protection",
+   "summary": "Last updated: 29 October 2026 — aligned with Egypt's Personal Data Protection Law No. 151/2020 We never store your card details or sell your data; you can give anonymously and ask us to delete your data at any time. Al-Yusr Charity Foundation is an Egyptian non-governmental foundation registered with the Ministry of Social Solidarity under No. 2665/2019. We are responsible for the data you enter on elyusr.org and through our official channels.",
+   "sections": [
+    "1. Who we are",
+    "2. What we collect",
+    "3. How we use it",
+    "4. Giving anonymously",
+    "5. Cookies & measurement",
+    "6. Notifications (Web Push)",
+    "7. Who we share data with",
+    "8. How long we keep data",
+    "9. Security",
+    "10. Your rights"
+   ]
+  }
+ },
+ "/programs": {
+  "ar": {
+   "title": "برامج خيرية في مصر | إطعام وعلاج وكفالة أيتام ومياه — اليسر",
+   "description": "برامج مؤسسة اليسر الخيرية في مصر، من المنصورة إلى محافظات مصر: — بحث اجتماعي قبل الصرف وتوثيق بالصور.",
+   "h1": "برامج اليسر… دعم متكامل يحسّن ظروف المعيشة",
+   "summary": "من كرتونة الأمل إلى فرص العلاج والتعليم والمياه والسكن الآمن، نوصل الخير إلى البيوت المحتاجة بعد تحقق ميداني وبكرامة كاملة. كل خطوة موثّقة بالصور والفيديو، ويراجعها فريق ميداني في الدقهلية. من الغذاء والعلاج إلى التعليم والأضحية وستر البيوت.",
+   "sections": [
+    "٤ خطوات من تبرعك إلى باب بيت الأسرة",
+    "كل برامجنا في مكان واحد",
+    "اختر برنامجًا لمدينتك",
+    "كل برامج اليسر في مدن وقرى الدقهلية",
+    "أسئلة شائعة عن برامج اليسر",
+    "تجارة رابحة — تدفع ثمن جهاز اليوم، وتجني حسنات لسنين"
+   ]
+  },
+  "en": {
+   "title": "Charity programs in Egypt | Food, Health, Orphans, Water —…",
+   "description": "Al-Yusr Charity programs across Egypt, from Mansoura to every governorate: — social assessment before spending and photo documentation.",
+   "h1": "Al-Yusr programs for better living conditions",
+   "summary": "From a hope box to healthcare, education, water, and safer homes — we deliver support after field verification and with full dignity. Every step is documented with photos and video and reviewed by our Dakahlia field team. From food and health to education, Qurbani and shelter.",
+   "sections": [
+    "4 steps from your donation to the family's door",
+    "Every Al-Yusr program in one place",
+    "Pick a program in your city",
+    "All Al-Yusr programs across Dakahlia cities and villages",
+    "Programs FAQs",
+    "A winning trade — pay for a trousseau today, reap rewards for years"
+   ]
+  }
+ },
+ "/projects": {
+  "ar": {
+   "title": "مشاريع صدقة جارية في مصر | مساجد، توصيل مياه، وقف — اليسر",
+   "description": "مشاريع مؤسسة اليسر: بناء المساجد، المزرعة الوقفية، سقيا الماء، غسل وتكفين ونقل الموتى في المنصورة، حضانات اليسر ودور تحفيظ القرآن، تسقيف المنازل وتيسير الزواج.",
+   "h1": "مشاريعنا التنموية المستدامة",
+   "summary": "هدفنا ألّا ينتهي الخير بانتهاء التبرع؛ فكل مشروع أصل يظل يعمل سنوات: إما أن يدرّ موارد تُصرف على أنشطة المؤسسة، وإما أن يترك أثرًا يغيّر حياة الناس، وفي الحالتين يبقى أجره صدقة جارية لك ما دام قائمًا. اختر مشروعك وابدأ مساهمتك بأي مبلغ أو بسهم محدد كصدقة جارية لك أو لوالديك. بعض مشاريعنا خدمية تدرّ موارد تُصرف على أنشطة المؤسسة، وبعضها هدفه الأثر المباشر في المجتمع، وقد يجمع المشروع الواحد بين الأمرين.",
+   "sections": [
+    "مشاريعنا التنموية الجارية",
+    "مشاريعنا نوعان، وكلاهما خير مستمر",
+    "لماذا المشاريع التنموية في مؤسسة اليسر؟",
+    "اختر مشروعك الآن وابدأ أثرًا لا ينقطع"
+   ]
+  },
+  "en": {
+   "title": "Al-Yusr Development Projects | Mosques, Waqf, Water,…",
+   "description": "Al-Yusr development projects: mosque construction, Waqf farm, clean water, home roofing, marriage aid, and mortuary vans.",
+   "h1": "Our Sustainable Projects",
+   "summary": "Our aim is good that does not end when the donation does. Each project is an asset that keeps working for years: it either earns income for the foundation's work or leaves an impact that changes lives, and either way its reward is ongoing charity for you. Choose your project and contribute with any amount or share as an enduring charity. Some projects provide services whose income funds the foundation's work; others exist for their impact on the community. Some do both.",
+   "sections": [
+    "Our Ongoing Development Projects",
+    "Two kinds of projects, both lasting good",
+    "Why Development Projects with Al-Yusr?",
+    "Choose Your Project & Begin Your Everlasting Impact"
+   ]
+  }
+ },
+ "/qurbani": {
+  "ar": {
+   "title": "صك أضحية 2027 في مصر والمنصورة | مؤسسة اليسر",
+   "description": "احجز صك أضحية مضمون من أي مكان في مصر مع مؤسسة اليسر: معاينة قبل الذبح، وتوثيق بالصور، وتوزيع يوم العيد على الأسر المستحقة في المنصورة والدقهلية.",
+   "h1": "صك أضحية بسعر مناسب وجودة مضمونة",
+   "summary": "سنعلن موعد الحجز هنا، وحتى ذلك الحين يمكنك دعم المزرعة الوقفية التي تُطعم الأسر طوال العام. سعر الصك لدينا مناسب، ونقدّم ما لا يقدّمه غيرنا: ٣٠ كجم لحم صافٍ، وتوثيق بالصور والفيديو، وتوزيع في يوم العيد نفسه على الأسر المستحقة في الدقهلية. اختر مدينتك لترى البرامج النشطة فيها، وتحجز صك أضحية موجَّهًا لأسرها.",
+   "sections": [
+    "كيف تصل أضحيتك إلى الأسرة؟",
+    "صك أضحية في كل مدن الدقهلية",
+    "توثيق صكوك الأضحية — صور من مواسم 2024 و2025 ومن قوافل اليسر",
+    "أسئلة شائعة عن صك الأضحية بالدقهلية",
+    "أضحيتك مع اليسر: معاينة وتوثيق حتى باب البيت"
+   ]
+  },
+  "en": {
+   "title": "Qurbani 2027 in Egypt & Mansoura | Al-Yusr",
+   "description": "Book a verified Qurbani share in Dakahlia with Al-Yusr: pre-slaughter checks, photo proof, and same-day Eid delivery to families in Mansoura.",
+   "h1": "Affordable Qurbani share with guaranteed quality",
+   "summary": "We'll announce the booking date here. Meanwhile you can support our endowment farm that feeds families year-round. Our share is honestly priced — 30 kg of clean meat, full photo/video proof, and Eid-day delivery to families in need across Dakahlia. Pick your city to see active programs and reserve a Qurbani share targeted to its families.",
+   "sections": [
+    "How your Qurbani reaches the family",
+    "Qurbani in every Dakahlia city",
+    "Qurbani voucher proof — photos from 2024, 2025 & Al-Yusr convoys",
+    "Dakahlia Qurbani FAQ",
+    "Your Qurbani with Al-Yusr: inspected and documented to the doorstep"
+   ]
+  }
+ },
+ "/qurbani-guarantee": {
+  "ar": {
+   "title": "صك الأضحية المضمون — الوحيدون في مصر بضمان جودة الأضحية |…",
+   "description": "احجز صك أضحية مضمون الجودة مع مؤسسة اليسر بالدقهلية. ضمان كتابي على الأضحية، وتوثيق بالصور والفيديو، وتوزيع في يوم العيد نفسه على الأسر المستحقة في المنصورة…",
+   "h1": "صك الأضحية المضمون — الوحيدون في مصر بضمان جودة الأضحية",
+   "summary": "معاينة بيطرية قبل الذبح، وتوثيق بالصور والفيديو لكل صك، وتعويض كامل إن ظهر أي عيب. صك أضحية الدقهلية من اليسر: من المزرعة الوقفية حتى باب بيت الأسرة المستحقة. احجز صك أضحية مضمون الجودة مع مؤسسة اليسر بالدقهلية. ضمان كتابي على الأضحية، وتوثيق بالصور والفيديو، وتوزيع في يوم العيد نفسه على الأسر المستحقة في المنصورة وميت غمر وطلخا وكفر الشيخ. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "صك الأضحية المضمون — الوحيدون في مصر بضمان جودة الأضحية",
+    "لماذا تختار اليسر لهذه الحملة؟",
+    "كيف تتم العملية خطوة بخطوة",
+    "نماذج توثيق ميدانية",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "ابدأ تبرعك الآن"
+   ]
+  },
+  "en": {
+   "title": "Guaranteed Qurbani Receipt — Egypt's only verified quality…",
+   "description": "Reserve a quality-guaranteed Qurbani receipt with Al-Yusr in Dakahlia. Written guarantee, photo/video proof, same-day Eid distribution across Mansoura, Mit…",
+   "h1": "Guaranteed Qurbani Receipt — Egypt's only verified quality guarantee",
+   "summary": "Pre-slaughter veterinary inspection, photo and video proof for every receipt, and a full refund if any defect appears. Al-Yusr Dakahlia Qurbani — from our endowment farm to a deserving family's door. Reserve a quality-guaranteed Qurbani receipt with Al-Yusr in Dakahlia. Written guarantee, photo/video proof, same-day Eid distribution across Mansoura, Mit Ghamr, Talkha and Kafr El Sheikh. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Guaranteed Qurbani Receipt — Egypt's only verified quality guarantee",
+    "Why choose Al-Yusr for this campaign?",
+    "How it works — step by step",
+    "Field documentation",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "Start your donation now"
+   ]
+  }
+ },
+ "/qurbani/mansoura": {
+  "ar": {
+   "title": "صك أضحية المنصورة 2027 | مضمون مع توثيق — مؤسسة اليسر",
+   "description": "احجز صك أضحية المنصورة (الدقهلية) مع مؤسسة اليسر — نوزّع صكوك الأضحية في المنصورة كل سنة على أفقر الأسر، مع معاينة قبل الذبح وتوثيق بالصور والفيديو. اطمئن،…",
+   "h1": "صك أضحية المنصورة",
+   "summary": "نوزّع صكوك الأضحية في المنصورة كل سنة على أفقر الأسر، مع معاينة قبل الذبح وتوثيق بالصور والفيديو. اطمئن، فصك أضحيتك في المنصورة سيصل إلى باب البيت يوم العيد. يتعاون فريق اليسر في المنصورة مع أئمة المساجد والوحدات المحلية لتحديد الأسر المستحقة فعلًا، ونسلّم اللحم طازجًا في يوم الذبح نفسه. تغطية كاملة لقرى ومراكز المنصورة داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.",
+   "sections": [
+    "صك أضحية في باقي مدن الدقهلية",
+    "أسعار صك أضحية المنصورة",
+    "أسئلة شائعة عن صك أضحية المنصورة"
+   ]
+  },
+  "en": {
+   "title": "Qurbani share in Mansoura 2027 | Verified — Al-Yusr",
+   "description": "Reserve a Qurbani share for Mansoura (Dakahlia) with Al-Yusr — We distribute Qurbani shares in Mansoura every Eid to the poorest families, with pre-slaughter…",
+   "h1": "Qurbani share in Mansoura",
+   "summary": "We distribute Qurbani shares in Mansoura every Eid to the poorest families, with pre-slaughter inspection and full photo/video documentation. Your Qurbani share in Mansoura reaches the family's doorstep on Eid day. Our Mansoura team works with mosque imams and local social units to identify truly deserving families, and we deliver the meat fresh on slaughter day. Full coverage of Mansoura villages and districts within Dakahlia Governorate with free delivery for families unable to come in person.",
+   "sections": [
+    "Qurbani in other Dakahlia cities",
+    "Qurbani share prices in Mansoura",
+    "FAQs — Qurbani in Mansoura"
+   ]
+  }
+ },
+ "/ramadan": {
+  "ar": {
+   "title": "موسم الخير — «رمضانك في اليسر إحسانٌ لا ينقطع» | مؤسسة…",
+   "description": "شارك في موسم رمضان مع مؤسسة اليسر: كرتونة الخير (25 كيلو بلدي)، ومطبخ وجبات الإفطار الساخنة، وذبائح مزارعنا الوقفية، وتيسير الزواج «الفرحة فرحتين»، وكسوة…",
+   "h1": "رمضانك في اليسر إحسانٌ لا ينقطع",
+   "summary": "في شهر الجود تتضاعف الحسنات. كرتونة تكفي أسرة الشهر، ووجبة إفطار ساخنة، ولحوم من مزارعنا الوقفية، وكسوة عيد، وعروسة تكتمل فرحتها. شارك في موسم رمضان مع مؤسسة اليسر: كرتونة الخير (25 كيلو بلدي)، ومطبخ وجبات الإفطار الساخنة، وذبائح مزارعنا الوقفية، وتيسير الزواج «الفرحة فرحتين»، وكسوة العيد، وزكاة المال والفطر. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "موسم الخير — «رمضانك في اليسر إحسانٌ لا ينقطع»",
+    "اختر ما تضعه على سفرة أسرة صائمة",
+    "ستّ عطايا في شهر واحد",
+    "مع الهلال حتى العيد",
+    "كم صائمًا تفطّر؟",
+    "أخرجها عنك وعمّن تعول، ونوصلها في وقتها",
+    "إنجازات رمضان السابق",
+    "من رمضان الماضي",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة"
+   ]
+  },
+  "en": {
+   "title": "Ramadan Season — 'Your Ramadan with Al-Yusr goodness…",
+   "description": "Support Al-Yusr's Ramadan Season: 25kg family boxes, hot iftar kitchen, endowment farm meat, bride support, orphan Eid clothing, and Zakat distribution in…",
+   "h1": "Your Ramadan with Al-Yusr goodness without end",
+   "summary": "In the month of generosity, rewards multiply: a box that feeds a family for the month, a hot iftar, meat from our farms, Eid clothes, and a bride's joy made complete. Support Al-Yusr's Ramadan Season: 25kg family boxes, hot iftar kitchen, endowment farm meat, bride support, orphan Eid clothing, and Zakat distribution in Egypt. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Ramadan Season — 'Your Ramadan with Al-Yusr goodness without end'",
+    "Choose what you bring to a fasting family's table",
+    "Six gifts in one month",
+    "From the crescent to Eid",
+    "How many will you feed?",
+    "Give it for yourself and your dependants; we deliver it on time",
+    "Last Ramadan's achievements",
+    "From last Ramadan",
+    "Related programs & campaigns",
+    "Frequently Asked Questions"
+   ]
+  }
+ },
+ "/services-map": {
+  "ar": {
+   "title": "خريطة خدمات اليسر — 7 قطاعات للتبرع | المنصورة الدقهلية",
+   "description": "خريطة خدمات مؤسسة اليسر الخيرية بالدقهلية وكفر الشيخ: 7 قطاعات للتبرع — الغذاء، الصحة، التكافل، الإسكان، التعليم، التنمية، والزكاة — توثيق كامل بالصور…",
+   "h1": "خريطة خدمات اليسر — 7 قطاعات للتبرع",
+   "summary": "تصفّح كافة القطاعات والخدمات مصنّفة وموثّقة بالكامل: اختر القطاع المناسب وتبرّع مباشرة للأسر المتعففة في الدقهلية وكفر الشيخ. صفحات مكتوبة بأيدي فريق المؤسسة من قلب الميدان: مصنّفة حسب القطاع لمعرفة التفاصيل، التوثيق، والتسليم لباب البيت. هدفنا بناء وترميم 20 مسجدًا في عام 2025 بالقرى والمناطق الأكثر احتياجًا، صدقةً جارية يبقى نفعها ما بقي المسجد.",
+   "sections": [
+    "تعرّف على خدماتنا بالتفصيل",
+    "اختر تبرعك الآن",
+    "كل ما تريد معرفته عن قطاعات خدماتنا",
+    "اختر خدمة وادعمها مباشرة"
+   ]
+  },
+  "en": {
+   "title": "Al-Yusr Services Map — 7 donation sectors | Mansoura,…",
+   "description": "Al-Yusr Charity services map in Dakahlia: 7 donation sectors — Food, Health, Family Care, Housing, Education, Development, and Zakat — full transparency with…",
+   "h1": "Al-Yusr Services Map — 7 donation sectors",
+   "summary": "Browse all classified & fully documented services: select your sector and support needy families with a single click. Pages written by our team from the field: categorized by sector to show impact, proof, and doorstep delivery. We aim to rebuild and restore 20 mosques in 2025 across rural and underserved areas — a perpetual charity that keeps giving for a lifetime.",
+   "sections": [
+    "Explore our services in detail",
+    "Choose your donation now",
+    "All you need to know about our services",
+    "Pick a service and support it directly"
+   ]
+  }
+ },
+ "/services/farm": {
+  "ar": {
+   "title": "مزرعة اليسر الوقفية — لحوم بلدية دون وسطاء | المنصورة",
+   "description": "مزرعة وقفية في المنصورة تنتج لحومًا بلدية عالية الجودة لصكوك الأضحية والمواسم؛ وقف مستدام دون وسطاء.",
+   "h1": "مزرعة اليسر الوقفية",
+   "summary": "مزرعة وقفية تنتج أكثر من 5 أطنان سنويًا من اللحوم البلدية الطازجة، تُوزَّع مجانًا على الأسر المتعففة دون وسطاء ودون هامش ربح. تعود أرباح الإنتاج لزيادة عدد الرؤوس وخدمة أسر أكثر. تصل اللحوم طازجة إلى باب البيت في اليوم نفسه.",
+   "sections": [
+    "ما الذي يميزنا؟",
+    "باقات دعم مزرعة اليسر الوقفية",
+    "خدمات ذات صلة",
+    "كن سببًا في الأثر"
+   ]
+  },
+  "en": {
+   "title": "Al-Yusr Endowment Farm — Local meat, zero middlemen |…",
+   "description": "An endowment farm in Mansoura producing premium local meat for Qurbani and seasonal aid — sustainable, no middlemen.",
+   "h1": "Al-Yusr Endowment Farm",
+   "summary": "An endowment farm producing 5+ tons of fresh local meat annually, distributed for free to needy families — zero middlemen, zero profit margin. Vaccinations and periodic checks per head. Profits reinvested to grow the herd and serve more families.",
+   "sections": [
+    "What makes us different?",
+    "Support packages — Al-Yusr Endowment Farm",
+    "Related services",
+    "Be the reason behind the impact"
+   ]
+  }
+ },
+ "/services/food-box": {
+  "ar": {
+   "title": "كرتونة الخير 25 كيلو — تبرّع بإطعام أسرة | مؤسسة اليسر",
+   "description": "تبرّع بكرتونة 25 كيلو لأسرة محتاجة في الدقهلية: بقوليات ومعلبات وأساسيات بجودة بلدي طازج.",
+   "h1": "كرتونة الخير — 25 كيلو من الأساسيات",
+   "summary": "كرتونة وزنها 25 كيلو، غنية بالبقوليات والمعلبات والأساسيات بجودة «بلدي طازج»، تكفي أسرة شهرًا كاملًا. نوصلها بكرامة، دون طوابير أو تصوير للأسرة. نوزّعها في رمضان والمواسم الكبرى وعند الحاجة.",
+   "sections": [
+    "ما الذي يميزنا؟",
+    "باقات دعم كرتونة الخير — 25 كيلو من الأساسيات",
+    "خدمات ذات صلة",
+    "كن سببًا في الأثر"
+   ]
+  },
+  "en": {
+   "title": "25kg Family Food Box — Feed a family | Al-Yusr",
+   "description": "Donate a 25kg food box to a needy family in Dakahlia: legumes, canned goods and pantry essentials of fresh local quality.",
+   "h1": "Al-Khair Food Box — 25kg of Essentials",
+   "summary": "A 25kg box of legumes, canned goods and essentials of fresh local quality — feeds a family for a full month. Beans, lentils, rice, pasta, sugar, tea. Tuna, eggs, and local meat from our farm.",
+   "sections": [
+    "What makes us different?",
+    "Support packages — Al-Khair Food Box — 25kg of Essentials",
+    "Related services",
+    "Be the reason behind the impact"
+   ]
+  }
+ },
+ "/services/housing": {
+  "ar": {
+   "title": "سكن كريم — ترميم وأسقف للأسر المتعففة | مؤسسة اليسر",
+   "description": "ترميم بيوت وتركيب أسقف آمنة للأسر المتعففة في مصر، بإشراف فني وتقارير ميدانية موثّقة من مؤسسة اليسر.",
+   "h1": "سكن كريم — ترميم وأسقف للأسر المتعففة",
+   "summary": "ترمّم حملة سكن كريم البيوت المتهالكة وتركّب أسقفًا آمنة للأسر المتعففة في الدقهلية ومحافظات مصر، حتى يكون لكل أسرة سقف يحميها. الحوائط والأرضيات والكهرباء والصرف الصحي. تركيب أسقف خرسانية أو معدنية بحسب الحالة.",
+   "sections": [
+    "ما الذي يميزنا؟",
+    "باقات دعم سكن كريم — ترميم وأسقف للأسر المتعففة",
+    "خدمات ذات صلة",
+    "كن سببًا في الأثر"
+   ]
+  },
+  "en": {
+   "title": "Sakan Kareem — Home Restoration & Roofing | Al-Yusr",
+   "description": "Restoring homes and installing safe roofs for needy families in Egypt, with technical supervision and field-verified reports by Al-Yusr.",
+   "h1": "Sakan Kareem — Restoration & Roofing",
+   "summary": "Sakan Kareem restores dilapidated homes and installs safe roofs for needy families in Dakahlia and across Egypt — every family deserves a roof that protects. Concrete or metal roofs depending on the case. Bed, mattress, blankets, wardrobe for each family.",
+   "sections": [
+    "What makes us different?",
+    "Support packages — Sakan Kareem — Restoration & Roofing",
+    "Related services",
+    "Be the reason behind the impact"
+   ]
+  }
+ },
+ "/services/markoun": {
+  "ar": {
+   "title": "حملة مركون — تبرّع بالأثاث والأجهزة والدواء | مؤسسة اليسر",
+   "description": "تبرّع بالأثاث أو الأجهزة الكهربائية أو الملابس أو الأدوية، وحملة مركون تجدّدها وتوصلها إلى أسرة محتاجة في الدقهلية.",
+   "h1": "حملة مركون — أجهزة مستعملة بحياة جديدة",
+   "summary": "بدلًا من أن تبيع جهازك أو أثاثك خردة، تبرّع به لحملة مركون. نجدّد الأجهزة والأثاث ونفحص الدواء، ثم نوصلها إلى أسر متعففة في الدقهلية وكفر الشيخ مع توثيق كامل. نستلم الجهاز من بيتك مجانًا في الدقهلية. كل باقة تُترجم تبرعك إلى أثر فعلي محسوب، مع خيارات دفع متعددة وآمنة.",
+   "sections": [
+    "ما الذي يميزنا؟",
+    "باقات دعم حملة مركون — أجهزة مستعملة بحياة جديدة",
+    "خدمات ذات صلة",
+    "كن سببًا في الأثر"
+   ]
+  },
+  "en": {
+   "title": "Markoun — Donate Used Furniture, Appliances & Medicine |…",
+   "description": "Donate furniture, appliances, clothes or medicine — Markoun refurbishes and delivers them to a needy family in Dakahlia.",
+   "h1": "Markoun — Refurbished Appliances, New Life",
+   "summary": "Instead of selling your used appliance or furniture as scrap, give it to Markoun. We refurbish appliances, furniture and medicine and deliver them to needy families in Dakahlia and Kafr El Sheikh with full documentation. Cleaning and maintenance before each summer. From scrap to new life for every appliance.",
+   "sections": [
+    "What makes us different?",
+    "Support packages — Markoun — Refurbished Appliances, New Life",
+    "Related services",
+    "Be the reason behind the impact"
+   ]
+  }
+ },
+ "/services/marriage": {
+  "ar": {
+   "title": "تيسير زواج اليتيمات — جهاز عروس كامل | مؤسسة اليسر",
+   "description": "ساهم مع مؤسسة اليسر في تجهيز عروس يتيمة: أجهزة ومفروشات وذهب، وفرحة تحفظ كرامتها.",
+   "h1": "تيسير زواج اليتيمات — فرحتها فرحتان",
+   "summary": "نساهم في تجهيز العرائس بأفضل الخامات: أجهزة كهربائية ومفروشات وملابس، لبناء بيت مسلم مستقر بكرامة. كل باقة تُترجم تبرعك إلى أثر فعلي محسوب، مع خيارات دفع متعددة وآمنة.",
+   "sections": [
+    "ما الذي يميزنا؟",
+    "باقات دعم تيسير زواج اليتيمات — فرحتها فرحتان",
+    "خدمات ذات صلة",
+    "كن سببًا في الأثر"
+   ]
+  },
+  "en": {
+   "title": "Marriage Support for Orphan Brides | Al-Yusr",
+   "description": "Help equip an orphan bride — appliances, furnishings, dowry and a dignified celebration with Al-Yusr.",
+   "h1": "Marriage Support for Orphan Brides",
+   "summary": "We help equip orphan brides with quality essentials: appliances, furnishings and clothing — building a stable Muslim home with dignity. Identity of brides and families protected. Each package translates your donation into a concrete impact, with multiple secure payment options.",
+   "sections": [
+    "What makes us different?",
+    "Support packages — Marriage Support for Orphan Brides",
+    "Related services",
+    "Be the reason behind the impact"
+   ]
+  }
+ },
+ "/services/mosques": {
+  "ar": {
+   "title": "بناء وترميم المساجد — صدقة جارية | مؤسسة اليسر",
+   "description": "ساهم في بناء وترميم 20 مسجدًا في 2025 بإشراف هندسي وتقارير دورية؛ صدقة جارية موثّقة مع مؤسسة اليسر.",
+   "h1": "بناء وترميم المساجد",
+   "summary": "هدفنا بناء وترميم 20 مسجدًا في عام 2025 بالقرى والمناطق الأكثر احتياجًا، صدقةً جارية يبقى نفعها ما بقي المسجد. رسومات معتمدة وحساب تكاليف شفاف لكل مشروع. مهندس يتابع الموقع بانتظام حتى الافتتاح.",
+   "sections": [
+    "ما الذي يميزنا؟",
+    "باقات دعم بناء وترميم المساجد",
+    "خدمات ذات صلة",
+    "كن سببًا في الأثر"
+   ]
+  },
+  "en": {
+   "title": "Mosque Building & Restoration — Perpetual Sadaqah | Al-Yusr",
+   "description": "Help build and restore 20 mosques in 2025 with engineering supervision and periodic reports — a documented perpetual charity by Al-Yusr.",
+   "h1": "Mosque Building & Restoration",
+   "summary": "We aim to rebuild and restore 20 mosques in 2025 across rural and underserved areas — a perpetual charity that keeps giving for a lifetime. Certified drawings and transparent cost estimation per project. We restore old mosques and build new ones from scratch.",
+   "sections": [
+    "What makes us different?",
+    "Support packages — Mosque Building & Restoration",
+    "Related services",
+    "Be the reason behind the impact"
+   ]
+  }
+ },
+ "/services/orphans": {
+  "ar": {
+   "title": "كفالة يتيم — اليسر | رعاية شاملة وتقارير متابعة",
+   "description": "اكفل يتيمًا في الدقهلية ومحافظات مصر مع مؤسسة اليسر — كفالة شاملة بتقارير شهرية وأثر موثّق.",
+   "h1": "كفالة الأيتام — رعاية مادية ومعنوية وتعليمية",
+   "summary": "كفالة شهرية ترعى اليتيم: نفقات المعيشة والمدرسة والعلاج والترفيه، مع متابعة دورية ومرشد اجتماعي لكل حالة. المصروفات والزي والمستلزمات والكتب الخارجية. نحافظ على سرية هوية اليتيم وأسرته في كل تواصل.",
+   "sections": [
+    "ما الذي يميزنا؟",
+    "باقات دعم كفالة الأيتام — رعاية مادية ومعنوية وتعليمية",
+    "خدمات ذات صلة",
+    "كن سببًا في الأثر"
+   ]
+  },
+  "en": {
+   "title": "Sponsor an Orphan — Al-Yusr | Full care & follow-up",
+   "description": "Sponsor an orphan in Dakahlia & Egypt with Al-Yusr — full sponsorship with monthly reports and documented impact.",
+   "h1": "Orphan Sponsorship — Material, Emotional & Educational Care",
+   "summary": "Monthly sponsorship covering living costs, school, healthcare and play — with periodic follow-up and a social worker per case. Tuition, uniform, supplies and external books. Examinations and care at our medical complex.",
+   "sections": [
+    "What makes us different?",
+    "Support packages — Orphan Sponsorship — Material, Emotional & Educational Care",
+    "Related services",
+    "Be the reason behind the impact"
+   ]
+  }
+ },
+ "/services/ster": {
+  "ar": {
+   "title": "حملة ستر للشتاء — دفء وكسوة للأسر المتعففة | مؤسسة اليسر",
+   "description": "تبرّع لحملة ستر: ألحفة ومراتب وكسوة شتوية وأسقف وأبواب وشبابيك للأسر المتعففة في الدقهلية ومحافظات مصر.",
+   "h1": "حملة ستر — دفء وأمان للأسر المتعففة",
+   "summary": "تنطلق حملة «ستر» من أكتوبر إلى فبراير: ألحفة فايبر ومراتب وكسوة شتوية وأسقف وأبواب وشبابيك، تحت شعار «من ستر مسلمًا ستره الله». تركيب أسقف وأبواب وشبابيك تمنع تسرب الماء والبرد. ملابس وأحذية للأطفال والكبار قبل بدء الدراسة.",
+   "sections": [
+    "ما الذي يميزنا؟",
+    "باقات دعم حملة ستر — دفء وأمان للأسر المتعففة",
+    "خدمات ذات صلة",
+    "كن سببًا في الأثر"
+   ]
+  },
+  "en": {
+   "title": "Ster Winter Campaign — Warmth for Needy Families | Al-Yusr",
+   "description": "Donate to the Ster winter campaign: blankets, mattresses, winter clothes, roofs and doors for needy families in Dakahlia & across Egypt.",
+   "h1": "Ster — Warmth & Shelter for Needy Families",
+   "summary": "Ster runs Oct–Feb: blankets & fiber duvets, mattresses, winter clothes, roofs, doors and windows — 'Whoever shelters a Muslim, Allah shelters them'. Installing roofs, doors and windows that block rain and cold. Clothing and shoes for kids and adults before school season.",
+   "sections": [
+    "What makes us different?",
+    "Support packages — Ster — Warmth & Shelter for Needy Families",
+    "Related services",
+    "Be the reason behind the impact"
+   ]
+  }
+ },
+ "/services/treatment": {
+  "ar": {
+   "title": "سهم العلاج — مجمّع طبي وغسيل كلوي وقوافل | مؤسسة اليسر",
+   "description": "ساهم في تشغيل المجمّع الطبي ومركز الغسيل الكلوي وقوافل اليسر: علاج وعمليات وأطراف صناعية للأسر المتعففة.",
+   "h1": "سهم العلاج — مجمّع طبي وقوافل ومركز غسيل كلوي",
+   "summary": "نوفّر العلاج للأسر المتعففة من خلال مجمّع طبي من 4 طوابق، ومركز غسيل كلوي بالمنزلة، وقوافل طبية، وعمليات جراحية عاجلة. طب الأسرة والأطفال والباطنة والعظام بأسعار رمزية. تغطية عمليات جراحية عاجلة لغير القادرين.",
+   "sections": [
+    "ما الذي يميزنا؟",
+    "باقات دعم سهم العلاج — مجمّع طبي وقوافل ومركز غسيل كلوي",
+    "خدمات ذات صلة",
+    "كن سببًا في الأثر"
+   ]
+  },
+  "en": {
+   "title": "Treatment Share — Medical complex & dialysis | Al-Yusr",
+   "description": "Help operate the medical complex, dialysis center & medical caravans — treatment, surgeries and prosthetics for needy families.",
+   "h1": "Treatment Share — Medical Complex, Caravans & Dialysis",
+   "summary": "We provide care to needy families via a 4-floor medical complex, a dialysis center in El-Manzala, mobile clinics, and urgent surgeries. Family, pediatrics, internal & ortho at symbolic fees. Periodic outreach to underserved villages.",
+   "sections": [
+    "What makes us different?",
+    "Support packages — Treatment Share — Medical Complex, Caravans & Dialysis",
+    "Related services",
+    "Be the reason behind the impact"
+   ]
+  }
+ },
+ "/services/wells": {
+  "ar": {
+   "title": "حفر الآبار وشبكات المياه النظيفة | مؤسسة اليسر",
+   "description": "750 مترًا من شبكات المياه و100 وصلة منزلية — ساهم في توصيل المياه النظيفة إلى قرى مصر بإشراف فني وتقارير دورية.",
+   "h1": "حفر الآبار وشبكات المياه",
+   "summary": "نحفر الآبار ونمدّ شبكات المياه والوصلات المنزلية لتصل المياه النظيفة إلى كل بيت محتاج. حتى الآن: 750 مترًا من الشبكات و100 وصلة منزلية. حفر بمعدات معتمدة وتحت إشراف هيدروجيولوجي. تحليل معملي للمياه قبل التشغيل وبشكل دوري.",
+   "sections": [
+    "ما الذي يميزنا؟",
+    "باقات دعم حفر الآبار وشبكات المياه",
+    "خدمات ذات صلة",
+    "كن سببًا في الأثر"
+   ]
+  },
+  "en": {
+   "title": "Wells & Clean Water Networks | Al-Yusr",
+   "description": "750m of pipelines and 100 home connections — help bring clean water to Egyptian villages with technical supervision and periodic reporting.",
+   "h1": "Wells & Water Networks",
+   "summary": "We dig wells and extend water networks and home connections so clean water reaches every needy household. To date: 750m of pipelines and 100 home connections. Drilled with certified equipment under hydrogeology supervision. Lab analysis before commissioning and periodically after.",
+   "sections": [
+    "What makes us different?",
+    "Support packages — Wells & Water Networks",
+    "Related services",
+    "Be the reason behind the impact"
+   ]
+  }
+ },
+ "/setr": {
+  "ar": {
+   "title": "حملة سِتْر — «مَن سَتَرَ مسلمًا في الدنيا، سَتَرَهُ الله…",
+   "description": "شارك في حملة سِتر مع مؤسسة اليسر: أسقف عازلة للبيوت، وأبواب وشبابيك، وأسِرّة ومراتب، وألحفة فايبر، وكسوة شتاء للأطفال وكبار السن بالدقهلية ومحافظات مصر.",
+   "h1": "مَن سَتَرَ مسلماً سَتَرَه الله في الدنيا والآخرة",
+   "summary": "يصبح الشتاء عبئًا ثقيلًا على الأسر المستحقة؛ فبرده القارس يحرم الأطفال من النوم ويؤذي كبار السن. وجاءت حملة ستر لتجعل من تبرعك غطاءً دافئًا وجدارًا ساترًا يحمي أهالينا، ويكون لك سترًا وأجرًا ممتدًا في الدنيا والآخرة. شارك في حملة سِتر مع مؤسسة اليسر: أسقف عازلة للبيوت، وأبواب وشبابيك، وأسِرّة ومراتب، وألحفة فايبر، وكسوة شتاء للأطفال وكبار السن بالدقهلية ومحافظات مصر. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "حملة سِتْر — «مَن سَتَرَ مسلمًا في الدنيا، سَتَرَهُ الله في الدنيا والآخرة»",
+    "اختر ما يدفئ أسرة هذا الشتاء",
+    "ثلاث طبقات من الستر",
+    "زيارة ميدانية قبل كل تبرع",
+    "البرد لا يصيب الجميع بالتساوي",
+    "نسبق البرد قبل أن يشتد",
+    "ماذا يحدث بعد تبرعك؟",
+    "دورة لا يضيع فيها شيء",
+    "من شتاء العام الماضي",
+    "حملات وبرامج ذات صلة"
+   ]
+  },
+  "en": {
+   "title": "Setr Campaign — 'Whoever covers a Muslim in this world,…",
+   "description": "Join Al-Yusr's Setr Winter Campaign: home roofing, doors & windows, beds & mattresses, fiber blankets, and winter clothing for children and elderly in Egypt.",
+   "h1": "Whoever covers a Muslim Allah will cover them in both worlds",
+   "summary": "When winter becomes a harsh burden on needy families: freezing cold that keeps children awake. The Setr campaign provides roofs, warm fiber blankets, heavy clothing, beds and mattresses across Egyptian villages. Join Al-Yusr's Setr Winter Campaign: home roofing, doors & windows, beds & mattresses, fiber blankets, and winter clothing for children and elderly in Egypt. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Choose what warms a family this winter",
+    "Three layers of covering",
+    "A field visit before every gift",
+    "The cold does not hit everyone equally",
+    "We get ahead of the cold",
+    "What happens after you give",
+    "A cycle where nothing goes to waste",
+    "From last winter",
+    "Related programs & campaigns",
+    "Frequently Asked Questions"
+   ]
+  }
+ },
+ "/stories": {
+  "ar": {
+   "title": "قصص الأثر — حكايات حقيقية من أسر وصلها خيركم | مؤسسة اليسر",
+   "description": "قصص حقيقية موثّقة لأسر وأطفال في الدقهلية ومحافظات مصر تغيّرت حياتهم بتبرعاتكم: إطعام، علاج، تعليم، سكن وجهاز عرائس — اقرأ وتبرّع لتصنع قصة جديدة.",
+   "h1": "بيوت تغيّرت بخيركم",
+   "summary": "كل قصة هنا حقيقية وموثّقة، كُتبت بموافقة أصحابها، ووراءها متبرع مثلك. «أول مرة من سنين تكفي العزومة شهر كامل، ربنا يكرمكم زي ما كرمتونا.» «كنت بحلم بجهاز يستر بناتي.. اليُسر خلّتني عريسة ومعايا بيت كامل. ربنا يجزيكم خير.»",
+   "sections": [
+    "أم سعاد — المنصورة",
+    "القصة القادمة قد تبدأ بتبرعك"
+   ]
+  },
+  "en": {
+   "title": "Impact stories — real families your giving reached | Al-Yusr",
+   "description": "Documented, real stories of families and children across Egypt whose lives changed thanks to your donations — read them and help write the next one.",
+   "h1": "Homes your giving changed",
+   "summary": "Every story here is real and documented, shared with consent — and behind each one is a donor like you. «For the first time in years, the box lasts a full month. May God bless you as you blessed us.» «I dreamt of a simple trousseau. Al-Yusr gave me a full home. May God reward you.»",
+   "sections": [
+    "Umm Soad — Mansoura",
+    "The next story can start with your gift"
+   ]
+  }
+ },
+ "/takrim": {
+  "ar": {
+   "title": "غسل وتكفين ونقل الموتى مجانًا في المنصورة | تكريم الإنسان…",
+   "description": "خدمة غسل وتكفين الميت ونقل الموتى داخل المنصورة من مؤسسة اليسر، مجانية تمامًا لكل الناس، والمرحلة القادمة القاهرة. اطلب الخدمة أو تبرع لاستمرارها.",
+   "h1": "اطلب خدمة الغسل والتكفين ونقل المتوفى الآن، مجانًا",
+   "summary": "من الغسل والتكفين حتى المسجد والمقابر، فريق وسيارات مجهزة تكرّم المتوفى وترفع العناء عن أهله، والخدمة مجانية تمامًا لكل الناس. نخدم المنصورة الآن، والمرحلة القادمة القاهرة. خدمة غسل وتكفين الميت ونقل الموتى داخل المنصورة من مؤسسة اليسر، مجانية تمامًا لكل الناس، والمرحلة القادمة القاهرة. اطلب الخدمة أو تبرع لاستمرارها. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "تكريم الإنسان: غسل وتكفين ونقل الموتى مجانًا في المنصورة",
+    "اطلب الخدمة الآن",
+    "دعاء للمتوفى",
+    "مميزات الخدمة",
+    "يمكنك التبرع لاستمرار الخدمة مجانًا",
+    "كيف تتم الخدمة خطوة بخطوة",
+    "خدمات تكريم الإنسان في المنصورة",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "ساهم في أن تبقى الخدمة مجانية للجميع"
+   ]
+  },
+  "en": {
+   "title": "Free funeral washing, shrouding & vans in Mansoura |…",
+   "description": "Washing, shrouding and funeral van service inside Mansoura by Al-Yusr, completely free for everyone, expanding to Cairo next. Request the service or give to…",
+   "h1": "Request washing, shrouding and funeral transport now — free",
+   "summary": "From washing and shrouding to the mosque and the grave: a team and equipped vans that honour the deceased and carry the load for the family, completely free for everyone. Serving Mansoura now, Cairo next. Washing, shrouding and funeral van service inside Mansoura by Al-Yusr, completely free for everyone, expanding to Cairo next. Request the service or give to keep it free. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Takrim: free washing, shrouding and funeral transport in Mansoura",
+    "Request the service now",
+    "A du'a for the deceased",
+    "Service features",
+    "Give to keep the service free",
+    "How the service works, step by step",
+    "What Takrim provides in Mansoura",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "Help keep the service free for everyone"
+   ]
+  }
+ },
+ "/ten-days": {
+  "ar": {
+   "title": "صدقات العشر الأوائل من ذي الحجة — أحبّ الأيام إلى الله |…",
+   "description": "صدقات العشر الأوائل من ذي الحجة مع مؤسسة اليسر: صدقة يومية طوال العشر، إفطار صائم يوم عرفة، لحوم بلدي، سقيا ماء، وصك أضحية يوم النحر، بتوثيق كامل في الدقهلية…",
+   "h1": "أحبّ الأيام إلى الله صدقتك فيها مضاعفة",
+   "summary": "عشرة أيام العملُ الصالح فيها أحبّ إلى الله من أي وقت آخر. صدقة كل يوم، وإفطار صائم يوم عرفة، وأضحية يوم النحر، كلها تصل إلى أسر مستحقة في الدقهلية ومصر بتوثيق كامل. صدقات العشر الأوائل من ذي الحجة مع مؤسسة اليسر: صدقة يومية طوال العشر، إفطار صائم يوم عرفة، لحوم بلدي، سقيا ماء، وصك أضحية يوم النحر، بتوثيق كامل في الدقهلية ومصر. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "صدقات العشر الأوائل من ذي الحجة — أحبّ الأيام إلى الله",
+    "خطة صدقة العشر يوم بيوم",
+    "اختر صدقتك في العشر",
+    "لماذا تتصدّق في العشر؟",
+    "يوم عرفة",
+    "أضحيتك من مزرعتنا الوقفية",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "لا تفوّت أحبّ الأيام إلى الله"
+   ]
+  },
+  "en": {
+   "title": "Charity in the first ten days of Dhul Hijjah — The days…",
+   "description": "Charity in the first ten days of Dhul Hijjah with Al-Yusr: a daily charity, iftar on the day of Arafah, local meat, water and a Qurbani share on Eid day,…",
+   "h1": "The days most beloved to Allah make your charity count in them",
+   "summary": "Ten days in which good deeds are more beloved to Allah than at any other time. A charity every day, iftar for a fasting person on the day of Arafah and a Qurbani on the day of sacrifice, all reaching families in need with full documentation. Charity in the first ten days of Dhul Hijjah with Al-Yusr: a daily charity, iftar on the day of Arafah, local meat, water and a Qurbani share on Eid day, fully documented. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Charity in the first ten days of Dhul Hijjah — The days most beloved to Allah",
+    "A day-by-day plan for the ten days",
+    "Choose your charity for the ten days",
+    "Why give in the ten days?",
+    "The day of Arafah",
+    "Your Qurbani from our waqf farm",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "Don't miss the days most beloved to Allah"
+   ]
+  }
+ },
+ "/terms": {
+  "ar": {
+   "title": "الشروط والأحكام — مؤسسة اليسر الخيرية",
+   "description": "شروط استخدام موقع مؤسسة اليسر الخيرية: التبرعات وطرق الدفع، الزكاة، إعادة تخصيص التبرعات، الاسترداد خلال 7 أيام، التبرع الشهري، والأضاحي.",
+   "h1": "الشروط والأحكام",
+   "summary": "تنظم هذه الشروط العلاقة بين مؤسسة اليسر الخيرية ومستخدمي موقعها الإلكتروني والمتبرعين من خلاله، وتبيّن حقوق كل طرف والتزاماته. آخر تحديث: 28 أكتوبر 2026 · إشهار رقم 2665 لسنة 2019 هذا الملخص للتيسير فحسب، ويُعتد بالنص الكامل الوارد أدناه عند التعارض.",
+   "sections": [
+    "ملخص الأحكام الرئيسية",
+    "١. التعريف وقبول الشروط",
+    "٢. التعريفات",
+    "٣. استخدام الموقع",
+    "٤. التبرعات وطرق الدفع",
+    "٥. الزكاة والصدقات",
+    "٦. توجيه التبرع والمبالغ الزائدة",
+    "٧. الاسترداد والإلغاء",
+    "٨. التبرعات الشهرية والكفالات",
+    "٩. الأضاحي والحملات الموسمية"
+   ]
+  },
+  "en": {
+   "title": "Terms & Conditions — Al-Yusr Charity",
+   "description": "Al-Yusr Charity terms: donations and payments, zakat, reallocation, refunds within 7 days, monthly giving and Qurbani.",
+   "h1": "Terms & Conditions",
+   "summary": "These Terms govern the relationship between Al-Yusr Charity Foundation and the users of, and donors through, its website, setting out each party's rights and obligations. Last updated: 28 October 2026 · Registration No. 2665/2019 This summary is provided for convenience only; the full text below prevails in case of conflict.",
+   "sections": [
+    "Summary of key provisions",
+    "1. Who we are and acceptance",
+    "2. Definitions",
+    "3. Using the site",
+    "4. Donations and payment methods",
+    "5. Zakat and sadaqa",
+    "6. Designation and surplus amounts",
+    "7. Refunds and cancellation",
+    "8. Monthly gifts and sponsorships",
+    "9. Qurbani and seasonal campaigns"
+   ]
+  }
+ },
+ "/trust": {
+  "ar": {
+   "title": "الشفافية والثقة | مؤسسة اليسر الخيرية — تتبع تبرعك خطوة…",
+   "description": "مؤسسة اليسر الخيرية مشهرة برقم 2665/2019 وتعمل في كل محافظات مصر: رقم تتبع لكل تبرع، دفع آمن، توثيق بالصور والفيديو، 90% من التبرعات تصل إلى المستفيدين،…",
+   "h1": "الشفافية في مؤسسة اليسر الخيرية",
+   "summary": "نفتح أبوابنا لك لتتأكد بنفسك من وصول كل جنيه إلى مستحقه: ترخيص رسمي، ورقم تتبع لكل تبرع، وصور وفيديو، وزيارات ميدانية. اليسر مؤسسة أهلية مصرية مشهرة لدى وزارة التضامن الاجتماعي برقم 2665/2019، تعمل في كل محافظات مصر منذ 2019؛ يصل 90% من التبرعات إلى الحالات والمستفيدين، ولكل تبرع رقم تتبع وتوثيق بالصور. مؤسسة أهلية مسجّلة لدى وزارة التضامن الاجتماعي منذ 2019.",
+   "sections": [
+    "مشهرة برقم 2665/2019",
+    "رقم تتبع لكل تبرع",
+    "دفع آمن ومشفّر",
+    "توثيق بالصور والفيديو",
+    "أرقامنا على أرض الواقع",
+    "لا نطلب منك أن تثق بنا… بل نُريك بنفسك",
+    "من تبرعك حتى وصول الأثر — 4 خطوات شفافة",
+    "أين يذهب كل جنيه؟",
+    "وضعنا الرسمي",
+    "طرق تبرع آمنة وبياناتك في أمان"
+   ]
+  },
+  "en": {
+   "title": "Trust & Transparency | Al-Yusr Charity Foundation",
+   "description": "Al-Yusr Charity Foundation (NGO No. 2665/2019) works across Egypt: a tracking number per donation, secure payment, photo/video proof, 90% of donations…",
+   "h1": "Transparency at Al-Yusr Charity Foundation",
+   "summary": "We open our doors so you can verify every pound reached the right family — official license, a tracking number per donation, photos, video and field visits. Al-Yusr is an Egyptian NGO registered with the Ministry of Social Solidarity (No. 2665/2019), working across Egypt since 2019; 90% of donations reach the cases and beneficiaries, and every gift has a tracking number and photo proof. Egyptian NGO registered with the Ministry of Social Solidarity since 2019.",
+   "sections": [
+    "Registered No. 2665/2019",
+    "A tracking number per gift",
+    "Secure, encrypted payment",
+    "Photo & video proof",
+    "Our impact in numbers",
+    "We don't ask for your trust — we show you",
+    "From your donation to verified impact — 4 transparent steps",
+    "Where does every pound go?",
+    "Our official standing",
+    "Safe ways to give — your data stays safe"
+   ]
+  }
+ },
+ "/volunteer": {
+  "ar": {
+   "title": "تطوع مع اليسر في الدقهلية والمنصورة | وقتك وخبرتك يصنعان…",
+   "description": "تطوع مع مؤسسة اليسر في قوافل التوزيع وزيارات الحالات والقوافل الطبية والإعلام والدعم التقني. لا تحتاج إلى التبرع بالمال؛ وقتك وخبرتك يكفيان لصناعة أثر حقيقي.",
+   "h1": "تطوع مع اليسر في الدقهلية",
+   "summary": "لا تحتاج إلى التبرع بالمال. يمكنك أن تمنح وقتك في الميدان، أو خبرتك الطبية والتقنية، أو موهبتك في التصوير، أو حتى نصف يوم في قافلة توزيع. كل جهد تقدمه يصل إلى أسرة محتاجة في الدقهلية. تطوع في الوقت الذي يناسبك: ساعة أو يوم أو موسم كامل، دون التزامات ثابتة. سترى بعينيك الأسرة التي وصل إليها جهدك، وليس مجرد أرقام وتقارير.",
+   "sections": [
+    "وقتك أثمن مما تتخيل",
+    "اختر المسار الذي يناسبك",
+    "خمس خطوات تفصلك عن الميدان",
+    "وعدنا لك كمتطوع",
+    "أسئلة شائعة عن التطوع",
+    "سجّل الآن"
+   ]
+  },
+  "en": {
+   "title": "Volunteer in Dakahlia & Mansoura - your time, effort &…",
+   "description": "Volunteer with Al-Yusr in Dakahlia: distribution convoys, case visits, medical convoys, media, tech support. You do not need to donate - your time, effort and…",
+   "h1": "Volunteer in Dakahlia - your time, effort & expertise is enough",
+   "summary": "You do not need to donate money - you can volunteer your time in the field, your medical or tech expertise, your photography talent, or even a half-day at a distribution convoy. Every effort you give reaches a needy family in Dakahlia. Volunteer when you can - an hour, a day, or a full season. No fixed obligations. You see with your own eyes the family your help reached - not just numbers.",
+   "sections": [
+    "Your time is worth more than you imagine",
+    "Pick a track that fits you",
+    "Five steps to the field",
+    "Our promise to you as a volunteer",
+    "Volunteer FAQs",
+    "Register now"
+   ]
+  }
+ },
+ "/water": {
+  "ar": {
+   "title": "توصيل مياه نظيفة للبيوت في مصر | وصلة مياه صدقة جارية —…",
+   "description": "تبرع لمشروع سقيا الماء من مؤسسة اليسر: توصيل مياه شرب نظيفة للبيوت وفلاتر للقرى في الدقهلية. أمان لصحة الأطفال وكبار السن وصدقة جارية.",
+   "h1": "سقيا الماء — مياه نظيفة لكل بيت",
+   "summary": "وصلة مياه نظيفة داخل البيت تعني أمانًا لصحة الأطفال وكبار السن، وراحة للأم والأب من مشوار الجراكن والمياه الملوثة. افتح الحنفية بالأسفل وشاهد الفرق بنفسك. تبرع لمشروع سقيا الماء من مؤسسة اليسر: توصيل مياه شرب نظيفة للبيوت وفلاتر للقرى في الدقهلية. أمان لصحة الأطفال وكبار السن وصدقة جارية. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "سقيا الماء — مياه نظيفة لكل بيت",
+    "تخيّل يومك دون ماء في البيت",
+    "لماذا المياه النظيفة أولوية؟",
+    "أين يذهب تبرعك في سقيا الماء؟",
+    "من الميدان",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "افتح حنفية خير في بيت محتاج"
+   ]
+  },
+  "en": {
+   "title": "Clean water connections in Egypt | Ongoing charity — Al-Yusr",
+   "description": "Support Al-Yusr's clean water project: home water connections and filters for villages in Dakahlia. Safety for children and elders, and ongoing charity.",
+   "h1": "Clean water — safe water for every home",
+   "summary": "A clean water connection at home means safety for children and elders, and relief for parents from long trips and dirty water. Open the tap below and see the difference. Support Al-Yusr's clean water project: home water connections and filters for villages in Dakahlia. Safety for children and elders, and ongoing charity. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Clean water — safe water for every home",
+    "Imagine your day without water at home",
+    "Why clean water comes first",
+    "Where your water donation goes",
+    "From the field",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "Open a tap of good in a home in need"
+   ]
+  }
+ },
+ "/zakat": {
+  "ar": {
+   "title": "حاسبة زكاة المال 2026 بسعر الذهب اليوم في مصر | اليسر",
+   "description": "احسب زكاة المال أونلاين بسعر الذهب اليوم في مصر (24/21/18 قيراط)، وزكاة التجارة والفطر، وأخرجها في أبواب موثّقة في المنصورة والدقهلية ومحافظات مصر: كفالة…",
+   "h1": "حاسبة الزكاة 2026 بالدقهلية — زكاتُك بركة مالِك",
+   "summary": "احسب زكاتك بسعر الذهب اليوم في مصر، واصرفها في أبواب موثّقة بالمنصورة وميت غمر وطلخا: كفالة يتيم، علاج، سداد ديون الغارمين، ومشاريع صغيرة تُحيي الأسر. بسعر الذهب اللحظي اليوم في مصر. أدخل أصولك وخصم الديون لحساب صافي الزكاة. النصاب = 85 جم ذهب 24 قيراط ≈ 466,286 ج.م",
+   "sections": [
+    "حاسبة زكاة المال (متقدّمة)",
+    "أنواع الزكاة والصدقات",
+    "أبواب صرف زكاتك",
+    "محاور صرف زكاتك في اليسر",
+    "اختر سهمك في الجنة",
+    "مواسم الخير في اليسر",
+    "سجل الإنجازات منذ 2019",
+    "خريطة عملنا في مصر",
+    "ثقتك أمانة.. وشفافيتنا هي الضمان",
+    "أسئلة شائعة عن الزكاة"
+   ]
+  },
+  "en": {
+   "title": "Zakat Calculator Egypt 2026 — Live Gold Price | Al-Yusr",
+   "description": "Calculate Zakat online with Egypt's live gold price (24/21/18K), wealth, business and Zakat al-Fitr, then give it through verified causes in Mansoura,…",
+   "h1": "Zakat Calculator 2026 (Dakahlia) — your Zakat, your wealth's blessing",
+   "summary": "Calculate Zakat with Egypt's live gold price and channel it to verified causes in Mansoura, Mit Ghamr & Talkha — orphan sponsorship, treatment, debt relief, micro-projects. Live gold price for Egypt. Enter assets and deduct debts to compute your net Zakat. Your wealth is below nisab — Zakat is not due, but voluntary sadaqah is always rewarded.",
+   "sections": [
+    "Advanced Zakat calculator",
+    "Types of Zakat & sadaqah",
+    "Where your Zakat goes",
+    "Where your Zakat is invested",
+    "Choose your share in jannah",
+    "Al-Yusr seasons of giving",
+    "Track record since 2019",
+    "Our coverage across Egypt",
+    "Your trust is sacred — transparency is our guarantee",
+    "Frequently asked questions"
+   ]
+  }
+ }
 }

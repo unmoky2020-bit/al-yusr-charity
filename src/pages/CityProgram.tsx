@@ -7,6 +7,7 @@ import {
 import { motion, useReducedMotion } from "motion/react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
+import { isIndexedCity } from "@/data/seoIndexable";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
@@ -90,9 +91,9 @@ const CityProgram = () => {
         description={seoDescription}
         path={path}
         image={prog.image}
+        noindex={!isIndexedCity(cityObj.slug)}
       />
       <Helmet>
-        <link rel="canonical" href={url} />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
@@ -106,28 +107,16 @@ const CityProgram = () => {
         })}</script>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "LocalBusiness",
-          "@id": `${url}#localbusiness`,
-          name: `${isRTL ? "مؤسسة اليسر الخيرية" : "Al-Yusr Charity"} — ${cName}`,
-          image: {
-            "@type": "ImageObject",
-            url: prog.image?.startsWith("http") ? prog.image : `https://elyusr.org${prog.image || ""}`,
-            caption: headline,
-            creditText: "Al-Yusr Charity Foundation",
-            copyrightNotice: "© Al-Yusr Charity Foundation",
-            creator: { "@type": "Organization", name: "Al-Yusr Charity Foundation", url: "https://elyusr.org/" },
-            license: "https://elyusr.org/terms",
-            acquireLicensePage: "https://elyusr.org/contact",
-          },
+          "@type": "Service",
+          "@id": `${url}#service`,
+          name: headline,
+          serviceType: pName,
+          image: prog.image?.startsWith("http") ? prog.image : `https://elyusr.org${prog.image || ""}`,
           url,
-          telephone: "+201097000137",
-          priceRange: "EGP",
+          provider: { "@type": "NGO", name: isRTL ? "مؤسسة اليسر الخيرية" : "Al-Yusr Charity Foundation", url: "https://elyusr.org/" },
           areaServed: { "@type": "City", name: cName, containedInPlace: { "@type": "AdministrativeArea", name: "Dakahlia, Egypt" } },
-          address: { "@type": "PostalAddress", addressCountry: "EG", addressRegion: "Dakahlia", addressLocality: cName },
-          geo: { "@type": "GeoCoordinates", latitude: cityObj.lat, longitude: cityObj.lon },
-          makesOffer: {
+          offers: {
             "@type": "Offer",
-            name: headline,
             priceCurrency: "EGP",
             price: prog.priceFrom || undefined,
             url: `https://elyusr.org/donate?program=${prog.slug}&city=${cityObj.slug}`,

@@ -11,10 +11,29 @@ import { writeFileSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { ALL_GEO_PAIRS } from "../src/data/geoPages";
 import { DAKAHLIA_CITIES } from "../src/data/dakahliaCities";
+import { isIndexedCity, isIndexedGeo } from "../src/data/seoIndexable";
 
 const BASE_URL = "https://elyusr.org";
 // Laravel API (Supabase is no longer used). Public endpoints only, no token.
 const BACKEND = process.env.VITE_BACKEND_URL || "https://api.elyusr.org";
+
+/** List endpoints that could not be read in this run (offline build, API down). */
+const unreachable = new Set<string>();
+
+/**
+ * The API pages of the last sitemap (programs, articles, stories, cases). An offline build keeps
+ * them instead of dropping them, or of listing a guessed set of programs.
+ */
+const previousApiEntries: Entry[] = (() => {
+  try {
+    const xml = readFileSync(resolve("public/sitemap-base.xml"), "utf8");
+    return [...xml.matchAll(/<url>\s*<loc>https?:\/\/[^/<]+(\/[^<]*)<\/loc>(?:\s*<lastmod>([^<]+)<\/lastmod>)?/g)]
+      .filter((m) => /^\/(programs|blog|stories|cases)\/[^/]+$/.test(m[1]))
+      .map((m) => ({ path: m[1], lastmod: m[2], changefreq: "weekly", priority: m[1].startsWith("/programs/") ? "0.9" : "0.75" }));
+  } catch {
+    return [];
+  }
+})();
 
 /** GET a public Laravel list endpoint; returns [] on any failure (the sitemap must never break dev/build). */
 async function laravelList(path: string): Promise<any[]> {
@@ -24,7 +43,10 @@ async function laravelList(path: string): Promise<any[]> {
     for (let page = 1; page <= 50; page++) {
       const sep = path.includes("?") ? "&" : "?";
       const res = await fetch(`${BACKEND}/api/v1${path}${sep}per_page=100&page=${page}`, { headers: { Accept: "application/json" } });
-      if (!res.ok) break;
+      if (!res.ok) {
+        if (page === 1) unreachable.add(path);
+        break;
+      }
       const json: any = await res.json();
       const list = Array.isArray(json) ? json : Array.isArray(json?.data) ? json.data : Array.isArray(json?.data?.data) ? json.data.data : [];
       out.push(...list);
@@ -34,13 +56,13 @@ async function laravelList(path: string): Promise<any[]> {
     return out;
   } catch (e) {
     console.warn(`[sitemap] could not fetch ${path} from Laravel:`, (e as Error).message);
+    unreachable.add(path);
     return [];
   }
 }
 
 type Entry = { path: string; lastmod?: string; changefreq?: string; priority?: string; noindex?: boolean };
 
-const today = new Date().toISOString().slice(0, 10);
 
 const staticEntries: Entry[] = [
   { path: "/", changefreq: "daily", priority: "1.0" },
@@ -115,7 +137,8 @@ function urlEntry(e: Entry): string {
   return [
     "  <url>",
     `    <loc>${escapeXml(loc)}</loc>`,
-    `    <lastmod>${e.lastmod || today}</lastmod>`,
+    // No date rather than "today" on every build: Google stops trusting a lastmod that always moves.
+    e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : "",
     e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : "",
     e.priority ? `    <priority>${e.priority}</priority>` : "",
     `    <xhtml:link rel="alternate" hreflang="ar-EG" href="${escapeXml(altAr)}" />`,
@@ -144,7 +167,7 @@ async function fetchBlogPosts(): Promise<Entry[]> {
       dates.push(match[1]);
     }
     slugs.forEach((slug, idx) => {
-      const date = dates[idx] || today;
+      const date = dates[idx] || undefined;
       map.set(slug, {
         path: `/blog/${slug}`,
         lastmod: date,
@@ -163,7 +186,7 @@ async function fetchBlogPosts(): Promise<Entry[]> {
     if (a.slug && published) {
       map.set(a.slug, {
         path: `/blog/${a.slug}`,
-        lastmod: (a.updated_at || a.created_at || "").slice(0, 10) || today,
+        lastmod: (a.updated_at || a.created_at || "").slice(0, 10) || undefined,
         changefreq: "weekly",
         priority: "0.75",
       });
@@ -181,7 +204,7 @@ async function fetchStories(): Promise<Entry[]> {
     if (s.slug && (s.status === "published" || s.is_published === true)) {
       map.set(s.slug, {
         path: `/stories/${s.slug}`,
-        lastmod: (s.updated_at || s.created_at || "").slice(0, 10) || today,
+        lastmod: (s.updated_at || s.created_at || "").slice(0, 10) || undefined,
         changefreq: "monthly",
         priority: "0.6",
       });
@@ -200,7 +223,7 @@ async function fetchCases(): Promise<Entry[]> {
     .filter((c: any) => REAL_CODE.test(String(c.ref_code || c.code || "")) && PUBLIC_STATUSES.includes(String(c.status || "").toLowerCase()))
     .map((c: any) => ({
       path: `/cases/${encodeURIComponent(String(c.ref_code || c.code))}`,
-      lastmod: (c.updated_at || "").slice(0, 10) || today,
+      lastmod: (c.updated_at || "").slice(0, 10) || undefined,
       changefreq: "weekly",
       priority: "0.75",
     }));
@@ -221,10 +244,11 @@ async function fetchPrograms(): Promise<Entry[]> {
   const lastmodOf = new Map<string, string>(live.map((p: any) => [p.slug, String(p.updated_at || "").slice(0, 10)]));
   // Published backend programs only: an inactive program's page is "unavailable" (noindex), so it must
   // not be in the sitemap. The static list is a fallback for an offline build.
-  const slugs = new Set<string>(live.length ? live.map((p: any) => String(p.slug)) : STATIC_PROGRAM_SLUGS);
+  const previous = previousApiEntries.filter((e) => e.path.startsWith("/programs/")).map((e) => e.path.slice("/programs/".length));
+  const slugs = new Set<string>(live.length ? live.map((p: any) => String(p.slug)) : previous.length ? previous : STATIC_PROGRAM_SLUGS);
   return [...slugs].map((slug) => ({
     path: `/programs/${slug}`,
-    lastmod: lastmodOf.get(slug) || today,
+    lastmod: lastmodOf.get(slug) || undefined,
     changefreq: "weekly",
     priority: "0.9",
   }));
@@ -246,35 +270,38 @@ const STATIC_BLOG_SLUGS: { slug: string; date: string }[] = [
   const staticBlog: Entry[] = STATIC_BLOG_SLUGS
     .map((p) => ({ path: `/blog/${p.slug}`, lastmod: p.date, changefreq: "weekly" as const, priority: "0.7" }))
     .filter((b) => !blogSlugs.has(b.path));
-  // Markoun pickup only covers Dakahlia: other governorates' markoun pages stay out of the sitemap.
-  const geo: Entry[] = ALL_GEO_PAIRS.filter(({ governorate, program }) => program !== "markoun" || governorate === "dakahlia").map(({ governorate, program }) => ({
+  // Templated local pages: only the cities/governorates in src/data/seoIndexable.ts (the others are
+  // noindex,follow — same text with another place name reads as doorway pages).
+  const geo: Entry[] = ALL_GEO_PAIRS.filter(({ governorate }) => isIndexedGeo(governorate)).map(({ governorate, program }) => ({
     path: `/geo/${governorate}/${program}`,
-    lastmod: today,
+    changefreq: "monthly",
+    priority: "0.6",
+  }));
+  const cities: Entry[] = DAKAHLIA_CITIES.filter((c) => isIndexedCity(c.slug)).map((c) => ({
+    path: `/qurbani/${c.slug}`,
     changefreq: "weekly",
     priority: "0.8",
   }));
-  // Dakahlia city Qurbani pages — high-intent local SEO targets.
-  const cities: Entry[] = DAKAHLIA_CITIES.map((c) => ({
-    path: `/qurbani/${c.slug}`,
-    lastmod: today,
-    changefreq: "weekly",
-    priority: "0.9",
-  }));
   // Local-intent /donate/:city landing pages (currently MVP: Mansoura only).
   const donateCities: Entry[] = [
-    { path: "/donate/mansoura", lastmod: today, changefreq: "weekly", priority: "0.9" },
+    { path: "/donate/mansoura", changefreq: "weekly", priority: "0.9" },
   ];
   // City × program landings — /dakahlia/:city/:program
-  const cityPrograms: Entry[] = DAKAHLIA_CITIES.flatMap((c) =>
+  const cityPrograms: Entry[] = DAKAHLIA_CITIES.filter((c) => isIndexedCity(c.slug)).flatMap((c) =>
     (c.programs || []).map((p) => ({
       path: `/dakahlia/${c.slug}/${p}`,
-      lastmod: today,
-      changefreq: "weekly" as const,
-      priority: "0.8",
+      changefreq: "monthly" as const,
+      priority: "0.7",
     })),
   );
-  const dyn = [...programPages, ...blog, ...staticBlog, ...stories, ...cases, ...geo, ...cities, ...donateCities, ...cityPrograms];
-  const all = [...staticEntries, ...serviceEntries, ...dyn];
+  // API down: keep the API pages the last sitemap had (a program, article, story or case is never
+  // dropped just because this build ran offline).
+  const kept = unreachable.size ? previousApiEntries : [];
+  if (kept.length) console.warn(`[sitemap] API unreachable (${[...unreachable].join(", ")}): kept ${kept.length} pages from the last sitemap`);
+  const dyn = [...programPages, ...blog, ...staticBlog, ...stories, ...cases, ...kept, ...geo, ...cities, ...donateCities, ...cityPrograms];
+  // One entry per page (a path listed twice keeps its first entry).
+  const seen = new Set<string>();
+  const all = [...staticEntries, ...serviceEntries, ...dyn].filter((e) => !seen.has(e.path) && seen.add(e.path));
   const xml = [
     `<?xml version="1.0" encoding="UTF-8"?>`,
     `<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>`,

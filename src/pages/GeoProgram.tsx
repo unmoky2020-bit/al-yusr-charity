@@ -4,6 +4,7 @@ import { Heart, MapPin, Phone, ShieldCheck, HelpCircle, Sparkles, Truck, FileChe
 import { motion, useReducedMotion } from "motion/react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
+import { isIndexedGeo } from "@/data/seoIndexable";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
@@ -13,9 +14,9 @@ import { RelatedContentLinks } from "@/components/common/RelatedContentLinks";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 
 /**
- * Localized geo landing — /geo/:governorate/:program.
- * Adds LocalBusiness JSON-LD + canonical + AR↔EN hreflang and unique
- * bilingual copy per (city, program) pair.
+ * Localized geo landing — /geo/:governorate/:program: Service JSON-LD (the foundation serving that
+ * area, not a branch there) + canonical/hreflang via SEOHelmet. Out of search unless the
+ * governorate is in src/data/seoIndexable.ts (the copy is shared across governorates).
  */
 const GeoProgram = () => {
   const { governorate = "", program = "" } = useParams();
@@ -59,9 +60,8 @@ const GeoProgram = () => {
 
   return (
     <PageLayout>
-      <SEOHelmet title={`${c.headline} | ${isRTL ? "مؤسسة اليسر الخيرية" : "Al-Yusr Charity"}`} description={c.intro} path={path} image={prog.image} />
+      <SEOHelmet title={`${c.headline} | ${isRTL ? "مؤسسة اليسر الخيرية" : "Al-Yusr Charity"}`} description={c.intro} path={path} image={prog.image} noindex={!isIndexedGeo(geo.slug)} />
       <Helmet>
-        <link rel="canonical" href={url} />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
@@ -74,19 +74,16 @@ const GeoProgram = () => {
         })}</script>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "LocalBusiness",
-          "@id": `${url}#localbusiness`,
-          name: `${isRTL ? "مؤسسة اليسر الخيرية" : "Al-Yusr Charity"} — ${gName}`,
+          "@type": "Service",
+          "@id": `${url}#service`,
+          name: c.headline,
+          serviceType: prog[lang].name,
           image: prog.image,
           url,
-          telephone: "+201097000137",
-          priceRange: "EGP",
+          provider: { "@type": "NGO", name: isRTL ? "مؤسسة اليسر الخيرية" : "Al-Yusr Charity Foundation", url: "https://elyusr.org/" },
           areaServed: { "@type": "AdministrativeArea", name: gName },
-          address: { "@type": "PostalAddress", addressCountry: "EG", addressRegion: gName },
-          geo: { "@type": "GeoCoordinates", latitude: geo.lat, longitude: geo.lon },
-          makesOffer: {
+          offers: {
             "@type": "Offer",
-            name: c.headline,
             priceCurrency: "EGP",
             price: prog.priceFrom || undefined,
             url: `https://elyusr.org/donate?program=${prog.slug}&governorate=${geo.slug}`,

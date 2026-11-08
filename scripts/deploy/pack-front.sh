@@ -5,6 +5,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 npm run build
+# Each fixed page's own title, heading and text for crawlers without JavaScript (seo.php reads it).
+npx tsx scripts/seo-snapshot.ts
 git checkout -q -- public/sitemap.xml public/sitemap-base.xml 2>/dev/null || true   # the build regenerates them
 rm -rf deploy-out/pkg && mkdir -p deploy-out/pkg
 cp -a dist deploy-out/pkg/site
