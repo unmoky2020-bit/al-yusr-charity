@@ -146,6 +146,56 @@ function static_page(string $path, string $lang): ?array
     return is_array($entry) ? $entry + ['type' => 'website'] : null;
 }
 
+/**
+ * Links every crawler can follow without running JavaScript: the app builds its menus in the
+ * browser, so without these a non-JS crawler (Semrush, Bing, social and AI bots) only finds the
+ * page it was given. One list from seo-static.json (the fixed pages) + the main sections.
+ */
+function site_links(string $path, string $lang): string
+{
+    static $map = null;
+    $map ??= json_decode((string) @file_get_contents(__DIR__ . '/seo-static.json'), true) ?: [];
+    $sections = ['/' => ['الرئيسية', 'Home'], '/programs' => ['البرامج', 'Programs'], '/projects' => ['المشاريع', 'Projects'],
+        '/campaigns' => ['الحملات', 'Campaigns'], '/cases' => ['الحالات', 'Cases'], '/blog' => ['المدونة', 'Blog'],
+        '/donate' => ['تبرع الآن', 'Donate'], '/contact' => ['تواصل معنا', 'Contact']];
+    $links = [];
+    foreach ($sections as $href => [$ar, $en]) {
+        $links[$href] = $lang === 'en' ? $en : $ar;
+    }
+    foreach ($map as $href => $entry) {
+        if (! is_string($href) || isset($links[$href]) || ! str_starts_with($href, '/')) {
+            continue;
+        }
+        $title = (string) ($entry[$lang]['title'] ?? $entry['ar']['title'] ?? '');
+        $label = trim((string) preg_split('/\s[|—–-]\s/u', $title)[0]);
+        if ($label !== '') {
+            $links[$href] = $label;
+        }
+    }
+    // A hub page (/blog, /programs, /qurbani…) also links to every page under it from the sitemap.
+    static $locs = null;
+    if ($locs === null) {
+        $xml = (string) @file_get_contents(__DIR__ . '/sitemap-base.xml');
+        preg_match_all('#<loc>https?://[^/<]+(/[^<]*)</loc>#', $xml, $m);
+        $locs = array_values(array_unique($m[1] ?? []));
+    }
+    if ($path !== '/') {
+        foreach ($locs as $href) {
+            if (str_starts_with($href, $path . '/') && ! isset($links[$href])) {
+                $links[$href] = urldecode(str_replace('-', ' ', basename($href)));
+            }
+        }
+    }
+    unset($links[$path]);
+    $suffix = $lang === 'en' ? '?lang=en' : '';   // same URL scheme as the canonical / hreflang tags
+    $items = '';
+    foreach ($links as $href => $label) {
+        $items .= '<li><a href="' . e($href . $suffix) . '">' . e($label) . '</a></li>';
+    }
+
+    return '<nav aria-label="' . ($lang === 'en' ? 'Site pages' : 'صفحات الموقع') . '"><ul>' . $items . '</ul></nav>';
+}
+
 function e(?string $v): string
 {
     return htmlspecialchars((string) $v, ENT_QUOTES | ENT_HTML5, 'UTF-8');
@@ -211,7 +261,7 @@ function render(string $html, array $p, string $path, string $lang): string
         if (! empty($p['donate_url'])) {
             $body .= '<p><a href="' . e($p['donate_url']) . '">' . ($lang === 'en' ? 'Donate now' : 'تبرع الآن') . '</a></p>';
         }
-        $body .= '</main>';
+        $body .= site_links($path, $lang) . '</main>';
         $html = preg_replace('#<div id="root">\s*</div>#', '<div id="root">' . str_replace(['\\', '$'], ['\\\\', '\\$'], $body) . '</div>', $html, 1);
     }
 
