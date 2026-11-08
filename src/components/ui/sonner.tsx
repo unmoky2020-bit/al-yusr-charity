@@ -32,11 +32,15 @@ const Toaster = ({ ...props }: ToasterProps) => {
         },
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-card/95 group-[.toaster]:backdrop-blur-md group-[.toaster]:text-foreground group-[.toaster]:border group-[.toaster]:border-border/80 group-[.toaster]:shadow-2xl group-[.toaster]:rounded-2xl group-[.toaster]:p-3.5 sm:group-[.toaster]:p-4 md:group-[.toaster]:px-6 md:group-[.toaster]:py-4 md:group-[.toaster]:min-w-[420px] font-['Droid_Arabic_Kufi',_'DIN_Next_Arabic',_sans-serif] pointer-events-auto",
+            "group toast group-[.toaster]:bg-card/95 group-[.toaster]:backdrop-blur-md group-[.toaster]:text-foreground group-[.toaster]:border group-[.toaster]:border-border/80 group-[.toaster]:shadow-2xl group-[.toaster]:rounded-2xl group-[.toaster]:p-3.5 sm:group-[.toaster]:p-4 md:group-[.toaster]:px-6 md:group-[.toaster]:py-4 group-[.toaster]:pe-12 md:group-[.toaster]:pe-14 md:group-[.toaster]:min-w-[420px] font-['Droid_Arabic_Kufi',_'DIN_Next_Arabic',_sans-serif] pointer-events-auto",
           title: "group-[.toast]:font-extrabold group-[.toast]:text-xs sm:group-[.toast]:text-sm md:group-[.toast]:text-[15px] group-[.toast]:leading-snug",
           description: "group-[.toast]:text-muted-foreground group-[.toast]:text-xs sm:group-[.toast]:text-sm font-semibold group-[.toast]:mt-0.5",
           actionButton: "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground font-bold rounded-xl",
           cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground font-bold rounded-xl",
+          // Close (×): inside the toast on the reading end (left in Arabic, right in English), centred,
+          // never over the status icon. Sonner's own position comes from these variables.
+          closeButton:
+            "[--toast-close-button-start:auto] [--toast-close-button-end:auto] [--toast-close-button-transform:translateY(-50%)] !end-3 !top-1/2 !h-7 !w-7 !border-0 !bg-transparent !text-muted-foreground hover:!bg-muted hover:!text-foreground",
           success: "group-[.toaster]:border-emerald-500/35 group-[.toaster]:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.18),0_0_24px_rgba(16,185,129,0.12)]",
           error: "group-[.toaster]:border-rose-500/35 group-[.toaster]:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.18),0_0_24px_rgba(244,63,94,0.12)]",
           warning: "group-[.toaster]:border-amber-500/35",
