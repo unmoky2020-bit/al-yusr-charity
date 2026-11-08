@@ -16,12 +16,12 @@ interface Props {
 const HIGH_VOLUME_KEYWORDS = [
   // هوية المؤسسة
   "اليسر", "مؤسسة اليسر", "مؤسسة اليسر الخيرية", "جمعية اليسر", "جمعية اليسر الخيرية", "اليسر الخيرية",
-  // الموقع الجغرافي
-  "المنصورة", "الدقهلية", "جمعية خيرية بالمنصورة", "تبرع الدقهلية",
+  // النطاق: مصر كلها، والمقر في المنصورة
+  "مؤسسة خيرية في مصر", "تبرع في مصر", "مؤسسة خيرية في المنصورة", "جمعية خيرية في المنصورة", "تبرع في الدقهلية", "المنصورة", "الدقهلية",
   // الخدمات
-  "تبرع", "زكاة", "صدقة جارية", "كفالة أيتام", "صك أضحية", "تيسير زواج", "سقيا الماء",
+  "تبرع", "زكاة المال", "صدقة جارية", "كفالة أيتام", "صك أضحية", "أضحية", "توصيل مياه", "وصلة مياه", "كرتونة رمضان", "تجهيز عرائس", "علاج المرضى", "إطعام", "التبرع بالملابس المستعملة",
   // English
-  "Al-Yusr Charity Foundation", "Al-Yusr Egypt", "Donate Egypt", "Zakat Egypt", "Orphan sponsorship Egypt",
+  "Al-Yusr Charity Foundation", "Charity in Egypt", "Charity in Mansoura", "Donate Egypt", "Zakat Egypt", "Orphan sponsorship Egypt",
 ].join(", ");
 
 export const SEOHelmet = ({ title, description, path = "/", image, ogType = "website", keywords, noindex = false }: Props) => {
@@ -103,10 +103,10 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
             "@id": "https://elyusr.org/#org",
             name: lang === "ar" ? "مؤسسة اليسر الخيرية" : "Al-Yusr Charity Foundation",
             alternateName: [
+              "اليسر",
               "مؤسسة اليسر",
               "جمعية اليسر",
               "جمعية اليسر الخيرية",
-              "مؤسسة اليسر الخيرية",
               "اليسر الخيرية",
               "مؤسسة اليسر المنصورة",
               "مؤسسة اليسر بالمنصورة",
@@ -141,9 +141,9 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
             },
             telephone: "+201097000137",
             areaServed: [
-              { "@type": "City", name: "المنصورة" },
+              { "@type": "Country", name: "مصر" },
               { "@type": "AdministrativeArea", name: "محافظة الدقهلية" },
-              { "@type": "Country", name: "مصر" }
+              { "@type": "City", name: "المنصورة" }
             ],
             sameAs: [
               "https://facebook.com/Elyosr.Charity",

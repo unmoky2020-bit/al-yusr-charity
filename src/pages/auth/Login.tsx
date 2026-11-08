@@ -104,7 +104,7 @@ const Login = () => {
       } else {
         try { localStorage.removeItem(REMEMBER_KEY); } catch {}
       }
-      toast({ title: lang === "ar" ? "أهلاً بعودتك " : "Welcome back ", description: lang === "ar" ? "تم تسجيل الدخول بنجاح." : "You are now signed in.", });
+      toast({ title: lang === "ar" ? "أهلًا بعودتك " : "Welcome back ", description: lang === "ar" ? "تم تسجيل الدخول بنجاح." : "You are now signed in.", });
       // Navigation handled by the session effect above.
     }, 500);
   };
@@ -132,7 +132,7 @@ const Login = () => {
                 {lang === "ar" ? "تسجيل الدخول" : "Sign in"}
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">
-                {lang === "ar" ? "أهلاً بعودتك إلى مؤسسة اليسر" : "Welcome back to Al-Yusr"}
+                {lang === "ar" ? "أهلًا بعودتك إلى مؤسسة اليسر" : "Welcome back to Al-Yusr"}
               </p>
             </div>
 
@@ -179,7 +179,7 @@ const Login = () => {
               )}
               {tab === "email" && (
                 <Button type="submit" disabled={loading} className="h-12 w-full bg-orange-grad text-base font-extrabold text-accent-foreground shadow-cta hover:opacity-95">
-                  {loading ? (lang === "ar" ? "جاري الدخول..." : "Signing in...") : (lang === "ar" ? "دخول" : "Sign in")}
+                  {loading ? (lang === "ar" ? "جارٍ الدخول..." : "Signing in...") : (lang === "ar" ? "دخول" : "Sign in")}
                 </Button>
               )}
             </form>

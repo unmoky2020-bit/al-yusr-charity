@@ -84,7 +84,7 @@ export const CartonJourney = () => {
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm font-bold text-primary-foreground/85 sm:text-base md:text-lg">
             {isAr
-              ? "كل تبرع يبدأ بكرتونة: طعام وكساء ودواء — نجمعها بجودة، نوثّقها بالصور، ونوصّلها لباب البيت بأمانة."
+              ? "كل تبرع يبدأ بكرتونة: طعام وكساء ودواء — نجهّزها بجودة، ونوثّقها بالصور، ونوصلها إلى باب البيت بأمانة."
               : "Every donation begins with a carton: food, clothing, and medicine — packed with care, documented in photos, and delivered to the doorstep with trust."}
           </p>
         </div>
@@ -183,7 +183,7 @@ export const CartonJourney = () => {
             <a
               href={`https://wa.me/201097000137?text=${encodeURIComponent(
                 isAr
-                  ? "السلام عليكم، حابب أتبرع بكرتونة من مؤسسة اليسر."
+                  ? "السلام عليكم، أرغب في التبرع بكرتونة من مؤسسة اليسر."
                   : "Hello, I'd like to sponsor an Al-Yusr aid carton.",
               )}`}
               target="_blank"

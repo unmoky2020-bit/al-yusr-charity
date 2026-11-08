@@ -86,6 +86,7 @@ const AdminCampaignResults = lazy(() => import("./pages/admin/AdminCampaignResul
 const AdminSiteStats = lazy(() => import("./pages/admin/AdminSiteStats.tsx"));
 const AdminReports = lazy(() => import("./pages/admin/AdminReports.tsx"));
 const AdminGallery = lazy(() => import("./pages/admin/AdminGallery.tsx"));
+const AdminPageGalleries = lazy(() => import("./pages/admin/AdminPageGalleries.tsx"));
 const AdminMediaLibrary = lazy(() => import("./pages/admin/AdminMediaLibrary.tsx"));
 const AdminNotifications = lazy(() => import("./pages/admin/AdminNotifications.tsx"));
 const AdminInbox = lazy(() => import("./pages/admin/AdminInbox.tsx"));
@@ -425,6 +426,7 @@ const App = () => (
                   <Route path="/admin/campaign-results" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignResults /></RequireAuth>} />
                   <Route path="/admin/site-stats" element={<RequireAuth roles={["admin", "editor"]}><AdminSiteStats /></RequireAuth>} />
                   <Route path="/admin/gallery" element={<RequireAuth roles={["admin"]}><AdminGallery /></RequireAuth>} />
+                  <Route path="/admin/page-galleries" element={<RequireAuth roles={["admin", "editor"]}><AdminPageGalleries /></RequireAuth>} />
                   <Route path="/admin/media" element={<RequireAuth roles={["admin", "editor"]}><AdminMediaLibrary /></RequireAuth>} />
                   <Route path="/admin/inbox" element={<RequireAuth roles={["admin", "editor"]}><AdminInbox /></RequireAuth>} />
                   <Route path="/admin/notifications" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminNotifications /></RequireAuth>} />

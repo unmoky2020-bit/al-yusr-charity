@@ -125,7 +125,7 @@ export const FaqCenter = () => {
         description={
           isAr
             ? "دليلك الشامل والموثق للإجابة عن جميع الأسئلة المتعلقة بالتبرعات، البرامج، كرتونة الغذاء، صكوك الأضاحي، الزكاة، وحملة مركون والتطوع في مصر."
-            : "Comprehensive guide to all questions regarding donations, programs, Qurbani, Zakat, and volunteering with Al-Yusr Foundation."
+            : "Comprehensive guide to all questions regarding donations, programs, Qurbani, Zakat, and volunteering with Al-Yusr Charity Foundation."
         }
         path="/faqs"
       />
@@ -266,7 +266,7 @@ export const FaqCenter = () => {
           {isLoading ? (
             <div className="py-20 text-center text-muted-foreground">
               <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-              <p className="mt-4 font-bold">{isAr ? "جاري تحميل الأسئلة الشائعة..." : "Loading FAQs..."}</p>
+              <p className="mt-4 font-bold">{isAr ? "جارٍ تحميل الأسئلة الشائعة..." : "Loading FAQs..."}</p>
             </div>
           ) : filteredFaqs.length === 0 ? (
             <div className="rounded-3xl border border-dashed border-border bg-card p-12 text-center">
@@ -275,7 +275,7 @@ export const FaqCenter = () => {
                 {isAr ? "لم نجد أي أسئلة تطابق بحثك" : "No questions matched your search"}
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                {isAr ? "جرب البحث بكلمات أخرى أو اختر تصنيفاً مختلفاً." : "Try searching with different keywords or clear the filter."}
+                {isAr ? "جرّب البحث بكلمات أخرى أو اختر تصنيفًا مختلفًا." : "Try searching with different keywords or clear the filter."}
               </p>
               <button
                 type="button"
@@ -414,7 +414,7 @@ export const FaqCenter = () => {
                 <MessageCircle className="h-7 w-7" />
               </div>
               <h2 className="mt-4 text-2xl font-black text-primary md:text-3xl">
-                {isAr ? "لسه عندك استفسار أو محتاج توضيح؟" : "Still have questions or need assistance?"}
+                {isAr ? "هل ما زال لديك استفسار أو تحتاج إلى توضيح؟" : "Still have questions or need assistance?"}
               </h2>
               <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
                 {isAr
@@ -425,7 +425,7 @@ export const FaqCenter = () => {
               <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                 <a
                   href={`https://wa.me/201097000137?text=${encodeURIComponent(
-                    isAr ? "السلام عليكم، عندي استفسار بخصوص مؤسسة اليسر." : "Hello, I have an inquiry about Al-Yusr."
+                    isAr ? "السلام عليكم، لديّ استفسار بخصوص مؤسسة اليسر." : "Hello, I have an inquiry about Al-Yusr."
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"

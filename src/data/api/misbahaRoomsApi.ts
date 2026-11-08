@@ -77,4 +77,4 @@ export const misbahaRoomsApi = {
   },
 };
 
-export const MISBAHA_ROOMS_PENDING_AR = "السبح المشتركة لسه بتتفعّل على السيرفر. جرّب كمان شوية، وتقدر تسبّح هنا عادي لحد ما تشتغل.";
+export const MISBAHA_ROOMS_PENDING_AR = "السبح المشتركة قيد التفعيل على الخادم حاليًا. حاول بعد قليل، ويمكنك أن تسبّح هنا كالمعتاد حتى يتم تفعيلها.";

@@ -48,7 +48,7 @@ export const MobileSmartCTA = () => {
   const map: Record<string, CTA> = {
     qurbani: {
       label: isAR ? "احجز صكّك" : "Reserve a share",
-      sub: isAR ? "قبل ما يخلص الوقت" : "Before time runs out",
+      sub: isAR ? "قبل انتهاء الوقت" : "Before time runs out",
       href: "/qurbani",
       icon: Beef,
     },
@@ -72,7 +72,7 @@ export const MobileSmartCTA = () => {
     },
     goals: {
       label: isAR ? "ساهم في تحقيق الأهداف" : "Help us hit the goal",
-      sub: isAR ? "كل جنيه بيقرّبنا" : "Every EGP brings us closer",
+      sub: isAR ? "كل جنيه يقرّبنا" : "Every EGP brings us closer",
       href: "/donate",
       icon: Target,
     },

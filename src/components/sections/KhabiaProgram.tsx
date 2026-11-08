@@ -56,14 +56,14 @@ export const KhabiaProgram = () => {
       address,
     });
     if (!parsed.success) {
-      toast({ title: isRTL ? " راجع البيانات قبل الإرسال" : " Please review the form" });
+      toast({ title: isRTL ? "راجع البيانات قبل الإرسال" : " Please review the form" });
       return;
     }
     // simple anti-duplicate (last 5 minutes, same phone, in this browser)
     try {
       const last = JSON.parse(localStorage.getItem("alyusr.khabia.last") || "null");
       if (last && last.phone === form.phone && Date.now() - last.at < 5 * 60_000) {
-        toast({ title: isRTL ? "تم استلام طلب مماثل قبل قليل " : "A similar request was just received " });
+        toast({ title: isRTL ? "تم استلام طلب مماثل قبل قليل" : "A similar request was just received " });
         if (last.ref) setRefCode(last.ref);
         return;
       }
@@ -89,8 +89,8 @@ export const KhabiaProgram = () => {
       track("khabia_request", { fbEvent: "Lead", payload: { source: "khabia-section", ref, city: form.city } });
       toast({
         title: ref
-          ? (isRTL ? ` تم تسجيل طلبك (${ref}) — هنتواصل خلال ٤٨ ساعة` : `✅ Request received (${ref}) — we'll reach you within 48h`)
-          : (isRTL ? " تم تسجيل طلبك — هنتواصل خلال ٤٨ ساعة" : "✅ Request received — we'll reach you within 48h"),
+          ? (isRTL ? `تم تسجيل طلبك (${ref}) — سنتواصل معك خلال ٤٨ ساعة` : `✅ Request received (${ref}) — we'll reach you within 48h`)
+          : (isRTL ? "تم تسجيل طلبك — سنتواصل معك خلال ٤٨ ساعة" : "✅ Request received — we'll reach you within 48h"),
       });
       setForm({ name: "", phone: "", city: "" });
       setAddress("");
@@ -109,7 +109,7 @@ export const KhabiaProgram = () => {
       toast({
         title: isRTL ? "تعذّر إرسال الطلب" : "Couldn't submit your request",
         description: isRTL
-          ? "حصلت مشكلة في الاتصال بالخادم. تقدر تبعت نفس الطلب على واتساب من الزر اللي تحت."
+          ? "حدثت مشكلة في الاتصال بالخادم. يمكنك إرسال الطلب نفسه عبر واتساب من الزر بالأسفل."
           : "We couldn't reach the server. You can send the same request on WhatsApp using the button below.",
         variant: "destructive",
       });
@@ -120,9 +120,9 @@ export const KhabiaProgram = () => {
 
   const steps = [
     { I: HandCoins, t: isRTL ? "سجّل بياناتك" : "Register", d: isRTL ? "اسمك ورقمك ومدينتك — في أقل من دقيقة." : "Name, phone, city — under a minute." },
-    { I: Truck, t: isRTL ? "مندوب لباب البيت" : "Delegate at your door", d: isRTL ? "نوصّلك الخبيئة مجانًا خلال ٤٨ ساعة." : "Free Khabia delivery within 48h." },
-    { I: PiggyBank, t: isRTL ? "اجمع على راحتك" : "Save at your pace", d: isRTL ? "حُط فيها كل يوم اللي يتيسّر — جنيه ولا أكتر." : "Drop in what you can each day — even 1 EGP." },
-    { I: Gift, t: isRTL ? "نستلم ونوزّع" : "We collect & deliver", d: isRTL ? "نمر نأخذها ونوزّعها بأمانة موثّقة." : "We collect and distribute with full documentation." },
+    { I: Truck, t: isRTL ? "مندوب حتى باب البيت" : "Delegate at your door", d: isRTL ? "نوصل إليك الخبيئة مجانًا خلال ٤٨ ساعة." : "Free Khabia delivery within 48h." },
+    { I: PiggyBank, t: isRTL ? "اجمع على راحتك" : "Save at your pace", d: isRTL ? "ضع فيها كل يوم ما تيسّر — جنيهًا أو أكثر." : "Drop in what you can each day — even 1 EGP." },
+    { I: Gift, t: isRTL ? "نستلم ونوزّع" : "We collect & deliver", d: isRTL ? "نمرّ لاستلامها، ونوزّعها بأمانة وتوثيق." : "We collect and distribute with full documentation." },
   ];
 
   return (
@@ -184,7 +184,7 @@ export const KhabiaProgram = () => {
 
             <p className="mt-4 max-w-[58ch] text-[15px] leading-relaxed text-muted-foreground sm:text-base">
               {isRTL
-                ? "حصّالة صغيرة بتقعد في بيتك، تجمع فيها كل يوم اللي يتيسّر — جنيه، خمسة، عشرة. مندوب اليسر بيوصّلهالك مجانًا، وبيمر يستلمها كل فترة. أنت بتنوي.. واحنا بنوصّل، وفي ميزانك صدقة جارية موثّقة."
+                ? "حصّالة صغيرة تبقى في بيتك، تضع فيها كل يوم ما تيسّر — جنيهًا أو خمسة أو عشرة. يوصلها إليك مندوب اليسر مجانًا، ويمرّ لاستلامها كل فترة. أنت تنوي ونحن نوصل، وفي ميزانك صدقة جارية موثّقة."
                 : "A small can that sits in your home — drop in whatever you can each day. Our delegate delivers it free of charge and stops by to collect. You give the intention, we deliver the goodness — fully documented."}
             </p>
 
@@ -268,13 +268,13 @@ export const KhabiaProgram = () => {
                 <PiggyBank className="h-5 w-5" />
                 {sending
                   ? (isRTL ? "جاري التسجيل..." : "Submitting...")
-                  : (isRTL ? "سجّلني — وصّلولي الخبيئة" : "Register — bring me a Khabia")}
+                  : (isRTL ? "سجّلني — أريد الخبيئة" : "Register — bring me a Khabia")}
                 <Arrow className="h-4 w-4" />
               </Button>
               {whatsAppFallback && (
                 <div role="alert" className="mt-3 rounded-2xl border border-destructive/30 bg-destructive/5 p-3 text-center">
                   <p className="text-xs font-bold text-destructive">
-                    {isRTL ? "لم يصل طلبك للخادم. ابعته لنا على واتساب بضغطة واحدة:" : "Your request didn't reach our server. Send it on WhatsApp in one tap:"}
+                    {isRTL ? "لم يصل طلبك إلى الخادم. أرسله إلينا عبر واتساب بضغطة واحدة:" : "Your request didn't reach our server. Send it on WhatsApp in one tap:"}
                   </p>
                   <a
                     href={whatsAppFallback}
@@ -295,7 +295,7 @@ export const KhabiaProgram = () => {
               )}
               <p className="mt-3 text-center text-[11px] font-bold text-muted-foreground">
                 {isRTL
-                  ? "بدون أي رسوم. التوصيل خلال 48 ساعة داخل الدقهلية."
+                  ? "دون أي رسوم. التوصيل خلال 48 ساعة داخل الدقهلية."
                   : "No fees. Delivery within 48h inside Dakahlia."}
               </p>
             </form>

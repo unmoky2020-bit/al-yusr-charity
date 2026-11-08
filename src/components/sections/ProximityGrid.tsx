@@ -138,7 +138,7 @@ export const ProximityGrid = () => {
 
           <p className="mx-auto mt-4 max-w-xl text-sm font-medium leading-7 text-muted-foreground sm:text-base">
             {isRTL
-              ? "اختر الباب الذي يُلمس قلبك — كل برنامج صدقة جارية تجري في ميزانك."
+              ? "اختر الباب الذي يلمس قلبك — كل برنامج صدقة يجري أجرها في ميزانك."
               : "Choose the door of goodness that moves your heart — every program is an ongoing charity."}
           </p>
         </div>
@@ -294,7 +294,7 @@ export const ProximityGrid = () => {
         <div className="mx-auto mt-10 flex max-w-2xl flex-col items-center gap-4 text-center">
           <p className="text-sm font-bold text-foreground/75 sm:text-base">
             {isRTL
-              ? "اضغط أي أيقونة لتبدأ التبرع في المجال الذي يُلمس قلبك."
+              ? "اضغط أي أيقونة لتبدأ التبرع في المجال الذي يلمس قلبك."
               : "Tap any icon to start donating to the cause that moves you most."}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">

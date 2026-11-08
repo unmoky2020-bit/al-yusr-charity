@@ -23,10 +23,10 @@ export const InteractiveJourney = () => {
   const steps =
     lang === "ar"
       ? [
-          { icon: Heart, title: "تبرعك", desc: "بتختار قيمة تبرعك خلال ثوانٍ بأمان كامل." },
+          { icon: Heart, title: "تبرعك", desc: "تختار قيمة تبرعك خلال ثوانٍ وبأمان تام." },
           { icon: PackageCheck, title: "نجهّز الكرتونة", desc: "فريقنا يجمع الطعام والكساء والدواء بجودة عالية." },
-          { icon: Truck, title: "على الطريق", desc: "شاحناتنا توصل لأبعد قرى الدقهلية وكل محافظات مصر." },
-          { icon: HandHeart, title: "وصلت ليد المحتاج", desc: "نسلّم يدًا بيد ونوثّق الأثر بالصوت والصورة." },
+          { icon: Truck, title: "على الطريق", desc: "تصل شاحناتنا إلى أبعد قرى الدقهلية وكل محافظات مصر." },
+          { icon: HandHeart, title: "وصلت إلى يد المحتاج", desc: "نسلّم يدًا بيد ونوثّق الأثر بالصوت والصورة." },
           { icon: Sparkles, title: "ابتسامة جديدة", desc: "كل تبرع يصنع فرحة حقيقية ويغيّر حياة بإذن الله." },
         ]
       : [
@@ -122,7 +122,7 @@ export const InteractiveJourney = () => {
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm font-semibold text-primary-foreground/80 sm:text-base">
           {lang === "ar"
-            ? "اسحب لأسفل وعِش كل خطوة من رحلة الخير — من تبرعك حتى ابتسامة العيلة."
+            ? "اسحب لأسفل وعِش كل خطوة من رحلة الخير — من تبرعك حتى ابتسامة الأسرة."
             : "Scroll down and live every step — from your gift to a family's smile."}
         </p>
       </div>

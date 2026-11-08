@@ -10,6 +10,12 @@ import { useProjectPage } from "@/hooks/useProjectPage";
 import WATER_DEFAULTS from "@/data/projectPages/water";
 import waterHero from "@/assets/program-water-new.jpg";
 
+/**
+ * /water — «سقيا الماء». Linked to the backend project `water` (dashboard → المشاريع → سقيا الماء):
+ *  - hero image: the project's cover image (bundled photo until one is set);
+ *  - texts and gallery: the project's «محتوى صفحة» tab (`page_content`, defaults in data/projectPages/water.ts);
+ *  - FAQ: the FAQ category linked to the project (the defaults' list as fallback).
+ */
 const PROJECT_SLUG = "water";
 const DONATE = "/donate?project=water";
 const WHAT_ICONS: Record<string, LucideIcon> = { home: Home, meter: Gauge, filter: Droplets };

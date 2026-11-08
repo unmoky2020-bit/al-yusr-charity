@@ -34,7 +34,7 @@ export const LocalFAQ = ({
   const { lang } = useLang();
   const isAr = lang === "ar";
   const wa = `https://wa.me/201097000137?text=${encodeURIComponent(
-    waText || (isAr ? "السلام عليكم، عندي سؤال عن التبرع للحملة." : "Hi, I have a question about donating to the campaign."),
+    waText || (isAr ? "السلام عليكم، لدي سؤال عن التبرع للحملة." : "Hi, I have a question about donating to the campaign."),
   )}`;
 
   const { data: dynamicFaqs } = useQuery<FaqItem[]>({
@@ -78,7 +78,7 @@ export const LocalFAQ = ({
             {title || (isAr ? "أسئلة شائعة حول الحملة" : "Frequently Asked Questions")}
           </h2>
           <p className="mt-3 text-sm font-semibold leading-relaxed text-muted-foreground md:text-base">
-            {intro || (isAr ? "إجابات واضحة وشفافة عن كل ما يخص تبرعك، طرق التنفيذ، والتوثيق الميداني." : "Clear, transparent answers about your donation, delivery, and documentation.")}
+            {intro || (isAr ? "إجابات واضحة وشفافة عن كل ما يخص تبرعك وطرق التنفيذ والتوثيق الميداني." : "Clear, transparent answers about your donation, delivery, and documentation.")}
           </p>
         </div>
 
@@ -123,7 +123,7 @@ export const LocalFAQ = ({
         <p className="mt-6 text-center text-xs text-muted-foreground md:text-sm">
           {isAr ? (
             <>
-              لسه عندك استفسار عن الحملة؟{" "}
+              هل لديك استفسار آخر؟{" "}
               <a
                 href={wa}
                 target="_blank"

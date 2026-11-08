@@ -13,10 +13,10 @@ const REGIONS: Region[] = DAKAHLIA_CITIES;
 const PROGRAM_LABEL: Record<string, { ar: string; en: string }> = {
   odhya: { ar: "صك أضحية", en: "Qurbani" },
   box: { ar: "كرتونة عزومة", en: "Food box" },
-  meat: { ar: "كيلو لحمة", en: "Kilo of meat" },
+  meat: { ar: "كيلو لحم", en: "Kilo of meat" },
   education: { ar: "كفالة تعليمية", en: "Education" },
   water: { ar: "وصلة مياه", en: "Water" },
-  bride: { ar: "جواز عروسة", en: "Bride" },
+  bride: { ar: "تجهيز عروس", en: "Bride" },
   zakat: { ar: "زكاة مال", en: "Zakat" },
 };
 
@@ -88,7 +88,7 @@ export const ImpactMap = () => {
                 : "Permanent presence across Dakahlia"}
             </h2>
             <p className="mt-4 text-primary-foreground/80">
-              {lang === "ar" ? "بنركّز جهودنا حيث الحاجة الأكبر. كل نقطة على الخريطة بتمثل أسرًا حقيقية تغيرت حياتها بفضل تبرعك." : "We focus our work where the need is greatest. Every dot represents real families whose lives changed thanks to your donation."}
+              {lang === "ar" ? "نركّز جهودنا حيث الحاجة أكبر. كل نقطة على الخريطة تمثّل أسرًا حقيقية تغيّرت حياتها بفضل تبرعك." : "We focus our work where the need is greatest. Every dot represents real families whose lives changed thanks to your donation."}
             </p>
 
             <div className="mt-6 grid grid-cols-2 gap-2">
@@ -118,7 +118,7 @@ export const ImpactMap = () => {
             </div>
             <p className="mt-4 text-xs font-bold text-primary-foreground/70">
               {lang === "ar"
-                ? "كل مدينة بنخدمها ببرامج مختلفة بحسب احتياجها: من صكوك الأضحية وكرتونة العزومة، لوصلات المياه، لكفالة الأيتام، لتجهيز العرائس وزكاة المال."
+                ? "نخدم كل مدينة ببرامج تناسب احتياجها: من صكوك الأضحية وكرتونة العزومة، إلى وصلات المياه وكفالة الأيتام، وتجهيز العرائس وزكاة المال."
                 : "We serve each city with different programs by need: Qurbani vouchers, food boxes, water connections, orphan sponsorship, brides preparation and Zakat distribution."}
             </p>
           </div>

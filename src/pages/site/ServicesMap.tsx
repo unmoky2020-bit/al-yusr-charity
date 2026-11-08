@@ -125,14 +125,14 @@ const FAQS = [
     id: "faq-2",
     q_ar: "كيف يتم توثيق التبرعات وتوصيلها للمستحقين؟",
     q_en: "How are donations documented and delivered?",
-    a_ar: "تلتزم مؤسسة اليسر بتوثيق التبرعات بنسبة 100% بالصور والفيديو من لحظة تجهيز السلال أو الذبح وحتى التسليم لباب البيت مع الحفاظ على كرامة الأسر المتعففة في المنصورة والدقهلية وكفر الشيخ.",
+    a_ar: "تلتزم مؤسسة اليسر بتوثيق التبرعات بنسبة 100% بالصور والفيديو من لحظة تجهيز السلال أو الذبح وحتى التسليم لباب البيت، مع الحفاظ على كرامة الأسر المتعففة في المنصورة والدقهلية وكفر الشيخ.",
     a_en: "Al-Yusr is committed to 100% photo and video documentation from preparation to doorstep delivery in Dakahlia & Kafr El Sheikh.",
   },
   {
     id: "faq-3",
     q_ar: "كيف يمكن التبرع لبرنامج معين مباشرة من خريطة الخدمات؟",
     q_en: "How can I donate to a specific program directly from the map?",
-    a_ar: "يمكنك الضغط على زر 'تبرع الآن' الموجود على بطاقة أي برنامج للانتقال مباشرة إلى نموذج التبرع الآمن، أو استخدام خيار التحويل البنكي وحساباتنا الرسمية في بنك CIB.",
+    a_ar: "يمكنك الضغط على زر «تبرع الآن» الموجود على بطاقة أي برنامج للانتقال مباشرة إلى نموذج التبرع الآمن، أو استخدام خيار التحويل البنكي وحساباتنا الرسمية في بنك CIB.",
     a_en: "Click 'Donate now' on any program card to jump straight to our secure donation form or use our CIB bank transfer options.",
   },
 ];
@@ -399,7 +399,7 @@ const ServicesMap = () => {
           <div className="grid grid-cols-2 gap-3 rounded-3xl border border-lime-400/40 bg-card p-4 text-center shadow-soft sm:grid-cols-4 md:p-6">
             {[
               { k: "2665/2019", l: isRTL ? "رقم الإشهار الرسمي" : "Official License" },
-              { k: "<8%", l: isRTL ? "مصاريف تشغيلية" : "Operating cost" },
+              { k: "90%", l: isRTL ? "يصل إلى المستفيدين" : "Reaches beneficiaries" },
               { k: "100%", l: isRTL ? "توصيل لباب البيت" : "Doorstep delivery" },
               { k: "CIB", l: isRTL ? "حساب بنكي موثّق" : "Verified CIB bank" },
             ].map(({ k, l }, i) => (
@@ -446,13 +446,13 @@ const ServicesMap = () => {
 
               <p className="mx-auto mt-3 max-w-2xl text-xs font-semibold leading-relaxed text-foreground/80 sm:text-sm md:text-base">
                 {isRTL
-                  ? "لنا هدفان: الأول يركز على المستحق والثاني عليك. هدفنا الأكبر هو النجاة بالإنسان من الفقر، فلا نركز على إعطاء مساعدة عابرة، بل علي تغير حياة المستحق والهدف الثاني هو أن نجعل لتبرعك أثراً في حياتك وحياة المستحق."
+                  ? "لنا هدفان: الأول يركّز على المستحق، والثاني عليك. هدفنا الأكبر هو انتشال الإنسان من الفقر، فلا نكتفي بتقديم مساعدة عابرة، بل نسعى إلى تغيير حياة المستحق. والهدف الثاني أن نجعل لتبرعك أثرًا في حياتك وحياة المستحق."
                   : "We have two goals: first, to focus on the recipient; second, on you. Our largest aim is lifting people out of poverty rather than temporary aid, but truly transforming the recipient's life and making your donation leave a lasting impact."}
               </p>
 
               <p className="mx-auto mt-2.5 max-w-2xl text-[11.5px] font-extrabold leading-6 text-primary sm:text-xs md:text-sm">
                 {isRTL
-                  ? "نوفر في مؤسسة اليسر الخيرية بالمنصورة - الدقهلية اكثر من نشاط وحملة تبرعات تخدم كل محافظات مصر :"
+                  ? "نوفّر في مؤسسة اليسر الخيرية بالمنصورة (الدقهلية) أكثر من نشاط وحملة تبرعات تخدم كل محافظات مصر:"
                   : "Al-Yusr Charity Foundation in Mansoura - Dakahlia provides multiple activities and donation campaigns serving all governorates of Egypt:"}
               </p>
             </div>

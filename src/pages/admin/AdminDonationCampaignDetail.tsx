@@ -109,6 +109,7 @@ export default function AdminDonationCampaignDetail() {
   // together with `seo` and `faqs` (PUT /donation-campaigns/{id}). Prices are the donation packages.
   const queryClient = useQueryClient();
   const [pageContent, setPageContent] = useState<CampaignPageContent | null>(null);
+  /** The landing page's code defaults (for «الصور الأصلية» in the pictures tab). */
   const [pageDefaults, setPageDefaults] = useState<CampaignPageContent | null>(null);
   /** One tab per landing section (families like areas_now/areas_before share the parent's tab). */
   const sectionTabs = useMemo(() => (pageContent ? campaignSectionTabs(pageContent) : []), [pageContent]);
@@ -136,6 +137,7 @@ export default function AdminDonationCampaignDetail() {
         source = saved ? "legacy" : null;
       }
       const merged = mergeCampaignContent(defaults, saved);
+      setPageDefaults(defaults);
       setPageContent(merged);
       setPageHasOverride(!!saved);
       setPageSource(source);
@@ -857,7 +859,7 @@ export default function AdminDonationCampaignDetail() {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl bg-emerald-500/10 p-3 border border-emerald-500/20">
                   <p className="text-xs text-muted-foreground">
                     {isAr
-                      ? `صفحة الهبوط elyusr.org${pageMeta.path} — التصميم ثابت، والنصوص تتعدل من هنا وتُحفظ بزر «حفظ التغييرات» أعلى الصفحة. الأسعار تُقرأ من «باقات التبرع».`
+                      ? `صفحة الهبوط elyusr.org${pageMeta.path} — التصميم ثابت، والنصوص والصور تتعدل من هنا وتُحفظ بزر «حفظ التغييرات» أعلى الصفحة. الأسعار تُقرأ من «باقات التبرع».`
                       : `Landing page elyusr.org${pageMeta.path}: layout is fixed; texts are edited here and saved with the main Save button. Prices come from "Donation packages".`}
                     {pageSource === "legacy" && (
                       <span className="mt-1 block font-bold text-amber-700 dark:text-amber-400">
@@ -881,7 +883,7 @@ export default function AdminDonationCampaignDetail() {
                   <TabsContent value="hero" className="space-y-4 pt-2">{bar}{panel(HeroPanel)}</TabsContent>
                   <TabsContent value="images" className="space-y-4 pt-2">
                     {bar}
-                    {pageContent && <PageImagesPanel value={pageContent} onChange={setPageContent} defaults={pageDefaults} />}
+                    {pageContent ? <PageImagesPanel value={pageContent} onChange={setPageContent} defaults={pageDefaults} /> : skeleton}
                   </TabsContent>
                   <TabsContent value="hadith" className="space-y-4 pt-2">
                     {bar}{panel(HadithPanel)}

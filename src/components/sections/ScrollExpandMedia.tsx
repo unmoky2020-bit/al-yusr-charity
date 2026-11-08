@@ -25,7 +25,7 @@ export const ScrollExpandMedia = ({
   mediaSrc,
   posterSrc,
   bgImageSrc,
-  title = "اتصدق النهاردة.. وخليه عربون لبركة بكرة",
+  title = "تصدّق اليوم.. واجعله عربونًا لبركة الغد",
   badge = "عربون خير 🌿",
   isRTL = true,
   children,
@@ -151,8 +151,8 @@ export const ScrollExpandMedia = ({
 
   // Title split: first part top-left, second part bottom-right
   const words = title ? title.split("..") : [];
-  const firstPart = words[0]?.trim() || "اتصدق النهاردة";
-  const secondPart = (words[1] ? words[1].trim() : "وخليه عربون لبركة بكرة!").replace(/^[،,\s]+/, "");
+  const firstPart = words[0]?.trim() || "تصدّق اليوم";
+  const secondPart = (words[1] ? words[1].trim() : "واجعله عربونًا لبركة الغد!").replace(/^[،,\s]+/, "");
 
   return (
     <div
@@ -206,7 +206,7 @@ export const ScrollExpandMedia = ({
                 </div>
                 <p className="text-[11.5px] leading-relaxed text-zinc-300 font-medium">
                   {isRTL
-                    ? "أضفها لـ GitHub و Behance وبورتفوليو أعمالك كأصل أخلاقي يميّزك."
+                    ? "أضفها إلى GitHub وBehance ومعرض أعمالك، علامةً أخلاقية تميّزك."
                     : "Display it on your GitHub & Behance as a verified impact badge."}
                 </p>
                 <div className="mt-2.5 flex items-center gap-1.5 text-[10px] font-bold text-orange-400/90">
@@ -226,13 +226,13 @@ export const ScrollExpandMedia = ({
                       {isRTL ? "مرونة كاملة" : "No Minimum"}
                     </span>
                     <h4 className="text-sm font-black text-white leading-tight">
-                      {isRTL ? "مفيش حد أدنى للتبرع" : "Flexible Giving"}
+                      {isRTL ? "لا يوجد حد أدنى للتبرع" : "Flexible Giving"}
                     </h4>
                   </div>
                 </div>
                 <p className="text-[11.5px] leading-relaxed text-zinc-300 font-medium">
                   {isRTL
-                    ? "استقطع أي نسبة تناسب مشروعك.. بالجنيه أو الدولار أو الريال."
+                    ? "اقتطع أي نسبة تناسب مشروعك، بالجنيه أو الدولار أو الريال."
                     : "Pledge any percentage from each payout via cards or InstaPay."}
                 </p>
                 <div className="mt-2.5 flex items-center gap-1.5 text-[10px] font-bold text-lime-400/90">
@@ -348,7 +348,7 @@ export const ScrollExpandMedia = ({
                 </div>
                 <p className="text-[11.5px] leading-relaxed text-zinc-300 font-medium">
                   {isRTL
-                    ? "توثيق بالصور والفيديو وكود تتبع مخصص لكل تبرع يوصلك تقريره."
+                    ? "توثيق بالصور والفيديو وكود تتبع مخصص لكل تبرع، ويصلك تقريره."
                     : "Photo/video documentation and a unique tracking code per gift."}
                 </p>
                 <div className="mt-2.5 flex items-center gap-1.5 text-[10px] font-bold text-lime-400/90">
@@ -368,13 +368,13 @@ export const ScrollExpandMedia = ({
                       {isRTL ? "بركة الرزق" : "Barakah & Growth"}
                     </span>
                     <h4 className="text-sm font-black text-white leading-tight">
-                      {isRTL ? "علاج قلق الشغل" : "Peace of Mind"}
+                      {isRTL ? "طمأنينة في العمل" : "Peace of Mind"}
                     </h4>
                   </div>
                 </div>
                 <p className="text-[11.5px] leading-relaxed text-zinc-300 font-medium">
                   {isRTL
-                    ? "استنزل الرزق بالعطاء.. وخلّي عربون خيرك حصن وسند في مواسم الركود."
+                    ? "استنزل الرزق بالعطاء، واجعل عربون خيرك حصنًا وسندًا في مواسم الركود."
                     : "Attract divine provision through giving and safeguard dry seasons."}
                 </p>
                 <div className="mt-2.5 flex items-center gap-1.5 text-[10px] font-bold text-orange-400/90">

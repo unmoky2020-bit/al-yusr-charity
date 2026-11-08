@@ -51,7 +51,7 @@ const QurbaniConfirm = () => {
 
   const status = rec ? STATUS_LABEL[rec.status] : null;
   const waText = useMemo(() => encodeURIComponent(isAr
-    ? `حابب أتابع طلب صك الأضحية رقم ${ref}`
+    ? `أودّ متابعة طلب صك الأضحية رقم ${ref}`
     : `I'd like to follow up on Qurbani order ${ref}`), [isAr, ref]);
 
   return (
@@ -74,10 +74,10 @@ const QurbaniConfirm = () => {
             <div className="mt-8 rounded-3xl border border-border bg-card p-8 text-center shadow-card">
               <Clock className="mx-auto h-10 w-10 text-muted-foreground" />
               <h1 className="mt-4 text-2xl font-black text-primary">
-                {isAr ? "مفيش طلب بهذا الرقم" : "No order found"}
+                {isAr ? "لا يوجد طلب بهذا الرقم" : "No order found"}
               </h1>
               <p className="mt-2 text-sm text-muted-foreground">
-                {isAr ? "تأكد من رابط التأكيد أو ابدأ حجز جديد." : "Check the link or start a new booking."}
+                {isAr ? "تأكد من رابط التأكيد، أو ابدأ حجزًا جديدًا." : "Check the link or start a new booking."}
               </p>
               <Button asChild className="mt-6 bg-orange-grad text-accent-foreground shadow-cta">
                 <Link to="/qurbani"><Heart className="h-4 w-4" />{isAr ? "احجز صك أضحية" : "Reserve a share"}</Link>
@@ -93,7 +93,7 @@ const QurbaniConfirm = () => {
                   {isAr ? "تم استلام طلب صك الأضحية" : "Qurbani booking received"}
                 </h1>
                 <p className="mt-1 text-sm text-primary-foreground/85">
-                  {isAr ? "هنبعتلك إيصال PDF ورابط متابعة على الواتساب والإيميل." : "You'll get a PDF receipt and a follow-up link by WhatsApp and email."}
+                  {isAr ? "سنرسل إليك إيصال PDF ورابط متابعة عبر واتساب والبريد الإلكتروني." : "You'll get a PDF receipt and a follow-up link by WhatsApp and email."}
                 </p>
                 <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-4 py-1.5 text-sm font-extrabold ring-1 ring-secondary/40">
                   <ReceiptIcon className="h-4 w-4 text-secondary" />
@@ -131,13 +131,13 @@ const QurbaniConfirm = () => {
 
               {/* Next steps */}
               <div className="border-t border-border bg-muted/30 p-6 md:p-8">
-                <h2 className="text-lg font-black text-primary">{isAr ? "الخطوات الجاية" : "Next steps"}</h2>
+                <h2 className="text-lg font-black text-primary">{isAr ? "الخطوات التالية" : "Next steps"}</h2>
                 <ol className="mt-3 space-y-2 text-sm">
                   {[
                     isAr ? "تأكيد المبلغ وإصدار الإيصال خلال دقائق" : "Amount confirmed and receipt issued within minutes",
-                    isAr ? "تواصل من فريقنا قبل العيد لتأكيد العنوان" : "Our team contacts you pre-Eid to confirm address",
-                    isAr ? "صور ومعاينة طبية للأضحية قبل الذبح" : "Vet check + photos before slaughter",
-                    isAr ? "فيديو الذبح + توصيل لباب البيت يوم العيد" : "Slaughter video + doorstep delivery on Eid",
+                    isAr ? "يتواصل معك فريقنا قبل العيد لتأكيد العنوان" : "Our team contacts you pre-Eid to confirm address",
+                    isAr ? "معاينة بيطرية للأضحية وصور لها قبل الذبح" : "Vet check + photos before slaughter",
+                    isAr ? "فيديو الذبح، والتوصيل حتى باب البيت يوم العيد" : "Slaughter video + doorstep delivery on Eid",
                   ].map((s, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />

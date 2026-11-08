@@ -4,6 +4,8 @@ import { useLang } from "@/i18n/LangContext";
 import { formatServerImageUrl, getApiToken } from "@/data/laravelApi";
 import { campaignPagesApi, type CampaignPagePackage } from "@/data/campaignPages/api";
 import { mergeCampaignContent, withCampaignHeroImageSlot, type CampaignPageContent, type L, type PriceItem } from "@/data/campaignPages/types";
+import { resolveImages } from "@/data/pageImages";
+import { useFirstLoad } from "@/hooks/useFirstLoad";
 
 export type CampaignDonationPackage = CampaignPagePackage;
 
@@ -66,6 +68,7 @@ export function useCampaignPage(slug: string, defaults: CampaignPageContent) {
   const isAdmin = !!getApiToken();
 
   const pageResult = useQuery(pageQuery(slug, isAdmin));
+  const isLoading = useFirstLoad(pageResult);
   const { data } = pageResult;
 
   // Prices and page content come from the same campaign record to avoid duplicate requests.
@@ -121,6 +124,8 @@ export function useCampaignPage(slug: string, defaults: CampaignPageContent) {
   };
   const stat = (id: string) => c.stats.find((s) => s.id === id);
   const section = (key: string) => c.sections[key];
+  /** Pictures of a slot (dashboard → الصور), ready for <img>; empty when the page has no such slot. */
+  const images = (key: string) => resolveImages(c.images?.[key]?.items);
 
   return {
     c,
@@ -131,7 +136,8 @@ export function useCampaignPage(slug: string, defaults: CampaignPageContent) {
     packageId,
     stat,
     section,
+    images,
     campaignImage,
-    isLoading: pageResult.isLoading,
+    isLoading,
   };
 }

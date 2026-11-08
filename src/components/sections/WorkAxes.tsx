@@ -224,7 +224,7 @@ export const WorkAxes = () => {
                 </h2>
                 <p data-wa className="mx-auto mt-4 max-w-xl text-sm font-medium leading-relaxed text-muted-foreground sm:text-base md:text-[16px]">
                   {isAR
-                    ? (sectionCMS?.subtitle_ar || "بناء إنسان واعٍ جسدياً، ثقافياً، وصحياً. محاورنا الأساسية تخدم رسالتنا:")
+                    ? (sectionCMS?.subtitle_ar || "بناء إنسان واعٍ جسديًا وثقافيًا وصحيًا. هذه محاورنا الأساسية التي تخدم رسالتنا:")
                     : (sectionCMS?.subtitle_en || "Building a person who is physically, culturally, and health-aware. Our core pillars serve our mission:")}
                 </p>
               </>
@@ -418,13 +418,13 @@ export const WorkAxes = () => {
 
             {/* Inspiring headline */}
             <h2 className="mt-4 max-w-3xl text-2xl font-black leading-tight sm:text-3xl md:text-4xl text-white">
-              {isAR ? "كل تبرع منك يصنع فارقاً حقيقياً في حياة أسرة مستحقة" : "Every donation makes a real difference in a deserving family's life"}
+              {isAR ? "كل تبرع منك يصنع فارقًا حقيقيًا في حياة أسرة مستحقة" : "Every donation makes a real difference in a deserving family's life"}
             </h2>
 
             {/* Clear reassuring subtitle */}
             <p className="mx-auto mt-3 max-w-2xl text-xs sm:text-sm md:text-base font-normal leading-relaxed text-white/90">
               {isAR
-                ? "اختر البرنامج المناسب، تبرع بسهولة وأمان بأي مبلغ، واطلب توثيق تبرعك بالفيديو والصور ليصلك الأثر أينما كنت."
+                ? "اختر البرنامج المناسب، وتبرّع بسهولة وأمان بأي مبلغ، واطلب توثيق تبرعك بالفيديو والصور ليصلك الأثر أينما كنت."
                 : "Choose the right program, donate easily and securely, and request photo and video documentation of your donation."}
             </p>
 

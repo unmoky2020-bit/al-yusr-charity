@@ -9,11 +9,11 @@ const STEPS: Step[] = [
                        en: { t: "Sign up", d: "Fill the volunteer form: skills, city, availability." } },
   { I: ShieldCheck,   ar: { t: "مراجعة الفريق", d: "نراجع طلبك خلال 48 ساعة ونعتمدك في قاعدة المتطوعين." },
                        en: { t: "Team review", d: "We review and approve you within 48h." } },
-  { I: Megaphone,     ar: { t: "اختر حملة", d: "تابع الحملات المفتوحة (عيد، رمضان، قوافل) وقدّم لما يناسبك." },
+  { I: Megaphone,     ar: { t: "اختر حملة", d: "تابع الحملات المفتوحة (عيد، رمضان، قوافل) وقدّم على ما يناسبك." },
                        en: { t: "Pick a campaign", d: "Browse open drives (Eid, Ramadan, convoys) and apply." } },
-  { I: MapPin,        ar: { t: "تأكيد المناوبة", d: "نُعيّن لك دور وشيفت ومكان، ونرسلك بريفنج كامل قبل اليوم." },
+  { I: MapPin,        ar: { t: "تأكيد المناوبة", d: "نحدّد لك دورك وموعد مناوبتك ومكانها، ونرسل إليك شرحًا كاملًا قبل يوم العمل." },
                        en: { t: "Get your shift", d: "We assign your role, shift, and location with a full briefing." } },
-  { I: Award,         ar: { t: "نفّذ واتركْ أثرًا", d: "احضر، ساعد، ووثّق. نسجل ساعاتك ونمنحك شهادة تقدير." },
+  { I: Award,         ar: { t: "نفّذ واترك أثرًا", d: "احضر وساعد ووثّق، ونحن نسجّل ساعاتك ونمنحك شهادة تقدير." },
                        en: { t: "Show up & impact", d: "Attend, help, and we log your hours + a certificate." } },
 ];
 
@@ -34,7 +34,7 @@ export const VolunteerJourney = () => {
           </h2>
           <p className="mt-2 text-sm text-muted-foreground md:text-base">
             {isRTL
-              ? "من أول ما تسجّل لحد ما توقّع شهادتك — كل خطوة واضحة ومدعومة بفريق."
+              ? "من لحظة التسجيل حتى استلام شهادتك — كل خطوة واضحة، والفريق معك فيها."
               : "From signup to certificate — every step is clear and supported."}
           </p>
         </header>

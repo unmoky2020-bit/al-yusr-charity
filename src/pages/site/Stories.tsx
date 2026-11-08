@@ -76,7 +76,7 @@ const Stories = () => {
         title={isRTL ? "قصص الأثر — حكايات حقيقية من أسر وصلها خيركم | مؤسسة اليسر" : "Impact stories — real families your giving reached | Al-Yusr"}
         description={
           isRTL
-            ? "قصص حقيقية موثّقة لأسر وأطفال في الدقهلية ومحافظات مصر اتغيّرت حياتهم بتبرعاتكم: إطعام، علاج، تعليم، سكن وجهاز عرائس — اقرأ واتبرع لقصة جديدة."
+            ? "قصص حقيقية موثّقة لأسر وأطفال في الدقهلية ومحافظات مصر تغيّرت حياتهم بتبرعاتكم: إطعام، علاج، تعليم، سكن وجهاز عرائس — اقرأ وتبرّع لتصنع قصة جديدة."
             : "Documented, real stories of families and children across Egypt whose lives changed thanks to your donations — read them and help write the next one."
         }
         path={topic ? `/stories?topic=${encodeURIComponent(topic)}` : "/stories"}
@@ -102,10 +102,10 @@ const Stories = () => {
           <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-black text-secondary">
             <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "قصص الأثر" : "Impact stories"}
           </span>
-          <h1 className="mt-3 text-balance text-3xl font-black md:text-5xl">{isRTL ? "بيوت اتغيّرت بخيركم" : "Homes your giving changed"}</h1>
+          <h1 className="mt-3 text-balance text-3xl font-black md:text-5xl">{isRTL ? "بيوت تغيّرت بخيركم" : "Homes your giving changed"}</h1>
           <p className="mx-auto mt-3 max-w-2xl text-primary-foreground/85 md:text-lg">
             {isRTL
-              ? "كل قصة هنا حقيقية وموثّقة، اتكتبت بموافقة أصحابها — ووراها متبرع زيّك."
+              ? "كل قصة هنا حقيقية وموثّقة، كُتبت بموافقة أصحابها، ووراءها متبرع مثلك."
               : "Every story here is real and documented, shared with consent — and behind each one is a donor like you."}
           </p>
           {!loading && stories.length > 0 && (
@@ -147,9 +147,9 @@ const Stories = () => {
           ) : shown.length === 0 ? (
             <div className="mx-auto max-w-lg rounded-3xl border border-dashed border-border bg-muted/30 p-10 text-center">
               <Quote className="mx-auto h-10 w-10 text-secondary" />
-              <p className="mt-3 font-black text-primary">{isRTL ? "القصص الجديدة بتتكتب دلوقتي" : "New stories are on their way"}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{isRTL ? "تابع الحالات المفتوحة — كل حالة بتكتمل بتبقى قصة هنا." : "Follow the open cases — each one completed becomes a story here."}</p>
-              <Button asChild className="mt-5"><Link to="/cases">{isRTL ? "شوف الحالات المفتوحة" : "See open cases"}</Link></Button>
+              <p className="mt-3 font-black text-primary">{isRTL ? "قصص جديدة تُكتب الآن" : "New stories are on their way"}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{isRTL ? "تابع الحالات المفتوحة، فكل حالة تكتمل تصبح قصة هنا." : "Follow the open cases — each one completed becomes a story here."}</p>
+              <Button asChild className="mt-5"><Link to="/cases">{isRTL ? "تصفّح الحالات المفتوحة" : "See open cases"}</Link></Button>
             </div>
           ) : (
             <>
@@ -165,9 +165,9 @@ const Stories = () => {
           {/* Give */}
           <div className="mt-14 overflow-hidden rounded-[2rem] bg-[#06301c] p-6 text-center text-white md:p-10">
             <HandHeart className="mx-auto h-10 w-10 text-secondary" />
-            <h2 className="mt-3 text-2xl font-black md:text-3xl">{isRTL ? "القصة الجاية ممكن تبدأ بتبرعك" : "The next story can start with your gift"}</h2>
+            <h2 className="mt-3 text-2xl font-black md:text-3xl">{isRTL ? "القصة القادمة قد تبدأ بتبرعك" : "The next story can start with your gift"}</h2>
             <p className="mx-auto mt-2 max-w-xl text-sm text-white/75 md:text-base">
-              {isRTL ? "اختار حالة مفتوحة أو برنامج، وتابع أثر تبرعك لحد ما يوصل." : "Pick an open case or a program and follow your gift until it arrives."}
+              {isRTL ? "اختر حالة مفتوحة أو برنامجًا، وتابع أثر تبرعك حتى يصل." : "Pick an open case or a program and follow your gift until it arrives."}
             </p>
             <div className="mt-6 grid gap-2.5 sm:flex sm:justify-center">
               <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">

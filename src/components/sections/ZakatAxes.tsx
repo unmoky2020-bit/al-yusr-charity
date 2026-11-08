@@ -76,7 +76,7 @@ export const ZakatAxes = () => {
         ? "أمان غذائي لكل أسرة مستحقة عبر مزارعنا الوقفية ومطابخ اليسر الدائمة."
         : "Food security for every family in need through our endowment farms and permanent Al-Yusr kitchens.",
       bullets: isRTL
-        ? ["كرتونة الغذاء الشهرية + كيلو لحمة بلدي", "مطبخ يومي بآلاف الوجبات الساخنة", "أكثر من 5 طن لحوم سنويًا من مزارعنا الوقفية"]
+        ? ["كرتونة الغذاء الشهرية + كيلو لحم بلدي", "مطبخ يومي بآلاف الوجبات الساخنة", "أكثر من 5 طن لحوم سنويًا من مزارعنا الوقفية"]
         : ["Monthly food box + 1 kg of farm meat", "Daily kitchen with thousands of hot meals", "Over 5 tons of meat per year from our endowment farms"],
       href: "/axes/food",
       accent: "bg-secondary text-secondary-foreground",
@@ -123,7 +123,7 @@ export const ZakatAxes = () => {
     { icon: Home, title: isRTL ? "سهم سَتر" : "Shelter share", text: isRTL ? "تسقيف وترميم منزل لأسرة." : "Roofing and home repair for a family." },
     { icon: Package, title: isRTL ? "كرتونة الخير 25 كيلو" : "25kg goodness carton", text: isRTL ? "إطعام أسرة لمدة شهر كامل." : "Feeds a family for a whole month." },
     { icon: Beef, title: isRTL ? "صك الأضحية" : "Qurbani share", text: isRTL ? "لحوم بلدي من مزارعنا — بدون ربح." : "Farm-raised meat from our farms — non-profit." },
-    { icon: Gift, title: isRTL ? "تيسير عروسة" : "Bride's trousseau", text: isRTL ? "تجهيز يتيمة بأجهزة ومستلزمات بيتها." : "Equipping an orphan bride with home essentials." },
+    { icon: Gift, title: isRTL ? "تيسير زواج عروس" : "Bride's trousseau", text: isRTL ? "تجهيز يتيمة بأجهزة ومستلزمات بيتها." : "Equipping an orphan bride with home essentials." },
     { icon: Pill, title: isRTL ? "سهم العلاج" : "Treatment share", text: isRTL ? "دواء أو عملية جراحية عاجلة." : "Medicine or urgent surgery." },
   ];
 
@@ -143,8 +143,8 @@ export const ZakatAxes = () => {
       tag: isRTL ? "عيد الأضحى — قريبًا" : "Eid al-Adha — coming soon",
       title: isRTL ? "تيسير الطاعة" : "Easing worship",
       text: isRTL
-        ? "نربط المضحّي بالمستحق مباشرة — أكثر من ٢ طن لحوم سنويًا تصل لأبواب الأسر المتعفّفة في يوم العيد، طازجة، موثّقة بالصور والفيديو."
-        : "We connect the donor directly to a family in need — over 2 tons of fresh meat delivered yearly on Eid day, documented with photo & video.",
+        ? "نربط المضحّي بالمستحق مباشرة — أكثر من ٥ أطنان لحوم سنويًا تصل إلى أبواب الأسر المتعفّفة يوم العيد، طازجة وموثّقة بالصور والفيديو."
+        : "We connect the donor directly to a family in need — over 5 tons of fresh meat delivered yearly on Eid day, documented with photo & video.",
       months: isRTL ? "ذو الحجة" : "Dhul Hijjah",
       accent: "from-amber-500/20 to-rose-500/10",
       href: "/qurbani",
@@ -155,7 +155,7 @@ export const ZakatAxes = () => {
       tag: isRTL ? "موسم الصيف" : "Summer season",
       title: isRTL ? "حملة ظل" : "Shade campaign",
       text: isRTL
-        ? "في عزّ الحرّ.. وصلة ماء بارد لبيت بلا حنفيّة، مروحة «مركون» تُسكِن غرفة، ومشروب بارد ليد عامل تحت الشمس. كرامة بسيطة في يوم طويل."
+        ? "في عزّ الحرّ.. وصلة ماء بارد لبيت بلا حنفيّة، مروحة «مركون» تُسكِن غرفة، ومشروب بارد في يد عامل تحت الشمس. كرامة بسيطة في يوم طويل."
         : "In the peak of summer — a cold water line to a home with no tap, a fan from a closet that cools a room, a cold drink for a worker under the sun.",
       months: isRTL ? "يونيو — سبتمبر" : "June — September",
       accent: "from-sky-400/20 to-cyan-400/10",
@@ -167,7 +167,7 @@ export const ZakatAxes = () => {
       tag: isRTL ? "موسم الشتاء" : "Winter season",
       title: isRTL ? "حملة ستر" : "Shelter campaign",
       text: isRTL
-        ? "أكتوبر — فبراير: لحاف يدفّي طفل، مرتبة بدل الأرض، باب وشبّاك يحبسوا الريح، وسقف يحمي بيت بأكمله. «من ستر مسلماً ستره الله»."
+        ? "أكتوبر — فبراير: لحاف يدفئ طفلًا، ومرتبة بدل النوم على الأرض، وباب ونافذة يصدّان الريح، وسقف يحمي بيتًا بأكمله. «من ستر مسلماً ستره الله»."
         : "October–February: a blanket to warm a child, a mattress instead of the floor, doors and windows that hold back the cold, a roof that shelters a whole home.",
       months: isRTL ? "أكتوبر — فبراير" : "October — February",
       accent: "from-indigo-400/20 to-blue-500/10",
@@ -214,7 +214,7 @@ export const ZakatAxes = () => {
           </h2>
           <p className="mx-auto mt-3 max-w-[52ch] text-[15px] leading-relaxed text-muted-foreground sm:text-base">
             {isRTL
-              ? "نحن لا نمنح إعانة، بل نصنع حياة. زكاتك تتحوّل إلى غذاء يحفظ الكرامة، علاج يعيد الأمل، وتعليم يكسر دائرة الفقر."
+              ? "نحن لا نمنح إعانة، بل نصنع حياة. زكاتك تتحوّل إلى غذاء يحفظ الكرامة، وعلاج يعيد الأمل، وتعليم يكسر دائرة الفقر."
               : "We don't hand out aid — we build lives. Your Zakat becomes dignified food, restoring treatment, and education that breaks the cycle of poverty."}
           </p>
         </header>
@@ -333,7 +333,7 @@ export const ZakatAxes = () => {
           </h2>
           <p className="mx-auto mt-3 max-w-[58ch] text-[15px] leading-relaxed text-muted-foreground sm:text-base">
             {isRTL
-              ? "كل موسم له قلبه ووجعه وفرحته — ومعاك بنوصل الخير في وقته، مش بعد فوات الأوان. الترتيب حسب الموسم القادم."
+              ? "لكل موسم احتياجه وألمه وفرحته — ومعك نوصل الخير في وقته، لا بعد فوات الأوان. الترتيب حسب الموسم القادم."
               : "Every season has its own heartbeat — we deliver good in its right time, never too late. Ordered by what's coming next."}
           </p>
         </header>

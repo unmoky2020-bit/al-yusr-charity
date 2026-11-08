@@ -40,9 +40,6 @@ import { GalleryCarousel } from "@/components/sections/GalleryCarousel";
 import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
 
 import posterEducation from "@/assets/poster-education.png";
-import yusrDistribution from "@/assets/yusr-distribution-1.webp";
-import yusrMeals from "@/assets/yusr-meals.webp";
-import markounFurniture from "@/assets/markoun-furniture.webp";
 import { HadithBlock } from "@/components/campaigns/HadithBlock";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import ARBOUN_DEFAULTS from "@/data/campaignPages/arboun";
@@ -60,7 +57,7 @@ const ArbounLanding = () => {
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
   // Editable content (code defaults merged with the dashboard override).
-  const { c, t, section, campaignImage, isLoading } = useCampaignPage("arboun", ARBOUN_DEFAULTS);
+  const { c, t, section, images, campaignImage, isLoading } = useCampaignPage("arboun", ARBOUN_DEFAULTS);
   const items = (key: string) => section(key)?.items ?? [];
   const label = (id: string) => items("labels").find((i) => i.id === id);
 
@@ -194,32 +191,9 @@ const ArbounLanding = () => {
 
   const STEPS = items("steps").map((st) => ({ id: st.id, title: t(st.title), desc: t(st.desc) }));
 
-  const GALLERY = [
-    {
-      src: posterEducation,
-      altAr: "دعم تعليم أطفال الأسر المستحقة والأيتام بالحقائب والزي المدرسي",
-      altEn: "Supporting education for orphan children with backpacks and supplies",
-      badgeAr: "كفالة تعليم أيتام",
-    },
-    {
-      src: markounFurniture,
-      altAr: "تيسير زواج الفتيات اليتيمات بأجهزة معمرة وأثاث منزلي",
-      altEn: "Providing household appliances for orphan brides",
-      badgeAr: "تيسير زواج عرائس",
-    },
-    {
-      src: yusrDistribution,
-      altAr: "قوافل الخير الميدانية لتسقيف البيوت وسقيا الماء بالقرى",
-      altEn: "Field aid convoys for clean water and roofing across Egypt",
-      badgeAr: "سقيا ماء وأسقف معزولة",
-    },
-    {
-      src: yusrMeals,
-      altAr: "الإغاثة الغذائية والوجبات الساخنة للأسر الأشد احتياجاً",
-      altEn: "Food relief and hot meals for vulnerable families",
-      badgeAr: "سلال إطعام شهرية",
-    },
-  ];
+  // Rotating pictures at the end of the page (dashboard → الصور → معرض الصور في آخر الصفحة).
+  const GALLERY = images("gallery").map((g) => ({ src: g.src, altAr: g.altAr, altEn: g.altEn, badgeAr: isRTL ? g.captionAr : g.captionEn }));
+  const videoPoster = images("video_poster")[0]?.src ?? posterEducation;
 
   const RELATED_LINKS = [
     { href: "/athar", ar: "حملة أَثَر (التعليم وبناء المستقبل)", en: "Athar Campaign (Education)" },
@@ -275,8 +249,8 @@ const ArbounLanding = () => {
             "@graph": [
               {
                 "@type": "NGO",
-                name: "مؤسسة اليسر للتنمية",
-                alternateName: ["مؤسسة اليسر الخيرية", "جمعية اليسر", "Al-Yusr Charity Foundation"],
+                name: "مؤسسة اليسر الخيرية",
+                alternateName: ["مؤسسة اليسر", "جمعية اليسر", "Al-Yusr Charity Foundation"],
                 url: "https://elyusr.org/",
                 logo: "https://elyusr.org/logo-512.png",
                 telephone: "+201097000137",
@@ -297,7 +271,7 @@ const ArbounLanding = () => {
                 "@type": "DonateAction",
                 name: isRTL ? "تبرع لمبادرة عربون خير" : "Donate to Arboun Khair",
                 description: isRTL ? "استقطع عربون بركة من أرباح مشروعك" : "Pledge a share of your project revenue",
-                recipient: { "@type": "NGO", name: "مؤسسة اليسر للتنمية", url: "https://elyusr.org/" },
+                recipient: { "@type": "NGO", name: "مؤسسة اليسر الخيرية", url: "https://elyusr.org/" },
                 target: `https://elyusr.org${DONATE}`,
               },
               {
@@ -604,7 +578,7 @@ const ArbounLanding = () => {
       {/* ── 4. Creative Scroll-Expanding Video Section ── */}
       <ScrollExpandMedia
         mediaSrc="/vid/2222222.mp4"
-        posterSrc={campaignImage || undefined}
+        posterSrc={videoPoster}
         title={t(section("video")?.title) || undefined}
         badge={t(section("video")?.lead) || undefined}
         isRTL={isRTL}
@@ -848,7 +822,7 @@ const ArbounLanding = () => {
       </section>
 
       {/* ── 8. Real Ground Proof — Premium Overlay Carousel ──────── */}
-      <GalleryCarousel gallery={GALLERY} isRTL={isRTL} />
+      {GALLERY.length > 0 && <GalleryCarousel gallery={GALLERY} isRTL={isRTL} />}
 
       {/* ── 9. Related Initiatives Links ─────────────────────────── */}
       <section className="py-10 bg-muted/20 border-t border-border">

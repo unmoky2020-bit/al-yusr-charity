@@ -28,7 +28,7 @@ export function ProgramUnavailable() {
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
             {isAr
-              ? "البرنامج ده مش بيستقبل تبرعات دلوقتي. تقدر تختار برنامج تاني من برامجنا الحالية، أو تتبرع تبرع عام ونوصله للأشد احتياجاً."
+              ? "هذا البرنامج لا يستقبل تبرعات حاليًا. يمكنك اختيار برنامج آخر من برامجنا الحالية، أو تقديم تبرع عام نوصله إلى الأشد احتياجًا."
               : "This program is not accepting donations right now. Choose one of our current programs, or give a general donation for the families most in need."}
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">

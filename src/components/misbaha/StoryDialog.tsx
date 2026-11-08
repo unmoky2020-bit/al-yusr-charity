@@ -35,11 +35,11 @@ export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; r
       title,
       tagline: roomTagline(room.kind, room.gender, isAr),
       total: room.total_count,
-      totalLabel: isAr ? "ذكر لحد دلوقتي" : "dhikr so far",
+      totalLabel: isAr ? "ذكر حتى الآن" : "dhikr so far",
       zeroText: isAr ? "كن أول من يسبّح" : "Be the first",
       progress: room.target_total ? room.total_count / room.target_total : 0,
       goalLine: room.target_total ? (isAr ? `الهدف ${room.target_total.toLocaleString(locale)} ذكر — شاركنا` : `Goal: ${room.target_total.toLocaleString(locale)} — join us`) : undefined,
-      cta: isAr ? "امسح الكود وسبّح معانا" : "Scan and join in",
+      cta: isAr ? "امسح الرمز وسبّح معنا" : "Scan and join in",
       url: link("story"),
       rtl: isAr,
       locale,
@@ -117,7 +117,7 @@ export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; r
             <img src={url} alt={isAr ? "صورة السبحة للستوري" : "Tasbih story image"} className="max-h-[34dvh] w-auto rounded-2xl shadow-2xl md:max-h-[70dvh]" />
           ) : (
             <div className="grid aspect-[9/16] h-[34dvh] place-items-center rounded-2xl bg-white/5 text-sm font-bold text-white/70 md:h-[60dvh]">
-              {failed ? (isAr ? "تعذر تجهيز الصورة" : "Could not create the image") : (isAr ? "بنجهّز الصورة…" : "Preparing…")}
+              {failed ? (isAr ? "تعذر تجهيز الصورة" : "Could not create the image") : (isAr ? "جارٍ تجهيز الصورة…" : "Preparing…")}
             </div>
           )}
         </div>
@@ -126,7 +126,7 @@ export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; r
         <div className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-6">
           <h2 className="pe-10 text-lg font-black text-primary">{isAr ? "شارك السبحة" : "Share the tasbih"}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {isAr ? "كل اللي يدخل من رابطك ويسبّح، ذكره بيتضاف للعدّاد. والدال على الخير كفاعله." : "Everyone who joins from your link adds to the count."}
+            {isAr ? "كل من يدخل من رابطك ويسبّح يُضاف ذكره إلى العدّاد. والدال على الخير كفاعله." : "Everyone who joins from your link adds to the count."}
           </p>
 
           <p className="mt-5 text-xs font-black text-muted-foreground">{isAr ? "صورة للستوري والحالة" : "Story & status image"}</p>
@@ -134,7 +134,7 @@ export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; r
             {canShareFile && (
               <button type="button" onClick={shareImage} disabled={!file}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-orange-grad font-black text-accent-foreground shadow-cta disabled:opacity-50">
-                <Share2 className="h-4 w-4" /> {isAr ? "انشرها ستوري (واتساب · انستجرام · فيسبوك)" : "Post as a story"}
+                <Share2 className="h-4 w-4" /> {isAr ? "انشرها ستوري (واتساب · إنستجرام · فيسبوك)" : "Post as a story"}
               </button>
             )}
             <a href={url ?? undefined} download={fileName} aria-disabled={!url} onClick={() => url && sent("story_download")}
@@ -143,7 +143,7 @@ export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; r
             </a>
           </div>
 
-          <p className="mt-5 text-xs font-black text-muted-foreground">{isAr ? "ابعت الرابط" : "Send the link"}</p>
+          <p className="mt-5 text-xs font-black text-muted-foreground">{isAr ? "أرسل الرابط" : "Send the link"}</p>
           <div className="mt-2 grid grid-cols-4 gap-2">
             {apps.map(({ key, label, Icon, cls, href }) => (
               <a key={key} href={href} target="_blank" rel="noopener noreferrer" onClick={() => sent(key)}
@@ -156,15 +156,15 @@ export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; r
             className="mt-2 flex h-12 w-full items-center gap-3 rounded-xl border border-border bg-muted/40 px-3 text-start transition hover:border-secondary">
             {copied ? <Check className="h-4 w-4 shrink-0 text-secondary" /> : <Copy className="h-4 w-4 shrink-0 text-primary" />}
             <span className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground" dir="ltr">{pageUrl.replace(/^https?:\/\//, "")}</span>
-            <span className="shrink-0 text-xs font-black text-primary">{copied ? (isAr ? "اتنسخ" : "Copied") : isAr ? "انسخ" : "Copy"}</span>
+            <span className="shrink-0 text-xs font-black text-primary">{copied ? (isAr ? "تم النسخ" : "Copied") : isAr ? "انسخ" : "Copy"}</span>
           </button>
 
           <div className="mt-5 rounded-2xl bg-gradient-to-br from-[#fdf2f8] via-[#f5f3ff] to-[#fff7ed] p-4">
-            <p className="flex items-center gap-2 text-sm font-black text-primary"><Instagram className="h-4 w-4 text-[#d62976]" /> {isAr ? "على انستجرام" : "On Instagram"}</p>
+            <p className="flex items-center gap-2 text-sm font-black text-primary"><Instagram className="h-4 w-4 text-[#d62976]" /> {isAr ? "على إنستجرام" : "On Instagram"}</p>
             <ol className="mt-2 list-inside list-decimal space-y-1 text-xs leading-6 text-foreground/75">
-              <li>{isAr ? "حمّل الصورة، أو اضغط «انشرها ستوري» من الموبايل." : "Save the image, or tap “Post as a story” on your phone."}</li>
-              <li>{isAr ? "في الستوري حط ستيكر «Link» والصق رابط السبحة." : "Add a “Link” sticker and paste the tasbih link."}</li>
-              <li>{isAr ? "اللي مش هيضغط الرابط يقدر يمسح الكود اللي في الصورة." : "Anyone can also scan the code on the image."}</li>
+              <li>{isAr ? "حمّل الصورة، أو اضغط «انشرها ستوري» من هاتفك." : "Save the image, or tap “Post as a story” on your phone."}</li>
+              <li>{isAr ? "أضف إلى الستوري ملصق «Link» والصق رابط السبحة." : "Add a “Link” sticker and paste the tasbih link."}</li>
+              <li>{isAr ? "ومن لا يضغط على الرابط يمكنه مسح الرمز الموجود في الصورة." : "Anyone can also scan the code on the image."}</li>
             </ol>
           </div>
         </div>

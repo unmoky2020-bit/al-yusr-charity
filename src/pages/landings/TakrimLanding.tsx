@@ -25,7 +25,7 @@ import { ProjectKindNote } from "@/components/campaigns/ProjectKind";
 import { useLang } from "@/i18n/LangContext";
 import { useTakrimContent, useTakrimContentState, type TakrimShare } from "@/data/takrimContent";
 
-const DONATE = "/donate?program=takrim";
+const DONATE = "/donate?project=takrim";
 const PHONE = "+201097000137";
 const PHONE_DISPLAY = "+20 109 700 0137";
 
@@ -136,6 +136,8 @@ const SERVICES: { icon: LucideIcon; title: Bi; body: Bi }[] = [
 const TakrimHero = ({ image }: { image: string }) => {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  // Same cached query as the page: the dashboard title and description of the Takrim project.
+  const content = useTakrimContent();
   const Arrow = isAr ? ArrowLeft : ArrowRight;
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -159,7 +161,7 @@ const TakrimHero = ({ image }: { image: string }) => {
           <div className="min-w-0">
             <p className="flex items-center justify-center gap-3 text-sm font-bold text-secondary md:justify-start">
               <span aria-hidden className="h-px w-10 bg-secondary/70" />
-              {isAr ? "تكريم الإنسان · مؤسسة اليسر" : "Takrim · Al-Yusr Foundation"}
+              {isAr ? "تكريم الإنسان · مؤسسة اليسر" : "Takrim · Al-Yusr Charity Foundation"}
             </p>
 
             <h1 className="mt-4 text-center text-[1.75rem] font-black leading-[1.3] text-balance sm:text-4xl md:text-start lg:text-[3.1rem] lg:leading-[1.25]">

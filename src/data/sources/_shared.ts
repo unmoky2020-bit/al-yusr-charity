@@ -8,6 +8,7 @@
  *                                    and return all static data on error / empty response.
  */
 import { useMemo } from "react";
+import { useFirstLoad } from "@/hooks/useFirstLoad";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch, formatServerImageUrl } from "@/data/laravelApi";
 import { useApiContent, type ContentSource } from "@/lib/contentSource";
@@ -216,12 +217,13 @@ export function useSourced<TRaw, TOut>(
     staleTime: 5 * 60_000,
     retry: 1,
   });
+  const firstLoad = useFirstLoad(q, enabled);
   const raw = enabled && !q.isError ? q.data : undefined;
   // `resolve` is a pure mapper; only the fetched payload (and the static value) can change the result.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resolved = useMemo(() => (raw === undefined ? undefined : resolve(raw)), [raw, staticValue]);
   if (resolved === undefined) {
-    return { data: staticValue, isLoading: enabled && q.isLoading, fromApi: false };
+    return { data: staticValue, isLoading: firstLoad, fromApi: false };
   }
   return { data: resolved, isLoading: false, fromApi: true };
 }

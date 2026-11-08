@@ -7,11 +7,8 @@ import { HadithBlock } from "@/components/campaigns/HadithBlock";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import FOOD_DEFAULTS from "@/data/campaignPages/food";
 import heroCarton from "@/assets/hero-carton-opened.webp";
-import cartonStack from "@/assets/brand-carton-stack.png";
 import meatPlates from "@/assets/poster-meat.webp";
 import mealsBoxes from "@/assets/yusr-orphans-meals.webp";
-import iftarTrays from "@/assets/yusr-meals.webp";
-import doorstep from "@/assets/program-food-new.jpg";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("food");
@@ -37,13 +34,6 @@ const MEAL_META: Record<string, { icon: LucideIcon; priceId: string; count: numb
 const MEAT_ICONS: Record<string, LucideIcon> = { farm: Stethoscope, pack: Boxes, deliver: Truck, proof: Camera };
 /** Segment colours of the carton weight bar, cycled in order. */
 const BAR_COLOURS = ["bg-secondary", "bg-accent", "bg-primary", "bg-[hsl(42_80%_60%)]", "bg-[hsl(152_45%_35%)]", "bg-[hsl(18_75%_55%)]"];
-
-const GALLERY = [
-  { src: doorstep, altAr: "تسليم كرتونة الغذاء الشهرية على باب أسرة بالمنصورة", altEn: "Monthly food carton delivered to a family's door in Mansoura" },
-  { src: meatPlates, altAr: "لحوم ذبيحة الشهر مقسّمة كيلو لكل أسرة", altEn: "The month's slaughter meat portioned 1 kg per family" },
-  { src: cartonStack, altAr: "كراتين الغذاء في مخزن المؤسسة قبل التوزيع", altEn: "Food cartons at the foundation's warehouse before distribution" },
-  { src: iftarTrays, altAr: "وجبات مطبوخة من مطبخ اليسر جاهزة للتوزيع", altEn: "Cooked meals from the Al-Yusr kitchen ready for distribution" },
-];
 
 const PriceButton = ({ to, label, amount, isAr, primary = false }: { to: string; label: string; amount: number; isAr: boolean; primary?: boolean }) => {
   const Arrow = isAr ? ArrowLeft : ArrowRight;
@@ -104,7 +94,7 @@ const FoodHero = () => {
               </span>
               <span className="food-tag rounded-xl bg-accent px-4 py-2 text-accent-foreground shadow-cta" style={{ animationDelay: "120ms" }}>
                 <span className="block text-2xl font-black leading-none tabular-nums">{fmtNum(1, isAr)}</span>
-                <span className="block text-[11px] font-bold">{isAr ? "كيلو لحمة شهرياً" : "kg of meat monthly"}</span>
+                <span className="block text-[11px] font-bold">{isAr ? "كيلو لحم شهريًا" : "kg of meat monthly"}</span>
               </span>
               <span className="food-tag rounded-xl bg-primary-foreground px-4 py-2 text-primary shadow-cta" style={{ animationDelay: "240ms" }}>
                 <span className="block text-2xl font-black leading-none tabular-nums">{fmtNum(amount("meal"), isAr)}</span>
@@ -121,7 +111,8 @@ const FoodHero = () => {
 };
 
 const FoodMain = () => {
-  const { c, t, isAr, price, amount, packageId, section } = useCampaignPage(SLUG, FOOD_DEFAULTS);
+  const { c, t, isAr, price, amount, packageId, section, images } = useCampaignPage(SLUG, FOOD_DEFAULTS);
+  const galleryImgs = images("gallery");
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
   const hadith2 = section("hadith2")?.items[0];
@@ -254,7 +245,7 @@ const FoodMain = () => {
             <figure className="relative overflow-hidden rounded-2xl bg-muted shadow-card">
               <img src={meatPlates} alt={isAr ? "أطباق لحم ذبيحة الشهر مقسّمة للأسر" : "Plates of the month's slaughter meat portioned for families"} loading="lazy" className="aspect-[4/3] w-full object-cover object-[50%_45%] lg:aspect-square" />
               <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 pt-12 text-sm font-bold text-white">
-                {isAr ? "كيلو لكل أسرة، طازج في يوم الذبح" : "One kilo per family, fresh on slaughter day"}
+                {isAr ? "كيلو لكل أسرة، طازج يوم الذبح" : "One kilo per family, fresh on slaughter day"}
               </figcaption>
             </figure>
             <div>
@@ -361,7 +352,7 @@ const FoodMain = () => {
               const hot = i === 1;
               return (
                 <article key={tier.id} className={`relative flex flex-col rounded-2xl p-6 ${hot ? "bg-primary text-primary-foreground shadow-card ring-2 ring-secondary" : "border border-border bg-card"}`}>
-                  {hot && <span className="absolute -top-3 start-6 rounded-full bg-secondary px-3 py-1 text-xs font-black text-secondary-foreground">{isAr ? "الأكثر اختياراً" : "Most chosen"}</span>}
+                  {hot && <span className="absolute -top-3 start-6 rounded-full bg-secondary px-3 py-1 text-xs font-black text-secondary-foreground">{isAr ? "الأكثر اختيارًا" : "Most chosen"}</span>}
                   <h3 className={`text-lg font-black ${hot ? "" : "text-primary"}`}>{t(tier.title)}</h3>
                   <p className={`mt-2 text-4xl font-black tabular-nums ${hot ? "text-secondary" : "text-primary"}`}>
                     {fmtNum(p.amount, isAr)} <span className={`text-sm font-bold ${hot ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{isAr ? "جنيه" : "EGP"}</span>
@@ -427,7 +418,7 @@ const FoodMain = () => {
       <section className="bg-background py-16 md:py-20">
         <div className="container mx-auto max-w-6xl px-4">
           <h2 className="text-3xl font-black text-primary md:text-4xl">{t(section("gallery")?.title)}</h2>
-          <div className="mt-8"><BentoGallery items={GALLERY} isAr={isAr} /></div>
+          <div className="mt-8"><BentoGallery items={galleryImgs} isAr={isAr} /></div>
         </div>
       </section>
     </>
@@ -447,7 +438,7 @@ const FoodBoxLanding = () => {
       titleEn={seo?.title.en ?? ""}
       taglineAr={seo?.lead?.ar ?? ""}
       taglineEn={seo?.lead?.en ?? ""}
-      metaDescAr="برنامج الغذاء الشهري من مؤسسة اليسر: لحوم من ذبائح شهرية، كرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام تصلح كفارة صيام أو كفارة يمين. توصيل لباب البيت في المنصورة والدقهلية وكل مصر، بتوثيق بالصور."
+      metaDescAr="برنامج الغذاء الشهري من مؤسسة اليسر: لحوم من ذبائح شهرية، وكرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام تصلح لكفارة الصيام أو كفارة اليمين. توصيل حتى باب البيت في المنصورة والدقهلية وكل مصر، مع التوثيق بالصور."
       metaDescEn="Al-Yusr's monthly food programme: meat from monthly slaughters, a 14 kg carton of local staples, and cooked meals for feeding, fasting expiation or oath expiation. Doorstep delivery in Mansoura, Dakahlia and all Egypt, with photo proof."
       heroImage={campaignImage}
       heroAlt="الغذاء الشهري — كرتونة ١٤ كيلو ولحوم الذبائح الشهرية ووجبات الإطعام"

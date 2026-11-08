@@ -55,7 +55,7 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
                       </button>
                     )}
                     <button type="button" onClick={() => copy(d.id, d.text)} className="inline-flex h-9 items-center gap-1.5 rounded-full border border-border px-3 text-xs font-black text-primary hover:border-secondary">
-                      {copiedId === d.id ? <Check className="h-3.5 w-3.5 text-secondary" /> : <Copy className="h-3.5 w-3.5" />} {copiedId === d.id ? (isAr ? "اتنسخ" : "Copied") : isAr ? "انسخ" : "Copy"}
+                      {copiedId === d.id ? <Check className="h-3.5 w-3.5 text-secondary" /> : <Copy className="h-3.5 w-3.5" />} {copiedId === d.id ? (isAr ? "تم النسخ" : "Copied") : isAr ? "انسخ" : "Copy"}
                     </button>
                   </span>
                 </div>
@@ -80,12 +80,12 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
 
         <div className="space-y-5">
           <div className="rounded-3xl border border-border bg-card p-5 shadow-soft">
-            <h3 className="text-lg font-black text-primary">{isAr ? "رسالة جاهزة للجروبات" : "Ready-made message"}</h3>
-            <p className="mt-1 text-xs font-bold text-muted-foreground">{isAr ? "انسخها وابعتها، أو اختار التطبيق على طول." : "Copy it, or pick an app."}</p>
+            <h3 className="text-lg font-black text-primary">{isAr ? "رسالة جاهزة للمجموعات" : "Ready-made message"}</h3>
+            <p className="mt-1 text-xs font-bold text-muted-foreground">{isAr ? "انسخها وأرسلها، أو اختر التطبيق مباشرة." : "Copy it, or pick an app."}</p>
             <pre className="mt-3 max-h-44 overflow-auto whitespace-pre-wrap rounded-2xl bg-muted/50 p-3 font-sans text-sm font-bold leading-7 text-foreground/85" dir={isAr ? "rtl" : "ltr"}>{message}</pre>
             <div className="mt-3 flex flex-wrap gap-2">
               <button type="button" onClick={() => copy("message", message)} className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-primary px-4 text-sm font-black text-primary-foreground">
-                {copiedId === "message" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />} {copiedId === "message" ? (isAr ? "اتنسخت" : "Copied") : isAr ? "انسخ الرسالة" : "Copy message"}
+                {copiedId === "message" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />} {copiedId === "message" ? (isAr ? "تم النسخ" : "Copied") : isAr ? "انسخ الرسالة" : "Copy message"}
               </button>
               <a href={`https://wa.me/?text=${encodeURIComponent(message)}`} onClick={() => sent("whatsapp")} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
                 className="grid h-10 w-10 place-items-center rounded-xl bg-[#25D366] text-white"><WhatsAppIcon className="h-4 w-4" /></a>
@@ -109,7 +109,7 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
             ) : (
               <>
                 <h3 className="flex items-center gap-2 text-lg font-black text-primary"><HandHeart className="h-5 w-5 text-secondary" /> {isAr ? (kind === "deceased" ? `صدقة جارية ${room.gender === "f" ? "على روحها" : "على روحه"}` : "صدقة جارية بنية المجموعة") : "An ongoing charity"}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{isAr ? "أجرها بيفضل شغّال: سقيا ماء أو حفر بئر أو مساهمة في حالة." : "Its reward keeps running: water, a well, or a case."}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{isAr ? "يظل أجرها جاريًا: سقيا ماء أو حفر بئر أو مساهمة في حالة." : "Its reward keeps running: water, a well, or a case."}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Link to="/water" className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta"><Droplets className="h-4 w-4" /> {isAr ? "سقيا ماء" : "Water"}</Link>
                   <Link to="/cases" className="inline-flex h-10 items-center rounded-xl border border-border bg-card px-4 text-sm font-black text-primary">{isAr ? "ساهم في حالة" : "Fund a case"}</Link>
@@ -120,7 +120,7 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
           </div>
 
           <Link to="/misbaha#memorial" className="flex items-center justify-center gap-2 rounded-2xl border border-dashed border-border px-4 py-3 text-sm font-black text-primary transition hover:border-secondary hover:bg-secondary/10">
-            <Plus className="h-4 w-4" /> {isAr ? "اعمل سبحة لحد تاني غالي عليك" : "Create one for someone else"}
+            <Plus className="h-4 w-4" /> {isAr ? "أنشئ سبحة لشخص آخر عزيز عليك" : "Create one for someone else"}
           </Link>
         </div>
       </div>

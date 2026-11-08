@@ -4,7 +4,10 @@ const sameText = (a: string | null | undefined, b: string | null | undefined) =>
   !!a?.trim() && !!b?.trim() && a.trim() === b.trim();
 
 /** Journey entries already include updates created by the backend; omit their duplicate update rows. */
-export function updatesNotInJourney(journey: JourneyStepRow[], updates: CaseUpdateRow[]): CaseUpdateRow[] {
+/** The journey fields the comparison reads (the public journey endpoint returns only some columns). */
+type JourneyStepLike = Pick<JourneyStepRow, "occurred_at" | "note_ar" | "note_en" | "media_url">;
+
+export function updatesNotInJourney(journey: JourneyStepLike[], updates: CaseUpdateRow[]): CaseUpdateRow[] {
   return updates.filter((update) => !journey.some((step) => {
     if (step.occurred_at !== update.created_at) return false;
     const sameBody = sameText(update.body, step.note_ar) || sameText(update.body, step.note_en);

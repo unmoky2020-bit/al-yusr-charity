@@ -56,7 +56,7 @@ const Trust = () => {
 
   const promises = isRTL
     ? [
-        { I: BadgeCheck, t: `مشهرة برقم ${LICENSE}`, d: "مؤسسة أهلية مسجلة بوزارة التضامن الاجتماعي منذ 2019." },
+        { I: BadgeCheck, t: `مشهرة برقم ${LICENSE}`, d: "مؤسسة أهلية مسجّلة لدى وزارة التضامن الاجتماعي منذ 2019." },
         { I: Search, t: "رقم تتبع لكل تبرع", d: "تتابع حالة تبرعك من الاستلام حتى التسليم." },
         { I: Lock, t: "دفع آمن ومشفّر", d: "بيانات بطاقتك لا تُخزَّن عندنا أبدًا." },
         { I: Camera, t: "توثيق بالصور والفيديو", d: "دليل مرئي على وصول التبرع، مع حفظ كرامة الأسر." },
@@ -70,10 +70,10 @@ const Trust = () => {
 
   const pillars = isRTL
     ? [
-        { I: Users, t: "زيارة ميدانية", d: "نسّق معنا لزيارة الحالة اللي اتبرعت لها بنفسك وتشوف الأثر." },
+        { I: Users, t: "زيارة ميدانية", d: "نسّق معنا لزيارة الحالة التي تبرعت لها، وشاهد الأثر بنفسك." },
         { I: Camera, t: "توثيق مرئي", d: "صور وفيديو لكل مشروع، مع حفظ كرامة الحالة." },
         { I: HandHeart, t: "تطوع عائلتك", d: "شارك أطفالك وشبابك في قوافل التوزيع." },
-        { I: FileCheck2, t: "استلام مباشر", d: "وصّل تبرعك العيني بنفسك للمقر أو للحالة بإشرافنا." },
+        { I: FileCheck2, t: "استلام مباشر", d: "سلّم تبرعك العيني بنفسك في المقر، أو للحالة مباشرة تحت إشرافنا." },
       ]
     : [
         { I: Users, t: "Field visit", d: "Coordinate a personal visit to the case you supported and see the impact." },
@@ -84,10 +84,10 @@ const Trust = () => {
 
   const steps = isRTL
     ? [
-        { I: MousePointerClick, t: "اختر الباب", d: "حالة بعينها، برنامج، مشروع أو حملة — كفالة، علاج، إطعام، سقيا، صك أضحية." },
-        { I: Heart, t: "تبرّع بأمان", d: "بطاقة بنكية أو محفظة عبر بوابة كاشير، إنستاباي، فودافون كاش، أو تحويل بنكي." },
-        { I: Search, t: "تتبّع رقمك", d: "كل تبرع له رقم مرجعي تتابع بيه حالته من صفحة «تتبع تبرعك»." },
-        { I: BadgeCheck, t: "استلم التوثيق", d: "صور وفيديو التسليم — وزيارة ميدانية لو حابب." },
+        { I: MousePointerClick, t: "اختر الباب", d: "حالة بعينها، أو برنامج، أو مشروع، أو حملة: كفالة، علاج، إطعام، سقيا، صك أضحية." },
+        { I: Heart, t: "تبرّع بأمان", d: "بطاقة بنكية أو محفظة إلكترونية عبر بوابة كاشير، أو إنستاباي، أو فودافون كاش، أو تحويل بنكي." },
+        { I: Search, t: "تتبّع رقمك", d: "لكل تبرع رقم مرجعي تتابع به حالته من صفحة «تتبع تبرعك»." },
+        { I: BadgeCheck, t: "استلم التوثيق", d: "صور التسليم وفيديو له، وزيارة ميدانية إن رغبت." },
       ]
     : [
         { I: MousePointerClick, t: "Pick a cause", d: "A specific case, program, project or campaign — sponsorship, treatment, food, water, Qurbani." },
@@ -97,16 +97,16 @@ const Trust = () => {
       ];
 
   const allocation = [
-    { ar: "البرامج الميدانية", en: "Field programs", pct: 89, color: "bg-secondary" },
-    { ar: "اللوجستيات والتشغيل", en: "Logistics & operations", pct: 7, color: "bg-primary/45" },
-    { ar: "الإدارة والمتابعة", en: "Administration & follow-up", pct: 4, color: "bg-primary" },
+    { ar: "يصل إلى الحالات والمستفيدين", en: "Reaches cases & beneficiaries", pct: 90, color: "bg-secondary" },
+    { ar: "مصاريف لوجستية ونقل وتجهيز", en: "Logistics, transport & preparation", pct: 6, color: "bg-primary/45" },
+    { ar: "رواتب وإدارة", en: "Salaries & administration", pct: 4, color: "bg-primary" },
   ];
 
   const docs = isRTL
     ? [
-        { I: BadgeCheck, t: "حاصلون على صفة النفع العام", d: "مؤسسة ذات نفع عام معتمدة رسمياً." },
-        { I: FileCheck2, t: `رقم الإشهار ${LICENSE}`, d: "مؤسسة أهلية مشهرة رسمياً منذ 2019." },
-        { I: Landmark, t: "تابعون لوزارة التضامن الاجتماعي", d: "نعمل تحت إشراف ورقابة وزارة التضامن الاجتماعي." },
+        { I: BadgeCheck, t: "حاصلون على صفة النفع العام", d: "مؤسسة ذات نفع عام معتمدة رسميًا." },
+        { I: FileCheck2, t: `رقم الإشهار ${LICENSE}`, d: "مؤسسة أهلية مشهرة رسميًا منذ 2019." },
+        { I: Landmark, t: "مسجّلون لدى وزارة التضامن الاجتماعي", d: "نعمل تحت إشراف ورقابة وزارة التضامن الاجتماعي." },
         { I: Lock, t: "جميع حساباتنا البنكية مرخّصة", d: "كل حسابات التبرع رسمية ومرخّصة باسم المؤسسة." },
       ]
     : [
@@ -118,10 +118,10 @@ const Trust = () => {
 
   const payments = isRTL
     ? [
-        { I: CreditCard, t: "بطاقات ومحافظ إلكترونية", d: "عبر بوابة كاشير المرخّصة — الدفع بيتم في صفحة البوابة نفسها ومش بنشوف بيانات البطاقة." },
-        ...(walletNames.ar ? [{ I: Phone, t: walletNames.ar, d: "حوّل وابعت صورة الإيصال، ونأكد التبرع ونبعتلك رقم التتبع." }] : []),
+        { I: CreditCard, t: "بطاقات ومحافظ إلكترونية", d: "عبر بوابة كاشير المرخّصة؛ يتم الدفع في صفحة البوابة نفسها، ولا نطّلع على بيانات بطاقتك." },
+        ...(walletNames.ar ? [{ I: Phone, t: walletNames.ar, d: "حوّل المبلغ وأرسل صورة الإيصال، وسنؤكد التبرع ونرسل إليك رقم التتبع." }] : []),
         ...(bankText ? [{ I: Landmark, t: "تحويل بنكي", d: `حساب ${bankText} — وتحويل دولي SWIFT عند الطلب.` }] : []),
-        { I: EyeOff, t: "تبرّع باسم «فاعل خير»", d: "تقدر تخفي اسمك من الظهور العام، وبياناتك بتفضل محمية حسب سياسة الخصوصية." },
+        { I: EyeOff, t: "تبرّع باسم «فاعل خير»", d: "يمكنك إخفاء اسمك من الظهور العام، وتبقى بياناتك محمية وفق سياسة الخصوصية." },
       ]
     : [
         { I: CreditCard, t: "Cards & e-wallets", d: "Through the licensed Kashier gateway — you pay on the gateway's own page and we never see card details." },
@@ -132,8 +132,8 @@ const Trust = () => {
 
   const regions = isRTL
     ? [
-        "الدقهلية — المقر الرئيسي، قوافل إطعام والمجمّع الطبي",
-        "كفر الشيخ — 70 بيت تم تسقيفه ضمن سكن كريم",
+        "الدقهلية — المقر الرئيسي وقوافل الإطعام والمجمّع الطبي",
+        "كفر الشيخ — تسقيف 70 بيتًا ضمن «سكن كريم»",
         "الفيوم — بناء وترميم المساجد والكتاتيب",
         "المنيا — حفر آبار وشبكات مياه نظيفة",
         "القاهرة — حالات عاجلة وقوافل إطعام دورية",
@@ -159,17 +159,17 @@ const Trust = () => {
 
   const faq = isRTL
     ? [
-        { q: "هل مؤسسة اليسر مرخّصة رسميًا في مصر؟", a: `أيوه، اليسر مؤسسة أهلية مشهرة بوزارة التضامن الاجتماعي تحت رقم ${LICENSE}، وحاصلة على صفة النفع العام.` },
-        { q: "إزاي أتتبع تبرعي بعد ما أدفع؟", a: "بيوصلك رقم مرجعي بعد الدفع، تدخله في صفحة «تتبع تبرعك» (elyusr.org/donate/track) وتعرف حالة التبرع ومرحلة التنفيذ." },
-        { q: "فين بيروح تبرعي بالظبط؟", a: "89% من التبرعات بتروح للبرامج الميدانية مباشرة، و7% للوجستيات والتشغيل، و4% للإدارة والمتابعة." },
-        { q: "هل بيانات بطاقتي بتتحفظ عندكم؟", a: "لا. الدفع بالبطاقة بيتم في صفحة بوابة كاشير المرخّصة، ومحدش في المؤسسة بيشوف أو بيخزّن بيانات البطاقة." },
-        { q: "هل أقدر أزور حالة تبرعت لها بنفسي؟", a: "أيوه، بننسّق مع المتبرعين زيارات ميدانية للحالات في أي محافظة بنشتغل فيها، مع الحفاظ على كرامة الأسرة." },
-        { q: "هل أقدر أتبرع من غير ما اسمي يظهر؟", a: "أيوه، اختار «فاعل خير» في فورم التبرع. هنطلب رقم موبايل بس علشان نبعتلك رقم التتبع والتوثيق." },
+        { q: "هل مؤسسة اليسر مرخّصة رسميًا في مصر؟", a: `نعم، اليسر مؤسسة أهلية مشهرة لدى وزارة التضامن الاجتماعي تحت رقم ${LICENSE}، وحاصلة على صفة النفع العام.` },
+        { q: "كيف أتتبع تبرعي بعد الدفع؟", a: "يصلك رقم مرجعي بعد الدفع، أدخله في صفحة «تتبع تبرعك» (elyusr.org/donate/track) لتعرف حالة التبرع ومرحلة التنفيذ." },
+        { q: "أين يذهب تبرعي بالضبط؟", a: "يصل 90% من التبرعات إلى الحالات والمستفيدين، و6% مصاريف لوجستية ونقل وتجهيز، و4% رواتب وإدارة." },
+        { q: "هل تحتفظون ببيانات بطاقتي؟", a: "لا. يتم الدفع بالبطاقة في صفحة بوابة كاشير المرخّصة، ولا يطّلع أحد في المؤسسة على بيانات البطاقة أو يخزّنها." },
+        { q: "هل يمكنني زيارة حالة تبرعت لها بنفسي؟", a: "نعم، ننسّق مع المتبرعين زيارات ميدانية للحالات في أي محافظة نعمل فيها، مع الحفاظ على كرامة الأسرة." },
+        { q: "هل يمكنني التبرع دون أن يظهر اسمي؟", a: "نعم، اختر «فاعل خير» في نموذج التبرع. سنطلب رقم هاتفك فقط لنرسل إليك رقم التتبع والتوثيق." },
       ]
     : [
         { q: "Is Al-Yusr officially licensed in Egypt?", a: `Yes — a non-governmental foundation registered with the Ministry of Social Solidarity under No. ${LICENSE}, with public-benefit status.` },
         { q: "How do I track my donation after paying?", a: "You receive a reference after payment. Enter it on the Track page (elyusr.org/donate/track) to see its status and delivery stage." },
-        { q: "Where exactly does my donation go?", a: "89% goes directly to field programs, 7% to logistics and operations, and 4% to administration and follow-up." },
+        { q: "Where exactly does my donation go?", a: "90% reaches the cases and beneficiaries, 6% covers logistics, transport and preparation, and 4% covers salaries and administration." },
         { q: "Do you store my card details?", a: "No. Card payments happen on the licensed Kashier gateway's page; nobody at the foundation sees or stores card data." },
         { q: "Can I personally visit a case I supported?", a: "Yes — we coordinate donor field visits in every governorate we work in, while preserving family dignity." },
         { q: "Can I donate without my name showing?", a: "Yes — choose \"Anonymous\" on the donation form. We only ask for a phone number to send your tracking reference and proof." },
@@ -180,8 +180,8 @@ const Trust = () => {
       <SEOHelmet
         title={isRTL ? "الشفافية والثقة | مؤسسة اليسر الخيرية — تتبع تبرعك خطوة بخطوة" : "Trust & Transparency | Al-Yusr Charity Foundation"}
         description={isRTL
-          ? `مؤسسة اليسر الخيرية مشهرة برقم ${LICENSE} وتعمل في كل محافظات مصر: رقم تتبع لكل تبرع، دفع آمن، توثيق بالصور والفيديو، 89% للبرامج الميدانية، وزيارات ميدانية للحالات.`
-          : `Al-Yusr Charity Foundation (NGO No. ${LICENSE}) works across Egypt: a tracking number per donation, secure payment, photo/video proof, 89% to field programs, and field visits.`}
+          ? `مؤسسة اليسر الخيرية مشهرة برقم ${LICENSE} وتعمل في كل محافظات مصر: رقم تتبع لكل تبرع، دفع آمن، توثيق بالصور والفيديو، 90% من التبرعات تصل إلى المستفيدين، وزيارات ميدانية للحالات.`
+          : `Al-Yusr Charity Foundation (NGO No. ${LICENSE}) works across Egypt: a tracking number per donation, secure payment, photo/video proof, 90% of donations reaching beneficiaries, and field visits.`}
         path="/trust"
         image={trustHero}
         keywords={isRTL ? "شفافية مؤسسة خيرية, تتبع التبرع, جمعية خيرية موثوقة, مؤسسة خيرية مرخصة, التبرع الآمن" : "charity transparency Egypt, track donation, trusted charity Egypt, licensed NGO Egypt"}
@@ -223,7 +223,7 @@ const Trust = () => {
             },
             {
               "@type": "HowTo",
-              name: isRTL ? "إزاي تتأكد بنفسك من وصول تبرعك" : "How to verify your donation reached its recipient",
+              name: isRTL ? "كيف تتأكد بنفسك من وصول تبرعك" : "How to verify your donation reached its recipient",
               step: steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, name: s.t, text: s.d })),
             },
           ],
@@ -244,14 +244,14 @@ const Trust = () => {
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg">
               {isRTL
-                ? "بنفتح أبوابنا لك علشان تتأكد بنفسك من وصول كل جنيه لمستحقه — ترخيص رسمي، رقم تتبع لكل تبرع، صور وفيديو، وزيارات ميدانية."
+                ? "نفتح أبوابنا لك لتتأكد بنفسك من وصول كل جنيه إلى مستحقه: ترخيص رسمي، ورقم تتبع لكل تبرع، وصور وفيديو، وزيارات ميدانية."
                 : "We open our doors so you can verify every pound reached the right family — official license, a tracking number per donation, photos, video and field visits."}
             </p>
             {/* Short factual answer for AI / voice search (speakable target) */}
             <p className="ai-answer mt-3 max-w-2xl text-sm leading-relaxed text-white/75">
               {isRTL
-                ? `اليسر مؤسسة أهلية مصرية مشهرة بوزارة التضامن الاجتماعي برقم ${LICENSE}، تعمل في كل محافظات مصر منذ 2019؛ 89% من التبرعات للبرامج الميدانية، ولكل تبرع رقم تتبع وتوثيق بالصور.`
-                : `Al-Yusr is an Egyptian NGO registered with the Ministry of Social Solidarity (No. ${LICENSE}), working across Egypt since 2019; 89% of donations fund field programs, and every gift has a tracking number and photo proof.`}
+                ? `اليسر مؤسسة أهلية مصرية مشهرة لدى وزارة التضامن الاجتماعي برقم ${LICENSE}، تعمل في كل محافظات مصر منذ 2019؛ يصل 90% من التبرعات إلى الحالات والمستفيدين، ولكل تبرع رقم تتبع وتوثيق بالصور.`
+                : `Al-Yusr is an Egyptian NGO registered with the Ministry of Social Solidarity (No. ${LICENSE}), working across Egypt since 2019; 90% of donations reach the cases and beneficiaries, and every gift has a tracking number and photo proof.`}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
@@ -282,7 +282,7 @@ const Trust = () => {
         <div className="container mx-auto max-w-6xl px-4 sm:px-6">
           <SectionHead
             title={isRTL ? "أرقامنا على أرض الواقع" : "Our impact in numbers"}
-            sub={isRTL ? "كل رقم بيقابله ملف توثيق وصور ميدانية." : "Every number is backed by a documentation file and field photos."} />
+            sub={isRTL ? "وراء كل رقم ملف توثيق وصور ميدانية." : "Every number is backed by a documentation file and field photos."} />
           <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4">
             {statsLoading
               ? Array.from({ length: 4 }).map((_, i) => (
@@ -309,7 +309,7 @@ const Trust = () => {
             className="aspect-[4/3] w-full rounded-2xl object-cover shadow-card md:aspect-[4/5]" />
           <div>
             <h2 className="text-balance text-3xl font-black leading-tight text-primary md:text-4xl">
-              {isRTL ? "إحنا مش بنطلب منك تثق فينا — بنوريك بنفسك" : "We don't ask for your trust — we show you"}
+              {isRTL ? "لا نطلب منك أن تثق بنا… بل نُريك بنفسك" : "We don't ask for your trust — we show you"}
             </h2>
             <ul className="mt-8 divide-y divide-border border-y border-border">
               {pillars.map((p) => (
@@ -348,12 +348,12 @@ const Trust = () => {
       {/* ══════════ Where every pound goes — one bar that adds up to 100% ══════════ */}
       <section className="bg-muted/40 py-16 md:py-24">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6">
-          <SectionHead title={isRTL ? "فين بيروح كل جنيه؟" : "Where does every pound go?"} />
+          <SectionHead title={isRTL ? "أين يذهب كل جنيه؟" : "Where does every pound go?"} />
           <div className="mt-10 grid gap-8 md:grid-cols-[auto_minmax(0,1fr)] md:items-center md:gap-14">
             <div>
-              <div className="font-mono text-7xl font-black leading-none tabular-nums text-primary md:text-8xl" dir="ltr">89%</div>
+              <div className="font-mono text-7xl font-black leading-none tabular-nums text-primary md:text-8xl" dir="ltr">90%</div>
               <p className="mt-3 max-w-[16rem] font-bold text-foreground/80">
-                {isRTL ? "من تبرعاتك بتروح مباشرة للبرامج الميدانية." : "of your donations go directly to field programs."}
+                {isRTL ? "من تبرعاتك تصل إلى الحالات والمستفيدين." : "of your donations reach the cases and beneficiaries."}
               </p>
             </div>
             <div>
@@ -426,8 +426,8 @@ const Trust = () => {
       <section className="bg-background py-16 md:py-24">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6">
           <SectionHead
-            title={isRTL ? "بنوصل لكل محافظات مصر" : "We reach every governorate in Egypt"}
-            sub={isRTL ? "أي حالة بتتقبل بعد بحث ميداني من فريقنا، في أي مكان في مصر." : "Every case is accepted after a field assessment by our team, anywhere in Egypt."} />
+            title={isRTL ? "نصل إلى كل محافظات مصر" : "We reach every governorate in Egypt"}
+            sub={isRTL ? "نقبل أي حالة في أي مكان في مصر بعد بحث ميداني يجريه فريقنا." : "Every case is accepted after a field assessment by our team, anywhere in Egypt."} />
           <dl className="mt-10 grid gap-x-12 md:grid-cols-2">
             {regions.map((x) => {
               const [place, ...rest] = x.split(" — ");
@@ -455,7 +455,7 @@ const Trust = () => {
         <div className="container mx-auto max-w-6xl px-4 sm:px-6">
           <SectionHead
             title={isRTL ? "صور حقيقية من قوافلنا الميدانية" : "Real photos from our field convoys"}
-            sub={isRTL ? "كل تبرع يصاحبه دليل بصري يوصلك مع رقم المتابعة." : "Every donation comes with visual proof, sent with your tracking reference."} />
+            sub={isRTL ? "يصاحب كل تبرع دليل بصري يصلك مع رقم المتابعة." : "Every donation comes with visual proof, sent with your tracking reference."} />
           <div className="mt-10 grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[190px] md:grid-cols-3 md:auto-rows-[210px] [&>*:last-child]:col-span-2 md:[&>*:last-child]:col-span-1">
             {gallery.map((g, i) => (
               <figure key={g.alt} className={`group relative overflow-hidden rounded-2xl bg-muted ${i === 0 ? "col-span-2 row-span-2" : ""}`}>
@@ -475,9 +475,9 @@ const Trust = () => {
       <LocalFAQ
         categorySlug="trust"
         donateHref="/donate"
-        waText={isRTL ? "السلام عليكم، عندي سؤال عن الشفافية وتتبع التبرع." : "Hi, I have a question about transparency and donation tracking."}
+        waText={isRTL ? "السلام عليكم، لديّ سؤال عن الشفافية وتتبع التبرع." : "Hi, I have a question about transparency and donation tracking."}
         title={isRTL ? "أسئلة شائعة عن الشفافية وتتبع التبرع" : "Transparency & donation tracking FAQs"}
-        intro={isRTL ? "كل ما يخص الترخيص، توثيق التبرع، وطرق الدفع الآمنة في مؤسسة اليسر الخيرية." : "Everything about licensing, donation proof and secure payment at Al-Yusr Charity Foundation."}
+        intro={isRTL ? "كل ما يخص الترخيص وتوثيق التبرع وطرق الدفع الآمنة في مؤسسة اليسر الخيرية." : "Everything about licensing, donation proof and secure payment at Al-Yusr Charity Foundation."}
         items={faq}
       />
 
@@ -489,7 +489,7 @@ const Trust = () => {
               <h2 className="text-xl font-black text-primary md:text-2xl">{isRTL ? "البيانات القانونية" : "Legal identity"}</h2>
               <ul className="mt-4 space-y-2.5 text-sm text-foreground/85">
                 <li className="flex gap-2"><BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />{isRTL ? "مؤسسة اليسر الخيرية — مؤسسة أهلية مصرية" : "Al-Yusr Charity Foundation — Egyptian non-governmental foundation"}</li>
-                <li className="flex gap-2"><FileCheck2 className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />{isRTL ? `مشهرة برقم ${LICENSE} بوزارة التضامن الاجتماعي` : `Registered No. ${LICENSE}, Ministry of Social Solidarity`}</li>
+                <li className="flex gap-2"><FileCheck2 className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />{isRTL ? `مشهرة برقم ${LICENSE} لدى وزارة التضامن الاجتماعي` : `Registered No. ${LICENSE}, Ministry of Social Solidarity`}</li>
                 <li className="flex gap-2"><CalendarCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />{isRTL ? "تأسست عام 2019" : "Founded in 2019"}</li>
                 <li className="flex gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />{isRTL ? "المقر الرئيسي: المنصورة، تقسيم خطاب، بجوار وكالة المنصورة، محافظة الدقهلية" : "Head office: Khattab district, Mansoura, Dakahlia, Egypt"}</li>
               </ul>
@@ -498,7 +498,7 @@ const Trust = () => {
               <h2 className="text-xl font-black text-primary md:text-2xl">{isRTL ? "تواصل مع فريق المتبرعين" : "Contact the donor team"}</h2>
               <ul className="mt-4 space-y-2.5 text-sm text-foreground/85">
                 <li><a href={`tel:+${WA_NUMBER}`} className="inline-flex items-center gap-2 hover:text-secondary"><Phone className="h-4 w-4 text-secondary" /><span dir="ltr">{PHONE}</span></a></li>
-                <li><a href={wa(isRTL ? "السلام عليكم، عايز أسأل عن تبرع." : "Hi, I have a question about a donation.")} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-secondary"><MessageCircle className="h-4 w-4 text-secondary" />{isRTL ? "واتساب" : "WhatsApp"}</a></li>
+                <li><a href={wa(isRTL ? "السلام عليكم، لديّ سؤال عن تبرع." : "Hi, I have a question about a donation.")} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-secondary"><MessageCircle className="h-4 w-4 text-secondary" />{isRTL ? "واتساب" : "WhatsApp"}</a></li>
                 <li><a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-2 hover:text-secondary"><Mail className="h-4 w-4 text-secondary" />{EMAIL}</a></li>
                 <li><Link to="/contact" className="inline-flex items-center gap-2 font-extrabold text-primary underline decoration-secondary decoration-2 underline-offset-4">{isRTL ? "كل وسائل التواصل" : "All contact options"} <Arrow className="h-3.5 w-3.5" /></Link></li>
               </ul>
@@ -510,7 +510,7 @@ const Trust = () => {
       {/* ══════════ Final CTA ══════════ */}
       <section className="bg-primary py-14 text-primary-foreground md:py-20">
         <div className="container mx-auto max-w-3xl px-4 text-center">
-          <h2 className="text-2xl font-black md:text-4xl">{isRTL ? "تبرعك بيوصل… ومتابعتك بتفرق" : "Your donation arrives — your follow-up matters"}</h2>
+          <h2 className="text-2xl font-black md:text-4xl">{isRTL ? "تبرعك يصل… ومتابعتك تصنع الفرق" : "Your donation arrives — your follow-up matters"}</h2>
           <p className="mt-3 text-primary-foreground/85 md:text-lg">
             {isRTL ? "تبرّع واستلم رقم تتبع فوري مع توثيق ميداني كامل." : "Donate and receive an instant tracking number with full field documentation."}
           </p>

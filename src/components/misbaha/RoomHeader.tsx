@@ -28,14 +28,14 @@ export function RoomHeader({
   if (!room) {
     return (
       <div className="rounded-3xl bg-white/10 p-6">
-        <h1 className="text-2xl font-black md:text-3xl">{state === "pending" ? (isAr ? "السبحة بتتجهّز" : "Almost ready") : isAr ? "السبحة دي مش متاحة" : "This tasbih is not available"}</h1>
+        <h1 className="text-2xl font-black md:text-3xl">{state === "pending" ? (isAr ? "جارٍ تجهيز السبحة" : "Almost ready") : isAr ? "هذه السبحة غير متاحة" : "This tasbih is not available"}</h1>
         <p className="mt-2 text-sm text-white/80">
           {state === "pending"
             ? MISBAHA_ROOMS_PENDING_AR
-            : isAr ? "الرابط ممكن يكون غلط أو السبحة اتشالت. تقدر تسبّح هنا عادي، أو تعمل سبحة جديدة." : "The link may be wrong or the tasbih was removed. You can still count here, or create a new one."}
+            : isAr ? "قد يكون الرابط غير صحيح أو حُذفت السبحة. يمكنك التسبيح هنا كالمعتاد، أو إنشاء سبحة جديدة." : "The link may be wrong or the tasbih was removed. You can still count here, or create a new one."}
         </p>
         <Link to="/misbaha#memorial" className="mt-4 inline-flex items-center gap-2 rounded-xl bg-secondary px-4 py-2 text-sm font-black text-slate-950">
-          <Plus className="h-4 w-4" /> {isAr ? "اعمل سبحة جديدة" : "Create a new one"}
+          <Plus className="h-4 w-4" /> {isAr ? "أنشئ سبحة جديدة" : "Create a new one"}
         </Link>
       </div>
     );
@@ -47,7 +47,7 @@ export function RoomHeader({
       {isNew && (
         <div className="misbaha-fade mx-auto mb-5 max-w-md rounded-2xl border border-secondary/40 bg-secondary/15 px-4 py-3 text-sm font-bold text-white">
           <Sparkles className="me-1 inline h-4 w-4 text-secondary" />
-          {isAr ? "السبحة اتعملت. ابعتها دلوقتي لجروب العيلة والأصحاب، وكل اللي يدخل يسبّح بيزوّد العدّاد." : "Created! Send it to family and friends now — everyone who joins adds to the count."}
+          {isAr ? "تم إنشاء السبحة. أرسلها الآن إلى مجموعات العائلة والأصدقاء، وكل من يدخل ويسبّح يزيد العدّاد." : "Created! Send it to family and friends now — everyone who joins adds to the count."}
         </div>
       )}
       <p className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-black text-secondary">{isAr ? `سبحة مشتركة · ${meta.ar}` : `Shared tasbih · ${meta.en}`}</p>
@@ -60,7 +60,7 @@ export function RoomHeader({
           <span className="font-mono text-4xl font-black tabular-nums" aria-live="polite">{fmt(room.total_count)}</span>
         </div>
         <p className="mt-1 text-xs font-bold text-white/70">
-          {isAr ? "ذكر اتقال من كل اللي شاركوا" : "dhikr said by everyone so far"}
+          {isAr ? "ذكر قاله جميع المشاركين" : "dhikr said by everyone so far"}
           {live && (
             <span className="ms-2 inline-flex items-center gap-1 text-secondary">
               <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-secondary opacity-60 motion-reduce:hidden" /><span className="relative inline-flex h-2 w-2 rounded-full bg-secondary" /></span>
@@ -69,7 +69,7 @@ export function RoomHeader({
           )}
         </p>
         {othersRecent > 0 && (
-          <p className="misbaha-fade mt-1 text-xs font-black text-secondary">{isAr ? `+${fmt(othersRecent)} من ناس تانية من ساعة ما فتحت` : `+${fmt(othersRecent)} from others since you opened`}</p>
+          <p className="misbaha-fade mt-1 text-xs font-black text-secondary">{isAr ? `+${fmt(othersRecent)} من مشاركين آخرين منذ أن فتحت الصفحة` : `+${fmt(othersRecent)} from others since you opened`}</p>
         )}
         {room.target_total ? (
           <div className="mt-3">
@@ -79,23 +79,23 @@ export function RoomHeader({
             </div>
             <p className="mt-1.5 text-xs font-bold text-white/70">
               {room.total_count >= room.target_total
-                ? isAr ? `وصلنا للهدف (${fmt(room.target_total)}) الحمد لله. كمّلوا، الخير ما بيخلصش.` : `Goal of ${fmt(room.target_total)} reached. Keep going.`
-                : isAr ? `الهدف ${fmt(room.target_total)} · فاضل ${fmt(room.target_total - room.total_count)}` : `Goal ${fmt(room.target_total)} · ${fmt(room.target_total - room.total_count)} to go`}
+                ? isAr ? `بلغنا الهدف (${fmt(room.target_total)}) والحمد لله. واصلوا، فالخير لا ينتهي.` : `Goal of ${fmt(room.target_total)} reached. Keep going.`
+                : isAr ? `الهدف ${fmt(room.target_total)} · المتبقي ${fmt(room.target_total - room.total_count)}` : `Goal ${fmt(room.target_total)} · ${fmt(room.target_total - room.total_count)} to go`}
             </p>
           </div>
         ) : null}
       </div>
-      {room.created_by && <p className="mt-3 text-xs font-bold text-white/60">{isAr ? `عملها ${room.created_by}` : `Created by ${room.created_by}`}</p>}
+      {room.created_by && <p className="mt-3 text-xs font-bold text-white/60">{isAr ? `أنشأها ${room.created_by}` : `Created by ${room.created_by}`}</p>}
 
       <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
         <a href={waHref} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#25D366] px-5 text-sm font-black text-white shadow-cta transition hover:brightness-95">
-          <WhatsAppIcon className="h-4 w-4" /> {isAr ? "ابعتها واتساب" : "WhatsApp"}
+          <WhatsAppIcon className="h-4 w-4" /> {isAr ? "أرسلها عبر واتساب" : "WhatsApp"}
         </a>
         <button type="button" onClick={onStory} className="inline-flex h-11 items-center gap-2 rounded-xl bg-secondary px-5 text-sm font-black text-slate-950 shadow-cta transition hover:-translate-y-0.5">
           <ImageIcon className="h-4 w-4" /> {isAr ? "صورة للستوري" : "Story image"}
         </button>
         <button type="button" onClick={onCopy} className="inline-flex h-11 items-center gap-2 rounded-xl border border-white/25 px-4 text-sm font-black text-white hover:bg-white/10">
-          {copied ? <Check className="h-4 w-4 text-secondary" /> : <Copy className="h-4 w-4" />} {copied ? (isAr ? "اتنسخ" : "Copied") : isAr ? "انسخ الرابط" : "Copy link"}
+          {copied ? <Check className="h-4 w-4 text-secondary" /> : <Copy className="h-4 w-4" />} {copied ? (isAr ? "تم النسخ" : "Copied") : isAr ? "انسخ الرابط" : "Copy link"}
         </button>
         {onNativeShare && (
           <button type="button" onClick={onNativeShare} className="grid h-11 w-11 place-items-center rounded-xl border border-white/25 text-white hover:bg-white/10" aria-label={isAr ? "مشاركة" : "Share"}>

@@ -12,22 +12,22 @@ const KhabiaLanding = () => (
     badgeEn="Easiest ongoing sadaqah"
     titleAr="الخبيئة — صدقة لا يعلمها إلا الله"
     titleEn="Al-Khabiaa — Sadaqah only Allah knows"
-    taglineAr="حصّالة صغيرة بتقعد في بيتك بالمنصورة أو ميت غمر، تجمع فيها كل يوم اللي يتيسّر — جنيه، خمسة، عشرة. مندوب اليسر يوصّلها مجانًا، ويمر يستلمها كل فترة. أنت تنوي.. واحنا نوصّل."
+    taglineAr="حصّالة صغيرة في بيتك بالمنصورة أو ميت غمر، تضع فيها كل يوم ما تيسّر: جنيهًا أو خمسة أو عشرة. يوصلها مندوب اليسر إليك مجانًا، ويمر لاستلامها كل فترة. أنت تنوي، ونحن نوصل."
     taglineEn="A small donation can that lives in your home in Mansoura or Mit Ghamr. Drop in whatever you can each day — 1, 5 or 10 EGP. Al-Yusr brings it free and collects it periodically. You intend, we deliver."
-    metaDescAr="اطلب حصّالة الخبيئة من مؤسسة اليسر — صدقة جارية يومية في بيتك بالدقهلية والمنصورة وميت غمر وطلخا وكفر الشيخ. مندوب اليسر يوصّلها ويستلمها مجانًا، توثيق كامل."
+    metaDescAr="اطلب حصّالة الخبيئة من مؤسسة اليسر — صدقة جارية يومية في بيتك بالدقهلية والمنصورة وميت غمر وطلخا وكفر الشيخ. يوصلها مندوب اليسر ويستلمها مجانًا، مع توثيق كامل."
     metaDescEn="Request your Al-Khabiaa sadaqah can from Al-Yusr — daily ongoing charity at home across Dakahlia, Mansoura, Mit Ghamr, Talkha and Kafr El Sheikh. Free delivery and pickup."
     heroImage={khabiaCan}
     heroAlt="حصّالة الخبيئة من مؤسسة اليسر للصدقة الجارية"
     pillars={[
-      { titleAr: "صدقة كل يوم", titleEn: "Daily sadaqah", descAr: "ما تحتاجش مبلغ كبير. جنيه أو خمسة كل يوم بيكوّنوا صدقة كبيرة على مدار شهر — في صحيفتك ولأهل الدقهلية.", descEn: "No big amount needed. 1 or 5 EGP a day becomes a large sadaqah over a month — in your record and Dakahlia families' lives." },
-      { titleAr: "بنجيب وبنستلم مجانًا", titleEn: "Free delivery & pickup", descAr: "مندوب اليسر يوصّلها لباب البيت في المنصورة، ميت غمر، طلخا، بلقاس، وقرى كفر الشيخ — ومرة كل ٣ شهور بنمر نستلمها.", descEn: "Our team delivers it to your door across Mansoura, Mit Ghamr, Talkha, Belqas and Kafr El Sheikh — and we collect every 3 months." },
-      { titleAr: "تقرير شخصي", titleEn: "Personal report", descAr: "بعد كل استلام، بنرسل لك إجمالي ما جمعته خبيئتك ومجال الصرف، مع رقم تتبّع لكل خبيئة على حدة.", descEn: "After every pickup, we send your can's total, where it was spent, and a tracking number for each can." },
+      { titleAr: "صدقة كل يوم", titleEn: "Daily sadaqah", descAr: "لا تحتاج إلى مبلغ كبير؛ فجنيه أو خمسة كل يوم تصنع صدقة كبيرة على مدار الشهر، تُكتب في صحيفتك وتصل إلى أهل الدقهلية.", descEn: "No big amount needed. 1 or 5 EGP a day becomes a large sadaqah over a month — in your record and Dakahlia families' lives." },
+      { titleAr: "توصيل واستلام مجاني", titleEn: "Free delivery & pickup", descAr: "يوصلها مندوب اليسر حتى باب البيت في المنصورة وميت غمر وطلخا وبلقاس وقرى كفر الشيخ، ونمر لاستلامها مرة كل ٣ شهور.", descEn: "Our team delivers it to your door across Mansoura, Mit Ghamr, Talkha, Belqas and Kafr El Sheikh — and we collect every 3 months." },
+      { titleAr: "تقرير شخصي", titleEn: "Personal report", descAr: "بعد كل استلام نرسل إليك إجمالي ما جمعته خبيئتك ومجال صرفه، مع رقم تتبّع لكل خبيئة على حدة.", descEn: "After every pickup, we send your can's total, where it was spent, and a tracking number for each can." },
     ]}
     steps={[
-      { titleAr: "اطلب خبيئتك", titleEn: "Request your can", descAr: "املأ النموذج أو ابعتلنا واتس — هنحدّد مع المنطقة وقت التسليم.", descEn: "Fill the form or message us on WhatsApp — we coordinate delivery timing for your area." },
-      { titleAr: "نوصّلها مجانًا", titleEn: "We deliver free", descAr: "مندوب اليسر يوصّل الخبيئة لباب البيت بالدقهلية أو كفر الشيخ خلال ٧٢ ساعة.", descEn: "Al-Yusr delivers the can to your door in Dakahlia or Kafr El Sheikh within 72 hours." },
-      { titleAr: "تجمع كل يوم", titleEn: "Drop in daily", descAr: "ضعها في مكان مرئي — على الديواني أو جنب باب البيت — وحط فيها اللي يتيسّر يوميًا بنيّة الصدقة.", descEn: "Place it visibly — by the entry or living area — and drop in whatever you can daily with sadaqah intention." },
-      { titleAr: "بنمر نستلم", titleEn: "We collect periodically", descAr: "كل ٣ شهور بنمر نستلمها ونوثّقها قدامك ونرسل لك تقرير الصرف.", descEn: "Every 3 months we collect, count it in front of you and send the spending report." },
+      { titleAr: "اطلب خبيئتك", titleEn: "Request your can", descAr: "املأ النموذج أو راسلنا عبر واتساب، وسنحدد معك موعد التسليم حسب منطقتك.", descEn: "Fill the form or message us on WhatsApp — we coordinate delivery timing for your area." },
+      { titleAr: "نوصّلها مجانًا", titleEn: "We deliver free", descAr: "يوصل مندوب اليسر الخبيئة حتى باب البيت في الدقهلية أو كفر الشيخ خلال ٧٢ ساعة.", descEn: "Al-Yusr delivers the can to your door in Dakahlia or Kafr El Sheikh within 72 hours." },
+      { titleAr: "تصدّق كل يوم", titleEn: "Drop in daily", descAr: "ضعها في مكان ظاهر، في غرفة الاستقبال أو بجوار باب البيت، وضع فيها ما تيسّر يوميًا بنيّة الصدقة.", descEn: "Place it visibly — by the entry or living area — and drop in whatever you can daily with sadaqah intention." },
+      { titleAr: "نمرّ لاستلامها", titleEn: "We collect periodically", descAr: "كل ٣ شهور نمر لاستلامها، ونعدّها أمامك، ثم نرسل إليك تقرير الصرف.", descEn: "Every 3 months we collect, count it in front of you and send the spending report." },
     ]}
     gallery={[
       { src: khabiaCan, altAr: "حصّالة الخبيئة بشعار اليسر", altEn: "Al-Khabiaa can with Al-Yusr branding" },
@@ -44,15 +44,15 @@ const KhabiaLanding = () => (
     ]}
     faq={{
       ar: [
-        { q: "هل خدمة التوصيل والاستلام مجانية فعلًا؟", a: "نعم — التوصيل والاستلام مجاني تمامًا داخل الدقهلية وكفر الشيخ، التكلفة محتسبة من مصاريف التشغيل (أقل من ٨٪)." },
-        { q: "بكام الخبيئة؟", a: "الحصّالة هدية من اليسر — ما بتدفعش ثمنها. كل اللي عليك إنك تنوي وتحط فيها اللي يتيسّر يوميًا." },
-        { q: "متى تستلموها؟", a: "كل ٣ شهور بنمر نستلمها بموعد متّفق عليه، ونعدّها قدامك ونرجّعها فاضية." },
-        { q: "أين يُصرف ما يُجمع؟", a: "بيتم صرفه في برامج اليسر الجارية بالدقهلية: كرتونة الغذاء، علاج المسنّين، تسقيف بيوت متهالكة، حصص دراسية للأيتام." },
-        { q: "أقدر أطلبها وأنا في كفر الشيخ؟", a: "نعم — بنوصّل لقرى مختارة في كفر الشيخ بالاتفاق المسبق على الواتس." },
-        { q: "هل يصلني تقرير عن خبيئتي؟", a: "نعم — بعد كل استلام تحصل على رقم تتبّع وتقرير قصير بمجال الصرف على الواتس أو الإيميل." },
+        { q: "هل خدمة التوصيل والاستلام مجانية فعلًا؟", a: "نعم، التوصيل والاستلام مجانيان تمامًا داخل الدقهلية وكفر الشيخ، وتُحتسب تكلفتهما من بند المصاريف اللوجستية والنقل (٦٪ فقط من التبرعات)." },
+        { q: "كم ثمن الخبيئة؟", a: "الحصّالة هدية من اليسر، ولا تدفع ثمنها. كل ما عليك أن تنوي وتضع فيها ما تيسّر يوميًا." },
+        { q: "متى تستلمونها؟", a: "نمر لاستلامها كل ٣ شهور في موعد متّفق عليه، ونعدّها أمامك ونعيدها إليك فارغة." },
+        { q: "أين يُصرف ما يُجمع؟", a: "يُصرف في برامج اليسر الجارية بالدقهلية: كرتونة الغذاء، وعلاج المسنّين، وتسقيف البيوت المتهالكة، والحصص الدراسية للأيتام." },
+        { q: "هل يمكنني طلبها وأنا في كفر الشيخ؟", a: "نعم، نوصلها إلى قرى مختارة في كفر الشيخ بالاتفاق المسبق عبر واتساب." },
+        { q: "هل يصلني تقرير عن خبيئتي؟", a: "نعم، بعد كل استلام تحصل على رقم تتبّع وتقرير قصير بمجال الصرف عبر واتساب أو البريد الإلكتروني." },
       ],
       en: [
-        { q: "Are delivery and pickup really free?", a: "Yes — fully free inside Dakahlia and Kafr El Sheikh; the cost is covered by our under-8% operating budget." },
+        { q: "Are delivery and pickup really free?", a: "Yes — fully free inside Dakahlia and Kafr El Sheikh; the cost comes from our logistics and transport budget (only 6% of donations)." },
         { q: "How much does the can cost?", a: "It's a gift from Al-Yusr — no purchase price. Just intend and drop in what you can daily." },
         { q: "When do you collect it?", a: "Every 3 months at an agreed time. We count in front of you and return it empty." },
         { q: "Where do collected funds go?", a: "Active Al-Yusr Dakahlia programs: food cartons, elder medication, roof repairs, orphan tuition." },

@@ -33,7 +33,7 @@ export const ArbounCalculator = () => {
     }
     if (egpEquivalent < 500) {
       return isRTL
-        ? "يكفل شنطة مدرسية متكاملة بأدواتها وزي لطالب يتيم"
+        ? "يوفر حقيبة مدرسية متكاملة بأدواتها وزيًّا مدرسيًّا لطالب يتيم"
         : "Fully equips an orphan student with a backpack & supplies";
     }
     if (egpEquivalent < 1000) {
@@ -43,11 +43,11 @@ export const ArbounCalculator = () => {
     }
     if (egpEquivalent < 2000) {
       return isRTL
-        ? "يساهم في جهاز منزلي أساسي لتيسير زواج عروسة يتيمة"
+        ? "يساهم في شراء جهاز منزلي أساسي لتيسير زواج عروس يتيمة"
         : "Directly funds a core home appliance for an orphan bride";
     }
     return isRTL
-      ? "يساهم في مد وصلة مياه نقية أو عزل سقف منزل يحمي أسرة لـ 10 سنوات"
+      ? "يساهم في مد وصلة مياه نقية أو عزل سقف منزل يحمي أسرة لمدة 10 سنوات"
       : "Funds clean water piping or insulated roofing lasting 10 years";
   };
 
@@ -62,7 +62,7 @@ export const ArbounCalculator = () => {
 
           <h2 className="text-2xl font-black leading-tight sm:text-3xl md:text-4xl text-foreground">
             {isRTL ? (
-              <>احسب عربون خيرك.. <span className="text-gradient-lime">وبارك في رزقك</span></>
+              <>احسب عربون خيرك، <span className="text-gradient-lime">ليبارك الله في رزقك</span></>
             ) : (
               <>Calculate Your Pledge & <span className="text-gradient-lime">Bless Your Work</span></>
             )}
@@ -70,7 +70,7 @@ export const ArbounCalculator = () => {
 
           <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
             {isRTL
-              ? "مهما كانت قيمة مشروعك أو عملتك.. استقطع نسبة تناسبك وشاهد أثرها الحي والمباشر على الأرض."
+              ? "مهما كانت قيمة مشروعك أو عملته، اقتطع نسبة تناسبك وشاهد أثرها المباشر على أرض الواقع."
               : "No matter your project size or currency, pick your percentage and see its direct field impact."}
           </p>
         </div>
@@ -202,7 +202,7 @@ export const ArbounCalculator = () => {
                 <Heart className="h-4 w-4" />
                 <span>
                   {isRTL
-                    ? `طلع عربون خيرك الآن (${calculatedValue.toLocaleString()} ${currency})`
+                    ? `أخرِج عربون خيرك الآن (${calculatedValue.toLocaleString()} ${currency})`
                     : `Pledge ${calculatedValue.toLocaleString()} ${currency} Now`}
                 </span>
               </Link>

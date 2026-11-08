@@ -108,7 +108,7 @@ export const ArbounMarqueeBanner = () => {
   const topBannerPromotions: PromotionItem[] = [
     {
       icon: <Zap className="h-4 w-4" />,
-      textAr: "استقطع نسبة من كل مشروع.. تفتح أبواب الرزق والبركة",
+      textAr: "اقتطع نسبة من كل مشروع، تُفتح لك أبواب الرزق والبركة",
       textEn: "Deduct a fraction per client project — invite barakah & flow",
     },
     {
@@ -118,7 +118,7 @@ export const ArbounMarqueeBanner = () => {
     },
     {
       icon: <BadgeCheck className="h-4 w-4" />,
-      textAr: "شارة «مستقل داعم» رقمية للبورتفوليو و GitHub و Behance",
+      textAr: "شارة «مستقل داعم» الرقمية لمعرض أعمالك وحساباتك على GitHub وBehance",
       textEn: "Digital 'Impact Freelancer' Badge for your Portfolio",
     },
     {
@@ -141,27 +141,27 @@ export const ArbounMarqueeBanner = () => {
   const bottomBannerPromotions: PromotionItem[] = [
     {
       icon: <Coins className="h-4 w-4" />,
-      textAr: "مفيش حد أدنى — حتى 1% تصنع فرقاً حقيقياً في حياة أسرة",
+      textAr: "لا يوجد حد أدنى، فحتى 1% تصنع فرقًا حقيقيًا في حياة أسرة",
       textEn: "No minimum — even 1% builds a roof or feeds a family",
     },
     {
       icon: <CheckCircle2 className="h-4 w-4" />,
-      textAr: "تبرع آمن بكارت البنك أو فودافون كاش أو InstaPay أو CIB",
+      textAr: "تبرع آمن بالبطاقة البنكية أو فودافون كاش أو InstaPay أو CIB",
       textEn: "Secure Payment via Visa, Mastercard, InstaPay & Cash",
     },
     {
       icon: <Award className="h-4 w-4" />,
-      textAr: "نقبل التبرعات بالدولار والريال واليورو لعملائك بالخارج",
+      textAr: "نقبل التبرعات بالدولار والريال واليورو إن كان عملاؤك في الخارج",
       textEn: "Accepts USD, SAR & EUR from your international earnings",
     },
     {
       icon: <Sparkles className="h-4 w-4" />,
-      textAr: "علاج فوري لضغط وقلق الشغل وبطء العملاء وتأخر الدفعات",
+      textAr: "علاج لضغط العمل وقلقه، ولبطء العملاء وتأخر الدفعات",
       textEn: "Relieves project fatigue, client delays, and market stress",
     },
     {
       icon: <ShieldCheck className="h-4 w-4" />,
-      textAr: "صدقة جارية وأصل وقفي يعيش أثره ويضاعف حسناتك",
+      textAr: "صدقة جارية وأصل وقفي يبقى أثره وتتضاعف به حسناتك",
       textEn: "Ongoing charity & lasting endowment multiplying good deeds",
     },
   ];

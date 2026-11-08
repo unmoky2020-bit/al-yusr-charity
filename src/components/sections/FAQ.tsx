@@ -51,7 +51,7 @@ export const FAQ = () => {
             {isAr ? "الأسئلة الشائعة" : "Frequently Asked"}
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            {isAr ? "إجابات واضحة على أكثر الأسئلة شيوعاً." : "Clear answers to the most common questions."}
+            {isAr ? "إجابات واضحة على أكثر الأسئلة شيوعًا." : "Clear answers to the most common questions."}
           </p>
         </div>
 

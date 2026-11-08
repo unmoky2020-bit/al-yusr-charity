@@ -25,7 +25,7 @@ export const INTERNAL_LINK_RULES: LinkRule[] = [
   { match: /تيسير\s*زواج|جواز\s*عروسة/, href: "/programs/marriage", ar: "تيسير زواج" },
   { match: /شفافية|تقرير\s*سنوي/, href: "/about#transparency", ar: "شفافية اليسر" },
   { match: /مين\s*احنا|عن\s*اليسر|مؤسسة\s*اليسر/, href: "/about", ar: "مؤسسة اليسر" },
-  { match: /تبرع|تبرعك|ساهم/, href: "/donate", ar: "تبرع دلوقتي" },
+  { match: /تبرع|تبرعك|ساهم/, href: "/donate", ar: "تبرع الآن" },
 ];
 
 /**

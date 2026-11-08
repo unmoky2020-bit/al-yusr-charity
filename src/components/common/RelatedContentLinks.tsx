@@ -88,10 +88,10 @@ export const RelatedContentLinks = ({
     >
       <div className="container mx-auto max-w-6xl px-4">
         <h2 className="mb-2 text-center text-xl font-black text-primary md:text-2xl">
-          {isRTL ? "اقرأ أكتر واستكشف أكتر" : "Read more & explore more"}
+          {isRTL ? "اقرأ واستكشف المزيد" : "Read more & explore more"}
         </h2>
         <p className="mb-8 text-center text-sm text-muted-foreground">
-          {isRTL ? "روابط داخلية مختارة لمساعدتك تتعمق أكتر في هذا البرنامج." : "Hand-picked internal links to dive deeper into this program."}
+          {isRTL ? "روابط داخلية مختارة تساعدك على التعمق أكثر في هذا البرنامج." : "Hand-picked internal links to dive deeper into this program."}
         </p>
 
         <div className={`grid gap-6 ${otherGeos.length > 0 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
@@ -127,7 +127,7 @@ export const RelatedContentLinks = ({
             <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
               <div className="mb-3 flex items-center gap-2 font-extrabold text-primary">
                 <MapPin className="h-5 w-5 text-secondary" />
-                {isRTL ? "نفس البرنامج في محافظات تانية" : "Same program in other governorates"}
+                {isRTL ? "البرنامج نفسه في محافظات أخرى" : "Same program in other governorates"}
               </div>
               <ul className="grid grid-cols-2 gap-1.5 text-sm">
                 {otherGeos.map((g) => (

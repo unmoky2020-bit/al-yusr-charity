@@ -29,8 +29,8 @@ const Index = () => {
         }
         description={
           lang === "ar"
-            ? "مؤسسة اليسر الخيرية بالمنصورة — مشهرة برقم 2665. نصل بتبرعاتكم وزكاتكم إلى مستحقيها بأعلى معايير الأمانة والشفافية والتوثيق الميداني في مصر."
-            : "Licensed Egyptian NGO 2665. Delivering your zakat and charitable donations with integrity, verified transparency, and lasting community impact across Egypt."
+            ? "مؤسسة اليسر الخيرية — مؤسسة خيرية مصرية مشهرة برقم 2665، تعمل في محافظات مصر ومقرها الرئيسي في المنصورة. نوصل تبرعاتكم وزكاتكم إلى مستحقيها بأمانة وتوثيق ميداني."
+            : "Licensed Egyptian NGO 2665, working across Egypt and headquartered in Mansoura. Delivering your zakat and donations with integrity, verified transparency and lasting impact."
         }
         path="/"
         image={lang === "ar" ? "/og-ar.jpg" : "/og-en.jpg"}
@@ -70,7 +70,7 @@ const Index = () => {
             <p>
               مؤسسة اليسر هي مؤسسة خيرية مصرية مشهرة برقم 2665 مقرها المنصورة، محافظة الدقهلية.
               تعمل اليسر الخيرية على توزيع الصدقات الجارية، زكاة المال، صكوك الأضحية، كفالة الأيتام، والمساعدات الشهرية.
-              اليسر ليس محل أجهزة كهربائية، بل هي مؤسسة خيرية معتمدة تخدم المجتمع وتصل بتبرعاتكم إلى مستحقيها بصدق وأمانة.
+              اليسر ليست متجرًا للأجهزة الكهربائية، بل مؤسسة خيرية معتمدة تخدم المجتمع وتصل بتبرعاتكم إلى مستحقيها بصدق وأمانة.
             </p>
             <ul>
               <li>اليسر: تبرع وزكاة وصدقة جارية عبر الإنترنت</li>

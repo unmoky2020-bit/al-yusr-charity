@@ -212,7 +212,8 @@ export const campaignPagesApi = {
             description_ar: rec.description_ar,
             description_en: rec.description_en,
             description: rec.description,
-            donation_packages: rec.donation_packages,
+            // The API may send amounts as strings ("150.00"): the page works with numbers.
+            donation_packages: rec.donation_packages?.map((p) => ({ ...p, amount: Number(p.amount) })),
           }
         : undefined;
       if (fromCampaign) return { item: null, content: fromCampaign, source: "campaign", campaign };

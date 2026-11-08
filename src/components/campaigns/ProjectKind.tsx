@@ -15,7 +15,7 @@ export const PROJECT_KINDS: Record<ProjectKindId, { icon: LucideIcon; ar: string
     icon: HandCoins,
     ar: "مشاريع خدمية تُدرّ موارد",
     en: "Service projects that generate income",
-    descAr: "مشاريع تقدّم خدمة حقيقية للناس بمقابل مناسب، ودخلها يرجع يتصرف على أنشطة المؤسسة وبرامجها الخيرية. يعني تبرعك فيها بيفضل يشتغل ويرجع بخير أكتر كل سنة.",
+    descAr: "مشاريع تقدّم خدمة حقيقية للناس بمقابل مناسب، ويُنفَق دخلها على أنشطة المؤسسة وبرامجها الخيرية. أي أن تبرعك فيها يظل يعمل ويعود بخير أكثر كل عام.",
     descEn: "Projects that offer a real service at a fair price; their income is spent back on the foundation's charitable programmes, so your gift keeps working year after year.",
     examplesAr: "مثل: حضانات اليسر، المزرعة الوقفية",
     examplesEn: "e.g. Al-Yusr nurseries, the Waqf farm",
@@ -55,7 +55,7 @@ export const ProjectKindNote = ({ kinds, noteAr, noteEn }: { kinds: ProjectKindI
       </div>
       {(noteAr || noteEn) && <p className="mt-3 text-sm leading-relaxed text-foreground/80">{isAr ? noteAr : noteEn}</p>}
       <Link to="/projects#project-kinds" className="mt-3 inline-block text-xs font-bold text-secondary hover:underline">
-        {isAr ? "اعرف أكتر عن أنواع مشاريع اليسر" : "More about Al-Yusr project types"}
+        {isAr ? "اعرف أكثر عن أنواع مشاريع اليسر" : "More about Al-Yusr project types"}
       </Link>
     </aside>
   );

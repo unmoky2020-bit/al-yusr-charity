@@ -312,7 +312,7 @@ export function KashierCheckoutModal({
             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-white">
               <Loader2 className="h-7 w-7 animate-spin text-emerald-600" />
               <p className="text-sm font-semibold text-gray-700">
-                {verifying ? "جارٍ التحقق من عملية الدفع..." : "جاري فتح بوابة الدفع الآمنة..."}
+                {verifying ? "جارٍ التحقق من عملية الدفع..." : "جارٍ فتح بوابة الدفع الآمنة..."}
               </p>
             </div>
           )}

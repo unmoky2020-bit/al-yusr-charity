@@ -30,24 +30,27 @@ import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { ProjectKindNote } from "@/components/campaigns/ProjectKind";
 import { BentoGallery } from "@/components/campaigns/shared";
+import { PAGE_GALLERIES, usePageGallery } from "@/data/pageGalleries";
+import { resolveImages } from "@/data/pageImages";
 import { useInView } from "@/hooks/useInView";
 import { useLang } from "@/i18n/LangContext";
 import { entityDonateHref, findShare, shareDonateHref, useEntityShares, useEntitySharesState, type Share } from "@/data/entityShares";
-import { COMPLEX_SHARES, CONVOY_SHARES, DISABILITY_SHARES, MEDICAL_SOURCES, TREATMENT_SHARES } from "@/data/medicalShares";
 import { useProjectDetail } from "@/data/sources/projects";
+import { COMPLEX_SHARES, CONVOY_SHARES, DISABILITY_SHARES, MEDICAL_SOURCES, SECTION_WORDS, sectionShares, TREATMENT_SHARES } from "@/data/medicalShares";
 import heroHealth from "@/assets/program-health.webp";
-import prostheticsImg from "@/assets/Prosthetics.jpg";
-import medicineImg from "@/assets/axis-health.jpg";
 
 /**
  * /medical — «المشروع الطبي»: one long page, every section open, in this order:
- *   complex (project "medical") → prescriptions, surgeries, radiology & labs (program "treatment")
- *   → overcoming disability (program "prosthetics") → medical convoys (program "medical-convoys").
- * Each section sells the packages of its backend record (editable in the dashboard); prices are shown
+ *   complex → prescriptions, surgeries, radiology & labs → overcoming disability → medical convoys.
+ * Every section sells packages of the backend project "medical" (editable in the dashboard); prices are shown
  * as «يبدأ من» and the donor can pick several shares before opening the donate form.
  */
 
 type Bi = { ar: string; en: string };
+/** Hero image: the medical project's cover image (dashboard → المشاريع → المجمعات الطبية → الصورة), else the site photo. */
+const MEDICAL_GALLERY_DEFAULTS = resolveImages(PAGE_GALLERIES.medical.defaults);
+/** Stable empty fallback, so a section can tell "no project packages" from its own defaults. */
+const NO_SHARES: Share[] = [];
 const t = (isAr: boolean, v: Bi) => (isAr ? v.ar : v.en);
 const fmt = (n: number) => n.toLocaleString("en-US");
 
@@ -115,7 +118,7 @@ const MedicalHero = ({ image }: { image: string }) => {
           <div className="text-center md:text-start">
             <p className="flex items-center justify-center gap-3 text-sm font-bold text-secondary md:justify-start">
               <span aria-hidden className="h-px w-10 bg-secondary/70" />
-              {isAr ? "المشروع الطبي · مؤسسة اليسر" : "The medical project · Al-Yusr Foundation"}
+              {isAr ? "المشروع الطبي · مؤسسة اليسر" : "The medical project · Al-Yusr Charity Foundation"}
             </p>
             <h1 className="mt-4 text-[1.8rem] font-black leading-[1.3] text-balance sm:text-4xl lg:text-[3.2rem] lg:leading-[1.22]">
               {isAr ? "المشروع الطبي: حتى لا يتأخر علاج مريض بسبب التكلفة" : "The medical project: so no patient's treatment waits on cost"}
@@ -622,7 +625,7 @@ const DisabilitySection = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
   const src = MEDICAL_SOURCES.disability;
-  const shares = useEntityShares(src.kind, src.slug, DISABILITY_SHARES);
+  const shares = sectionShares(useEntityShares(src.kind, src.slug, NO_SHARES), SECTION_WORDS.disability, DISABILITY_SHARES);
   const [open, setOpen] = useState(0);
   return (
     <Section id="disability" n={5}>
@@ -674,7 +677,7 @@ const ConvoysSection = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
   const src = MEDICAL_SOURCES.convoys;
-  const shares = useEntityShares(src.kind, src.slug, CONVOY_SHARES);
+  const shares = sectionShares(useEntityShares(src.kind, src.slug, NO_SHARES), SECTION_WORDS.convoys, CONVOY_SHARES);
   const [days, setDays] = useState(5);
   const carries: { icon: LucideIcon; label: Bi; body: Bi }[] = [
     { icon: Users, label: { ar: "مجموعة من الأطباء", en: "A group of doctors" }, body: { ar: "تجتمع في القافلة تخصصات مختلفة لتغطي احتياجات أهل القرية.", en: "Different specialties travel together to cover the village's needs." } },
@@ -716,7 +719,7 @@ const ConvoysSection = () => {
           <label htmlFor="convoy-days" className="mt-5 block text-xs font-bold text-primary-foreground/70">{isAr ? "حرّك المؤشر لتغيير المدة (من 3 إلى 10 أيام)" : "Drag to change the length (3 to 10 days)"}</label>
           <input id="convoy-days" type="range" min={3} max={10} value={days} onChange={(e) => setDays(Number(e.target.value))} className="mt-2 w-full accent-[hsl(var(--secondary))]" dir="ltr" />
           <p className="mt-4 text-sm leading-relaxed text-primary-foreground/80">
-            {isAr ? `في قافلة من ${days} أيام، يقدّم الأطباء الكشف والعلاج بالمجان طوال الأيام كلها.` : `In a ${days}-day convoy, the doctors give free check-ups and treatment every day.`}
+            {isAr ? `في قافلة من ${days} أيام، يقدّم الأطباء الكشف والعلاج بالمجان طوال أيامها.` : `In a ${days}-day convoy, the doctors give free check-ups and treatment every day.`}
           </p>
         </div>
       </div>
@@ -730,18 +733,13 @@ const ConvoysSection = () => {
 const FromTheField = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const gallery = usePageGallery("medical") ?? MEDICAL_GALLERY_DEFAULTS;
   return (
     <section className="bg-muted/40 py-14 md:py-20">
       <div className="container mx-auto max-w-6xl px-4">
         <h2 className="mb-8 text-center text-2xl font-black text-primary md:text-3xl">{isAr ? "من الميدان" : "From the field"}</h2>
-        <BentoGallery
-          isAr={isAr}
-          items={[
-            { src: heroHealth, altAr: "طبيب من فريق اليسر يطمئن على مريض أثناء صرف العلاج", altEn: "An Al-Yusr doctor checking on a patient while medicine is handed out" },
-            { src: prostheticsImg, altAr: "شاب بطرف صناعي من مشروع تحدّي الإعاقة مع الطبيب المعالج", altEn: "A young man with a prosthetic limb from the Overcoming Disability programme" },
-            { src: medicineImg, altAr: "تسليم كرتونة أدوية لمريضة كبيرة في السن", altEn: "Handing a box of medicines to an elderly patient" },
-          ]}
-        />
+        {/* Dashboard → معارض صور الصفحات → «من الميدان» في المشروع الطبي (defaults in data/pageGalleries.ts). */}
+        <BentoGallery isAr={isAr} items={gallery} />
         <div className="mx-auto mt-10 max-w-4xl">
           <ProjectKindNote
             kinds={["impact"]}
@@ -771,12 +769,11 @@ const MedicalMain = () => {
 };
 
 const MedicalLanding = () => {
+  // Every section sells the packages of ONE record (the project "medical"): wait for it and for the
+  // project's cover once, so the page renders with the dashboard prices and picture.
   const project = useProjectDetail("medical");
-  const complexShares = useEntitySharesState("project", "medical", COMPLEX_SHARES);
-  const treatmentShares = useEntitySharesState("program", "treatment", TREATMENT_SHARES);
-  const disabilityShares = useEntitySharesState("program", "prosthetics", DISABILITY_SHARES);
-  const convoyShares = useEntitySharesState("program", "medical-convoys", CONVOY_SHARES);
-  if (project.isLoading || complexShares.isLoading || treatmentShares.isLoading || disabilityShares.isLoading || convoyShares.isLoading) {
+  const shares = useEntitySharesState(MEDICAL_SOURCES.complex.kind, MEDICAL_SOURCES.complex.slug, COMPLEX_SHARES);
+  if (project.isLoading || shares.isLoading) {
     return <PageLayout><PageLoadingState /></PageLayout>;
   }
   const heroImage = project.project?.image && project.project.image !== "/placeholder.svg" ? project.project.image : heroHealth;
@@ -791,7 +788,7 @@ const MedicalLanding = () => {
     taglineEn="A complex serving 43 villages, free prescriptions, help with surgery, scans and tests, rehabilitation for children with disabilities, and convoys to remote villages."
     metaDescAr="المشروع الطبي من مؤسسة اليسر: مجمع اليسر الطبي بالحفير يخدم 43 قرية بين الدقهلية وكفر الشيخ، صرف روشتات بالمجان، عمليات جراحية، أشعة وتحاليل، تحدّي الإعاقة، وقوافل طبية."
     metaDescEn="Al-Yusr's medical project: the El-Hafir complex serving 43 villages between Dakahlia and Kafr El-Sheikh, free prescriptions, surgery, scans and tests, disability support and medical convoys."
-    seo={{ title: { ar: "المشروع الطبي: مجمع اليسر الطبي وروشتات وعمليات وقوافل | مؤسسة اليسر", en: "The medical project: complex, prescriptions, surgery & convoys | Al-Yusr" } }}
+    seo={{ title: { ar: "علاج المرضى غير القادرين في مصر: عمليات وروشتات وأشعة | اليسر", en: "The medical project: complex, prescriptions, surgery & convoys | Al-Yusr" } }}
     heroImage={heroImage}
     heroAlt="طبيب من مؤسسة اليسر مع مريض أثناء صرف العلاج"
     hero={<MedicalHero image={heroImage} />}

@@ -56,7 +56,7 @@ export const Testimonial = () => {
             {isAR ? "قصص الأثر" : "Impact stories"}
           </span>
           <h2 id="impact-stories-title" className="mt-3 text-2xl font-black leading-[1.3] text-primary md:text-4xl">
-            {isAR ? "بيوت اتغيّرت بخيركم" : "Homes your giving changed"}
+            {isAR ? "بيوت تغيّرت بخيركم" : "Homes your giving changed"}
           </h2>
           <p className="mt-3 text-sm leading-7 text-muted-foreground md:text-base">
             {isAR

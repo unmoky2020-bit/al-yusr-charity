@@ -24,7 +24,7 @@ export const DEFAULT_URGENT_SETTINGS: UrgentCasesSettings = {
   mode: "auto",
   case_ids: [],
   limit: 8,
-  title_ar: "حالات عاجلة محتاجة دعمك",
+  title_ar: "حالات عاجلة تحتاج دعمك",
   title_en: "Urgent cases that need you",
 };
 

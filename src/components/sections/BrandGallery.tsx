@@ -23,13 +23,13 @@ export const BrandGallery = () => {
   const items = [
     { src: truck, span: "md:col-span-2 md:row-span-2", alt: isRTL ? "سيارة توصيل اليسر" : "Al-Yusr delivery truck" },
     { src: volunteerId, span: "md:col-span-1 md:row-span-2", alt: isRTL ? "بطاقة متطوع اليسر" : "Volunteer ID" },
-    { src: van, span: "md:col-span-1 md:row-span-1", alt: isRTL ? "فان اليسر" : "Al-Yusr van" },
+    { src: van, span: "md:col-span-1 md:row-span-1", alt: isRTL ? "سيارة فان اليسر" : "Al-Yusr van" },
     { src: donationCan, span: "md:col-span-1 md:row-span-1", alt: isRTL ? "حصالة تبرعات" : "Donation can" },
-    { src: billboard, span: "md:col-span-2 md:row-span-2", alt: isRTL ? "بيلبورد إعلاني" : "Outdoor billboard" },
+    { src: billboard, span: "md:col-span-2 md:row-span-2", alt: isRTL ? "لوحة إعلانية" : "Outdoor billboard" },
     { src: vest, span: "md:col-span-1 md:row-span-1", alt: isRTL ? "زي المتطوعين" : "Volunteer vest" },
-    { src: app, span: "md:col-span-1 md:row-span-1", alt: isRTL ? "تطبيق الموبايل" : "Mobile app" },
+    { src: app, span: "md:col-span-1 md:row-span-1", alt: isRTL ? "تطبيق الهاتف" : "Mobile app" },
     { src: stationery, span: "md:col-span-2 md:row-span-1", alt: isRTL ? "مطبوعات اليسر" : "Stationery system" },
-    { src: card, span: "md:col-span-2 md:row-span-1", alt: isRTL ? "كارت تعريفي" : "Business card" },
+    { src: card, span: "md:col-span-2 md:row-span-1", alt: isRTL ? "بطاقة تعريفية" : "Business card" },
   ];
 
   return (
@@ -41,11 +41,11 @@ export const BrandGallery = () => {
             {isRTL ? "الهوية على أرض الواقع" : "Identity in the field"}
           </span>
           <h2 className="mt-4 text-3xl font-black text-primary md:text-4xl">
-            {isRTL ? "هوية واحدة من المنصورة لكل قرى الدقهلية" : "One identity — from Mansoura to every Dakahlia village"}
+            {isRTL ? "هوية واحدة من المنصورة إلى محافظات مصر" : "One identity — from Mansoura to every governorate in Egypt"}
           </h2>
           <p className="mt-3 text-muted-foreground md:text-lg">
             {isRTL
-              ? "عربيات، بطاقات، أطقم تطوع، بيلبوردات، تطبيق موبايل — كله بنفس اللغة البصرية اللي تعرف بيها اليسر من بعيد."
+              ? "سيارات وبطاقات وأطقم تطوع ولوحات إعلانية وتطبيق للهاتف — كلها بلغة بصرية واحدة تعرف بها اليسر من بعيد."
               : "Vehicles, IDs, volunteer kits, outdoor, app — one consistent visual language you can spot from a distance."}
           </p>
         </div>

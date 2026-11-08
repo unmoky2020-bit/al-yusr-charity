@@ -21,7 +21,17 @@ export type SectionItem = { id: string; title: L; desc: L; extra?: L };
  */
 export type Section = { title: L; lead?: L; items: SectionItem[]; dynamic?: boolean; extraLabel?: L };
 export type FaqItem = { q: L; a: L };
+
+/**
+ * One picture on a landing page. `src` is an uploaded image URL, or `asset:<file>` for a picture bundled
+ * with the site (the code defaults, see src/data/pageImages.ts): those names stay valid across builds.
+ */
 export type PageImage = { src: string; alt: L; caption?: L };
+/**
+ * A picture slot of a page (its main image, a gallery…). The dashboard replaces `items`; `label`, `hint`,
+ * `max` and `captions` (the page shows a short caption per picture) are fixed by the page code.
+ * `max: 1` = a single image.
+ */
 export type ImageSlot = { label: L; hint?: L; max?: number; captions?: boolean; items: PageImage[] };
 export type ImageSlots = Record<string, ImageSlot>;
 
@@ -38,7 +48,7 @@ export interface CampaignPageContent {
   cta: { title: L; sub: L };
   /** Optional SEO override (dashboard "SEO & Meta" tab). Empty strings mean "use the page's static meta". */
   seo?: { title: L; description: L; keywords: L; canonical?: string; noindex?: boolean; nofollow?: boolean };
-  /** Editable image slots. The layout and the images used by each slot remain page-specific. */
+  /** Picture slots keyed by a stable key (e.g. "hero", "gallery"); the layout of each slot stays in the page code. Pages without pictures leave it out. */
   images?: ImageSlots;
 }
 
@@ -63,7 +73,7 @@ export function withCampaignHeroImageSlot(content: CampaignPageContent): Campaig
   };
 }
 
-/** Strip editor-only slot labels and limits before persisting the image column. */
+/** What is stored for the picture slots: only each slot's pictures (labels and limits stay in the code). */
 export function imagesColumn(images?: ImageSlots): Record<string, { items: PageImage[] }> | undefined {
   if (!images) return undefined;
   return Object.fromEntries(Object.entries(images).map(([key, slot]) => [key, { items: slot.items }]));

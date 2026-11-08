@@ -20,8 +20,8 @@ const c = (slug: string, ar: string, en: string, lat: number, lon: number, famil
   highlight: { ar: highlightAr, en: highlightEn },
   copy: {
     ar: {
-      intro: `بنوزّع صكوك الأضحية في ${ar} كل سنة على أفقر الأسر، بمعاينة قبل الذبح وتوثيق بالصور والفيديو. اطمن إن صك أضحيتك في ${ar} هيوصل لباب البيت يوم العيد.`,
-      localNote: `فريق اليسر في ${ar} بيتعاون مع شيوخ الجوامع والوحدات المحلية لتحديد الأسر المستحقة فعلاً، وبنسلم اللحمة طازجة في نفس يوم الذبح.`,
+      intro: `نوزّع صكوك الأضحية في ${ar} كل سنة على أفقر الأسر، مع معاينة قبل الذبح وتوثيق بالصور والفيديو. اطمئن، فصك أضحيتك في ${ar} سيصل إلى باب البيت يوم العيد.`,
+      localNote: `يتعاون فريق اليسر في ${ar} مع أئمة المساجد والوحدات المحلية لتحديد الأسر المستحقة فعلًا، ونسلّم اللحم طازجًا في يوم الذبح نفسه.`,
       coverage: `تغطية كاملة لقرى ومراكز ${ar} داخل محافظة الدقهلية مع توصيل مجاني للأسر التي لا تستطيع الحضور.`,
     },
     en: {
@@ -35,8 +35,8 @@ const c = (slug: string, ar: string, en: string, lat: number, lon: number, famil
 export const DAKAHLIA_CITIES: DakahliaCity[] = [
   c("mansoura",     "المنصورة",   "Mansoura",     31.038, 31.381, 3200, ["odhya","box","education"], "المقر الرئيسي — كل البرامج نشطة", "HQ — all programs active"),
   c("mit-ghamr",    "ميت غمر",    "Mit Ghamr",    30.717, 31.262, 1100, ["odhya","box","water"],            "تركيز على وصلات المياه والكرتونة", "Focus on water lines & food boxes"),
-  c("belqas",       "بلقاس",      "Belqas",       31.213, 31.358,  850, ["odhya","box","bride"],          "حملات جواز عرائس فعالة", "Active brides preparation campaigns"),
-  c("dikirnis",     "دكرنس",      "Dikirnis",     31.092, 31.589,  620, ["odhya","box","education"],       "20 طفل تحت الكفالة التعليمية", "20 children under education sponsorship"),
+  c("belqas",       "بلقاس",      "Belqas",       31.213, 31.358,  850, ["odhya","box","bride"],          "حملات نشطة لتجهيز العرائس", "Active brides preparation campaigns"),
+  c("dikirnis",     "دكرنس",      "Dikirnis",     31.092, 31.589,  620, ["odhya","box","education"],       "20 طفلًا تحت الكفالة التعليمية", "20 children under education sponsorship"),
   c("sherbin",      "شربين",      "Sherbin",      31.181, 31.524,  480, ["odhya","water"],                  "12 وصلة مياه نظيفة", "12 clean water lines installed"),
   c("aga",          "أجا",        "Aga",          30.940, 31.237,  730, ["odhya","box"],            "توزيع شهري للحوم", "Monthly meat distribution"),
   c("sinbillawayn", "السنبلاوين", "Sinbillawayn", 30.881, 31.456,  540, ["odhya","zakat","box"],           "توزيع زكاة المال على المستحقين", "Zakat distribution to eligible families"),

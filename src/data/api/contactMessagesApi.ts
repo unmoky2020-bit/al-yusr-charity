@@ -24,8 +24,8 @@ export interface ContactMessage {
 
 export const CONTACT_STATUS_LABELS: Record<ContactStatus, string> = {
   new: "جديدة",
-  read: "اتقرت",
-  replied: "اترد عليها",
+  read: "مقروءة",
+  replied: "تم الرد عليها",
   archived: "مؤرشفة",
 };
 

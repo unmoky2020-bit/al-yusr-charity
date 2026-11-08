@@ -78,19 +78,19 @@ export const SEASONS: Season[] = [
     taglineAr: "«من ستر مسلمًا ستره الله في الدنيا والآخرة»",
     taglineEn: "“Whoever shields a Muslim, Allah shields him in this life and the next.”",
     descriptionAr:
-      "بنحمي أهالينا من البرد قبل ما يجي. لحاف فايبر، أسقف منازل، مراتب، كسوة شتاء، سراير، وبنية أساسية (باب وشباك) تحبس الريح وتدفّي البيت. كل تبرع يصل لمستحقه بالاسم والتوثيق.",
+      "نحمي أهالينا من البرد قبل أن يشتد: لحاف فايبر، وأسقف منازل، ومراتب، وكسوة شتاء، وأسِرّة، وبنية أساسية (باب وشباك) تصدّ الريح وتُدفئ البيت. ويصل كل تبرع إلى مستحقه بالاسم والتوثيق.",
     descriptionEn:
       "We shield our people from the cold before it arrives — fiber blankets, roofs, mattresses, winter clothes, beds, and basic infrastructure (doors & windows) that hold back the wind. Every donation reaches a named beneficiary, fully documented.",
     donateHref: "/donate?campaign=ster",
     items: [
       { ar: "لحاف فايبر مقاوم للبرد", en: "Cold-resistant fiber blanket" },
       { ar: "كسوة شتاء كاملة للأطفال والكبار", en: "Full winter clothing — kids & adults" },
-      { ar: "مراتب وسراير لمن لا يجد", en: "Mattresses and beds for those who lack them" },
+      { ar: "مراتب وأسِرّة لمن لا يجدها", en: "Mattresses and beds for those who lack them" },
       { ar: "إصلاح/تركيب أبواب وشبابيك", en: "Door & window repair or installation" },
       { ar: "إصلاح وتركيب أسقف منازل", en: "Roof repair and installation" },
     ],
     pricing: [
-      { labelAr: "لحاف فايبر", labelEn: "Fiber blanket", amount: 350, tagAr: "الأكثر طلباً", tagEn: "Most needed" },
+      { labelAr: "لحاف فايبر", labelEn: "Fiber blanket", amount: 350, tagAr: "الأكثر طلبًا", tagEn: "Most needed" },
       { labelAr: "كسوة شتاء فرد", labelEn: "Winter outfit (1 person)", amount: 500 },
       { labelAr: "مرتبة + سرير", labelEn: "Mattress + bed", amount: 1800 },
       { labelAr: "سقف بيت أسرة", labelEn: "Roof for a family home", amount: 9500 },
@@ -98,7 +98,7 @@ export const SEASONS: Season[] = [
     metaTitleAr: "حملة ستر للشتاء | بطاطين وأسقف وكسوة شتاء — مؤسسة اليسر",
     metaTitleEn: "Ster Winter Campaign | Blankets, Roofs & Winter Aid — Al-Yusr",
     metaDescAr: "ساهم في حملة ستر الشتوية مع مؤسسة اليسر: بطاطين فايبر، كسوة شتاء، أسقف منازل، وأبواب وشبابيك للأسر الأولى بالرعاية في الدقهلية. توثيق كامل وتوصيل مجاني.",
-    metaDescEn: "Support the Ster winter campaign by Al-Yusr Foundation: fiber blankets, winter clothing, home roofs, and door/window repair for vulnerable families in Dakahlia. Fully documented with free delivery.",
+    metaDescEn: "Support the Ster winter campaign by Al-Yusr Charity Foundation: fiber blankets, winter clothing, home roofs, and door/window repair for vulnerable families in Dakahlia. Fully documented with free delivery.",
     keywordsAr: ["حملة ستر", "كسوة الشتاء", "بطاطين للفقراء", "أسقف منازل", "تبرعات الشتاء", "اليسر الدقهلية"],
     keywordsEn: ["winter campaign egypt", "blankets donation", "roof repair charity", "ster yusr", "dakahlia winter aid"],
   },
@@ -113,10 +113,10 @@ export const SEASONS: Season[] = [
     tagEn: "Summer season",
     titleAr: "حملة ظل — رحمة من الشمس",
     titleEn: "Thill Campaign — Mercy from the Sun",
-    taglineAr: "ظل ومياه ونفس بارد للي بيشتغل تحت الشمس",
+    taglineAr: "ظل وماء ونسمة باردة لمن يعمل تحت الشمس",
     taglineEn: "Shade, water, and cool relief for those working under the sun",
     descriptionAr:
-      "في عز الحر بنوصل وصلات مياه نظيفة للمنازل والقرى، وبنركّب أسقف تحمي من الشمس، وبنجدّد ونوزّع أجهزة مستعملة (مراوح وثلاجات)، وبنوزّع مياه ومشروبات باردة للعمال في الشوارع.",
+      "في عز الحر نوصل المياه النظيفة إلى المنازل والقرى، ونركّب أسقفًا تحمي من الشمس، ونجدّد أجهزة مستعملة (مراوح وثلاجات) ونوزعها، ونوزّع المياه والمشروبات الباردة على العمال في الشوارع.",
     descriptionEn:
       "At the peak of summer we install clean water lines for homes and whole villages, install sun-proof roofs, refurbish and distribute used appliances (fans, fridges), and hand out cold water and drinks to outdoor workers.",
     donateHref: "/donate?campaign=thill",
@@ -128,7 +128,7 @@ export const SEASONS: Season[] = [
       { ar: "مياه ومشروبات باردة للعمال", en: "Cold water & drinks for outdoor workers" },
     ],
     pricing: [
-      { labelAr: "وصلة مياه لبيت", labelEn: "Water line for a home", amount: 1200, tagAr: "الأكثر طلباً", tagEn: "Most needed" },
+      { labelAr: "وصلة مياه لبيت", labelEn: "Water line for a home", amount: 1200, tagAr: "الأكثر طلبًا", tagEn: "Most needed" },
       { labelAr: "مروحة مجدّدة", labelEn: "Refurbished fan", amount: 450 },
       { labelAr: "ثلاجة مجدّدة", labelEn: "Refurbished fridge", amount: 3500 },
       { labelAr: "خط مياه لقرية", labelEn: "Village water line", amount: 25000 },
@@ -154,7 +154,7 @@ export const SEASONS: Season[] = [
     taglineAr: "«أحسن العطاء» — كل المكونات بلدي وطازجة من شركات موثوقة",
     taglineEn: "“The best of giving” — local, fresh ingredients from trusted suppliers",
     descriptionAr:
-      "موسم متكامل: كرتونة الخير 25 كجم، مشروع الإفطار اليومي، تيسير زواج عروسة من بناتنا اليتيمات كل يوم، أكثر من 3 طن ذبائح طازجة، مسابقات للقرآن بجوائز قيّمة، وزكاة المال والفطر للأسر المستحقة في العشر الأواخر. وفي ليلة العيد: صلاة العيد بمسجد الصديق بالمنصورة.",
+      "موسم متكامل: كرتونة الخير 25 كجم، مشروع الإفطار اليومي، تيسير زواج عروسة من بناتنا اليتيمات كل يوم، أكثر من 3 أطنان من الذبائح الطازجة، مسابقات للقرآن بجوائز قيّمة، وزكاة المال والفطر للأسر المستحقة في العشر الأواخر. وفي ليلة العيد: صلاة العيد بمسجد الصديق بالمنصورة.",
     descriptionEn:
       "A full season: 25kg Goodness box, the daily Iftar project, a wedding for an orphaned bride every day, 3+ tons of fresh meat, Quran contests with valuable prizes, and timely Zakat money & Fitr in the last ten nights — all topped with Eid prayer at Al-Siddiq Mosque, Mansoura.",
     donateHref: "/donate?campaign=ramadan",
@@ -167,7 +167,7 @@ export const SEASONS: Season[] = [
       { ar: "زكاة المال والفطر", en: "Zakat Mal & Fitr", arD: "موصّلة للمستحقين في العشر الأواخر.", enD: "Delivered to the deserving in the last 10 nights." },
     ],
     pricing: [
-      { labelAr: "كرتونة الخير 25 كجم", labelEn: "25kg Goodness box", amount: 850, tagAr: "الأكثر طلباً", tagEn: "Most needed" },
+      { labelAr: "كرتونة الخير 25 كجم", labelEn: "25kg Goodness box", amount: 850, tagAr: "الأكثر طلبًا", tagEn: "Most needed" },
       { labelAr: "وجبة إفطار صائم", labelEn: "Iftar meal", amount: 35 },
       { labelAr: "زكاة الفطر فرد", labelEn: "Zakat al-Fitr (1 person)", amount: 50 },
       { labelAr: "تيسير زواج يتيمة", labelEn: "Sponsor an orphan wedding", amount: 15000 },
@@ -206,7 +206,7 @@ export const SEASONS: Season[] = [
     ],
     pricing: [
       { labelAr: "وجبة إفطار صائم", labelEn: "Iftar meal", amount: 35 },
-      { labelAr: "سهم ذبح يوم", labelEn: "Day-slaughter share", amount: 1500, tagAr: "الأكثر طلباً", tagEn: "Most needed" },
+      { labelAr: "سهم ذبح يوم", labelEn: "Day-slaughter share", amount: 1500, tagAr: "الأكثر طلبًا", tagEn: "Most needed" },
       { labelAr: "إعمار جزء من مسجد", labelEn: "Mosque-restoration share", amount: 5000 },
     ],
     metaTitleAr: "العشر الأوائل من ذي الحجة | إفطار وذبائح وإعمار مساجد — اليسر",
@@ -230,20 +230,20 @@ export const SEASONS: Season[] = [
     taglineAr: "أضحيتك بسعر السوق… مقابل 5 كيلو للفقراء",
     taglineEn: "Your Qurbani at market price — for 5kg to the poor",
     descriptionAr:
-      "بنشتغل طول العام في مزارع اليسر الوقفية: مواشي محصّنة بأفضل أعلاف لضمان أعلى تصفية وأقل دهون. المضحي يأخذ أضحيته بسعر السوق بدون ربح للمؤسسة، مقابل التبرع بـ 5 كيلو من الصك للفقراء. أكتر من 2 طن لحوم سنوياً للمستحقين.",
+      "نعمل طوال العام في مزارع اليسر الوقفية: مواشٍ محصّنة تتغذى على أفضل الأعلاف لضمان أعلى تصفية وأقل دهون. يحصل المضحي على أضحيته بسعر السوق دون ربح للمؤسسة، مقابل التبرع بـ 5 كيلو من الصك للفقراء. أكثر من 5 أطنان من اللحوم سنويًا للمستحقين.",
     descriptionEn:
-      "Year-round work at Al-Yusr endowment farms: vaccinated cattle, top feed for highest yield and lowest fat. You take your Qurbani at market price with zero markup, in exchange for donating 5kg from each share to the poor. 2+ tons distributed yearly.",
+      "Year-round work at Al-Yusr endowment farms: vaccinated cattle, top feed for highest yield and lowest fat. You take your Qurbani at market price with zero markup, in exchange for donating 5kg from each share to the poor. 5+ tons distributed yearly.",
     donateHref: "/qurbani",
     items: [
       { ar: "صك أضحية كامل (سعر السوق)", en: "Full Qurbani share (market price)" },
       { ar: "تبرع بـ 5 كيلو للفقراء", en: "5kg donation back to the poor" },
-      { ar: "أعلاف وتحصين طول السنة", en: "Year-round feed & vaccination" },
+      { ar: "أعلاف وتحصين طوال السنة", en: "Year-round feed & vaccination" },
       { ar: "ذبح حلال وتوثيق صور وفيديو", en: "Halal slaughter with photo & video proof" },
       { ar: "توصيل مجاني لباب البيت", en: "Free doorstep delivery" },
     ],
     metaTitleAr: "حملة الأضاحي 2026 | تيسير الأضاحي بدون استغلال — مزارع اليسر",
     metaTitleEn: "Qurbani 2026 | Market-Price Qurbani, No Exploitation — Al-Yusr",
-    metaDescAr: "احجز أضحيتك بسعر السوق من مزارع اليسر الوقفية: مواشي محصّنة، تصفية أعلى، توثيق كامل، وتوصيل مجاني. مقابل تبرعك بـ 5 كيلو للفقراء.",
+    metaDescAr: "احجز أضحيتك بسعر السوق من مزارع اليسر الوقفية: مواشٍ محصّنة، تصفية أعلى، توثيق كامل، وتوصيل مجاني. مقابل تبرعك بـ 5 كيلو للفقراء.",
     metaDescEn: "Book your Qurbani at market price from Al-Yusr endowment farms: vaccinated cattle, higher yield, full documentation, free delivery — for 5kg donated back to the poor.",
     keywordsAr: ["أضحية", "حملة الأضاحي", "صك أضحية", "مزارع اليسر", "اليسر الدقهلية"],
     keywordsEn: ["qurbani 2026", "udhiya egypt", "qurbani share", "yusr farms"],
@@ -259,10 +259,10 @@ export const SEASONS: Season[] = [
     tagEn: "Back to school",
     titleAr: "موسم العودة للمدارس — الجهل هو الفقر الأول",
     titleEn: "Back-to-School — Ignorance is the First Poverty",
-    taglineAr: "علِّم طفل، تعلِّم جيل",
+    taglineAr: "علِّم طفلًا، تُعلِّم جيلًا",
     taglineEn: "Educate a child, change a generation",
     descriptionAr:
-      "بنجهّز كل طالب مستحق ليبدأ سنته الدراسية بكرامة: شنطة مدرسية، أدوات كاملة، زي مدرسي جديد، ودفع مصروفات دراسية لمن لا يستطيع.",
+      "نجهّز كل طالب مستحق ليبدأ عامه الدراسي بكرامة: شنطة مدرسية، وأدوات كاملة، وزي مدرسي جديد، ودفع المصروفات الدراسية لمن لا يستطيع.",
     descriptionEn:
       "We prepare every needy student to start the school year with dignity: school bag, full supplies, a new uniform, and tuition fees paid for those who cannot afford them.",
     donateHref: "/donate?campaign=school",
@@ -273,7 +273,7 @@ export const SEASONS: Season[] = [
       { ar: "دفع مصروفات دراسية", en: "Tuition fees coverage" },
     ],
     pricing: [
-      { labelAr: "شنطة + أدوات لطفل", labelEn: "Bag + supplies (1 child)", amount: 450, tagAr: "الأكثر طلباً", tagEn: "Most needed" },
+      { labelAr: "شنطة + أدوات لطفل", labelEn: "Bag + supplies (1 child)", amount: 450, tagAr: "الأكثر طلبًا", tagEn: "Most needed" },
       { labelAr: "زي مدرسي كامل", labelEn: "Full school uniform", amount: 600 },
       { labelAr: "مصروفات دراسية لسنة", labelEn: "One year tuition", amount: 2500 },
     ],

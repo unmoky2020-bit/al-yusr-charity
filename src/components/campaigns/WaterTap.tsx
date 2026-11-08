@@ -8,15 +8,15 @@ import { useLang } from "@/i18n/LangContext";
  * smiles and the "after" benefits appear. Pure SVG + CSS (classes wtap-* in index.css).
  */
 const BEFORE = [
-  { icon: Footprints, ar: "مشوار بعيد وجركن تقيل", en: "A long walk and a heavy jerrycan", bodyAr: "أمهات وآباء بيشيلوا المية من مسافات بعيدة كل يوم، وكتير منها مش نظيف.", bodyEn: "Mothers and fathers carry water from far away every day, often unclean." },
-  { icon: HeartPulse, ar: "مية ملوثة تمرّض الصغير والكبير", en: "Dirty water makes young and old sick", bodyAr: "الأطفال وكبار السن أول ناس بتتعب من المية الملوثة: إسهال ونزلات معوية وأمراض كلى.", bodyEn: "Children and the elderly are first to suffer from dirty water: diarrhoea, stomach and kidney illness." },
-  { icon: CloudOff, ar: "لما المية تقطع الحياة بتقف", en: "When water stops, life stops", bodyAr: "لا طبخ ولا غسيل ولا وضوء ولا نظافة للأطفال، والبيت كله يعيش في قلق.", bodyEn: "No cooking, washing, ablution or bathing the children; the whole home lives in worry." },
+  { icon: Footprints, ar: "مشوار بعيد وجركن ثقيل", en: "A long walk and a heavy jerrycan", bodyAr: "أمهات وآباء يحملون الماء من مسافات بعيدة كل يوم، وكثير منه غير نظيف.", bodyEn: "Mothers and fathers carry water from far away every day, often unclean." },
+  { icon: HeartPulse, ar: "ماء ملوث يُمرض الصغير والكبير", en: "Dirty water makes young and old sick", bodyAr: "الأطفال وكبار السن أول من يتأذى من الماء الملوث: إسهال ونزلات معوية وأمراض في الكلى.", bodyEn: "Children and the elderly are first to suffer from dirty water: diarrhoea, stomach and kidney illness." },
+  { icon: CloudOff, ar: "حين ينقطع الماء تتوقف الحياة", en: "When water stops, life stops", bodyAr: "لا طبخ ولا غسيل ولا وضوء ولا نظافة للأطفال، والبيت كله يعيش في قلق.", bodyEn: "No cooking, washing, ablution or bathing the children; the whole home lives in worry." },
 ];
 
 const AFTER = [
-  { icon: ShieldCheck, ar: "أمان لصحة الأطفال", en: "Safety for children's health", bodyAr: "مية نظيفة في البيت يعني أمراض أقل وطفل بيروح مدرسته بصحته.", bodyEn: "Clean water at home means less illness and children who go to school healthy." },
-  { icon: PersonStanding, ar: "رعاية لكبار السن", en: "Care for the elderly", bodyAr: "كبير السن يشرب ويتوضّى من غير ما يستنى حد يجيب له مية.", bodyEn: "Elders can drink and make ablution without waiting for someone to fetch water." },
-  { icon: Smile, ar: "راحة للأم والأب", en: "Relief for mothers and fathers", bodyAr: "وقت ومجهود المشوار يرجع للبيت وللشغل وللأولاد.", bodyEn: "The time and effort of the walk go back to home, work and children." },
+  { icon: ShieldCheck, ar: "أمان لصحة الأطفال", en: "Safety for children's health", bodyAr: "الماء النظيف في البيت يعني أمراضًا أقل، وطفلًا يذهب إلى مدرسته بصحة جيدة.", bodyEn: "Clean water at home means less illness and children who go to school healthy." },
+  { icon: PersonStanding, ar: "رعاية لكبار السن", en: "Care for the elderly", bodyAr: "يشرب كبير السن ويتوضأ دون أن ينتظر من يحضر له الماء.", bodyEn: "Elders can drink and make ablution without waiting for someone to fetch water." },
+  { icon: Smile, ar: "راحة للأم والأب", en: "Relief for mothers and fathers", bodyAr: "يعود وقت المشوار وجهده إلى البيت والعمل والأولاد.", bodyEn: "The time and effort of the walk go back to home, work and children." },
 ];
 
 const SKIN = "hsl(24 55% 69%)";
@@ -32,7 +32,7 @@ export const WaterTap = () => {
   return (
     <div className={`wtap ${open ? "wtap-open" : ""} grid items-center gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]`}>
       <div className="relative mx-auto w-full max-w-md rounded-[2rem] bg-gradient-to-b from-sky-50 to-sky-100 p-4 ring-1 ring-sky-200 dark:from-slate-900 dark:to-slate-800 dark:ring-slate-700">
-        <svg viewBox="0 0 360 300" className="h-auto w-full" role="img" aria-label={isAr ? (open ? "الحنفية مفتوحة والطفل مبسوط بالمية النظيفة" : "الحنفية مقفولة والطفل مستني المية") : open ? "The tap is open and the child is happy" : "The tap is closed and the child is waiting"}>
+        <svg viewBox="0 0 360 300" className="h-auto w-full" role="img" aria-label={isAr ? (open ? "الحنفية مفتوحة والطفل سعيد بالماء النظيف" : "الحنفية مغلقة والطفل ينتظر الماء") : open ? "The tap is open and the child is happy" : "The tap is closed and the child is waiting"}>
           {/* wall tiles */}
           <g stroke="hsl(200 40% 80% / 0.6)" strokeWidth="1">
             <line x1="0" y1="100" x2="360" y2="100" /><line x1="0" y1="20" x2="360" y2="20" />
@@ -136,18 +136,18 @@ export const WaterTap = () => {
           className={`mt-3 flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-base font-black shadow-lg transition hover:scale-[1.01] active:scale-[0.99] ${open ? "bg-primary text-primary-foreground" : "bg-sky-600 text-white shadow-sky-600/30"}`}
         >
           <Droplets className="h-5 w-5" />
-          {open ? (isAr ? "اقفل الحنفية وشوف الفرق" : "Close the tap and see the difference") : isAr ? "افتح الحنفية" : "Open the tap"}
+          {open ? (isAr ? "أغلق الحنفية لترى الفرق" : "Close the tap and see the difference") : isAr ? "افتح الحنفية" : "Open the tap"}
         </button>
       </div>
 
       <div aria-live="polite">
         <p className={`text-sm font-black ${open ? "text-sky-600 dark:text-sky-400" : "text-accent"}`}>
-          {open ? (isAr ? "بعد ما المية النظيفة توصل البيت" : "After clean water reaches the home") : isAr ? "قبل ما المية توصل البيت" : "Before water reaches the home"}
+          {open ? (isAr ? "بعد أن يصل الماء النظيف إلى البيت" : "After clean water reaches the home") : isAr ? "قبل أن يصل الماء إلى البيت" : "Before water reaches the home"}
         </p>
         <h2 className="mt-2 text-2xl font-black leading-snug text-primary md:text-3xl">
           {open
-            ? isAr ? "حنفية واحدة بتغيّر حياة بيت كامل" : "One tap changes a whole home"
-            : isAr ? "تخيّل يومك من غير مية في البيت" : "Imagine your day without water at home"}
+            ? isAr ? "حنفية واحدة تغيّر حياة بيت كامل" : "One tap changes a whole home"
+            : isAr ? "تخيّل يومك دون ماء في البيت" : "Imagine your day without water at home"}
         </h2>
         <ul className="mt-6 space-y-3">
           {items.map(({ icon: Icon, ar, en, bodyAr, bodyEn }) => (

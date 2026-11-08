@@ -51,7 +51,7 @@ export function CasePosterCard({ c, isRTL, showOwner = false, className = "" }: 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 text-white">
         {days !== null && days >= 0 && !done && (
           <span className={`mb-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-black ${days <= 7 ? "bg-destructive/90" : "bg-white/15"}`}>
-            <Clock className="h-3 w-3" /> {days === 0 ? (isRTL ? "آخر يوم" : "Last day") : isRTL ? `باقي ${days} يوم` : `${days} days left`}
+            <Clock className="h-3 w-3" /> {days === 0 ? (isRTL ? "آخر يوم" : "Last day") : isRTL ? `متبقٍ ${days} يوم` : `${days} days left`}
           </span>
         )}
         <h3 className="line-clamp-2 text-[16px] font-black leading-snug drop-shadow sm:text-[17px]">{c.title}</h3>
@@ -60,7 +60,7 @@ export function CasePosterCard({ c, isRTL, showOwner = false, className = "" }: 
         </div>
         <div className="mt-2.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-2">
           <span className="min-w-0 text-[12px] font-bold leading-tight text-white/85">
-            {done ? (isRTL ? "اكتمل التمويل — شوف التوثيق" : "Funded — see the proof") : (
+            {done ? (isRTL ? "اكتمل التمويل — شاهد التوثيق" : "Funded — see the proof") : (
               <>
                 <b className="text-[13px] font-black text-white">{pct}%</b>
                 <span className="mx-1 opacity-50">·</span>

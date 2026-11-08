@@ -8,34 +8,34 @@ const QurbaniGuaranteeLanding = () => (
   <CampaignLandingShell
     slug="qurbani-guarantee"
     path="/qurbani-guarantee"
-    badgeAr="الوحيدون في مصر بضمان جودة"
+    badgeAr="الوحيدون في مصر بضمان الجودة"
     badgeEn="Egypt's only quality-guaranteed Qurbani"
     titleAr="صك الأضحية المضمون — الوحيدون في مصر بضمان جودة الأضحية"
     titleEn="Guaranteed Qurbani Receipt — Egypt's only verified quality guarantee"
-    taglineAr="معاينة بيطرية قبل الذبح، توثيق بالصور والفيديو لكل صك، وتعويض كامل لو ظهر أيّ عيب. صك أضحية الدقهلية من اليسر — من المزرعة الوقفية لباب بيت الأسرة المستحقة."
+    taglineAr="معاينة بيطرية قبل الذبح، وتوثيق بالصور والفيديو لكل صك، وتعويض كامل إن ظهر أي عيب. صك أضحية الدقهلية من اليسر: من المزرعة الوقفية حتى باب بيت الأسرة المستحقة."
     taglineEn="Pre-slaughter veterinary inspection, photo and video proof for every receipt, and a full refund if any defect appears. Al-Yusr Dakahlia Qurbani — from our endowment farm to a deserving family's door."
-    metaDescAr="احجز صك أضحية مضمون الجودة مع مؤسسة اليسر بالدقهلية. ضمان كتابي على الأضحية، توثيق بالصور والفيديو، توزيع نفس يوم العيد على الأسر المستحقة في المنصورة وميت غمر وطلخا وكفر الشيخ."
+    metaDescAr="احجز صك أضحية مضمون الجودة مع مؤسسة اليسر بالدقهلية. ضمان كتابي على الأضحية، وتوثيق بالصور والفيديو، وتوزيع في يوم العيد نفسه على الأسر المستحقة في المنصورة وميت غمر وطلخا وكفر الشيخ."
     metaDescEn="Reserve a quality-guaranteed Qurbani receipt with Al-Yusr in Dakahlia. Written guarantee, photo/video proof, same-day Eid distribution across Mansoura, Mit Ghamr, Talkha and Kafr El Sheikh."
     heroImage={qurbaniMeatQuality}
     heroAlt="ضمان جودة لحم الأضحية - مؤسسة اليسر الدقهلية"
     pricing={[
-      { labelAr: "سُبع بقرة", labelEn: "1/7 cow share", amount: 1400, tagAr: "الأكثر طلبًا", tagEn: "Most chosen" },
-      { labelAr: "خروف كامل", labelEn: "Whole sheep", amount: 4500 },
-      { labelAr: "بقرة كاملة", labelEn: "Whole cow", amount: 9800 },
+      { labelAr: "صك سُبع بقري", labelEn: "1/7 cow share", amount: 16000, tagAr: "الأكثر طلبًا", tagEn: "Most chosen" },
+      { labelAr: "صك سُبع جاموسي", labelEn: "1/7 buffalo share", amount: 14000 },
+      { labelAr: "خروف كامل", labelEn: "Whole sheep", amount: 14500 },
       { labelAr: "عقيقة", labelEn: "Aqeeqa", amount: 4500 },
       { labelAr: "نذر / كفّارة", labelEn: "Vow / Kaffara", amount: 4500 },
-      { labelAr: "أيّ مبلغ", labelEn: "Any amount", amount: 100 },
+      { labelAr: "أي مبلغ", labelEn: "Any amount", amount: 100 },
     ]}
     pillars={[
-      { titleAr: "ضمان كتابي على الجودة", titleEn: "Written quality guarantee", descAr: "الوحيدون في مصر بنوقّع لك ضمان كتابي على وزن وجودة الأضحية، مع تعويض كامل لو ظهر أيّ عيب صحي.", descEn: "We are the only foundation in Egypt issuing a written guarantee on weight and quality, with full refund on any health defect." },
-        { titleAr: "معاينة بيطرية قبل الذبح", titleEn: "Pre-slaughter vet inspection", descAr: "كل ذبيحة تمر بفحص بيطري معتمد ومعاينة نظر للمضحّي عبر فيديو لايف من مزرعة اليسر بالدقهلية.", descEn: "Every animal is vet-inspected and you can watch a live video from our Dakahlia farm before slaughter." },
-      { titleAr: "توزيع نفس يوم العيد", titleEn: "Same-day Eid distribution", descAr: "اللحمة بتوصل لأسر المنصورة وميت غمر وطلخا وكفر الشيخ في نفس يوم العيد — طازجة وموثّقة.", descEn: "Meat reaches families in Mansoura, Mit Ghamr, Talkha and Kafr El Sheikh on Eid day itself — fresh and documented." },
+      { titleAr: "ضمان كتابي على الجودة", titleEn: "Written quality guarantee", descAr: "نحن الوحيدون في مصر الذين نوقّع لك ضمانًا كتابيًا على وزن الأضحية وجودتها، مع تعويض كامل إن ظهر أي عيب صحي.", descEn: "We are the only foundation in Egypt issuing a written guarantee on weight and quality, with full refund on any health defect." },
+        { titleAr: "معاينة بيطرية قبل الذبح", titleEn: "Pre-slaughter vet inspection", descAr: "تخضع كل ذبيحة لفحص بيطري معتمد، ويعاينها المضحّي بنفسه عبر بث مباشر بالفيديو من مزرعة اليسر بالدقهلية.", descEn: "Every animal is vet-inspected and you can watch a live video from our Dakahlia farm before slaughter." },
+      { titleAr: "التوزيع في يوم العيد نفسه", titleEn: "Same-day Eid distribution", descAr: "يصل اللحم إلى أسر المنصورة وميت غمر وطلخا وكفر الشيخ في يوم العيد نفسه، طازجًا وموثّقًا.", descEn: "Meat reaches families in Mansoura, Mit Ghamr, Talkha and Kafr El Sheikh on Eid day itself — fresh and documented." },
     ]}
     steps={[
-      { titleAr: "احجز صكّك", titleEn: "Reserve your receipt", descAr: "اختار سُبع بقرة أو خروف كامل وادفع أونلاين بأمان (Kashier / Vodafone Cash / InstaPay).", descEn: "Pick a 1/7 cow or full sheep and pay securely (Kashier / Vodafone Cash / InstaPay)." },
-      { titleAr: "معاينة قبل الذبح", titleEn: "Pre-slaughter check", descAr: "نرسل لك صورة الحيوان ووزنه وفيديو معاينة، مع إيصال صك يحمل رقم تتبّع.", descEn: "We send you the animal photo, weight, inspection video and a receipt with a tracking number." },
-      { titleAr: "ذبح وتوثيق", titleEn: "Slaughter & document", descAr: "الذبح شرعيًا فجر يوم العيد، مع تصوير كامل وعدّاد رقمي على كل ذبيحة.", descEn: "Halal slaughter at Eid dawn with full filming and a digital counter per animal." },
-      { titleAr: "توزيع وضمان", titleEn: "Distribute & guarantee", descAr: "توزيع اللحمة على الأسر المستحقة بالدقهلية وكفر الشيخ، وتقرير ضمان جودة لكل متبرّع.", descEn: "Distribution to deserving families across Dakahlia & Kafr El Sheikh, with a quality-guarantee report for each donor." },
+      { titleAr: "احجز صكّك", titleEn: "Reserve your receipt", descAr: "اختر صك سُبع (بقري أو جاموسي) أو خروفًا كاملًا، وادفع إلكترونيًا بأمان (Kashier / Vodafone Cash / InstaPay).", descEn: "Pick a 1/7 share (cow or buffalo) or a whole sheep and pay securely (Kashier / Vodafone Cash / InstaPay)." },
+      { titleAr: "معاينة قبل الذبح", titleEn: "Pre-slaughter check", descAr: "نرسل إليك صورة الذبيحة ووزنها وفيديو المعاينة، مع إيصال صك يحمل رقم تتبّع.", descEn: "We send you the animal photo, weight, inspection video and a receipt with a tracking number." },
+      { titleAr: "ذبح وتوثيق", titleEn: "Slaughter & document", descAr: "ذبح شرعي صباح يوم العيد، مع تصوير كامل وعدّاد رقمي لكل ذبيحة.", descEn: "Halal slaughter at Eid dawn with full filming and a digital counter per animal." },
+      { titleAr: "توزيع وضمان", titleEn: "Distribute & guarantee", descAr: "توزيع اللحوم على الأسر المستحقة في الدقهلية وكفر الشيخ، وتقرير ضمان جودة لكل متبرّع.", descEn: "Distribution to deserving families across Dakahlia & Kafr El Sheikh, with a quality-guarantee report for each donor." },
     ]}
     gallery={[
       { src: qurbaniCowSheep, altAr: "بقرة وخروف الأضحية في مزرعة اليسر الوقفية بالدقهلية", altEn: "Qurbani cow and sheep at Al-Yusr Dakahlia endowment farm" },
@@ -53,16 +53,16 @@ const QurbaniGuaranteeLanding = () => (
     ]}
     faq={{
       ar: [
-        { q: "إيه يعني ضمان جودة الأضحية؟", a: "اليسر هي المؤسسة الوحيدة في مصر اللي بتوقّع للمتبرّع ضمان كتابي على وزن وصحة الأضحية. لو ظهر أيّ عيب صحي بعد الذبح، بنعوّضك بأضحية بديلة كاملة." },
-        { q: "إيه أسعار صك الأضحية ٢٠٢٦؟", a: "سُبع البقرة بـ١٤٠٠ جنيه، الخروف الكامل بـ٤٥٠٠ جنيه، البقرة الكاملة بـ٩٨٠٠ جنيه. الأسعار شاملة كل الخدمات." },
-        { q: "أقدر أحضر الذبح بنفسي؟", a: "نعم، تقدر تزور المزرعة الوقفية بالدقهلية بحجز مسبق، أو نبعت لك فيديو لايف لذبيحتك من غير ما تتنقل." },
-        { q: "اللحمة بتوصل لمين بالظبط؟", a: "بنوزّع على الأسر المستحقة في المنصورة وميت غمر وطلخا وبلقاس وأجا والسنبلاوين، إضافة لقرى مختارة بكفر الشيخ — بقوائم مدروسة من فريق العمل الاجتماعي." },
-        { q: "إزاي أحجز من خارج مصر؟", a: "تقدر تحجز أونلاين من أيّ دولة عبر Kashier أو InstaPay، وتستلم رقم التتبّع والصور على الواتس أو الإيميل." },
-        { q: "هل في إيصال أو صك ورقي؟", a: "نعم، بنرسل صك الأضحية موثّق برقم تسلسلي ورقم تتبّع، وتقدر تتابعه من /donation-tracking." },
+        { q: "ما المقصود بضمان جودة الأضحية؟", a: "اليسر هي المؤسسة الوحيدة في مصر التي توقّع للمتبرّع ضمانًا كتابيًا على وزن الأضحية وسلامتها. وإن ظهر أي عيب صحي بعد الذبح، نعوّضك بأضحية بديلة كاملة." },
+        { q: "ما أسعار صك الأضحية ٢٠٢٦؟", a: "صك سُبع بقري بـ١٦٬٠٠٠ جنيه، وصك سُبع جاموسي بـ١٤٬٠٠٠ جنيه، والخروف الكامل بـ١٤٬٥٠٠ جنيه. ويمكنك حجز أكثر من صك؛ فالعجل الكامل = 7 صكوك. والأسعار شاملة جميع الخدمات." },
+        { q: "هل يمكنني حضور الذبح بنفسي؟", a: "نعم، يمكنك زيارة المزرعة الوقفية بالدقهلية بحجز مسبق، أو نرسل إليك بثًا مباشرًا لذبيحتك دون أن تضطر إلى الانتقال." },
+        { q: "لمن يصل اللحم تحديدًا؟", a: "نوزّعه على الأسر المستحقة في المنصورة وميت غمر وطلخا وبلقاس وأجا والسنبلاوين، إضافة إلى قرى مختارة في كفر الشيخ، وفق قوائم يعدّها فريق البحث الاجتماعي." },
+        { q: "كيف أحجز من خارج مصر؟", a: "يمكنك الحجز إلكترونيًا من أي دولة عبر Kashier أو InstaPay، وستصلك الصور ورقم التتبّع عبر واتساب أو البريد الإلكتروني." },
+        { q: "هل يوجد إيصال أو صك ورقي؟", a: "نعم، نرسل إليك صك الأضحية موثّقًا برقم تسلسلي ورقم تتبّع، ويمكنك متابعته من /donation-tracking." },
       ],
       en: [
         { q: "What is the quality guarantee?", a: "Al-Yusr is the only foundation in Egypt issuing a written guarantee on weight and health. Any defect after slaughter triggers a full replacement Qurbani." },
-        { q: "What are Qurbani prices?", a: "1/7 cow: EGP 1,400 — Whole sheep: EGP 4,500 — Whole cow: EGP 9,800. All services included." },
+        { q: "What are Qurbani prices?", a: "1/7 cow share: EGP 16,000 — 1/7 buffalo share: EGP 14,000 — Whole sheep: EGP 14,500. You can book more than one share (a whole animal = 7 shares). All services included." },
         { q: "Can I attend the slaughter?", a: "Yes — visit our Dakahlia endowment farm by appointment, or receive a live video of your specific animal." },
         { q: "Who exactly receives the meat?", a: "Vetted families in Mansoura, Mit Ghamr, Talkha, Belqas, Aga, Sinbillawein and selected Kafr El Sheikh villages — via our social-work team's lists." },
         { q: "Can I reserve from abroad?", a: "Yes — book online from any country via Kashier or InstaPay; you receive a tracking number, photos and video on WhatsApp/email." },

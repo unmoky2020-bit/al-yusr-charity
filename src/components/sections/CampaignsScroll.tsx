@@ -143,10 +143,10 @@ export const CampaignsScroll = () => {
   const spacing = useResponsiveSpacing();
 
   const headerTitle = settings.title?.[lang] || (isRTL
-    ? "خيرك… بيوصل لحد الباب"
+    ? "خيرك… يصل إلى باب البيت"
     : "Your kindness — delivered to the doorstep");
   const headerSubtitle = settings.subtitle?.[lang] || (isRTL
-    ? "اختار حملتك وابدأ أثرك في دقايق."
+    ? "اختر حملتك وابدأ أثرك في دقائق."
     : "Pick a campaign and start your impact in minutes.");
 
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -856,7 +856,7 @@ const Header = ({ isRTL, title, subtitle }: { isRTL: boolean; title?: string; su
     </h2>
     <p className="mx-auto mt-0.5 sm:mt-1 max-w-[50ch] text-[11px] sm:text-xs md:text-sm font-semibold leading-relaxed text-muted-foreground">
       {subtitle ?? (isRTL
-        ? "مرّر بهدوء، كل بطاقة قصة أثر حقيقية."
+        ? "مرّر بهدوء، فكل بطاقة قصة أثر حقيقية."
         : "Scroll gently, every card is a story of real impact.")}
     </p>
   </header>
@@ -1406,7 +1406,7 @@ const FinalCTACard = ({
       </span>
 
       <h3 className="mt-2.5 text-xl font-black leading-[1.2] sm:text-2xl">
-        {isRTL ? "تبرعك النهارده يصنع الفرق" : "Your gift today makes a difference"}
+        {isRTL ? "تبرعك اليوم يصنع الفرق" : "Your gift today makes a difference"}
       </h3>
       <p className="mt-1.5 max-w-[28ch] text-xs font-semibold text-primary-foreground/85 sm:text-sm">
         {isRTL
@@ -1431,7 +1431,7 @@ const FinalCTACard = ({
           size="sm"
           className="h-9 sm:h-10 flex-1 min-w-0 border-secondary/50 bg-primary-foreground/5 px-3 text-[11px] sm:text-xs font-extrabold text-primary-foreground hover:bg-secondary/15"
         >
-          <Link to="/projects" onClick={() => recordCampaignClick("__cta__", "details_click")}>
+          <Link to="/campaigns" onClick={() => recordCampaignClick("__cta__", "details_click")}>
             <HeartHandshake className="h-4 w-4" />
             {isRTL ? "تصفح كل الحملات" : "Browse all campaigns"}
           </Link>

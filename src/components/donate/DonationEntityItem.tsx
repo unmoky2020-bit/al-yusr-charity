@@ -387,7 +387,7 @@ export function DonationEntityItem({
           <div className="space-y-2.5 rounded-xl border border-border/60 bg-muted/15 p-3">
             <p className="text-[11px] text-muted-foreground leading-relaxed">
               {isAR
-                ? "مبلغ مفتوح يوزع على أولويات هذا البرنامج باحتياجاته الأشد إلحاحاً"
+                ? "مبلغ مفتوح يُوزَّع على أولويات هذا البرنامج وأشد احتياجاته إلحاحًا"
                 : "Open amount distributed across the most urgent needs"}
             </p>
             <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
@@ -428,7 +428,7 @@ export function DonationEntityItem({
         {item.donationMode === "shares" && (
           <div className="space-y-2">
             <p className="text-[11px] text-muted-foreground">
-              {isAR ? "اختر سهماً أو أكثر — المبلغ يتحسب تلقائياً" : "Select one or more shares — total auto-calculates"}
+              {isAR ? "اختر سهمًا أو أكثر، وسيُحسب المبلغ تلقائيًا" : "Select one or more shares — total auto-calculates"}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {selectedEntity.shares.map((share) => {
@@ -541,10 +541,10 @@ export function DonationEntityItem({
                         </span>
                         <span className="mt-1 flex items-center justify-between gap-2 text-[10.5px] font-bold">
                           <span className="text-muted-foreground">
-                            {isAR ? `اتجمع ${raised.toLocaleString(loc)} من ${need.toLocaleString(loc)} ج` : `${raised.toLocaleString(loc)} of ${need.toLocaleString(loc)} EGP`}
+                            {isAR ? `جُمع ${raised.toLocaleString(loc)} من ${need.toLocaleString(loc)} ج` : `${raised.toLocaleString(loc)} of ${need.toLocaleString(loc)} EGP`}
                           </span>
                           <span className="shrink-0 font-black text-primary">
-                            {left > 0 ? (isAR ? `فاضل ${left.toLocaleString(loc)}` : `${left.toLocaleString(loc)} left`) : (isAR ? "اكتملت" : "Funded")}
+                            {left > 0 ? (isAR ? `متبقٍ ${left.toLocaleString(loc)}` : `${left.toLocaleString(loc)} left`) : (isAR ? "اكتملت" : "Funded")}
                           </span>
                         </span>
                       </span>
@@ -568,7 +568,7 @@ export function DonationEntityItem({
                         item.amount === a ? "border-secondary bg-secondary text-slate-950" : "border-border/70 bg-card text-primary hover:border-secondary/50"
                       }`}>
                       {a === left
-                        ? (isAR ? `كمّل الحالة (${a.toLocaleString("en-US")} ج)` : `Complete it (${a.toLocaleString()} EGP)`)
+                        ? (isAR ? `أكمل الحالة (${a.toLocaleString("en-US")} ج)` : `Complete it (${a.toLocaleString()} EGP)`)
                         : `${a.toLocaleString("en-US")} ${isAR ? "ج" : "EGP"}`}
                     </button>
                   ))}

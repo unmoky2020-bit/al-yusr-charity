@@ -22,8 +22,8 @@ export const Newsletter = () => {
       setSuccess(true);
       setEmail("");
       toast({
-        title: isRTL ? "اشتراكك اتسجّل" : "Subscription saved",
-        description: isRTL ? "هيوصلك إيميل تأكيد، اضغط على الرابط اللي فيه علشان النشرة توصلك." : "Check your inbox for a confirmation link.",
+        title: isRTL ? "تم تسجيل اشتراكك" : "Subscription saved",
+        description: isRTL ? "ستصلك رسالة تأكيد على بريدك الإلكتروني، اضغط على الرابط الموجود فيها لتبدأ النشرة في الوصول إليك." : "Check your inbox for a confirmation link.",
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "";
@@ -63,7 +63,7 @@ export const Newsletter = () => {
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-primary-foreground/80 md:text-lg">
           {isRTL
-            ? "كرتونة تصل لأم تدعو لك، وسقف يحمي أطفالاً من المطر — قصص حقيقية تصلك مرتين شهرياً بدون إزعاج."
+            ? "كرتونة تصل لأم تدعو لك، وسقف يحمي أطفالًا من المطر — قصص حقيقية تصلك مرتين شهريًا دون إزعاج."
             : "A box delivered to a mother praying for you, a roof protecting children — true stories sent once every two weeks. No spam."}
         </p>
         <form className="mx-auto mt-8 flex max-w-xl flex-col gap-2 sm:flex-row" onSubmit={handleSubmit} dir={isRTL ? "rtl" : "ltr"}>
@@ -91,7 +91,7 @@ export const Newsletter = () => {
         </form>
         <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] font-bold text-primary-foreground/75">
           <li className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-secondary" />{isRTL ? "بياناتك محمية 100%" : "Your data stays private"}</li>
-          <li className="inline-flex items-center gap-1.5"><Mail className="h-3.5 w-3.5 text-secondary" />{isRTL ? "رسالتان شهرياً فقط" : "Only 2 emails / month"}</li>
+          <li className="inline-flex items-center gap-1.5"><Mail className="h-3.5 w-3.5 text-secondary" />{isRTL ? "رسالتان شهريًا فقط" : "Only 2 emails / month"}</li>
           <li className="inline-flex items-center gap-1.5"><Heart className="h-3.5 w-3.5 text-secondary" />{isRTL ? "إلغاء اشتراك بضغطة واحدة" : "One-click unsubscribe"}</li>
         </ul>
       </div>

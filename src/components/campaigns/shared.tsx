@@ -72,7 +72,7 @@ export const HeroActions = ({
           : "border-primary/25 text-primary hover:bg-primary/5 focus-visible:ring-ring"
       }`}
     >
-      <WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> {isAr ? "تواصل واتساب" : "WhatsApp"}
+      <WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> {isAr ? "تواصل عبر واتساب" : "WhatsApp"}
     </a>
   </div>
 );

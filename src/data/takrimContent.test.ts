@@ -72,3 +72,35 @@ describe("takrim landing content", () => {
     expect(c.shares).toEqual(TAKRIM_DEFAULT_SHARES);
   });
 });
+
+describe("resolveTakrimFromRecords", () => {
+  it("uses the takrim project's packages when there is no takrim program", async () => {
+    const { resolveTakrimFromRecords, TAKRIM_DEFAULT_TITLE } = await import("./takrimContent");
+    const c = resolveTakrimFromRecords({
+      programs: [{ id: 1, slug: "zakat" }],
+      projects: [
+        { id: 31, slug: "takrim", name: "سيارات تكريم الإنسان", donation_packages: [
+          { id: 141, name_ar: "ب", amount: "250.00", sort_order: 2 },
+          { id: 140, name_ar: "أ", amount: "100.00", sort_order: 1 },
+          { id: 142, name_ar: "ج", amount: "500.00", is_active: false },
+        ] },
+      ],
+    });
+    expect(c.shares.map((s) => [s.apiId, s.amount])).toEqual([[140, 100], [141, 250]]);
+    expect(c.title).toEqual(TAKRIM_DEFAULT_TITLE);
+  });
+
+  it("falls back to the static shares when neither record exists", async () => {
+    const { resolveTakrimFromRecords, TAKRIM_DEFAULT_SHARES } = await import("./takrimContent");
+    const c = resolveTakrimFromRecords({ programs: [], projects: [] });
+    expect(c.shares.map((s) => s.id)).toEqual(TAKRIM_DEFAULT_SHARES.map((s) => s.id));
+  });
+});
+
+describe("takrim hero image", () => {
+  it("uses the takrim project's cover image", async () => {
+    const { resolveTakrimFromRecords } = await import("./takrimContent");
+    const c = resolveTakrimFromRecords({ programs: [], projects: [{ id: 31, slug: "takrim", cover_image: "https://api.elyusr.org/storage/media/programs/takrim.webp" }] });
+    expect(c.image).toContain("takrim.webp");
+  });
+});

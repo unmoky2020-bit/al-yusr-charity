@@ -393,7 +393,7 @@ export default function AdminProjectDetail() {
           {pageMeta && pageContent && (
             <TabsContent value="page" className="space-y-4" dir="rtl">
               <SectionCard icon={<Sparkles className="h-4 w-4 text-primary" />} title={`محتوى صفحة ${pageMeta.name.ar}`} actions={pendingBadge(["page_content"])}
-                description={`النصوص اللي بتظهر في ${pageMeta.path}. الصورة الرئيسية = صورة الغلاف، والأسهم = باقات المساهمة، والأسئلة = تبويب الأسئلة الشائعة.`}>
+                description={`النصوص اللي بتظهر في ${pageMeta.path}. الصور في قسم «صور الصفحة» تحت، والأسهم = باقات المساهمة، والأسئلة = تبويب الأسئلة الشائعة.`}>
                 <div className="flex flex-wrap gap-2">
                   <Button variant="outline" size="sm" asChild><a href={pageMeta.path} target="_blank" rel="noopener noreferrer" className="gap-1"><Eye className="h-3.5 w-3.5" /> عرض الصفحة</a></Button>
                   {pageDefaults && (

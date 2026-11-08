@@ -1155,8 +1155,8 @@
     "faq_category_slug": "qurbani",
     "question_ar": "كم سعر صك الأضحية في 2026؟",
     "question_en": "What does a Qurbani share cost in 2026?",
-    "answer_ar": "الخروف من 7000 جنيه، السبع في العجل من 4500 جنيه، والعجل الكامل من 32,000 جنيه. الأسعار قابلة للتحديث حسب السوق.",
-    "answer_en": "Sheep from 7,000 EGP, cow share (1/7) from 4,500 EGP, whole cow from 32,000 EGP. Prices may adjust with market rates.",
+    "answer_ar": "الخروف الكامل 14,500 جنيه، وصك السُّبع البقري 16,000 جنيه، وصك السُّبع الجاموسي 14,000 جنيه. ويمكنك حجز أكثر من صك؛ فالعجل الكامل يساوي 7 صكوك.",
+    "answer_en": "A whole sheep is EGP 14,500, a 1/7 cow share EGP 16,000, and a 1/7 buffalo share EGP 14,000. You can book more than one share; a whole animal equals 7 shares.",
     "sort_order": 102,
     "is_active": true,
     "extra": {

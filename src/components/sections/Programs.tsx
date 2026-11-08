@@ -55,15 +55,15 @@ export const Programs = () => {
   // 3 strategic pillars from our official mission (الغذاء / الصحة / التعليم)
   const corePillars = isRTL
     ? [
-        { icon: Utensils, name: "الغذاء", slug: "box", stat: "+1100 كرتونة و5 طن لحوم/2025",
-          desc: "كرتونة العزومة، كيلو لحمة، مطبخ اليسر، ومزارعنا الوقفية — حياة كريمة بلا جوع." },
+        { icon: Utensils, name: "الغذاء", slug: "box", stat: "+1400 كرتونة و5 طن لحوم/2025",
+          desc: "كرتونة العزومة، وكيلو اللحم، ومطبخ اليسر، ومزارعنا الوقفية — حياة كريمة بلا جوع." },
         { icon: Stethoscope, name: "الصحة", slug: "treatment", stat: "مجمع طبي + غسيل كلوي + قوافل",
-          desc: "علاج وأدوية وعمليات، أطراف صناعية، وقوافل طبية تخصصية تصل للقرى البعيدة." },
+          desc: "علاج وأدوية وعمليات، وأطراف صناعية، وقوافل طبية تخصصية تصل إلى القرى البعيدة." },
         { icon: GraduationCap, name: "التعليم", slug: "education", stat: "354 طالبًا تحت الكفالة 2025",
-          desc: "مصاريف، أدوات، زي مدرسي، ودروس تقوية — استثمار في مستقبل طفل ومستقبل مصر." },
+          desc: "مصروفات دراسية وأدوات وزي مدرسي ودروس تقوية — استثمار في مستقبل طفل ومستقبل مصر." },
       ]
     : [
-        { icon: Utensils, name: "Food", slug: "box", stat: "+1,100 boxes & 5 tons meat / 2025",
+        { icon: Utensils, name: "Food", slug: "box", stat: "+1,400 boxes & 5 tons meat / 2025",
           desc: "Food boxes, kilo of meat, our kitchen, and waqf farms — a dignified life with no hunger." },
         { icon: Stethoscope, name: "Health", slug: "treatment", stat: "Medical complex + dialysis + convoys",
           desc: "Treatment, medication, surgeries, prosthetics, and specialty convoys reaching remote villages." },
@@ -96,7 +96,7 @@ export const Programs = () => {
     ? [
         { icon: Search, t: "بحث ميداني", d: "زيارة منزلية + تحقق من الاستحقاق قبل أي صرف." },
         { icon: Heart, t: "تبرع آمن", d: "ادفع بأمان عبر فيزا أو فودافون كاش أو إنستا باي." },
-        { icon: Truck, t: "تنفيذ وتسليم", d: "تجهيز وتسليم الخير لباب البيت بكرامة." },
+        { icon: Truck, t: "تنفيذ وتسليم", d: "تجهيز الخير وتسليمه حتى باب البيت بكرامة." },
         { icon: Camera, t: "متابعة وتوثيق", d: "تقرير صور وفيديو يصلك بعد التسليم." },
       ]
     : [
@@ -288,11 +288,11 @@ export const Programs = () => {
             {isRTL ? "كل برامجنا في مكان واحد" : "All our programs in one place"}
           </span>
           <h2 className="mt-4 text-3xl font-black text-primary md:text-5xl">
-            {isRTL ? "كل برامجنا واحتياجات أساسية" : "All Programs & Basic Needs"}
+            {isRTL ? "كل برامجنا والاحتياجات الأساسية" : "All Programs & Basic Needs"}
           </h2>
           <p className="mt-3 text-muted-foreground">
             {isRTL
-              ? "كل باب من الأبواب دي له مسار واضح للتبرع، البحث، التنفيذ، ثم المتابعة. اختار الباب اللي يناسب نيتك، أو تواصل واتساب ونرشدك لأكثر احتياج عاجل."
+              ? "لكل باب من هذه الأبواب مسار واضح: التبرع، ثم البحث، ثم التنفيذ، ثم المتابعة. اختر الباب الذي يناسب نيتك، أو تواصل معنا عبر واتساب لنرشدك إلى الاحتياج الأكثر إلحاحًا."
               : "Each pillar has a clear path: donate, research, execute, then follow up. Pick the one that matches your intent, or message us on WhatsApp."}
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
@@ -625,10 +625,10 @@ const StepsDialog = ({
 
   const steps = isRTL
     ? [
-        { icon: Heart, key: "donate", t: "تبرع", d: "اختر مبلغك ادفع بأمان فوري عبر فيزا أو فودافون كاش أو إنستا باي.", wa: "عايز أتبرع لبرنامج" },
-        { icon: Search, key: "research", t: "بحث ميداني", d: "فريقنا يدخل البيوت ويتحقق من الحالات الأكثر استحقاقًا قبل أي صرف.", wa: "اطلع على آلية البحث الميداني لبرنامج" },
-        { icon: Truck, key: "execute", t: "تنفيذ وتسليم", d: "تجهيز الكرتونة/الصك/التحويل وتسليمه باليد لباب البيت بكرامة.", wa: "اتابع موعد تنفيذ تبرعي لبرنامج" },
-        { icon: Camera, key: "follow", t: "متابعة وتوثيق", d: "تقرير صور وفيديو يصلك بعد التسليم — شفافية كاملة.", wa: "اطلب تقرير المتابعة والتوثيق لبرنامج" },
+        { icon: Heart, key: "donate", t: "تبرع", d: "اختر مبلغك وادفع فورًا وبأمان عبر فيزا أو فودافون كاش أو إنستا باي.", wa: "أريد التبرع لبرنامج" },
+        { icon: Search, key: "research", t: "بحث ميداني", d: "فريقنا يدخل البيوت ويتحقق من الحالات الأكثر استحقاقًا قبل أي صرف.", wa: "أريد الاطلاع على آلية البحث الميداني لبرنامج" },
+        { icon: Truck, key: "execute", t: "تنفيذ وتسليم", d: "تجهيز الكرتونة أو الصك أو التحويل، وتسليمه باليد حتى باب البيت بكرامة.", wa: "أريد متابعة موعد تنفيذ تبرعي لبرنامج" },
+        { icon: Camera, key: "follow", t: "متابعة وتوثيق", d: "تقرير صور وفيديو يصلك بعد التسليم — شفافية كاملة.", wa: "أريد تقرير المتابعة والتوثيق لبرنامج" },
       ]
     : [
         { icon: Heart, key: "donate", t: "Donate", d: "Pick your amount and pay securely via Visa, Vodafone Cash or InstaPay.", wa: "I want to donate to program" },

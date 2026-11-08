@@ -30,9 +30,9 @@ export const OFFICIAL_CAMPAIGN_SEO_PRESETS: Record<string, CampaignSeoData> = {
   // 01 — Zell Campaign (حملة ظل)
   zell: {
     meta_title_ar: "حملة ظل | أسقف ووصلات مياه صدقة جارية للأسر المستحقة — مؤسسة اليسر",
-    meta_title_en: "Zell Campaign | Roofs & Clean Water as Ongoing Charity — Al-Yusr Foundation",
+    meta_title_en: "Zell Campaign | Roofs & Clean Water as Ongoing Charity — Al-Yusr Charity Foundation",
     meta_description_ar: "ساهم في حملة ظل من مؤسسة اليسر الخيرية: أسقف منازل ووصلات مياه نقية وأبواب وشبابيك ومراوح لأسر مستحقة، بأسهم تبدأ من 500 جنيه وصدقة جارية.",
-    meta_description_en: "Support the Zell campaign by Al-Yusr Foundation: roofs, clean-water connections, doors, windows and fans for families in need. Shares start at EGP 500 — all ongoing charity.",
+    meta_description_en: "Support the Zell campaign by Al-Yusr Charity Foundation: roofs, clean-water connections, doors, windows and fans for families in need. Shares start at EGP 500 — all ongoing charity.",
     focus_keywords_ar: "حملة ظل، تسقيف منازل، تبرع لبناء سقف، وصلة مياه صدقة جارية، سقيا الماء، صدقة جارية، مؤسسة اليسر الخيرية",
     focus_keywords_en: "Zell campaign, donate a roof, clean water connection, sadaqah jariyah, Al-Yusr Charity Foundation",
     canonical_url: "https://elyusr.org/campaigns/zell",
@@ -67,9 +67,9 @@ export const OFFICIAL_CAMPAIGN_SEO_PRESETS: Record<string, CampaignSeoData> = {
   // 02 — Sitr Campaign (حملة ستر)
   sitr: {
     meta_title_ar: "حملة ستر | دفء الشتاء للأسر المستحقة — مؤسسة اليسر الخيرية",
-    meta_title_en: "Sitr Campaign | Winter Warmth for Families in Need — Al-Yusr Foundation",
-    meta_description_ar: "تبرع لحملة ستر من مؤسسة اليسر الخيرية: أسقف وأبواب وشبابيك وأسرة ومراتب وألحفة فايبر وكسوة شتوية للأسر المستحقة. تنطلق في أكتوبر وتمتد حتى فبراير.",
-    meta_description_en: "Donate to the Sitr campaign by Al-Yusr Foundation: roofs, doors, windows, beds, mattresses, fiber quilts and winter clothing for families in need. Runs from October to February.",
+    meta_title_en: "Sitr Campaign | Winter Warmth for Families in Need — Al-Yusr Charity Foundation",
+    meta_description_ar: "تبرع لحملة ستر من مؤسسة اليسر الخيرية: أسقف وأبواب وشبابيك وأسِرّة ومراتب وألحفة فايبر وكسوة شتوية للأسر المستحقة. تنطلق في أكتوبر وتمتد حتى فبراير.",
+    meta_description_en: "Donate to the Sitr campaign by Al-Yusr Charity Foundation: roofs, doors, windows, beds, mattresses, fiber quilts and winter clothing for families in need. Runs from October to February.",
     focus_keywords_ar: "حملة ستر، صدقة الشتاء، تبرع بألحفة وبطاطين، كسوة الشتاء للفقراء، مساعدة الأسر المحتاجة في الشتاء، مؤسسة اليسر الخيرية",
     focus_keywords_en: "Sitr campaign, winter charity Egypt, donate quilts, winter clothing for the poor, Al-Yusr Charity Foundation",
     canonical_url: "https://elyusr.org/campaigns/sitr",
@@ -77,7 +77,7 @@ export const OFFICIAL_CAMPAIGN_SEO_PRESETS: Record<string, CampaignSeoData> = {
     nofollow: false,
     impact_regions_ar: "محافظات الدلتا والصعيد وقرى الدقهلية الأكثر برودة",
     impact_regions_en: "Delta and Upper Egypt villages in need of winter insulation",
-    impact_stats_ar: "تنطلق سنوياً من أكتوبر وتمتد حتى فبراير لمواجهة موجات البرد",
+    impact_stats_ar: "تنطلق سنويًا من أكتوبر وتمتد حتى فبراير لمواجهة موجات البرد",
     impact_stats_en: "Runs annually from October to February",
     suggested_articles: [
       {
@@ -114,7 +114,7 @@ export const OFFICIAL_CAMPAIGN_SEO_PRESETS: Record<string, CampaignSeoData> = {
     nofollow: false,
     impact_regions_ar: "المنصورة، طلخا، ومراكز الدقهلية الكبرى مع أسطول سيارات مجهز",
     impact_regions_en: "Mansoura, Talkha, and Dakahlia centers with dedicated pickup vehicles",
-    impact_stats_ar: "أول حملة مصرية تُحيي أسر بالمركون في البيوت",
+    impact_stats_ar: "أول حملة مصرية تُحيي أسرًا بالمركون في البيوت",
     impact_stats_en: "First Egyptian campaign reviving families with surplus household items",
     suggested_articles: [
       {
@@ -188,7 +188,7 @@ export const OFFICIAL_CAMPAIGN_SEO_PRESETS: Record<string, CampaignSeoData> = {
     nofollow: false,
     impact_regions_ar: "مدارس وقرى محافظة الدقهلية وحضانات أبي بكر الصديق والفاروق عمر وحضانة أثر",
     impact_regions_en: "Schools and nurseries in Dakahlia (Abu Bakr, Al-Farouq, and Athar)",
-    impact_stats_ar: "كفالة مئات الطلاب ومنع تسربهم من التعليم سنوياً",
+    impact_stats_ar: "كفالة مئات الطلاب ومنع تسربهم من التعليم سنويًا",
     impact_stats_en: "Sponsoring hundreds of needy students annually",
     suggested_articles: [
       {

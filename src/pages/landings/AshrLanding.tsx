@@ -122,7 +122,7 @@ const DayPlanner = () => {
               <Link to={amountHref(DONATE, special === "arafah" ? amount("arafah_iftar", 95) : dayAmount)} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-grad px-6 py-3.5 text-sm font-black text-accent-foreground shadow-cta transition hover:opacity-95">
                 <Heart className="h-5 w-5" />
                 {special === "arafah"
-                  ? (isAr ? `فطّر صائم بـ ${fmtNum(amount("arafah_iftar", 95), true)} ج` : `Give an iftar for EGP ${fmtNum(amount("arafah_iftar", 95), false)}`)
+                  ? (isAr ? `فطّر صائمًا بـ ${fmtNum(amount("arafah_iftar", 95), true)} ج` : `Give an iftar for EGP ${fmtNum(amount("arafah_iftar", 95), false)}`)
                   : (isAr ? `تصدّق اليوم بـ ${fmtNum(dayAmount, true)} ج` : `Give today: EGP ${fmtNum(dayAmount, false)}`)}
               </Link>
             )}
@@ -137,7 +137,8 @@ const DayPlanner = () => {
 };
 
 const AshrMain = () => {
-  const { c, t, isAr, section, packageId } = useCampaignPage(SLUG, ASHR_DEFAULTS);
+  const { c, t, isAr, section, packageId, images } = useCampaignPage(SLUG, ASHR_DEFAULTS);
+  const mainImg = images("hero")[0];
   const why = section("why");
   const arafah = section("arafah");
   const qurbani = section("qurbani");
@@ -159,7 +160,7 @@ const AshrMain = () => {
       {/* What to give */}
       <section className="bg-muted/30 py-16 md:py-20">
         <div className="container mx-auto max-w-6xl px-4">
-          <h2 className="text-center text-3xl font-black text-primary md:text-4xl">{isAr ? "اختار صدقتك في العشر" : "Choose your charity for the ten days"}</h2>
+          <h2 className="text-center text-3xl font-black text-primary md:text-4xl">{isAr ? "اختر صدقتك في العشر" : "Choose your charity for the ten days"}</h2>
           <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {c.prices.map((p) => (
               <Link key={p.id} to={amountHref(DONATE, p.amount, packageId(p.id))} className="group flex flex-col rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-secondary/60 hover:shadow-card">
@@ -168,7 +169,7 @@ const AshrMain = () => {
                 <span className="mt-4 text-3xl font-black tabular-nums text-accent">
                   {fmtNum(p.amount, isAr)} <span className="text-sm font-bold text-muted-foreground">{isAr ? "جنيه" : "EGP"}</span>
                 </span>
-                <span className="mt-2 text-xs font-black text-accent group-hover:underline">{isAr ? "تبرع بالمبلغ ده ←" : "Give this amount →"}</span>
+                <span className="mt-2 text-xs font-black text-accent group-hover:underline">{isAr ? "تبرّع بهذا المبلغ ←" : "Give this amount →"}</span>
               </Link>
             ))}
           </div>
@@ -209,7 +210,7 @@ const AshrMain = () => {
           )}
           {qurbani && (
             <article className="flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft">
-              <img src={heroImg} alt={isAr ? "لحوم أضاحي اليسر جاهزة للتوزيع على الأسر" : "Al-Yusr Qurbani meat ready for distribution"} loading="lazy" className="aspect-[16/9] w-full object-cover" />
+              <img src={mainImg?.src ?? heroImg} alt={mainImg ? (isAr ? mainImg.altAr : mainImg.altEn) : ""} loading="lazy" className="aspect-[16/9] w-full object-cover" />
               <div className="flex flex-1 flex-col p-8">
                 <h2 className="text-2xl font-black text-primary md:text-3xl">{t(qurbani.title)}</h2>
                 <p className="mt-3 flex-1 text-base leading-loose text-muted-foreground">{t(qurbani.lead)}</p>
@@ -226,7 +227,7 @@ const AshrMain = () => {
 };
 
 const AshrLanding = () => {
-  const { c, isLoading } = useCampaignPage(SLUG, ASHR_DEFAULTS);
+  const { c, images, isLoading } = useCampaignPage(SLUG, ASHR_DEFAULTS);
   return (
     <CampaignLandingShell
       slug={SLUG}
@@ -239,7 +240,7 @@ const AshrLanding = () => {
       taglineEn={c.hero.lead.en}
       metaDescAr="صدقات العشر الأوائل من ذي الحجة مع مؤسسة اليسر: صدقة يومية طوال العشر، إفطار صائم يوم عرفة، لحوم بلدي، سقيا ماء، وصك أضحية يوم النحر، بتوثيق كامل في الدقهلية ومصر."
       metaDescEn="Charity in the first ten days of Dhul Hijjah with Al-Yusr: a daily charity, iftar on the day of Arafah, local meat, water and a Qurbani share on Eid day, fully documented."
-      heroImage={heroImg}
+      heroImage={images("hero")[0]?.src ?? heroImg}
       heroAlt="صدقات العشر الأوائل من ذي الحجة مع مؤسسة اليسر"
       hero={<AshrHero />}
       main={<AshrMain />}

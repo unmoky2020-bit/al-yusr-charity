@@ -50,9 +50,9 @@ const Register = () => {
       return;
     }
     if (role === "editor") {
-      toast({ title: isRTL ? " تم إرسال طلبك — سيُراجعه الأدمن قريبًا" : " Request sent — an admin will review it shortly" });
+      toast({ title: isRTL ? " تم إرسال طلبك — سيراجعه المشرف قريبًا" : " Request sent — an admin will review it shortly" });
     } else {
-      toast({ title: isRTL ? " أهلاً بك في عائلة اليسر — تحقّق من بريدك" : " Welcome to Al-Yusr — check your inbox" });
+      toast({ title: isRTL ? " أهلًا بك في عائلة اليسر — تحقّق من بريدك" : " Welcome to Al-Yusr — check your inbox" });
     }
     nav("/login");
   };
@@ -110,7 +110,7 @@ const Register = () => {
             {role === "editor" && (
               <div className="mt-4 rounded-xl border border-accent/30 bg-accent/5 p-3 text-xs font-bold text-accent">
                 {isRTL
-                  ? "ملاحظة: حسابات المحررين تحتاج موافقة من الأدمن قبل تفعيل صلاحياتهم."
+                  ? "ملاحظة: حسابات المحررين تحتاج إلى موافقة المشرف قبل تفعيل صلاحياتهم."
                   : "Note: Editor accounts need admin approval before permissions are granted."}
               </div>
             )}
@@ -153,7 +153,7 @@ const Register = () => {
               )}
               <Button type="submit" disabled={loading} className="h-12 w-full bg-orange-grad text-base font-extrabold text-accent-foreground shadow-cta hover:opacity-95">
                 {loading
-                  ? (isRTL ? "جاري الإنشاء..." : "Creating...")
+                  ? (isRTL ? "جارٍ الإنشاء..." : "Creating...")
                   : role === "editor"
                     ? (isRTL ? "إرسال طلب محرر" : "Submit editor request")
                     : (isRTL ? "أنشئ حسابي" : "Create my account")}

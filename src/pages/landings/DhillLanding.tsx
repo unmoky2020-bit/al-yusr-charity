@@ -8,9 +8,6 @@ import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import DHILL_DEFAULTS from "@/data/campaignPages/dhill";
 import yusrWater from "@/assets/yusr-water.png";
-import yusrDistribution from "@/assets/yusr-distribution-1.webp";
-import yusrMeals from "@/assets/yusr-meals.webp";
-import posterWater from "@/assets/poster-water.png";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("dhill");
@@ -28,13 +25,6 @@ const TRACK_META = {
 
 type TrackId = keyof typeof TRACK_META;
 const isTrackId = (id: string): id is TrackId => id in TRACK_META;
-
-const GALLERY = [
-  { src: yusrWater, altAr: "وصلة مياه نقية مع موتور وخزان لأسرة مستحقة", altEn: "Water connection with pump and tank" },
-  { src: posterWater, altAr: "تسقيف خشبي معزول يحمي البيت من حر الصيف", altEn: "Insulated wooden roof" },
-  { src: yusrDistribution, altAr: "توزيع مراوح ووسائل تبريد لبيوت القرى", altEn: "Fans for village homes" },
-  { src: yusrMeals, altAr: "قوافل السقيا الميدانية في قرى مصر", altEn: "Field water convoys" },
-];
 
 const DhillHero = () => {
   const { c, t, isAr, section, campaignImage } = useCampaignPage("dhill", DHILL_DEFAULTS);
@@ -81,7 +71,8 @@ const DhillHero = () => {
 };
 
 const DhillMain = () => {
-  const { c, t, isAr, price, amount, packageId, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const { c, t, isAr, price, amount, packageId, section, images } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const gallery = images("gallery");
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
   const tracksSection = section("tracks");
@@ -179,7 +170,7 @@ const DhillMain = () => {
               </p>
               <p className="mt-1 text-xl font-black">
                 {shares > 1
-                  ? (isAr ? `${fmtNum(shares, true)} سهماً = ${fullLabel}` : `${shares} shares = ${fullLabel.toLowerCase()}`)
+                  ? (isAr ? `${fmtNum(shares, true)} سهمًا = ${fullLabel}` : `${shares} shares = ${fullLabel.toLowerCase()}`)
                   : fullLabel}
               </p>
               <div className="mt-6 grid grid-cols-8 gap-1.5" aria-hidden>
@@ -194,8 +185,8 @@ const DhillMain = () => {
               <p className="mt-5 flex items-center gap-2 text-sm text-primary-foreground/80">
                 <span className="h-3 w-3 shrink-0 rounded-[3px] bg-accent" aria-hidden />
                 {shares > 1
-                  ? (isAr ? "سهمك يكتمل مع أسهم غيرك من المتبرعين، ونسلّم الحالة فور اكتمالها." : "Your share joins other donors' shares; we deliver as soon as the unit is complete.")
-                  : (isAr ? "تتسلمها الأسرة مركّبة وجاهزة." : "Delivered to the family installed and ready.")}
+                  ? (isAr ? "يكتمل سهمك مع أسهم غيرك من المتبرعين، ونسلّم الحالة فور اكتمالها." : "Your share joins other donors' shares; we deliver as soon as the unit is complete.")
+                  : (isAr ? "تتسلّمها الأسرة مركّبة وجاهزة." : "Delivered to the family installed and ready.")}
               </p>
             </div>
           </div>
@@ -224,7 +215,7 @@ const DhillMain = () => {
             ))}
             <li>
               <a href={waHref(isAr, "صدقة جارية في حملة ظل", "an ongoing-charity water tap")} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-[44px] items-center gap-2 text-sm font-black text-secondary underline underline-offset-4 hover:text-primary-foreground">
-                <WhatsAppIcon className="h-4 w-4" /> {isAr ? "أرسل الاسم على واتساب" : "Send the name on WhatsApp"}
+                <WhatsAppIcon className="h-4 w-4" /> {isAr ? "أرسل الاسم عبر واتساب" : "Send the name on WhatsApp"}
               </a>
             </li>
           </ol>
@@ -273,12 +264,14 @@ const DhillMain = () => {
       </section>
 
       {/* Field documentation */}
-      <section className="bg-background py-16 md:py-20">
-        <div className="container mx-auto max-w-6xl px-4">
-          <h2 className="text-3xl font-black text-primary md:text-4xl">{t(section("gallery")?.title)}</h2>
-          <div className="mt-8"><BentoGallery items={GALLERY} isAr={isAr} /></div>
-        </div>
-      </section>
+      {gallery.length > 0 && (
+        <section className="bg-background py-16 md:py-20">
+          <div className="container mx-auto max-w-6xl px-4">
+            <h2 className="text-3xl font-black text-primary md:text-4xl">{t(section("gallery")?.title)}</h2>
+            <div className="mt-8"><BentoGallery items={gallery} isAr={isAr} /></div>
+          </div>
+        </section>
+      )}
     </>
   );
 };
@@ -296,7 +289,7 @@ const DhillLanding = () => {
       titleEn={seo?.title.en ?? ""}
       taglineAr={seo?.lead?.ar ?? ""}
       taglineEn={seo?.lead?.en ?? ""}
-      metaDescAr="شارك في حملة ظِل مع مؤسسة اليسر: أسقف منازل خشبية معزولة، وصلات مياه نقية للمنازل (سهم 500 ج)، خطوط مياه للقرى، أبواب وشبابيك، ومراوح تبريد بالدقهلية وكفر الشيخ والشرقية وكل مصر."
+      metaDescAr="شارك في حملة ظِلّ مع مؤسسة اليسر: أسقف خشبية معزولة للمنازل، ووصلات مياه نقية للمنازل (سهم 500 ج)، وخطوط مياه للقرى، وأبواب وشبابيك، ومراوح تبريد بالدقهلية وكفر الشيخ والشرقية وكل مصر."
       metaDescEn="Join Al-Yusr's Dhill Campaign: insulated wooden roofs, clean water connections (EGP 500 share), village water lines, doors & windows, and cooling fans across Dakahlia, Kafr El Sheikh and Egypt."
       heroImage={campaignImage}
       heroAlt="حملة ظل — وصلات مياه وأسقف خشبية ومراوح للأسر المستحقة"

@@ -50,7 +50,7 @@ export default function StoryDetail() {
   if (loading) {
     return (
       <PageLayout>
-        <div aria-busy="true" aria-label="جاري التحميل">
+        <div aria-busy="true" aria-label="جارٍ التحميل">
           <div className="bg-primary/90 py-14">
             <div className="container mx-auto max-w-3xl space-y-4 px-4 text-center">
               <div className="mx-auto h-4 w-40 animate-pulse rounded bg-white/20" />
@@ -225,7 +225,7 @@ export default function StoryDetail() {
                   </h3>
                   <p className="text-xs font-bold text-accent-foreground/90 max-w-md">
                     {isAR
-                      ? "كل تبرع منك بيغير حياة أسرة ثانية وبيوصلهم الأمل والخير بأمانة."
+                      ? "كل تبرع منك يغيّر حياة أسرة أخرى، ويوصل إليها الأمل والخير بأمانة."
                       : "Every donation changes another family's life and brings them hope with trust."}
                   </p>
                 </div>

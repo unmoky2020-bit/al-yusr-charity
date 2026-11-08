@@ -7,9 +7,6 @@ import { Crescent, Lantern, Star8, NightSky } from "@/components/campaigns/Ramad
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import RAMADAN_DEFAULTS from "@/data/campaignPages/ramadan";
 import yusrRamadanBox from "@/assets/yusr-ramadan-box.png";
-import yusrMeals from "@/assets/yusr-meals.webp";
-import yusrDistribution from "@/assets/yusr-distribution-1.webp";
-import farmHero from "@/assets/farm-hero.jpg";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("ramadan");
@@ -32,13 +29,6 @@ const STAT_ICONS: Record<string, typeof Package> = {
   sadaqa: Droplets,
 };
 const WIDE_STATS = new Set(["boxes", "sadaqa"]);
-
-const GALLERY = [
-  { src: yusrRamadanBox, altAr: "كرتونة الخير الكبرى من اليسر 25 كيلو", altEn: "Al-Yusr 25 kg Ramadan box" },
-  { src: yusrMeals, altAr: "تجهيز وجبات الإفطار الساخنة يومياً", altEn: "Daily hot iftar prep" },
-  { src: farmHero, altAr: "لحوم بلدي طازجة من المزارع الوقفية", altEn: "Endowment farm meat" },
-  { src: yusrDistribution, altAr: "قوافل التوزيع الرمضانية في قرى الدقهلية", altEn: "Ramadan aid convoys" },
-];
 
 const MoonIcon = ({ phase }: { phase: "new" | "half" | "full" }) => (
   <svg viewBox="0 0 40 40" className="h-10 w-10" aria-hidden>
@@ -106,7 +96,8 @@ const RamadanHero = () => {
 };
 
 const RamadanMain = () => {
-  const { c, t, isAr, price, amount, packageId, section } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
+  const { c, t, isAr, price, amount, packageId, section, images } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
+  const galleryImgs = images("gallery");
   const Arrow = isAr ? ArrowLeft : ArrowRight;
   const [people, setPeople] = useState(4);
   const [meals, setMeals] = useState(10);
@@ -214,7 +205,7 @@ const RamadanMain = () => {
             <p className="mt-2 text-sm text-foreground/75 sm:text-base">{t(feedCard?.desc).replace("{n}", fmtNum(IFTAR, isAr))}</p>
             <Counter isAr={isAr} value={meals} setValue={setMeals} min={1} max={1000} step={5} labelAr="وجبة" labelEn="meals" />
             <Link to={amountHref(DONATE, meals * IFTAR)} className="mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-orange-grad font-black text-accent-foreground shadow-cta transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
-              <Heart className="h-5 w-5" /> {isAr ? `فطّر ${fmtNum(meals, true)} صائماً بـ ${fmtNum(meals * IFTAR, true)} جنيه` : `Feed ${meals} for ${fmtNum(meals * IFTAR, false)} EGP`}
+              <Heart className="h-5 w-5" /> {isAr ? `فطّر ${fmtNum(meals, true)} صائمًا بـ ${fmtNum(meals * IFTAR, true)} جنيه` : `Feed ${meals} for ${fmtNum(meals * IFTAR, false)} EGP`}
             </Link>
           </div>
         </div>
@@ -287,7 +278,7 @@ const RamadanMain = () => {
       <section className="bg-background py-16 md:py-20">
         <div className="container mx-auto max-w-6xl px-4">
           <h2 className="text-3xl font-black text-primary md:text-4xl">{isAr ? "من رمضان الماضي" : "From last Ramadan"}</h2>
-          <div className="mt-8"><BentoGallery items={GALLERY} isAr={isAr} /></div>
+          <div className="mt-8"><BentoGallery items={galleryImgs} isAr={isAr} /></div>
         </div>
       </section>
     </>
@@ -306,7 +297,7 @@ const RamadanLanding = () => {
       titleEn={`Ramadan Season — '${c.hero.title.en} ${c.hero.title2.en}'`}
       taglineAr={c.hero.lead.ar}
       taglineEn={c.hero.lead.en}
-      metaDescAr="شارك في موسم رمضان مع مؤسسة اليسر: كرتونة الخير (25 كيلو بلدي)، مطبخ وجبات الإفطار الساخنة، ذبائح مزارعنا الوقفية، تيسير الزواج 'الفرحة فرحتين'، كسوة العيد، وزكاة المال والفطر."
+      metaDescAr="شارك في موسم رمضان مع مؤسسة اليسر: كرتونة الخير (25 كيلو بلدي)، ومطبخ وجبات الإفطار الساخنة، وذبائح مزارعنا الوقفية، وتيسير الزواج «الفرحة فرحتين»، وكسوة العيد، وزكاة المال والفطر."
       metaDescEn="Support Al-Yusr's Ramadan Season: 25kg family boxes, hot iftar kitchen, endowment farm meat, bride support, orphan Eid clothing, and Zakat distribution in Egypt."
       heroImage={campaignImage}
       heroAlt="كرتونة رمضان 25 كيلو من مؤسسة اليسر مع لحوم بلدي"

@@ -56,7 +56,7 @@ const NewsletterAction = ({ action }: { action: "confirm" | "unsubscribe" }) => 
           {status === "loading" && (
             <div className="flex flex-col items-center gap-3 text-muted-foreground">
               <Loader2 className="h-10 w-10 animate-spin text-primary" />
-              <p>{isRTL ? "جاري المعالجة..." : "Processing..."}</p>
+              <p>{isRTL ? "جارٍ المعالجة..." : "Processing..."}</p>
             </div>
           )}
           {status === "ok" && (
@@ -69,10 +69,10 @@ const NewsletterAction = ({ action }: { action: "confirm" | "unsubscribe" }) => 
               <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
                 {action === "confirm"
                   ? (isRTL
-                      ? "هتوصلك أحدث الحملات وقصص الأثر — وكرّم بدايتك بصدقة جارية الآن."
+                      ? "ستصلك أحدث الحملات وقصص الأثر، فابدأ رحلتك معنا بصدقة جارية الآن."
                       : "You'll receive our latest campaigns and impact stories — make your start meaningful with a donation today.")
                   : (isRTL
-                      ? "تم إيقاف الرسائل. لو رجعت غيرت رأيك تقدر تشترك من جديد في أي وقت."
+                      ? "تم إيقاف الرسائل. وإن غيّرت رأيك، يمكنك الاشتراك من جديد في أي وقت."
                       : "We won't email you anymore. You can resubscribe anytime.")}
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -96,7 +96,7 @@ const NewsletterAction = ({ action }: { action: "confirm" | "unsubscribe" }) => 
                 {isRTL ? "رابط غير صالح" : "Invalid link"}
               </h1>
               <p className="mt-3 text-sm text-muted-foreground">
-                {isRTL ? "الرابط منتهي أو غير صحيح." : "The link is invalid or expired."}
+                {isRTL ? "الرابط منتهي الصلاحية أو غير صحيح." : "The link is invalid or expired."}
               </p>
               <Link to="/" className="mt-5 inline-flex h-11 items-center gap-2 rounded-2xl border border-primary/15 bg-background px-5 text-sm font-extrabold text-primary hover:border-secondary">
                 {isRTL ? "الصفحة الرئيسية" : "Home"}

@@ -371,7 +371,7 @@ const Gallery = () => {
                   </li>
                   <li className="flex items-start gap-2 rounded-2xl bg-black/10 p-3">
                     <span className="mt-0.5 h-2.5 w-2.5 rounded-full bg-accent" />
-                    <span>{isRTL ? "يمنحك شعورًا بأن الخير يصل فعلاً." : "It gives you confidence that giving truly reaches people."}</span>
+                    <span>{isRTL ? "يمنحك شعورًا بأن الخير يصل فعلًا." : "It gives you confidence that giving truly reaches people."}</span>
                   </li>
                 </ul>
               </div>

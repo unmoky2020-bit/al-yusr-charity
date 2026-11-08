@@ -96,7 +96,7 @@ export async function generateOg({ title, category, url }: OgInput): Promise<str
   ctx.font = "bold 20px system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif";
   ctx.textAlign = "right";
   ctx.direction = "rtl";
-  ctx.fillText("الرحمة والأمل · بنك الطعام", W - 100, H - 90);
+  ctx.fillText("مؤسسة اليسر الخيرية · المنصورة", W - 100, H - 90);
 
   return canvas.toDataURL("image/jpeg", 0.9);
 }
