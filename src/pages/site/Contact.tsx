@@ -694,7 +694,7 @@ const Contact = () => {
                   </p>
                 </div>
                 <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(isRTL ? "المنصورة، الدقهلية، مصر" : "Mansoura, Dakahlia, Egypt")}`}
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${ORG.geo.lat},${ORG.geo.lng}`}
                   target="_blank"
                   rel="noopener"
                   className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full bg-secondary px-5 py-2 text-xs font-black text-primary shadow-glow transition hover:opacity-90"
@@ -709,7 +709,7 @@ const Contact = () => {
             <div className="relative overflow-hidden">
               <iframe
                 title={isRTL ? "موقع مؤسسة اليسر — المنصورة" : "Al-Yusr Charity — Mansoura location"}
-                src={`https://www.google.com/maps?q=${encodeURIComponent(isRTL ? "المنصورة، الدقهلية، مصر" : "Mansoura, Dakahlia, Egypt")}&hl=${isRTL ? "ar" : "en"}&z=13&output=embed`}
+                src={ORG.mapsEmbed}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 className="block h-[340px] w-full border-0 md:h-[420px]"

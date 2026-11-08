@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useRef, useState, useMemo } from "react";
 import {
   ShieldCheck,
@@ -996,7 +997,7 @@ const About = () => {
               <div data-reveal className="reveal-up overflow-hidden rounded-3xl border border-border shadow-card order-2 lg:order-1">
                 <iframe
                   title={isRTL ? "موقع مؤسسة اليسر — المنصورة" : "Al-Yusr location — Mansoura"}
-                  src={`https://www.google.com/maps?q=${encodeURIComponent(isRTL ? "المنصورة، الدقهلية، مصر" : "Mansoura, Dakahlia, Egypt")}&hl=${isRTL ? "ar" : "en"}&z=13&output=embed`}
+                  src={ORG.mapsEmbed}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="block h-full min-h-[320px] w-full border-0 lg:min-h-[460px]"
