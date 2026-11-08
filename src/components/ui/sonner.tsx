@@ -1,10 +1,10 @@
-import { Toaster as Sonner, toast } from "sonner";
+import { Toaster as Sonner } from "sonner";
 import { useLang } from "@/i18n/LangContext";
 import { CheckCircle2, AlertTriangle, AlertCircle, Info } from "lucide-react";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
-/** The site's only toaster: language-aware direction, close button on the reading end (see index.css). */
+/** The site's only toaster: language-aware direction, close button on the reading end. Show messages through @/lib/notify. */
 const Toaster = ({ ...props }: ToasterProps) => {
   const { lang } = useLang();
 
@@ -52,5 +52,5 @@ const Toaster = ({ ...props }: ToasterProps) => {
   );
 };
 
-export { Toaster, toast };
+export { Toaster };
 

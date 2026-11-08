@@ -27,6 +27,7 @@ import {
 } from "@/data/usersApi";
 import { LaravelRole, LaravelPermission } from "@/data/laravelApi";
 import { logActivity } from "@/lib/activityLog";
+import { errorReason } from "@/lib/notify";
 
 const ROLE_LABEL: Record<string, { ar: string; en: string }> = {
   admin:        { ar: "مدير", en: "Admin" },
@@ -127,7 +128,7 @@ const Inner = () => {
         setRolePermIds(permIds);
       }
     } catch (e: any) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      toast({ title: "Error", description: errorReason(e), variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -205,7 +206,7 @@ const Inner = () => {
         summary: `Updated permissions for role: ${role.name}`,
       });
     } catch (err: any) {
-      toast({ title: isAr ? "فشل حفظ الصلاحيات" : "Failed to save permissions", description: err.message, variant: "destructive", });
+      toast({ title: isAr ? "فشل حفظ الصلاحيات" : "Failed to save permissions", description: errorReason(err), variant: "destructive", });
     } finally {
       setSavingRole(false);
     }
@@ -234,7 +235,7 @@ const Inner = () => {
       toast({ title: isAr ? " تم تحديث دور المستخدم" : " User role updated" });
       void reload();
     } catch (err: any) {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
+      toast({ title: "Error", description: errorReason(err), variant: "destructive" });
     } finally {
       setBusyId(null);
     }
@@ -259,7 +260,7 @@ const Inner = () => {
       setNewUserData({ name: "", email: "", phone: "", roleId: 4, password: "" });
       void reload();
     } catch (err: any) {
-      toast({ title: isAr ? "فشل إنشاء المستخدم" : "Failed to create user", description: err.message, variant: "destructive", });
+      toast({ title: isAr ? "فشل إنشاء المستخدم" : "Failed to create user", description: errorReason(err), variant: "destructive", });
     } finally {
       setAddingUser(false);
     }
@@ -276,7 +277,7 @@ const Inner = () => {
       toast({ title: isAr ? " تم حذف المستخدم" : " User deleted" });
       void reload();
     } catch (err: any) {
-      toast({ title: isAr ? "فشل الحذف" : "Delete failed", description: err.message, variant: "destructive" });
+      toast({ title: isAr ? "فشل الحذف" : "Delete failed", description: errorReason(err), variant: "destructive" });
     }
   };
 
@@ -299,7 +300,7 @@ const Inner = () => {
       await reload();
       setSelectedRoleId(created.id);
     } catch (err: any) {
-      toast({ title: isAr ? "فشل إنشاء الدور" : "Failed to create role", description: err.message, variant: "destructive" });
+      toast({ title: isAr ? "فشل إنشاء الدور" : "Failed to create role", description: errorReason(err), variant: "destructive" });
     } finally {
       setAddingRole(false);
     }
@@ -316,7 +317,7 @@ const Inner = () => {
       toast({ title: isAr ? " تم حذف الدور" : " Role deleted" });
       void reload();
     } catch (err: any) {
-      toast({ title: isAr ? "فشل الحذف" : "Delete failed", description: err.message, variant: "destructive" });
+      toast({ title: isAr ? "فشل الحذف" : "Delete failed", description: errorReason(err), variant: "destructive" });
     }
   };
 

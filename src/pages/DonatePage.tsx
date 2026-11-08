@@ -44,6 +44,7 @@ import { PaymobCheckoutModal } from "@/components/donate/PaymobCheckoutModal";
 import { KashierCheckoutModal } from "@/components/donate/KashierCheckoutModal";
 import { getGatewaySettings } from "@/data/kashierGateway";
 import { usePaymentOptions, type PaymentOption, type PayoutDestination } from "@/data/paymentOptions";
+import { errorReason } from "@/lib/notify";
 
 type StaticMethod = {
   id: string;
@@ -667,7 +668,7 @@ const DonatePage = () => {
             trackDonationStarted({ amount: totalAmount, program: items[0]?.entityId || "general", method, source: "donate-success" });
             (window as any).dataLayer?.push?.({ event: "donation_submitted", transaction_id: created.ref, value: totalAmount, currency: "EGP", method, program: items[0]?.entityId });
           } catch (e: any) {
-            toast({ title: lang === "ar" ? "تعذر تسجيل الطلب" : "Could not record", description: e?.message || "", variant: "destructive" });
+            toast({ title: lang === "ar" ? "تعذر تسجيل الطلب" : "Could not record", description: errorReason(e), variant: "destructive" });
             setStep(2);
           } finally { setProcessing(false); }
         })();
@@ -1628,7 +1629,7 @@ const DonatePage = () => {
                           toast({
                             variant: "destructive",
                             title: lang === "ar" ? "تعذر فتح بوابة الدفع" : "Payment gateway error",
-                            description: err?.message || (lang === "ar" ? "يُرجى تجربة وسيلة دفع أخرى أو المحاولة لاحقًا" : "Please try another method"),
+                            description: errorReason(err) || (lang === "ar" ? "يُرجى تجربة وسيلة دفع أخرى أو المحاولة لاحقًا" : "Please try another method"),
                           });
                         } finally {
                           setProcessing(false);

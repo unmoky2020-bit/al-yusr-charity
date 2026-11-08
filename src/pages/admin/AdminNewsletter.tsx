@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Download, Search, X, RefreshCcw, Copy, BellOff, CheckCircle2, Mail, Plus, FileText, TrendingUp, Send } from "lucide-react";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { useLang } from "@/i18n/LangContext";
 import { newsletterApi, type LaravelNewsletter } from "@/data/laravelApi";
 

@@ -15,7 +15,7 @@ import { MediaPickerModal } from "@/components/admin/MediaPickerModal";
 import { LucideIconPicker } from "@/components/admin/LucideIconPicker";
 import { formatServerImageUrl } from "@/data/laravelApi";
 import { describeWriteError } from "@/data/api/backendPending";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { MEDIA_ACCEPT, MEDIA_MAX_BYTES, uploadMedia, type MediaCollection } from "@/data/api/mediaApi";
 import { NEEDS_BACKEND_AR, type FaqItem } from "@/data/api/programsAdminApi";
 import { toKebabIcon } from "./formUtils";

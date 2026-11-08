@@ -21,6 +21,7 @@ import { donorsApi, donationsApiV1 } from "@/data/laravelApi";
 import { DonationReceipt } from "@/components/common/DonationReceipt";
 import { donationPaymentMethodLabel } from "@/lib/payment-method-label";
 import { resolveDonorUserProfileId } from "@/lib/donor-user-profile";
+import { errorReason } from "@/lib/notify";
 
 
 type DonorRow = {
@@ -128,7 +129,7 @@ export default function AdminDonorDetail() {
         })
       );
     } catch (e: any) {
-      toast({ title: isAr ? "خطأ في تحميل بيانات المتبرع" : "Failed to load donor", description: e?.message, variant: "destructive" });
+      toast({ title: isAr ? "خطأ في تحميل بيانات المتبرع" : "Failed to load donor", description: errorReason(e), variant: "destructive" });
     } finally {
       setLoading(false);
     }

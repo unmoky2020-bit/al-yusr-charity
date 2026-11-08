@@ -57,6 +57,7 @@ import { HeroPanel, HadithPanel, StatsPanel, SectionsPanel, CtaPanel, campaignSe
 import { getCampaignPageMetaForCampaign, mergeCampaignContent, withCampaignHeroImageSlot, type CampaignPageContent } from "@/data/campaignPages";
 import { campaignPagesApi, contentFromCampaign, seoColumnFromForm, toCampaignColumns } from "@/data/campaignPages/api";
 import { publicUrls } from "@/lib/publicUrls";
+import { errorReason } from "@/lib/notify";
 
 const EMPTY_SEO: CampaignSeoData = {
   meta_title_ar: "",
@@ -432,7 +433,7 @@ export default function AdminDonationCampaignDetail() {
     } catch (err: any) {
       toast({
         title: isAr ? "فشل الحذف" : "Delete failed",
-        description: err.message,
+        description: errorReason(err),
         variant: "destructive",
       });
     }

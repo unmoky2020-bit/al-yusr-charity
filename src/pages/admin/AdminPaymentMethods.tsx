@@ -36,6 +36,7 @@ import {
 import { paymentGatewaysApi } from "@/data/laravelApi";
 import { logActivity } from "@/lib/activityLog";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
+import { errorReason } from "@/lib/notify";
 
 const Inner = () => {
   const { lang } = useLang();
@@ -166,7 +167,7 @@ const Inner = () => {
       console.warn("Backend gateway update notice:", err);
       toast({
         title: isAr ? "تعذر حفظ الإعدادات على الخادم" : "Could not save settings on the server",
-        description: err?.message || (isAr ? "حاول مرة أخرى" : "Please try again"),
+        description: errorReason(err) || (isAr ? "حاول مرة أخرى" : "Please try again"),
         variant: "destructive",
       });
     }

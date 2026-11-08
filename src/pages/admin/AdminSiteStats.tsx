@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { useLang } from "@/i18n/LangContext";
 import { getLucideIcon } from "@/lib/lucide-icon";
 import { LucideIconPicker } from "@/components/admin/LucideIconPicker";

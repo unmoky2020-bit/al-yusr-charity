@@ -8,7 +8,7 @@ import { generateAndUploadOg } from "@/lib/blog-uploads";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { NiceSelect } from "@/components/common/NiceSelect";
 import { BlogPromptWorkbench } from "./BlogPromptWorkbench";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 
 type Line = ImportedArticle & { pick: boolean; exists: boolean; state?: "ok" | "fail"; msg?: string };
 

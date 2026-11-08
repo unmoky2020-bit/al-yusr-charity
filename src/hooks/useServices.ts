@@ -4,6 +4,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { servicesApi, type ServiceCard, type ServiceDetail } from "@/data/servicesApi";
 import { toast } from "@/hooks/use-toast";
+import { errorReason } from "@/lib/notify";
 
 const KEYS = {
   list: ["services", "list"] as const,
@@ -53,7 +54,7 @@ export function useServiceUpsert() {
       toast({ title: "تم الحفظ بنجاح" });
     },
     onError: (err: Error) => {
-      toast({ title: "خطأ في الحفظ", description: err.message, variant: "destructive" });
+      toast({ title: "خطأ في الحفظ", description: errorReason(err), variant: "destructive" });
     },
   });
 }
@@ -69,7 +70,7 @@ export function useServiceToggleActive() {
       qc.invalidateQueries({ queryKey: KEYS.listAll });
     },
     onError: (err: Error) => {
-      toast({ title: "خطأ", description: err.message, variant: "destructive" });
+      toast({ title: "خطأ", description: errorReason(err), variant: "destructive" });
     },
   });
 }
@@ -85,7 +86,7 @@ export function useServiceDelete() {
       toast({ title: "تم الحذف" });
     },
     onError: (err: Error) => {
-      toast({ title: "خطأ في الحذف", description: err.message, variant: "destructive" });
+      toast({ title: "خطأ في الحذف", description: errorReason(err), variant: "destructive" });
     },
   });
 }

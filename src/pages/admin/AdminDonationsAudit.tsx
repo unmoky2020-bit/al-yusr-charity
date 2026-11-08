@@ -8,6 +8,7 @@ import { useLang } from "@/i18n/LangContext";
 
 import { toast } from "@/hooks/use-toast";
 import { classifyDonationSource, normalizeUtm, isMeaningfulUtm } from "@/lib/donationSource";
+import { errorReason } from "@/lib/notify";
 
 type Row = {
   id: string;
@@ -44,7 +45,7 @@ const AdminDonationsAudit = () => {
       setRows((donations || []) as any);
       setCamps([]); // ad_campaigns removed (Supabase removed)
     } catch (e: any) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      toast({ title: "Error", description: errorReason(e), variant: "destructive" });
     } finally { setLoading(false); }
   };
   useEffect(() => { load(); }, []);

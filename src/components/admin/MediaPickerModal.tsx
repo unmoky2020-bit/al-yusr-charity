@@ -33,7 +33,7 @@ import {
 
 /** One media-library file, in the shape the grid below renders. */
 type PickerImage = { id: string; image: string; preview?: string; external_url?: string; title_ar: string; title_en?: string; city?: string; program?: string; donation_program?: string; collection: string };
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { useLang } from "@/i18n/LangContext";
 
 export interface MediaPickerModalProps {

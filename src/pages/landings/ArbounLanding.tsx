@@ -30,7 +30,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { BreadcrumbSchema } from "@/components/common/Schemas";
 import { Helmet } from "react-helmet-async";
 import { useLang } from "@/i18n/LangContext";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 
 import { ScrollExpandMedia } from "@/components/sections/ScrollExpandMedia";

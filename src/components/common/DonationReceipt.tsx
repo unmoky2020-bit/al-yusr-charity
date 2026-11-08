@@ -6,6 +6,7 @@ import type { DonationRecord } from "@/data/donationsStore";
 import { downloadReceiptPdf, tafqeetEGP } from "@/lib/generateReceiptPdf";
 import { toast } from "@/hooks/use-toast";
 import logoImg from "@/assets/logo-circle.png";
+import { errorReason } from "@/lib/notify";
 
 export const DonationReceipt = ({ d }: { d: DonationRecord }) => {
   const { lang } = useLang();
@@ -35,7 +36,7 @@ export const DonationReceipt = ({ d }: { d: DonationRecord }) => {
     } catch (err: any) {
       toast({
         title: lang === "ar" ? "خطأ في إنشاء ملف PDF" : "PDF generation failed",
-        description: err?.message || "",
+        description: errorReason(err),
         variant: "destructive",
       });
     } finally {

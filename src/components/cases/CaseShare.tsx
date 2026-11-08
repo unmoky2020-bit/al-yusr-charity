@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Check, Copy, Facebook, Send, Share2 } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { track } from "@/lib/track";
 
 const WhatsAppIcon = ({ className = "" }: { className?: string }) => (

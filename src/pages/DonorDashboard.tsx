@@ -2,10 +2,7 @@ import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
-  Heart, TrendingUp, Users, Settings, Target,
-  ReceiptText, ArrowRight, ArrowLeft, Sparkles, CheckCircle2,
-  CreditCard, Wallet, Smartphone, LogOut, Trash2, Truck, PackageCheck, Wallet2, Hourglass, ChevronDown, ChevronUp,
-  Bell, CheckCheck, Inbox,
+  Heart, TrendingUp, Users, Settings, Target, ReceiptText, ArrowRight, ArrowLeft, Sparkles, CheckCircle2, CreditCard, Wallet, Smartphone, LogOut, Trash2, Truck, PackageCheck, Wallet2, Hourglass, ChevronDown, ChevronUp, Bell, CheckCheck,
 } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { NotificationItem } from "@/components/notifications/NotificationItem";
@@ -21,6 +18,7 @@ import { donationsStore, subscribeDonations, type DonationRecord } from "@/data/
 import { listMyDonations, listCaseDocuments } from "@/data/casesApi";
 import { formatServerImageUrl } from "@/data/laravelApi";
 import { toast } from "@/hooks/use-toast";
+import { NotificationsEmpty } from "@/components/notifications/NotificationsEmpty";
 
 type Tab = "impact" | "donations" | "notifications" | "account";
 const TABS: Tab[] = ["impact", "donations", "notifications", "account"];
@@ -527,10 +525,9 @@ const Inner = () => {
               {!notifications.loaded ? (
                 <p className="p-8 text-center text-sm text-muted-foreground">{lang === "ar" ? "جارٍ التحميل…" : "Loading…"}</p>
               ) : notifications.items.length === 0 ? (
-                <div className="flex flex-col items-center gap-2 p-10 text-center text-sm text-muted-foreground">
-                  <Inbox className="h-9 w-9 opacity-50" />
-                  {lang === "ar" ? "لا توجد إشعارات بعد. سنخبرك هنا بكل خطوة في رحلة تبرعك." : "No notifications yet. Every step of your donation will show up here."}
-                </div>
+                <NotificationsEmpty
+                  text={lang === "ar" ? "لا توجد إشعارات بعد. سنخبرك هنا بكل خطوة في رحلة تبرعك." : "No notifications yet. Every step of your donation will show up here."}
+                />
               ) : (
                 <div className="divide-y divide-border">
                   {notifications.items.map((n) => (

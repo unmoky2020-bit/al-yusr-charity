@@ -5,7 +5,7 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { useLang } from "@/i18n/LangContext";
 import { ChoiceSelect } from "@/components/admin/programs/FormKit";
 import { describeWriteError, isEndpointMissing, BACKEND_PENDING_AR } from "@/data/api/backendPending";

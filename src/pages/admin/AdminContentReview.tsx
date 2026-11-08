@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { listAllCasesForStaff, setCaseStatus, type CaseRow } from "@/data/casesApi";
 
 import { contentChangeRequestsApi, LaravelContentChangeRequest } from "@/data/laravelApi";
+import { errorReason } from "@/lib/notify";
 
 type ReviewStatus = "pending" | "approved" | "rejected";
 type ReviewKind = "story" | "case_update" | "campaign" | "media" | "page";
@@ -202,7 +203,7 @@ const Inner = () => {
       toast({ title: status === "approved" ? (lang === "ar" ? "تم قبول العنصر " : "Item approved ") : (lang === "ar" ? "تم رفض العنصر" : "Item rejected"), description: lang === "ar" ? `بواسطة ${user?.name || "محرر"}` : `By ${user?.name || "editor"}`,
       });
     } catch (e) {
-      toast({ title: lang === "ar" ? "فشل التحديث" : "Update failed", description: (e as Error).message, variant: "destructive", });
+      toast({ title: lang === "ar" ? "فشل التحديث" : "Update failed", description: errorReason(e), variant: "destructive", });
     } finally {
       setNoteDraft("");
       setOpen(null);

@@ -8,6 +8,7 @@ import { useLang } from "@/i18n/LangContext";
 import { RequireAuth } from "@/auth/RequireAuth";
 import { toast } from "@/hooks/use-toast";
 import { donorsApi, donationsApiV1, LaravelDonor, LaravelDonation } from "@/data/laravelApi";
+import { errorReason } from "@/lib/notify";
 
 export interface DonorViewItem {
   id: string;
@@ -64,7 +65,7 @@ const Inner = () => {
 
       setDonors(items);
     } catch (e: any) {
-      toast({ title: isAr ? "خطأ في تحميل المتبرعين" : "Failed to load donors", description: e.message, variant: "destructive" });
+      toast({ title: isAr ? "خطأ في تحميل المتبرعين" : "Failed to load donors", description: errorReason(e), variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -99,7 +100,7 @@ const Inner = () => {
       setNewDonor({ name: "", email: "", phone: "" });
       void reload();
     } catch (err: any) {
-      toast({ title: isAr ? "فشل إضافة المتبرع" : "Failed to add donor", description: err.message, variant: "destructive" });
+      toast({ title: isAr ? "فشل إضافة المتبرع" : "Failed to add donor", description: errorReason(err), variant: "destructive" });
     } finally {
       setAdding(false);
     }
@@ -112,7 +113,7 @@ const Inner = () => {
       toast({ title: isAr ? " تم حذف المتبرع" : " Donor deleted" });
       void reload();
     } catch (err: any) {
-      toast({ title: isAr ? "فشل الحذف" : "Delete failed", description: err.message, variant: "destructive" });
+      toast({ title: isAr ? "فشل الحذف" : "Delete failed", description: errorReason(err), variant: "destructive" });
     }
   };
 

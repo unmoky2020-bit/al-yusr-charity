@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { toast as sonner } from "sonner";
+import { toast as sonner } from "@/lib/notify";
 
 /**
  * The site has ONE toast system: Sonner (src/components/ui/sonner.tsx). This module keeps the older

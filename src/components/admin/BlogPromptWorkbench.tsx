@@ -3,7 +3,7 @@ import { Check, Copy, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 
 type PromptRole = { title: string; objective: string; prompt: string };
 

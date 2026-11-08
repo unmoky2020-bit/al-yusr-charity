@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, CheckCheck, Inbox, Volume2, VolumeX } from "lucide-react";
+import { Bell, CheckCheck, Volume2, VolumeX } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useLang } from "@/i18n/LangContext";
 import { NotificationItem } from "@/components/notifications/NotificationItem";
 import { isNotificationSoundEnabled, playNotificationSound, setNotificationSoundEnabled } from "@/lib/notificationSound";
+import { NotificationsEmpty } from "@/components/notifications/NotificationsEmpty";
 
 type BellProps = {
   /** Where «عرض كل الإشعارات» goes: the dashboard inbox for staff, the donor's own page for donors. */
@@ -82,9 +83,7 @@ export const NotificationsBell = ({ allHref = "/admin/notifications", buttonClas
           </div>
           <div className="max-h-[60vh] overflow-y-auto">
             {items.length === 0 ? (
-              <div className="flex flex-col items-center gap-2 p-8 text-center text-sm text-muted-foreground">
-                <Inbox className="h-8 w-8 opacity-50" /> {ar ? "لا توجد إشعارات" : "No notifications yet"}
-              </div>
+              <NotificationsEmpty compact text={ar ? "لا توجد إشعارات" : "No notifications yet"} />
             ) : (
               items.map((n) => (
                 <NotificationItem key={n.id} n={n} compact onOpen={(x) => { void markRead(x.id); if (x.link) setOpen(false); }} />

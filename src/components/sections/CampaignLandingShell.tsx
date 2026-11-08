@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { LocalFAQ, FAQItem } from "@/components/common/LocalFAQ";
 import { useLang } from "@/i18n/LangContext";
 import { Helmet } from "react-helmet-async";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { getCampaignPageMeta } from "@/data/campaignPages/index";
 

@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { programs } from "@/data/programs";
 import { DONATION_ENTITIES, type DonationEntity } from "@/data/donationEntities";
 import {

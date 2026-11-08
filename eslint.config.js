@@ -21,6 +21,12 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": "off",
+      // One toast system: everything goes through src/lib/notify.ts.
+      "no-restricted-imports": ["error", { paths: [{ name: "sonner", message: "Use toast / notifyError from @/lib/notify." }] }],
     },
+  },
+  {
+    files: ["src/lib/notify.ts", "src/components/ui/sonner.tsx"],
+    rules: { "no-restricted-imports": "off" },
   },
 );

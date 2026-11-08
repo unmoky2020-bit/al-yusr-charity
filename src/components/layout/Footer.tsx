@@ -6,7 +6,7 @@ import { ORG } from "@/data/orgInfo";
 import { useLang } from "@/i18n/LangContext";
 import { prefetchHandlers } from "@/lib/prefetch";
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { newsletterApi } from "@/data/laravelApi";
 import { track } from "@/lib/track";
 import ctaHourglass from "@/assets/cta-hourglass-banner.jpg";

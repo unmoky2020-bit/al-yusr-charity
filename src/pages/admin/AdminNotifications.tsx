@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { BellOff, BellRing, CheckCheck, ChevronLeft, ChevronRight, Inbox, Loader2, Trash2 } from "lucide-react";
+import { BellOff, BellRing, CheckCheck, ChevronLeft, ChevronRight, Loader2, Trash2 } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { NotificationItem } from "@/components/notifications/NotificationItem";
 import { useNotifications } from "@/hooks/useNotifications";
 import {
@@ -18,6 +18,7 @@ import {
 import { NOTIFICATION_TYPES } from "@/data/notifications/notificationLinks";
 import { describeWriteError } from "@/data/api/backendPending";
 import { disablePush, enablePush, getPushStatus, type PushStatus } from "@/lib/webPush";
+import { NotificationsEmpty } from "@/components/notifications/NotificationsEmpty";
 
 const FILTERS = [
   { key: "all", label: "الكل" },
@@ -155,9 +156,7 @@ export default function AdminNotifications() {
               ))}
             </div>
           ) : rows.length === 0 ? (
-            <div className="flex flex-col items-center gap-2 p-12 text-center text-sm text-muted-foreground">
-              <Inbox className="h-10 w-10 opacity-50" /> لا توجد إشعارات هنا
-            </div>
+            <NotificationsEmpty text="لا توجد إشعارات هنا" />
           ) : (
             rows.map((n) => <NotificationItem key={n.id} n={n} onOpen={open} onDelete={(x) => void remove(x)} />)
           )}

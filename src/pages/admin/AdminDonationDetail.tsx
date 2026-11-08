@@ -32,6 +32,7 @@ import { donationsAdminApi } from "@/data/api/donationsAdminApi";
 import { donationsApiV1 } from "@/data/laravelApi";
 import { donationPaymentMethodLabel } from "@/lib/payment-method-label";
 import { resolveDonorUserProfileId } from "@/lib/donor-user-profile";
+import { errorReason } from "@/lib/notify";
 
 const STATUS_CONFIG: Record<
   string,
@@ -183,7 +184,7 @@ export default function AdminDonationDetail() {
         donation_package: d.donation_package,
       });
     } catch (e: any) {
-      toast({ title: isAr ? "خطأ في التحميل" : "Load error", description: e?.message, variant: "destructive" });
+      toast({ title: isAr ? "خطأ في التحميل" : "Load error", description: errorReason(e), variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -212,7 +213,7 @@ export default function AdminDonationDetail() {
       });
       await reload();
     } catch (e: any) {
-      toast({ title: isAr ? "تعذر التحديث" : "Update failed", description: e?.message, variant: "destructive" });
+      toast({ title: isAr ? "تعذر التحديث" : "Update failed", description: errorReason(e), variant: "destructive" });
     } finally {
       setUpdating(false);
     }

@@ -5,7 +5,7 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { ChoiceSelect } from "@/components/admin/programs/FormKit";
 import { describeWriteError } from "@/data/api/backendPending";
 import { FOUNDATION_WHATSAPP } from "@/data/api/contactApi";

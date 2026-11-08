@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUp, FolderOpen, ImagePlus, Loader2, Plus, RotateCcw, Trash2, Upload } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MediaPickerModal } from "@/components/admin/MediaPickerModal";

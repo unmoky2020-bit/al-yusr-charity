@@ -10,6 +10,7 @@ import { createDonation, GENERAL_PROGRAM_ID } from "@/data/casesApi";
 import { donationsStore } from "@/data/donationsStore";
 import { KashierCheckoutModal } from "@/components/donate/KashierCheckoutModal";
 import { usePaymentOptions, type PayoutDestination } from "@/data/paymentOptions";
+import { errorReason } from "@/lib/notify";
 
 type MethodId = "card_kashier" | "vodafone_cash" | "instapay" | "bank_transfer";
 
@@ -151,7 +152,7 @@ export const Donate = () => {
       orderId = res?.donation?.transaction_reference || res?.ref_code || fallbackId;
     } catch (err: any) {
       setProcessing(false);
-      toast({ variant: "destructive", title: isAr ? "تعذر فتح بوابة الدفع" : "Could not open checkout", description: err?.message });
+      toast({ variant: "destructive", title: isAr ? "تعذر فتح بوابة الدفع" : "Could not open checkout", description: errorReason(err) });
       return;
     }
     setProcessing(false);

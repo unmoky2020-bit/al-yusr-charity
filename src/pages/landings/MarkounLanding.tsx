@@ -34,7 +34,7 @@ import { useLang } from "@/i18n/LangContext";
 import { Helmet } from "react-helmet-async";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 
 import posterFurniture from "@/assets/markoun-poster-furniture.webp";
 import { HadithBlock } from "@/components/campaigns/HadithBlock";

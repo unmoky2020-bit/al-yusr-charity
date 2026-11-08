@@ -7,7 +7,7 @@
  * chime and shows a toast. System notifications (also with the site closed) come from Web Push:
  * the backend pushes every notification and public/sw.js shows it (src/lib/webPush.ts).
  */
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import { apiFetch, ApiError } from "@/data/laravelApi";
 import { playNotificationSound } from "@/lib/notificationSound";
 import { refreshPushSubscription } from "@/lib/webPush";
@@ -91,7 +91,8 @@ async function fetchBellList() {
 
 function announce(n: AppNotification) {
   void playNotificationSound();
-  toast(n.title, { description: n.message });
+  const show = n.severity === "success" ? toast.success : n.severity === "warning" ? toast.warning : toast.info;
+  show(n.title, { description: n.message });
 }
 
 async function poll() {

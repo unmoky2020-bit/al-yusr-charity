@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { toast } from "sonner";
+import { toast } from "@/lib/notify";
 import {
   Plus, Trash2, Upload, Loader2, ArrowUp, ArrowDown,
   Eye, EyeOff, Star, Pencil, Image as ImageIcon, Link2,

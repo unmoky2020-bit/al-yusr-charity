@@ -43,6 +43,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import brandBags from "@/assets/brand-bags.jpg";
 import brandPoster from "@/assets/brand-poster-frame.jpg";
+import { errorReason } from "@/lib/notify";
 
 export const AdminHomepageContent = () => {
   const { lang } = useLang();
@@ -112,7 +113,7 @@ export const AdminHomepageContent = () => {
     } catch (err: any) {
       toast({
         title: isRTL ? "خطأ في رفع الصورة" : "Upload error",
-        description: err?.message || (isRTL ? "تعذر حفظ الصورة على السيرفر" : "Failed to upload to server"),
+        description: errorReason(err) || (isRTL ? "تعذر حفظ الصورة على السيرفر" : "Failed to upload to server"),
         variant: "destructive",
       });
     } finally {
