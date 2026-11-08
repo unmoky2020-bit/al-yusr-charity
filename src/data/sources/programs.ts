@@ -120,6 +120,11 @@ export function mapApiProgram(raw: ApiRecord, fallback?: ProgramContent): Progra
     details: bilingual(texts("details", "ar"), texts("details", "en")),
     impact: bilingual(pairs("impact", "ar"), pairs("impact", "en")),
     faq: bilingual(qa("faq", "ar"), qa("faq", "en")),
+    relatedSlugs: (() => {
+      const st = sectionsByKey.get("related_programs")?.settings as ApiRecord | undefined;
+      const v = st && typeof st === "object" ? st.program_slugs : undefined;
+      return Array.isArray(v) ? v.map((x) => String(x).trim()).filter(Boolean) : undefined;
+    })(),
   };
   if (Object.values(sections).some(Boolean)) out.sections = sections;
 

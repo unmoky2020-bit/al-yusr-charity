@@ -56,6 +56,8 @@ export type ProgramContent = {
     impact?: { ar: { t: string; d: string }[]; en: { t: string; d: string }[] };
     /** «الأسئلة الشائعة» section of the dashboard page sections (question / answer). */
     faq?: { ar: { q: string; a: string }[]; en: { q: string; a: string }[] };
+    /** «برامج مشابهة» chosen in the dashboard (settings.program_slugs), in order. */
+    relatedSlugs?: string[];
   };
   /** Search title/description from the dashboard SEO tab (meta_title_* / meta_description_*). */
   seo?: { ar: { title?: string; description?: string }; en: { title?: string; description?: string } };

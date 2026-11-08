@@ -5,8 +5,7 @@
  * Source of truth: live records of program 35 (GET /programs/35/page-sections), the Postman
  * examples, and the sections rendered by the public page src/pages/ProgramDetail.tsx
  * (benefits, how-it-works, details, impact, testimonials, faq, related + the in-page TOC).
- * Keys whose item shape is not proven by a live record are marked `proposed`.
- */
+  */
 
 export type ItemFieldType = "text" | "textarea" | "icon" | "number" | "switch";
 
@@ -33,8 +32,6 @@ export interface SectionSchema {
   newItem?: () => Record<string, unknown>;
   /** settings.top_section navigation list (only for the "top_section" key). */
   navSettings?: boolean;
-  /** Shape inferred from the public page, no live record yet. */
-  proposed?: boolean;
   hintAr?: string;
 }
 
@@ -118,9 +115,9 @@ export const SECTION_SCHEMAS: SectionSchema[] = [
     key: "donor_testimonials",
     labelAr: "آراء المتبرعين",
     labelEn: "Donor testimonials",
+    hintAr: "لا يظهر في صفحة البرنامج حاليًا (تعرض الصفحة «التزامنا» مكانه). أضف آراء حقيقية فقط وبإذن أصحابها.",
     anchor: "testimonials",
     content: "items",
-    proposed: true,
     itemFields: [
       { name: "name", labelAr: "اسم المتبرع", type: "text", width: "half" },
       { name: "location", labelAr: "المدينة / الصفة", type: "text", width: "half" },
@@ -132,9 +129,9 @@ export const SECTION_SCHEMAS: SectionSchema[] = [
     key: "faq",
     labelAr: "أسئلة شائعة",
     labelEn: "FAQ",
+    hintAr: "يظهر في «أسئلة شائعة» بصفحة البرنامج، ويسبق تصنيف الأسئلة المربوط بالبرنامج.",
     anchor: "faq",
     content: "items",
-    proposed: true,
     itemFields: [
       { name: "question", labelAr: "السؤال", type: "text", width: "full" },
       { name: "answer", labelAr: "الإجابة", type: "textarea", width: "full" },
@@ -147,8 +144,7 @@ export const SECTION_SCHEMAS: SectionSchema[] = [
     labelEn: "Related programs",
     anchor: "related",
     content: "none",
-    proposed: true,
-    hintAr: "يعرض برامج أخرى. لتحديدها يدوياً اكتب في الإعدادات: {\"program_slugs\": [\"box\", \"water\"]}",
+    hintAr: "تعرض الصفحة 3 برامج أخرى. لاختيارها بنفسك اكتب في الإعدادات: {\"program_slugs\": [\"zakat\", \"orphans\"]}",
   },
 ];
 

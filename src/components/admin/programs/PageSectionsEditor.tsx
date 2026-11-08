@@ -8,7 +8,7 @@
 import { UiSelect } from "@/components/common/UiSelect";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  ArrowDown, ArrowUp, Braces, ChevronDown, ChevronUp, LayoutList, Loader2, Pencil, Plus, RefreshCw, Save, Trash2, X,
+  ArrowDown, ArrowUp, Braces, ChevronDown, ChevronUp, LayoutList, Loader2, Pencil, Plus, RefreshCw, Save, Sparkles, Trash2, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,8 @@ import {
   type PageSectionInput,
   type ProgramPageSection,
 } from "@/data/api/programsAdminApi";
-import { BilingualField, Field, ItemListEditor, NeedsBackendBadge, SectionCard } from "./FormKit";
+import { BilingualField, Field, ItemListEditor, SectionCard } from "./FormKit";
+import { fillProgramSections, loadDefaultSections } from "@/data/programs/fillProgramSections";
 import { DEFAULT_NAV_ITEMS, NAV_ITEM_FIELDS, SECTION_SCHEMAS, getSectionSchema } from "./sectionSchemas";
 import { str } from "./formUtils";
 
@@ -163,7 +164,7 @@ function serverBody(s: ProgramPageSection, sortOrder: number): PageSectionInput 
   };
 }
 
-export function PageSectionsEditor({ programId }: { programId: number | string }) {
+export function PageSectionsEditor({ programId, slug }: { programId: number | string; slug?: string }) {
   const [sections, setSections] = useState<ProgramPageSection[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
@@ -197,6 +198,23 @@ export function PageSectionsEditor({ programId }: { programId: number | string }
 
   const fail = (title: string, err: unknown) =>
     toast({ variant: "destructive", title, description: apiErrorMessageAr(err) });
+
+  /** Writes the suggested copy into the sections that are still empty (never over what was typed here). */
+  const fillEmpty = async () => {
+    setBusy("fill");
+    try {
+      const written = await fillProgramSections(programsAdminApi, { id: Number(programId), slug }, await loadDefaultSections());
+      toast({
+        title: written ? `تم ملء ${written} من الأقسام الفاضية` : "كل الأقسام فيها محتوى بالفعل",
+        description: written ? "راجع النصوص وعدّل ما تريد، ثم ستظهر في صفحة البرنامج." : undefined,
+      });
+      await load();
+    } catch (err) {
+      fail("تعذّر ملء الأقسام", err);
+    } finally {
+      setBusy("");
+    }
+  };
 
   const openEditor = (s: ProgramPageSection) => {
     if (openId === s.id) {
@@ -358,11 +376,18 @@ export function PageSectionsEditor({ programId }: { programId: number | string }
     <SectionCard
       icon={<LayoutList className="h-4 w-4 text-primary" />}
       title="أقسام صفحة البرنامج"
-      description="كل قسم يُحفظ منفصلاً. الصفحة العامة تقرأ هذه الأقسام عند تشغيل مصدر المحتوى من الـ API؛ مع الوضع الثابت تبقى الصفحة كما هي."
+      description="كل قسم يُحفظ منفصلاً ويظهر في صفحة البرنامج كما هو. القسم الفاضي لا يظهر في الصفحة."
       actions={
-        <Button type="button" size="sm" variant="ghost" className="h-8 gap-1 text-xs" onClick={() => void load()} disabled={loading}>
-          <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} /> تحديث
-        </Button>
+        <div className="flex flex-wrap items-center gap-1">
+          {slug && (
+            <Button type="button" size="sm" variant="outline" className="h-8 gap-1 rounded-xl text-xs" onClick={() => void fillEmpty()} disabled={loading || !!busy}>
+              {busy === "fill" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />} املأ الأقسام الفاضية
+            </Button>
+          )}
+          <Button type="button" size="sm" variant="ghost" className="h-8 gap-1 text-xs" onClick={() => void load()} disabled={loading}>
+            <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} /> تحديث
+          </Button>
+        </div>
       }
     >
       {loadError && (
@@ -414,9 +439,6 @@ export function PageSectionsEditor({ programId }: { programId: number | string }
                 {isOpen && draft && (
                   <div className="space-y-4 border-t border-border/70 p-3 sm:p-4">
                     {schema?.hintAr && <p className="rounded-xl bg-muted/50 p-2 text-[11px] text-muted-foreground">{schema.hintAr}</p>}
-                    {schema?.proposed && (
-                      <NeedsBackendBadge text="شكل العناصر مقترح من الواجهة (لا يوجد سجل حي بعد) — راجع ملف 04" />
-                    )}
                     <BilingualField label="عنوان القسم" valueAr={draft.title_ar} valueEn={draft.title_en}
                       onAr={(v) => patchDraft({ title_ar: v })} onEn={(v) => patchDraft({ title_en: v })} />
                     <BilingualField label="العنوان الفرعي" valueAr={draft.subtitle_ar} valueEn={draft.subtitle_en}

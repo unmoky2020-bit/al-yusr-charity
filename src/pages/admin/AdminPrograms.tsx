@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  BookOpen, Plus, Pencil, Trash2, Loader2, Search, ExternalLink, Tag, Users,
+  BookOpen, Plus, Pencil, Trash2, Loader2, Search, ExternalLink, Tag, Users, Sparkles,
 } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { ListingHeroImageButton } from "@/components/admin/ListingHeroImageButton";
@@ -22,6 +22,7 @@ import {
 } from "@/data/laravelApi";
 import { apiErrorMessageAr, programsAdminApi } from "@/data/api/programsAdminApi";
 import { PackagesEditor } from "@/components/admin/programs/PackagesEditor";
+import { fillProgramSections, loadDefaultSections } from "@/data/programs/fillProgramSections";
 import { publicUrls } from "@/lib/publicUrls";
 
 export default function AdminPrograms() {
@@ -44,6 +45,35 @@ export default function AdminPrograms() {
   const [pkgProgram, setPkgProgram] = useState<LaravelProgram | null>(null);
 
   // Load programs, axes, seasons from backend
+  const [filling, setFilling] = useState("");
+
+  /** One click for every program: writes the suggested copy into empty page sections only. */
+  const fillAllSections = async () => {
+    setFilling("…");
+    let written = 0;
+    const failed: string[] = [];
+    try {
+      const defaults = await loadDefaultSections();
+      for (const [i, p] of programs.entries()) {
+        setFilling(`${i + 1}/${programs.length}`);
+        try {
+          written += await fillProgramSections(programsAdminApi, { id: Number(p.id), slug: p.slug }, defaults);
+        } catch {
+          failed.push(String(p.name_ar ?? p.slug ?? p.id));
+        }
+      }
+      toast({
+        variant: failed.length ? "destructive" : "default",
+        title: written ? `تم ملء ${written} قسمًا فاضيًا في صفحات البرامج` : "كل أقسام البرامج فيها محتوى بالفعل",
+        description: failed.length ? `لم يكتمل: ${failed.join("، ")}` : "لم يتغير أي قسم كان فيه محتوى.",
+      });
+    } catch (err) {
+      toast({ variant: "destructive", title: "تعذّر ملء الأقسام", description: apiErrorMessageAr(err) });
+    } finally {
+      setFilling("");
+    }
+  };
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -153,6 +183,17 @@ export default function AdminPrograms() {
 
           <div className="flex flex-wrap items-center gap-2">
             <ListingHeroImageButton pageKey="programs" />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => void fillAllSections()}
+              disabled={!!filling || programs.length === 0}
+              className="gap-1.5"
+              title="يكتب المحتوى المقترح في أقسام صفحات البرامج الفاضية فقط، ولا يغيّر أي قسم فيه محتوى"
+            >
+              {filling ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+              {filling ? `جارٍ الملء ${filling}` : (isAr ? "املأ أقسام البرامج الفاضية" : "Fill empty program sections")}
+            </Button>
             <Button
               onClick={() => nav('/admin/programs/new')}
               className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-sm"

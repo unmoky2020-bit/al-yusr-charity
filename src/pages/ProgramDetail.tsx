@@ -137,7 +137,11 @@ const ProgramDetail = () => {
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   const baseUrl = "https://elyusr.org";
   const url = `${baseUrl}/programs/${program.slug}`;
-  const related = programs.filter((p) => p.slug !== program.slug).slice(0, 3);
+  // «برامج مشابهة»: the dashboard's choice (settings.program_slugs) first, then other programs.
+  const chosen = (program.sections?.relatedSlugs ?? [])
+    .map((s) => programs.find((p) => p.slug === s))
+    .filter((p): p is NonNullable<typeof p> => !!p && p.slug !== program.slug);
+  const related = [...chosen, ...programs.filter((p) => p.slug !== program.slug && !chosen.includes(p))].slice(0, 3);
   // Donation options = the program's shares from the dashboard (program → «باقات التبرع»).
   const subOptions: SubOption[] = (program.packages ?? []).map((pk, i) => ({
     id: String(pk.id), slug: pk.slug, packageId: pk.id,

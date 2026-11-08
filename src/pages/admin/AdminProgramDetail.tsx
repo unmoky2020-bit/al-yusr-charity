@@ -360,7 +360,7 @@ export default function AdminProgramDetail() {
             {isNew || !id ? (
               <div className="rounded-3xl border border-dashed border-border p-6 text-center text-xs text-muted-foreground">احفظ البرنامج أولاً لإدارة أقسام الصفحة.</div>
             ) : (
-              <PageSectionsEditor programId={id} />
+              <PageSectionsEditor programId={id} slug={form.slug} />
             )}
           </TabsContent>
 
