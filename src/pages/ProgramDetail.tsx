@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { DonationPackageCard } from "@/components/donate/DonationPackageCard";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
@@ -455,76 +456,46 @@ const ProgramDetail = () => {
           className="scroll-mt-28 bg-background py-14 md:py-20"
         >
           <div className="container mx-auto max-w-5xl px-4">
-            <div className="mx-auto mb-8 max-w-2xl text-center">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/25 border border-secondary/40 px-3.5 py-1 text-xs font-black text-black shadow-xs">
-                <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "اختر الجزء الأقرب إلى قلبك" : "Pick the part that moves your heart"}
+            <div className="mx-auto mb-10 max-w-2xl text-center">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary/40 bg-secondary/25 px-3.5 py-1 text-xs font-black text-primary shadow-xs">
+                <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "خيارات التبرع" : "Ways to give"}
               </span>
-              <h2 className="mt-3 text-xl font-black text-primary md:text-3xl">
-                {isRTL ? "ادعم البرنامج بالكامل" : "Support the whole program"}
+              <h2 className="mt-3 text-2xl font-black text-primary md:text-3xl">
+                {isRTL ? "اختر سهمك في البرنامج" : "Choose your share"}
               </h2>
-              <p className="mt-2 text-sm text-muted-foreground md:text-base">
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">
                 {isRTL
-                  ? "تبرّع واحد للبرنامج كله بالمبلغ الذي تختاره، يُوزَّع على جميع أنشطته واحتياجاته."
-                  : "One unified donation to the entire program at any amount you choose — distributed across all its activities."}
+                  ? "كل سهم يغطي احتياجًا محددًا في البرنامج، ويصلك إيصال فوري ورقم تتابع به تبرعك."
+                  : "Each share covers a specific need in the program; you get an instant receipt and a reference to follow your gift."}
               </p>
             </div>
 
-            {displaySubOptions.length > 0 && (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {displaySubOptions.map((o) => {
-                const title = isRTL ? o.title_ar : (o.title_en || o.title_ar);
-                const desc = isRTL ? o.description_ar : (o.description_en || o.description_ar);
+            <div className={`mx-auto grid gap-5 ${displaySubOptions.length === 1 ? "max-w-sm" : displaySubOptions.length === 2 ? "max-w-3xl sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3"}`}>
+              {displaySubOptions.map((o) => {
+                const donateHref = `/donate?program=${program.slug}&package=${o.packageId}`;
+                const detailsHref = `/programs/${program.slug}/${o.slug}`;
                 return (
-                  <div
+                  <DonationPackageCard
                     key={o.id}
-                    className="group relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-1 hover:shadow-card"
-                  >
-                    <div>
-                      <div className="flex items-start justify-between gap-3">
-                        <h3 className="text-base font-black text-primary md:text-lg">{title}</h3>
-                        {o.amount ? (
-                          <span className="shrink-0 rounded-full bg-secondary/25 px-2.5 py-1 text-[11px] font-black text-primary">
-                            {o.amount.toLocaleString()} EGP
-                          </span>
-                        ) : null}
-                      </div>
-                      {desc && (
-                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{desc}</p>
-                      )}
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <Button asChild size="sm" className="flex-1 bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
-                        <Link
-                          to={`/donate?program=${program.slug}&package=${o.packageId}`}
-                          data-source={`program-${program.slug}-options`}
-                          data-label={`option-${o.slug}-donate`}
-                          onClick={() => trackCta(`option-${o.slug}-donate`, `/donate?program=${program.slug}&package=${o.packageId}`, "InitiateCheckout")}
-                        >
-                          <Heart className="h-4 w-4" />
-                          {isRTL ? "تبرع" : "Donate"}
-                        </Link>
-                      </Button>
-                      <Button asChild size="sm" variant="outline" className="border-secondary/50">
-                        <Link
-                          to={`/programs/${program.slug}/${o.slug}`}
-                          data-source={`program-${program.slug}-options`}
-                          data-label={`option-${o.slug}-details`}
-                          onClick={() => trackCta(`option-${o.slug}-details`, `/programs/${program.slug}/${o.slug}`)}
-                        >
-                          {isRTL ? "تفاصيل" : "Details"}
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
+                    lang={isRTL ? "ar" : "en"}
+                    title={(isRTL ? o.title_ar : (o.title_en || o.title_ar)) ?? ""}
+                    description={isRTL ? o.description_ar : (o.description_en || o.description_ar)}
+                    amount={o.amount}
+                    donateHref={donateHref}
+                    detailsHref={o.slug ? detailsHref : undefined}
+                    source={`program-${program.slug}-options`}
+                    label={`option-${o.slug}`}
+                    onDonate={() => trackCta(`option-${o.slug}-donate`, donateHref, "InitiateCheckout")}
+                    onDetails={() => trackCta(`option-${o.slug}-details`, detailsHref)}
+                  />
                 );
-                })}
-              </div>
-            )}
+              })}
+            </div>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-3 rounded-2xl bg-primary/5 p-5 text-center sm:flex-row sm:text-start">
               <div className="flex-1">
                 <h3 className="text-base font-black text-primary md:text-lg">
-                  {isRTL ? "أو ادعم البرنامج بالكامل" : "Or support the whole program"}
+                  {isRTL ? "أو تبرّع للبرنامج كله" : "Or give to the whole program"}
                 </h3>
                 <p className="mt-1 text-xs text-muted-foreground md:text-sm">
                   {isRTL ? "اختر مبلغك بنفسك ووجِّهه لكل احتياجات البرنامج." : "Choose your own amount and direct it to all program needs."}
