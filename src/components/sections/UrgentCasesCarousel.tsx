@@ -4,8 +4,9 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { urgentCasesApi, type UrgentCasesSettings } from "@/data/api/urgentCasesApi";
-import type { CaseRow } from "@/data/casesApi";
+import { listPublicCases, type CaseRow } from "@/data/casesApi";
 import { CasesCarousel } from "@/components/cases/CasesCarousel";
+import { filterUrgentOpenCases } from "@/lib/caseFunding";
 
 /**
  * Homepage «حالات عاجلة» strip. The admin chooses in /admin/cases: automatic (cases marked «عاجلة»)
@@ -19,12 +20,17 @@ export const UrgentCasesCarousel = () => {
 
   useEffect(() => {
     let alive = true;
-    urgentCasesApi
-      .get()
-      .then((r) => {
+    Promise.all([urgentCasesApi.get(), listPublicCases({ urgent: true })])
+      .then(([r, currentUrgentCases]) => {
         if (!alive) return;
         setSettings(r.settings);
-        setCases(r.cases);
+        const openCases = filterUrgentOpenCases(currentUrgentCases);
+        const selectedCases = r.settings.mode === "manual"
+          ? r.settings.case_ids
+              .map((id) => openCases.find((c) => Number(c.id) === id))
+              .filter((c): c is CaseRow => !!c)
+          : openCases;
+        setCases(selectedCases.slice(0, Math.max(0, r.settings.limit)));
       })
       .catch(() => alive && setCases([]));
     return () => {

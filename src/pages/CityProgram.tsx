@@ -168,14 +168,14 @@ const CityProgram = () => {
                 {isRTL ? `يبدأ من ${prog.priceFrom} ج لـ ${cName}` : `From ${prog.priceFrom} EGP in ${cName}`}
               </span>
             )}
-            <div className="mt-5 flex flex-wrap gap-2.5">
-              <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta">
-                <Link to={`/donate?program=${prog.slug}&city=${cityObj.slug}`}>
-                  <Heart className="h-5 w-5" /> {isRTL ? `تبرع لـ ${cName}` : `Donate to ${cName}`}
+            <div className="mt-5 grid w-full max-w-md grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:gap-3">
+              <Button asChild size="lg" className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base bg-orange-grad text-accent-foreground shadow-cta">
+                <Link to={`/donate?program=${prog.slug}&city=${cityObj.slug}`} className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2">
+                  <Heart className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> {isRTL ? `تبرع لـ ${cName}` : `Donate to ${cName}`}
                 </Link>
               </Button>
-              <Button asChild size="lg" className="bg-whatsapp text-whatsapp-foreground shadow-whatsapp">
-                <a href={waHref} target="_blank" rel="noopener"><WhatsAppIcon className="h-5 w-5" aria-hidden /> {isRTL ? "واتساب" : "WhatsApp"}</a>
+              <Button asChild size="lg" className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base bg-whatsapp text-whatsapp-foreground shadow-whatsapp">
+                <a href={waHref} target="_blank" rel="noopener" className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"><WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" aria-hidden /> {isRTL ? "واتساب" : "WhatsApp"}</a>
               </Button>
             </div>
           </motion.div>

@@ -1,6 +1,6 @@
 import { UiSelect } from "@/components/common/UiSelect";
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Search, Shield, Loader2, KeyRound, Users as UsersIcon, Plus, Trash2, X, Check, CheckSquare, Square, Save, UserCheck } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { Input } from "@/components/ui/input";
@@ -412,12 +412,16 @@ const Inner = () => {
                     return (
                       <tr key={u.id} className="border-t border-border/60 hover:bg-muted/30 transition">
                         <td className="px-3 py-2.5">
-                          <div className="flex items-center gap-2">
+                          <Link
+                            to={`/admin/users/${encodeURIComponent(u.id)}`}
+                            className="group flex items-center gap-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                            aria-label={isAr ? `فتح بروفايل ${u.full_name}` : `Open ${u.full_name}'s profile`}
+                          >
                             <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-primary to-primary-glow text-sm font-black text-secondary">
                               {(u.full_name || "?").charAt(0)}
                             </div>
                             <div className="min-w-0">
-                              <div className="font-extrabold text-primary flex items-center gap-1.5">
+                              <div className="font-extrabold text-primary group-hover:underline flex items-center gap-1.5">
                                 {u.full_name}
                                 {String(u.id) === String(user?.id) && (
                                   <span className="text-[10px] bg-accent/20 text-accent px-1.5 py-0.2 rounded font-bold">
@@ -429,7 +433,7 @@ const Inner = () => {
                                 {u.phone || "—"}
                               </div>
                             </div>
-                          </div>
+                          </Link>
                         </td>
                         <td className="px-3 py-2.5 font-mono text-xs text-muted-foreground" dir="ltr">
                           {u.email || "—"}

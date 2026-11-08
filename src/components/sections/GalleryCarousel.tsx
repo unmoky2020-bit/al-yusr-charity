@@ -44,14 +44,14 @@ export const GalleryCarousel = ({ gallery, isRTL = true }: GalleryCarouselProps)
   };
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden">
+    <section className="py-12 md:py-24 relative overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-[hsl(150_25%_5%/0.5)] to-background" />
       <div aria-hidden className="pointer-events-none absolute -left-40 top-20 h-80 w-80 rounded-full bg-lime-400/6 blur-3xl" />
       <div aria-hidden className="pointer-events-none absolute -right-40 bottom-20 h-80 w-80 rounded-full bg-emerald-500/6 blur-3xl" />
 
       <div className="container relative mx-auto max-w-6xl px-4 sm:px-6">
         {/* Header */}
-        <div className="mx-auto mb-10 max-w-2xl text-center">
+        <div className="mx-auto mb-8 sm:mb-10 max-w-2xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-lime-400/30 bg-lime-400/10 px-4 py-1.5 text-xs font-black text-lime-600 dark:text-lime-400 mb-3 shadow-sm">
             <ShieldCheck className="h-3.5 w-3.5 text-lime-500" />
             <span>{isRTL ? "توثيق ميداني فوري لكل تبرع" : "Verified Field Proof"}</span>
@@ -67,13 +67,11 @@ export const GalleryCarousel = ({ gallery, isRTL = true }: GalleryCarouselProps)
         </div>
 
         {/* Carousel */}
-        <div className="relative mx-auto max-w-5xl">
+        <div className="relative mx-auto max-w-[700px]">
           {/* Main slide */}
           <div
-            className="relative overflow-hidden rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,0.35)]"
-            style={{ aspectRatio: "4/5" }}
+            className="relative aspect-[5/4] overflow-hidden rounded-2xl sm:aspect-[3/2] sm:rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,0.35)]"
           >
-            <style>{`@media (min-width: 640px) { .carousel-main { aspect-ratio: 16/9 !important; } }`}</style>
             <AnimatePresence custom={direction} mode="popLayout">
               <motion.div
                 key={current}

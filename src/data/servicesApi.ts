@@ -1,7 +1,7 @@
 ﻿/**
  * servicesApi.ts — service pages (/services/:slug, cards on /services-map, AdminServices).
  *
- * Source of truth: Laravel `/services` (NEW — proposed, see src/data/api/servicesRemoteApi.ts and
+ * Source of truth: Laravel `/services` (documented in Postman; access and payloads need live verification, see src/data/api/servicesRemoteApi.ts and
  * backend-handoff/01-replace-supabase-public.md). Supabase and the localStorage "overrides"
  * are gone: admin edits are saved on the server or fail with a real error.
  *

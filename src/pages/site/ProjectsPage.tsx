@@ -31,10 +31,8 @@ import { useProjectCards, type ProjectCard } from "@/data/sources/projects";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { PROJECT_KINDS } from "@/components/campaigns/ProjectKind";
-
-// ── Images ──
-import heroImg from "@/assets/hands-sprout.jpg";
-import nurseriesImg from "@/assets/program-education.jpg";
+import { useListingHero } from "@/data/listingHeroes";
+import { PROJECT_LANDINGS } from "@/data/projectLandings";
 
 /** Look of a project card (icon + colours + optional landing page), by project slug. Text, image and
  *  prices come from the backend (dashboard → المشاريع); a project without an entry gets DEFAULT_THEME. */
@@ -57,14 +55,18 @@ const PROJECT_THEMES: Record<string, ProjectTheme> = {
   bride: { icon: Heart, bgGradient: "from-pink-950 via-slate-950/85 to-transparent", accentColor: "#ec4899" },
   medical: { icon: Stethoscope, bgGradient: "from-emerald-950 via-slate-950/85 to-transparent", accentColor: "#10b981", landingUrl: "/medical" },
   takrim: { icon: Truck, bgGradient: "from-slate-950 via-slate-950/85 to-transparent", accentColor: "#64748b", landingUrl: "/takrim" },
+  nurseries: { icon: BookOpen, bgGradient: "from-emerald-950 via-slate-950/85 to-transparent", accentColor: "#0f766e", landingUrl: "/nurseries" },
 };
 
 type ProjectItem = ProjectCard & ProjectTheme;
 
-const toItem = (p: ProjectCard): ProjectItem => ({ ...p, ...(PROJECT_THEMES[p.slug] ?? DEFAULT_THEME) });
+const toItem = (p: ProjectCard): ProjectItem => {
+  const theme = PROJECT_THEMES[p.slug] ?? DEFAULT_THEME;
+  return { ...p, ...theme };
+};
 
 /** Details: the campaign landing page when the project has one, else its own page. */
-const detailsHref = (p: ProjectItem) => p.landingUrl ?? `/projects/${p.slug}`;
+const detailsHref = (p: ProjectItem) => p.landingUrl ?? PROJECT_LANDINGS[p.slug] ?? `/projects/${p.slug}`;
 const donateHref = (p: ProjectItem) => p.donateUrl ?? `/donate?project=${encodeURIComponent(p.slug)}`;
 
 /**
@@ -77,7 +79,7 @@ const CODE_PROJECTS: ProjectItem[] = [
     id: 0, slug: "nurseries", ar: "حضانات اليسر ودور تحفيظ القرآن", en: "Al-Yusr nurseries & Qur'an houses",
     descAr: "حضانات تعليمية للأطفال من ٤ لـ ٦ سنين، ودور تحفيظ قرآن من ٤ لـ ١٦ سنة، بمناهج متخصصة بنبنيها ونشرف عليها، ومسابقات قرآن.",
     descEn: "Learning nurseries for ages 4–6 and Qur'an houses for ages 4–16, with curricula we build and supervise, and Qur'an competitions.",
-    image: nurseriesImg, priceFrom: 0, sharesCount: 0, casesCount: 0,
+    image: "", priceFrom: 0, sharesCount: 0, casesCount: 0,
     icon: BookOpen, bgGradient: "from-emerald-950 via-slate-950/85 to-transparent", accentColor: "#0f766e",
     landingUrl: "/nurseries", donateUrl: "/donate?type=project",
   },
@@ -103,6 +105,7 @@ function ProjectsGridSkeleton() {
 const ProjectsPage = () => {
   const { lang } = useLang();
   const isAR = lang === "ar";
+  const heroImg = useListingHero("projects");
   const Arrow = isAR ? ArrowLeft : ArrowRight;
 
   const { projects: cards, isLoading } = useProjectCards();
@@ -177,21 +180,21 @@ const ProjectsPage = () => {
               : "Our aim is good that does not end when the donation does. Each project is an asset that keeps working for years: it either earns income for the foundation's work or leaves an impact that changes lives, and either way its reward is ongoing charity for you."}
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3.5 justify-center items-center">
+          <div className="mt-8 grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:justify-center sm:items-center sm:gap-3.5">
             <Link
               to="/donate?type=project"
-              className="inline-flex items-center gap-2.5 rounded-2xl bg-secondary px-7 py-3.5 text-sm sm:text-base font-black text-slate-950 shadow-xl shadow-secondary/25 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex w-full min-w-0 items-center justify-center gap-1.5 rounded-2xl bg-secondary px-2.5 py-3.5 text-center text-[11px] font-black leading-tight text-slate-950 shadow-xl shadow-secondary/25 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98] sm:w-auto sm:gap-2.5 sm:px-7 sm:text-base"
             >
               {isAR ? "تبرع لمشروع بالأسهم" : "Donate to a Project"}
-              <Arrow className="h-4 w-4" />
+              <Arrow className="h-4 w-4 shrink-0" />
             </Link>
             <a
               href={`https://wa.me/201097000137?text=${waMsg}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-2xl border border-white/25 bg-black/20 backdrop-blur-md px-6 py-3.5 text-sm sm:text-base font-bold text-white transition hover:bg-black/30 hover:border-white/40"
+              className="inline-flex w-full min-w-0 items-center justify-center gap-1.5 rounded-2xl border border-white/25 bg-black/20 px-2.5 py-3.5 text-center text-[11px] font-bold leading-tight text-white backdrop-blur-md transition hover:bg-black/30 hover:border-white/40 sm:w-auto sm:gap-2 sm:px-6 sm:text-base"
             >
-              <PhoneCall className="h-4 w-4 text-secondary" />
+              <PhoneCall className="h-4 w-4 shrink-0 text-secondary" />
               {isAR ? "استفسار هاتفي / واتساب" : "WhatsApp Inquiry"}
             </a>
           </div>
@@ -263,13 +266,15 @@ const ProjectsPage = () => {
             return (
               <ScrollReveal>
                 <article className="group mb-8 grid overflow-hidden rounded-[2rem] border border-border/70 bg-primary text-primary-foreground shadow-card transition-shadow duration-500 hover:shadow-2xl sm:mb-10 lg:grid-cols-2">
-                  <Link to={detailsHref(proj)} className="relative block aspect-[16/10] overflow-hidden lg:aspect-auto lg:min-h-[440px]" aria-label={isAR ? `تفاصيل ${proj.ar}` : `${proj.en} details`}>
-                    <img
-                      src={proj.image}
-                      alt={isAR ? proj.ar : proj.en}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                      loading="eager"
-                    />
+                  <Link to={detailsHref(proj)} className="relative block aspect-[4/3] overflow-hidden sm:aspect-[16/10] lg:aspect-auto lg:min-h-[440px]" aria-label={isAR ? `تفاصيل ${proj.ar}` : `${proj.en} details`}>
+                    {proj.image && proj.image !== "/placeholder.svg" && (
+                      <img
+                        src={proj.image}
+                        alt={isAR ? proj.ar : proj.en}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                        loading="eager"
+                      />
+                    )}
                     <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
                     <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-black text-slate-950 shadow-md">
                       <Sparkles className="h-3.5 w-3.5" /> {isAR ? "المشروع الرائد لهذا الشهر" : "Featured this month"}
@@ -319,16 +324,16 @@ const ProjectsPage = () => {
                       {proj.casesCount > 0 && <span className="flex items-center gap-1"><Heart className="h-4 w-4 text-rose-300" />{proj.casesCount} {isAR ? "حالات مرتبطة" : "linked cases"}</span>}
                     </div>
 
-                    <div className="flex flex-col gap-2.5 sm:flex-row">
+                    <div className="grid grid-cols-2 gap-2.5">
                       <Link
                         to={donateHref(proj)}
-                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-secondary px-7 py-3 text-sm font-black text-slate-950 shadow-lg shadow-secondary/25 transition-all hover:scale-[1.02] hover:bg-secondary/90 active:scale-[0.98]"
+                        className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-2xl bg-secondary px-2.5 py-3 text-center text-xs font-black leading-tight text-slate-950 shadow-lg shadow-secondary/25 transition-all hover:scale-[1.02] hover:bg-secondary/90 active:scale-[0.98] sm:gap-2 sm:px-6 sm:text-sm"
                       >
                         {isAR ? "تبرع الآن" : "Donate now"} <Arrow className="h-4 w-4" />
                       </Link>
                       <Link
                         to={detailsHref(proj)}
-                        className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold transition hover:bg-white/20"
+                        className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-2xl border border-white/25 bg-white/10 px-2.5 py-3 text-center text-xs font-bold leading-tight transition hover:bg-white/20 sm:gap-2 sm:px-6 sm:text-sm"
                       >
                         <ExternalLink className="h-4 w-4 text-secondary" /> {isAR ? "تفاصيل المشروع" : "Project details"}
                       </Link>
@@ -346,13 +351,15 @@ const ProjectsPage = () => {
               return (
                 <ScrollReveal key={proj.slug}>
                   <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-secondary/50 hover:shadow-card">
-                    <Link to={detailsHref(proj)} className="relative block aspect-[16/10] overflow-hidden" aria-label={isAR ? `تفاصيل ${proj.ar}` : `${proj.en} details`}>
-                      <img
-                        src={proj.image}
-                        alt={isAR ? proj.ar : proj.en}
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        loading="lazy"
-                      />
+                    <Link to={detailsHref(proj)} className="relative block aspect-[4/3] overflow-hidden sm:aspect-[16/10]" aria-label={isAR ? `تفاصيل ${proj.ar}` : `${proj.en} details`}>
+                      {proj.image && proj.image !== "/placeholder.svg" && (
+                        <img
+                          src={proj.image}
+                          alt={isAR ? proj.ar : proj.en}
+                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      )}
                       <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                       {proj.priceFrom > 0 && (
                         <span className="absolute end-3 top-3 rounded-full bg-secondary px-3 py-1 text-xs font-black text-slate-950 shadow-md">
@@ -379,16 +386,16 @@ const ProjectsPage = () => {
                           {proj.casesCount > 0 && <span className="flex items-center gap-1"><Heart className="h-3.5 w-3.5 text-rose-500" />{proj.casesCount} {isAR ? "حالات" : "cases"}</span>}
                         </div>
                       )}
-                      <div className="mt-auto flex items-center gap-2.5 pt-5">
+                      <div className="mt-auto grid grid-cols-2 gap-2.5 pt-5">
                         <Link
                           to={donateHref(proj)}
-                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-sm font-black text-primary-foreground transition hover:bg-primary/90"
+                          className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-xl bg-primary px-2.5 py-2.5 text-sm font-black text-primary-foreground transition hover:bg-primary/90"
                         >
                           {isAR ? "تبرع الآن" : "Donate now"} <Arrow className="h-4 w-4" />
                         </Link>
                         <Link
                           to={detailsHref(proj)}
-                          className="inline-flex shrink-0 items-center justify-center gap-1 rounded-xl border border-border px-4 py-2.5 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10"
+                          className="inline-flex min-w-0 items-center justify-center gap-1 rounded-xl border border-border px-2.5 py-2.5 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10"
                         >
                           {isAR ? "التفاصيل" : "Details"}
                         </Link>
@@ -451,6 +458,11 @@ const ProjectsPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Cases that belong to our projects (live from the backend) */}
+      <LinkedCasesSection filter={{ linkedTo: "project" }} showOwner variant="carousel" filterByOwner limit={30} isRTL={isAR} className="bg-muted/30"
+        title={isAR ? "حالات ميدانية ضمن مشاريعنا" : "Field cases in our projects"}
+        subtitle={isAR ? "كل حالة اتعمل لها بحث ميداني، وتبرعك ليها بيروح لنفس المشروع." : "Every case is field-verified; your donation goes to the same project."} />
 
       {/* ══════════ Why Projects (Balanced 2-Column + Full-Width Bottom CTA Across Both Columns) ══════════ */}
       <section className="py-8 sm:py-12 bg-muted/30 border-t border-border/60">
@@ -708,16 +720,10 @@ const ProjectsPage = () => {
       </section>
 
       {/* ══════════ CTA (Expanded max-w-[1440px]) ══════════ */}
-      {/* Cases that belong to our projects (live from the backend) */}
-      <LinkedCasesSection filter={{ linkedTo: "project" }} showOwner variant="carousel" filterByOwner limit={30} isRTL={isAR} className="bg-muted/30"
-        title={isAR ? "حالات ميدانية ضمن مشاريعنا" : "Field cases in our projects"}
-        subtitle={isAR ? "كل حالة اتعمل لها بحث ميداني، وتبرعك ليها بيروح لنفس المشروع." : "Every case is field-verified; your donation goes to the same project."} />
-
-      <section className="pt-10 sm:pt-14 pb-16 sm:pb-20 bg-primary relative overflow-hidden">
+      <section className="pt-10 sm:pt-14 pb-20 sm:pb-24 md:pb-28 bg-primary relative overflow-hidden">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_60%_50%,theme(colors.secondary.DEFAULT)_0%,transparent_60%)] pointer-events-none" />
         <div className="relative z-10 container mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary/40 bg-secondary/15 px-3.5 py-1 text-xs font-black text-secondary mb-4">
-            <Sparkles className="h-3.5 w-3.5" />
             {isAR ? "خطوتك الأولى في الصدقة الجارية" : "Your First Step in Perpetual Giving"}
           </span>
 
@@ -731,19 +737,19 @@ const ProjectsPage = () => {
               : "Donate to multiple projects with various shares in one checkout using Visa, Meeza, mobile wallets, or our home representative."}
           </p>
 
-          <div className="flex flex-wrap gap-3.5 justify-center items-center">
+          <div className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:justify-center sm:items-center sm:gap-3.5">
             <Link
               to="/donate?type=project"
-              className="inline-flex items-center gap-2.5 rounded-2xl bg-secondary px-8 py-3.5 text-sm sm:text-base font-black text-slate-950 shadow-xl shadow-secondary/30 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-2xl bg-secondary px-2.5 py-3.5 text-center text-[11px] font-black leading-tight text-slate-950 shadow-xl shadow-secondary/30 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98] sm:gap-2.5 sm:px-8 sm:text-base"
             >
               {isAR ? "انتقل لصفحة التبرع" : "Go to Donation Page"}
-              <Arrow className="h-4 w-4" />
+              <Arrow className="h-4 w-4 shrink-0" />
             </Link>
             <Link
               to="/cases"
-              className="inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/5 backdrop-blur-md px-7 py-3.5 text-sm sm:text-base font-bold text-white transition hover:bg-white/15 hover:border-white/40"
+              className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-2xl border border-white/20 bg-white/5 px-2.5 py-3.5 text-center text-[11px] font-bold leading-tight text-white backdrop-blur-md transition hover:bg-white/15 hover:border-white/40 sm:gap-2 sm:px-7 sm:text-base"
             >
-              <ExternalLink className="h-4 w-4 text-secondary" />
+              <ExternalLink className="h-4 w-4 shrink-0 text-secondary" />
               {isAR ? "استعرض الحالات الميدانية" : "View Field Cases"}
             </Link>
           </div>

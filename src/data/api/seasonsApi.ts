@@ -1,10 +1,9 @@
 /**
  * Seasons (`/seasons`): the six annual campaigns (ستر، ظل، رمضان، العشر، الأضاحي، المدارس).
  *
- * EXISTING: GET /seasons (auth today, returns 500 at the time of writing), POST /seasons,
- *           PATCH /seasons/{id} { is_active, donation_available }.
- * PROPOSED (backend-handoff/05-campaigns-seasons-section.md): GET /seasons public (no token),
- *           PUT /seasons/{id} (full edit), DELETE /seasons/{id}, and the extra columns
+ * Documented in the latest Postman collection: GET/POST /seasons, PATCH/PUT/DELETE /seasons/{id}.
+ * The collection includes a saved response for GET /seasons; the update/delete requests have no
+ * saved response. Public unauthenticated access and the extra columns
  *           `slug`, `badge_ar/en`, `donate_url`, `items`, `pricing`, `meta_title_*`, `meta_description_*`.
  * Writes throw the ApiError; screens show it with `describeWriteError`.
  */
@@ -71,7 +70,7 @@ export const seasonsApi = {
     return one(res);
   },
 
-  /** PUT /seasons/{id} (PROPOSED: full edit). */
+  /** Documented: PUT /seasons/{id}; field support still needs a successful round-trip check. */
   async update(id: number | string, body: Partial<SeasonInput>): Promise<SeasonRecord> {
     const res = await apiFetch<unknown>(`/seasons/${id}`, { method: "PUT", body });
     invalidateApiCache("/seasons");
@@ -85,7 +84,7 @@ export const seasonsApi = {
     return one(res);
   },
 
-  /** DELETE /seasons/{id} (PROPOSED). */
+  /** Documented: DELETE /seasons/{id}. */
   async remove(id: number | string): Promise<void> {
     await apiFetch(`/seasons/${id}`, { method: "DELETE" });
     invalidateApiCache("/seasons");

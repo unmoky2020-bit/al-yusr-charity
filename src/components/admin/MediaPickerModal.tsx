@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Search,
   Upload,
@@ -16,13 +17,22 @@ import {
   Copy,
   Image as ImageIcon,
   RefreshCw,
+  Layers,
 } from "lucide-react";
 import { formatServerImageUrl } from "@/data/laravelApi";
 import { describeWriteError } from "@/data/api/backendPending";
-import { listMedia, uploadMedia, MEDIA_ACCEPT, MEDIA_MAX_BYTES } from "@/data/api/mediaApi";
+import {
+  listMedia,
+  uploadMedia,
+  MEDIA_ACCEPT,
+  MEDIA_MAX_BYTES,
+  MEDIA_COLLECTIONS,
+  MEDIA_COLLECTION_LABELS_AR,
+  type MediaCollection,
+} from "@/data/api/mediaApi";
 
 /** One media-library file, in the shape the grid below renders. */
-type PickerImage = { id: string; image: string; preview?: string; external_url?: string; title_ar: string; title_en?: string; city?: string; program?: string; donation_program?: string };
+type PickerImage = { id: string; image: string; preview?: string; external_url?: string; title_ar: string; title_en?: string; city?: string; program?: string; donation_program?: string; collection: string };
 import { toast } from "sonner";
 import { useLang } from "@/i18n/LangContext";
 
@@ -48,6 +58,7 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [search, setSearch] = useState("");
+  const [collection, setCollection] = useState<MediaCollection | "">("");
   const [selectedUrl, setSelectedUrl] = useState<string | null>(currentValue || null);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
 
@@ -57,13 +68,13 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
       // The media library (GET /media) — the same files as /admin/media.
       // Every stored image (also older folders), without identical copies, so the same picture is reused.
       const files = (await listMedia({ scope: "all" })).filter((f) => !f.duplicate_of);
-      setImages(files.map((f) => ({ id: f.path, image: f.url, preview: f.preview, title_ar: f.name, title_en: f.name, program: f.collection })));
+      setImages(files.map((f) => ({ id: f.path, image: f.url, preview: f.preview, title_ar: f.name, title_en: f.name, program: f.collection, collection: f.collection })));
     } catch (err) {
       toast.error(describeWriteError(err, "GET /media"));
     } finally {
       setLoading(false);
     }
-  }, [isAr]);
+  }, []);
 
   useEffect(() => {
     if (open) {
@@ -76,6 +87,7 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return images.filter((img) => {
+      if (collection ? img.collection !== collection : img.collection === "og") return false;
       if (!q) return true;
       const tAr = (img.title_ar || "").toLowerCase();
       const tEn = (img.title_en || "").toLowerCase();
@@ -84,7 +96,31 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
       const prog = (img.program || img.donation_program || "").toLowerCase();
       return tAr.includes(q) || tEn.includes(q) || url.includes(q) || city.includes(q) || prog.includes(q);
     });
-  }, [images, search]);
+  }, [images, search, collection]);
+
+  const collectionCounts = useMemo(
+    () => images.reduce<Record<string, number>>((counts, image) => {
+      counts[image.collection] = (counts[image.collection] || 0) + 1;
+      return counts;
+    }, {}),
+    [images],
+  );
+  const allCollectionCount = images.filter((image) => image.collection !== "og").length;
+  const selectedImage = images.find((img) => (img.image || img.external_url) === selectedUrl);
+  const collectionLabel = (value: string) => {
+    if (isAr) return MEDIA_COLLECTION_LABELS_AR[value as MediaCollection] || value;
+    const labels: Record<string, string> = {
+      blog: "Articles",
+      og: "Social images",
+      pages: "Pages",
+      programs: "Programs",
+      campaigns: "Campaigns",
+      cases: "Cases",
+      gallery: "Gallery",
+      general: "General",
+    };
+    return labels[value] || value;
+  };
 
   // Upload straight into the media library («عام» folder) and select it.
   const handleUpload = async (file: File) => {
@@ -95,7 +131,7 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
     }
     setUploading(true);
     try {
-      const saved = await uploadMedia(file, file.name, "general");
+      const saved = await uploadMedia(file, file.name, collection || "general");
       setSelectedUrl(saved.url);
       if (saved.duplicate) toast.info(isAr ? "الصورة دي موجودة في المكتبة قبل كده — اخترناها لك من غير ما نرفعها تاني" : "Already in the library — selected the existing copy");
       else toast.success(isAr ? "تم رفع الصورة لمكتبة الوسائط" : "Uploaded to the media library");
@@ -127,7 +163,7 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
         dir={isAr ? "rtl" : "ltr"}
         className="max-w-4xl max-h-[85vh] flex flex-col p-0 overflow-hidden rounded-2xl"
       >
-        <DialogHeader className="p-4 sm:p-5 border-b border-border/70 flex flex-row items-center justify-between gap-3">
+        <DialogHeader className="flex flex-row items-center justify-between gap-3 border-b border-border/70 bg-gradient-to-l from-emerald-500/[0.06] via-background to-background p-4 sm:px-5 sm:py-4">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
               <ImageIcon className="h-5 w-5" />
@@ -157,41 +193,79 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
         </DialogHeader>
 
         {/* Toolbar: Search + Upload */}
-        <div className="p-4 border-b border-border/60 bg-muted/20 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-          <div className="relative flex-1">
-            <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={isAr ? "البحث في أسماء ومسارات الصور..." : "Search images by title or URL..."}
-              className="ps-9 h-8.5 text-xs rounded-xl"
-            />
+        <div className="space-y-2 border-b border-border/60 bg-muted/20 p-3 sm:px-4 sm:py-3">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_176px_auto] sm:items-center">
+            <div className="relative min-w-0">
+              <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={isAr ? "ابحث باسم الصورة أو مسارها..." : "Search by image name or path..."}
+                className="h-10 rounded-xl bg-background ps-9 text-sm"
+                aria-label={isAr ? "البحث في مكتبة الصور" : "Search the image library"}
+              />
+            </div>
+            <Select
+              dir={isAr ? "rtl" : "ltr"}
+              value={collection || "all"}
+              onValueChange={(value) => setCollection(value === "all" ? "" : value as MediaCollection)}
+            >
+              <SelectTrigger
+                className="relative h-10 rounded-xl bg-background text-xs"
+                aria-label={isAr ? "فلترة الصور حسب التصنيف" : "Filter images by category"}
+              >
+                <Layers className="pointer-events-none absolute end-10 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+                <SelectValue className="min-w-0 flex-1 pe-8 text-start leading-5" />
+              </SelectTrigger>
+              <SelectContent dir={isAr ? "rtl" : "ltr"} className="max-h-80">
+                <SelectItem value="all">
+                  {isAr ? `كل التصنيفات (${allCollectionCount})` : `All categories (${allCollectionCount})`}
+                </SelectItem>
+                {MEDIA_COLLECTIONS.filter((item) => collectionCounts[item]).map((item) => (
+                  <SelectItem key={item} value={item}>
+                    {collectionLabel(item)} ({collectionCounts[item]})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2">
+              {uploading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>{isAr ? "جاري الرفع..." : "Uploading..."}</span>
+                </>
+              ) : (
+                <>
+                  <Upload className="h-4 w-4" />
+                  <span>{isAr ? "رفع صورة جديدة" : "Upload image"}</span>
+                </>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                disabled={uploading}
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleUpload(f);
+                  e.target.value = "";
+                }}
+              />
+            </label>
           </div>
 
-          <label className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer transition shadow-xs shrink-0 h-8.5">
-            {uploading ? (
-              <>
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                <span>{isAr ? "جاري الرفع..." : "Uploading..."}</span>
-              </>
-            ) : (
-              <>
-                <Upload className="h-3.5 w-3.5" />
-                <span>{isAr ? "رفع صورة جديدة للمكتبة" : "Upload to Library"}</span>
-              </>
+          <div className="flex items-center justify-between gap-2 text-[11px] text-muted-foreground">
+            <span>{isAr ? `${filtered.length} صورة` : `${filtered.length} images`}</span>
+            {(search || collection) && (
+              <button
+                type="button"
+                onClick={() => { setSearch(""); setCollection(""); }}
+                className="font-bold text-emerald-700 hover:underline dark:text-emerald-400"
+              >
+                {isAr ? "مسح عوامل التصفية" : "Clear filters"}
+              </button>
             )}
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              disabled={uploading}
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) handleUpload(f);
-                e.target.value = "";
-              }}
-            />
-          </label>
+          </div>
         </div>
 
         {/* Gallery Grid */}
@@ -218,7 +292,7 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
           )}
 
           {!loading && filtered.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
               {filtered.map((img) => {
                 const imgUrl = img.image || img.external_url || "";
                 const isSelected = selectedUrl === imgUrl;
@@ -226,7 +300,16 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
                   <div
                     key={img.id}
                     onClick={() => setSelectedUrl(imgUrl)}
-                    className={`group relative flex flex-col overflow-hidden rounded-xl border-2 transition-all cursor-pointer bg-card ${
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={isSelected}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setSelectedUrl(imgUrl);
+                      }
+                    }}
+                    className={`group relative flex flex-col overflow-hidden rounded-xl border-2 transition-all cursor-pointer bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
                       isSelected
                         ? "border-emerald-600 ring-2 ring-emerald-600/30 shadow-md scale-[1.02]"
                         : "border-border/80 hover:border-emerald-500/50 hover:shadow-xs"
@@ -287,31 +370,45 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
         </div>
 
         {/* Selected info & Action Footer */}
-        <DialogFooter className="p-3.5 sm:p-4 border-t border-border/70 bg-card flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2 min-w-0 flex-1">
-            {selectedUrl ? (
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-xs font-bold text-foreground shrink-0">
-                  {isAr ? "الصورة المحددة:" : "Selected:"}
-                </span>
-                <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 truncate" dir="ltr">
-                  {selectedUrl}
-                </span>
-              </div>
+        <DialogFooter className="border-t border-border/70 bg-card p-3 sm:p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            {selectedUrl && selectedImage ? (
+              <>
+                <img
+                  src={selectedImage.preview || formatServerImageUrl(selectedUrl) || selectedUrl}
+                  alt=""
+                  className="h-12 w-16 shrink-0 rounded-lg border border-border object-cover"
+                />
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold text-muted-foreground">{isAr ? "الصورة المحددة" : "Selected image"}</p>
+                  <p className="truncate text-sm font-bold text-foreground" title={selectedImage.title_ar}>
+                    {selectedImage.title_ar || selectedImage.title_en || (isAr ? "صورة" : "Image")}
+                  </p>
+                  <p className="truncate text-[10px] text-muted-foreground">{collectionLabel(selectedImage.collection)}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleCopy(selectedUrl)}
+                  className="ms-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border text-muted-foreground transition hover:border-emerald-500/60 hover:text-emerald-700"
+                  title={isAr ? "نسخ رابط الصورة" : "Copy image URL"}
+                >
+                  {copiedUrl === selectedUrl ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
+                </button>
+              </>
             ) : (
               <span className="text-xs text-muted-foreground">
-                {isAr ? "انقر على أي صورة لاختيارها" : "Click any image to select"}
+                {isAr ? "اختار صورة من المكتبة أو ارفع صورة جديدة" : "Choose an image or upload a new one"}
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-2 shrink-0 justify-end">
+          <div className="flex shrink-0 items-center gap-2 justify-end">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={() => onOpenChange(false)}
-              className="text-xs font-bold h-8.5 rounded-xl px-4"
+              className="h-10 rounded-xl px-4 text-sm font-bold"
             >
               {isAr ? "إلغاء" : "Cancel"}
             </Button>
@@ -320,7 +417,7 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
               size="sm"
               disabled={!selectedUrl}
               onClick={handleConfirmSelect}
-              className="text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white h-8.5 rounded-xl px-5 gap-1.5 shadow-sm"
+              className="h-10 rounded-xl px-5 text-sm font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white gap-2 shadow-md shadow-emerald-700/20 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 sm:min-w-40"
             >
               <Check className="h-3.5 w-3.5" />
               <span>{isAr ? "تأكيد الاختيار" : "Select Image"}</span>

@@ -7,10 +7,7 @@ import { HadithBlock, type Hadith } from "@/components/campaigns/HadithBlock";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useCampaignPage } from "@/hooks/useCampaignPage";
 import ATHAR_DEFAULTS from "@/data/campaignPages/athar";
-import posterEdu from "@/assets/poster-education.png";
-import classroom from "@/assets/brand-poster-classroom.webp";
-import yusrDistribution from "@/assets/yusr-distribution-1.webp";
-import axisEdu from "@/assets/axis-education.jpg";
+import { formatServerImageUrl } from "@/data/laravelApi";
 
 import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("athar");
@@ -24,20 +21,13 @@ const DEDICATE_IDS = ["dedicate_student", "dedicate_nursery"] as const;
 /** Open / in-preparation flag per nursery item id (kept in code; the dashboard edits the names). */
 const NURSERY_LIVE: Record<string, boolean> = { abu_bakr: true, farouq_omar: true, athar: false };
 
-const GALLERY = [
-  { src: classroom, altAr: "توزيع الحقائب المدرسية على طلاب قرى طلخا والمنصورة", altEn: "Distributing school bags in Dakahlia" },
-  { src: posterEdu, altAr: "الشنط والأدوات والزي المدرسي جاهزة للتسليم", altEn: "Bags and supplies ready" },
-  { src: axisEdu, altAr: "فصل دراسي في حضانة تعليمية تابعة لليسر", altEn: "Al-Yusr nursery classroom" },
-  { src: yusrDistribution, altAr: "قوافل دعم الطلاب الأيتام في الدقهلية", altEn: "Student support convoy" },
-];
-
 const AtharHero = () => {
-  const { c, t, isAr } = useCampaignPage("athar", ATHAR_DEFAULTS);
+  const { c, t, isAr, campaignImage } = useCampaignPage("athar", ATHAR_DEFAULTS);
   return (
     <section className="athar-paper relative overflow-hidden text-foreground">
       <div className="container relative mx-auto max-w-6xl px-4 pb-16 pt-10 md:pb-24 md:pt-14">
         <CampaignCrumbs isAr={isAr} name={isAr ? "حملة أَثَر" : "Athar"} className="text-primary/80" />
-        <div className="mt-10 grid items-center gap-12 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+        <div className={`mt-10 grid items-center gap-12 ${campaignImage ? "md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]" : ""}`}>
           <div className="text-center md:text-start">
             <p className="text-sm font-black text-accent">{t(c.hero.eyebrow)}</p>
             <h1 className="mt-3 text-4xl font-black leading-[1.35] text-primary sm:text-5xl lg:text-6xl">
@@ -45,13 +35,15 @@ const AtharHero = () => {
               <span className="mt-2 block text-3xl sm:text-4xl lg:text-5xl">{t(c.hero.title2)}</span>
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-base leading-[1.9] text-foreground/80 md:mx-0 md:text-lg">{t(c.hero.lead)}</p>
-            <HeroActions isAr={isAr} donateHref={DONATE} donateLabel={t(c.hero.donateLabel)} wa={waHref(isAr, "حملة أثر", "the Athar campaign")} tone="light" className="mt-8 justify-center md:justify-start" />
+            <HeroActions isAr={isAr} donateHref={DONATE} donateLabel={t(c.hero.donateLabel)} wa={waHref(isAr, "حملة أثر", "the Athar campaign")} tone="light" className="mx-auto mt-8 justify-center md:mx-0 md:justify-start" />
           </div>
-          <figure className="athar-photo relative mx-auto w-full max-w-sm">
-            <span aria-hidden className="athar-tape absolute -top-3 start-8 z-10 h-7 w-24 -rotate-6" />
-            <span aria-hidden className="athar-tape absolute -bottom-3 end-8 z-10 h-7 w-24 rotate-3" />
-            <img src={posterEdu} alt={isAr ? "حملة أثر — شنط وأدوات مدرسية للطلاب المستحقين" : "Athar — school bags for students"} loading="eager" className="w-full rounded-md bg-card object-cover p-3 shadow-card" />
-          </figure>
+          {campaignImage && (
+            <figure className="athar-photo relative mx-auto w-[84%] md:w-full">
+              <span aria-hidden className="athar-tape absolute -top-3 start-8 z-10 h-7 w-24 -rotate-6" />
+              <span aria-hidden className="athar-tape absolute -bottom-3 end-8 z-10 h-7 w-24 rotate-3" />
+              <img src={campaignImage} alt={isAr ? "حملة أثر — شنط وأدوات مدرسية للطلاب المستحقين" : "Athar — school bags for students"} loading="eager" className="mx-auto block h-auto max-h-[min(60vh,420px)] w-auto max-w-full rounded-md bg-card object-contain object-center p-3 shadow-card" />
+            </figure>
+          )}
         </div>
       </div>
     </section>
@@ -59,7 +51,7 @@ const AtharHero = () => {
 };
 
 const AtharMain = () => {
-  const { c, t, isAr, price, amount, section } = useCampaignPage("athar", ATHAR_DEFAULTS);
+  const { c, t, isAr, price, amount, packageId, section } = useCampaignPage("athar", ATHAR_DEFAULTS);
   const [picked, setPicked] = useState<Record<string, boolean>>({ bag: true, uniform: true, tuition: false });
   const [students, setStudents] = useState(1);
   const perStudent = useMemo(() => KIT_IDS.reduce((s, id) => s + (picked[id] ? amount(id) : 0), 0), [picked, amount]);
@@ -75,6 +67,12 @@ const AtharMain = () => {
   const dedicate = section("dedicate");
   const year = section("year");
   const gallery = section("gallery");
+  const galleryImages = (c.images?.gallery?.items ?? []).flatMap((item) => {
+    const src = formatServerImageUrl(item.src);
+    return src && src !== "/placeholder.svg"
+      ? [{ src, altAr: item.alt.ar, altEn: item.alt.en }]
+      : [];
+  });
 
   return (
     <>
@@ -143,7 +141,7 @@ const AtharMain = () => {
               const p = price(id);
               if (!p) return null;
               return (
-                <Link key={id} to={amountHref(DONATE, p.amount)} className="rounded-xl border-2 border-border bg-card p-4 transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <Link key={id} to={amountHref(DONATE, p.amount, packageId(id))} className="rounded-xl border-2 border-border bg-card p-4 transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <div className="text-sm font-bold text-muted-foreground">{t(p.note)}</div>
                   <div className="mt-1 font-black text-primary">{t(p.label)}</div>
                   <div className="mt-2 text-2xl font-black tabular-nums text-accent">{fmtNum(p.amount, isAr)} <span className="text-sm font-bold text-muted-foreground">{isAr ? "جنيه" : "EGP"}</span></div>
@@ -242,7 +240,7 @@ const AtharMain = () => {
               const o = price(id);
               if (!o) return null;
               return (
-                <Link key={id} to={amountHref(DONATE, o.amount)} className="rounded-xl bg-primary-foreground/[0.07] p-5 transition-colors hover:bg-primary-foreground/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary">
+                <Link key={id} to={amountHref(DONATE, o.amount, packageId(id))} className="rounded-xl bg-primary-foreground/[0.07] p-5 transition-colors hover:bg-primary-foreground/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary">
                   <span className="block text-sm font-bold text-primary-foreground/75">{t(o.label)}</span>
                   <span className="mt-1 block text-3xl font-black tabular-nums text-secondary">{fmtNum(o.amount, isAr)} <span className="text-sm">{isAr ? "جنيه" : "EGP"}</span></span>
                 </Link>
@@ -271,22 +269,25 @@ const AtharMain = () => {
         </div>
       </section>
 
-      <section className="bg-background py-16 md:py-20">
-        <div className="container mx-auto max-w-6xl px-4">
-          <h2 className="text-3xl font-black text-primary md:text-4xl">{t(gallery?.title)}</h2>
-          <div className="mt-8"><BentoGallery items={GALLERY} isAr={isAr} /></div>
-        </div>
-      </section>
+      {galleryImages.length > 0 && (
+        <section className="bg-background py-16 md:py-20">
+          <div className="container mx-auto max-w-6xl px-4">
+            <h2 className="text-3xl font-black text-primary md:text-4xl">{t(gallery?.title)}</h2>
+            <div className="mt-8"><BentoGallery items={galleryImages} isAr={isAr} /></div>
+          </div>
+        </section>
+      )}
     </>
   );
 };
 
 const AtharLanding = () => {
-  const { c, section } = useCampaignPage("athar", ATHAR_DEFAULTS);
+  const { c, section, campaignImage, isLoading } = useCampaignPage("athar", ATHAR_DEFAULTS);
   const page = section("page");
   return (
     <CampaignLandingShell
       slug="athar"
+      isLoading={isLoading}
       seo={c.seo}
       path="/athar"
       titleAr={page?.title.ar ?? ""}
@@ -295,7 +296,7 @@ const AtharLanding = () => {
       taglineEn={page?.lead?.en ?? ""}
       metaDescAr="شارك في حملة أَثَر التعليمية مع مؤسسة اليسر: شنط وأدوات مدرسية، زي مدرسي، سداد مصروفات، مبادرة تدوير الكتب 'أثر يتوارث'، ودور تحفيظ القرآن وحضانات نموذجية بالدقهلية."
       metaDescEn="Join Al-Yusr's Athar Education Campaign: school bags, supplies, uniforms, tuition sponsorship, textbook recycling, and Quranic pre-schools across Dakahlia, Egypt."
-      heroImage={posterEdu}
+      heroImage={campaignImage}
       heroAlt="حملة أثر التعليمية - شنط وأدوات مدرسية وكفالة مصاريف للطلاب المستحقين"
       hero={<AtharHero />}
       main={<AtharMain />}

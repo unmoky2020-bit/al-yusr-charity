@@ -393,19 +393,9 @@ AuthContext.tsx
 // دور غير مسموح → redirect /
 ```
 
-### 7.5 حسابات الديمو
+### 7.5 حسابات الاختبار
 
-| البريد | كلمة المرور | الدور |
-|--------|------------|-------|
-| `admin@elyusr.org` | `admin123` | admin |
-| `editor@elyusr.org` | `editor123` | case_manager |
-| `ahmed.v@example.com` | `vol123` | volunteer |
-| `mahmoud@example.com` | `donor123` | donor |
-
-لإعادة إنشائها:
-```
-POST /functions/v1/seed-demo-users
-```
+لا تُحفظ بيانات دخول حقيقية أو افتراضية في المستودع. أنشئ حسابات الاختبار محليًا عبر لوحة إدارة الخادم وإعدادات بيئة التطوير.
 
 ---
 
@@ -603,7 +593,7 @@ VITE_API_BASE_URL=http://localhost:8000
 | **المدير العام** | `admin@alyusr.com` | (محفوظة في مدير كلمات المرور، لا تُكتب هنا) | `Super Admin` |
 
 > [!NOTE]
-> الحساب القديم `admin@elyusr.org / admin123` غير موجود على خادم Laravel ويعطي `401 Unauthorized`.
+> حسابات Supabase التجريبية القديمة غير متاحة على خادم Laravel؛ أنشئ حسابات اختبار من لوحة إدارة الخادم.
 
 ---
 
@@ -668,4 +658,3 @@ Laravel Charity API (https://elyusr-api.pyramedx.com/api/v1)
 2. **نظام الألوان:** لا تكتب أكواد ألوان صريحة (`hex/rgb`) — استخدم CSS design tokens المعرفة في `index.css`.
 3. **الترجمة واللغات:** كل نص يظهر للمستخدم يجب أن يكون ثنائي اللغة ومدعوماً في `src/i18n/LangContext.tsx` أو مسترجعاً من الـ API بحقول `_ar` و`_en`.
 4. **حماية الصفحات:** أي مسار إداري جديد يجب تغليفه بمكون `<RequireAuth>` مع تحديد الصلاحيات المطلوبة.
-

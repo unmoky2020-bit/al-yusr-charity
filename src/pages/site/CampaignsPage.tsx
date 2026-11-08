@@ -23,8 +23,8 @@ import { useLang } from "@/i18n/LangContext";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFaqs, type FaqItem } from "@/data/faqsApi";
-import { useDonationEntities } from "@/data/sources/donationEntities";
-import { useSettled } from "@/hooks/useCampaignPage";
+import { fetchPublicList } from "@/data/sources/_shared";
+import { mapPublicCampaignCards } from "@/data/sources/publicCampaignCards";
 import { Skeleton } from "@/components/ui/skeleton";
 
 /** Motion wrapper for cards matching ServicesMap exact motion */
@@ -210,7 +210,7 @@ const CampaignsFAQ = ({ isRTL }: { isRTL: boolean }) => {
 };
 
 
-export const CAMPAIGNS_DATA = [
+const CAMPAIGNS_DATA = [
   {
     id: "arboun",
     slug: "arboun",
@@ -412,16 +412,20 @@ export const CampaignsPage = () => {
     { key: "education", labelAr: "تعليم وبناء الإنسان", labelEn: "Education" },
   ];
 
-  // The dashboard's campaign (same slug) gives the live photo and starting price; the copy here is the fallback.
-  const { entities, isLoading: entitiesLoading } = useDonationEntities();
-  // Posters wait for the dashboard (or a short timeout) so the built-in photo never shows first and then swaps.
-  const entitiesReady = useSettled(!entitiesLoading);
-  const live = (slug: string) => entities.find((e) => e.entityType === "campaign" && (e.slug === slug || e.id === slug));
-  const filteredCampaigns = CAMPAIGNS_DATA.filter((c) => filter === "all" || c.category === filter).map((c) => {
-    const e = live(c.slug);
-    const img = e?.image && !e.image.includes("placeholder") ? e.image : c.image;
-    return { ...c, image: img, livePrice: e?.priceFrom || 0 };
+  // The public cards are backend-only; the static list below is used only for structured metadata.
+  const {
+    data: campaignRecords = [],
+    isLoading: campaignsLoading,
+    isError: campaignsError,
+    refetch: refetchCampaigns,
+  } = useQuery({
+    queryKey: ["public-donation-campaigns"],
+    queryFn: () => fetchPublicList("/donation-campaigns", { per_page: 100 }),
+    staleTime: 60_000,
+    retry: 1,
   });
+  const campaigns = mapPublicCampaignCards(campaignRecords);
+  const filteredCampaigns = campaigns.filter((campaign) => filter === "all" || campaign.category === filter);
 
   return (
     <PageLayout>
@@ -581,7 +585,7 @@ export const CampaignsPage = () => {
       </section>
 
       {/* Main Campaign Directory with Generous Bottom Clearance for Footer Newsletter */}
-      <section className="relative bg-background pt-12 pb-28 sm:pb-36 md:pt-16 md:pb-44">
+      <section className="relative overflow-x-clip bg-background pt-12 pb-20 sm:pb-24 md:pt-16 md:pb-28">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
           {/* Category Filter Pills */}
@@ -603,28 +607,49 @@ export const CampaignsPage = () => {
           </div>
 
           {/* Campaigns Grid — Using Exact AlternatingCard Motion from ServicesMap */}
-          {!entitiesReady ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-label={isRTL ? "جاري التحميل" : "Loading"}>
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="flex aspect-[4/5] min-h-[430px] flex-col justify-end gap-3 rounded-[1.75rem] bg-muted p-6">
-                  <Skeleton className="h-7 w-3/5 bg-foreground/10" />
-                  <Skeleton className="h-4 w-full bg-foreground/10" />
-                  <Skeleton className="h-4 w-4/5 bg-foreground/10" />
-                  <div className="mt-2 flex gap-2">
-                    <Skeleton className="h-11 flex-1 rounded-xl bg-foreground/10" />
-                    <Skeleton className="h-11 flex-1 rounded-xl bg-foreground/10" />
+          {campaignsLoading ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-label={isRTL ? "جاري تحميل الحملات" : "Loading campaigns"}>
+              {Array.from({ length: 6 }, (_, idx) => (
+                <article key={idx} className="relative flex min-h-[430px] min-w-0 flex-col justify-end overflow-hidden rounded-[1.75rem] bg-muted">
+                  <Skeleton className="absolute inset-0 h-full w-full rounded-none" />
+                  <div className="relative space-y-3 p-5 sm:p-6">
+                    <Skeleton className="h-6 w-24 rounded-full" />
+                    <Skeleton className="h-8 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                    <div className="grid grid-cols-2 gap-2 pt-2">
+                      <Skeleton className="h-11 rounded-xl" />
+                      <Skeleton className="h-11 rounded-xl" />
+                    </div>
                   </div>
-                </div>
+                </article>
               ))}
+            </div>
+          ) : campaignsError ? (
+            <div className="rounded-3xl border border-border bg-card p-8 text-center" role="status">
+              <p className="font-bold text-foreground">
+                {isRTL ? "تعذر تحميل الحملات من الخادم." : "Campaigns could not be loaded from the server."}
+              </p>
+              <button
+                type="button"
+                onClick={() => void refetchCampaigns()}
+                className="mt-4 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
+              >
+                {isRTL ? "إعادة المحاولة" : "Retry"}
+              </button>
+            </div>
+          ) : filteredCampaigns.length === 0 ? (
+            <div className="rounded-3xl border border-border bg-card p-8 text-center text-muted-foreground" role="status">
+              {isRTL ? "لا توجد حملات منشورة في هذا التصنيف حالياً." : "No published campaigns in this category right now."}
             </div>
           ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredCampaigns.map((camp, idx) => (
               <AlternatingCard key={camp.id} index={idx} className="h-full">
-                <article className="group relative isolate flex aspect-[4/5] h-full min-h-[430px] flex-col justify-end overflow-hidden rounded-[1.75rem] bg-primary shadow-card ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl">
+                <article className="group relative isolate flex h-full min-h-[430px] min-w-0 flex-col justify-end overflow-hidden rounded-[1.75rem] bg-primary shadow-card ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl">
                   <img
                     src={camp.image}
-                    alt={isRTL ? camp.titleAr : camp.titleEn}
+                    alt={isRTL ? camp.ar || camp.en : camp.en || camp.ar}
                     loading={idx < 3 ? "eager" : "lazy"}
                     decoding="async"
                     className="absolute inset-0 -z-20 h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
@@ -633,40 +658,54 @@ export const CampaignsPage = () => {
                   <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-[#03170d] via-[#03170d]/90 via-50% to-transparent to-85%" />
 
                   <div className="absolute inset-x-3.5 top-3.5 flex items-start justify-between gap-2">
-                    <span className="max-w-[62%] truncate rounded-full bg-white/95 px-3 py-1 text-[11px] font-black text-primary shadow-sm">
-                      {isRTL ? camp.badgeAr : camp.badgeEn}
-                    </span>
-                    <span className="shrink-0 rounded-full bg-orange-grad px-3 py-1 text-[11px] font-black text-accent-foreground shadow-cta">
-                      {camp.livePrice ? (isRTL ? `يبدأ من ${camp.livePrice} ج` : `From ${camp.livePrice} EGP`) : isRTL ? camp.priceFromAr : camp.priceFromEn}
-                    </span>
+                    {camp.categoryAr || camp.categoryEn ? (
+                      <span className="max-w-[62%] truncate rounded-full bg-white/95 px-3 py-1 text-[11px] font-black text-primary shadow-sm">
+                        {isRTL ? camp.categoryAr || camp.categoryEn : camp.categoryEn || camp.categoryAr}
+                      </span>
+                    ) : <span />}
+                    {camp.priceFrom > 0 && (
+                      <span className="shrink-0 rounded-full bg-orange-grad px-3 py-1 text-[11px] font-black text-accent-foreground shadow-cta">
+                        {isRTL ? `يبدأ من ${camp.priceFrom} ج` : `From ${camp.priceFrom} EGP`}
+                      </span>
+                    )}
                   </div>
 
                   <div className="p-5 text-white sm:p-6">
                     <h2 className="text-2xl font-black leading-tight tracking-tight drop-shadow sm:text-[1.7rem]">
                       <Link to={camp.path} className="after:absolute after:inset-0 after:content-[''] focus:outline-none">
-                        {isRTL ? camp.titleAr : camp.titleEn}
+                        {isRTL ? camp.ar || camp.en : camp.en || camp.ar}
                       </Link>
                     </h2>
-                    <p className="mt-1.5 line-clamp-1 text-[12.5px] font-bold text-secondary">{isRTL ? camp.subtitleAr : camp.subtitleEn}</p>
-                    <p className="mt-2 line-clamp-2 text-[13px] leading-6 text-white/80">{isRTL ? camp.descAr : camp.descEn}</p>
-                    <ul className="mt-3 flex flex-wrap gap-1.5">
-                      {camp.pillars.slice(0, 2).map((pil, pIdx) => (
-                        <li key={pIdx} className="inline-flex max-w-full items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white/90 ring-1 ring-white/15 backdrop-blur">
-                          <CheckCircle2 className="h-3 w-3 shrink-0 text-secondary" />
-                          <span className="truncate">{isRTL ? pil.ar : pil.en}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {(camp.taglineAr || camp.taglineEn) && (
+                      <p className="mt-1.5 line-clamp-1 text-[12.5px] font-bold text-secondary">
+                        {isRTL ? camp.taglineAr || camp.taglineEn : camp.taglineEn || camp.taglineAr}
+                      </p>
+                    )}
+                    {(camp.descriptionAr || camp.descriptionEn) && (
+                      <p className="mt-2 line-clamp-2 text-[13px] leading-6 text-white/80">
+                        {isRTL ? camp.descriptionAr || camp.descriptionEn : camp.descriptionEn || camp.descriptionAr}
+                      </p>
+                    )}
+                    {(isRTL ? camp.benefitsAr?.length : camp.benefitsEn?.length) ? (
+                      <ul className="mt-3 flex flex-wrap gap-1.5">
+                        {(isRTL ? camp.benefitsAr : camp.benefitsEn)?.slice(0, 2).map((benefit, pIdx) => (
+                          <li key={pIdx} className="inline-flex max-w-full items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white/90 ring-1 ring-white/15 backdrop-blur">
+                            <CheckCircle2 className="h-3 w-3 shrink-0 text-secondary" />
+                            <span className="truncate">{benefit}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
                     <div className="relative z-10 mt-4 grid grid-cols-2 gap-2">
                       <Link to={camp.path}
                         className="inline-flex h-11 items-center justify-center gap-1 rounded-xl bg-white/12 text-xs font-black text-white ring-1 ring-white/25 backdrop-blur transition hover:bg-white/20">
                         {isRTL ? "تفاصيل الحملة" : "Details"} <Arrow className="h-3.5 w-3.5" />
                       </Link>
-                      <Link to={camp.slug === "markoun" ? "/markoun" : `/donate?campaign=${camp.slug}`}
+                      <Link to={camp.slug === "markoon" || camp.donationType === "in_kind" ? "/markoun" : `/donate?campaign=${encodeURIComponent(camp.slug)}`}
                         data-source="campaigns" data-label={`campaign-${camp.slug}`}
                         className="inline-flex h-11 items-center justify-center gap-1 rounded-xl bg-orange-grad text-xs font-black text-accent-foreground shadow-cta transition hover:opacity-95">
                         <Heart className="h-3.5 w-3.5" />
-                        {camp.slug === "markoun" ? (isRTL ? "طلب مندوب" : "Pickup") : (isRTL ? "تبرع الآن" : "Donate")}
+                        {camp.slug === "markoon" || camp.donationType === "in_kind" ? (isRTL ? "طلب مندوب" : "Pickup") : (isRTL ? "تبرع الآن" : "Donate")}
                       </Link>
                     </div>
                   </div>

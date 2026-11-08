@@ -2,7 +2,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Heart, ShieldCheck, CheckCircle2, Clock, Search, X, FileText, Building, HandCoins,
-  ArrowLeft, ArrowRight, Sparkles, SlidersHorizontal,
+  ArrowLeft, ArrowRight, Sparkles, Check, ChevronDown,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
@@ -11,7 +11,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
 import { Button } from "@/components/ui/button";
 import { CaseCard } from "@/components/cases/CaseCard";
-import { NiceSelect } from "@/components/common/NiceSelect";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useLang } from "@/i18n/LangContext";
 import { listPublicCases, listCategories, type CaseRow, type CategoryRow } from "@/data/casesApi";
 import { caseFunding, filterCases, sortCases, type CaseSort, type CaseStatusFilter } from "@/lib/caseFunding";
@@ -30,6 +30,85 @@ const STATUSES: { key: CaseStatusFilter; ar: string; en: string }[] = [
   { key: "done", ar: "اكتملت", en: "Funded" },
   { key: "all", ar: "الكل", en: "All" },
 ];
+const CASE_TYPES = [
+  { key: "all", ar: "كل الارتباطات", en: "All case types" },
+  { key: "program", ar: "تابعة لبرنامج", en: "Linked to a program" },
+  { key: "project", ar: "تابعة لمشروع", en: "Linked to a project" },
+  { key: "campaign", ar: "تابعة لحملة", en: "Linked to a campaign" },
+  { key: "general", ar: "حالة عامة", en: "General cases" },
+] as const;
+type CaseTypeFilter = (typeof CASE_TYPES)[number]["key"];
+type FilterOption = { value: string; label: string; compactLabel?: string };
+
+function CaseFilterSelect({
+  value,
+  options,
+  onChange,
+  ariaLabel,
+  isRTL,
+}: {
+  value: string;
+  options: FilterOption[];
+  onChange: (value: string) => void;
+  ariaLabel: string;
+  isRTL: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const selected = options.find((option) => option.value === value) ?? options[0];
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          aria-label={ariaLabel}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          dir={isRTL ? "rtl" : "ltr"}
+          className="flex h-9 min-w-0 w-full items-center justify-between gap-1 rounded-xl border border-border bg-background px-1.5 text-[10px] font-bold text-primary shadow-none transition hover:border-secondary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 sm:px-3 sm:text-xs"
+        >
+          <span className="min-w-0 truncate sm:hidden">{selected.compactLabel ?? selected.label}</span>
+          <span className="hidden min-w-0 truncate sm:inline">{selected.label}</span>
+          <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-50" aria-hidden />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        dir={isRTL ? "rtl" : "ltr"}
+        align="start"
+        side="bottom"
+        className="max-h-80 w-[min(220px,80vw)] overflow-y-auto rounded-2xl border-border/80 p-1 shadow-card"
+      >
+        <div role="listbox" aria-label={ariaLabel}>
+          {options.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              role="option"
+              aria-selected={value === option.value}
+              onClick={() => {
+                onChange(option.value);
+                setOpen(false);
+              }}
+              className={`flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-start text-xs font-bold transition ${
+                value === option.value ? "bg-secondary/20 text-primary" : "text-foreground hover:bg-muted"
+              }`}
+            >
+              <span>{option.label}</span>
+              {value === option.value && <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden />}
+            </button>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+function matchesCaseType(c: CaseRow, type: CaseTypeFilter) {
+  if (type === "all") return true;
+  if (type === "program") return !!(c.program_id || c.program_name);
+  if (type === "project") return !!(c.project_id || c.project_name);
+  if (type === "campaign") return !!(c.donation_campaign_id || c.donation_campaign_name);
+  return !(c.program_id || c.program_name || c.project_id || c.project_name || c.donation_campaign_id || c.donation_campaign_name);
+}
 
 const Cases = () => {
   const { lang } = useLang();
@@ -41,6 +120,7 @@ const Cases = () => {
   const q = params.get("q") || "";
   const status = (STATUSES.find((s) => s.key === params.get("status"))?.key ?? "open") as CaseStatusFilter;
   const sort = (SORTS.find((s) => s.key === params.get("sort"))?.key ?? "urgent") as CaseSort;
+  const caseType = (CASE_TYPES.find((t) => t.key === params.get("type"))?.key ?? "all") as CaseTypeFilter;
 
   const [all, setAll] = useState<CaseRow[] | null>(null);
   const [cats, setCats] = useState<CategoryRow[]>([]);
@@ -74,7 +154,7 @@ const Cases = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qDraft]);
 
-  useEffect(() => setShown(PAGE), [cat, q, status, sort]);
+  useEffect(() => setShown(PAGE), [cat, q, status, sort, caseType]);
 
   const update = (patch: Record<string, string | null>) => {
     const next = new URLSearchParams(params);
@@ -98,7 +178,7 @@ const Cases = () => {
 
   /** Categories that actually have cases (for the current status), with counts. */
   const catChips = useMemo(() => {
-    const pool = filterCases(rows, { status, q });
+    const pool = filterCases(rows, { status, q }).filter((c) => matchesCaseType(c, caseType));
     const counts = new Map<string, { name: string; n: number; order: number }>();
     for (const c of pool) {
       if (!c.category_slug) continue;
@@ -111,22 +191,25 @@ const Cases = () => {
       });
     }
     return { total: pool.length, list: [...counts.entries()].sort((a, b) => a[1].order - b[1].order || b[1].n - a[1].n) };
-  }, [rows, cats, status, q, isRTL]);
+  }, [rows, cats, status, q, caseType, isRTL]);
 
-  const list = useMemo(() => sortCases(filterCases(rows, { cat, q, status }), sort), [rows, cat, q, status, sort]);
+  const list = useMemo(
+    () => sortCases(filterCases(rows, { cat, q, status }).filter((c) => matchesCaseType(c, caseType)), sort),
+    [rows, cat, q, status, caseType, sort],
+  );
 
   /** One open case that a few donors can finish today — the strongest nudge on the page. */
   const nearlyThere = useMemo(() => {
-    if (cat || q || status === "done") return null;
+    if (cat || q || status === "done" || caseType !== "all") return null;
     return (
       [...open]
         .map((c) => ({ c, f: caseFunding(c) }))
         .filter(({ f }) => f.pct >= 60 && f.remaining > 0)
         .sort((a, b) => a.f.remaining - b.f.remaining)[0] ?? null
     );
-  }, [open, cat, q, status]);
+  }, [open, cat, q, status, caseType]);
 
-  const filtered = !!(cat || q || status !== "open");
+  const filtered = !!(cat || q || status !== "open" || caseType !== "all");
   const resetFilters = () => {
     setQDraft("");
     setParams(new URLSearchParams(), { replace: true });
@@ -204,10 +287,10 @@ const Cases = () => {
         </div>
       </section>
 
-      <section className="bg-background pb-14 pt-6 md:pb-20">
+      <section className="bg-background pb-20 pt-6 md:pb-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6">
           {/* Filters bar */}
-          <div ref={gridTop} className="sticky top-20 z-30 -mx-4 mb-6 border-b border-border/60 bg-background/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
+          <div ref={gridTop} className="relative z-30 -mx-4 mb-6 border-b border-border/60 bg-background/95 px-4 py-3 backdrop-blur sm:sticky sm:top-20 sm:-mx-6 sm:px-6">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none]" role="tablist" aria-label={isRTL ? "نوع الحالة" : "Case type"}>
                 <Chip active={!cat} onClick={() => update({ cat: null })} label={isRTL ? "كل الحالات" : "All cases"} n={catChips.total} />
@@ -215,21 +298,42 @@ const Cases = () => {
                   <Chip key={slug} active={cat === slug} onClick={() => update({ cat: cat === slug ? null : slug })} label={v.name} n={v.n} />
                 ))}
               </div>
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex min-w-0 rounded-xl bg-muted p-1" role="radiogroup" aria-label={isRTL ? "حالة التمويل" : "Funding status"}>
+              <div className="grid grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)] items-center gap-1.5 sm:flex sm:items-center sm:justify-end sm:gap-2">
+                <div className="flex min-w-0 shrink-0 rounded-xl bg-muted p-1" role="radiogroup" aria-label={isRTL ? "حالة التمويل" : "Funding status"}>
                   {STATUSES.map((s) => (
                     <button key={s.key} type="button" role="radio" aria-checked={status === s.key}
                       onClick={() => update({ status: s.key === "open" ? null : s.key })}
-                      className={`whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs font-black transition sm:px-3 ${status === s.key ? "bg-card text-primary shadow-sm" : "text-muted-foreground hover:text-primary"}`}>
+                      className={`whitespace-nowrap rounded-lg px-1.5 py-1.5 text-[10px] font-black transition sm:px-3 sm:text-xs ${status === s.key ? "bg-card text-primary shadow-sm" : "text-muted-foreground hover:text-primary"}`}>
                       {isRTL ? s.ar : s.en}
                     </button>
                   ))}
                 </div>
-                <div className="flex w-36 shrink-0 items-center gap-1.5 sm:w-44">
-                  <SlidersHorizontal className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-                  <NiceSelect size="sm" value={sort} onChange={(v) => update({ sort: v === "urgent" ? null : v })} ariaLabel={isRTL ? "ترتيب الحالات" : "Sort cases"} dir={isRTL ? "rtl" : "ltr"}
-                    options={SORTS.map((s) => ({ value: s.key, label: isRTL ? s.ar : s.en }))} />
-                </div>
+                <CaseFilterSelect
+                  value={caseType}
+                  onChange={(v) => update({ type: v === "all" ? null : v })}
+                  ariaLabel={isRTL ? "نوع ارتباط الحالة" : "Case relationship type"}
+                  isRTL={isRTL}
+                  options={CASE_TYPES.map((t) => ({
+                    value: t.key,
+                    label: isRTL ? t.ar : t.en,
+                    compactLabel: isRTL
+                      ? { all: "الكل", program: "برنامج", project: "مشروع", campaign: "حملة", general: "عامة" }[t.key]
+                      : { all: "All", program: "Program", project: "Project", campaign: "Campaign", general: "General" }[t.key],
+                  }))}
+                />
+                <CaseFilterSelect
+                  value={sort}
+                  onChange={(v) => update({ sort: v === "urgent" ? null : v })}
+                  ariaLabel={isRTL ? "ترتيب الحالات" : "Sort cases"}
+                  isRTL={isRTL}
+                  options={SORTS.map((s) => ({
+                    value: s.key,
+                    label: isRTL ? s.ar : s.en,
+                    compactLabel: isRTL
+                      ? { urgent: "احتياج", closest: "للإكمال", newest: "الأحدث", remaining: "المتبقي" }[s.key]
+                      : { urgent: "Urgent", closest: "Closest", newest: "Newest", remaining: "Gap" }[s.key],
+                  }))}
+                />
               </div>
             </div>
           </div>
@@ -256,7 +360,7 @@ const Cases = () => {
                     : <>{nearlyThere.f.pct}% raised — only <b className="text-primary">{formatNumberEN(nearlyThere.f.remaining)} {egp}</b> to close it.</>}
                 </p>
               </div>
-              <span className="flex items-center justify-center gap-1.5 bg-orange-grad px-6 py-3 text-sm font-black text-accent-foreground sm:w-44">
+              <span className="mb-4 inline-flex h-[60px] min-w-[152px] self-center items-center justify-center gap-2 rounded-full bg-orange-grad px-8 text-sm font-black text-accent-foreground shadow-cta transition group-hover:-translate-y-0.5 sm:mb-0 sm:h-auto sm:min-w-0 sm:w-44 sm:self-stretch sm:rounded-none sm:px-6">
                 {isRTL ? "كمّلها" : "Finish it"} <Arrow className="h-4 w-4" />
               </span>
             </Link>

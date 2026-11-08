@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { caseFunding, daysLeft, filterCases, sortCases, suggestedAmounts } from "@/lib/caseFunding";
+import { caseFunding, daysLeft, filterCases, filterOpenCases, filterUrgentOpenCases, sortCases, suggestedAmounts } from "@/lib/caseFunding";
 import type { CaseRow } from "@/data/casesApi";
 
 const mk = (p: Partial<CaseRow>): CaseRow =>
@@ -12,6 +12,31 @@ describe("caseFunding", () => {
   });
   it("treats a completed case as done even if not fully raised", () => {
     expect(caseFunding(mk({ status: "completed" as CaseRow["status"] })).done).toBe(true);
+  });
+  it("treats funded status aliases as done", () => {
+    expect(caseFunding(mk({ status: " Funded " as CaseRow["status"] })).done).toBe(true);
+  });
+  it("only keeps approved, unfinished cases in linked case sections", () => {
+    const cases = [
+      mk({ id: "open" }),
+      mk({ id: "completed", status: "completed" }),
+      mk({ id: "closed", status: "closed" }),
+      mk({ id: "funded-status", status: "funded" as CaseRow["status"] }),
+      mk({ id: "fully-funded", raised_amount: 1000 }),
+      mk({ id: "unapproved", status: "pending_review" }),
+    ];
+    expect(filterOpenCases(cases).map((c) => c.id)).toEqual(["open"]);
+  });
+  it("removes completed, closed, and fully funded cases from the urgent carousel", () => {
+    const cases = [
+      mk({ id: "open", is_urgent: true }),
+      mk({ id: "completed", status: "completed", is_urgent: true }),
+      mk({ id: "closed", status: "closed", is_urgent: true }),
+      mk({ id: "funded", raised_amount: 1000, is_urgent: true }),
+      mk({ id: "unapproved", status: "pending_review", is_urgent: true }),
+      mk({ id: "not-urgent", is_urgent: false }),
+    ];
+    expect(filterUrgentOpenCases(cases).map((c) => c.id)).toEqual(["open"]);
   });
 });
 

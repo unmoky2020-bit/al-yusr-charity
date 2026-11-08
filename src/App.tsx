@@ -8,11 +8,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LangProvider } from "@/i18n/LangContext";
 import { AuthProvider } from "@/auth/AuthContext";
 import { bindAnchorClickTracker, track } from "@/lib/track";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 const Index = lazy(() => import("./pages/Index.tsx"));
 import { SmoothScroll } from "@/components/common/SmoothScroll";
-const CampaignPageGate = lazy(() => import("@/components/common/PageGates").then((m) => ({ default: m.CampaignPageGate })));
-const ProjectPageGate = lazy(() => import("@/components/common/PageGates").then((m) => ({ default: m.ProjectPageGate })));
-const ProgramsPageGate = lazy(() => import("@/components/common/PageGates").then((m) => ({ default: m.ProgramsPageGate })));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const ProgramDetail = lazy(() => import("./pages/ProgramDetail.tsx"));
 const ProgramOptionDetail = lazy(() => import("./pages/ProgramOptionDetail.tsx"));
@@ -78,6 +76,7 @@ const AdminDonors = lazy(() => import("./pages/admin/AdminDonors.tsx"));
 const AdminDonorDetail = lazy(() => import("./pages/admin/AdminDonorDetail.tsx"));
 const AdminDonationDetail = lazy(() => import("./pages/admin/AdminDonationDetail.tsx"));
 const AdminUsers = lazy(() => import("./pages/admin/AdminUsers.tsx"));
+const AdminUserDetail = lazy(() => import("./pages/admin/AdminUserDetail.tsx"));
 const AdminProfile = lazy(() => import("./pages/admin/AdminProfile.tsx"));
 const AdminNewsletter = lazy(() => import("./pages/admin/AdminNewsletter.tsx"));
 const AdminNewsletterCampaigns = lazy(() => import("./pages/admin/AdminNewsletterCampaigns.tsx"));
@@ -128,6 +127,7 @@ const ArbounLanding = lazy(() => import("./pages/landings/ArbounLanding.tsx"));
 const TakrimLanding = lazy(() => import("./pages/landings/TakrimLanding.tsx"));
 const WaterLanding = lazy(() => import("./pages/landings/WaterLanding.tsx"));
 const NurseriesLanding = lazy(() => import("./pages/landings/NurseriesLanding.tsx"));
+const MosquesLanding = lazy(() => import("./pages/landings/MosquesLanding.tsx"));
 const MedicalLanding = lazy(() => import("./pages/landings/MedicalLanding.tsx"));
 const AshrLanding = lazy(() => import("./pages/landings/AshrLanding.tsx"));
 const Misbaha = lazy(() => import("./pages/site/Misbaha.tsx"));
@@ -260,6 +260,19 @@ const RouteTracker = () => {
   return null;
 };
 
+const LegacyBlogSeoRedirect = () => {
+  const location = useLocation();
+  return (
+    <Navigate
+      to={{
+        ...location,
+        pathname: location.pathname.replace(/^\/admin\/blog-seo(?=\/|$)/, "/admin/blog"),
+      }}
+      replace
+    />
+  );
+};
+
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
@@ -271,7 +284,7 @@ const App = () => (
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <SmoothScroll />
               <RouteTracker />
-              <Suspense fallback={<div className="grid min-h-[60vh] place-items-center text-primary"><div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary" aria-label="loading" /></div>}>
+              <Suspense fallback={<PageLoadingState />}>
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/programs" element={<Projects />} />
@@ -315,28 +328,29 @@ const App = () => (
                   <Route path="/seasons/:slug" element={<SeasonDetail />} />
                   <Route path="/c/:slug" element={<AdLanding />} />
                   {import.meta.env.DEV && <Route path="/dev/hero-breakpoints" element={<HeroBreakpointTest />} />}
-                  <Route path="/farm" element={<ProjectPageGate slug="waqf"><Farm /></ProjectPageGate>} />
+                  <Route path="/farm" element={<Farm />} />
                   <Route path="/trust" element={<Trust />} />
-                  <Route path="/markoun" element={<CampaignPageGate slug="markoun"><MarkounLanding /></CampaignPageGate>} />
-                  <Route path="/food-box" element={<CampaignPageGate slug="food"><FoodBoxLanding /></CampaignPageGate>} />
+                  <Route path="/markoun" element={<MarkounLanding />} />
+                  <Route path="/food-box" element={<FoodBoxLanding />} />
                   <Route path="/qurbani-guarantee" element={<QurbaniGuaranteeLanding />} />
                   <Route path="/khabia" element={<KhabiaLanding />} />
-                  <Route path="/dhill" element={<CampaignPageGate slug="dhill"><DhillLanding /></CampaignPageGate>} />
-                  <Route path="/setr" element={<CampaignPageGate slug="setr"><SetrLanding /></CampaignPageGate>} />
-                  <Route path="/athar" element={<CampaignPageGate slug="athar"><AtharLanding /></CampaignPageGate>} />
-                  <Route path="/education-campaign" element={<CampaignPageGate slug="athar"><AtharLanding /></CampaignPageGate>} />
-                  <Route path="/ramadan" element={<CampaignPageGate slug="ramadan"><RamadanLanding /></CampaignPageGate>} />
-                  <Route path="/arboun" element={<CampaignPageGate slug="arboun"><ArbounLanding /></CampaignPageGate>} />
-                  <Route path="/takrim" element={<ProgramsPageGate><TakrimLanding /></ProgramsPageGate>} />
+                  <Route path="/dhill" element={<DhillLanding />} />
+                  <Route path="/setr" element={<SetrLanding />} />
+                  <Route path="/athar" element={<AtharLanding />} />
+                  <Route path="/education-campaign" element={<AtharLanding />} />
+                  <Route path="/ramadan" element={<RamadanLanding />} />
+                  <Route path="/arboun" element={<ArbounLanding />} />
+                  <Route path="/takrim" element={<TakrimLanding />} />
                   <Route path="/water" element={<WaterLanding />} />
-                  <Route path="/nurseries" element={<ProgramsPageGate><NurseriesLanding /></ProgramsPageGate>} />
-                  <Route path="/medical" element={<ProgramsPageGate withProjects><MedicalLanding /></ProgramsPageGate>} />
-                  <Route path="/ten-days" element={<CampaignPageGate slug="ashr"><AshrLanding /></CampaignPageGate>} />
+                  <Route path="/nurseries" element={<NurseriesLanding />} />
+                  <Route path="/mosques" element={<MosquesLanding />} />
+                  <Route path="/medical" element={<MedicalLanding />} />
+                  <Route path="/ten-days" element={<AshrLanding />} />
                   <Route path="/ashr" element={<Navigate to="/ten-days" replace />} />
                   <Route path="/misbaha" element={<Misbaha />} />
                   <Route path="/misbaha/:slug" element={<Misbaha />} />
                   <Route path="/tasbih" element={<Navigate to="/misbaha" replace />} />
-                  <Route path="/freelancers" element={<CampaignPageGate slug="arboun"><ArbounLanding /></CampaignPageGate>} />
+                  <Route path="/freelancers" element={<ArbounLanding />} />
                   <Route path="/donate/track/:ref" element={<DonationTracking />} />
                   <Route path="/donate/track" element={<DonationTracking />} />
                   <Route path="/dashboard" element={<RequireAuth><DonorDashboard /></RequireAuth>} />
@@ -386,12 +400,15 @@ const App = () => (
                   <Route path="/admin/donors/:id" element={<RequireAuth roles={["admin"]}><AdminDonorDetail /></RequireAuth>} />
                   <Route path="/admin/donations/:id" element={<RequireAuth roles={["admin", "caseworker"]}><AdminDonationDetail /></RequireAuth>} />
                   <Route path="/admin/users" element={<RequireAuth roles={["admin"]}><AdminUsers /></RequireAuth>} />
+                  <Route path="/admin/users/:id" element={<RequireAuth roles={["admin"]}><AdminUserDetail /></RequireAuth>} />
                   <Route path="/admin/payment-methods" element={<RequireAuth roles={["admin"]}><AdminPaymentMethods /></RequireAuth>} />
                   <Route path="/admin/payment-methods/:id" element={<RequireAuth roles={["admin"]}><AdminPaymentMethodDetail /></RequireAuth>} />
                   <Route path="/admin/permissions" element={<RequireAuth roles={["admin"]}><AdminPermissions /></RequireAuth>} />
                   <Route path="/admin/activity" element={<RequireAuth roles={["admin"]}><AdminActivityLog /></RequireAuth>} />
-                  <Route path="/admin/blog-seo" element={<RequireAuth roles={["admin", "editor"]}><AdminBlogSeo /></RequireAuth>} />
-                  <Route path="/admin/blog-seo/:slug" element={<RequireAuth roles={["admin", "editor"]}><AdminBlogPostEdit /></RequireAuth>} />
+                  <Route path="/admin/blog" element={<RequireAuth roles={["admin", "editor"]}><AdminBlogSeo /></RequireAuth>} />
+                  <Route path="/admin/blog/new" element={<RequireAuth roles={["admin", "editor"]}><AdminBlogPostEdit createMode /></RequireAuth>} />
+                  <Route path="/admin/blog/:slug" element={<RequireAuth roles={["admin", "editor"]}><AdminBlogPostEdit /></RequireAuth>} />
+                  <Route path="/admin/blog-seo/*" element={<LegacyBlogSeoRedirect />} />
                   <Route path="/admin/stories" element={<RequireAuth roles={["admin", "editor"]}><AdminStories /></RequireAuth>} />
                   <Route path="/admin/stories/new" element={<RequireAuth roles={["admin", "editor"]}><AdminStoryEdit /></RequireAuth>} />
                   <Route path="/admin/stories/:id" element={<RequireAuth roles={["admin", "editor"]}><AdminStoryEdit /></RequireAuth>} />

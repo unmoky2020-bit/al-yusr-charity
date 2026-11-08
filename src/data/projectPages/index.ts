@@ -1,4 +1,4 @@
-import { l, type CampaignPageContent, type L } from "@/data/campaignPages/types";
+import { imagesColumn, l, type CampaignPageContent, type L } from "@/data/campaignPages/types";
 
 /**
  * Project landing pages whose content is editable from the dashboard (المشاريع → محتوى الصفحة).
@@ -17,15 +17,19 @@ export type ProjectPageMeta = {
 
 export const PROJECT_PAGES: ProjectPageMeta[] = [
   { projectSlug: "waqf", path: "/farm", name: l("المزرعة الوقفية", "Waqf farm"), load: () => import("./farm").then((m) => m.default) },
+  { projectSlug: "nurseries", path: "/nurseries", name: l("الحضانات ودور التحفيظ", "Nurseries & Qur'an houses"), load: () => import("./nurseries").then((m) => m.default) },
+  { projectSlug: "water", path: "/water", name: l("سقيا الماء", "Clean water"), load: () => import("./water").then((m) => m.default) },
+  { projectSlug: "mosques", path: "/mosques", name: l("عمارة المساجد", "Mosques"), load: () => import("./mosques").then((m) => m.default) },
 ];
 
 export const getProjectPageMeta = (projectSlug: string | null | undefined) =>
   projectSlug ? PROJECT_PAGES.find((p) => p.projectSlug === projectSlug) : undefined;
 
 /** What is stored in `projects.page_content`: everything except prices (= donation packages), FAQ (= linked FAQ category) and SEO (= the project's SEO fields). */
-export function projectPageColumn(c: CampaignPageContent): Omit<CampaignPageContent, "prices" | "faq" | "seo"> {
-  const { prices: _p, faq: _f, seo: _s, ...rest } = c;
-  return rest;
+export function projectPageColumn(c: CampaignPageContent): Omit<CampaignPageContent, "prices" | "faq" | "seo" | "images"> & { images?: ReturnType<typeof imagesColumn> } {
+  const { prices: _p, faq: _f, seo: _s, images, ...rest } = c;
+  const pageImages = imagesColumn(images);
+  return { ...rest, ...(pageImages ? { images: pageImages } : {}) };
 }
 
 /** Parse a JSON column that may arrive as an object or a JSON string. */

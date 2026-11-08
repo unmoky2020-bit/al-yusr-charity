@@ -126,14 +126,14 @@ const GeoProgram = () => {
               {isRTL ? `يبدأ من ${prog.priceFrom} ج لـ ${gName}` : `From ${prog.priceFrom} EGP in ${gName}`}
             </span>
           )}
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta">
-              <Link to={`/donate?program=${prog.slug}&governorate=${geo.slug}`}>
-                <Heart className="h-5 w-5" /> {isRTL ? `تبرع لـ ${gName}` : `Donate to ${gName}`}
+          <div className="mt-6 grid w-full max-w-md grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:gap-3">
+            <Button asChild size="lg" className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base bg-orange-grad text-accent-foreground shadow-cta">
+              <Link to={`/donate?program=${prog.slug}&governorate=${geo.slug}`} className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2">
+                <Heart className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> {isRTL ? `تبرع لـ ${gName}` : `Donate to ${gName}`}
               </Link>
             </Button>
-            <Button asChild size="lg" className="bg-whatsapp text-whatsapp-foreground shadow-whatsapp hover:opacity-95">
-              <a href={waHref} target="_blank" rel="noopener"><WhatsAppIcon className="h-5 w-5" aria-hidden /> {isRTL ? "تواصل واتساب" : "WhatsApp"}</a>
+            <Button asChild size="lg" className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base bg-whatsapp text-whatsapp-foreground shadow-whatsapp hover:opacity-95">
+              <a href={waHref} target="_blank" rel="noopener" className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"><WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" aria-hidden /> {isRTL ? "تواصل واتساب" : "WhatsApp"}</a>
             </Button>
           </div>
           </motion.div>

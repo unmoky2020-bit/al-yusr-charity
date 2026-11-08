@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -15,12 +16,14 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { CampaignLandingShell } from "@/components/sections/CampaignLandingShell";
+import { PageLayout } from "@/components/layout/PageLayout";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { HadithBlock, HADITH } from "@/components/campaigns/HadithBlock";
 import { ProjectKindNote } from "@/components/campaigns/ProjectKind";
 import { useLang } from "@/i18n/LangContext";
-import { useTakrimContent, type TakrimShare } from "@/data/takrimContent";
+import { useTakrimContent, useTakrimContentState, type TakrimShare } from "@/data/takrimContent";
 
 const DONATE = "/donate?program=takrim";
 const PHONE = "+201097000137";
@@ -130,11 +133,11 @@ const SERVICES: { icon: LucideIcon; title: Bi; body: Bi }[] = [
 
 /* ───────────────────────── Hero: request the service ───────────────────────── */
 
-const TakrimHero = () => {
+const TakrimHero = ({ image }: { image: string }) => {
   const { lang } = useLang();
   const isAr = lang === "ar";
-  const content = useTakrimContent();
   const Arrow = isAr ? ArrowLeft : ArrowRight;
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <section className="relative w-full overflow-x-clip pattern-hero-luxe hero-pattern-fade text-primary-foreground">
@@ -218,13 +221,18 @@ const TakrimHero = () => {
             </div>
           </div>
 
-          <figure className="mx-auto w-full max-w-md rounded-[20px] bg-primary-foreground/10 p-2 ring-1 ring-primary-foreground/15">
+          <figure className="relative mx-auto aspect-[3/4] w-full max-w-[360px] overflow-hidden rounded-[20px] bg-primary-foreground/10 p-1.5 ring-1 ring-primary-foreground/15 md:max-w-[420px]">
             <img
-              src={content.image}
+              key={image}
+              src={image}
               alt={isAr ? "سيارة تكريم الإنسان لنقل الموتى في المنصورة من مؤسسة اليسر" : "Al-Yusr's Takrim van for funeral transport in Mansoura"}
               loading="eager"
-              className="max-h-[480px] w-full rounded-2xl object-contain"
+              width={1080}
+              height={1440}
+              onLoad={() => setImageLoaded(true)}
+              className={`block h-full w-full rounded-2xl object-contain object-center transition-opacity duration-200 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
             />
+            {!imageLoaded && <div className="absolute inset-1.5 rounded-2xl bg-primary-foreground/5" aria-hidden="true" />}
           </figure>
         </div>
       </div>
@@ -499,7 +507,8 @@ const TakrimMain = () => {
 };
 
 const TakrimLanding = () => {
-  const content = useTakrimContent();
+  const { content, isLoading } = useTakrimContentState();
+  if (isLoading) return <PageLayout><PageLoadingState /></PageLayout>;
 
   return (
     <CampaignLandingShell
@@ -520,7 +529,7 @@ const TakrimLanding = () => {
       }}
       heroImage={content.image}
       heroAlt="سيارة تكريم الإنسان لنقل الموتى في المنصورة من مؤسسة اليسر"
-      hero={<TakrimHero />}
+      hero={<TakrimHero key={content.image} image={content.image} />}
       main={<TakrimMain />}
       relatedLinks={[
         { href: "/projects", ar: "كل مشاريع اليسر", en: "All projects" },

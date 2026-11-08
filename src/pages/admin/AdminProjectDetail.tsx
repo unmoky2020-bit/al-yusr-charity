@@ -36,6 +36,7 @@ import { publicUrls } from "@/lib/publicUrls";
 import { getProjectPageMeta, parsePageContent, projectPageColumn } from "@/data/projectPages";
 import { mergeCampaignContent, type CampaignPageContent } from "@/data/campaignPages/types";
 import { CtaPanel, HadithPanel, HeroPanel, SectionsPanel, StatsPanel } from "@/components/admin/CampaignPageContentEditor";
+import { PageImagesPanel } from "@/components/admin/PageImagesPanel";
 
 const triggerCls = "rounded-xl px-3 py-2 text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs";
 
@@ -55,7 +56,7 @@ export default function AdminProjectDetail() {
   const [toggling, setToggling] = useState<InstantKey | null>(null);
   const [notSaved, setNotSaved] = useState<string[]>([]);
 
-  // Landing-page content (only for projects that have their own page, e.g. waqf → /farm).
+  // Landing-page content for projects with a dedicated public page.
   // Saved on the project as `page_content` (proposed column, backend-handoff/04-programs-projects.md).
   const pageMeta = getProjectPageMeta(record?.slug ?? null);
   const [pageContent, setPageContent] = useState<CampaignPageContent | null>(null);
@@ -403,6 +404,7 @@ export default function AdminProjectDetail() {
                 </div>
               </SectionCard>
               <HeroPanel value={pageContent} onChange={setPageContent} isAr />
+              {pageDefaults && <PageImagesPanel value={pageContent} onChange={setPageContent} defaults={pageDefaults} />}
               <StatsPanel value={pageContent} onChange={setPageContent} isAr />
               <SectionsPanel value={pageContent} onChange={setPageContent} isAr />
               <HadithPanel value={pageContent} onChange={setPageContent} isAr />

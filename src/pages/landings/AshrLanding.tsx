@@ -69,7 +69,7 @@ const AshrHero = () => {
 };
 
 const DayPlanner = () => {
-  const { c, t, isAr, section, amount } = useCampaignPage(SLUG, ASHR_DEFAULTS);
+  const { c, t, isAr, section, amount, packageId } = useCampaignPage(SLUG, ASHR_DEFAULTS);
   const days = section("days");
   const [active, setActive] = useState(0);
   if (!days || days.items.length === 0) return null;
@@ -126,7 +126,7 @@ const DayPlanner = () => {
                   : (isAr ? `تصدّق اليوم بـ ${fmtNum(dayAmount, true)} ج` : `Give today: EGP ${fmtNum(dayAmount, false)}`)}
               </Link>
             )}
-            <Link to={amountHref(DONATE, amount("daily", 500))} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border px-6 py-3 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
+            <Link to={amountHref(DONATE, amount("daily", 500), packageId("daily"))} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border px-6 py-3 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
               <CalendarDays className="h-4 w-4" /> {t(c.prices.find((p) => p.id === "daily")?.label)}
             </Link>
           </div>
@@ -137,7 +137,7 @@ const DayPlanner = () => {
 };
 
 const AshrMain = () => {
-  const { c, t, isAr, section } = useCampaignPage(SLUG, ASHR_DEFAULTS);
+  const { c, t, isAr, section, packageId } = useCampaignPage(SLUG, ASHR_DEFAULTS);
   const why = section("why");
   const arafah = section("arafah");
   const qurbani = section("qurbani");
@@ -162,7 +162,7 @@ const AshrMain = () => {
           <h2 className="text-center text-3xl font-black text-primary md:text-4xl">{isAr ? "اختار صدقتك في العشر" : "Choose your charity for the ten days"}</h2>
           <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {c.prices.map((p) => (
-              <Link key={p.id} to={amountHref(DONATE, p.amount)} className="group flex flex-col rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-secondary/60 hover:shadow-card">
+              <Link key={p.id} to={amountHref(DONATE, p.amount, packageId(p.id))} className="group flex flex-col rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-secondary/60 hover:shadow-card">
                 <span className="text-base font-black text-primary">{t(p.label)}</span>
                 {t(p.note) && <span className="mt-1 text-xs font-bold text-muted-foreground">{t(p.note)}</span>}
                 <span className="mt-4 text-3xl font-black tabular-nums text-accent">
@@ -202,7 +202,7 @@ const AshrMain = () => {
               <Sun className="h-10 w-10 text-secondary" />
               <h2 className="mt-4 text-2xl font-black md:text-3xl">{t(arafah.title)}</h2>
               <p className="mt-3 flex-1 text-base leading-loose text-primary-foreground/85">{t(arafah.lead)}</p>
-              <Link to={amountHref(DONATE, c.prices.find((p) => p.id === "arafah_iftar")?.amount ?? 95)} className="mt-6 inline-flex w-fit items-center gap-2 rounded-2xl bg-secondary px-6 py-3 text-sm font-black text-slate-950 transition hover:bg-secondary/90">
+              <Link to={amountHref(DONATE, c.prices.find((p) => p.id === "arafah_iftar")?.amount ?? 95, packageId("arafah_iftar"))} className="mt-6 inline-flex w-fit items-center gap-2 rounded-2xl bg-secondary px-6 py-3 text-sm font-black text-slate-950 transition hover:bg-secondary/90">
                 <HandHeart className="h-5 w-5" /> {t(c.prices.find((p) => p.id === "arafah_iftar")?.label)}
               </Link>
             </article>
@@ -226,10 +226,11 @@ const AshrMain = () => {
 };
 
 const AshrLanding = () => {
-  const { c } = useCampaignPage(SLUG, ASHR_DEFAULTS);
+  const { c, isLoading } = useCampaignPage(SLUG, ASHR_DEFAULTS);
   return (
     <CampaignLandingShell
       slug={SLUG}
+      isLoading={isLoading}
       seo={c.seo}
       path="/ten-days"
       titleAr={`صدقات العشر الأوائل من ذي الحجة — ${c.hero.title.ar}`}

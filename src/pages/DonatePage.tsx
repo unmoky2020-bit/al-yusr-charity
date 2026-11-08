@@ -108,7 +108,7 @@ export type { DonationItemState };
 
 const DonatePage = () => {
   // Backend programs / projects / campaigns (static list only while loading or when the API is unreachable).
-  const { entities: baseEntities, fromApi: entitiesFromApi } = useDonationEntities();
+  const { entities: baseEntities, fromApi: entitiesFromApi, isLoading: entitiesLoading } = useDonationEntities();
   // Open backend cases, each under its program / project / campaign (or the general donation),
   // plus the case opened from a case page (?case=…), listed first.
   const [openCases, setOpenCases] = useState<CaseRow[]>([]);
@@ -153,12 +153,22 @@ const DonatePage = () => {
     campaign: campaignSlug,
   });
   const hasLinkTarget = !!(entityParam || programSlug || campaignSlug || projectSlug);
+  const linkKey = [
+    entityParam,
+    programSlug,
+    campaignSlug,
+    projectSlug,
+    params.get("package"),
+    params.get("qty"),
+    params.get("amount"),
+  ].join("|");
 
   const initialEntity = linkedEntity || DONATION_ENTITIES[0];
   const initialMode = initialEntity.isMarkoun ? "in_kind" : "general";
   const initialAmount = Number(params.get("amount")) || (initialMode === "in_kind" ? 0 : initialEntity.priceFrom || 100);
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [initializedLinkKey, setInitializedLinkKey] = useState<string | null>(hasLinkTarget ? "" : null);
   const [items, setItems] = useState<DonationItemState[]>([
     {
       id: "item-init",
@@ -185,7 +195,18 @@ const DonatePage = () => {
 
   useEffect(() => {
     setSectorFilter(sectorSlugParam || "all");
-    if (!hasLinkTarget || basketEditedRef.current || !linkedEntity) return;
+    if (!hasLinkTarget || basketEditedRef.current) {
+      setInitializedLinkKey(linkKey);
+      return;
+    }
+    if (entitiesLoading) {
+      setInitializedLinkKey(null);
+      return;
+    }
+    if (!linkedEntity) {
+      setInitializedLinkKey(linkKey);
+      return;
+    }
     // ?package=<backend package id | share id>: open the form on that share.
     const pkgParam = params.get("package");
     const share = pkgParam ? linkedEntity.shares.find((s) => String(s.apiId) === pkgParam || s.id === pkgParam) : undefined;
@@ -204,8 +225,9 @@ const DonatePage = () => {
         selectedCaseId: null,
       },
     ]);
+    setInitializedLinkKey(linkKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectorSlugParam, entityParam, programSlug, campaignSlug, projectSlug, linkedEntity?.id, entitiesFromApi]);
+  }, [sectorSlugParam, linkKey, hasLinkTarget, linkedEntity?.id, entitiesFromApi, entitiesLoading]);
 
   const MAX_BASKET_ITEMS = 3;
 
@@ -667,6 +689,18 @@ const DonatePage = () => {
     reader.readAsDataURL(file);
   };
 
+  if (hasLinkTarget && (entitiesLoading || initializedLinkKey !== linkKey)) {
+    return (
+      <PageLayout>
+        <div className="container mx-auto max-w-3xl animate-pulse px-4 py-12" role="status" aria-busy="true">
+          <div className="h-10 rounded-xl bg-muted" />
+          <div className="mt-6 h-24 rounded-2xl bg-muted" />
+          <div className="mt-4 h-48 rounded-2xl bg-muted" />
+        </div>
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout>
       {verifyingReturn && (
@@ -876,7 +910,7 @@ const DonatePage = () => {
                       size="sm"
                       onClick={addItem}
                       disabled={items.length >= MAX_BASKET_ITEMS}
-                      className="h-10 px-4 rounded-xl border-2 border-dashed border-primary/25 hover:border-secondary hover:bg-secondary/10 text-primary font-black text-xs cursor-pointer shadow-xs transition-all w-full sm:w-auto flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="h-10 px-4 rounded-xl border-2 border-dashed border-primary/25 hover:border-secondary hover:bg-secondary/10 text-primary hover:text-primary font-black text-xs cursor-pointer shadow-xs transition-all w-full sm:w-auto flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <div className="grid h-5 w-5 place-items-center rounded-full bg-secondary text-slate-950 font-black text-xs">
                         +

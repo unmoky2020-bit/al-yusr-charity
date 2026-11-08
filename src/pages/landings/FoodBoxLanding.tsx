@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Beef, Package, UtensilsCrossed, ShieldCheck, FileCheck2, MapPin, ArrowLeft, ArrowRight, Minus, Plus, Scale, Stethoscope, Truck, Camera, Boxes, HandPlatter, type LucideIcon } from "lucide-react";
+import { Beef, Package, UtensilsCrossed, ArrowLeft, ArrowRight, Minus, Plus, Scale, Stethoscope, Truck, Camera, Boxes, HandPlatter, type LucideIcon } from "lucide-react";
 import { CampaignLandingShell } from "@/components/sections/CampaignLandingShell";
 import { amountHref, waHref, fmtNum, CampaignCrumbs, HeroActions, BentoGallery } from "@/components/campaigns/shared";
 import { HadithBlock } from "@/components/campaigns/HadithBlock";
@@ -35,8 +35,6 @@ const MEAL_META: Record<string, { icon: LucideIcon; priceId: string; count: numb
 };
 
 const MEAT_ICONS: Record<string, LucideIcon> = { farm: Stethoscope, pack: Boxes, deliver: Truck, proof: Camera };
-const TRUST_ICONS: Record<string, LucideIcon> = { ngo: ShieldCheck, docs: FileCheck2, areas: MapPin };
-
 /** Segment colours of the carton weight bar, cycled in order. */
 const BAR_COLOURS = ["bg-secondary", "bg-accent", "bg-primary", "bg-[hsl(42_80%_60%)]", "bg-[hsl(152_45%_35%)]", "bg-[hsl(18_75%_55%)]"];
 
@@ -68,8 +66,7 @@ const PriceButton = ({ to, label, amount, isAr, primary = false }: { to: string;
 };
 
 const FoodHero = () => {
-  const { c, t, isAr, section, amount } = useCampaignPage(SLUG, FOOD_DEFAULTS);
-  const trust = section("trust")?.items ?? [];
+  const { c, t, isAr, section, amount, campaignImage } = useCampaignPage(SLUG, FOOD_DEFAULTS);
   // The carton's weight is the sum of its (editable) ingredients; 14 is the design figure if the list is empty.
   const cartonKg = (section("carton")?.items ?? []).reduce((s, it) => s + (Number.parseFloat(it.extra?.en || it.extra?.ar || "0") || 0), 0) || 14;
   return (
@@ -81,9 +78,9 @@ const FoodHero = () => {
         <div className="absolute inset-[-28%] rounded-full border border-secondary/10" />
       </div>
 
-      <div className="container relative mx-auto max-w-6xl px-4 pb-16 pt-10 md:pb-20 md:pt-14">
+      <div className="container relative mx-auto max-w-6xl px-4 pb-10 pt-10 md:pb-12 md:pt-14">
         <CampaignCrumbs isAr={isAr} name={isAr ? "الغذاء الشهري" : "Monthly food"} className="text-primary-foreground/80" />
-        <div className="mt-10 grid items-center gap-10 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+        <div className={`mt-10 grid items-center gap-10 ${campaignImage ? "md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]" : ""}`}>
           <div className="text-center md:text-start">
             <p className="text-sm font-black text-secondary">{t(c.hero.eyebrow)}</p>
             <h1 className="mt-3 text-4xl font-black leading-[1.25] sm:text-5xl lg:text-6xl">
@@ -96,10 +93,11 @@ const FoodHero = () => {
             <HeroActions isAr={isAr} donateHref={DONATE} donateLabel={t(c.hero.donateLabel)} wa={waHref(isAr, "برنامج الغذاء الشهري", "the monthly food programme")} className="mt-8 justify-center md:justify-start" />
           </div>
 
-          <div className="relative mx-auto w-full max-w-md">
-            <img src={heroCarton} alt={isAr ? "كرتونة الغذاء الشهرية ١٤ كيلو مع كيلو لحمة من ذبيحة الشهر" : "The 14 kg monthly food carton with 1 kg of meat from the month's slaughter"} loading="eager" width={1520} height={1013} className="relative w-full rounded-2xl object-cover shadow-card ring-1 ring-primary-foreground/15" />
-            {/* The two numbers a donor remembers */}
-            <div className="absolute -bottom-4 start-3 flex gap-2 sm:-bottom-5 sm:start-4">
+          {campaignImage && (
+            <div className="relative mx-auto flex w-[84%] justify-center md:w-full">
+              <img src={campaignImage} alt={isAr ? "حملة الغذاء الشهري" : "Monthly food campaign"} loading="eager" width={1520} height={1013} className="relative h-auto max-h-[min(60vh,420px)] w-auto max-w-full rounded-2xl object-contain object-center shadow-card ring-1 ring-primary-foreground/15" />
+              {/* The two numbers a donor remembers */}
+              <div className="absolute -bottom-4 start-3 flex gap-2 sm:-bottom-5 sm:start-4">
               <span className="food-tag rounded-xl bg-secondary px-4 py-2 text-secondary-foreground shadow-cta">
                 <span className="block text-2xl font-black leading-none tabular-nums">{fmtNum(cartonKg, isAr)}</span>
                 <span className="block text-[11px] font-bold">{isAr ? "كيلو في الكرتونة" : "kg in the carton"}</span>
@@ -112,27 +110,18 @@ const FoodHero = () => {
                 <span className="block text-2xl font-black leading-none tabular-nums">{fmtNum(amount("meal"), isAr)}</span>
                 <span className="block text-[11px] font-bold">{isAr ? "جنيه للوجبة" : "EGP per meal"}</span>
               </span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
-        <ul className="mt-14 grid grid-cols-1 gap-3 text-sm font-bold text-primary-foreground/85 sm:grid-cols-3 md:mt-12">
-          {trust.map((it) => {
-            const I = TRUST_ICONS[it.id] ?? ShieldCheck;
-            return (
-              <li key={it.id} className="flex items-center justify-center gap-2 md:justify-start">
-                <I className="h-4 w-4 shrink-0 text-secondary" /> {t(it.title)}
-              </li>
-            );
-          })}
-        </ul>
       </div>
     </section>
   );
 };
 
 const FoodMain = () => {
-  const { c, t, isAr, price, amount, section } = useCampaignPage(SLUG, FOOD_DEFAULTS);
+  const { c, t, isAr, price, amount, packageId, section } = useCampaignPage(SLUG, FOOD_DEFAULTS);
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
   const hadith2 = section("hadith2")?.items[0];
@@ -158,7 +147,7 @@ const FoodMain = () => {
   return (
     <>
       {/* Second hadith band, continuing the hero ground */}
-      <section className="food-hero pb-16 text-primary-foreground md:pb-20">
+      <section className="food-hadith pb-16 pt-8 text-primary-foreground md:pb-20 md:pt-10">
         <div className="container mx-auto max-w-4xl px-4 text-center">
           <p className="text-sm font-black text-secondary/80">{t(section("hadith2")?.title)}</p>
           <blockquote className="mt-3 text-2xl font-black leading-[1.7] text-secondary md:text-3xl">{t(hadith2?.title)}</blockquote>
@@ -196,7 +185,7 @@ const FoodMain = () => {
                           <span className="block text-xs font-bold text-muted-foreground">{t(p.label)}</span>
                           <span className="block text-xl font-black tabular-nums text-primary">{fmtNum(p.amount, isAr)} <span className="text-xs font-bold">{isAr ? "جنيه" : "EGP"}</span></span>
                         </span>
-                        <Link to={amountHref(DONATE, p.amount)} className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+                        <Link to={amountHref(DONATE, p.amount, packageId(m.priceId))} className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
                           {isAr ? "تبرّع" : "Donate"} <Arrow className="h-4 w-4" />
                         </Link>
                       </div>
@@ -218,8 +207,8 @@ const FoodMain = () => {
               <h2 className="mt-2 text-3xl font-black text-primary md:text-4xl">{t(carton?.title)}</h2>
               <p className="mt-4 max-w-[55ch] text-base leading-[1.9] text-foreground/80">{t(carton?.lead)}</p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                {price("carton") && <PriceButton to={amountHref(DONATE, amount("carton"))} label={t(price("carton")?.label)} amount={amount("carton")} isAr={isAr} />}
-                {price("full") && <PriceButton to={amountHref(DONATE, amount("full"))} label={t(price("full")?.note ?? price("full")?.label)} amount={amount("full")} isAr={isAr} primary />}
+                {price("carton") && <PriceButton to={amountHref(DONATE, amount("carton"), packageId("carton"))} label={t(price("carton")?.label)} amount={amount("carton")} isAr={isAr} />}
+                {price("full") && <PriceButton to={amountHref(DONATE, amount("full"), packageId("full"))} label={t(price("full")?.note ?? price("full")?.label)} amount={amount("full")} isAr={isAr} primary />}
               </div>
             </div>
 
@@ -290,8 +279,8 @@ const FoodMain = () => {
                 })}
               </ol>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                {price("meat_share") && <PriceButton to={amountHref(DONATE, amount("meat_share"))} label={t(price("meat_share")?.label)} amount={amount("meat_share")} isAr={isAr} primary />}
-                {price("meat_kg") && <PriceButton to={amountHref(DONATE, amount("meat_kg"))} label={t(price("meat_kg")?.label)} amount={amount("meat_kg")} isAr={isAr} />}
+                {price("meat_share") && <PriceButton to={amountHref(DONATE, amount("meat_share"), packageId("meat_share"))} label={t(price("meat_share")?.label)} amount={amount("meat_share")} isAr={isAr} primary />}
+                {price("meat_kg") && <PriceButton to={amountHref(DONATE, amount("meat_kg"), packageId("meat_kg"))} label={t(price("meat_kg")?.label)} amount={amount("meat_kg")} isAr={isAr} />}
               </div>
             </div>
           </div>
@@ -378,7 +367,7 @@ const FoodMain = () => {
                     {fmtNum(p.amount, isAr)} <span className={`text-sm font-bold ${hot ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{isAr ? "جنيه" : "EGP"}</span>
                   </p>
                   <p className={`mt-3 flex-1 text-sm leading-relaxed ${hot ? "text-primary-foreground/80" : "text-foreground/75"}`}>{t(tier.desc)}</p>
-                  <Link to={amountHref(DONATE, p.amount)} className={`mt-5 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl px-5 text-base font-black focus-visible:outline-none focus-visible:ring-2 ${hot ? "bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95 focus-visible:ring-secondary" : "border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground focus-visible:ring-ring"}`}>
+                  <Link to={amountHref(DONATE, p.amount, packageId(tier.id))} className={`mt-5 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl px-5 text-base font-black focus-visible:outline-none focus-visible:ring-2 ${hot ? "bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95 focus-visible:ring-secondary" : "border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground focus-visible:ring-ring"}`}>
                     {isAr ? "اكفل الآن" : "Sponsor now"} <Arrow className="h-4 w-4" />
                   </Link>
                 </article>
@@ -446,11 +435,12 @@ const FoodMain = () => {
 };
 
 const FoodBoxLanding = () => {
-  const { c, section } = useCampaignPage(SLUG, FOOD_DEFAULTS);
+  const { c, section, campaignImage, isLoading } = useCampaignPage(SLUG, FOOD_DEFAULTS);
   const seo = section("seo");
   return (
     <CampaignLandingShell
       slug="food-box-meat"
+      isLoading={isLoading}
       seo={c.seo}
       path="/food-box"
       titleAr={seo?.title.ar ?? ""}
@@ -459,7 +449,7 @@ const FoodBoxLanding = () => {
       taglineEn={seo?.lead?.en ?? ""}
       metaDescAr="برنامج الغذاء الشهري من مؤسسة اليسر: لحوم من ذبائح شهرية، كرتونة ١٤ كيلو من المكونات الغذائية البلدي، ووجبات إطعام تصلح كفارة صيام أو كفارة يمين. توصيل لباب البيت في المنصورة والدقهلية وكل مصر، بتوثيق بالصور."
       metaDescEn="Al-Yusr's monthly food programme: meat from monthly slaughters, a 14 kg carton of local staples, and cooked meals for feeding, fasting expiation or oath expiation. Doorstep delivery in Mansoura, Dakahlia and all Egypt, with photo proof."
-      heroImage={heroCarton}
+      heroImage={campaignImage}
       heroAlt="الغذاء الشهري — كرتونة ١٤ كيلو ولحوم الذبائح الشهرية ووجبات الإطعام"
       hero={<FoodHero />}
       main={<FoodMain />}

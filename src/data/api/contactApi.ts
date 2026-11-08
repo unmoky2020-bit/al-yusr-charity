@@ -1,7 +1,7 @@
 /**
  * Public form submissions (no auth) → Laravel.
  *
- * Endpoints (NEW — proposed, documented in backend-handoff/01-replace-supabase-public.md):
+ * Endpoints documented in the latest Postman collection:
  *   POST /contact-messages   — "تواصل معنا" form (src/pages/site/Contact.tsx)
  *   POST /khabia-requests    — "الخبيئة" request form (src/components/sections/KhabiaProgram.tsx)
  *

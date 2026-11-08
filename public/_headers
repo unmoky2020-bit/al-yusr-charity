@@ -56,7 +56,7 @@
 
 # SEO files
 /sitemap.xml
-  Cache-Control: public, max-age=3600
+  Cache-Control: public, max-age=1800
 /image-sitemap.xml
   Cache-Control: public, max-age=3600
 /robots.txt

@@ -24,6 +24,7 @@ import {
   BookOpen,
   Calendar,
   ChevronDown,
+  type LucideIcon,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
@@ -48,6 +49,7 @@ import { DAKAHLIA_CITIES } from "@/data/dakahliaCities";
 import { TagsRail } from "@/components/common/TagsRail";
 import { programHref } from "@/data/programLandings";
 import { isListedProgram } from "@/data/programScope";
+import { useListingHero } from "@/data/listingHeroes";
 // Accordion imports kept for other uses
 import {
   Accordion,
@@ -60,6 +62,7 @@ const Projects = () => {
   const { lang, t } = useLang();
   const isRTL = lang === "ar";
   const reduce = useReducedMotion();
+  const heroImg = useListingHero("programs");
   // Published backend programs (static copy only when the API is unreachable).
   const { programs: allPrograms, isLoading: programsLoading } = usePrograms();
   // One list, from the backend: campaigns and projects have their own pages and are never repeated here.
@@ -113,7 +116,7 @@ const Projects = () => {
 
   // Per-program signature innovations — what makes EACH program one-of-a-kind.
   // Used to power the new "Program signatures" section below for richer storytelling.
-  const signatures: { slug: string; icon: any; ar: { t: string; d: string }; en: { t: string; d: string } }[] = [
+  const signatures: { slug: string; icon: LucideIcon; ar: { t: string; d: string }; en: { t: string; d: string } }[] = [
     {
       slug: "odhya",
       icon: ShieldCheck,
@@ -360,36 +363,42 @@ const Projects = () => {
         })}</script>
       </Helmet>
 
-      <section className="pattern-hero-luxe hero-pattern-fade text-primary-foreground">
+      <section className="pattern-hero-luxe hero-pattern-fade relative overflow-x-clip overflow-y-visible text-primary-foreground md:overflow-hidden">
+        <div className="pointer-events-none !absolute inset-0" aria-hidden>
+          <img
+            src={heroImg}
+            alt=""
+            className="h-full w-full object-cover object-center"
+            fetchpriority="high"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/75 via-primary/55 to-primary/90" />
+        </div>
         {/* Brand leaf tile overlay — same SVG motif used on Bride Trousseau hero */}
-        <div className="brand-leaf-tile pointer-events-none absolute inset-0 opacity-50" aria-hidden />
-        <div className="container mx-auto px-4 py-12 md:py-16">
+        <div className="brand-leaf-tile pointer-events-none absolute inset-0 opacity-30" aria-hidden />
+        <div className="container relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 md:py-16">
           <div className="flex justify-center text-primary-foreground/80">
             <Breadcrumbs items={[{ name: isRTL ? "الرئيسية" : "Home", href: "/" }, { name: isRTL ? "البرامج" : "Programs" }]} />
           </div>
           <div className="mt-4 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-center">
             <div className="text-center lg:text-start">
-              <span className="inline-flex rounded-full border border-secondary/40 bg-primary/55 px-3 py-1 text-xs font-extrabold text-secondary backdrop-blur">
-                {isRTL ? "غذاء • علاج • تعليم • مياه • سكن" : "Food • Health • Education • Water • Shelter"}
-              </span>
-              <h1 className="mt-4 mx-auto lg:mx-0 max-w-3xl text-3xl font-black leading-[1.2] md:text-5xl">
+              <h1 className="mt-2 mx-auto lg:mx-0 max-w-3xl text-3xl font-black leading-[1.2] md:text-5xl">
                 {isRTL ? "برامج اليسر… دعم متكامل يحسّن ظروف المعيشة" : "Al-Yusr programs for better living conditions"}
               </h1>
               <p className="mt-4 mx-auto lg:mx-0 max-w-2xl text-sm font-semibold leading-7 text-primary-foreground/85 md:text-base">
                 {isRTL ? "من كرتونة الأمل لفرصة علاج وتعليم ومياه وسكن آمن — بنوصل الخير للبيوت المحتاجة بعد تحقق ميداني وبكرامة كاملة." : "From a hope box to healthcare, education, water, and safer homes — we deliver support after field verification and with full dignity."}
               </p>
-              <div className="mt-6 flex flex-wrap justify-center lg:justify-start gap-3">
-                <Button asChild size="lg" className="bg-whatsapp text-whatsapp-foreground shadow-whatsapp hover:opacity-95">
-                  <a href={waHref} target="_blank" rel="noopener" data-source="programs" data-label="programs-whatsapp-hero">
-                    <WhatsAppIcon className="h-5 w-5" aria-hidden />{isRTL ? "تواصل واتساب" : "WhatsApp us"}
+              <div className="mt-6 grid w-full max-w-xl grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:gap-3 lg:justify-start">
+                <Button asChild size="lg" className="w-full min-w-0 px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-sm bg-whatsapp text-whatsapp-foreground shadow-whatsapp hover:opacity-95">
+                  <a href={waHref} target="_blank" rel="noopener" data-source="programs" data-label="programs-whatsapp-hero" className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center whitespace-normal sm:gap-2">
+                    <WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" aria-hidden />{isRTL ? "تواصل واتساب" : "WhatsApp us"}
                   </a>
                 </Button>
-                <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
-                  <Link to="/donate" data-source="programs" data-label="programs-donate-hero"><Heart className="h-5 w-5" />{isRTL ? "تبرع الآن" : "Donate now"}</Link>
+                <Button asChild size="lg" className="w-full min-w-0 px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-sm bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
+                  <Link to="/donate" data-source="programs" data-label="programs-donate-hero" className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center whitespace-normal sm:gap-2"><Heart className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />{isRTL ? "تبرع الآن" : "Donate now"}</Link>
                 </Button>
               </div>
             </div>
-            <div className="grid gap-2 rounded-3xl border border-secondary/25 bg-primary/55 p-4 shadow-card backdrop-blur">
+            <div className="relative z-20 -mb-36 grid gap-2 rounded-3xl border border-secondary/25 bg-primary/90 p-4 shadow-card backdrop-blur md:mb-0 md:bg-primary/55">
               {highlights.map((item) => (
                 <div key={item} className="flex items-center gap-2 rounded-2xl bg-primary-foreground/10 px-3 py-2 text-sm font-extrabold">
                   <ShieldCheck className="h-4 w-4 text-secondary" />
@@ -404,11 +413,11 @@ const Projects = () => {
 
 
       {/* How it works — 4-step donation journey (mirrors HowTo JSON-LD) */}
-      <section aria-labelledby="programs-how" className="bg-background py-14 md:py-20">
+      <section aria-labelledby="programs-how" className="bg-background px-0 pb-14 pt-36 md:py-20">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-              <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "إزاي بنشتغل" : "How it works"}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3 py-1 text-[11px] font-bold text-primary">
+              <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "إزاي بنشتغل" : "How it works"}
             </span>
             <h2 id="programs-how" className="mt-3 text-2xl font-black text-primary md:text-4xl">
               {isRTL ? "٤ خطوات من تبرعك لباب بيت الأسرة" : "4 steps from your donation to the family's door"}
@@ -466,8 +475,8 @@ const Projects = () => {
       <section className="pattern-programs relative overflow-x-clip py-14 md:py-20">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-              <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "كل البرامج" : "All programs"}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3 py-1 text-[11px] font-bold text-primary">
+              <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "كل البرامج" : "All programs"}
             </span>
             <h2 className="mt-3 text-2xl font-black leading-[1.15] text-primary md:text-4xl">
               {isRTL ? "كل برامجنا في مكان واحد" : "Every Al-Yusr program in one place"}
@@ -506,10 +515,10 @@ const Projects = () => {
             {programs.map((p, idx) => {
               // Static (JIT-safe) sticky offsets that cascade so each card peeks under the next.
               const offsets = [
-                "top-[72px] md:top-[88px]",
-                "top-[84px] md:top-[102px]",
-                "top-[96px] md:top-[116px]",
-                "top-[108px] md:top-[130px]",
+                "top-[84px] md:top-[88px]",
+                "top-[96px] md:top-[102px]",
+                "top-[108px] md:top-[116px]",
+                "top-[120px] md:top-[130px]",
               ];
               const offset = offsets[idx % offsets.length];
               const reverse = idx % 2 === 1;
@@ -521,10 +530,10 @@ const Projects = () => {
                     to={programHref(p.slug)}
                     data-source="projects"
                     data-label={`project-${p.slug}`}
-                    className={`group relative isolate mx-auto flex w-full transform-gpu flex-col overflow-hidden rounded-[28px] lg:mx-0 lg:w-[90%] lg:max-w-none border border-primary/10 bg-gradient-to-b from-card to-card/95 shadow-card ring-1 ring-primary/5 transition-colors duration-300 [backface-visibility:hidden] hover:border-secondary/50 md:items-stretch ${reverse ? "md:flex-row-reverse" : "md:flex-row"}`}
+                    className={`group relative isolate mx-auto flex w-full transform-gpu flex-col overflow-hidden rounded-[28px] lg:mx-0 lg:min-h-[320px] lg:w-[90%] lg:max-w-none border border-primary/10 bg-card shadow-card ring-1 ring-primary/5 transition-colors duration-300 [backface-visibility:hidden] hover:border-secondary/50 md:items-stretch md:bg-gradient-to-b md:from-card md:to-card/95 ${reverse ? "md:flex-row-reverse" : "md:flex-row"}`}
                   >
                     {/* Content first in DOM so it reads first on large screens */}
-                    <div className="order-2 flex flex-1 flex-col px-5 pb-5 pt-4 md:order-1 md:w-1/2 md:justify-center md:px-6 md:py-6">
+                    <div className="order-2 flex flex-1 flex-col px-5 pb-5 pt-4 text-start md:order-1 md:w-1/2 md:justify-center md:px-6 md:py-6">
                       {p.season && (
                         <span className="mb-2 inline-flex w-fit rounded-full bg-accent/15 px-3 py-1 text-[11px] font-extrabold text-accent">
                           {p.season[lang]}
@@ -533,9 +542,9 @@ const Projects = () => {
                       <h3 className="text-2xl font-black leading-tight text-primary md:text-[28px]">{p[lang].name}</h3>
                       <p className="mt-2 text-sm font-semibold leading-7 text-muted-foreground md:text-base">{p[lang].tagline}</p>
                       <p className="mt-2 line-clamp-2 text-xs leading-6 text-muted-foreground md:text-sm">{p[lang].desc}</p>
-                      <div className="mt-4 flex items-center gap-1.5 text-xs font-extrabold text-muted-foreground">
+                      <div className="mt-4 inline-flex w-fit max-w-full items-center gap-1.5 text-xs font-extrabold text-muted-foreground">
                         <CheckCircle2 className="h-4 w-4 text-primary" />
-                        {isRTL ? "موثّق ومراجع ميدانيًا" : "Field-verified and reviewed"}
+                        <span>{isRTL ? "موثّق ومراجع ميدانيًا" : "Field-verified and reviewed"}</span>
                       </div>
                       <div className="mt-5 flex flex-wrap items-center gap-2.5">
                         {p.priceFrom > 0 && (
@@ -594,8 +603,8 @@ const Projects = () => {
       <section aria-labelledby="programs-geo" className="bg-background py-10 md:py-14">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-              <MapPin className="h-3.5 w-3.5" /> {isRTL ? "تغطية جغرافية" : "Local coverage"}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3 py-1 text-[11px] font-bold text-primary">
+              <MapPin className="h-3.5 w-3.5 text-primary" /> {isRTL ? "تغطية جغرافية" : "Local coverage"}
             </span>
             <h2 id="programs-geo" className="mt-2 text-xl font-black text-primary md:text-2xl">
               {isRTL ? "اختر برنامج لمدينتك" : "Pick a program in your city"}
@@ -637,7 +646,7 @@ const Projects = () => {
                     <span className="text-[11px] font-bold text-muted-foreground">{activeGov.region}</span>
                   </div>
                 </div>
-                <span className="rounded-full border border-secondary/30 bg-secondary/15 px-3 py-1 text-xs font-black text-secondary">
+                <span className="rounded-full border border-secondary/30 bg-secondary/20 px-3 py-1 text-xs font-black text-primary">
                   {Object.keys(activeGov.programs).filter((s) => programSlugs.has(s)).length} {isRTL ? "برنامج نشط" : "active programs"}
                 </span>
               </div>
@@ -740,8 +749,8 @@ const Projects = () => {
       >
         <div className="container mx-auto max-w-5xl px-4">
           <div className="mx-auto max-w-xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-3 py-1 text-[11px] font-bold text-secondary">
-              <Sparkles className="h-3.5 w-3.5" /> {isRTL ? "أسئلة شائعة" : "FAQ"}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3 py-1 text-[11px] font-bold text-primary">
+              <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "أسئلة شائعة" : "FAQ"}
             </span>
             <h2
               id="programs-faq-heading"

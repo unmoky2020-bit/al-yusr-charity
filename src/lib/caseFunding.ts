@@ -18,9 +18,17 @@ export function caseFunding(c: Pick<CaseRow, "needed_amount" | "raised_amount" |
   const raised = Math.max(0, Number(c.raised_amount) || 0);
   const remaining = Math.max(0, need - raised);
   const pct = need > 0 ? Math.min(100, Math.floor((raised / need) * 100)) : 0;
-  const status = String(c.status || "");
-  const done = status === "completed" || status === "closed" || (need > 0 && remaining === 0);
+  const status = String(c.status || "").trim().toLowerCase();
+  const done = status === "completed" || status === "closed" || status === "funded" || (need > 0 && remaining === 0);
   return { need, raised, remaining, pct, done };
+}
+
+export function filterOpenCases(rows: CaseRow[]): CaseRow[] {
+  return rows.filter((c) => String(c.status || "").trim().toLowerCase() === "approved" && !caseFunding(c).done);
+}
+
+export function filterUrgentOpenCases(rows: CaseRow[]): CaseRow[] {
+  return filterOpenCases(rows).filter((c) => c.is_urgent);
 }
 
 /**

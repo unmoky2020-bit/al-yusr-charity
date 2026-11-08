@@ -450,7 +450,7 @@ export function DonationEntityItem({
                           </p>
                         )}
                       </div>
-                      <span className="text-sm font-black text-secondary shrink-0 whitespace-nowrap">
+                      <span className="text-sm font-black text-primary shrink-0 whitespace-nowrap">
                         {share.price.toLocaleString()} {isAR ? "ج" : "EGP"}
                       </span>
                     </div>
@@ -474,7 +474,7 @@ export function DonationEntityItem({
                         </div>
                       ) : (
                         <button type="button" onClick={() => updateShareCount(share.id, 1)}
-                          className="h-7 px-3 text-xs font-bold rounded-lg border border-secondary/50 text-secondary hover:bg-secondary hover:text-slate-950 transition cursor-pointer">
+                          className="h-7 px-3 text-xs font-bold rounded-lg border border-secondary/50 text-primary hover:bg-secondary hover:text-slate-950 transition cursor-pointer">
                           {isAR ? "+ اختيار" : "+ Select"}
                         </button>
                       )}
@@ -488,7 +488,7 @@ export function DonationEntityItem({
                 <span className="text-xs font-bold text-muted-foreground">
                   {isAR ? "إجمالي الأسهم:" : "Shares total:"}
                 </span>
-                <span className="text-sm font-black text-secondary">
+                <span className="text-sm font-black text-primary">
                   {item.amount.toLocaleString()} {isAR ? "ج.م" : "EGP"}
                 </span>
               </div>

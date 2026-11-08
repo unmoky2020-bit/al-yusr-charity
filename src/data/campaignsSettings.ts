@@ -35,7 +35,7 @@ export interface CarouselCard {
  *   - cards (texts, image, link, active, order) + show/hide + speed: the existing carousel endpoints
  *     (`/homepage/carousel`, `/admin/homepage/carousel/...`), exactly as before;
  *   - header texts, the three switches, speed and the extra card fields (price, donate link, source):
- *     PROPOSED `GET/PUT /homepage/campaigns-section`.
+ *     `GET/PUT /homepage/campaigns-section` (documented in the latest Postman collection; responses are not saved).
  * Public reads: CONTENT_SOURCE "static" -> today's behaviour (defaults + carousel items);
  * "api"/"auto" -> the same plus `/homepage/campaigns-section` on top.
  */
@@ -272,7 +272,7 @@ const isNumericId = (id: string) => /^\d+$/.test(id) && Number(id) > 0;
 
 /**
  * Dashboard state for /admin/campaigns-section. Every write is awaited and throws (with an Arabic message) when
- * the carousel part fails; the section part (proposed route) is reported in the returned result.
+ * the carousel part fails; the documented section route's result is reported separately.
  * `settings` is an unsaved draft until `saveSettings()`; cards are written immediately.
  */
 export const useCampaignsSectionAdmin = () => {
@@ -338,7 +338,7 @@ export const useCampaignsSectionAdmin = () => {
   };
 
   /**
-   * Save the draft: carousel settings (show/hide + speed, existing route) then the section row (proposed route).
+   * Save the draft: carousel settings (show/hide + speed, existing route) then the documented section row.
    * Throws when the carousel part fails; the section part is in the result.
    */
   const saveSettings = useCallback(async (): Promise<SectionWriteResult> => {

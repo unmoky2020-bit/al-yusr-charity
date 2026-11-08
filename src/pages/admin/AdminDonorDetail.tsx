@@ -10,7 +10,6 @@ import {
   MessageCircle,
   ExternalLink,
   User,
-  RefreshCw,
   FileText,
   X,
 } from "lucide-react";
@@ -20,6 +19,8 @@ import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
 import { donorsApi, donationsApiV1 } from "@/data/laravelApi";
 import { DonationReceipt } from "@/components/common/DonationReceipt";
+import { donationPaymentMethodLabel } from "@/lib/payment-method-label";
+import { resolveDonorUserProfileId } from "@/lib/donor-user-profile";
 
 
 type DonorRow = {
@@ -29,6 +30,8 @@ type DonorRow = {
   phone: string | null;
   address: string | null;
   created_at: string;
+  user_id?: string | number | null;
+  user?: { id?: string | number | null } | null;
   [k: string]: any;
 };
 
@@ -91,11 +94,13 @@ export default function AdminDonorDetail() {
               phone: firstDon.donor_phone || firstDon.phone || firstDon.donor?.phone || null,
               address: null,
               created_at: firstDon.created_at || new Date().toISOString(),
+              user_id: firstDon.donor?.user_id ?? null,
+              user: firstDon.donor?.user ?? null,
             }
           : { id: String(id), name: `متبرع #${id}`, email: null, phone: null, address: null, created_at: new Date().toISOString() };
       }
 
-      setDonor({
+      const donorProfile: DonorRow = {
         id: String(donorData.id || id),
         name: donorData.name || donorData.full_name || `متبرع #${id}`,
         email: donorData.email || null,
@@ -103,14 +108,13 @@ export default function AdminDonorDetail() {
         address: donorData.address || donorData.city || null,
         created_at: donorData.created_at || new Date().toISOString(),
         ...donorData,
-      });
+      };
+      const userProfileId = await resolveDonorUserProfileId(donorProfile);
+      setDonor({ ...donorProfile, user_id: userProfileId });
 
       setDonations(
         donorDonations.map((d: any) => {
-          const pm = d.payment_method;
-          const methodName =
-            (typeof pm === "object" ? pm?.name_ar || pm?.name_en || pm?.slug : pm) ||
-            d.method || "—";
+          const methodName = donationPaymentMethodLabel(d, isAr ? "ar" : "en");
           return {
             id: String(d.id),
             ref_code: d.transaction_reference || d.reference_code || d.ref_code || d.code || `DON-${d.id}`,
@@ -170,6 +174,7 @@ export default function AdminDonorDetail() {
           : `Hello ${donor.name}, we're reaching out from Al-Yusr Charity. Thank you for your generous support.`
       )}`
     : null;
+  const userProfileId = donor.user_id;
 
   return (
     <AdminLayout>
@@ -204,9 +209,14 @@ export default function AdminDonorDetail() {
                 <a href={`tel:${donor.phone}`}><Phone className="h-4 w-4" /><span dir="ltr">{donor.phone}</span></a>
               </Button>
             )}
-            <Button size="sm" variant="outline" onClick={reload} className="gap-1.5 text-xs font-bold">
-              <RefreshCw className="h-3.5 w-3.5" />{isAr ? "تحديث" : "Refresh"}
-            </Button>
+            {userProfileId != null && (
+              <Button asChild size="sm" variant="outline" className="gap-1.5 text-xs font-bold">
+                <Link to={`/admin/users/${encodeURIComponent(String(userProfileId))}`}>
+                  <User className="h-3.5 w-3.5" />
+                  {isAr ? "عرض الملف" : "View profile"}
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
 

@@ -7,7 +7,8 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
-import { DetailPageSkeleton, CardGridSkeleton } from "@/components/common/ContentSkeletons";
+import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { LocalFAQ } from "@/components/common/LocalFAQ";
 import { Button } from "@/components/ui/button";
@@ -90,7 +91,7 @@ const AxisDetail = () => {
     [axis, programRecords],
   );
 
-  if (isLoading) return <PageLayout><DetailPageSkeleton /></PageLayout>;
+  if (isLoading) return <PageLayout><PageLoadingState /></PageLayout>;
 
   if (!axis) {
     return (

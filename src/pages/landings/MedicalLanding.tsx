@@ -25,13 +25,16 @@ import {
 } from "lucide-react";
 import { DonateBtn, DonationPicker, ShareBand, StartsFrom, Stepper, type Source } from "@/components/campaigns/DonationPicker";
 import { CampaignLandingShell } from "@/components/sections/CampaignLandingShell";
+import { PageLayout } from "@/components/layout/PageLayout";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { ProjectKindNote } from "@/components/campaigns/ProjectKind";
 import { BentoGallery } from "@/components/campaigns/shared";
 import { useInView } from "@/hooks/useInView";
 import { useLang } from "@/i18n/LangContext";
-import { entityDonateHref, findShare, shareDonateHref, useEntityShares, type Share } from "@/data/entityShares";
+import { entityDonateHref, findShare, shareDonateHref, useEntityShares, useEntitySharesState, type Share } from "@/data/entityShares";
 import { COMPLEX_SHARES, CONVOY_SHARES, DISABILITY_SHARES, MEDICAL_SOURCES, TREATMENT_SHARES } from "@/data/medicalShares";
+import { useProjectDetail } from "@/data/sources/projects";
 import heroHealth from "@/assets/program-health.webp";
 import prostheticsImg from "@/assets/Prosthetics.jpg";
 import medicineImg from "@/assets/axis-health.jpg";
@@ -90,7 +93,7 @@ const Point = ({ children, dark = false }: { children: ReactNode; dark?: boolean
 
 /* ───────────────────────── Hero ───────────────────────── */
 
-const MedicalHero = () => {
+const MedicalHero = ({ image }: { image: string }) => {
   const { lang } = useLang();
   const isAr = lang === "ar";
   const stats: { v: string; l: Bi }[] = [
@@ -124,7 +127,7 @@ const MedicalHero = () => {
             </p>
           </div>
           <figure className="mx-auto w-full max-w-md rounded-[20px] bg-primary-foreground/10 p-2 ring-1 ring-primary-foreground/15">
-            <img src={heroHealth} alt={isAr ? "طبيب من فريق اليسر مع مريض أثناء صرف العلاج" : "An Al-Yusr doctor with a patient"} loading="eager" className="aspect-[4/3] w-full rounded-2xl object-cover" />
+            <img src={image} alt={isAr ? "طبيب من فريق اليسر مع مريض أثناء صرف العلاج" : "An Al-Yusr doctor with a patient"} loading="eager" className="mx-auto block h-auto max-h-[min(60vh,420px)] w-auto max-w-full rounded-2xl object-contain object-center" />
           </figure>
         </div>
 
@@ -767,8 +770,18 @@ const MedicalMain = () => {
   );
 };
 
-const MedicalLanding = () => (
-  <CampaignLandingShell
+const MedicalLanding = () => {
+  const project = useProjectDetail("medical");
+  const complexShares = useEntitySharesState("project", "medical", COMPLEX_SHARES);
+  const treatmentShares = useEntitySharesState("program", "treatment", TREATMENT_SHARES);
+  const disabilityShares = useEntitySharesState("program", "prosthetics", DISABILITY_SHARES);
+  const convoyShares = useEntitySharesState("program", "medical-convoys", CONVOY_SHARES);
+  if (project.isLoading || complexShares.isLoading || treatmentShares.isLoading || disabilityShares.isLoading || convoyShares.isLoading) {
+    return <PageLayout><PageLoadingState /></PageLayout>;
+  }
+  const heroImage = project.project?.image && project.project.image !== "/placeholder.svg" ? project.project.image : heroHealth;
+
+  return <CampaignLandingShell
     slug="medical"
     path="/medical"
     crumbParent={{ ar: "مشاريعنا", en: "Our projects", href: "/projects" }}
@@ -779,9 +792,9 @@ const MedicalLanding = () => (
     metaDescAr="المشروع الطبي من مؤسسة اليسر: مجمع اليسر الطبي بالحفير يخدم 43 قرية بين الدقهلية وكفر الشيخ، صرف روشتات بالمجان، عمليات جراحية، أشعة وتحاليل، تحدّي الإعاقة، وقوافل طبية."
     metaDescEn="Al-Yusr's medical project: the El-Hafir complex serving 43 villages between Dakahlia and Kafr El-Sheikh, free prescriptions, surgery, scans and tests, disability support and medical convoys."
     seo={{ title: { ar: "المشروع الطبي: مجمع اليسر الطبي وروشتات وعمليات وقوافل | مؤسسة اليسر", en: "The medical project: complex, prescriptions, surgery & convoys | Al-Yusr" } }}
-    heroImage={heroHealth}
+    heroImage={heroImage}
     heroAlt="طبيب من مؤسسة اليسر مع مريض أثناء صرف العلاج"
-    hero={<MedicalHero />}
+    hero={<MedicalHero image={heroImage} />}
     main={<MedicalMain />}
     relatedLinks={[
       { href: "/projects", ar: "كل المشاريع", en: "All projects" },
@@ -816,7 +829,7 @@ const MedicalLanding = () => (
     bottomCtaEn="Be the reason a patient heals"
     bottomSubAr="كل سهم يصل إلى مريض بعينه: دواء، أو أشعة، أو عملية، أو جلسة تأهيل لطفل."
     bottomSubEn="Every share reaches a real patient: medicine, a scan, surgery or a rehabilitation session for a child."
-  />
-);
+  />;
+};
 
 export default MedicalLanding;

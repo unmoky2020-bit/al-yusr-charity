@@ -68,6 +68,10 @@ describe("programs source", () => {
     expect(bare).toEqual({ ...fb });
   });
 
+  it("does not invent a placeholder image for an API program without one", () => {
+    expect(mapApiProgram({ slug: "no-image", name_ar: "برنامج" }).image).toBe("");
+  });
+
   it("returns the static array unchanged when the flag is static", () => {
     expect(resolvePrograms(undefined)).toBe(programs);
     expect(resolvePrograms([API_PROGRAM_ORPHANS], "static")).toBe(programs);

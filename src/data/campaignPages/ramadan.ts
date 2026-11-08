@@ -3,7 +3,7 @@ import { l, type CampaignPageContent } from "./types";
 /**
  * Default content for the Ramadan season landing page (/ramadan).
  * Ids and section keys are referenced by `src/pages/landings/RamadanLanding.tsx`; keep them stable.
- * Price ids: iftar, fitr, meat, eid_clothes, box, bride.
+ * Price ids: iftar, fitr, meat, eid_clothes, box, bride, meat_monthly.
  * Stat ids: boxes, brides, zakat_families, orphans, iftar_meals, cattle, sheep, sadaqa (value null; parts in `note`, joined by " · ").
  * Section keys: table, gifts, moon, feed, fitr, achievements.
  */
@@ -28,12 +28,13 @@ const ramadan: CampaignPageContent = {
   },
 
   prices: [
-    { id: "iftar", label: l("وجبة إفطار صائم ساخنة", "Hot iftar meal"), amount: 95, note: l("مطبخ اليسر", "Daily iftar") },
-    { id: "fitr", label: l("زكاة الفطر عن فرد", "Zakat al-Fitr per person"), amount: 75, note: l("مصارف شرعية", "Zakat") },
-    { id: "meat", label: l("سهم لحوم بلدي (1 كجم)", "Farm meat share (1 kg)"), amount: 420, note: l("من مزارعنا", "Our farms") },
-    { id: "eid_clothes", label: l("كسوة عيد لطفل يتيم وعلبة كعك", "Orphan Eid outfit + cookies"), amount: 650, note: l("فرحة العيد", "Eid joy") },
-    { id: "box", label: l("كرتونة رمضان الكبرى (25 كجم)", "Ramadan box (25 kg)"), amount: 950, note: l("تكفي أسرة الشهر", "A family's month") },
-    { id: "bride", label: l("سهم تيسير زواج عروسة يتيمة", "Orphan bride share"), amount: 1500, note: l("الفرحة فرحتين", "Double joy") },
+    { id: "iftar", label: l("وجبة إفطار صائم ساخنة", "Hot iftar meal"), amount: 95, note: l("مطبخ اليسر", "Daily iftar"), backendPackageNames: ["وجبة إفطار صائم ساخنة"] },
+    { id: "fitr", label: l("زكاة الفطر عن فرد", "Zakat al-Fitr per person"), amount: 75, note: l("مصارف شرعية", "Zakat"), backendPackageNames: ["زكاة الفطر عن فرد"] },
+    { id: "meat", label: l("سهم لحوم بلدي (1 كجم)", "Farm meat share (1 kg)"), amount: 420, note: l("من مزارعنا", "Our farms"), backendPackageNames: ["سهم لحوم وذبائح مزارع الوقف"] },
+    { id: "eid_clothes", label: l("كسوة عيد لطفل يتيم وعلبة كعك", "Orphan Eid outfit + cookies"), amount: 650, note: l("فرحة العيد", "Eid joy"), backendPackageNames: ["كسوة وكعك العيد لطفل يتيم"] },
+    { id: "box", label: l("كرتونة رمضان الكبرى (25 كجم)", "Ramadan box (25 kg)"), amount: 950, note: l("تكفي أسرة الشهر", "A family's month"), backendPackageNames: ["كرتونة الخير 25 كجم مع لحم بلدي"] },
+    { id: "bride", label: l("سهم تيسير زواج عروسة يتيمة", "Orphan bride share"), amount: 1500, note: l("الفرحة فرحتين", "Double joy"), backendPackageNames: ["سهم تيسير زواج عروس يتيمة"] },
+    { id: "meat_monthly", label: l("سهم لحوم الذبائح الشهرية", "Monthly sacrificial meat share"), amount: 350, note: l("من مزارع الوقف", "From endowment farms"), backendPackageNames: ["سهم لحوم الذبائح الشهرية"] },
   ],
 
   /** Last Ramadan's results. */

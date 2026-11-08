@@ -96,8 +96,8 @@ const AdminDashboard = () => {
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 6" opacity={0.16} vertical={false} />
-                      <XAxis dataKey="name" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} reversed={isRTL} />
-                      <YAxis orientation={isRTL ? "right" : "left"} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} tickFormatter={(v) => formatCompact(Number(v), lang)} axisLine={false} tickLine={false} width={52} />
+                      <XAxis dataKey="name" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+                      <YAxis orientation="left" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} tickFormatter={(v) => formatCompact(Number(v), lang)} axisLine={false} tickLine={false} width={52} />
                       <Tooltip content={<MonthTooltip lang={lang} />} />
                       <Area type="monotone" dataKey="value" stroke="hsl(152 65% 22%)" strokeWidth={2.5} fill="url(#dgrad)" />
                     </AreaChart>

@@ -248,6 +248,15 @@ const athar: CampaignPageContent = {
       "Every EGP reaches the right hands — verified with photos, video and field follow-up.",
     ),
   },
+  images: {
+    gallery: {
+      label: l("صور أثر", "Athar gallery"),
+      hint: l("صور من أنشطة البرنامج المضافة من لوحة التحكم.", "Program photos managed from the dashboard."),
+      max: 4,
+      captions: true,
+      items: [],
+    },
+  },
 };
 
 export default athar;

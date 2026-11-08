@@ -295,7 +295,7 @@ export default function AdminDonationCampaigns() {
     setSavingEditCat(true);
     try {
       const slug = editingCat.slug?.trim() || `camp-cat-${Date.now().toString(36)}`;
-      // PUT /donation-campaign-categories/{id} is PROPOSED (404 => "needs backend").
+      // PUT /donation-campaign-categories/{id} is documented in Postman; a 404 still means this deployment lacks it.
       await donationCampaignsAdminApi.updateCategory(editingCat.id, {
         name_ar: editingCat.name_ar.trim(),
         name_en: editingCat.name_en?.trim() || editingCat.name_ar.trim(),

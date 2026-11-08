@@ -35,7 +35,7 @@ const Inner = () => {
   const navigate = useNavigate();
   // Laravel /content documents (all types). Writes go to POST/PATCH/DELETE /content.
   const { items, upsert, remove, setStatus, error: contentError } = useContentStore();
-  // DB-only blog rows (no static seed) — keeps counts in sync with /admin/blog-seo.
+  // DB-only blog rows (no static seed) — keeps counts in sync with /admin/blog.
   const { rows: blogRows } = useAllBlogRowsAdmin();
   const blogPosts = useMemo<BlogPost[]>(() => blogRows.map(dbToBlogPost), [blogRows]);
 
@@ -128,7 +128,7 @@ const Inner = () => {
   const [preview, setPreview] = useState<ContentDoc | null>(null);
 
   // Bridge: DB blog posts presented as read-only article docs,
-  // edited via the unified Blog SEO editor at /admin/blog-seo.
+  // edited via the unified blog editor at /admin/blog.
   const blogAsDocs = useMemo<ContentDoc[]>(() =>
     (Array.isArray(blogPosts) ? blogPosts : []).map((p: BlogPost, i: number) => {
       const db = blogRows[i];
@@ -367,8 +367,8 @@ const Inner = () => {
       return;
     }
     if (id.startsWith("BLOG:")) {
-      toast({ title: lang === "ar" ? "هذا المقال يدار من محرر سيو المدوّنة" : "This post is managed in the Blog SEO editor" });
-      navigate("/admin/blog-seo");
+      toast({ title: lang === "ar" ? "هذا المقال يُدار من صفحة المدونة" : "This post is managed in the Blog page" });
+      navigate("/admin/blog");
       return;
     }
     if (id.startsWith("NODE:")) {
@@ -398,13 +398,13 @@ const Inner = () => {
       toast({ title: lang === "ar" ? "هذا السؤال ثابت في الكود (يدار من ملفات البيانات)" : "Static FAQ (edited via source files)" });
       return;
     }
-    if (it.id.startsWith("BLOG:")) { navigate("/admin/blog-seo"); return; }
+    if (it.id.startsWith("BLOG:")) { navigate("/admin/blog"); return; }
     if (it.id.startsWith("NODE:")) { navigate(`/admin/programs/${it.id.slice(5)}`); return; }
     if (it.id.startsWith("STORY:")) { navigate(`/admin/stories`); return; }
     setEditing(it);
   };
   const onToggleStatus = async (it: ContentDoc) => {
-    if (it.id.startsWith("BLOG:")) { navigate("/admin/blog-seo"); return; }
+    if (it.id.startsWith("BLOG:")) { navigate("/admin/blog"); return; }
     if (it.id.startsWith("NODE:") || it.id.startsWith("STORY:") || it.id.startsWith("FAQ-STATIC:")) {
       onEdit(it);
       return;
@@ -425,13 +425,13 @@ const Inner = () => {
   return (
     <AdminLayout title={{ ar: "إدارة المحتوى", en: "Content management" }}>
       <div className="space-y-4">
-        {/* Unified blog editor banner — articles live in /admin/blog-seo (DB-backed) */}
-        <Link to="/admin/blog-seo" className="group flex items-center justify-between gap-3 rounded-2xl border border-secondary/40 bg-gradient-to-r from-secondary/15 via-card to-accent/10 p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
+        {/* Unified blog editor banner — articles live in /admin/blog (DB-backed) */}
+        <Link to="/admin/blog" className="group flex items-center justify-between gap-3 rounded-2xl border border-secondary/40 bg-gradient-to-r from-secondary/15 via-card to-accent/10 p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
           <div className="flex items-center gap-3">
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-orange-grad text-accent-foreground"><Sparkles className="h-5 w-5" /></div>
             <div>
-              <div className="text-sm font-black text-primary">{lang === "ar" ? "مقالات المدوّنة في محرر سيو موحّد" : "Blog articles live in the unified SEO editor"}</div>
-              <div className="text-[11px] text-muted-foreground">{lang === "ar" ? "للنشر/الجدولة/تقارير SEO/رفع صور وتوليد OG — اذهب إلى محرر سيو المدونة." : "For publish/schedule/SEO reports/image upload & OG — open the Blog SEO editor."}</div>
+              <div className="text-sm font-black text-primary">{lang === "ar" ? "مقالات المدونة" : "Blog articles"}</div>
+              <div className="text-[11px] text-muted-foreground">{lang === "ar" ? "لإضافة المقالات وتعديلها ونشرها أو جدولتها ورفع الصور." : "Add, edit, publish or schedule articles and manage their images."}</div>
             </div>
           </div>
           <ArrowLeft className={`h-4 w-4 text-accent transition-transform ${lang === "ar" ? "group-hover:-translate-x-1" : "rotate-180 group-hover:translate-x-1"}`} />

@@ -30,8 +30,8 @@ import {
  *   list    GET    /seasons           (existing; auth)
  *   create  POST   /seasons           (existing)
  *   toggle  PATCH  /seasons/{id}      (existing: is_active, donation_available)
- *   edit    PUT    /seasons/{id}      (PROPOSED)
- *   delete  DELETE /seasons/{id}      (PROPOSED)
+ *   edit    PUT    /seasons/{id}      (documented in latest Postman; no saved response)
+ *   delete  DELETE /seasons/{id}      (documented in latest Postman; no saved response)
  * The six static seasons (src/data/seasons.ts) are shown even when the backend has no record for them, with a
  * button that creates the record from the static copy.
  */
@@ -436,7 +436,7 @@ export const AdminSeasons: React.FC = () => {
               <div className="flex items-center justify-between gap-2.5 pt-3 border-t border-border">
                 <p className="text-[11px] text-muted-foreground">
                   {form.id
-                    ? isRTL ? "الحفظ: PUT /seasons/{id} (مقترح؛ لو ظهر «يحتاج تفعيل من الباك إند» فلم يُحفظ شيء)." : "Saves with PUT /seasons/{id} (proposed)."
+                    ? isRTL ? "الحفظ: PUT /seasons/{id} (موثق في Postman؛ لو ظهر «يحتاج تفعيل من الباك إند» فلم يُحفظ شيء)." : "Saves with PUT /seasons/{id} (documented in Postman; a backend warning means nothing was saved)."
                     : isRTL ? "الإنشاء: POST /seasons." : "Creates with POST /seasons."}
                 </p>
                 <div className="flex items-center gap-2">

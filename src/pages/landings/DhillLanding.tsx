@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Droplets, Home, Wind, ShieldCheck, FileCheck2, MapPin, ArrowLeft, ArrowRight, type LucideIcon } from "lucide-react";
+import { Droplets, Home, Wind, ArrowLeft, ArrowRight, type LucideIcon } from "lucide-react";
 import { CampaignLandingShell } from "@/components/sections/CampaignLandingShell";
 import { amountHref, waHref, fmtNum, CampaignCrumbs, HeroActions, BentoGallery } from "@/components/campaigns/shared";
 import { HadithBlock } from "@/components/campaigns/HadithBlock";
@@ -29,8 +29,6 @@ const TRACK_META = {
 type TrackId = keyof typeof TRACK_META;
 const isTrackId = (id: string): id is TrackId => id in TRACK_META;
 
-const TRUST_ICONS: Record<string, LucideIcon> = { ngo: ShieldCheck, docs: FileCheck2, areas: MapPin };
-
 const GALLERY = [
   { src: yusrWater, altAr: "وصلة مياه نقية مع موتور وخزان لأسرة مستحقة", altEn: "Water connection with pump and tank" },
   { src: posterWater, altAr: "تسقيف خشبي معزول يحمي البيت من حر الصيف", altEn: "Insulated wooden roof" },
@@ -39,8 +37,7 @@ const GALLERY = [
 ];
 
 const DhillHero = () => {
-  const { c, t, isAr, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
-  const trust = section("trust")?.items ?? [];
+  const { c, t, isAr, section, campaignImage } = useCampaignPage("dhill", DHILL_DEFAULTS);
   return (
     <section className="dhill-hero relative overflow-hidden bg-[hsl(152_65%_9%)] text-primary-foreground">
       {/* Sun + canopy: the shade the campaign casts */}
@@ -57,40 +54,34 @@ const DhillHero = () => {
 
       <div className="container relative mx-auto max-w-6xl px-4 pb-16 pt-10 md:pb-20 md:pt-14">
         <CampaignCrumbs isAr={isAr} name={isAr ? "حملة ظِلّ" : "Dhill"} className="text-primary-foreground/80" />
-        <div className="mt-10 grid items-end gap-10 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+        <div className={`mt-10 grid items-end gap-10 ${campaignImage ? "md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]" : ""}`}>
           <div className="text-center md:text-start">
             <p className="text-sm font-black text-secondary">{t(c.hero.eyebrow)}</p>
-            <h1 className="mt-3 text-4xl font-black leading-[1.25] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-3 text-4xl font-black !leading-[1.4] sm:text-5xl lg:text-6xl">
               {t(c.hero.title)}{" "}
-              <span className="mt-1 block text-secondary">{t(c.hero.title2)}</span>
+              <span className="mt-2 block text-secondary [text-shadow:0_0_16px_hsl(var(--secondary)/0.28),0_0_34px_hsl(var(--secondary)/0.16)]">
+                {t(c.hero.title2)}
+              </span>
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-primary-foreground/85 md:mx-0 md:text-lg">
               {t(c.hero.lead)}
             </p>
-            <HeroActions isAr={isAr} donateHref={DONATE} donateLabel={t(c.hero.donateLabel)} wa={waHref(isAr, "حملة ظل", "the Dhill campaign")} className="mt-8 justify-center md:justify-start" />
+            <HeroActions isAr={isAr} donateHref={DONATE} donateLabel={t(c.hero.donateLabel)} wa={waHref(isAr, "حملة ظل", "the Dhill campaign")} className="mx-auto mt-8 justify-self-center md:mx-0 md:justify-self-start" />
           </div>
-          <div className="relative mx-auto w-full max-w-sm">
-            <img src={yusrWater} alt={isAr ? "حملة ظل — وصلات مياه وأسقف للأسر المستحقة" : "Dhill — water and roofs for families"} loading="eager" className="relative w-full rounded-2xl object-cover shadow-card ring-1 ring-primary-foreground/15" />
-          </div>
+          {campaignImage && (
+            <div className="relative mx-auto flex w-[84%] justify-center md:w-full">
+              <img src={campaignImage} alt={isAr ? "حملة ظل — وصلات مياه وأسقف للأسر المستحقة" : "Dhill — water and roofs for families"} loading="eager" className="relative h-auto max-h-[min(60vh,420px)] w-auto max-w-full rounded-2xl object-contain object-center shadow-card ring-1 ring-primary-foreground/15" />
+            </div>
+          )}
         </div>
 
-        <ul className="mt-12 grid grid-cols-1 gap-3 text-sm font-bold text-primary-foreground/85 sm:grid-cols-3">
-          {trust.map((it) => {
-            const I = TRUST_ICONS[it.id] ?? ShieldCheck;
-            return (
-              <li key={it.id} className="flex items-center justify-center gap-2 md:justify-start">
-                <I className="h-4 w-4 shrink-0 text-secondary" /> {t(it.title)}
-              </li>
-            );
-          })}
-        </ul>
       </div>
     </section>
   );
 };
 
 const DhillMain = () => {
-  const { c, t, isAr, price, amount, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const { c, t, isAr, price, amount, packageId, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
   const tracksSection = section("tracks");
@@ -115,7 +106,7 @@ const DhillMain = () => {
   return (
     <>
       {/* Hadith band */}
-      <section className="bg-[hsl(152_60%_14%)] pb-16 text-primary-foreground md:pb-20">
+      <section className="border-t border-secondary/15 bg-[hsl(152_60%_14%)] pb-16 pt-12 text-primary-foreground md:pb-20 md:pt-16">
         <div className="container mx-auto max-w-4xl px-4 text-center">
           <blockquote className="text-2xl font-black leading-[1.7] text-secondary md:text-3xl">
             {t(hadith2?.title)}
@@ -163,7 +154,7 @@ const DhillMain = () => {
                 {options.map((o) => (
                   <Link
                     key={o.id}
-                    to={amountHref(DONATE, o.amount)}
+                    to={amountHref(DONATE, o.amount, packageId(o.id))}
                     className="group flex items-center justify-between gap-3 rounded-xl border-2 border-border bg-card p-4 transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <span>
@@ -293,11 +284,12 @@ const DhillMain = () => {
 };
 
 const DhillLanding = () => {
-  const { c, section } = useCampaignPage("dhill", DHILL_DEFAULTS);
+  const { c, section, campaignImage, isLoading } = useCampaignPage("dhill", DHILL_DEFAULTS);
   const seo = section("seo");
   return (
     <CampaignLandingShell
       slug="dhill"
+      isLoading={isLoading}
       seo={c.seo}
       path="/dhill"
       titleAr={seo?.title.ar ?? ""}
@@ -306,7 +298,7 @@ const DhillLanding = () => {
       taglineEn={seo?.lead?.en ?? ""}
       metaDescAr="شارك في حملة ظِل مع مؤسسة اليسر: أسقف منازل خشبية معزولة، وصلات مياه نقية للمنازل (سهم 500 ج)، خطوط مياه للقرى، أبواب وشبابيك، ومراوح تبريد بالدقهلية وكفر الشيخ والشرقية وكل مصر."
       metaDescEn="Join Al-Yusr's Dhill Campaign: insulated wooden roofs, clean water connections (EGP 500 share), village water lines, doors & windows, and cooling fans across Dakahlia, Kafr El Sheikh and Egypt."
-      heroImage={yusrWater}
+      heroImage={campaignImage}
       heroAlt="حملة ظل — وصلات مياه وأسقف خشبية ومراوح للأسر المستحقة"
       hero={<DhillHero />}
       main={<DhillMain />}

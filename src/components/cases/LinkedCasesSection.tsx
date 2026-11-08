@@ -6,6 +6,7 @@ import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
 import { listPublicCases, type CaseRow, type LinkedCasesFilter } from "@/data/casesApi";
 import { CaseCard, caseOwnerLabel } from "./CaseCard";
 import { CasesCarousel } from "./CasesCarousel";
+import { filterOpenCases, filterUrgentOpenCases } from "@/lib/caseFunding";
 
 /**
  * Approved cases that belong to a program / project / campaign (or to any of a kind), straight
@@ -44,15 +45,18 @@ export function LinkedCasesSection({
   useEffect(() => {
     let alive = true;
     setCases(null);
-    listPublicCases({ ...filter, limit })
-      .then((rows) => alive && setCases(include ? rows.filter(include) : rows))
+    listPublicCases({ ...filter, ...(variant === "carousel" ? { urgent: true } : {}), limit })
+      .then((rows) => {
+        const filtered = variant === "carousel" ? filterUrgentOpenCases(rows) : filterOpenCases(rows);
+        if (alive) setCases(include ? filtered.filter(include) : filtered);
+      })
       .catch(() => alive && setCases([]));
     return () => {
       alive = false;
     };
     // `key` is the serialised filter.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, limit, include]);
+  }, [key, limit, include, variant]);
 
   const owners = useMemo(() => {
     const counts = new Map<string, number>();

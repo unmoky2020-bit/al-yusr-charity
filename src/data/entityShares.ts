@@ -67,13 +67,13 @@ export function findShare(shares: Share[], words: string[]): Share | undefined {
   });
 }
 
-/** The public /projects records (also read by ProgramsPageGate, so both share one cached request). */
+/** The public /projects records shared by project and landing-page content hooks. */
 export const fetchProjectRecords = () => fetchPublicList("/projects", { per_page: 100 });
 
 /** Shares of every record kind, read through the shared content-source switch (cache shared per kind). */
-export function useEntityShares(kind: EntityKind, slug: string, defaults: Share[]): Share[] {
+export function useEntitySharesState(kind: EntityKind, slug: string, defaults: Share[]): { shares: Share[]; isLoading: boolean } {
   const isProgram = kind === "program";
-  const { data } = useSourced<ApiRecord[], Share[]>(
+  const { data, isLoading } = useSourced<ApiRecord[], Share[]>(
     isProgram ? ["programs"] : ["projects-raw"],
     isProgram ? fetchProgramRecords : fetchProjectRecords,
     defaults,
@@ -83,5 +83,9 @@ export function useEntityShares(kind: EntityKind, slug: string, defaults: Share[
         defaults,
       ),
   );
-  return data;
+  return { shares: data, isLoading };
+}
+
+export function useEntityShares(kind: EntityKind, slug: string, defaults: Share[]): Share[] {
+  return useEntitySharesState(kind, slug, defaults).shares;
 }

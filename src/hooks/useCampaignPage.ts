@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLang } from "@/i18n/LangContext";
-import { apiFetch, getApiToken } from "@/data/laravelApi";
-import { getCampaignPageMeta } from "@/data/campaignPages/index";
-import { campaignPagesApi } from "@/data/campaignPages/api";
-import { mergeCampaignContent, type CampaignPageContent, type L } from "@/data/campaignPages/types";
+import { formatServerImageUrl, getApiToken } from "@/data/laravelApi";
+import { campaignPagesApi, type CampaignPagePackage } from "@/data/campaignPages/api";
+import { mergeCampaignContent, withCampaignHeroImageSlot, type CampaignPageContent, type L, type PriceItem } from "@/data/campaignPages/types";
 
-type Pkg = { key?: string | null; name_ar: string; name_en?: string; amount: number; is_active?: boolean; sort_order?: number };
+export type CampaignDonationPackage = CampaignPagePackage;
 
 const normalise = (v: string) =>
   v.replace(/[ً-ْـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي")
@@ -34,32 +33,19 @@ function namesMatch(a: string, b: string): boolean {
   return hits === short.length;
 }
 
-function findPackage(packages: Pkg[], label: { ar: string; en: string }): Pkg | undefined {
+function findPackage(packages: CampaignDonationPackage[], label: { ar: string; en: string }): CampaignDonationPackage | undefined {
   const active = packages.filter((p) => p.is_active !== false).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
   // Arabic names only: English package names are short and generic ("Roof Share") and over-match.
   return active.find((p) => normalise(p.name_ar) === normalise(label.ar)) || active.find((p) => namesMatch(p.name_ar, label.ar));
 }
 
-async function fetchPackages(apiId?: number, apiSlugs?: string[]): Promise<Pkg[]> {
-  const ids = [apiId, ...(apiSlugs || [])].filter((v) => v !== undefined && v !== "");
-  for (const id of ids) {
-    try {
-      const res = await apiFetch<{ data?: { donation_packages?: Pkg[] } } & { donation_packages?: Pkg[] }>(`/donation-campaigns/${id}`, { method: "GET", ttlMs: 60_000, useCache: true, skipAuthClear: true });
-      const list = (res as { data?: { donation_packages?: Pkg[] } }).data?.donation_packages ?? (res as { donation_packages?: Pkg[] }).donation_packages;
-      if (Array.isArray(list)) return list.map((p) => ({ ...p, amount: Number(p.amount) }));
-    } catch { /* try the next identifier */ }
-  }
-  // A campaign created later in the dashboard has no id in the page registry: find it by its slug.
-  for (const s of apiSlugs || []) {
-    try {
-      const res = await apiFetch<{ data?: { donation_packages?: Pkg[] } } & { donation_packages?: Pkg[] }>(`/donation-campaigns/by-slug/${encodeURIComponent(s)}`, { method: "GET", ttlMs: 60_000, useCache: true, skipAuthClear: true });
-      const list = (res as { data?: { donation_packages?: Pkg[] } }).data?.donation_packages ?? (res as { donation_packages?: Pkg[] }).donation_packages;
-      if (Array.isArray(list)) return list.map((p) => ({ ...p, amount: Number(p.amount) }));
-    } catch (e) {
-      if ((e as { status?: number } | null)?.status === 404) continue;
-    }
-  }
-  return [];
+export function findCampaignPackage(packages: CampaignDonationPackage[], item: Pick<PriceItem, "id" | "label" | "backendPackageNames">): CampaignDonationPackage | undefined {
+  const active = packages.filter((p) => p.is_active !== false).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+  const byKey = active.find((p) => !!p.key && p.key === item.id);
+  if (byKey) return byKey;
+  const names = new Set((item.backendPackageNames || []).map(normalise));
+  const byBackendName = active.find((p) => names.has(normalise(p.name_ar)));
+  return byBackendName || findPackage(active, item.label);
 }
 
 const pageQuery = (slug: string, isAdmin: boolean) => ({
@@ -69,86 +55,83 @@ const pageQuery = (slug: string, isAdmin: boolean) => ({
   retry: 0,
 });
 
-const packagesQuery = (slug: string) => {
-  const meta = getCampaignPageMeta(slug);
-  return {
-    queryKey: ["campaign-packages", slug],
-    queryFn: () => fetchPackages(meta?.apiIds[0], meta?.apiSlugs),
-    staleTime: 60_000,
-    retry: 0,
-    enabled: !!meta,
-  };
-};
-
-/** Longest a visitor waits for the dashboard content before the page shows its built-in copy. */
-export const CONTENT_MAX_WAIT_MS = 8000;
-
-/**
- * True once a value has settled, or after `maxWait` (a slow API never keeps the page blank).
- *
- * It latches: once true it stays true for the same `resetKey` (pass the page's slug when one component
- * serves several pages). Without the latch a failing API loops forever: a query that failed has no data,
- * so every component that mounts under the gate refetches it, which puts it back in "loading", which
- * swaps the page for the skeleton again, and the timeout never gets to fire.
- */
-export function useSettled(settled: boolean, maxWait = CONTENT_MAX_WAIT_MS, resetKey: unknown = ""): boolean {
-  const [latchedFor, setLatchedFor] = useState<{ key: unknown } | null>(settled ? { key: resetKey } : null);
-  const done = latchedFor !== null && Object.is(latchedFor.key, resetKey);
-  useEffect(() => {
-    if (done) return;
-    if (settled) {
-      setLatchedFor({ key: resetKey });
-      return;
-    }
-    const t = window.setTimeout(() => setLatchedFor({ key: resetKey }), maxWait);
-    return () => window.clearTimeout(t);
-  }, [settled, done, maxWait, resetKey]);
-  return done || settled;
-}
-
-/**
- * True when the landing page's dashboard content and prices have arrived (or failed), so the page
- * renders once with the real content instead of showing the built-in copy and images first.
- */
-export function useCampaignPageReady(slug: string): boolean {
-  const isAdmin = !!getApiToken();
-  const page = useQuery(pageQuery(slug, isAdmin));
-  const pk = useQuery(packagesQuery(slug));
-  const pkSettled = !getCampaignPageMeta(slug) || !pk.isLoading;
-  return useSettled(!page.isLoading && pkSettled, CONTENT_MAX_WAIT_MS, slug);
-}
-
 /**
  * Content for a campaign landing page: code defaults merged with the dashboard override.
- * Routes wrap the page in <CampaignPageGate> (useCampaignPageReady), so it renders once the override arrived.
- * A failing API never breaks the page.
+ * Consumers can gate the page while backend content and package data load; a failed API falls
+ * back to the designed defaults once loading has finished.
  */
 export function useCampaignPage(slug: string, defaults: CampaignPageContent) {
   const { lang } = useLang();
   const isAr = lang === "ar";
   const isAdmin = !!getApiToken();
 
-  const { data } = useQuery(pageQuery(slug, isAdmin));
+  const pageResult = useQuery(pageQuery(slug, isAdmin));
+  const { data } = pageResult;
 
-  // Prices: the backend donation packages of this campaign are the source of truth.
-  // A package applies to a price item when their names match (normalised Arabic, either direction).
-  const { data: packages } = useQuery(packagesQuery(slug));
+  // Prices and page content come from the same campaign record to avoid duplicate requests.
+  const packages = useMemo(
+    () => data?.campaign?.donation_packages?.map((p) => ({ ...p, amount: Number(p.amount) })) ?? [],
+    [data?.campaign?.donation_packages],
+  );
 
   const c = useMemo(() => {
-    const merged = mergeCampaignContent(defaults, data?.content ?? null);
-    if (!packages?.length) return merged;
+    const pageDefaults = withCampaignHeroImageSlot(defaults);
+    const campaign = data?.campaign;
+    const campaignFallback: Partial<CampaignPageContent> | null = campaign
+      ? {
+          hero: {
+          eyebrow: { ar: campaign.subtitle_ar || "", en: campaign.subtitle_en || "" },
+          title: { ar: campaign.title_ar || campaign.name_ar || "", en: campaign.title_en || campaign.name_en || "" },
+          title2: { ar: "", en: "" },
+          lead: {
+            ar: campaign.description_ar || campaign.description || "",
+            en: campaign.description_en || "",
+          },
+          donateLabel: { ar: "", en: "" },
+          },
+        }
+      : null;
+    const saved = data?.content;
+    const merged = mergeCampaignContent(
+      pageDefaults,
+      campaignFallback || saved
+        ? { ...campaignFallback, ...saved, hero: { ...campaignFallback?.hero, ...saved?.hero } }
+        : null,
+    );
+    if (!packages.length) return merged;
     return { ...merged, prices: merged.prices.map((pr) => {
-      // Stable `key` (= the page price id) wins; Arabic-name matching stays as the fallback until every package has a key.
-      const pkg = packages.find((p) => p.is_active !== false && !!p.key && p.key === pr.id) || findPackage(packages, pr.label);
+      const pkg = findCampaignPackage(packages, pr);
       return pkg ? { ...pr, amount: pkg.amount } : pr;
     }) };
   }, [defaults, data, packages]);
 
+  const pageHeroImage = c.images?.hero?.items[0]?.src;
+  const pageImage = pageHeroImage?.startsWith("asset:") ? "" : formatServerImageUrl(pageHeroImage);
+  const formattedImage = pageImage && pageImage !== "/placeholder.svg"
+    ? pageImage
+    : formatServerImageUrl(data?.campaign?.image);
+  const campaignImage = formattedImage === "/placeholder.svg" ? "" : formattedImage;
   const t = (v?: L | null): string => (v ? (isAr ? v.ar || v.en : v.en || v.ar) : "");
   const price = (id: string) => c.prices.find((p) => p.id === id);
   const amount = (id: string, fallback = 0) => price(id)?.amount ?? fallback;
+  const packageId = (id: string) => {
+    const item = price(id);
+    if (!item) return undefined;
+    return findCampaignPackage(packages, item)?.id;
+  };
   const stat = (id: string) => c.stats.find((s) => s.id === id);
   const section = (key: string) => c.sections[key];
 
-  return { c, t, isAr, price, amount, stat, section };
+  return {
+    c,
+    t,
+    isAr,
+    price,
+    amount,
+    packageId,
+    stat,
+    section,
+    campaignImage,
+    isLoading: pageResult.isLoading,
+  };
 }

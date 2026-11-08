@@ -4,11 +4,13 @@
  * EXISTING on the backend:  GET/POST /donation-campaigns, PUT/DELETE /donation-campaigns/{id},
  *                           GET/POST /donation-campaigns/{id}/donation-packages,
  *                           GET/POST /donation-campaign-categories, DELETE /donation-campaign-categories/{id}.
- * PROPOSED (backend-handoff/05-campaigns-seasons-section.md):
+ * Documented in the latest Postman collection (successful responses are not saved for every request):
  *                           PUT/DELETE /donation-campaigns/{id}/donation-packages/{packageId},
  *                           POST /donation-campaigns/{id}/donation-packages/reorder,
- *                           GET /donation-campaigns/by-slug/{slug}, PUT /donation-campaign-categories/{id},
- *                           `key` on donation_packages, `page_content` / `seo` / `faqs` / `subtitle_*` / `category_id` / `image` in the campaign resource.
+ *                           PUT /donation-campaign-categories/{id}.
+ * The campaign POST sample documents `category_id` and `subtitle_*`, but its save round-trip
+ * has not been verified. Still awaiting backend confirmation: `key` on donation_packages and
+ * `page_content` / `seo` / `faqs` / `image` in the campaign resource.
  * Every function throws the ApiError on failure; callers show it (see `describeWriteError`).
  */
 import {
@@ -18,7 +20,7 @@ import {
   type LaravelDonationCampaignCategory,
   type LaravelDonationPackage,
 } from "@/data/laravelApi";
-import type { CampaignPageContent, L } from "@/data/campaignPages/types";
+import type { CampaignPageContent, L, PageImage } from "@/data/campaignPages/types";
 
 export type CampaignPackage = LaravelDonationPackage & {
   /** Stable link to a landing-page price item (`prices[].id` in src/data/campaignPages/<slug>.ts). PROPOSED column. */
@@ -37,7 +39,9 @@ export type CampaignSeo = {
 export type CampaignFaq = { question_ar: string; answer_ar: string; question_en?: string | null; answer_en?: string | null };
 
 /** Landing content stored on the campaign (`page_content`): everything except prices (= packages), faq (= `faqs`) and seo (= `seo`). */
-export type CampaignPageContentColumn = Partial<Omit<CampaignPageContent, "prices" | "faq" | "seo">>;
+export type CampaignPageContentColumn = Partial<Omit<CampaignPageContent, "prices" | "faq" | "seo" | "images">> & {
+  images?: Record<string, { items: PageImage[] }>;
+};
 
 export type CampaignRecord = LaravelDonationCampaign & {
   page_content?: CampaignPageContentColumn | null;
@@ -104,26 +108,26 @@ export const donationCampaignsAdminApi = {
     return unwrap<CampaignPackage>(res);
   },
 
-  /** PUT /donation-campaigns/{id}/donation-packages/{packageId} (PROPOSED). */
+  /** Documented: PUT /donation-campaigns/{id}/donation-packages/{packageId}. */
   async updatePackage(campaignId: number | string, packageId: number | string, body: Partial<PackageInput>): Promise<CampaignPackage> {
     const res = await apiFetch<unknown>(`${base}/${campaignId}/donation-packages/${packageId}`, { method: "PUT", body });
     invalidateApiCache(base);
     return unwrap<CampaignPackage>(res);
   },
 
-  /** DELETE /donation-campaigns/{id}/donation-packages/{packageId} (PROPOSED). */
+  /** Documented: DELETE /donation-campaigns/{id}/donation-packages/{packageId}. */
   async deletePackage(campaignId: number | string, packageId: number | string): Promise<void> {
     await apiFetch(`${base}/${campaignId}/donation-packages/${packageId}`, { method: "DELETE" });
     invalidateApiCache(base);
   },
 
-  /** POST /donation-campaigns/{id}/donation-packages/reorder  { items: [{ id, sort_order }] } (PROPOSED). */
+  /** Documented route; the collection does not yet include a sample request body. */
   async reorderPackages(campaignId: number | string, items: Array<{ id: number | string; sort_order: number }>): Promise<void> {
     await apiFetch(`${base}/${campaignId}/donation-packages/reorder`, { method: "POST", body: { items } });
     invalidateApiCache(base);
   },
 
-  /** PUT /donation-campaign-categories/{id} (PROPOSED). */
+  /** Documented: PUT /donation-campaign-categories/{id}. */
   async updateCategory(id: number | string, body: Partial<LaravelDonationCampaignCategory>): Promise<LaravelDonationCampaignCategory> {
     const res = await apiFetch<unknown>(`/donation-campaign-categories/${id}`, { method: "PUT", body });
     invalidateApiCache("/donation-campaign-categories");

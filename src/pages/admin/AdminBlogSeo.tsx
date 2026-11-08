@@ -1,9 +1,9 @@
 import { UiSelect } from "@/components/common/UiSelect";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   CheckCircle2, AlertTriangle, Search as SearchIcon, ExternalLink, Tag, Image as ImageIcon,
-  ShieldAlert, Loader2, Wand2, Plus, X, Calendar, Clock, FileDown, FileJson, Upload, Eye,
+  ShieldAlert, Loader2, Wand2, Plus, Calendar, FileDown, FileJson, Upload, Eye,
   MoreHorizontal, Pencil, Trash2, Archive,
 } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
@@ -17,12 +17,12 @@ import { useLang } from "@/i18n/LangContext";
 import { type BlogPost } from "@/data/blog";
 import { useAllBlogRowsAdmin } from "@/data/useBlogPosts";
 import {
-  createPost, updatePostStatus, updatePostMedia, deletePost,
+  updatePostStatus, updatePostMedia, deletePost,
   type DbBlogPost, type DbStatus, dbToBlogPost,
 } from "@/data/blogApi";
 import { axisOfPost, getAxis, authorOfPost, readingTime } from "@/data/blogTaxonomy";
 import { generateOg, downloadDataUrl } from "@/lib/og-generator";
-import { uploadBlogMedia, generateAndUploadOg } from "@/lib/blog-uploads";
+import { generateAndUploadOg } from "@/lib/blog-uploads";
 import { auditPost, downloadJson, downloadPdf } from "@/lib/seo-report";
 import { lintArticleSchema, type SchemaIssue } from "@/lib/lint-jsonld";
 import { toast } from "@/hooks/use-toast";
@@ -110,6 +110,7 @@ const Inner = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
   const { rows: dbRows, refetch } = useAllBlogRowsAdmin();
+  const nav = useNavigate();
   const [showImport, setShowImport] = useState(false);
   const [params, setParams] = useSearchParams();
 
@@ -117,7 +118,10 @@ const Inner = () => {
   const [statusF, setStatusF] = useState<StatusFilter>((params.get("status") as StatusFilter) || "all");
   const [from, setFrom] = useState(params.get("from") ?? "");
   const [to, setTo] = useState(params.get("to") ?? "");
-  const [sort, setSort] = useState<"score" | "date" | "updated">((params.get("sort") as any) || "score");
+  const [sort, setSort] = useState<"score" | "date" | "updated">(() => {
+    const value = params.get("sort");
+    return value === "score" || value === "date" || value === "updated" ? value : "updated";
+  });
 
   // Persist filters to URL
   useEffect(() => {
@@ -126,7 +130,7 @@ const Inner = () => {
     if (statusF !== "all") next.status = statusF;
     if (from) next.from = from;
     if (to) next.to = to;
-    if (sort !== "score") next.sort = sort;
+    if (sort !== "updated") next.sort = sort;
     setParams(next, { replace: true });
   }, [q, statusF, from, to, sort, setParams]);
 
@@ -142,92 +146,6 @@ const Inner = () => {
     for (const r of rows) m.set(r.post.slug, lintArticleSchema(r.post));
     return m;
   }, [rows]);
-
-  // ---------- New-post draft state ----------
-  const [showNew, setShowNew] = useState(false);
-  const [draft, setDraft] = useState({
-    slug: "", category_ar: "", category_en: "",
-    title_ar: "", title_en: "", excerpt_ar: "", excerpt_en: "",
-    body_ar: "", body_en: "", tags_ar: "", tags_en: "",
-    image_url: "", focus_keyword: "",
-    schedule_at: "" as string,
-  });
-  const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  const draftScore = useMemo(() => {
-    const tags = draft.tags_ar.split(",").map((s) => s.trim()).filter(Boolean);
-    const words = draft.body_ar.split(/\s+/).filter(Boolean).length;
-    let s = 0;
-    if (words >= 600) s += 25; else if (words >= 300) s += 15;
-    if (draft.title_ar.length >= 30 && draft.title_ar.length <= 70) s += 15;
-    if (draft.excerpt_ar.length >= 80 && draft.excerpt_ar.length <= 170) s += 15;
-    if (tags.length >= 3) s += 10;
-    if (draft.image_url) s += 15;
-    s += 10;
-    if (draft.category_ar) s += 10;
-    return { score: s, words, tagsCount: tags.length };
-  }, [draft]);
-
-  const saveDraft = async (mode: "draft" | "publish" | "schedule") => {
-    if (!draft.slug || !draft.title_ar) {
-      toast({ title: isRTL ? "العنوان والـ slug مطلوبان" : "Title and slug required", variant: "destructive" });
-      return;
-    }
-    if (mode === "schedule" && !draft.schedule_at) {
-      toast({ title: isRTL ? "اختر موعد النشر أولاً" : "Pick a schedule time", variant: "destructive" });
-      return;
-    }
-    setSaving(true);
-    try {
-      const status: DbStatus = mode === "publish" ? "published" : mode === "schedule" ? "scheduled" : "draft";
-      const slug = draft.slug.toLowerCase().replace(/\s+/g, "-");
-
-      // Auto-generate OG if missing & a cover exists
-      let og = draft.image_url || undefined;
-      if (draft.image_url && draft.title_ar && draft.category_ar) {
-        try {
-          og = await generateAndUploadOg({ slug, title: draft.title_ar, category: draft.category_ar });
-        } catch { /* fall back to image_url */ }
-      }
-
-      await createPost({
-        slug,
-        category_ar: draft.category_ar, category_en: draft.category_en || draft.category_ar,
-        focus_keyword: draft.focus_keyword || undefined,
-        title_ar: draft.title_ar, title_en: draft.title_en || draft.title_ar,
-        excerpt_ar: draft.excerpt_ar, excerpt_en: draft.excerpt_en || draft.excerpt_ar,
-        body_ar: draft.body_ar.split(/\n\s*\n/).filter(Boolean),
-        body_en: (draft.body_en || draft.body_ar).split(/\n\s*\n/).filter(Boolean),
-        tags_ar: draft.tags_ar.split(",").map((s) => s.trim()).filter(Boolean),
-        tags_en: (draft.tags_en || draft.tags_ar).split(",").map((s) => s.trim()).filter(Boolean),
-        image_url: draft.image_url || undefined,
-        og_image_url: og,
-        status,
-        scheduled_at: mode === "schedule" ? new Date(draft.schedule_at).toISOString() : null,
-        seo_score: draftScore.score,
-      });
-      toast({ title: isRTL ? mode === "publish" ? " نُشر المقال" : mode === "schedule" ? " تم جدولة المقال" : " حُفظ كمسودّة" : mode === "publish" ? " Published" : mode === "schedule" ? " Scheduled" : " Saved as draft", });
-      setShowNew(false);
-      setDraft({ slug:"", category_ar:"", category_en:"", title_ar:"", title_en:"", excerpt_ar:"", excerpt_en:"", body_ar:"", body_en:"", tags_ar:"", tags_en:"", image_url:"", focus_keyword:"", schedule_at:"" });
-      refetch();
-    } catch (e: any) {
-      toast({ title: e.message, variant: "destructive" });
-    } finally { setSaving(false); }
-  };
-
-  const onPickImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0]; if (!f) return;
-    setUploading(true);
-    try {
-      const url = await uploadBlogMedia(f, f.name);
-      setDraft((d) => ({ ...d, image_url: url }));
-      toast({ title: isRTL ? " تم رفع الصورة" : " Image uploaded" });
-    } catch (e: any) {
-      toast({ title: isRTL ? "فشل الرفع" : "Upload failed", description: e.message, variant: "destructive" });
-    } finally { setUploading(false); if (fileRef.current) fileRef.current.value = ""; }
-  };
 
   // ---------- Per-row actions ----------
   const generateOneOg = async (row: Row) => {
@@ -315,8 +233,10 @@ const Inner = () => {
     }
     if (from) out = out.filter((r) => r.post.date >= from);
     if (to) out = out.filter((r) => r.post.date <= to);
-    if (sort === "date") out = [...out].sort((a, b) => (a.post.date < b.post.date ? 1 : -1));
-    else if (sort === "updated") out = [...out].sort((a, b) => ((a.db?.updated_at || "") < (b.db?.updated_at || "") ? 1 : -1));
+    if (sort === "date") out = [...out].sort((a, b) => b.post.date.localeCompare(a.post.date));
+    else if (sort === "updated") out = [...out].sort((a, b) =>
+      (b.db?.updated_at || b.db?.created_at || b.post.date).localeCompare(a.db?.updated_at || a.db?.created_at || a.post.date),
+    );
     else out = [...out].sort((a, b) => a.score - b.score);
     return out;
   }, [rows, statusF, q, from, to, sort]);
@@ -338,7 +258,7 @@ const Inner = () => {
   };
 
   return (
-    <AdminLayout title={{ ar: "سيو المدونة", en: "Blog SEO" }}>
+    <AdminLayout title={{ ar: "المدونة", en: "Blog" }}>
       <div className="mb-6 rounded-3xl border border-border bg-background/80 p-5 shadow-sm">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0 space-y-2">
@@ -350,10 +270,6 @@ const Inner = () => {
                 ? "استخدم الفلاتر لتحديد المقالات الأضعف، راجع نقاط السيو لكل منشور، واحصل على خطط تحسين سريعة قابلة للتنفيذ."
                 : "Filter weak posts, compare SEO scores, and prioritize quick content improvements with clear actions."}
             </p>
-          </div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-secondary/15 px-4 py-2 text-xs font-extrabold text-secondary shadow-sm">
-            <SearchIcon className="h-4 w-4" />
-            {isRTL ? "فحص سيو المدونة" : "Blog SEO Audit"}
           </div>
         </div>
       </div>
@@ -377,7 +293,9 @@ const Inner = () => {
           <span className="text-xs text-muted-foreground">→</span>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="h-9 w-[150px]" />
         </div>
-        <UiSelect value={sort} onChange={(e) => setSort(e.target.value as any)} className="h-9 rounded-md border border-border bg-background px-2 text-xs font-bold">
+        <UiSelect value={sort} onChange={(e) => {
+          if (e.target.value === "score" || e.target.value === "date" || e.target.value === "updated") setSort(e.target.value);
+        }} className="h-9 rounded-md border border-border bg-background px-2 text-xs font-bold">
           <option value="score">{isRTL ? "ترتيب: النقاط" : "Sort: score"}</option>
           <option value="date">{isRTL ? "ترتيب: التاريخ" : "Sort: date"}</option>
           <option value="updated">{isRTL ? "ترتيب: آخر تعديل" : "Sort: updated"}</option>
@@ -396,7 +314,7 @@ const Inner = () => {
         </Button>
         <BlogImportDialog open={showImport} onOpenChange={setShowImport} isRTL={isRTL}
           existingSlugs={new Set(dbRows.map((r) => r.slug))} onDone={() => refetch()} />
-        <Button size="sm" onClick={() => setShowNew(true)} className="bg-orange-grad font-extrabold text-accent-foreground">
+        <Button size="sm" onClick={() => nav("/admin/blog/new")} className="bg-orange-grad font-extrabold text-accent-foreground">
           <Plus className="h-3.5 w-3.5" /> {isRTL ? "مقالة جديدة" : "New post"}
         </Button>
       </div>
@@ -415,95 +333,12 @@ const Inner = () => {
         })}
       </div>
 
-      {/* New post editor */}
-      {showNew && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 sm:items-center sm:p-4" onClick={() => setShowNew(false)}>
-          <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-t-3xl bg-card p-5 shadow-2xl sm:rounded-3xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-black text-primary">{isRTL ? "محرر مقالة جديدة" : "New article editor"}</h3>
-                <p className="text-xs text-muted-foreground">{isRTL ? "محرر بأسلوب AIOSEO — نقاط السيو حية، رفع صور، جدولة، توليد OG تلقائي." : "AIOSEO-style — live score, image upload, schedule, auto-OG."}</p>
-              </div>
-              <button onClick={() => setShowNew(false)} className="rounded-md p-1 text-muted-foreground hover:bg-muted"><X className="h-5 w-5" /></button>
-            </div>
-            <div className="mt-4 grid gap-4 lg:grid-cols-[1fr,280px]">
-              <div className="grid gap-3">
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <Input placeholder="slug (e.g. my-post-2026)" value={draft.slug} onChange={(e) => setDraft({ ...draft, slug: e.target.value })} />
-                  <Input placeholder={isRTL ? "الكلمة المفتاحية" : "Focus keyword"} value={draft.focus_keyword} onChange={(e) => setDraft({ ...draft, focus_keyword: e.target.value })} />
-                  <Input placeholder={isRTL ? "التصنيف (عربي)" : "Category (AR)"} value={draft.category_ar} onChange={(e) => setDraft({ ...draft, category_ar: e.target.value })} />
-                  <Input placeholder="Category (EN)" value={draft.category_en} onChange={(e) => setDraft({ ...draft, category_en: e.target.value })} />
-                  <Input placeholder={isRTL ? "العنوان (عربي)" : "Title (AR)"} value={draft.title_ar} onChange={(e) => setDraft({ ...draft, title_ar: e.target.value })} />
-                  <Input placeholder="Title (EN)" value={draft.title_en} onChange={(e) => setDraft({ ...draft, title_en: e.target.value })} />
-                </div>
-                <textarea className="min-h-[60px] w-full rounded-md border border-input bg-background p-3 text-sm" placeholder={isRTL ? "الوصف القصير (عربي) — 80-170 حرف" : "Excerpt (AR) — 80-170 chars"} value={draft.excerpt_ar} onChange={(e) => setDraft({ ...draft, excerpt_ar: e.target.value })} />
-                <textarea className="min-h-[60px] w-full rounded-md border border-input bg-background p-3 text-sm" placeholder="Excerpt (EN)" value={draft.excerpt_en} onChange={(e) => setDraft({ ...draft, excerpt_en: e.target.value })} />
-                <textarea className="min-h-[200px] w-full rounded-md border border-input bg-background p-3 text-sm" placeholder={isRTL ? "نص المقال (عربي) — افصل الفقرات بسطر فارغ — اهدف ≥600 كلمة" : "Body (AR) — separate paragraphs by blank line — aim ≥600 words"} value={draft.body_ar} onChange={(e) => setDraft({ ...draft, body_ar: e.target.value })} />
-                <textarea className="min-h-[120px] w-full rounded-md border border-input bg-background p-3 text-sm" placeholder="Body (EN) — paragraphs separated by blank lines" value={draft.body_en} onChange={(e) => setDraft({ ...draft, body_en: e.target.value })} />
-                <Input placeholder={isRTL ? "وسوم AR (مفصولة بفاصلة) — 3+" : "Tags AR (comma) — 3+"} value={draft.tags_ar} onChange={(e) => setDraft({ ...draft, tags_ar: e.target.value })} />
-                <Input placeholder="Tags EN (comma)" value={draft.tags_en} onChange={(e) => setDraft({ ...draft, tags_en: e.target.value })} />
-
-                {/* Cover image — upload OR URL */}
-                <div className="rounded-xl border border-dashed border-border bg-muted/20 p-3">
-                  <label className="text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">{isRTL ? "صورة الغلاف" : "Cover image"}</label>
-                  <div className="mt-2 flex flex-wrap items-center gap-2">
-                    {draft.image_url
-                      ? <img src={draft.image_url} alt="" className="h-16 w-28 rounded-lg object-cover" />
-                      : <div className="grid h-16 w-28 place-items-center rounded-lg bg-muted text-muted-foreground"><ImageIcon className="h-5 w-5" /></div>}
-                    <Button type="button" size="sm" variant="outline" onClick={() => fileRef.current?.click()} disabled={uploading}>
-                      {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
-                      {isRTL ? "رفع صورة" : "Upload"}
-                    </Button>
-                    <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickImage} />
-                    <Input className="flex-1 min-w-[200px]" placeholder={isRTL ? "أو ألصق رابط صورة" : "Or paste image URL"} value={draft.image_url} onChange={(e) => setDraft({ ...draft, image_url: e.target.value })} />
-                  </div>
-                  <p className="mt-2 text-[10px] text-muted-foreground">{isRTL ? "صورة OG (1200x630) ستُولَّد وتُرفع تلقائياً عند الحفظ." : "OG image (1200x630) is generated & uploaded automatically on save."}</p>
-                </div>
-
-                {/* Scheduling */}
-                <div className="rounded-xl border border-border bg-muted/20 p-3">
-                  <label className="text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">{isRTL ? "جدولة النشر" : "Schedule publish"}</label>
-                  <div className="mt-2 flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <Input type="datetime-local" value={draft.schedule_at} onChange={(e) => setDraft({ ...draft, schedule_at: e.target.value })} className="max-w-[260px]" />
-                    <span className="text-[10px] text-muted-foreground">{isRTL ? "(يتنشر تلقائياً عند الموعد)" : "(auto-publishes at this time)"}</span>
-                  </div>
-                </div>
-              </div>
-
-              <aside className="rounded-2xl bg-muted/30 p-4">
-                <div className="text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">{isRTL ? "نقاط السيو الحية" : "Live SEO score"}</div>
-                <div className={`mt-1 text-4xl font-black ${draftScore.score >= 85 ? "text-secondary" : draftScore.score >= 60 ? "text-accent" : "text-destructive"}`}>{draftScore.score}<span className="text-base text-muted-foreground">/100</span></div>
-                <ul className="mt-3 space-y-1.5 text-[11px]">
-                  <li className={draftScore.words >= 600 ? "text-secondary" : "text-destructive"}>• {isRTL ? "كلمات" : "Words"}: {draftScore.words} (≥600)</li>
-                  <li className={draft.title_ar.length >= 30 && draft.title_ar.length <= 70 ? "text-secondary" : "text-destructive"}>• {isRTL ? "طول العنوان" : "Title length"}: {draft.title_ar.length} (30-70)</li>
-                  <li className={draft.excerpt_ar.length >= 80 && draft.excerpt_ar.length <= 170 ? "text-secondary" : "text-destructive"}>• {isRTL ? "طول الوصف" : "Desc length"}: {draft.excerpt_ar.length} (80-170)</li>
-                  <li className={draftScore.tagsCount >= 3 ? "text-secondary" : "text-destructive"}>• {isRTL ? "وسوم" : "Tags"}: {draftScore.tagsCount} (≥3)</li>
-                  <li className={draft.image_url ? "text-secondary" : "text-destructive"}>• {isRTL ? "صورة OG" : "OG image"}</li>
-                  <li className={draft.category_ar ? "text-secondary" : "text-destructive"}>• {isRTL ? "تصنيف" : "Category"}</li>
-                </ul>
-                <div className="mt-4 flex flex-col gap-2">
-                  <Button onClick={() => saveDraft("publish")} disabled={saving} className="bg-orange-grad font-extrabold text-accent-foreground">
-                    {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null} {isRTL ? "نشر" : "Publish"}
-                  </Button>
-                  <Button onClick={() => saveDraft("schedule")} disabled={saving || !draft.schedule_at} variant="secondary" className="font-extrabold">
-                    <Calendar className="h-4 w-4" /> {isRTL ? "جدولة" : "Schedule"}
-                  </Button>
-                  <Button variant="outline" onClick={() => saveDraft("draft")} disabled={saving}>{isRTL ? "حفظ كمسودّة" : "Save as draft"}</Button>
-                </div>
-              </aside>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Table */}
       <div className="mt-4 overflow-x-auto rounded-2xl border border-border bg-card">
         <table className="w-full min-w-[720px] text-sm">
           <thead className="bg-muted/50 text-xs font-extrabold text-muted-foreground">
             <tr className="text-start">
               <th className="p-3 text-start">{isRTL ? "المقال" : "Article"}</th>
-              <th className="p-3 text-start">{isRTL ? "الحالة" : "Status"}</th>
               <th className="hidden p-3 text-start lg:table-cell">{isRTL ? "التصنيف" : "Category"}</th>
               <th className="hidden p-3 text-start xl:table-cell">{isRTL ? "كلمات" : "Words"}</th>
               <th className="hidden p-3 text-start xl:table-cell">{isRTL ? "العنوان" : "Title"}</th>
@@ -529,16 +364,16 @@ const Inner = () => {
                     <div className="flex items-start gap-2">
                       <img src={r.post.image} alt="" className="h-10 w-14 rounded object-cover" />
                       <div className="min-w-0">
-                        <div className="font-extrabold text-foreground line-clamp-2">{r.post.ar.title}</div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-extrabold text-foreground line-clamp-2">{r.post.ar.title}</span>
+                          <span className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[10px] font-extrabold ${meta.cls}`}>{meta[lang]}</span>
+                        </div>
                         <div className="mt-1 text-[11px] text-muted-foreground">{r.post.date} · {author.ar.name} · <span dir="ltr">{r.post.slug}</span></div>
+                        {r.db?.status === "scheduled" && r.db.scheduled_at && (
+                          <div className="mt-1 text-[10px] text-violet-700">⏰ {new Date(r.db.scheduled_at).toLocaleString(lang === "ar" ? "ar-EG" : "en")}</div>
+                        )}
                       </div>
                     </div>
-                  </td>
-                  <td className="p-3">
-                    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold ${meta.cls}`}>{meta[lang]}</span>
-                    {r.db?.status === "scheduled" && r.db.scheduled_at && (
-                      <div className="mt-1 text-[10px] text-violet-700">⏰ {new Date(r.db.scheduled_at).toLocaleString(lang === "ar" ? "ar-EG" : "en")}</div>
-                    )}
                   </td>
                   <td className="hidden p-3 lg:table-cell">
                     <Link to={`/blog/category/${axis.slug}`} className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline">
@@ -564,7 +399,7 @@ const Inner = () => {
                   <td className={`p-3 font-black ${tone}`}>{r.score}</td>
                   <td className="p-3">
                     <div className="flex items-center justify-end gap-1">
-                      <Link to={`/admin/blog-seo/${r.post.slug}`} className="inline-flex items-center gap-1 rounded-md bg-orange-grad px-2 py-1 text-[11px] font-extrabold text-accent-foreground hover:opacity-90">
+                      <Link to={`/admin/blog/${r.post.slug}`} className="inline-flex items-center gap-1 rounded-md bg-orange-grad px-2 py-1 text-[11px] font-extrabold text-accent-foreground hover:opacity-90">
                         <Pencil className="h-3 w-3" /> {isRTL ? "تعديل" : "Edit"}
                       </Link>
                       <DropdownMenu>
@@ -633,7 +468,7 @@ const Inner = () => {
               );
             })}
             {filtered.length === 0 && (
-              <tr><td colSpan={9} className="p-10 text-center text-muted-foreground">{isRTL ? "مفيش نتائج — جرّب تغيير الفلاتر" : "No results — try clearing filters"}</td></tr>
+              <tr><td colSpan={8} className="p-10 text-center text-muted-foreground">{isRTL ? "مفيش نتائج — جرّب تغيير الفلاتر" : "No results — try clearing filters"}</td></tr>
             )}
           </tbody>
         </table>

@@ -1,16 +1,18 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowLeft, ArrowRight, Heart, SearchX, Target, Sparkles } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
-import { DetailPageSkeleton } from "@/components/common/ContentSkeletons";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { LocalFAQ } from "@/components/common/LocalFAQ";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import { useProjectDetail } from "@/data/sources/projects";
+import { PROJECT_LANDINGS } from "@/data/projectLandings";
+import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 
 /**
  * /projects/:slug — one development project, entirely from the backend record (dashboard → المشاريع):
@@ -25,10 +27,13 @@ const ProjectDetail = () => {
   const { project, isLoading, notFound } = useProjectDetail(slug);
   const fmt = (n: number) => n.toLocaleString(isAR ? "ar-EG" : "en-US");
 
+  const landing = PROJECT_LANDINGS[slug];
+  if (landing) return <Navigate to={landing} replace />;
+
   if (isLoading && !project) {
     return (
       <PageLayout>
-        <DetailPageSkeleton />
+        <PageLoadingState />
       </PageLayout>
     );
   }
@@ -52,6 +57,10 @@ const ProjectDetail = () => {
   const lede = isAR ? project.descAr : project.descEn || project.descAr;
   const body = project.description && project.description !== project.descAr ? project.description : "";
   const donateHref = `/donate?project=${encodeURIComponent(project.slug)}`;
+  const waHref = `https://wa.me/201097000137?text=${encodeURIComponent(
+    isAR ? `السلام عليكم، أود الاستفسار عن مشروع ${name}.` : `Hello, I would like to ask about ${name}.`,
+  )}`;
+  const hasProjectImage = project.image && project.image !== "/placeholder.svg";
   const pct = project.target > 0 ? Math.min(100, Math.round((project.collected / project.target) * 100)) : 0;
   const url = `https://elyusr.org/projects/${project.slug}`;
   const crumbs = [
@@ -66,7 +75,7 @@ const ProjectDetail = () => {
         title={isAR ? `${name} | مشاريع اليسر — صدقة جارية` : `${name} | Al-Yusr projects`}
         description={(lede || body).slice(0, 155)}
         path={`/projects/${project.slug}`}
-        image={project.image}
+        image={hasProjectImage ? project.image : undefined}
       />
       <BreadcrumbSchema
         items={[
@@ -102,7 +111,7 @@ const ProjectDetail = () => {
       {/* Hero — same full-width style as the other listing pages */}
       <section className="relative flex min-h-[50vh] items-center overflow-hidden bg-primary sm:min-h-[55vh]">
         <div className="absolute inset-0">
-          <img src={project.image} alt="" aria-hidden className="h-full w-full object-cover opacity-45" loading="eager" />
+          {hasProjectImage && <img src={project.image} alt="" aria-hidden className="h-full w-full object-cover opacity-45" loading="eager" />}
           <div className="absolute inset-0 bg-gradient-to-b from-primary/75 via-primary/65 to-primary/95" />
         </div>
         <div className="container relative z-10 mx-auto max-w-[1440px] px-4 py-12 text-center sm:px-6 sm:py-20 lg:px-10">
@@ -114,19 +123,23 @@ const ProjectDetail = () => {
           </span>
           <h1 className="text-3xl font-black leading-tight tracking-tight text-white drop-shadow-sm sm:text-5xl md:text-6xl">{name}</h1>
           {lede && <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-white/90 sm:mt-5 sm:text-base md:text-lg">{lede}</p>}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
+          <div className="mx-auto mt-8 grid w-full max-w-xl grid-cols-2 gap-2 sm:gap-3">
             <Link
               to={donateHref}
-              className="inline-flex items-center gap-2.5 rounded-2xl bg-secondary px-7 py-3.5 text-sm font-black text-slate-950 shadow-xl shadow-secondary/25 transition-all hover:scale-[1.02] hover:bg-secondary/90 sm:text-base"
+              className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-2xl bg-secondary px-2.5 py-3.5 text-center text-xs font-black leading-tight text-slate-950 shadow-xl shadow-secondary/25 transition-all hover:scale-[1.02] hover:bg-secondary/90 sm:gap-2 sm:px-6 sm:text-base"
             >
-              <Heart className="h-5 w-5" /> {isAR ? "تبرع للمشروع" : "Donate to this project"}
+              <Heart className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> {isAR ? "تبرع للمشروع" : "Donate to this project"}
             </Link>
-            {project.priceFrom > 0 && (
-              <span className="rounded-2xl border border-white/25 bg-black/20 px-5 py-3.5 text-sm font-bold text-white backdrop-blur-md">
-                {isAR ? `الأسهم تبدأ من ${fmt(project.priceFrom)} ج.م` : `Shares from ${fmt(project.priceFrom)} EGP`}
-              </span>
-            )}
+            <a href={waHref} target="_blank" rel="noopener noreferrer"
+              className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-2xl border border-white/25 bg-black/20 px-2.5 py-3.5 text-center text-xs font-black leading-tight text-white backdrop-blur-md transition hover:bg-white/10 sm:gap-2 sm:px-6 sm:text-base">
+              <WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> {isAR ? "تواصل واتساب" : "WhatsApp"}
+            </a>
           </div>
+          {project.priceFrom > 0 && (
+            <p className="mt-3 text-center text-xs font-bold text-white/85 sm:text-sm">
+              {isAR ? `الأسهم تبدأ من ${fmt(project.priceFrom)} ج.م` : `Shares from ${fmt(project.priceFrom)} EGP`}
+            </p>
+          )}
         </div>
       </section>
 

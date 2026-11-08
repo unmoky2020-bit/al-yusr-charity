@@ -1032,7 +1032,7 @@ const About = () => {
         </section>
 
         {/* FAQ SECTION */}
-        <section id="faq" className="scroll-mt-24 py-16 md:py-24 pattern-programs">
+        <section id="faq" className="scroll-mt-24 pt-16 pb-20 md:pt-24 md:pb-24 pattern-programs">
           <div className="container mx-auto max-w-3xl px-4">
             <h2 data-reveal className="reveal-up text-center text-2xl font-black text-primary md:text-3xl">
               {isRTL ? "أسئلة شائعة عن مؤسسة اليسر" : "Frequently Asked Questions"}

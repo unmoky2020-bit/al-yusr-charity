@@ -24,6 +24,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { BreadcrumbSchema } from "@/components/common/Schemas";
@@ -59,7 +60,7 @@ const ArbounLanding = () => {
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
   // Editable content (code defaults merged with the dashboard override).
-  const { c, t, section } = useCampaignPage("arboun", ARBOUN_DEFAULTS);
+  const { c, t, section, campaignImage, isLoading } = useCampaignPage("arboun", ARBOUN_DEFAULTS);
   const items = (key: string) => section(key)?.items ?? [];
   const label = (id: string) => items("labels").find((i) => i.id === id);
 
@@ -237,12 +238,21 @@ const ArbounLanding = () => {
     sourceEn: c.hadith.source.en,
   };
 
+  if (isLoading) {
+    return (
+      <PageLayout>
+        <PageLoadingState />
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout>
       <SEOHelmet
         title={c.seo?.title?.[isRTL ? "ar" : "en"] || (isRTL ? "عربون خير — مبادرة اليسر للمستقلين | مؤسسة اليسر الخيرية" : "Arboun Khair Initiative | Al-Yusr Charity Foundation")}
         description={c.seo?.description?.[isRTL ? "ar" : "en"] || (isRTL ? "استقطع نسبة من مشروعك القادم لكفالة يتيم أو تيسير زواج. مبادرة اليسر الخيرية الأولى للمستقلين والفريلانسرز في مصر، مشهرة برقم 2665." : "Pledge a portion of your next project to sponsor an orphan or support a marriage. Al-Yusr's first giving initiative for freelancers & independents in Egypt.")}
         path="/arboun"
+        image={campaignImage || undefined}
         keywords={
           isRTL
             ? "عربون خير, فريلانسرز مصر, تبرع الفريلانسرز, مستقلين, زكاة العمل الحر, تيسير زواج, كفالة أيتام, صدقة جارية, مؤسسة اليسر, جمعية خيرية المنصورة"
@@ -362,20 +372,20 @@ const ArbounLanding = () => {
             <div className="flex items-center justify-center gap-2.5 sm:gap-4 w-full max-w-md mx-auto">
               <Link
                 to={DONATE}
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-lime-400 text-black px-6 py-3 text-xs sm:text-sm font-black shadow-[0_0_25px_rgba(163,230,53,0.6)] transition hover:bg-lime-300 hover:scale-105 active:scale-95"
+                className="inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full bg-lime-400 px-2.5 py-3 text-center text-[11px] font-black leading-tight text-black shadow-[0_0_25px_rgba(163,230,53,0.6)] transition hover:bg-lime-300 hover:scale-105 active:scale-95 sm:gap-2 sm:px-6 sm:text-sm"
               >
                 <Heart className="h-4 w-4 fill-black shrink-0" />
-                <span className="truncate">{t(c.hero.donateLabel)}</span>
+                <span className="line-clamp-2">{t(c.hero.donateLabel)}</span>
               </Link>
 
               <a
                 href="https://wa.me/201097000137?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%AD%D8%A7%D8%A8%D8%A8%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D9%85%D8%A8%D8%A7%D8%AF%D8%B1%D8%A9%20%D8%B9%D8%B1%D8%A8%D9%88%D9%86%20%D8%AE%D9%8A%D8%B1%20%D9%84%D9%84%D9%81%D8%B1%D9%8A%D9%84%D8%A7%D9%86%D8%B3%D8%B1%D8%B2"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] px-6 py-3 text-xs sm:text-sm font-black text-white shadow-lg transition hover:brightness-105 hover:scale-105 active:scale-95"
+                className="inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] px-2.5 py-3 text-center text-[11px] font-black leading-tight text-white shadow-lg transition hover:brightness-105 hover:scale-105 active:scale-95 sm:gap-2 sm:px-6 sm:text-sm"
               >
                 <WhatsAppIcon className="h-4 w-4 shrink-0" />
-                <span className="truncate">{t(label("whatsapp")?.title)}</span>
+                <span className="line-clamp-2">{t(label("whatsapp")?.title)}</span>
               </a>
             </div>
 
@@ -594,7 +604,7 @@ const ArbounLanding = () => {
       {/* ── 4. Creative Scroll-Expanding Video Section ── */}
       <ScrollExpandMedia
         mediaSrc="/vid/2222222.mp4"
-        posterSrc={posterEducation}
+        posterSrc={campaignImage || undefined}
         title={t(section("video")?.title) || undefined}
         badge={t(section("video")?.lead) || undefined}
         isRTL={isRTL}

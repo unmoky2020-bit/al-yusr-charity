@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
   LayoutDashboard, TrendingUp, HandCoins, Users, FolderKanban, Layers,
-  FileEdit, FileBarChart2, ArrowUpRight, Menu, X, Globe, LogOut, Search,
+  FileEdit, FileBarChart2, ArrowUpRight, Menu, X, Globe, LogOut,
   HandHeart, HeartHandshake, ShieldCheck, UserCog, Megaphone, ClipboardCheck,
   ListChecks, Mail, BarChart3, Activity, Wallet, Image as ImageIcon, FolderArchive, Loader2,
   Server, Sparkles, Building2, Compass, Calendar, ChevronDown, Heart, BookOpen, Target,
@@ -55,8 +55,8 @@ const ALL_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/stories", ar: "قصص الأثر", en: "Stories CMS", icon: HeartHandshake },
       { href: "/admin/media", ar: "مكتبة الوسائط", en: "Media Library", icon: FolderArchive },
       { href: "/admin/gallery", ar: "معرض الصور", en: "Photo Gallery", icon: ImageIcon },
-      { href: "/admin/content", ar: "المقالات والمدونة", en: "Articles & Blog", icon: FileEdit },
-      { href: "/admin/blog-seo", ar: "سيو المدونة", en: "Blog SEO", icon: Search },
+      { href: "/admin/content", ar: "محتوى الموقع", en: "Website Content", icon: FileEdit },
+      { href: "/admin/blog", ar: "المدونة", en: "Blog", icon: BookOpen },
       { href: "/admin/faqs", ar: "الأسئلة الشائعة", en: "FAQs CMS", icon: HelpCircle },
       { href: "/admin/inbox", ar: "رسائل تواصل معنا", en: "Contact inbox", icon: Mail },
       { href: "/admin/newsletter", ar: "النشرة البريدية", en: "Newsletter", icon: Mail },
@@ -86,7 +86,7 @@ const ALL_NAV_GROUPS: NavGroup[] = [
 /** Hrefs allowed per ROLE. Roles are now strictly separated:
  *  - admin        : full access
  *  - case_manager : cases / donations / reports
- *  - editor       : content + blog-seo + review
+ *  - editor       : content + blog + review
  *  - volunteer    : tasks + campaigns
  */
 const ROLE_ALLOWED: Record<string, string[]> = {
@@ -103,7 +103,7 @@ const ROLE_ALLOWED: Record<string, string[]> = {
     "/admin/homepage-content", "/admin/about-us", "/admin/axes",
     "/admin/projects", "/admin/programs", "/admin/services", "/admin/donation-campaigns", "/admin/campaigns", "/admin/seasons", "/admin/reports",
     "/admin/content", "/admin/stories", "/admin/site-stats", "/admin/gallery", "/admin/media",
-    "/admin/review", "/admin/blog-seo", "/admin/faqs", "/admin/newsletter", "/admin/inbox",
+    "/admin/review", "/admin/blog", "/admin/faqs", "/admin/newsletter", "/admin/inbox",
     "/admin/my-tasks", "/admin/profile", "/admin/notifications", "/admin/campaigns-section",
   ],
   volunteer: [
@@ -117,7 +117,7 @@ const ROLE_ALLOWED: Record<string, string[]> = {
 /** Volunteer permission → extra hrefs they unlock when granted. */
 const PERM_GRANTS: Record<string, string[]> = {
   "content.write":   ["/admin/content", "/admin/stories", "/admin/review"],
-  "content.publish": ["/admin/content", "/admin/stories", "/admin/review", "/admin/blog-seo"],
+  "content.publish": ["/admin/content", "/admin/stories", "/admin/review", "/admin/blog"],
   "cases.manage":    ["/admin/cases"],
   "field.coordinate":["/admin/campaigns", "/admin/my-tasks"],
   "media.upload":    ["/admin/content"],

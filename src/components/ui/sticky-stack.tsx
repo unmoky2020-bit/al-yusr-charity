@@ -29,6 +29,7 @@ export const StickyStackItem = ({
   index,
   top = "top-[84px] md:top-[96px]",
   sticky = true,
+  mobileSticky = true,
   className,
   style,
   children,
@@ -38,12 +39,19 @@ export const StickyStackItem = ({
   top?: string;
   /** Disable sticky per item when native scrolling should stay fully linear. */
   sticky?: boolean;
+  /** Keep items in normal flow on small screens while preserving the sticky stack above md. */
+  mobileSticky?: boolean;
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
 }) => (
   <div
-    className={cn(sticky ? "sticky" : "relative", sticky && top, "mb-5 md:mb-6", className)}
+    className={cn(
+      sticky ? (mobileSticky ? "sticky" : "relative md:sticky") : "relative",
+      sticky && top,
+      "mb-5 md:mb-6",
+      className,
+    )}
     style={{ zIndex: 10 + index, ...style }}
   >
     {children}

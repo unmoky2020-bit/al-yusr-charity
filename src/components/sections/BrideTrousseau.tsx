@@ -11,14 +11,23 @@ import bride from "@/assets/yusr-bride.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
+type BrideTrousseauProps = {
+  image?: string;
+  title?: string;
+  description?: string;
+  benefits?: string[];
+  donateHref?: string;
+};
+
 /**
  * "تجارة رابحة" — bride trousseau (jihaz) call to action on the programs page:
  * help buy a fridge / stove for an orphan bride after a field visit.
  */
-export const BrideTrousseau = () => {
+export const BrideTrousseau = ({ image, title, description, benefits, donateHref }: BrideTrousseauProps = {}) => {
   const { lang } = useLang();
   const isAR = lang === "ar";
   const root = useRef<HTMLElement | null>(null);
+  const imageSrc = image ?? bride;
 
   useEffect(() => {
     if (typeof window === "undefined" || !root.current) return;
@@ -50,15 +59,19 @@ export const BrideTrousseau = () => {
     isAR ? "السلام عليكم، حابب أعرف تكلفة أجهزة جهاز عروسة (تلاجة/بوتاجاز)" : "Hi, I'd like to know the cost of bride trousseau appliances",
   );
 
-  const points = [
+  const defaultPoints = [
     { icon: Home,       t: isAR ? "بيت مسلم بيتبني" : "Building a Muslim home", d: isAR ? "بتساهم في بداية أسرة كاملة" : "You help start a whole family" },
     { icon: Heart,      t: isAR ? "أثر بيفضل سنين" : "A lasting gift",          d: isAR ? "كل لقمة بتتطبخ في بيتها" : "In every meal cooked in her home" },
     { icon: ShieldCheck,t: isAR ? "ستر يتيمة" : "Sheltering an orphan",      d: isAR ? "«ومن ستر مسلمًا ستره الله» متفق عليه" : "“Whoever shelters a Muslim, Allah shelters him”" },
     { icon: Gift,       t: isAR ? "تسليم موثّق" : "Documented delivery",     d: isAR ? "بعد بحث ميداني، وبنبعتلك صور التسليم" : "After a field visit, with delivery photos" },
   ];
+  const icons = [Home, Heart, ShieldCheck, Gift];
+  const points = benefits
+    ? benefits.slice(0, 4).map((text, index) => ({ icon: icons[index], t: text, d: "" }))
+    : defaultPoints;
 
   return (
-    <section ref={root} id="bride-trousseau" className="pattern-hero-luxe hero-pattern-fade relative overflow-hidden py-14 md:py-20 text-primary-foreground">
+    <section ref={root} id="bride-trousseau" className="pattern-hero-luxe hero-pattern-fade relative overflow-hidden pt-14 pb-20 md:pt-20 md:pb-24 text-primary-foreground">
       <Helmet>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
@@ -84,19 +97,19 @@ export const BrideTrousseau = () => {
           ],
         })}</script>
       </Helmet>
-      <div className="container relative mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 md:gap-12 md:grid-cols-2 md:items-center lg:px-8">
-        <div data-bt="img" className="relative order-2 md:order-1">
-          <div className="absolute -inset-3 rounded-[2.5rem] bg-secondary/15 blur-2xl" aria-hidden />
-          <img
-            src={bride}
-            alt={isAR ? "عروسة يتيمة في يوم زفافها" : "Orphan bride on her wedding day"}
-            loading="lazy"
-            decoding="async"
-            width={900}
-            height={1200}
-            className="relative w-full rounded-[2rem] object-cover shadow-card ring-1 ring-secondary/30"
-          />
-        </div>
+      <div className={`container relative mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 md:gap-12 ${imageSrc ? "md:grid-cols-2 md:items-center" : ""} lg:px-8`}>
+        {imageSrc && (
+          <div data-bt="img" className="relative order-2 md:order-1">
+            <div className="absolute -inset-3 rounded-[2.5rem] bg-secondary/15 blur-2xl" aria-hidden />
+            <img
+              src={imageSrc}
+              alt={isAR ? "برنامج تجهيز العرائس" : "Bride trousseau program"}
+              loading="lazy"
+              decoding="async"
+              className="relative w-full rounded-[2rem] object-contain shadow-card ring-1 ring-secondary/30"
+            />
+          </div>
+        )}
 
         <div data-bt="copy" className="order-1 text-center md:order-2 md:text-start">
           <span className="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/15 px-3 py-1 text-[11px] font-extrabold text-secondary">
@@ -104,14 +117,14 @@ export const BrideTrousseau = () => {
             {isAR ? "حملة جهاز العرائس" : "Bride trousseau campaign"}
           </span>
           <h2 className="mt-3 text-xl font-black leading-[1.25] md:text-4xl lg:text-[2.6rem]">
-            {isAR ? (<>تجارة رابحة — تدفع ثمن جهاز اليوم،<br className="hidden sm:block" /> وتجني <span className="text-gradient-lime">حسنات</span> لسنين</>) : (
+            {title || (isAR ? (<>تجارة رابحة — تدفع ثمن جهاز اليوم،<br className="hidden sm:block" /> وتجني <span className="text-gradient-lime">حسنات</span> لسنين</>) : (
               <>A winning trade — pay for a trousseau today, reap <span className="text-gradient-lime">rewards</span> for years</>
-            )}
+            ))}
           </h2>
           <p className="mt-3 text-[13px] font-semibold leading-relaxed text-primary-foreground/85 md:text-base">
-            {isAR
+            {description || (isAR
               ? "تخيّل لما تساهم في شراء (تلاجة أو بوتاجاز) لعروسة يتيمة؛ كل لقمة بتطبخها، وكل حياة أولادها في المستقبل، هي أرباح بتنزل في رصيدك. أنت مش بتشتري أجهزة، أنت بتستثمر في بناء أسرة مسلمة بفضل الله ثم بفضل تبرعك."
-              : "Help buy a fridge or stove for an orphan bride — every meal she cooks and every life of her future children becomes a credit in your record. You're not buying appliances, you're investing in a Muslim family."}
+              : "Help buy a fridge or stove for an orphan bride — every meal she cooks and every life of her future children becomes a credit in your record. You're not buying appliances, you're investing in a Muslim family.")}
           </p>
 
           <div data-bt="grid" className="mt-5 grid grid-cols-2 gap-2.5 md:gap-3">
@@ -123,7 +136,7 @@ export const BrideTrousseau = () => {
                   </span>
                   <h3 className="text-[12.5px] font-extrabold md:text-sm">{t}</h3>
                 </div>
-                <p className="mt-1.5 text-[11px] font-semibold text-primary-foreground/75 md:mt-2 md:text-xs">{d}</p>
+                {d && <p className="mt-1.5 text-[11px] font-semibold text-primary-foreground/75 md:mt-2 md:text-xs">{d}</p>}
               </div>
             ))}
           </div>
@@ -136,16 +149,18 @@ export const BrideTrousseau = () => {
               </a>
             </Button>
             <Button asChild size="lg" variant="outline" className="h-11 px-2.5 sm:px-4 border-secondary/40 bg-primary-foreground/5 text-xs font-black text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground sm:text-sm md:h-12">
-              <Link to="/donate" data-source="programs" data-label="bride-trousseau-donate" className="flex items-center justify-center gap-1.5 whitespace-nowrap">
+              <Link to={donateHref ?? "/donate"} data-source="programs" data-label="bride-trousseau-donate" className="flex items-center justify-center gap-1.5 whitespace-nowrap">
                 <Heart className="h-4 w-4 shrink-0" />
                 <span>{isAR ? "ساهم في جهاز عروسة" : "Help a bride"}</span>
               </Link>
             </Button>
           </div>
 
-          <p className="mt-3 text-[11px] font-bold text-secondary/90">
-            {isAR ? "كل جهاز بيتسلّم للعروسة بعد بحث ميداني، وبتوصلك صور التسليم." : "Every appliance is delivered after a field visit, with photos sent to you."}
-          </p>
+          {!description && (
+            <p className="mt-3 text-[11px] font-bold text-secondary/90">
+              {isAR ? "كل جهاز بيتسلّم للعروسة بعد بحث ميداني، وبتوصلك صور التسليم." : "Every appliance is delivered after a field visit, with photos sent to you."}
+            </p>
+          )}
         </div>
       </div>
     </section>

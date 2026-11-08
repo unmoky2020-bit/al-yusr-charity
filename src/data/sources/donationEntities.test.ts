@@ -5,7 +5,7 @@ import { targetOfBasket, targetOfItem } from "@/data/donationTarget";
 import { mapApiProject } from "./projects";
 import { API_CAMPAIGN_ZELL, API_PROGRAM_ORPHANS, API_PROGRAM_ZAKAT_INACTIVE, API_PROJECT_WATER_STATION } from "./_testFixtures";
 
-const OPTIONAL_KEYS = ["color", "isMarkoun", "isSeasonal", "apiId", "slug"];
+const OPTIONAL_KEYS = ["benefitsAr", "benefitsEn", "color", "descriptionAr", "descriptionEn", "isMarkoun", "isSeasonal", "apiId", "slug"];
 const ENTITY_KEYS = Object.keys(ENTITY_MAP.general).filter((k) => !OPTIONAL_KEYS.includes(k)).sort();
 
 describe("donation entities source", () => {
@@ -21,6 +21,48 @@ describe("donation entities source", () => {
     expect(e.shares[0]).toMatchObject({ id: "pkg-48", nameAr: "سهم سقف خشبي", nameEn: "Roof Share" });
     expect(Object.keys(e).filter((k) => !OPTIONAL_KEYS.includes(k)).sort()).toEqual(ENTITY_KEYS);
     expect(e).toMatchObject({ apiId: API_CAMPAIGN_ZELL.id, slug: "zell" });
+  });
+
+  it("maps the Arboun backend slug and editable campaign content to the campaigns card entity", () => {
+    const list = resolveDonationEntities(
+      {
+        programs: [],
+        projects: [],
+        campaigns: [{
+          id: 22,
+          slug: "arboun-kheir",
+          name_ar: "عربون خير",
+          name_en: "Arboun Khair",
+          subtitle_ar: "عنوان فرعي من الباك إند",
+          subtitle_en: "Backend subtitle",
+          description_ar: "وصف محدث من الباك إند",
+          description_en: "Updated backend description",
+          benefits: ["ميزة محدثة من الباك إند"],
+          category: { name_ar: "مبادرات مجتمعية", name_en: "Community initiatives" },
+          image: "https://api.elyusr.org/storage/donation-campaigns/arboun.webp",
+          minimum_amount: 100,
+          donation_packages: [{ id: 1, name_ar: "سهم", amount: 150, is_active: true }],
+          is_active: true,
+        }],
+      },
+      "api",
+    );
+
+    expect(list.find((entity) => entity.id === "arboun")).toMatchObject({
+      apiId: 22,
+      slug: "arboun-kheir",
+      ar: "عربون خير",
+      en: "Arboun Khair",
+      taglineAr: "عنوان فرعي من الباك إند",
+      taglineEn: "Backend subtitle",
+      descriptionAr: "وصف محدث من الباك إند",
+      descriptionEn: "Updated backend description",
+      benefitsAr: ["ميزة محدثة من الباك إند"],
+      categoryAr: "مبادرات مجتمعية",
+      categoryEn: "Community initiatives",
+      image: "/storage/donation-campaigns/arboun.webp",
+      priceFrom: 150,
+    });
   });
 
   it("falls back to static fields (color, category) when the API lacks them, never to sample cases", () => {
@@ -149,7 +191,14 @@ describe("donate links and donation targets", () => {
         { id: 41, slug: "orphans", name_ar: "كفالة يتيم", is_active: true, donation_packages: [{ id: 5, name_ar: "كفالة شهر", amount: 500 }] }],
       projects: [{ id: 28, slug: "mosques", name: "عمارة المساجد", is_active: true, cases: [{ id: 37, code: "PRJ-1", title: "مسجد" }] },
         { id: 29, slug: "water", name: "سقيا الماء", is_active: true }],
-      campaigns: [{ id: 17, slug: "zell", landing_slug: "dhill", name_ar: "حملة ظل", is_active: true }],
+      campaigns: [{
+        id: 17,
+        slug: "zell",
+        landing_slug: "dhill",
+        name_ar: "حملة ظل",
+        is_active: true,
+        donation_packages: [{ id: 48, donation_campaign_id: 17, name_ar: "سهم سقف خشبي", amount: "500.00", is_active: true }],
+      }],
     },
     "api",
   );
@@ -167,6 +216,8 @@ describe("donate links and donation targets", () => {
     expect(targetOfItem({ entityId: "mosques", donationMode: "general", selectedShares: {} }, byId("mosques"))).toEqual({ kind: "project", id: 28 });
     expect(targetOfItem({ entityId: "orphans", donationMode: "shares", selectedShares: { "pkg-5": 2 } }, byId("orphans")))
       .toEqual({ kind: "program", id: 41, packageId: 5 });
+    expect(targetOfItem({ entityId: "dhill", donationMode: "shares", selectedShares: { "pkg-48": 1 } }, byId("dhill")))
+      .toEqual({ kind: "campaign", id: 17, packageId: 48 });
     expect(targetOfItem({ entityId: "mosques", donationMode: "case", selectedShares: {}, selectedCaseId: "case-37" }, byId("mosques")))
       .toEqual({ kind: "case", id: 37 });
     expect(targetOfBasket([{ entityId: "mosques", donationMode: "general", selectedShares: {} }], byId, "12")).toEqual({ kind: "case", id: 12 });

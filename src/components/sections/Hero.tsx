@@ -31,9 +31,9 @@ const HeroCopySkeleton = () => (
       <div className="h-3.5 w-[85%] rounded-lg bg-white/10" />
       <div className="h-3.5 w-[60%] rounded-lg bg-white/10" />
     </div>
-    <div className="flex gap-3 mt-2">
-      <div className="h-9 w-32 rounded-2xl bg-orange-400/30" />
-      <div className="h-9 w-32 rounded-2xl bg-white/15" />
+    <div className="mt-2 grid w-full max-w-[18rem] grid-cols-2 gap-2">
+      <div className="h-9 rounded-2xl bg-orange-400/30" />
+      <div className="h-9 rounded-2xl bg-white/15" />
     </div>
     <div className="h-6 w-28 rounded-full bg-white/10 mt-1" />
   </div>
@@ -268,27 +268,27 @@ export const Hero = () => {
                   return (
                     <div className="hc-copy relative z-20 mx-auto mt-2.5 sm:mt-4 lg:mt-3 flex w-full max-w-sm flex-row items-center justify-center gap-2 sm:gap-3.5 lg:gap-3">
                       <Button asChild size="default"
-                        className="h-9 min-w-[115px] px-3.5 sm:h-11 sm:min-w-[145px] sm:px-6 lg:h-10 lg:min-w-[135px] lg:px-5 rounded-2xl bg-orange-grad text-xs sm:text-sm font-black text-accent-foreground no-underline shadow-cta animate-pulse-glow hover:opacity-95 shrink-0">
+                        className="h-auto min-h-9 min-w-0 flex-1 px-2 sm:min-h-11 sm:px-4 lg:min-h-10 lg:px-4 rounded-2xl bg-orange-grad text-[11px] leading-tight sm:text-sm font-black text-accent-foreground no-underline shadow-cta animate-pulse-glow hover:opacity-95">
                         <a
                           href={content.hero_cta_primary_link || "/donate"}
                           data-cta="hero-donate"
                           style={{ textDecoration: "none" }}
                           onClick={() => trackHeroCta(content.hero_cta_primary_link || "/donate", "HeroCTA")}
-                          className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
+                          className="inline-flex min-w-0 items-center justify-center gap-1.5 whitespace-normal text-center leading-tight"
                         >
-                          <HeroPrimaryIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
+                          <HeroPrimaryIcon className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
                           <span>{isRTL ? content.hero_cta_primary_ar : content.hero_cta_primary_en}</span>
                         </a>
                       </Button>
                       <Button asChild size="default"
-                        className="h-9 min-w-[115px] px-3.5 sm:h-11 sm:min-w-[145px] sm:px-6 lg:h-10 lg:min-w-[135px] lg:px-5 rounded-2xl border-2 border-secondary/60 bg-primary-foreground/95 text-xs sm:text-sm font-black text-primary no-underline shadow-cta ring-1 ring-secondary/40 backdrop-blur-sm hover:bg-secondary hover:text-secondary-foreground shrink-0">
+                        className="h-auto min-h-9 min-w-0 flex-1 px-2 sm:min-h-11 sm:px-4 lg:min-h-10 lg:px-4 rounded-2xl border-2 border-secondary/60 bg-primary-foreground/95 text-[11px] leading-tight sm:text-sm font-black text-primary no-underline shadow-cta ring-1 ring-secondary/40 backdrop-blur-sm hover:bg-secondary hover:text-secondary-foreground">
                         <a
                           href={content.hero_cta_secondary_link || "/about"}
                           style={{ textDecoration: "none" }}
                           onClick={() => trackHeroCta(content.hero_cta_secondary_link || "/about", "HeroAbout")}
-                          className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
+                          className="inline-flex min-w-0 items-center justify-center gap-1.5 whitespace-normal text-center leading-tight"
                         >
-                          <HeroSecondaryIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
+                          <HeroSecondaryIcon className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
                           <span>{isRTL ? content.hero_cta_secondary_ar : content.hero_cta_secondary_en}</span>
                         </a>
                       </Button>

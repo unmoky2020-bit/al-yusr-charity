@@ -143,22 +143,22 @@ const ProgramOptionDetail = () => {
             {meta.ai_summary_ar && isRTL && <p className="mt-3 mx-auto md:mx-0 max-w-xl text-sm text-primary-foreground/75">{meta.ai_summary_ar}</p>}
             {meta.ai_summary_en && !isRTL && <p className="mt-3 mx-auto md:mx-0 max-w-xl text-sm text-primary-foreground/75">{meta.ai_summary_en}</p>}
 
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 md:justify-start">
+            <div className="mt-6 grid grid-cols-2 items-stretch gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-3 md:justify-start">
               {node.amount && (
-                <span className="inline-flex items-center rounded-2xl bg-secondary px-4 py-2 text-base font-extrabold text-secondary-foreground shadow-cta">
+                <span className="col-span-2 inline-flex items-center justify-center rounded-2xl bg-secondary px-4 py-2 text-base font-extrabold text-secondary-foreground shadow-cta sm:col-span-1">
                   {node.amount.toLocaleString()} EGP
                 </span>
               )}
-              <Button asChild size="lg" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
-                <Link to={donateHref} onClick={() => track("option_donate", { fbEvent: "InitiateCheckout", payload: { program: slug, option, amount: node.amount } })}>
-                  <Heart className="h-5 w-5" />{isRTL ? "تبرع لهذا الجزء" : "Donate to this item"}
+              <Button asChild size="lg" className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
+                <Link to={donateHref} className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2" onClick={() => track("option_donate", { fbEvent: "InitiateCheckout", payload: { program: slug, option, amount: node.amount } })}>
+                  <Heart className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />{isRTL ? "تبرع لهذا الجزء" : "Donate to this item"}
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-secondary/50 bg-transparent text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground">
-                <a href="https://wa.me/201097000137" target="_blank" rel="noopener" dir="ltr"><WhatsAppIcon className="h-5 w-5" /> WhatsApp</a>
+              <Button asChild size="lg" variant="outline" className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base border-secondary/50 bg-transparent text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground">
+                <a href="https://wa.me/201097000137" target="_blank" rel="noopener" dir="ltr" className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"><WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> WhatsApp</a>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-secondary/50 bg-transparent text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground">
-                <Link to={`/programs/${slug}`}><Arrow className="h-5 w-5" />{isRTL ? "كل خيارات البرنامج" : "All program options"}</Link>
+              <Button asChild size="lg" variant="outline" className="col-span-2 mx-auto w-full max-w-[16rem] min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:mx-0 sm:w-auto sm:max-w-none sm:px-4 sm:text-base border-secondary/50 bg-transparent text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground">
+                <Link to={`/programs/${slug}`} className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"><Arrow className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />{isRTL ? "كل خيارات البرنامج" : "All program options"}</Link>
               </Button>
             </div>
           </div>

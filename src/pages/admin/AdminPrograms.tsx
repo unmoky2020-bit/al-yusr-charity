@@ -21,6 +21,7 @@ import {
 } from "@/data/laravelApi";
 import { apiErrorMessageAr, programsAdminApi } from "@/data/api/programsAdminApi";
 import { PackagesEditor } from "@/components/admin/programs/PackagesEditor";
+import { ListingHeroImageButton } from "@/components/admin/ListingHeroImageButton";
 import { publicUrls } from "@/lib/publicUrls";
 
 export default function AdminPrograms() {
@@ -151,6 +152,7 @@ export default function AdminPrograms() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            <ListingHeroImageButton pageKey="programs" />
             <Button
               onClick={() => nav('/admin/programs/new')}
               className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-sm"

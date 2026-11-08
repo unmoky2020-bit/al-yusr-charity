@@ -2,11 +2,10 @@
  * Khabia requests + delegate field tasks — replaces the Supabase tables `khabia_requests`,
  * `user_roles`/`profiles` (delegate list) and the private storage bucket `khabia-proofs`.
  *
- * EXISTING:  GET /users (filter `role=delegate` is NEW), GET/PUT /cases/{id}
- * PROPOSED:  GET/POST /khabia-requests, PUT /khabia-requests/{id},
- *            POST /khabia-requests/{id}/proof (multipart),
- *            cases.assigned_delegate_id / scheduled_visit_at / delegate_notes columns,
- *            GET /cases?assigned_delegate_id=me, POST /cases/{id}/updates (multipart).
+ * Documented in the latest Postman collection: GET/POST /khabia-requests,
+ * GET/PUT/PATCH/DELETE /khabia-requests/{id}, and POST /proof (multipart).
+ * Delegate filtering and case-assignment columns/filters still need backend confirmation.
+ * GET/PUT /cases/{id} and POST /cases/{id}/updates are also documented.
  * See backend-handoff/02-replace-supabase-admin.md.
  */
 import { formatServerImageUrl } from "@/data/laravelApi";

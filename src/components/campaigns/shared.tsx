@@ -22,9 +22,15 @@ export const useAfterLoad = (delay = 1500) => {
   return on;
 };
 
-/** Donate link pre-filled with an amount, preserving the campaign's program param. */
-export const amountHref = (donateHref: string, amount: number) =>
-  `${donateHref}${donateHref.includes("?") ? "&" : "?"}amount=${amount}`;
+/** Donate link pre-filled with an amount and, when selected, the matching backend share. */
+export const amountHref = (donateHref: string, amount: number, packageId?: string | number, qty = 1) => {
+  const params = new URLSearchParams({ amount: String(amount) });
+  if (packageId !== undefined && packageId !== "") {
+    params.set("package", String(packageId));
+    if (qty > 1) params.set("qty", String(qty));
+  }
+  return `${donateHref}${donateHref.includes("?") ? "&" : "?"}${params.toString()}`;
+};
 
 export const waHref = (isAr: boolean, titleAr: string, titleEn: string) =>
   `https://wa.me/201097000137?text=${encodeURIComponent(
@@ -49,24 +55,24 @@ export const CampaignCrumbs = ({ isAr, name, className = "" }: { isAr: boolean; 
 export const HeroActions = ({
   isAr, donateHref, donateLabel, wa, tone = "dark", className = "",
 }: { isAr: boolean; donateHref: string; donateLabel: string; wa: string; tone?: "dark" | "light"; className?: string }) => (
-  <div className={`flex flex-col gap-3 sm:flex-row ${className}`}>
+  <div className={`grid w-full max-w-md grid-cols-2 gap-2 sm:gap-3 ${className}`}>
     <Link
       to={donateHref}
-      className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-orange-grad px-6 text-sm font-black text-accent-foreground shadow-cta transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:text-base"
+      className="inline-flex min-w-0 min-h-12 items-center justify-center gap-1.5 rounded-xl bg-orange-grad px-2.5 py-2 text-center text-xs font-black leading-tight text-accent-foreground shadow-cta transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:gap-2 sm:px-6 sm:text-base"
     >
-      <Heart className="h-5 w-5" /> {donateLabel}
+      <Heart className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> {donateLabel}
     </Link>
     <a
       href={wa}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex h-12 items-center justify-center gap-2 rounded-xl border-2 px-6 text-sm font-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:text-base ${
+      className={`inline-flex min-w-0 min-h-12 items-center justify-center gap-1.5 rounded-xl border-2 px-2.5 py-2 text-center text-xs font-black leading-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:gap-2 sm:px-6 sm:text-base ${
         tone === "dark"
           ? "border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 focus-visible:ring-secondary"
           : "border-primary/25 text-primary hover:bg-primary/5 focus-visible:ring-ring"
       }`}
     >
-      <WhatsAppIcon className="h-5 w-5" /> {isAr ? "تواصل واتساب" : "WhatsApp"}
+      <WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> {isAr ? "تواصل واتساب" : "WhatsApp"}
     </a>
   </div>
 );

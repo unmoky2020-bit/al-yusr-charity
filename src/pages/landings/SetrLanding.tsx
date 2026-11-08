@@ -72,65 +72,46 @@ const Rain = () => (
   </div>
 );
 
-/**
- * Illustrated winter scene: a house with a visibly layered (insulated) roof, a bed with a quilt
- * in front, folded blankets beside it. As `warmth` (0–1) rises the windows glow, the chimney
- * smokes, and the quilt and roof insulation come into colour. Pure SVG, ~2 KB, no image request.
- */
 const WinterHouse = ({ warmth, className = "" }: { warmth: number; className?: string }) => {
-  const w = Math.max(0, Math.min(1, warmth));
-  const glow = 0.15 + w * 0.85;
+  const glow = 0.15 + Math.max(0, Math.min(1, warmth)) * 0.85;
   return (
     <svg viewBox="0 0 320 240" className={`setr-house ${className}`} aria-hidden>
-      {/* ground */}
       <rect x="6" y="196" width="308" height="8" rx="4" fill="hsl(195 40% 75% / 0.35)" />
-      {/* chimney + smoke */}
       <rect x="214" y="58" width="16" height="36" rx="2" fill="hsl(152 45% 18%)" />
-      <g fill="hsl(0 0% 100%)" style={{ opacity: w * 0.55 }}>
-        <circle cx="222" cy="48" r="5" /><circle cx="228" cy="38" r="6.5" /><circle cx="236" cy="27" r="8" />
-      </g>
-      {/* roof: outer shell, wood layer, insulation line */}
       <polygon points="54,118 160,44 266,118" fill="hsl(152 50% 20%)" />
       <polygon points="72,116 160,56 248,116" fill="hsl(28 45% 32%)" />
-      <polyline points="72,116 160,56 248,116" fill="none" stroke="hsl(var(--secondary))" strokeWidth="3" strokeLinejoin="round" style={{ opacity: 0.25 + w * 0.75 }} />
-      <g stroke="hsl(28 35% 22%)" strokeWidth="1.5"><line x1="110" y1="90" x2="160" y2="56" /><line x1="210" y1="90" x2="160" y2="56" /></g>
-      {/* walls */}
+      <polyline points="72,116 160,56 248,116" fill="none" stroke="hsl(var(--secondary))" strokeWidth="3" strokeLinejoin="round" />
       <rect x="76" y="114" width="168" height="84" fill="hsl(152 50% 15%)" />
-      <rect x="76" y="114" width="168" height="4" fill="hsl(152 50% 22%)" />
-      {/* window glow halos */}
-      <ellipse cx="111" cy="146" rx="30" ry="24" fill="hsl(var(--accent))" style={{ opacity: w * 0.22 }} />
-      <ellipse cx="209" cy="146" rx="30" ry="24" fill="hsl(var(--accent))" style={{ opacity: w * 0.22 }} />
-      {/* windows */}
       <rect x="94" y="130" width="34" height="32" rx="3" fill="hsl(var(--accent))" style={{ opacity: glow }} />
       <rect x="192" y="130" width="34" height="32" rx="3" fill="hsl(var(--accent))" style={{ opacity: glow }} />
-      <g stroke="hsl(152 50% 15%)" strokeWidth="2"><line x1="111" y1="130" x2="111" y2="162" /><line x1="94" y1="146" x2="128" y2="146" /><line x1="209" y1="130" x2="209" y2="162" /><line x1="192" y1="146" x2="226" y2="146" /></g>
-      {/* door */}
       <rect x="146" y="150" width="28" height="48" rx="3" fill="hsl(28 55% 34%)" />
-      <circle cx="167" cy="176" r="2" fill="hsl(var(--gold, 43 85% 62%))" />
-      {/* bed in front: frame, legs, mattress, quilt, pillow */}
       <rect x="18" y="174" width="86" height="12" rx="3" fill="hsl(28 45% 32%)" />
-      <rect x="22" y="186" width="6" height="10" fill="hsl(28 45% 26%)" /><rect x="94" y="186" width="6" height="10" fill="hsl(28 45% 26%)" />
       <rect x="20" y="160" width="82" height="16" rx="4" fill="hsl(48 50% 92%)" />
-      <rect x="20" y="152" width="60" height="22" rx="5" fill="hsl(var(--accent))" style={{ opacity: 0.45 + w * 0.55 }} />
-      <g stroke="hsl(0 0% 100% / 0.45)" strokeWidth="1" strokeDasharray="3 3"><line x1="35" y1="154" x2="35" y2="172" /><line x1="50" y1="154" x2="50" y2="172" /><line x1="65" y1="154" x2="65" y2="172" /><line x1="22" y1="163" x2="78" y2="163" /></g>
-      <ellipse cx="90" cy="160" rx="11" ry="6" fill="hsl(0 0% 100%)" />
-      {/* folded blankets beside the house */}
+      <rect x="20" y="152" width="60" height="22" rx="5" fill="hsl(var(--accent))" style={{ opacity: glow }} />
       <rect x="258" y="186" width="48" height="10" rx="3" fill="hsl(var(--secondary))" />
-      <rect x="260" y="176" width="44" height="10" rx="3" fill="hsl(48 50% 92%)" />
-      <rect x="262" y="166" width="40" height="10" rx="3" fill="hsl(var(--accent))" style={{ opacity: 0.6 + w * 0.4 }} />
     </svg>
   );
 };
 
+const CampaignHeroImage = ({ src, alt }: { src: string; alt: string }) =>
+  src ? (
+    <img
+      src={src}
+      alt={alt}
+      loading="eager"
+      className="mx-auto block h-auto max-h-[min(60vh,420px)] w-auto max-w-[84%] rounded-2xl object-contain object-center shadow-card ring-1 ring-primary-foreground/15 md:max-w-full"
+    />
+  ) : null;
+
 const SetrHero = () => {
-  const { c, t, isAr } = useCampaignPage("setr", SETR_DEFAULTS);
+  const { c, t, isAr, campaignImage } = useCampaignPage("setr", SETR_DEFAULTS);
   const live = useAfterLoad();
   return (
     <section className="setr-night relative overflow-hidden text-primary-foreground">
       {live && <Rain />}
       <div className="container relative mx-auto max-w-6xl px-4 pb-24 pt-10 md:pb-32 md:pt-14">
         <CampaignCrumbs isAr={isAr} name={isAr ? "حملة سِتْر" : "Setr"} className="text-primary-foreground/80" />
-        <div className="mt-10 grid items-center gap-10 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+        <div className={`mt-10 grid items-center gap-10 ${campaignImage ? "md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]" : ""}`}>
           <div className="text-center md:text-start">
             <p className="text-sm font-black text-[hsl(195_70%_80%)]">{t(c.hero.eyebrow)}</p>
             <h1 className="mt-3 text-4xl font-black leading-[1.3] sm:text-5xl lg:text-6xl">
@@ -142,7 +123,9 @@ const SetrHero = () => {
             </p>
             <HeroActions isAr={isAr} donateHref={DONATE} donateLabel={t(c.hero.donateLabel)} wa={waHref(isAr, "حملة ستر", "the Setr campaign")} className="mt-8 justify-center md:justify-start" />
           </div>
-          <WinterHouse warmth={0.85} className="mx-auto w-full max-w-sm" />
+          {campaignImage && (
+            <CampaignHeroImage src={campaignImage} alt={isAr ? "حملة سِتر" : "Setr campaign"} />
+          )}
         </div>
       </div>
       {/* Snow drifts along the bottom edge (two layers for depth) */}
@@ -155,7 +138,7 @@ const SetrHero = () => {
 };
 
 const SetrMain = () => {
-  const { c, t, isAr, price, amount, section } = useCampaignPage("setr", SETR_DEFAULTS);
+  const { c, t, isAr, price, amount, packageId, section } = useCampaignPage("setr", SETR_DEFAULTS);
   const [picked, setPicked] = useState<Record<string, boolean>>({ blanket: true });
   const [hasRoof, setHasRoof] = useState(false);
   const [roofId, setRoofId] = useState<(typeof ROOFS)[number]["id"]>("bitumen");
@@ -267,7 +250,7 @@ const SetrMain = () => {
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {packages.map((p) => (
-              <Link key={p.id} to={amountHref(DONATE, p.amount)} className="flex items-center justify-between gap-4 rounded-xl border-2 border-border bg-card p-5 transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <Link key={p.id} to={amountHref(DONATE, p.amount, packageId(p.id))} className="flex items-center justify-between gap-4 rounded-xl border-2 border-border bg-card p-5 transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <span>
                   <span className="block text-sm font-bold text-muted-foreground">{t(p.note)}</span>
                   <span className="mt-0.5 block text-lg font-black text-primary">{t(p.label)}</span>
@@ -466,10 +449,11 @@ const SetrMain = () => {
 };
 
 const SetrLanding = () => {
-  const { c } = useCampaignPage("setr", SETR_DEFAULTS);
+  const { c, campaignImage, isLoading } = useCampaignPage("setr", SETR_DEFAULTS);
   return (
     <CampaignLandingShell
       slug="setr"
+      isLoading={isLoading}
       seo={c.seo}
       path="/setr"
       titleAr="حملة سِتْر — «مَن سَتَرَ مسلمًا في الدنيا، سَتَرَهُ الله في الدنيا والآخرة»"
@@ -478,7 +462,7 @@ const SetrLanding = () => {
       taglineEn="When winter becomes a harsh burden on needy families: freezing cold that keeps children awake. The Setr campaign provides roofs, warm fiber blankets, heavy clothing, beds and mattresses across Egyptian villages."
       metaDescAr="شارك في حملة سِتر مع مؤسسة اليسر: أسقف بيوت عازلة، أبواب وشبابيك، أسرة ومراتب، ألحفة فايبر، وكسوة شتاء للأطفال وكبار السن بالدقهلية ومحافظات مصر."
       metaDescEn="Join Al-Yusr's Setr Winter Campaign: home roofing, doors & windows, beds & mattresses, fiber blankets, and winter clothing for children and elderly in Egypt."
-      heroImage={posterWater}
+      heroImage={campaignImage}
       heroAlt="حملة ستر — تسقيف بيوت وألحفة فايبر وكسوة شتوية للأسر المستحقة"
       hero={<SetrHero />}
       main={<SetrMain />}

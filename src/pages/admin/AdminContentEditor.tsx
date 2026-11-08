@@ -3,11 +3,11 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { RequireAuth } from "@/auth/RequireAuth";
 import { useLang } from "@/i18n/LangContext";
 import { Card } from "@/components/ui/card";
-import { FileEdit, HeartHandshake, BarChart3, Search, ClipboardCheck, Layers, ArrowLeft } from "lucide-react";
+import { FileEdit, HeartHandshake, BarChart3, BookOpen, ClipboardCheck, Layers, ArrowLeft } from "lucide-react";
 
 const TILES = [
   { href: "/admin/content",   icon: FileEdit,         ar: "إدارة الصفحات والمحتوى", en: "Pages & Content",   desc: { ar: "تحرير صفحات الموقع والمحتوى التعريفي.", en: "Edit site pages and intro content." } },
-  { href: "/admin/blog-seo",  icon: Search,           ar: "المقالات و SEO",          en: "Blog & SEO",        desc: { ar: "إدارة المقالات، الكلمات المفتاحية، الجدولة والنشر.", en: "Manage posts, keywords, scheduling and publishing." } },
+  { href: "/admin/blog",      icon: BookOpen,         ar: "المدونة",                 en: "Blog",              desc: { ar: "إدارة المقالات والكلمات المفتاحية والجدولة والنشر.", en: "Manage posts, keywords, scheduling and publishing." } },
   { href: "/admin/stories",   icon: HeartHandshake,   ar: "قصص النجاح",              en: "Success Stories",   desc: { ar: "إضافة وتعديل قصص المستفيدين والشهادات.", en: "Add or edit beneficiary stories and testimonials." } },
   { href: "/admin/site-stats",icon: BarChart3,        ar: "الأرقام والإنجازات",       en: "Stats & Achievements", desc: { ar: "تحديث أرقام الصفحة الرئيسية والإنجازات.", en: "Update homepage stats and achievements." } },
   { href: "/admin/programs",  icon: Layers,           ar: "البرامج والأقسام",        en: "Programs",          desc: { ar: "تنظيم برامج المؤسسة وعرضها للزائرين.", en: "Organize programs displayed on the site." } },

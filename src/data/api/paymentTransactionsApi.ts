@@ -2,9 +2,9 @@
  * Payment gateway transactions (Paymob / Kashier attempts) — replaces the Supabase table
  * `payment_transactions` and the edge function `paymob-create-payment`.
  *
- * PROPOSED:  GET   /payment-transactions?status=&method=&search=
- *            PATCH /payment-transactions/{id}         { internal_notes }
- *            POST  /payment-transactions/{id}/retry   -> { redirect_url }
+ * Documented in the latest Postman collection: GET /payment-transactions,
+ * PATCH /payment-transactions/{id}, POST /payment-transactions/{id}/retry.
+ * Saved responses are not included for these requests; verify payload/response shapes against the live API.
  * See backend-handoff/02-replace-supabase-admin.md.
  */
 import { apiFetch } from "@/data/laravelApi";

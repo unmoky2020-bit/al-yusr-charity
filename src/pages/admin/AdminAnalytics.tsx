@@ -12,7 +12,7 @@ import { donationsAdminApi, filtersFromSearch, filtersToParams, type DonationFil
 import { MonthTooltip, TARGET_LABEL, TopTargets } from "@/components/admin/donations/DonationCharts";
 import { donationStatusName, formatCompact, formatMoney, formatMonth, formatNumber } from "@/lib/donationDisplay";
 
-const selectCls = "h-9 rounded-lg border border-border bg-background px-2.5 text-xs font-bold";
+const selectCls = "h-10 min-w-0 rounded-xl border border-border bg-background px-3 text-xs font-bold";
 /** Filters this page offers (all applied by GET /donations/stats). */
 const PAGE_KEYS: (keyof DonationFilters)[] = ["from", "to", "target", "channel"];
 const STATUS_ORDER = ["paid", "pending", "failed", "refunded", "cancelled"];
@@ -49,39 +49,45 @@ const AdminAnalytics = () => {
     <AdminLayout>
       <div className="space-y-5" dir={isRTL ? "rtl" : "ltr"}>
         {/* Filters */}
-        <div className="flex flex-wrap items-end gap-2 rounded-2xl border border-border bg-card p-3 shadow-soft">
-          <label className="space-y-1 text-[11px] font-bold text-muted-foreground">
-            <span>{isRTL ? "من تاريخ" : "From"}</span>
-            <Input type="date" value={filters.from ?? ""} onChange={(e) => setFilter({ from: e.target.value })} className="h-9 w-40 text-xs" />
-          </label>
-          <label className="space-y-1 text-[11px] font-bold text-muted-foreground">
-            <span>{isRTL ? "إلى تاريخ" : "To"}</span>
-            <Input type="date" value={filters.to ?? ""} onChange={(e) => setFilter({ to: e.target.value })} className="h-9 w-40 text-xs" />
-          </label>
-          <label className="space-y-1 text-[11px] font-bold text-muted-foreground">
-            <span>{isRTL ? "الجهة" : "Target"}</span>
-            <UiSelect className={`${selectCls} block`} value={filters.target ?? ""} onChange={(e) => setFilter({ target: (e.target.value || undefined) as TargetKind | undefined })}>
-              <option value="">{isRTL ? "كل الجهات" : "Any target"}</option>
-              {(Object.keys(TARGET_LABEL) as TargetKind[]).map((k) => <option key={k} value={k}>{TARGET_LABEL[k][lang]}</option>)}
-            </UiSelect>
-          </label>
-          <label className="space-y-1 text-[11px] font-bold text-muted-foreground">
-            <span>{isRTL ? "القناة" : "Channel"}</span>
-            <UiSelect className={`${selectCls} block`} value={filters.channel ?? ""} onChange={(e) => setFilter({ channel: (e.target.value || undefined) as DonationFilters["channel"] })}>
-              <option value="">{isRTL ? "أونلاين ويدوي" : "Online & manual"}</option>
-              <option value="gateway">{isRTL ? "أونلاين (بوابة دفع)" : "Online (gateway)"}</option>
-              <option value="manual">{isRTL ? "يدوي" : "Manual"}</option>
-            </UiSelect>
-          </label>
-          {Object.keys(filters).length > 0 && (
-            <Button size="sm" variant="outline" className="h-9 gap-1 text-xs font-bold" onClick={() => setSp({}, { replace: true })}>
-              <RotateCcw className="h-3.5 w-3.5" /> {isRTL ? "مسح" : "Clear"}
-            </Button>
-          )}
-          <span className="ms-auto flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
-            {q.isFetching && <RefreshCw className="h-3.5 w-3.5 animate-spin text-primary" />}
-            {isRTL ? "المبالغ = التبرعات المدفوعة فقط" : "Amounts = paid donations only"}
-          </span>
+        <div className="rounded-2xl border border-border bg-card p-4 shadow-soft sm:p-5">
+          <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <label className="flex min-w-0 flex-col gap-1.5 text-xs font-bold text-muted-foreground">
+              <span>{isRTL ? "من تاريخ" : "From date"}</span>
+              <Input type="date" max={filters.to} value={filters.from ?? ""} onChange={(e) => setFilter({ from: e.target.value || undefined })} className="h-10 w-full min-w-0 rounded-xl text-sm" />
+            </label>
+            <label className="flex min-w-0 flex-col gap-1.5 text-xs font-bold text-muted-foreground">
+              <span>{isRTL ? "إلى تاريخ" : "To date"}</span>
+              <Input type="date" min={filters.from} value={filters.to ?? ""} onChange={(e) => setFilter({ to: e.target.value || undefined })} className="h-10 w-full min-w-0 rounded-xl text-sm" />
+            </label>
+            <label className="flex min-w-0 flex-col gap-1.5 text-xs font-bold text-muted-foreground">
+              <span>{isRTL ? "الجهة" : "Target"}</span>
+              <UiSelect className={selectCls} value={filters.target ?? ""} aria-label={isRTL ? "الجهة" : "Target"}
+                onChange={(e) => setFilter({ target: (e.target.value || undefined) as TargetKind | undefined })}>
+                <option value="">{isRTL ? "كل الجهات" : "Any target"}</option>
+                {(Object.keys(TARGET_LABEL) as TargetKind[]).map((k) => <option key={k} value={k}>{TARGET_LABEL[k][lang]}</option>)}
+              </UiSelect>
+            </label>
+            <label className="flex min-w-0 flex-col gap-1.5 text-xs font-bold text-muted-foreground">
+              <span>{isRTL ? "القناة" : "Channel"}</span>
+              <UiSelect className={selectCls} value={filters.channel ?? ""} aria-label={isRTL ? "القناة" : "Channel"}
+                onChange={(e) => setFilter({ channel: (e.target.value || undefined) as DonationFilters["channel"] })}>
+                <option value="">{isRTL ? "أونلاين ويدوي" : "Online & manual"}</option>
+                <option value="gateway">{isRTL ? "أونلاين (بوابة دفع)" : "Online (gateway)"}</option>
+                <option value="manual">{isRTL ? "يدوي" : "Manual"}</option>
+              </UiSelect>
+            </label>
+          </div>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3">
+            <span className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+              {q.isFetching && <RefreshCw className="h-3.5 w-3.5 animate-spin text-primary" />}
+              {isRTL ? "المبالغ المعروضة تخص التبرعات المدفوعة فقط" : "Amounts shown include paid donations only"}
+            </span>
+            {Object.keys(filters).length > 0 && (
+              <Button size="sm" variant="outline" className="h-9 gap-1.5 rounded-xl px-3 text-xs font-bold" onClick={() => setSp({}, { replace: true })}>
+                <RotateCcw className="h-3.5 w-3.5" /> {isRTL ? "مسح الفلاتر" : "Clear filters"}
+              </Button>
+            )}
+          </div>
         </div>
 
         {q.isError && (
@@ -106,16 +112,20 @@ const AdminAnalytics = () => {
         <ChartCard icon={TrendingUp} title={isRTL ? "التبرعات المدفوعة شهرياً" : "Paid donations per month"}
           subtitle={isRTL ? "آخر 12 شهر — الأعمدة: المبلغ، الخط: عدد التبرعات (فلتر التاريخ مش بيأثر على الرسم ده)" : "Last 12 months — bars: amount, line: count (the date filter does not apply here)"}>
           {q.isLoading ? <div className="h-[280px] animate-pulse rounded-xl bg-muted" /> : (
-            <div dir="ltr">
-              <ResponsiveContainer width="100%" height={280}>
-                <ComposedChart data={monthly} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+            <div dir="ltr" className="min-w-0">
+              <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-bold text-muted-foreground" dir={isRTL ? "rtl" : "ltr"}>
+                <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-primary" />{isRTL ? "المبلغ المستلم" : "Amount received"}</span>
+                <span className="inline-flex items-center gap-1.5"><span className="h-0.5 w-3 rounded bg-orange-500" />{isRTL ? "عدد التبرعات" : "Donation count"}</span>
+              </div>
+              <ResponsiveContainer width="100%" height={320}>
+                <ComposedChart data={monthly} margin={{ top: 12, right: 8, left: 8, bottom: 4 }}>
                   <CartesianGrid strokeDasharray="3 6" opacity={0.16} vertical={false} />
-                  <XAxis dataKey="name" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} reversed={isRTL} />
-                  <YAxis yAxisId="amount" orientation={isRTL ? "right" : "left"} tick={{ fontSize: 11 }} tickFormatter={(v) => formatCompact(Number(v), lang)} axisLine={false} tickLine={false} width={52} />
-                  <YAxis yAxisId="count" orientation={isRTL ? "left" : "right"} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={32} allowDecimals={false} />
+                  <XAxis dataKey="name" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} tickMargin={10} />
+                  <YAxis yAxisId="amount" orientation="left" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} tickFormatter={(v) => formatCompact(Number(v), lang)} axisLine={false} tickLine={false} width={58} />
+                  <YAxis yAxisId="count" orientation="right" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} tickFormatter={(v) => formatNumber(Number(v), lang)} axisLine={false} tickLine={false} width={42} allowDecimals={false} />
                   <Tooltip content={<MonthTooltip lang={lang} />} />
-                  <Bar yAxisId="amount" dataKey="value" fill="hsl(152 65% 28%)" radius={[6, 6, 0, 0]} />
-                  <Line yAxisId="count" type="monotone" dataKey="count" stroke="hsl(22 88% 58%)" strokeWidth={2} dot={false} />
+                  <Bar yAxisId="amount" dataKey="value" fill="hsl(152 65% 28%)" radius={[7, 7, 0, 0]} maxBarSize={38} />
+                  <Line yAxisId="count" type="monotone" dataKey="count" stroke="hsl(22 88% 58%)" strokeWidth={2.5} dot={{ r: 3, fill: "hsl(22 88% 58%)", strokeWidth: 0 }} activeDot={{ r: 5 }} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>

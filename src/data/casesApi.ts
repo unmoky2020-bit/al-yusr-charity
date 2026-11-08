@@ -478,7 +478,7 @@ export async function getDonationsAnalytics(_months = 9) {
 
 /**
  * Read helpers used by public pages AND by AdminCaseDetail's Promise.all: on API failure
- * (e.g. the proposed endpoint is not deployed yet) they log and return [] — the same
+ * (e.g. a documented endpoint is not deployed on this server yet) they log and return [] — the same
  * empty result these functions returned before — so one missing endpoint never blocks the
  * whole page. Writes below always throw. Screens that need the error can call the
  * `fetch*` functions in ./api/caseContentApi directly.
@@ -492,7 +492,7 @@ async function readOrEmpty<T>(label: string, fn: () => Promise<T[]>): Promise<T[
   }
 }
 
-/** Case documents visible to the donor (Laravel GET /cases/{id}/documents — NEW, proposed). */
+/** Case documents visible to the donor (GET /cases/{id}/documents, documented in Postman). */
 export async function listCaseDocuments(caseId: string): Promise<CaseDocumentRow[]> {
   return readOrEmpty("documents", () => fetchCaseDocuments(caseId));
 }
@@ -508,7 +508,7 @@ export async function deleteCaseDocument(id: string): Promise<void> {
   return removeCaseDocument(id);
 }
 
-// ── Case updates (Laravel /cases/{id}/updates + /case-updates/{id} — NEW, proposed) ──
+// ── Case updates (routes documented in the latest Postman collection) ───────
 export async function listCaseUpdates(caseId: string): Promise<CaseUpdateRow[]> {
   return readOrEmpty("updates", () => fetchCaseUpdates(caseId));
 }
@@ -525,7 +525,7 @@ export async function deleteCaseUpdate(id: string): Promise<void> {
   return removeCaseUpdate(id);
 }
 
-// ── Case media (Laravel /cases/{id}/media + /case-media/{id} — NEW, proposed) ──
+// ── Case media (routes documented in the latest Postman collection) ─────────
 /** Public media for the case page (is_public only). */
 export async function listCaseMedia(caseId: string): Promise<CaseMediaRow[]> {
   return readOrEmpty("media", () => fetchCaseMedia(caseId));
@@ -566,7 +566,7 @@ export async function reorderCaseMedia(rows: { id: string; case_id?: string }[],
   return reorderCaseMediaItems(cid, rows.map((r) => r.id));
 }
 
-/** Public journey steps of a case (Laravel GET /cases/{id}/journey — NEW, proposed). */
+/** Public journey steps of a case (GET /cases/{id}/journey, documented in Postman). */
 export async function listCaseJourney(caseId: string): Promise<Pick<JourneyStepRow,
   "id" | "step_key" | "title_ar" | "title_en" | "note_ar" | "note_en" | "media_url" | "occurred_at" | "is_public">[]> {
   return readOrEmpty("journey", () => fetchCaseJourney(caseId));

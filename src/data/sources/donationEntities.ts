@@ -23,6 +23,7 @@ import {
   pick,
   resolveRecordKey,
   str,
+  strList,
   useSourced,
   withExtra,
 } from "./_shared";
@@ -33,6 +34,7 @@ export const ENTITY_ID_ALIASES: Record<string, string> = {
   zell: "dhill",
   sitr: "shelter",
   markoon: "markoun",
+  "arboun-kheir": "arboun",
 };
 
 const STATIC_IDS = new Set(STATIC_ENTITIES.map((e) => e.id));
@@ -120,6 +122,14 @@ export function mapApiEntity(raw: ApiRecord, kind: EntityType, fallback?: Donati
       pick(r.donation_tagline_ar, r.tagline_ar, r.subtitle_ar, top.subtitle_ar, r.short_description, fb?.taglineAr, r.description_ar, r.description) ?? "",
     taglineEn:
       pick(r.donation_tagline_en, r.tagline_en, r.subtitle_en, top.subtitle_en, r.short_description_en, fb?.taglineEn, r.description_en) ?? "",
+    descriptionAr: pick(r.description_ar, r.description),
+    descriptionEn: pick(r.description_en),
+    benefitsAr: Array.isArray(r.benefits_ar)
+      ? strList(r.benefits_ar) ?? []
+      : Array.isArray(r.benefits)
+        ? strList(r.benefits) ?? []
+        : undefined,
+    benefitsEn: Array.isArray(r.benefits_en) ? strList(r.benefits_en) ?? [] : undefined,
     image: image(r.donation_image, r.image, r.cover_image, r.image_url, top.image) ?? fb?.image ?? "/placeholder.svg",
     entityType: kind,
     donationType: (["cash", "in_kind", "both"].includes(r.donation_type) ? r.donation_type : fb?.donationType) ?? "cash",

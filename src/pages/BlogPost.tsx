@@ -9,7 +9,7 @@ import { SiteSchemas, BreadcrumbSchema, ArticleSchema, FAQSchema } from "@/compo
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
 import { findBlogPost, useBlogPosts } from "@/data/sources/blog";
-import { DetailPageSkeleton } from "@/components/common/ContentSkeletons";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { fetchPostBySlug } from "@/data/blogApi";
 import { linkifyBarePaths } from "@/lib/article-links";
 import type { BlogPost as BlogPostType } from "@/data/blog";
@@ -36,7 +36,7 @@ const BlogPost = () => {
 
   const post = fromPublic || previewPost || undefined;
   if (loading || (!post && isPreview && previewLoading)) {
-    return <PageLayout><DetailPageSkeleton /></PageLayout>;
+    return <PageLayout><PageLoadingState /></PageLayout>;
   }
   if (!post) return <Navigate to="/404" replace />;
 

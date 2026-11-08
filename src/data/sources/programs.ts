@@ -62,7 +62,7 @@ export function mapApiProgram(raw: ApiRecord, fallback?: ProgramContent): Progra
   };
   const out: ProgramContent = {
     slug: programSlugOf(r) || fb?.slug || "",
-    image: image(r.image, r.hero_image, top.image) ?? fb?.image ?? "/placeholder.svg",
+    image: image(r.image, r.hero_image, top.image) ?? fb?.image ?? "",
     priceFrom: num(r.minimum_amount) ?? num(top.minimum_amount) ?? minPackageAmount(r) ?? fb?.priceFrom ?? 0,
     ar: lang("ar"),
     en: lang("en"),

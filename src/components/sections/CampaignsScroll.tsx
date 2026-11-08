@@ -590,7 +590,7 @@ export const CampaignsScroll = () => {
               {/* Card height never exceeds the room left in the pinned viewport (padding + header + dots + skip),
                   so the skip button stays on screen on short laptop screens (e.g. 1366x768). */}
               <div
-                className="relative flex h-[clamp(340px,min(57svh,calc(100svh_-_215px)),500px)] sm:h-[clamp(360px,min(61svh,calc(100svh_-_230px)),560px)] md:h-[clamp(380px,min(64svh,calc(100svh_-_255px)),620px)] w-full items-center justify-center shrink-0 overflow-visible"
+                className="relative flex h-[clamp(380px,min(66svh,calc(100svh_-_215px)),560px)] sm:h-[clamp(360px,min(61svh,calc(100svh_-_230px)),560px)] md:h-[clamp(380px,min(64svh,calc(100svh_-_255px)),620px)] w-full items-center justify-center shrink-0 overflow-visible"
                 role="region"
                 aria-roledescription={isRTL ? "بطاقات حملات متراكمة" : "stacked campaign cards"}
                 aria-label={isRTL ? "بطاقات اليسر — مرّر عموديًا أو استخدم الأسهم للتنقل" : "Al-Yusr cards — scroll vertically or use arrows to navigate"}
@@ -757,7 +757,7 @@ const CoverflowSlide = ({
         // will-change:transform promotes to its own GPU layer.
         // No perspective, no rotateY, no filter = zero white-seam artifacts.
       }}
-      className="absolute inset-y-0 left-0 right-0 mx-auto flex w-[84vw] max-w-[305px] items-center justify-center outline-none will-change-transform sm:w-[345px] sm:max-w-[345px] md:w-[372px] md:max-w-[372px] lg:w-[395px] lg:max-w-[395px] xl:w-[415px] xl:max-w-[415px] 2xl:w-[425px] 2xl:max-w-[425px]"
+      className="absolute inset-y-0 left-0 right-0 mx-auto flex w-[90vw] max-w-[360px] items-center justify-center outline-none will-change-transform sm:w-[345px] sm:max-w-[345px] md:w-[372px] md:max-w-[372px] lg:w-[395px] lg:max-w-[395px] xl:w-[415px] xl:max-w-[415px] 2xl:w-[425px] 2xl:max-w-[425px]"
     >
       {children}
     </div>
@@ -1018,7 +1018,7 @@ const AutoplayCampaigns = ({
         <Header isRTL={isRTL} title={headerTitle} subtitle={headerSubtitle} />
 
         <div
-          className="relative flex h-[clamp(395px,57svh,500px)] sm:h-[clamp(450px,61svh,560px)] md:h-[clamp(480px,64svh,620px)] w-full items-center justify-center shrink-0 overflow-visible"
+          className="relative flex h-[clamp(420px,66svh,560px)] sm:h-[clamp(450px,61svh,560px)] md:h-[clamp(480px,64svh,620px)] w-full items-center justify-center shrink-0 overflow-visible"
           role="region"
           aria-roledescription={isRTL ? "بطاقات حملات متراكمة" : "stacked campaign cards"}
           aria-label={isRTL ? "بطاقات اليسر — استخدم الأسهم للتنقل" : "Al-Yusr cards — use arrows to navigate"}

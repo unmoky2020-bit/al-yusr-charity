@@ -739,6 +739,27 @@ html { scrollbar-width: thin; scrollbar-color: hsl(var(--primary) / 0.35) transp
 }
 ::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.55); }
 
+/* Keep the long live-SEO checklist scrollable with a subtle scrollbar rail. */
+.admin-seo-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary) / 0.32) hsl(var(--muted) / 0.45);
+}
+.admin-seo-scrollbar::-webkit-scrollbar {
+  display: block !important;
+  width: 3px !important;
+}
+.admin-seo-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--muted) / 0.45);
+  border-radius: 9999px;
+}
+.admin-seo-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.32);
+  border-radius: 9999px;
+}
+.admin-seo-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.55);
+}
+
 /* Mobile RTL polish — keep bold display headings readable on 320–420px */
 @media (max-width: 420px) {
   h1 { font-size: clamp(1.75rem, 8vw, 2.25rem) !important; line-height: 1.15 !important; }
@@ -1193,6 +1214,7 @@ img, video, svg, canvas {
 /* ─── Food (monthly food programme) ─────────────────────────────────── */
 /* Deep brand green warmed at the edge, the colour of a set table at dusk. */
 .food-hero { background: linear-gradient(165deg, hsl(152 65% 9%) 0%, hsl(152 60% 13%) 55%, hsl(140 45% 15%) 100%); }
+.food-hadith { background: hsl(140 45% 15%); }
 .food-plate { background: radial-gradient(circle at 50% 45%, hsl(42 90% 66%) 0%, hsl(var(--secondary)) 45%, hsl(28 80% 48%) 100%); opacity: 0.9; }
 /* A faint checked tablecloth under the carton section. */
 .food-cloth {

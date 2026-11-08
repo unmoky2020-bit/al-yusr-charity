@@ -1,7 +1,7 @@
 /**
  * Services-map sectors content source (/services-map).
  *   static: `DONATE_SECTORS` from src/data/servicesMap.ts (unchanged).
- *   api:    GET /service-categories (PROPOSED — seeded from DONATE_SECTORS), falling back to GET /axes (EXISTS)
+ *   api:    GET /service-categories (documented in Postman), falling back to GET /axes
  *           when that endpoint is missing/empty. One record = one sector (slug = sector id: food, health…).
  *           Nested `programs[]` become the sector programs (each needs a `slug`).
  *           A sector the API does not publish keeps its static copy; missing fields fall back to static.

@@ -3,7 +3,7 @@
  * pairs (Arabic first, side by side), toggles, list editors and an image field that uses
  * the shared media library (MediaPickerModal).
  */
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { ArrowDown, ArrowUp, FolderOpen, ImagePlus, Loader2, Plus, Trash2, Upload, X, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -378,6 +378,7 @@ export function ImageUrlField({
   const [pickerOpen, setPickerOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const preview = value ? formatServerImageUrl(value) || value : "";
 
   const upload = async (file: File) => {
@@ -401,8 +402,12 @@ export function ImageUrlField({
   return (
     <Field label={label} hint={hint} badge={badge}>
       <div className="space-y-2">
-        <div
-          className={`mx-auto grid w-full place-items-center overflow-hidden rounded-2xl border border-dashed border-border bg-muted/30 ${
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+          aria-label="اختيار صورة للرفع"
+          className={`group relative mx-auto grid w-full place-items-center overflow-hidden rounded-2xl border border-dashed border-border bg-muted/30 transition hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:cursor-wait ${
             aspect === "wide" ? "aspect-video max-h-[26rem]" : "aspect-[4/3] max-h-[22rem]"
           }`}
         >
@@ -415,16 +420,23 @@ export function ImageUrlField({
               <span className="text-[11px] font-semibold">ارفع صورة أو الصق رابطها</span>
             </div>
           )}
-        </div>
+          <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/35 group-focus-visible:bg-black/35">
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-orange-grad px-3 py-2 text-xs font-extrabold text-accent-foreground opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+              {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+              {uploading ? "جارٍ الرفع…" : "رفع صورة"}
+            </span>
+          </span>
+        </button>
+        <input ref={fileInputRef} type="file" accept={MEDIA_ACCEPT.join(",")} className="hidden" disabled={uploading} onChange={(e) => {
+          const f = e.target.files?.[0];
+          e.target.value = "";
+          if (f) void upload(f);
+        }} />
         <div className="flex items-center gap-1.5">
-          <label className={`inline-flex h-9 shrink-0 cursor-pointer items-center gap-1 rounded-xl border border-input bg-background px-3 text-xs font-bold hover:bg-muted ${uploading ? "pointer-events-none opacity-60" : ""}`}>
+          <button type="button" aria-label="رفع صورة" onClick={() => fileInputRef.current?.click()}
+            className={`inline-flex h-9 shrink-0 cursor-pointer items-center gap-1 rounded-xl border border-input bg-background px-3 text-xs font-bold hover:bg-muted ${uploading ? "pointer-events-none opacity-60" : ""}`}>
             {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />} رفع
-            <input type="file" accept={MEDIA_ACCEPT.join(",")} className="hidden" disabled={uploading} onChange={(e) => {
-              const f = e.target.files?.[0];
-              e.target.value = "";
-              if (f) void upload(f);
-            }} />
-          </label>
+          </button>
           <Input dir="ltr" value={value} placeholder="https://… رابط الصورة" className="h-9 min-w-0 flex-1 rounded-xl font-mono text-xs"
             onChange={(e) => { setError(""); onChange(e.target.value.trim()); }} />
           <Button type="button" size="icon" variant="outline" className="h-9 w-9 shrink-0 rounded-xl" title="اختيار من مكتبة الوسائط" onClick={() => setPickerOpen(true)}>

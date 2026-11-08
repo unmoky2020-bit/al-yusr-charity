@@ -25,6 +25,7 @@ import {
   Layers,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
@@ -70,7 +71,7 @@ const ADVANTAGE_ICONS: Record<string, LucideIcon> = {
 const MarkounLanding = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
-  const { c, t, section } = useCampaignPage("markoun", MARKOUN_DEFAULTS);
+  const { c, t, section, campaignImage, isLoading } = useCampaignPage("markoun", MARKOUN_DEFAULTS);
   const pillars = section("pillars")?.items ?? [];
   const advantages = section("advantages")?.items ?? [];
   const steps = section("steps")?.items ?? [];
@@ -126,6 +127,14 @@ const MarkounLanding = () => {
   );
   const waUrl = `https://wa.me/201097000137?text=${waDonateText}`;
 
+  if (isLoading) {
+    return (
+      <PageLayout>
+        <PageLoadingState />
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout>
       <FAQSchema items={c.faq.map((f) => ({ q: t(f.q), a: t(f.a) }))} />
@@ -133,7 +142,7 @@ const MarkounLanding = () => {
         title={c.seo?.title?.[isRTL ? "ar" : "en"] || (isRTL ? "حملة مَرْكون — أول حملة مصرية تُحيي أُسرة بالمركون في بيتك | مؤسسة اليسر الخيرية" : "Markoun Campaign — What's Idle at Home is Life for Another | Al-Yusr")}
         description={c.seo?.description?.[isRTL ? "ar" : "en"] || (isRTL ? "حملة مَرْكُون: كنزك المركون يبني حياة لغيرك. أول حملة مصرية منظمة لإعادة استخدام الأثاث المنزلي، الأجهزة الكهربائية، الملابس، الصيدلية المستدامة، والكتب. مندوبنا يصلك لباب بيتك مجاناً بالمنصورة والدقهلية: 01097000137." : "Markoun Campaign: Egypt's premier in-kind reuse initiative. Repurposing surplus furniture, electronics, clothing, medicine, and books with free doorstep pickup across Mansoura & Dakahlia.")}
         path="/markoun"
-        image={posterFurniture}
+        image={campaignImage || undefined}
         keywords={
           isRTL
             ? "حملة مركون, تبرع بالاثاث المنزلي المنصورة, تبرع بالأجهزة الكهربائية المستعملة, تبرع بالملابس المستعملة الدقهلية, صيدلية خيرية مجانية المنصورة, مندوب استلام تبرعات من المنزل, مؤسسة اليسر الخيرية, جمعية اليسر المنصورة"
@@ -195,9 +204,9 @@ const MarkounLanding = () => {
             />
           </div>
 
-          <div className="mt-6 grid items-center gap-8 lg:grid-cols-12">
+          <div className={`mt-6 grid items-center gap-8 ${campaignImage ? "lg:grid-cols-12" : ""}`}>
             {/* Hero Copy */}
-            <div className="text-center lg:col-span-7 lg:text-start">
+            <div className={`text-center lg:text-start ${campaignImage ? "lg:col-span-7" : ""}`}>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-primary-foreground backdrop-blur shadow-sm">
                 <Sparkles className="h-3.5 w-3.5 text-accent" />
                 {t(c.hero.eyebrow)}
@@ -213,12 +222,12 @@ const MarkounLanding = () => {
               </p>
 
               {/* Action Buttons */}
-              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 lg:justify-start w-full max-w-md mx-auto lg:mx-0">
+              <div className="mt-8 mx-auto grid w-full max-w-md grid-cols-2 gap-2.5 sm:gap-3 lg:mx-0 lg:justify-start">
                 <a
                   href={waUrl}
                   target="_blank"
                   rel="noopener"
-                  className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] px-5 sm:px-6 py-3 text-xs sm:text-sm font-black text-white shadow-lg transition hover:brightness-105 text-center leading-normal"
+                  className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] px-2.5 py-3 text-center text-[11px] font-black leading-tight text-white shadow-lg transition hover:brightness-105 sm:gap-2 sm:px-6 sm:text-sm"
                 >
                   <WhatsAppIcon className="h-4 w-4 shrink-0" />
                   <span>{t(c.hero.donateLabel)}</span>
@@ -227,9 +236,9 @@ const MarkounLanding = () => {
                 <Button
                   asChild
                   size="lg"
-                  className="w-full sm:w-auto flex-1 rounded-full bg-orange-grad px-5 sm:px-6 py-3 text-xs sm:text-sm font-black text-accent-foreground shadow-cta transition hover:opacity-95 text-center leading-normal h-auto min-h-[44px]"
+                  className="w-full min-w-0 rounded-full bg-orange-grad px-2.5 py-3 text-[11px] font-black leading-tight text-accent-foreground shadow-cta transition hover:opacity-95 sm:px-6 sm:text-sm h-auto min-h-[44px]"
                 >
-                  <Link to={DONATE}>
+                  <Link to={DONATE} className="inline-flex min-w-0 items-center justify-center gap-1.5 text-center leading-tight sm:gap-2">
                     <Heart className="h-4 w-4 shrink-0" />
                     <span>{isRTL ? "دعم نفقات الصيانة والنقل" : "Support Repair Fund"}</span>
                   </Link>
@@ -254,16 +263,18 @@ const MarkounLanding = () => {
             </div>
 
             {/* Hero Visual Poster */}
-            <div className="relative lg:col-span-5">
-              <div className="relative mx-auto max-w-md overflow-hidden rounded-[2.5rem] border-4 border-white/20 bg-card shadow-2xl">
-                <img
-                  src={posterFurniture}
-                  alt={isRTL ? "بوستر حملة مركون - مؤسسة اليسر الخيرية" : "Markoun Campaign Poster"}
-                  className="h-full w-full object-cover"
-                  loading="eager"
-                />
+            {campaignImage && (
+              <div className="relative mx-auto flex w-[84%] justify-center lg:col-span-5 lg:w-full">
+                <div className="relative mx-auto w-full max-w-2xl overflow-hidden rounded-[2.5rem] border-4 border-white/20 bg-card shadow-2xl">
+                  <img
+                    src={campaignImage}
+                    alt={isRTL ? "بوستر حملة مركون - مؤسسة اليسر الخيرية" : "Markoun Campaign Poster"}
+                    className="mx-auto block h-auto max-h-[min(60vh,420px)] w-auto max-w-full object-contain object-center"
+                    loading="eager"
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

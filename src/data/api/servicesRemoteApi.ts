@@ -1,7 +1,8 @@
 /**
  * Service pages (/services/:slug, cards on /services-map) → Laravel.
  *
- * Endpoints (NEW — proposed; documented in backend-handoff/01-replace-supabase-public.md).
+ * Endpoints documented in the latest Postman collection. Public access and successful
+ * responses still need verification against the deployed API.
  * Field names match the public reader in src/data/sources/services.ts (mapApiService).
  *   GET    /services                 public  → active services, sorted by sort_order
  *   GET    /services?all=1           staff   → also inactive ones (admin list)

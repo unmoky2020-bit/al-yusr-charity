@@ -48,12 +48,13 @@ import {
 } from "@/data/api/donationCampaignsAdminApi";
 import { BACKEND_PENDING_AR, describeWriteError } from "@/data/api/backendPending";
 import { CampaignPackagesManager } from "@/components/admin/campaigns/CampaignPackagesManager";
+import { PageImagesPanel } from "@/components/admin/PageImagesPanel";
 import { DEFAULT_NEW_CAMPAIGN_PACKAGES, createPackagesForCampaign, sortPackages } from "@/components/admin/campaigns/packageHelpers";
 import { getCampaignSeoPreset, type CampaignSeoData } from "@/data/campaignSeoStore";
 import { EntityFaqManager } from "@/components/admin/faq/EntityFaqManager";
 import { useQueryClient } from "@tanstack/react-query";
 import { HeroPanel, HadithPanel, StatsPanel, SectionsPanel, CtaPanel, campaignSectionTabs, sectionKeysFor } from "@/components/admin/CampaignPageContentEditor";
-import { getCampaignPageMetaForCampaign, mergeCampaignContent, type CampaignPageContent } from "@/data/campaignPages";
+import { getCampaignPageMetaForCampaign, mergeCampaignContent, withCampaignHeroImageSlot, type CampaignPageContent } from "@/data/campaignPages";
 import { campaignPagesApi, contentFromCampaign, seoColumnFromForm, toCampaignColumns } from "@/data/campaignPages/api";
 import { publicUrls } from "@/lib/publicUrls";
 
@@ -108,6 +109,7 @@ export default function AdminDonationCampaignDetail() {
   // together with `seo` and `faqs` (PUT /donation-campaigns/{id}). Prices are the donation packages.
   const queryClient = useQueryClient();
   const [pageContent, setPageContent] = useState<CampaignPageContent | null>(null);
+  const [pageDefaults, setPageDefaults] = useState<CampaignPageContent | null>(null);
   /** One tab per landing section (families like areas_now/areas_before share the parent's tab). */
   const sectionTabs = useMemo(() => (pageContent ? campaignSectionTabs(pageContent) : []), [pageContent]);
   const [pageHasOverride, setPageHasOverride] = useState(false);
@@ -122,9 +124,10 @@ export default function AdminDonationCampaignDetail() {
    */
   const loadPageContent = async (loaded: Partial<CampaignRecord>, opts?: { isNew?: boolean }) => {
     const meta = getCampaignPageMetaForCampaign(loaded);
-    if (!meta) { setPageContent(null); setPageHasOverride(false); setPageSource(null); return; }
+    if (!meta) { setPageContent(null); setPageDefaults(null); setPageHasOverride(false); setPageSource(null); return; }
     try {
-      const defaults = await meta.load();
+      const defaults = withCampaignHeroImageSlot(await meta.load());
+      setPageDefaults(defaults);
       let saved = opts?.isNew ? null : contentFromCampaign(loaded);
       let source: "campaign" | "legacy" | null = saved ? "campaign" : null;
       if (!saved && !opts?.isNew) {
@@ -351,6 +354,7 @@ export default function AdminDonationCampaignDetail() {
         }
         // Default/draft packages are created on the new campaign one by one.
         const { created, failed } = await createPackagesForCampaign(newId, packages);
+        await queryClient.invalidateQueries({ queryKey: ["content-source", "donation-entities"] });
         const warnings: string[] = [];
         try {
           warnings.push(...(await verifySaved(newId, payload)).map((k) => CAMPAIGN_FIELD_LABELS_AR[k] || k));
@@ -368,6 +372,7 @@ export default function AdminDonationCampaignDetail() {
 
       if (campaign.id === undefined || campaign.id === null) return;
       await donationCampaignsApi.update(campaign.id, payload as Partial<LaravelDonationCampaign>);
+      await queryClient.invalidateQueries({ queryKey: ["content-source", "donation-entities"] });
 
       // The PUT returned 2xx: check what the backend really kept.
       let ignored: string[] = [];
@@ -564,6 +569,7 @@ export default function AdminDonationCampaignDetail() {
               {pageMeta && (
                 <>
                   <TabsTrigger value="hero" className="text-xs font-bold py-2">{isAr ? "الهيرو" : "Hero"}</TabsTrigger>
+                  <TabsTrigger value="images" className="text-xs font-bold py-2">{isAr ? "الصور" : "Images"}</TabsTrigger>
                   <TabsTrigger value="hadith" className="text-xs font-bold py-2">{isAr ? "الحديث" : "Hadith"}</TabsTrigger>
                   {!!pageContent?.stats.length && (
                     <TabsTrigger value="stats" className="text-xs font-bold py-2 gap-1.5">
@@ -837,6 +843,7 @@ export default function AdminDonationCampaignDetail() {
                 packages={packages}
                 onChange={(next) => {
                   setPackages(next);
+                  void queryClient.invalidateQueries({ queryKey: ["content-source", "donation-entities"] });
                   if (pageMeta) void queryClient.invalidateQueries({ queryKey: ["campaign-packages", pageMeta.slug] });
                 }}
                 isAr={isAr}
@@ -872,6 +879,10 @@ export default function AdminDonationCampaignDetail() {
               return (
                 <>
                   <TabsContent value="hero" className="space-y-4 pt-2">{bar}{panel(HeroPanel)}</TabsContent>
+                  <TabsContent value="images" className="space-y-4 pt-2">
+                    {bar}
+                    {pageContent && <PageImagesPanel value={pageContent} onChange={setPageContent} defaults={pageDefaults} />}
+                  </TabsContent>
                   <TabsContent value="hadith" className="space-y-4 pt-2">
                     {bar}{panel(HadithPanel)}
                     {pageContent && <SectionsPanel value={pageContent} onChange={setPageContent} isAr={isAr} keys={sectionKeysFor(pageContent, "hadith")} />}

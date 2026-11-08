@@ -24,6 +24,7 @@ import {
   Search,
   PackageCheck,
   TrendingUp,
+  Image as ImageIcon,
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
@@ -41,7 +42,7 @@ import { StickyQurbaniCTA } from "@/components/common/StickyQurbaniCTA";
 import { TagsRail } from "@/components/common/TagsRail";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useProgramFaqs } from "@/data/programFaqs";
-import { DetailPageSkeleton } from "@/components/common/ContentSkeletons";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { programSeo } from "@/data/programSeo";
 import { ProgramUnavailable } from "@/components/programs/ProgramUnavailable";
@@ -57,6 +58,37 @@ type SubOption = {
   amount: number | null;
   image_url: string | null;
   sort_order: number;
+};
+
+const ProgramHeroImage = ({ src, alt }: { src: string; alt: string }) => {
+  const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <div className="relative mx-auto flex min-h-[220px] w-full max-w-[520px] items-center justify-center md:min-h-[300px]">
+      <div className="absolute -inset-4 rounded-[2.5rem] bg-secondary/25 blur-3xl" />
+      <div className="relative flex min-h-[220px] w-full items-center justify-center overflow-hidden rounded-[2rem] bg-primary/30 shadow-card md:min-h-[300px] md:rounded-[2.5rem]">
+        {!failed && (
+          <img
+            src={src}
+            alt={alt}
+            fetchPriority="high"
+            decoding="async"
+            loading="eager"
+            onLoad={() => setLoaded(true)}
+            onError={() => setFailed(true)}
+            className={`mx-auto block h-auto max-h-[min(68vh,520px)] w-auto max-w-full object-contain object-center transition-opacity duration-200 ${loaded ? "opacity-100" : "opacity-0"}`}
+          />
+        )}
+        {!loaded && (
+          <div className="absolute inset-0 flex items-center justify-center text-primary-foreground/50" aria-live="polite">
+            <ImageIcon className="h-8 w-8" aria-hidden="true" />
+            {failed && <span className="sr-only">تعذر تحميل صورة البرنامج</span>}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 const ProgramDetail = () => {
@@ -90,7 +122,7 @@ const ProgramDetail = () => {
   const dirX = isRTL ? 1 : -1;
 
   if (aliasRedirect) return <Navigate to={`/programs/${aliasRedirect}`} replace />;
-  if (programsLoading) return <PageLayout><DetailPageSkeleton /></PageLayout>;
+  if (programsLoading) return <PageLayout><PageLoadingState /></PageLayout>;
   if (!program) return <ProgramUnavailable />;
 
   const content = program[lang];
@@ -101,6 +133,7 @@ const ProgramDetail = () => {
     badge: program.hero?.[lang].badge || (isRTL ? "برنامج معتمد" : "Verified program"),
     image: program.hero?.image || program.image,
   };
+  const hasHeroImage = !!hero.image && hero.image !== "/placeholder.svg";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   const baseUrl = "https://elyusr.org";
   const url = `${baseUrl}/programs/${program.slug}`;
@@ -179,7 +212,7 @@ const ProgramDetail = () => {
         title={seo.title}
         description={seo.description}
         path={`/programs/${program.slug}`}
-        image={program.image}
+        image={program.image || undefined}
       />
       <SiteSchemas />
       <BreadcrumbSchema
@@ -213,7 +246,7 @@ const ProgramDetail = () => {
             url: `${baseUrl}/programs/${r.slug}`,
           })),
           description: content.desc,
-          image: program.image.startsWith("http") ? program.image : `${baseUrl}${program.image}`,
+          ...(program.image ? { image: program.image.startsWith("http") ? program.image : `${baseUrl}${program.image}` } : {}),
           offers: program.priceFrom > 0 ? {
             "@type": "Offer",
             price: program.priceFrom,
@@ -264,7 +297,7 @@ const ProgramDetail = () => {
             position: i + 1,
             url: `${baseUrl}/programs/${r.slug}`,
             name: r[lang].name,
-            image: r.image.startsWith("http") ? r.image : `${baseUrl}${r.image}`,
+            ...(r.image ? { image: r.image.startsWith("http") ? r.image : `${baseUrl}${r.image}` } : {}),
           })),
         })}</script>
       </Helmet>
@@ -274,7 +307,7 @@ const ProgramDetail = () => {
         data-source={`program-${program.slug}-hero`}
         className="relative -mt-px overflow-hidden pattern-hero-luxe hero-pattern-fade text-primary-foreground"
       >
-        <div className="container relative mx-auto grid gap-10 px-4 py-12 md:grid-cols-2 md:items-center md:py-20">
+        <div className={`container relative mx-auto grid gap-10 px-4 py-12 md:items-center md:py-20 ${hasHeroImage ? "md:grid-cols-2" : ""}`}>
           <div className="order-1 text-center md:order-none md:text-start">
             <div className="flex justify-center text-primary-foreground/80 md:justify-start">
               <Breadcrumbs
@@ -292,19 +325,20 @@ const ProgramDetail = () => {
             <p className="mt-4 text-lg text-primary-foreground/85 md:text-xl">{hero.subtitle}</p>
             <p className="mt-3 mx-auto md:mx-0 max-w-xl text-primary-foreground/75">{content.desc}</p>
 
-            <div className="mt-7 flex flex-wrap justify-center gap-3 sm:justify-start">
+            <div className="mx-auto mt-7 grid w-full max-w-md grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:justify-center sm:gap-3 md:mx-0 md:justify-start">
               <Button
                 asChild
                 size="lg"
-                className="flex-1 bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95 sm:flex-initial"
+                className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95"
               >
                 <Link
                   to={`/donate?program=${program.slug}`}
+                  className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"
                   data-source={`program-${program.slug}`}
                   data-label="hero-donate"
                   onClick={() => trackCta("hero-donate", `/donate?program=${program.slug}`, "InitiateCheckout")}
                 >
-                  <Heart className="h-5 w-5" />
+                  <Heart className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
                   {isRTL ? "تبرع لهذا البرنامج" : "Donate to this program"}
                 </Link>
               </Button>
@@ -312,7 +346,7 @@ const ProgramDetail = () => {
                 asChild
                 size="lg"
                 variant="outline"
-                className="flex-1 border-secondary/50 bg-secondary/10 text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground sm:flex-initial"
+                className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base border-secondary/50 bg-secondary/10 text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground"
               >
                 <a
                   href="https://wa.me/201097000137"
@@ -322,8 +356,9 @@ const ProgramDetail = () => {
                   data-source={`program-${program.slug}`}
                   data-label="hero-whatsapp"
                   onClick={() => trackCta("hero-whatsapp", "https://wa.me/201097000137", "Contact")}
+                  className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"
                 >
-                  <WhatsAppIcon className="h-5 w-5" /> WhatsApp
+                  <WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> WhatsApp
                 </a>
               </Button>
             </div>
@@ -338,19 +373,9 @@ const ProgramDetail = () => {
             )}
           </div>
 
-          <div className="relative mx-auto w-full max-w-md md:max-w-full">
-            <div className="absolute -inset-4 rounded-[2.5rem] bg-secondary/25 blur-3xl" />
-            {/* The photo fills the frame (no blurred side bars). */}
-            <div className="relative aspect-[4/3] max-h-[460px] w-full overflow-hidden rounded-[2rem] bg-primary/30 shadow-card md:rounded-[2.5rem]">
-              <img decoding="async"
-                src={hero.image}
-                alt={hero.title}
-                fetchpriority="high"
-                className="relative h-full w-full object-cover object-center"
-                loading="eager"
-              />
-            </div>
-          </div>
+          {hasHeroImage && (
+            <ProgramHeroImage key={`${program.slug}:${hero.image}`} src={hero.image} alt={hero.title} />
+          )}
         </div>
       </section>
 
@@ -567,23 +592,24 @@ const ProgramDetail = () => {
           </div>
 
           {/* Inline CTA */}
-          <div className="mt-8 grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:justify-center sm:gap-3">
+          <div className="mt-8 grid w-full max-w-md grid-cols-2 gap-2.5 sm:mx-auto sm:flex sm:flex-wrap sm:justify-center sm:gap-3">
             <Button
               asChild
               size="lg"
-              className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95"
+              className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95"
             >
               <Link
                 to={`/donate?program=${program.slug}`}
+                className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"
                 data-source={`program-${program.slug}`}
                 data-label="details-donate"
                 onClick={() => trackCta("details-donate", `/donate?program=${program.slug}`, "InitiateCheckout")}
               >
-                <Heart className="h-5 w-5" />
+                <Heart className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
                 {isRTL ? "تبرع الآن" : "Donate now"}
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline">
+            <Button asChild size="lg" variant="outline" className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base">
               <a
                 href="https://wa.me/201097000137"
                 target="_blank"
@@ -592,8 +618,9 @@ const ProgramDetail = () => {
                 data-source={`program-${program.slug}`}
                 data-label="details-whatsapp"
                 onClick={() => trackCta("details-whatsapp", "https://wa.me/201097000137", "Contact")}
+                className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"
               >
-                <WhatsAppIcon className="h-5 w-5" />
+                <WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
                 {isRTL ? "تواصل واتساب" : "WhatsApp"}
               </a>
             </Button>
@@ -818,14 +845,16 @@ const ProgramDetail = () => {
                 data-label={`related-${r.slug}`}
                 className="group overflow-hidden rounded-3xl bg-card shadow-soft transition hover:-translate-y-1 hover:shadow-card"
               >
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img decoding="async"
-                    src={r.image}
-                    alt={r[lang].name}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                </div>
+                {r.image && r.image !== "/placeholder.svg" && (
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img decoding="async"
+                      src={r.image}
+                      alt={r[lang].name}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                  </div>
+                )}
                 <div className="p-4">
                   <h3 className="font-extrabold text-primary">{r[lang].name}</h3>
                   <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{r[lang].tagline}</p>
@@ -840,7 +869,15 @@ const ProgramDetail = () => {
       </section>
 
       {/* Bride trousseau campaign — only on the bride program page */}
-      {program.slug === "bride" && <BrideTrousseau />}
+      {program.slug === "bride" && (
+        <BrideTrousseau
+          image={hasHeroImage ? hero.image : ""}
+          title={hero.title}
+          description={content.desc}
+          benefits={benefits}
+          donateHref={`/donate?program=${program.slug}`}
+        />
+      )}
 
       {/* Internal-link hub: related articles + geo pages + sibling programs (excluded on bride where BrideTrousseau is the concluding CTA) */}
       {program.slug !== "bride" && <RelatedContentLinks programSlug={program.slug} />}

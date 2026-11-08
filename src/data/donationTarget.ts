@@ -1,6 +1,6 @@
 /**
  * What a donation is recorded against on the backend. POST /donations/submit takes ONE target:
- * case_id | program_id | project_id | donation_campaign_id (+ donation_package_id for program packages).
+ * case_id | program_id | project_id | donation_campaign_id (+ donation_package_id for a selected package).
  */
 import type { DonationEntity } from "@/data/donationEntities";
 
@@ -9,7 +9,7 @@ export type DonationTargetKind = "case" | "program" | "project" | "campaign";
 export interface DonationTarget {
   kind: DonationTargetKind;
   id: number;
-  /** Program package (donation_packages.id) when exactly one program package was chosen. */
+  /** Backend package (donation_packages.id) when exactly one package was chosen. */
   packageId?: number;
 }
 
@@ -37,7 +37,7 @@ export function targetOfItem(item: TargetItem, entity: DonationEntity | undefine
   }
   if (!entity.apiId) return null;
   const target: DonationTarget = { kind: entity.entityType, id: entity.apiId };
-  if (entity.entityType === "program" && item.donationMode === "shares") {
+  if (item.donationMode === "shares") {
     const chosen = Object.entries(item.selectedShares).filter(([, n]) => n > 0).map(([id]) => id);
     const share = chosen.length === 1 ? entity.shares.find((s) => s.id === chosen[0]) : undefined;
     if (share?.apiId) target.packageId = share.apiId;

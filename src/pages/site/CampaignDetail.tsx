@@ -102,7 +102,7 @@ const CampaignDetail = () => {
           <h1 className="mt-3 text-2xl font-black md:text-4xl">{title}</h1>
         </div>
       </section>
-      <section className="bg-background pt-10 pb-28 sm:pb-36 md:pt-14 md:pb-44">
+      <section className="bg-background pt-10 pb-20 sm:pb-24 md:pt-14 md:pb-28">
         <div className="container mx-auto max-w-4xl px-4">
           <div className="grid gap-6 lg:grid-cols-[1.4fr,1fr]">
             <article className="rounded-3xl bg-card p-6 shadow-card md:p-8">

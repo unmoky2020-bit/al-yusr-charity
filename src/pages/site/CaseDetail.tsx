@@ -6,11 +6,11 @@ import {
   ShieldCheck, Building, Clock, HandCoins, ArrowLeft, ArrowRight, Hash, Paperclip, ExternalLink,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { BreadcrumbSchema } from "@/components/common/Schemas";
 import { Helmet } from "react-helmet-async";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import {
@@ -23,6 +23,7 @@ import { track } from "@/lib/track";
 import { CaseShare } from "@/components/cases/CaseShare";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { caseOwnerLabel } from "@/components/cases/CaseCard";
+import { updatesNotInJourney } from "@/lib/caseTimeline";
 
 const PAGE_SIZE = 9;
 const STORY_CLAMP = 700;
@@ -65,6 +66,35 @@ const DOC_LABEL: Record<string, { ar: string; en: string }> = {
   other: { ar: "مستند", en: "Document" },
 };
 
+const CaseDetailSkeleton = ({ isRTL }: { isRTL: boolean }) => (
+  <PageLayout>
+    <div aria-busy="true" aria-label={isRTL ? "جاري تحميل الحالة" : "Loading case"}>
+      <section className="bg-[#06301c]">
+        <div className="container mx-auto max-w-6xl px-4 pb-8 pt-6 md:pb-12 md:pt-8">
+          <Skeleton className="h-4 w-48 bg-white/15" />
+          <div className="mt-4 grid items-center gap-6 md:gap-8 lg:grid-cols-2 lg:gap-12">
+            <Skeleton className="aspect-[4/3] w-full rounded-[1.75rem] bg-white/10" />
+            <div className="space-y-4">
+              <Skeleton className="h-6 w-36 bg-white/15" />
+              <Skeleton className="h-10 w-full bg-white/15" />
+              <Skeleton className="h-5 w-3/4 bg-white/15" />
+              <Skeleton className="h-32 w-full rounded-2xl bg-white/10" />
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="container mx-auto grid max-w-6xl gap-8 px-4 py-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <div className="space-y-4">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-28 w-full rounded-2xl" />
+          <Skeleton className="h-28 w-full rounded-2xl" />
+        </div>
+        <Skeleton className="h-72 w-full rounded-3xl" />
+      </section>
+    </div>
+  </PageLayout>
+);
+
 const isVideo = (url: string) => /\.(mp4|webm|mov|m4v)(\?|$)/i.test(url);
 
 type TimelineItem = {
@@ -92,6 +122,7 @@ const CaseDetail = () => {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [storyOpen, setStoryOpen] = useState(false);
   const [showBar, setShowBar] = useState(false);
+  const [hideBarNearFooter, setHideBarNearFooter] = useState(false);
   const lightboxFigRef = useRef<HTMLDivElement | null>(null);
   const lightboxDialogRef = useRef<HTMLDivElement | null>(null);
   const lightboxOpenerRef = useRef<HTMLElement | null>(null);
@@ -101,6 +132,11 @@ const CaseDetail = () => {
     if (!ref) return;
     let alive = true;
     setLoading(true);
+    setC(null);
+    setUpdates([]);
+    setMedia([]);
+    setDocs([]);
+    setJourney([]);
     setStoryOpen(false);
     setVisibleCount(PAGE_SIZE);
     let onVisible: (() => void) | null = null;
@@ -108,6 +144,7 @@ const CaseDetail = () => {
       .then(async (row) => {
         if (!alive) return;
         setC(row as CaseRow | null);
+        setLoading(false);
         if (!row) return;
         const load = () =>
           Promise.all([
@@ -122,7 +159,7 @@ const CaseDetail = () => {
             setJourney(j);
             setDocs(d.filter((x) => x.is_public && x.storage_path));
           });
-        await load();
+        void load();
         track("view_case", {
           fbEvent: "ViewContent",
           payload: { content_ids: [row.ref_code], content_type: "product", content_name: row.title, content_category: "case" },
@@ -142,11 +179,28 @@ const CaseDetail = () => {
 
   // Mobile: a slim donate bar once the donate box has scrolled away.
   useEffect(() => {
-    const el = donateBoxRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(([e]) => setShowBar(!e.isIntersecting && e.boundingClientRect.top < 0), { threshold: 0 });
-    io.observe(el);
-    return () => io.disconnect();
+    const updateVisibility = () => {
+      const box = donateBoxRef.current;
+      setShowBar(!!box && box.getBoundingClientRect().bottom < 0);
+    };
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    updateVisibility();
+    return () => {
+      window.removeEventListener("scroll", updateVisibility);
+      window.removeEventListener("resize", updateVisibility);
+    };
+  }, [c, loading]);
+
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setHideBarNearFooter(entry.isIntersecting),
+      { threshold: 0 },
+    );
+    observer.observe(footer);
+    return () => observer.disconnect();
   }, [c, loading]);
 
   const lightbox = lightboxIdx !== null ? media[lightboxIdx] ?? null : null;
@@ -223,7 +277,7 @@ const CaseDetail = () => {
         step_key: j.step_key as StepKey,
       });
     }
-    for (const u of updates) {
+    for (const u of updatesNotInJourney(journey, updates)) {
       items.push({ id: `u-${u.id}`, kind: "update", title: isRTL ? "تحديث من الفريق" : "Team update", body: u.body, media_url: u.image_url, occurred_at: u.created_at });
     }
     return items.sort((a, b) => new Date(b.occurred_at).getTime() - new Date(a.occurred_at).getTime());
@@ -233,7 +287,7 @@ const CaseDetail = () => {
   const currentId = c?.id;
   const notThis = useCallback((x: CaseRow) => x.id !== currentId && !caseFunding(x).done, [currentId]);
 
-  if (loading) return <PageLayout><DetailSkeleton /></PageLayout>;
+  if (loading) return <CaseDetailSkeleton isRTL={isRTL} />;
 
   if (!c) {
     return (
@@ -361,7 +415,7 @@ const CaseDetail = () => {
           </div>
           <div className="mt-4 grid items-center gap-6 md:gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-12">
             <div className="relative overflow-hidden rounded-[1.75rem] bg-black/30 shadow-2xl ring-1 ring-white/10">
-              <img src={coverImg} alt={c.title} className="aspect-[4/3] max-h-[70vh] w-full object-cover sm:aspect-[16/10] lg:aspect-[4/3]" fetchPriority="high" />
+              <img src={coverImg} alt={c.title} className="aspect-[4/3] max-h-[70vh] w-full object-cover sm:aspect-[16/10] lg:aspect-[4/3]" fetchpriority="high" />
               {f.done && (
                 <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-black/85 to-transparent p-4 pt-10 text-sm font-black">
                   <CheckCircle2 className="h-5 w-5 text-[#a3e635]" /> {isRTL ? "اكتملت بفضل الله ثم بفضلكم" : "Fully funded — thank you"}
@@ -592,15 +646,15 @@ const CaseDetail = () => {
         variant="carousel"
         isRTL={isRTL}
         title={isRTL ? "حالات تانية محتاجة دعمك" : "Other cases that need you"}
-        className="bg-muted/30"
+        className="bg-muted/30 !pb-20 md:!pb-24"
       />
 
       {/* Mobile donate bar */}
       {!f.done && (
         <div
-          className={`fixed inset-x-0 bottom-0 z-40 transition-transform duration-300 lg:hidden ${showBar ? "translate-y-0" : "translate-y-full"}`}
+          className={`fixed inset-x-0 bottom-0 z-40 transition-transform duration-300 lg:hidden ${showBar && !hideBarNearFooter ? "translate-y-0" : "translate-y-full"}`}
           style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
-          aria-hidden={!showBar}
+          aria-hidden={!showBar || hideBarNearFooter}
         >
           <div className="mx-3 mb-2 flex items-center gap-3 rounded-2xl border border-secondary/30 bg-[#06301c]/95 px-3 py-2.5 text-white shadow-cta backdrop-blur">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-[11px] font-black"
@@ -611,7 +665,7 @@ const CaseDetail = () => {
               <div className="truncate text-[11px] font-bold text-white/75">{isRTL ? "باقي للاكتمال" : "Still needed"}</div>
               <div className="truncate text-sm font-black">{formatNumberEN(f.remaining)} {egp}</div>
             </div>
-            <Link to={`/donate?case=${encodeURIComponent(c.ref_code)}`} tabIndex={showBar ? 0 : -1} data-source="case-detail-bar" data-label={`case-${c.ref_code}`}
+            <Link to={`/donate?case=${encodeURIComponent(c.ref_code)}`} tabIndex={showBar && !hideBarNearFooter ? 0 : -1} data-source="case-detail-bar" data-label={`case-${c.ref_code}`}
               className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-orange-grad px-4 py-2.5 text-sm font-black text-accent-foreground shadow-cta">
               <Heart className="h-4 w-4" /> {isRTL ? "تبرع" : "Donate"}
             </Link>
@@ -755,49 +809,6 @@ function DonateBox({ c, isRTL, days }: { c: CaseRow; isRTL: boolean; days: numbe
         <ShieldCheck className="h-3.5 w-3.5 text-secondary" />
         {isRTL ? "دفع آمن · تبرعك بيتسجل باسم الحالة" : "Secure payment · recorded against this case"}
       </p>
-    </div>
-  );
-}
-
-/** Same grid as the real hero (photo first, facts centred beside it), so nothing jumps when data arrives. */
-function DetailSkeleton() {
-  const glass = "bg-white/10";
-  return (
-    <div aria-busy="true" aria-label="جاري التحميل">
-      <div className="bg-[#06301c]">
-        <div className="container mx-auto max-w-6xl px-4 pb-8 pt-6 md:pb-12 md:pt-8">
-          <Skeleton className={`mx-auto h-9 w-72 max-w-full rounded-full lg:mx-0 ${glass}`} />
-          <div className="mt-4 grid items-center gap-6 md:gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-12">
-            <Skeleton className={`aspect-[4/3] w-full rounded-[1.75rem] sm:aspect-[16/10] lg:aspect-[4/3] ${glass}`} />
-            <div className="flex min-w-0 flex-col items-center lg:items-start">
-              <div className="flex gap-2">
-                <Skeleton className={`h-6 w-16 rounded-full ${glass}`} />
-                <Skeleton className={`h-6 w-20 rounded-full ${glass}`} />
-                <Skeleton className={`h-6 w-24 rounded-full ${glass}`} />
-              </div>
-              <Skeleton className={`mt-4 h-10 w-4/5 ${glass}`} />
-              <Skeleton className={`mt-3 h-5 w-3/5 ${glass}`} />
-              <Skeleton className={`mt-4 h-8 w-48 rounded-full ${glass}`} />
-              <div className="mt-6 w-full max-w-md space-y-3 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
-                <div className="flex items-end justify-between">
-                  <Skeleton className={`h-8 w-32 ${glass}`} />
-                  <Skeleton className={`h-8 w-14 ${glass}`} />
-                </div>
-                <Skeleton className={`h-2 w-full rounded-full ${glass}`} />
-                <Skeleton className={`h-4 w-40 ${glass}`} />
-                <Skeleton className="h-11 w-full rounded-xl bg-white/15" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="container mx-auto grid max-w-6xl gap-8 px-4 py-10 lg:grid-cols-[minmax(0,1fr)_380px]">
-        <div className="space-y-3">
-          <Skeleton className="h-7 w-40" />
-          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className={`h-4 ${i % 3 === 2 ? "w-2/3" : "w-full"}`} />)}
-        </div>
-        <Skeleton className="h-80 w-full rounded-3xl" />
-      </div>
     </div>
   );
 }

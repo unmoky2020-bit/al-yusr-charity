@@ -19,6 +19,7 @@ import {
 } from "@/data/laravelApi";
 import { apiErrorMessageAr, projectsAdminApi } from "@/data/api/programsAdminApi";
 import { PackagesEditor } from "@/components/admin/programs/PackagesEditor";
+import { ListingHeroImageButton } from "@/components/admin/ListingHeroImageButton";
 
 export default function AdminProjects() {
   const { lang } = useLang();
@@ -135,6 +136,7 @@ export default function AdminProjects() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            <ListingHeroImageButton pageKey="projects" />
             <Button
               asChild
               className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-sm"

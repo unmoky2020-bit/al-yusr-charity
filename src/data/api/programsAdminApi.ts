@@ -5,17 +5,19 @@
  *   GET/POST /programs, GET/PUT/DELETE /programs/{id}
  *   GET/POST /programs/{id}/donation-packages
  *   GET/POST /programs/{id}/page-sections
- *   PUT/DELETE /programs/{id}/page-sections/{sectionId}
+ *   PUT/DELETE /programs/{id}/page-sections/{sectionId} (the collection's PUT sample has an extra /api/v1 in its URL)
  *   PATCH /programs/{id}/page-sections/{sectionId}/toggle
- *   PUT /programs/{id}/top-section
+ *   PUT /programs/{id}/top-section (the collection's sample has an extra /api/v1 in its URL)
  *   GET/POST /projects, GET/PUT/DELETE /projects/{id}
  *   GET/POST /projects/{id}/donation-packages
  *
- * PROPOSED endpoints (documented in backend-handoff/04-programs-projects.md). The UI calls them and,
- * while the backend does not have them yet, shows "يحتاج تفعيل من الباك إند" (never a fake success):
- *   PUT    /{programs|projects}/{id}/donation-packages/{packageId}
- *   DELETE /{programs|projects}/{id}/donation-packages/{packageId}
- *   POST   /{programs|projects}/{id}/donation-packages/reorder   (live since 2026-10-29)
+ * Package edit/delete/reorder routes are documented in the latest Postman collection, but have no saved
+ * responses. On 404/405 the UI still shows "يحتاج تفعيل من الباك إند" (never a fake success):
+ *   PUT/PATCH/DELETE /{programs|projects}/{id}/donation-packages/{packageId}
+ *   POST            /{programs|projects}/{id}/donation-packages/reorder
+ *
+ * The collection's PUT page-section and top-section samples have a duplicated /api/v1 path segment
+ * because base_url already contains /api/v1; verify those routes with the backend before relying on them.
  *
  * All calls throw on failure (no silent empty arrays), so screens can surface real errors.
  */
@@ -339,7 +341,7 @@ export const donationPackagesAdminApi = {
     invalidateApiCache(`/${kind}`);
     return unwrap<DonationPackageRow>(res);
   },
-  /** PROPOSED: PUT /{kind}/{id}/donation-packages/{packageId} */
+  /** Documented: PUT /{kind}/{id}/donation-packages/{packageId}. */
   async update(
     kind: PackageOwnerKind,
     ownerId: number | string,
@@ -350,7 +352,7 @@ export const donationPackagesAdminApi = {
     invalidateApiCache(`/${kind}`);
     return unwrap<DonationPackageRow>(res);
   },
-  /** PROPOSED: DELETE /{kind}/{id}/donation-packages/{packageId} */
+  /** Documented: DELETE /{kind}/{id}/donation-packages/{packageId}. */
   async remove(kind: PackageOwnerKind, ownerId: number | string, packageId: number): Promise<void> {
     await apiFetch(`/${kind}/${ownerId}/donation-packages/${packageId}`, { method: "DELETE" });
     invalidateApiCache(`/${kind}`);

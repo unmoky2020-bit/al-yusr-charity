@@ -3,9 +3,6 @@ import { Building2, HardHat, Hammer, Heart, BookOpen, MapPin, ShieldCheck, Truck
 import { ServicePage, type ServicePageConfig } from "@/components/services/ServicePage";
 import { useServicePage } from "@/data/sources/services";
 import { useServiceDetail } from "@/hooks/useServices";
-import { CONTENT_MAX_WAIT_MS, useSettled } from "@/hooks/useCampaignPage";
-import { PageLayout } from "@/components/layout/PageLayout";
-import { LandingPageSkeleton } from "@/components/common/ContentSkeletons";
 
 const ICON_MAP: Record<string, any> = {
   Building2, HardHat, Hammer, Heart, BookOpen, MapPin, ShieldCheck, Truck, Sparkles, Users, Droplets, Wrench, Pipette, Sprout, Beef, Stethoscope, Home, Bed, Construction, KeyRound, Snowflake, Recycle, Refrigerator, Wind, Activity, GraduationCap, HandCoins, Gift, UtensilsCrossed, Package, Calendar
@@ -27,18 +24,8 @@ function resolveIcon(icon: any) {
 
 const ServiceRouter = () => {
   const { slug = "" } = useParams();
-  const { data: remoteDetail, isLoading } = useServiceDetail(slug);
-  const { servicePage: staticConfig, isLoading: listLoading } = useServicePage(slug);
-  // Wait for the dashboard copy (or a short timeout) so the built-in text and photo never show first.
-  const ready = useSettled(!isLoading && !listLoading, CONTENT_MAX_WAIT_MS, slug);
-
-  if (!ready) {
-    return (
-      <PageLayout>
-        <LandingPageSkeleton />
-      </PageLayout>
-    );
-  }
+  const { data: remoteDetail } = useServiceDetail(slug);
+  const { servicePage: staticConfig } = useServicePage(slug);
 
   // Fall back to static config if remote isn't ready or hasn't override features
   const configSource = remoteDetail || staticConfig;

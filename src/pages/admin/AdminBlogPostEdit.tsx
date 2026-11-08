@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft, Calendar, Clock, ExternalLink, Eye, FileDown, FileJson,
-  Image as ImageIcon, Loader2, Upload, Wand2, Save, CheckCircle2, AlertTriangle,
+  ArrowLeft, ArrowRight, Calendar, Clock, ExternalLink, Eye, FileDown, FileJson,
+  Image as ImageIcon, FolderOpen, Loader2, Wand2, Save, CheckCircle2, AlertTriangle, Download, Archive, Trash2,
   Sparkles, Link2, Search, RotateCcw, History, Globe, Twitter, Facebook, ShieldCheck,
   Instagram, Music2, Undo2, Redo2, X,
 } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { MediaPickerModal } from "@/components/admin/MediaPickerModal";
+import { ImageUrlField } from "@/components/admin/programs/FormKit";
 import { ArticleToolbar } from "@/components/admin/ArticleToolbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,11 +17,12 @@ import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
 import {
   type DbBlogPost, dbToBlogPost,
-  updatePost, updatePostStatus, updatePostMedia, deletePost,
+  createPost, updatePost, updatePostStatus, updatePostMedia, deletePost,
   fetchAllRowsAdmin,
 } from "@/data/blogApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
-import { uploadBlogMedia, generateAndUploadOg } from "@/lib/blog-uploads";
+import { formatServerImageUrl } from "@/data/laravelApi";
+import { generateAndUploadOg } from "@/lib/blog-uploads";
 import { auditPost, downloadJson, downloadPdf, downloadCsv } from "@/lib/seo-report";
 import {
   scoreDraft, buildSuggestions, suggestRelated, countInternalLinks,
@@ -161,6 +163,49 @@ const networkFit = (w: number, h: number, key: keyof typeof NET_SPECS) => {
   return { ok: false, level: "ratio" as const, label: `${w}×${h} ≠ ${s.w}×${s.h}` };
 };
 
+const downloadNetworkCrop = async (
+  source: string,
+  spec: NetSpec,
+  slug: string,
+): Promise<void> => {
+  const image = new Image();
+  image.crossOrigin = "anonymous";
+  await new Promise<void>((resolve, reject) => {
+    image.onload = () => resolve();
+    image.onerror = () => reject(new Error("تعذر تحميل الصورة للقص؛ تحقق من الرابط أو صلاحيات CORS."));
+    image.src = source;
+  });
+
+  const canvas = document.createElement("canvas");
+  canvas.width = spec.w;
+  canvas.height = spec.h;
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("تعذر تجهيز مساحة الصورة في المتصفح.");
+
+  const scale = Math.max(spec.w / image.naturalWidth, spec.h / image.naturalHeight);
+  const cropWidth = spec.w / scale;
+  const cropHeight = spec.h / scale;
+  const sx = (image.naturalWidth - cropWidth) / 2;
+  const sy = (image.naturalHeight - cropHeight) / 2;
+  context.drawImage(image, sx, sy, cropWidth, cropHeight, 0, 0, spec.w, spec.h);
+
+  const blob = await new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (result) => result ? resolve(result) : reject(new Error("تعذر إنشاء ملف الصورة.")),
+      "image/jpeg",
+      0.92,
+    );
+  });
+  const objectUrl = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = objectUrl;
+  anchor.download = `${slug || "article"}-${spec.name.toLowerCase()}-${spec.w}x${spec.h}.jpg`;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+};
+
 /* Social preview: Google + Facebook + Twitter + Instagram + TikTok + dimension audit */
 const SocialPreview = ({
   isRTL, title, description, image, coverFallback, slug,
@@ -170,6 +215,7 @@ const SocialPreview = ({
   const t = title || (isRTL ? "عنوان المقال" : "Post title");
   const d = description || (isRTL ? "الوصف القصير سيظهر هنا في نتائج البحث ومنشورات السوشيال ميديا." : "Short description preview here.");
   const [bust, setBust] = useState(0);
+  const [exporting, setExporting] = useState<keyof typeof NET_SPECS | null>(null);
   const primary = image || "";
   const fb = coverFallback && coverFallback !== image ? coverFallback : "";
   const dimsPrimary = useImageDims(primary ? `${primary}${primary.includes("?") ? "&" : "?"}_b=${bust}` : "");
@@ -193,6 +239,30 @@ const SocialPreview = ({
     const tone = f.ok ? "bg-secondary/15 text-emerald-800" : f.level === "small" ? "bg-accent/15 text-accent" : "bg-destructive/15 text-destructive";
     return <span className={`ms-auto rounded px-1.5 py-0.5 text-[9px] font-bold ${tone}`}>{f.label}</span>;
   };
+  const ExportButton = ({ k }: { k: keyof typeof NET_SPECS }) => (
+    <button
+      type="button"
+      disabled={!img || !!exporting}
+      onClick={async () => {
+        if (!img) return;
+        setExporting(k);
+        try {
+          await downloadNetworkCrop(img, NET_SPECS[k], slug);
+          toast({ title: isRTL ? `تم تجهيز صورة ${NET_SPECS[k].name} (${NET_SPECS[k].w}×${NET_SPECS[k].h})` : `${NET_SPECS[k].name} image ready (${NET_SPECS[k].w}×${NET_SPECS[k].h})` });
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          toast({ title: isRTL ? "تعذر تجهيز الصورة" : "Could not prepare image", description: message, variant: "destructive" });
+        } finally {
+          setExporting(null);
+        }
+      }}
+      className="inline-flex shrink-0 items-center gap-1 rounded border border-border bg-background px-1.5 py-0.5 text-[9px] font-bold text-primary hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+      title={isRTL ? `تنزيل نسخة ${NET_SPECS[k].w}×${NET_SPECS[k].h}` : `Download ${NET_SPECS[k].w}×${NET_SPECS[k].h} version`}
+    >
+      {exporting === k ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3 w-3" />}
+      {isRTL ? "تجهيز" : "Export"}
+    </button>
+  );
 
   const fallback = (cls: string) => (
     <div className={`grid place-items-center bg-gradient-to-br from-primary/20 via-accent/10 to-secondary/20 ${cls}`}>
@@ -257,7 +327,7 @@ const SocialPreview = ({
         </div>
         {/* Facebook / LinkedIn OG */}
         <div className="overflow-hidden rounded-lg border border-border bg-background">
-          <div className="flex items-center gap-1 px-3 pt-2 text-[10px] font-bold text-muted-foreground"><Facebook className="h-3 w-3" /> Facebook / LinkedIn · 1200×630 <Badge k="facebook" /></div>
+          <div className="flex flex-wrap items-center gap-1 px-3 pt-2 text-[10px] font-bold text-muted-foreground"><Facebook className="h-3 w-3" /> Facebook / LinkedIn · 1200×630 <Badge k="facebook" /><ExportButton k="facebook" /></div>
           <div className="mt-2 aspect-[1200/630] w-full">{pic("h-full")}</div>
           <div className="border-t border-border bg-muted/30 px-3 py-2">
             <div className="text-[9px] uppercase text-muted-foreground" dir="ltr">{host}</div>
@@ -267,7 +337,7 @@ const SocialPreview = ({
         </div>
         {/* Twitter / X */}
         <div className="overflow-hidden rounded-lg border border-border bg-background">
-          <div className="flex items-center gap-1 px-3 pt-2 text-[10px] font-bold text-muted-foreground"><Twitter className="h-3 w-3" /> X · 1200×600 (2:1) <Badge k="x" /></div>
+          <div className="flex flex-wrap items-center gap-1 px-3 pt-2 text-[10px] font-bold text-muted-foreground"><Twitter className="h-3 w-3" /> X · 1200×600 (2:1) <Badge k="x" /><ExportButton k="x" /></div>
           <div className="mt-2 aspect-[2/1] w-full">{pic("h-full")}</div>
           <div className="px-3 py-2">
             <div className="line-clamp-2 text-[11px] font-bold text-primary" dir={isRTL ? "rtl" : "ltr"}>{t}</div>
@@ -277,7 +347,7 @@ const SocialPreview = ({
         </div>
         {/* Instagram (1:1 feed) */}
         <div className="overflow-hidden rounded-lg border border-border bg-background">
-          <div className="flex items-center gap-1 px-3 pt-2 text-[10px] font-bold text-muted-foreground"><Instagram className="h-3 w-3" /> Instagram · 1080×1080 <Badge k="instagram" /></div>
+          <div className="flex flex-wrap items-center gap-1 px-3 pt-2 text-[10px] font-bold text-muted-foreground"><Instagram className="h-3 w-3" /> Instagram · 1080×1080 <Badge k="instagram" /><ExportButton k="instagram" /></div>
           <div className="mt-2 aspect-square w-full">{pic("h-full")}</div>
           <div className="px-3 py-2">
             <div className="line-clamp-2 text-[11px] font-bold text-primary" dir={isRTL ? "rtl" : "ltr"}>{t}</div>
@@ -285,8 +355,8 @@ const SocialPreview = ({
         </div>
         {/* TikTok / Reels (9:16) */}
         <div className="overflow-hidden rounded-lg border border-border bg-background">
-          <div className="flex items-center gap-1 px-3 pt-2 text-[10px] font-bold text-muted-foreground"><Music2 className="h-3 w-3" /> TikTok / Reels · 1080×1920 <Badge k="tiktok" /></div>
-          <div className="relative mt-2 mx-auto aspect-[9/16] w-32">
+          <div className="flex flex-wrap items-center gap-1 px-3 pt-2 text-[10px] font-bold text-muted-foreground"><Music2 className="h-3 w-3" /> TikTok / Reels · 1080×1920 <Badge k="tiktok" /><ExportButton k="tiktok" /></div>
+          <div className="relative mx-auto mt-2 aspect-[9/16] w-full max-w-[220px] overflow-hidden rounded-lg bg-black">
             {pic("h-full")}
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-2">
               <div className="line-clamp-3 text-[10px] font-extrabold text-white" dir={isRTL ? "rtl" : "ltr"}>{t}</div>
@@ -303,6 +373,13 @@ const SocialPreview = ({
               <div className="line-clamp-2 text-[10px] text-muted-foreground" dir={isRTL ? "rtl" : "ltr"}>{d}</div>
               <div className="text-[9px] text-muted-foreground" dir="ltr">{host}</div>
             </div>
+            {img && (
+              <p className="mt-2 text-[10px] leading-5 text-muted-foreground">
+                {isRTL
+                  ? "المعاينات تقص الصورة تلقائيًا من المنتصف حسب أبعاد كل منصة. زر «تجهيز» ينزّل نسخة JPEG بالمقاس المحدد دون تغيير صورة المقال الأصلية."
+                  : "Previews center-crop the image to each platform ratio. Export downloads a JPEG at the specified size without changing the article's original image."}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -319,18 +396,17 @@ const SocialPreview = ({
   );
 };
 
-const Inner = () => {
+const Inner = ({ createMode = false }: { createMode?: boolean }) => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
   const { slug = "" } = useParams();
+  const isNew = createMode || slug === "new";
   const nav = useNavigate();
   const [row, setRow] = useState<DbBlogPost | null>(null);
-  const [picker, setPicker] = useState<null | "cover" | "og">(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
   const [draft, setDraft] = useState<EditState | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [autoSaving, setAutoSaving] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
@@ -340,11 +416,44 @@ const Inner = () => {
   const [accepted, setAccepted] = useState<Set<number>>(new Set());
   const [history, setHistory] = useState<EditState[]>([]);
   const [future, setFuture] = useState<EditState[]>([]);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const [ogPickerOpen, setOgPickerOpen] = useState(false);
+  const [generatingOg, setGeneratingOg] = useState(false);
   const initialJson = useRef<string>("");
   const autosaveTimer = useRef<number | null>(null);
 
   const load = async () => {
+    if (isNew) {
+      const now = new Date().toISOString();
+      const blank: DbBlogPost = {
+        id: "new-article",
+        slug: "",
+        status: "draft",
+        published_at: null,
+        scheduled_at: null,
+        image_url: null,
+        og_image_url: null,
+        category_ar: "مقالات",
+        category_en: "Articles",
+        focus_keyword: null,
+        title_ar: "",
+        title_en: "",
+        excerpt_ar: "",
+        excerpt_en: "",
+        body_ar: [],
+        body_en: [],
+        tags_ar: [],
+        tags_en: [],
+        seo_score: 0,
+        created_at: now,
+        updated_at: now,
+      };
+      setRow(blank);
+      setDraft(fromRow(blank));
+      initialJson.current = JSON.stringify(fromRow(blank));
+      setDirty(false);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const all = await fetchAllRowsAdmin();
     const r = all.find((item) => item.slug === slug || item.id === slug) || null;
@@ -373,7 +482,7 @@ const Inner = () => {
     setDirty(false);
     setLoading(false);
   };
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [slug]);
+  useEffect(() => { load(); /* eslint-disable-next-line */ }, [slug, createMode]);
 
   useEffect(() => {
     fetchAllRowsAdmin().then((rows) => setPool(rows.filter((r) => r.status === "published")));
@@ -384,6 +493,7 @@ const Inner = () => {
     const cur = JSON.stringify(draft);
     const isDirty = cur !== initialJson.current;
     setDirty(isDirty);
+    if (isNew) return;
     if (autosaveTimer.current) window.clearTimeout(autosaveTimer.current);
     if (isDirty) {
       autosaveTimer.current = window.setTimeout(() => {
@@ -396,7 +506,7 @@ const Inner = () => {
       }, 1200);
     }
     return () => { if (autosaveTimer.current) window.clearTimeout(autosaveTimer.current); };
-  }, [draft, row]);
+  }, [draft, row, isNew]);
 
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
@@ -415,11 +525,19 @@ const Inner = () => {
 
   const save = async (mode: "save" | "publish" | "schedule" | "unpublish") => {
     if (!row || !draft) return;
+    const normalizedSlug = draft.slug.toLowerCase().trim().replace(/\s+/g, "-");
+    if (!normalizedSlug || !draft.title_ar.trim()) {
+      toast({ title: isRTL ? "العنوان والرابط المختصر مطلوبان" : "Title and slug are required", variant: "destructive" });
+      return;
+    }
+    if (mode === "schedule" && !draft.scheduled_at) {
+      toast({ title: isRTL ? "اختر موعد النشر" : "Pick a schedule time", variant: "destructive" });
+      return;
+    }
     setSaving(true);
     try {
-      // PATCH /blog-seo/{id} (or POST /blog-seo the first time an older / built-in article is saved)
-      const savedId = await updatePost(row.id, {
-        slug: draft.slug.toLowerCase().replace(/\s+/g, "-"),
+      const content = {
+        slug: normalizedSlug,
         category_ar: draft.category_ar, category_en: draft.category_en || draft.category_ar,
         focus_keyword: draft.focus_keyword || null,
         title_ar: draft.title_ar, title_en: draft.title_en || draft.title_ar,
@@ -431,17 +549,29 @@ const Inner = () => {
         image_url: draft.image_url || null,
         og_image_url: draft.og_image_url || null,
         seo_score: score?.score ?? 0,
-      });
+      };
+      if (isNew) {
+        const status = mode === "publish" ? "published" : mode === "schedule" ? "scheduled" : "draft";
+        const created = await createPost({
+          ...content,
+          focus_keyword: draft.focus_keyword || undefined,
+          image_url: draft.image_url || undefined,
+          og_image_url: draft.og_image_url || undefined,
+          status,
+          scheduled_at: mode === "schedule" ? new Date(draft.scheduled_at).toISOString() : null,
+        });
+        toast({ title: isRTL ? (status === "published" ? "تم نشر المقال" : status === "scheduled" ? "تمت جدولة المقال" : "تم حفظ المقال كمسودة") : (status === "published" ? "Article published" : status === "scheduled" ? "Article scheduled" : "Article saved as draft") });
+        nav(`/admin/blog/${created.slug}`, { replace: true });
+        return;
+      }
+      const savedId = await updatePost(row.id, content);
       if (mode === "publish") await updatePostStatus(savedId, "published");
       if (mode === "unpublish") await updatePostStatus(savedId, "draft");
-      if (mode === "schedule") {
-        if (!draft.scheduled_at) { toast({ title: isRTL ? "اختر موعد النشر" : "Pick a schedule time", variant: "destructive" }); setSaving(false); return; }
-        await updatePostStatus(savedId, "scheduled", new Date(draft.scheduled_at).toISOString());
-      }
+      if (mode === "schedule") await updatePostStatus(savedId, "scheduled", new Date(draft.scheduled_at).toISOString());
       try { localStorage.removeItem(draftKey(row.slug)); } catch {}
       toast({ title: isRTL ? "تم الحفظ" : "Saved" });
-      const newSlug = draft.slug.toLowerCase().replace(/\s+/g, "-");
-      if (newSlug && newSlug !== row.slug) { nav(`/admin/blog-seo/${newSlug}`, { replace: true }); return; }
+      const newSlug = normalizedSlug;
+      if (newSlug && newSlug !== row.slug) { nav(`/admin/blog/${newSlug}`, { replace: true }); return; }
       await load();
     } catch (e: unknown) {
       toast({ title: isRTL ? "فشل الحفظ على الخادم" : "Save failed", description: apiErrorMessage(e), variant: "destructive" });
@@ -459,31 +589,20 @@ const Inner = () => {
       const result = await deletePost(row.id);
       try { localStorage.removeItem(draftKey(row.slug)); } catch { /* local draft cleanup only */ }
       toast({ title: result === "archived" ? (isRTL ? "اتأرشف المقال واختفى من الموقع" : "Article archived") : (isRTL ? "تم حذف المقال" : "Article deleted") });
-      nav("/admin/blog-seo");
+      nav("/admin/blog");
     } catch (e: unknown) {
       toast({ title: isRTL ? "فشل الحذف" : "Delete failed", description: apiErrorMessage(e), variant: "destructive" });
     } finally { setSaving(false); }
   };
 
-  const onPickImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0]; if (!f || !draft) return;
-    setUploading(true);
-    try {
-      const url = await uploadBlogMedia(f, f.name);
-      setDraft({ ...draft, image_url: url });
-      toast({ title: isRTL ? " تم رفع الصورة" : " Image uploaded" });
-    } catch (e: any) {
-      toast({ title: isRTL ? "فشل الرفع" : "Upload failed", description: e.message, variant: "destructive" });
-    } finally { setUploading(false); if (fileRef.current) fileRef.current.value = ""; }
-  };
-
   const regenerateOg = async () => {
     if (!row || !draft || !draft.title_ar) return;
+    setGeneratingOg(true);
     try {
       const og = await generateAndUploadOg({ slug: draft.slug, title: draft.title_ar, category: draft.category_ar });
       pushHistory();
       setDraft({ ...draft, og_image_url: og });
-      await updatePostMedia(row.id, { og_image_url: og, image_url: row.image_url || og });
+      if (!isNew) await updatePostMedia(row.id, { og_image_url: og });
       // End-to-end re-check: probe dimensions of the freshly generated OG
       const dims = await new Promise<{ w: number; h: number; ok: boolean }>((resolve) => {
         const im = new Image();
@@ -503,7 +622,8 @@ const Inner = () => {
           variant: "destructive",
         });
       }
-    } catch (e: any) { toast({ title: e.message, variant: "destructive" }); }
+    } catch (e: unknown) { toast({ title: apiErrorMessage(e), variant: "destructive" }); }
+    finally { setGeneratingOg(false); }
   };
 
   const pushHistory = useCallback(() => {
@@ -605,8 +725,8 @@ const Inner = () => {
     <AdminLayout>
       <div className="rounded-2xl border border-border bg-card p-10 text-center">
         <p className="font-bold text-muted-foreground">{isRTL ? "المقال غير موجود" : "Article not found"}</p>
-        <Link to="/admin/blog-seo" className="mt-4 inline-flex items-center gap-1 text-sm font-extrabold text-primary hover:underline">
-          <ArrowLeft className="h-4 w-4" /> {isRTL ? "عودة لقائمة المقالات" : "Back to articles"}
+        <Link to="/admin/blog" className="mt-4 inline-flex items-center gap-1 text-sm font-extrabold text-primary hover:underline">
+          {isRTL ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />} {isRTL ? "عودة لقائمة المقالات" : "Back to articles"}
         </Link>
       </div>
     </AdminLayout>
@@ -637,47 +757,29 @@ const Inner = () => {
     <AdminLayout>
       <div dir={isRTL ? "rtl" : "ltr"} className="space-y-3 px-1 sm:px-0">
         {/* ── Top toolbar ── */}
-        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-          <div className="flex min-w-0 items-center gap-2">
-            <button onClick={() => nav("/admin/blog-seo")} className="inline-flex h-8 shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 text-xs font-bold hover:bg-muted">
-              <ArrowLeft className="h-3.5 w-3.5" /> {isRTL ? "رجوع" : "Back"}
+        <div className="rounded-2xl border border-border bg-card p-3 shadow-sm sm:p-4">
+          <div className="flex min-w-0 items-start gap-3">
+            <button
+              type="button"
+              onClick={() => nav("/admin/blog")}
+              aria-label={isRTL ? "العودة إلى قائمة المقالات" : "Back to articles"}
+              title={isRTL ? "العودة إلى قائمة المقالات" : "Back to articles"}
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted/60 text-foreground transition-colors hover:bg-muted hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            >
+              <ArrowLeft className="h-5 w-5 rtl:rotate-180" />
             </button>
             <div className="min-w-0">
-              <h1 className="truncate text-sm font-black text-primary sm:text-base">{draft.title_ar || draft.slug}</h1>
-              <p className="truncate text-[10px] text-muted-foreground sm:text-[11px]" dir="ltr">
-                /{draft.slug} · {row.status}
-                {dirty && <span className="mx-1 rounded bg-accent/15 px-1.5 py-0.5 font-bold text-accent">{isRTL ? "غير محفوظ" : "unsaved"}</span>}
-                {autoSaving && <span className="mx-1">{isRTL ? "حفظ تلقائي…" : "autosaving…"}</span>}
-                {!autoSaving && lastSavedAt && <span className="mx-1">· {isRTL ? "محفوظ" : "local"} {lastSavedAt.toLocaleTimeString()}</span>}
-              </p>
+              <h1 className="line-clamp-2 text-base font-black leading-6 text-primary sm:text-lg">
+                {isNew ? (isRTL ? "إضافة مقالة جديدة" : "Create article") : draft.title_ar || draft.slug}
+              </h1>
+              <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] text-muted-foreground sm:text-[11px]">
+                <span dir="ltr" className="max-w-full truncate">/{draft.slug || "new"}</span>
+                <span className="rounded-full bg-muted px-2 py-0.5 font-bold">{row.status}</span>
+                {dirty && <span className="rounded-full bg-accent/15 px-2 py-0.5 font-bold text-accent">{isRTL ? "غير محفوظ" : "Unsaved"}</span>}
+                {autoSaving && <span>{isRTL ? "حفظ تلقائي…" : "Autosaving…"}</span>}
+                {!autoSaving && lastSavedAt && <span>{isRTL ? "محفوظ محليًا" : "Saved locally"} · {lastSavedAt.toLocaleTimeString()}</span>}
+              </div>
             </div>
-          </div>
-          {/* Action buttons — scroll horizontally on very small screens */}
-          <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
-            <Link to={previewHref} target="_blank" className="inline-flex h-8 items-center gap-1 rounded-md border border-border bg-muted/50 px-2 text-xs font-bold hover:bg-muted">
-              <Eye className="h-3.5 w-3.5" /> {isRTL ? "معاينة" : "Preview"}
-            </Link>
-            <Link to={publicUrls.blog(draft.slug)} target="_blank" className="inline-flex h-8 items-center gap-1 rounded-md border border-border bg-muted/50 px-2 text-xs font-bold hover:bg-muted">
-              <ExternalLink className="h-3.5 w-3.5" /> {isRTL ? "افتح" : "Live"}
-            </Link>
-            <Button size="sm" variant="outline" onClick={() => downloadPdf(auditPost(auditedPost))}><FileDown className="h-3.5 w-3.5" /><span className="hidden sm:inline"> PDF</span></Button>
-            <Button size="sm" variant="outline" onClick={() => downloadJson(auditPost(auditedPost))}><FileJson className="h-3.5 w-3.5" /><span className="hidden sm:inline"> JSON</span></Button>
-            <Button size="sm" variant="outline" onClick={() => downloadCsv(auditPost(auditedPost))}><FileDown className="h-3.5 w-3.5" /><span className="hidden sm:inline"> CSV</span></Button>
-            {dirty && (
-              <Button size="sm" variant="outline" onClick={discardLocal}>
-                <RotateCcw className="h-3.5 w-3.5" /><span className="hidden sm:inline"> {isRTL ? "تجاهل" : "Discard"}</span>
-              </Button>
-            )}
-            <Button size="sm" variant="outline" onClick={undo} disabled={history.length === 0}>
-              <Undo2 className="h-3.5 w-3.5" /><span className="hidden sm:inline"> {isRTL ? "تراجع" : "Undo"}</span>
-              {history.length > 0 && <span className="ms-1 text-[9px] text-muted-foreground">{history.length}</span>}
-            </Button>
-            <Button size="sm" variant="outline" onClick={redo} disabled={future.length === 0}>
-              <Redo2 className="h-3.5 w-3.5" /><span className="hidden sm:inline"> {isRTL ? "إعادة" : "Redo"}</span>
-            </Button>
-            <Button size="sm" onClick={() => save("save")} disabled={saving} className="bg-orange-grad font-extrabold text-accent-foreground">
-              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} {isRTL ? "حفظ" : "Save"}
-            </Button>
           </div>
         </div>
 
@@ -745,10 +847,69 @@ const Inner = () => {
               slug={draft.slug}
             />
 
-            <div className="rounded-xl border border-dashed border-border bg-muted/20 p-3">
-              <div className="flex items-center justify-between">
-                <label className="text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">{isRTL ? "صورة الغلاف" : "Cover image"}</label>
-                <div className="flex gap-1">
+            <section className="space-y-3 rounded-2xl border border-border/80 bg-card p-4 sm:p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h2 className="flex items-center gap-2 text-sm font-black text-foreground">
+                  <ImageIcon className="h-4 w-4 text-primary" /> {isRTL ? "صورة المشاركة (OG)" : "Social share image (OG)"}
+                </h2>
+                <Button type="button" size="sm" onClick={regenerateOg} disabled={generatingOg || !draft.title_ar}
+                  className="gap-1.5 bg-orange-grad font-bold text-accent-foreground">
+                  {generatingOg ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />}
+                  {generatingOg
+                    ? (isRTL ? "جارٍ التوليد…" : "Generating…")
+                    : (isRTL ? "توليد صورة OG" : "Generate OG image")}
+                </Button>
+              </div>
+              {(draft.og_image_url || draft.image_url) && (
+                <div className="group relative w-full min-w-0 overflow-hidden rounded-xl border border-border bg-muted/20">
+                  <button type="button" onClick={() => setOgPickerOpen(true)}
+                    className="relative block aspect-[1200/630] w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    aria-label={isRTL ? "تغيير صورة المشاركة" : "Change share image"}>
+                    <img
+                      src={formatServerImageUrl(draft.og_image_url || draft.image_url) || draft.og_image_url || draft.image_url}
+                      alt={isRTL ? "معاينة صورة المشاركة" : "Share image preview"}
+                      className="h-full w-full object-cover"
+                    />
+                    <span className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/35 group-focus-visible:bg-black/35">
+                      <span className="inline-flex translate-y-2 items-center gap-1.5 rounded-lg bg-orange-grad px-3 py-2 text-xs font-extrabold text-accent-foreground opacity-0 shadow-lg transition group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                        <FolderOpen className="h-4 w-4" /> {isRTL ? "تغيير الصورة" : "Change image"}
+                      </span>
+                    </span>
+                  </button>
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/70 px-3 py-2">
+                    <span className="text-[11px] text-muted-foreground">
+                      {draft.og_image_url
+                        ? (isRTL ? "صورة مشاركة مخصصة" : "Custom share image")
+                        : (isRTL ? "تُستخدم صورة الغلاف للمشاركة" : "Using the article cover image")}
+                    </span>
+                    {draft.image_url && draft.og_image_url !== draft.image_url && (
+                      <Button type="button" size="sm" variant="outline" className="h-7 text-[11px] font-bold"
+                        onClick={() => setDraft((current) => current ? { ...current, og_image_url: current.image_url } : current)}>
+                        {isRTL ? "استخدام صورة الغلاف" : "Use cover image"}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
+              <MediaPickerModal
+                open={ogPickerOpen}
+                onOpenChange={setOgPickerOpen}
+                currentValue={draft.og_image_url || draft.image_url}
+                title={isRTL ? "تغيير صورة المشاركة" : "Change share image"}
+                onSelect={(url) => {
+                  pushHistory();
+                  setDraft((current) => current ? { ...current, og_image_url: url } : current);
+                  setOgPickerOpen(false);
+                }}
+              />
+            </section>
+
+            <section className="space-y-4 rounded-2xl border border-border/80 bg-card p-4 sm:p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h2 className="flex items-center gap-2 text-sm font-black text-foreground">
+                  <ImageIcon className="h-4 w-4 text-primary" /> {isRTL ? "صورة الغلاف" : "Cover image"}
+                </h2>
+                <div className="flex gap-1.5">
                   <a href={`https://unsplash.com/s/photos/${fkQuery}`} target="_blank" rel="noreferrer" className="inline-flex h-7 items-center gap-1 rounded-md border border-border bg-card px-2 text-[10px] font-bold hover:bg-muted">
                     <Search className="h-3 w-3" /> Unsplash
                   </a>
@@ -757,52 +918,15 @@ const Inner = () => {
                   </a>
                 </div>
               </div>
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                {draft.image_url
-                  ? <img src={draft.image_url} alt="" className="h-16 w-28 rounded-lg object-cover" />
-                  : <div className="grid h-16 w-28 place-items-center rounded-lg bg-muted text-muted-foreground"><ImageIcon className="h-5 w-5" /></div>}
-                <Button type="button" size="sm" variant="outline" onClick={() => fileRef.current?.click()} disabled={uploading}>
-                  {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
-                  {isRTL ? "رفع صورة" : "Upload"}
-                </Button>
-                <Button type="button" size="sm" variant="outline" onClick={() => setPicker("cover")}>
-                  <ImageIcon className="h-3.5 w-3.5" /> {isRTL ? "من المكتبة" : "From library"}
-                </Button>
-                <input ref={fileRef} type="file" accept="image/*" hidden onChange={onPickImage} />
-                <Input className="min-w-[200px] flex-1" placeholder={isRTL ? "أو ألصق رابط صورة خارجية" : "Or paste external image URL"} value={draft.image_url} onChange={(e) => setDraft({ ...draft, image_url: e.target.value })} />
-                <Button type="button" size="sm" variant="outline" onClick={regenerateOg}><Wand2 className="h-3.5 w-3.5" /> {isRTL ? "ولّد OG" : "Generate OG"}</Button>
-              </div>
-              <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
-                <span className="text-[11px] font-extrabold text-muted-foreground">{isRTL ? "صورة المشاركة (OG) 1200×630:" : "Share image (OG):"}</span>
-                {draft.og_image_url
-                  ? <img src={draft.og_image_url} alt="" className="h-10 w-[76px] rounded-md object-cover" />
-                  : <span className="text-[11px] text-muted-foreground">{isRTL ? "مش موجودة — هتستخدم صورة الغلاف" : "none — the cover is used"}</span>}
-                <Button type="button" size="sm" variant="outline" onClick={() => setPicker("og")}>
-                  <ImageIcon className="h-3.5 w-3.5" /> {isRTL ? "اختار من المكتبة" : "From library"}
-                </Button>
-                {draft.og_image_url && (
-                  <Button type="button" size="sm" variant="ghost" onClick={() => setDraft({ ...draft, og_image_url: "" })}>{isRTL ? "شيلها" : "Remove"}</Button>
-                )}
-              </div>
-              <MediaPickerModal
-                open={picker !== null}
-                onOpenChange={(v) => !v && setPicker(null)}
-                currentValue={picker === "og" ? draft.og_image_url : draft.image_url}
-                title={picker === "og" ? (isRTL ? "صورة المشاركة من المكتبة" : "Share image from the library") : (isRTL ? "صورة الغلاف من المكتبة" : "Cover from the library")}
-                onSelect={(url) => setDraft((d) => (d ? (picker === "og" ? { ...d, og_image_url: url } : { ...d, image_url: url }) : d))}
+              <ImageUrlField
+                label={isRTL ? "صورة الغلاف" : "Cover image"}
+                value={draft.image_url}
+                onChange={(image_url) => setDraft((current) => current ? { ...current, image_url } : current)}
+                hint={isRTL ? "ارفع صورة، اخترها من مكتبة الوسائط، أو ألصق رابطها." : "Upload an image, choose from the media library, or paste its URL."}
+                aspect="wide"
+                collection="blog"
               />
-            </div>
-
-            <div className="rounded-xl border border-border bg-muted/20 p-3">
-              <label className="text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">{isRTL ? "جدولة النشر" : "Schedule publish"}</label>
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                <Clock className="h-4 w-4 text-muted-foreground" />
-                <Input type="datetime-local" value={draft.scheduled_at} onChange={(e) => setDraft({ ...draft, scheduled_at: e.target.value })} className="max-w-[260px]" />
-                <Button size="sm" variant="secondary" onClick={() => save("schedule")} disabled={saving || !draft.scheduled_at}>
-                  <Calendar className="h-4 w-4" /> {isRTL ? "حفظ + جدولة" : "Save + schedule"}
-                </Button>
-              </div>
-            </div>
+            </section>
 
             {/* Auto-optimize */}
             <div className="rounded-xl border border-accent/40 bg-accent/5 p-3">
@@ -958,7 +1082,7 @@ const Inner = () => {
             </div>
           </div>
 
-          <aside className="rounded-2xl border border-border bg-card p-4">
+          <aside className="admin-seo-scrollbar self-start rounded-2xl border border-border bg-card p-4 lg:sticky lg:top-4 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
             <div className="text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">{isRTL ? "نقاط السيو الحية" : "Live SEO score"}</div>
             <div className="mt-2 flex items-center justify-center"><ScoreRing value={sc.score} tone={ringTone} /></div>
             <div className="mt-1 text-center text-[10px] text-muted-foreground">
@@ -986,36 +1110,94 @@ const Inner = () => {
               })}
             </ul>
 
-            <div className="mt-4 flex flex-col gap-2">
-              {row.status !== "published" && (
-                <Button onClick={() => save("publish")} disabled={saving} className="bg-orange-grad font-extrabold text-accent-foreground">
-                  <CheckCircle2 className="h-4 w-4" /> {isRTL ? "حفظ + نشر" : "Save + publish"}
-                </Button>
-              )}
-              {row.status === "published" && (
-                <Button variant="outline" onClick={() => save("unpublish")} disabled={saving}>
-                  {isRTL ? "حول لمسودّة" : "Unpublish"}
-                </Button>
-              )}
-              {row.id.startsWith("laravel-") && (
-                <Button variant="outline" onClick={removePost} disabled={saving} className="border-destructive/40 text-destructive hover:bg-destructive/10">
-                  {isRTL ? "حذف المقال" : "Delete article"}
-                </Button>
-              )}
-              <div className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
-                <History className="h-3 w-3" /> {isRTL ? "آخر تحديث:" : "Updated:"} {new Date(row.updated_at).toLocaleString()}
-              </div>
-            </div>
           </aside>
         </div>
+
+        <section className="space-y-3 rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5" aria-labelledby="article-actions-heading">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/70 pb-3">
+            <div>
+              <h2 id="article-actions-heading" className="text-sm font-black text-primary">{isRTL ? "إجراءات المقال" : "Article actions"}</h2>
+              <p className="mt-0.5 text-[11px] text-muted-foreground">
+                {isRTL ? "راجع المحتوى ثم اختر الحفظ أو النشر أو الجدولة." : "Review the article, then save, publish, or schedule it."}
+              </p>
+            </div>
+            <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+              <History className="h-3 w-3" />
+              {isRTL ? (isNew ? "مقالة جديدة" : "آخر تحديث:") : (isNew ? "New article" : "Updated:")}
+              {!isNew && new Date(row.updated_at).toLocaleString()}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {draft.slug && (
+              <Link to={previewHref} target="_blank" className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border bg-muted/40 px-3 text-xs font-bold hover:bg-muted">
+                <Eye className="h-4 w-4" /> {isRTL ? "معاينة" : "Preview"}
+              </Link>
+            )}
+            {!isNew && (
+              <Link to={publicUrls.blog(draft.slug)} target="_blank" className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border bg-muted/40 px-3 text-xs font-bold hover:bg-muted">
+                <ExternalLink className="h-4 w-4" /> {isRTL ? "عرض المنشور" : "View published"}
+              </Link>
+            )}
+            <Button size="sm" variant="outline" onClick={() => downloadPdf(auditPost(auditedPost))}><FileDown className="h-4 w-4" /> PDF</Button>
+            <Button size="sm" variant="outline" onClick={() => downloadJson(auditPost(auditedPost))}><FileJson className="h-4 w-4" /> JSON</Button>
+            <Button size="sm" variant="outline" onClick={() => downloadCsv(auditPost(auditedPost))}><FileDown className="h-4 w-4" /> CSV</Button>
+            {dirty && !isNew && (
+              <Button size="sm" variant="outline" onClick={discardLocal}>
+                <RotateCcw className="h-4 w-4" /> {isRTL ? "تجاهل التعديلات المحلية" : "Discard local changes"}
+              </Button>
+            )}
+            <Button size="sm" variant="outline" onClick={undo} disabled={history.length === 0}>
+              <Undo2 className="h-4 w-4" /> {isRTL ? "تراجع" : "Undo"} {history.length > 0 && `(${history.length})`}
+            </Button>
+            <Button size="sm" variant="outline" onClick={redo} disabled={future.length === 0}>
+              <Redo2 className="h-4 w-4" /> {isRTL ? "إعادة" : "Redo"}
+            </Button>
+          </div>
+
+          <div className="grid gap-3 border-t border-border/70 pt-3 lg:grid-cols-[minmax(220px,1fr),auto] lg:items-end">
+            <label className="space-y-1.5 text-xs font-bold">
+              <span className="flex items-center gap-1.5 text-muted-foreground"><Clock className="h-3.5 w-3.5" />{isRTL ? "موعد النشر المجدول" : "Schedule publish"}</span>
+              <Input type="datetime-local" value={draft.scheduled_at} onChange={(e) => setDraft({ ...draft, scheduled_at: e.target.value })} />
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <Button onClick={() => save("save")} disabled={saving} variant="outline" className="font-bold">
+                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                {isRTL ? "حفظ كمسودة" : "Save draft"}
+              </Button>
+              <Button onClick={() => save("schedule")} disabled={saving || !draft.scheduled_at} variant="secondary" className="font-bold">
+                <Calendar className="h-4 w-4" /> {isRTL ? "حفظ + جدولة" : "Save + schedule"}
+              </Button>
+              <Button onClick={() => save("publish")} disabled={saving} className="bg-orange-grad font-extrabold text-accent-foreground">
+                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+                {row.status === "published"
+                  ? (isRTL ? "حفظ + تحديث المنشور" : "Save + update published")
+                  : (isRTL ? "حفظ + نشر" : "Save + publish")}
+              </Button>
+              {!isNew && row.status === "published" && (
+                <Button variant="outline" onClick={() => save("unpublish")} disabled={saving}>
+                  {isRTL ? "تحويل لمسودة" : "Unpublish"}
+                </Button>
+              )}
+              {!isNew && (
+                <Button variant="outline" onClick={removePost} disabled={saving} className="border-destructive/40 text-destructive hover:bg-destructive/10">
+                  {row.id.startsWith("static-") ? <Archive className="h-4 w-4" /> : <Trash2 className="h-4 w-4" />}
+                  {row.id.startsWith("static-")
+                    ? (isRTL ? "أرشفة المقال" : "Archive article")
+                    : (isRTL ? "حذف المقال" : "Delete article")}
+                </Button>
+              )}
+            </div>
+          </div>
+        </section>
       </div>
     </AdminLayout>
   );
 };
 
-const AdminBlogPostEdit = () => (
+const AdminBlogPostEdit = ({ createMode = false }: { createMode?: boolean }) => (
   <RequireAuth roles={["admin", "editor"]}>
-    <Inner />
+    <Inner createMode={createMode} />
   </RequireAuth>
 );
 

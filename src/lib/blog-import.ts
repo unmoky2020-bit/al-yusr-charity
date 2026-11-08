@@ -15,11 +15,16 @@ export type ImportedArticle = {
   file: string;
   slug: string;
   title_ar: string;
+  title_en: string;
   excerpt_ar: string;
+  excerpt_en: string;
   category_ar: string;
+  category_en: string;
   focus_keyword: string;
   tags_ar: string[];
+  tags_en: string[];
   body_ar: string[];
+  body_en: string[];
   /** «تاريخ النشر المقترح» as written, when the file has one */
   suggested_date?: string;
   words: number;
@@ -28,13 +33,21 @@ export type ImportedArticle = {
 
 const KEYS: Record<string, keyof ImportedArticle | "skip"> = {
   "العنوان": "title_ar",
+  "العنوان بالإنجليزية": "title_en",
+  "English title": "title_en",
   "الرابط": "slug",
   "الوصف": "excerpt_ar",
+  "الوصف بالإنجليزية": "excerpt_en",
+  "English description": "excerpt_en",
   "التصنيف": "category_ar",
+  "التصنيف بالإنجليزية": "category_en",
+  "English category": "category_en",
   "الكلمة الأساسية": "focus_keyword",
   "الكلمة المفتاحية": "focus_keyword",
   "كلمات قريبة": "tags_ar",
   "الكلمات المفتاحية": "tags_ar",
+  "كلمات قريبة بالإنجليزية": "tags_en",
+  "English related keywords": "tags_en",
   "تاريخ النشر المقترح": "suggested_date",
   "الحقل": "skip",
 };
@@ -64,31 +77,46 @@ export function parseArticleMarkdown(text: string, file = ""): ImportedArticle {
     i++;
   }
   if (lines[i]?.trim().match(/^-{3,}$/)) i++;
-  let bodyLines = lines.slice(i);
-  // the first "# Title" is the page title, not body
-  const h1 = bodyLines.findIndex((l) => /^#\s+/.test(l.trim()));
-  let h1Title = "";
-  if (h1 >= 0 && bodyLines.slice(0, h1).every((l) => !l.trim())) {
-    h1Title = bodyLines[h1].replace(/^#\s+/, "").trim();
-    bodyLines = bodyLines.slice(h1 + 1);
-  }
-  const body = bodyLines.join("\n").trim();
-  const paragraphs = body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
-  const words = body.replace(/[#*|>\-[\]()]/g, " ").split(/\s+/).filter(Boolean).length;
-
-  const title = meta.title_ar || h1Title;
+  const bodyLines = lines.slice(i);
+  const englishMarker = bodyLines.findIndex((line) => /^##\s+(?:english version|النسخة الإنجليزية)\s*$/i.test(line.trim()));
+  const arabicLines = englishMarker >= 0 ? bodyLines.slice(0, englishMarker) : bodyLines;
+  const englishLines = englishMarker >= 0 ? bodyLines.slice(englishMarker + 1) : [];
+  const extractBody = (source: string[]) => {
+    let title = "";
+    const h1 = source.findIndex((line) => /^#\s+/.test(line.trim()));
+    if (h1 >= 0 && source.slice(0, h1).every((line) => !line.trim())) {
+      title = source[h1].replace(/^#\s+/, "").trim();
+      source = source.slice(h1 + 1);
+    }
+    const body = source.join("\n").trim();
+    return {
+      title,
+      paragraphs: body.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean),
+      words: body.replace(/[#*|>\-[\]()]/g, " ").split(/\s+/).filter(Boolean).length,
+    };
+  };
+  const arabic = extractBody(arabicLines);
+  const english = extractBody(englishLines);
+  const title = meta.title_ar || arabic.title;
+  const titleEn = meta.title_en || english.title;
   const slug = slugify(meta.slug || file.replace(/\.[^.]+$/, "").replace(/^\d+\s*/, "")) || slugify(title);
   const tags = (meta.tags_ar || "").split(/[،,]/).map((t) => t.trim()).filter(Boolean);
+  const tagsEn = (meta.tags_en || "").split(/[،,]/).map((t) => t.trim()).filter(Boolean);
   const out: ImportedArticle = {
     file,
     slug,
     title_ar: title,
+    title_en: titleEn,
     excerpt_ar: meta.excerpt_ar || "",
+    excerpt_en: meta.excerpt_en || "",
     category_ar: meta.category_ar || "مقالات",
+    category_en: meta.category_en || "",
     focus_keyword: meta.focus_keyword || "",
     tags_ar: meta.focus_keyword && !tags.includes(meta.focus_keyword) ? [meta.focus_keyword, ...tags] : tags,
-    body_ar: paragraphs,
-    words,
+    tags_en: tagsEn,
+    body_ar: arabic.paragraphs,
+    body_en: english.paragraphs,
+    words: arabic.words + english.words,
     problems: [],
   };
   if (meta.suggested_date) out.suggested_date = meta.suggested_date;

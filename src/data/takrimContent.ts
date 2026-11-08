@@ -8,19 +8,11 @@
  */
 import takrimVan from "@/assets/takrim-van.jpg";
 import { fetchProgramRecords, programSlugOf } from "@/data/sources/programs";
-import { type ApiRecord, image, num, pick, useSourced } from "@/data/sources/_shared";
+import { type ApiRecord, image, pick, useSourced } from "@/data/sources/_shared";
+import { mapShares, type Share } from "@/data/entityShares";
 
 export type TakrimText = { ar: string; en: string };
-
-export type TakrimShare = {
-  /** Stable public id: the backend package key, or `pkg-<id>`, or the static share id. */
-  id: string;
-  /** Backend donation_packages[].id, sent to the donate page as `package`. */
-  apiId?: number;
-  nameAr: string;
-  nameEn: string;
-  amount: number;
-};
+export type TakrimShare = Share;
 
 export type TakrimContent = {
   title: TakrimText;
@@ -51,27 +43,6 @@ export const TAKRIM_DEFAULT_SHARES: TakrimShare[] = [
 
 const defaultShares = (): TakrimShare[] => TAKRIM_DEFAULT_SHARES.map((s) => ({ ...s }));
 
-/** Active packages in dashboard order; inactive / id-less rows are dropped. */
-function mapShares(raw: unknown): TakrimShare[] {
-  if (!Array.isArray(raw)) return [];
-  return (raw as ApiRecord[])
-    .filter((p) => p && typeof p === "object" && p.is_active !== false && p.is_active !== 0)
-    .sort((a, b) => (num(a.sort_order) ?? 0) - (num(b.sort_order) ?? 0))
-    .map((p) => {
-      const apiId = num(p.id);
-      const id = pick(p.key) ?? (apiId !== undefined ? `pkg-${apiId}` : "");
-      const share: TakrimShare = {
-        id,
-        nameAr: pick(p.name_ar, p.name) ?? "",
-        nameEn: pick(p.name_en, p.name_ar, p.name) ?? "",
-        amount: num(p.amount) ?? 0,
-      };
-      if (apiId !== undefined) share.apiId = apiId;
-      return share;
-    })
-    .filter((s) => !!s.id);
-}
-
 /**
  * Map a /programs record to the landing page content.
  * Every field falls back independently: hero_h1* → name_* → static default, hero_h3* → description_* →
@@ -101,13 +72,17 @@ export function findTakrimRecord(records: ApiRecord[] | undefined): ApiRecord | 
   return records?.find((r) => programSlugOf(r) === "takrim");
 }
 
-/** Top section + shares of the Takrim landing page (static defaults in "static" mode / on error). */
-export function useTakrimContent(): TakrimContent {
-  const { data } = useSourced<ApiRecord[], TakrimContent>(
+/** Top section + shares of the Takrim landing page. */
+export function useTakrimContentState(): { content: TakrimContent; isLoading: boolean } {
+  const { data, isLoading } = useSourced<ApiRecord[], TakrimContent>(
     ["programs"],
     fetchProgramRecords,
     DEFAULT_CONTENT,
     (records) => resolveTakrimContent(findTakrimRecord(records)),
   );
-  return data;
+  return { content: data, isLoading };
+}
+
+export function useTakrimContent(): TakrimContent {
+  return useTakrimContentState().content;
 }

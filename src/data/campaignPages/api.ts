@@ -11,6 +11,7 @@
  * again except to clear it on "reset to defaults".
  */
 import { apiFetch, invalidateApiCache, pagesApi, type LaravelUnifiedContent } from "@/data/laravelApi";
+import { fetchPublicList, normalizeSlug, type ApiRecord } from "@/data/sources/_shared";
 import {
   parseJsonColumn,
   type CampaignFaq,
@@ -18,7 +19,7 @@ import {
   type CampaignRecord,
   type CampaignSeo,
 } from "@/data/api/donationCampaignsAdminApi";
-import type { CampaignPageContent, FaqItem } from "./types";
+import { imagesColumn, type CampaignPageContent, type FaqItem, type PageImage } from "./types";
 // Call-time only (index.ts re-exports this module): no top-level use, so the import cycle is harmless.
 import { getCampaignPageMeta } from "./index";
 import { fetchFaqs } from "@/data/faqsApi";
@@ -33,6 +34,30 @@ export type CampaignPageRecord = {
   content: Partial<CampaignPageContent> | null;
   /** Where `content` came from. */
   source?: "campaign" | "legacy" | null;
+  /** Shared campaign fields used as fallbacks by the bespoke landing-page layouts. */
+  campaign?: Pick<
+    CampaignRecord,
+    | "image"
+    | "name_ar"
+    | "name_en"
+    | "title_ar"
+    | "title_en"
+    | "subtitle_ar"
+    | "subtitle_en"
+    | "description_ar"
+    | "description_en"
+    | "description"
+  > & { donation_packages?: CampaignPagePackage[] };
+};
+
+export type CampaignPagePackage = {
+  id?: number | string;
+  key?: string | null;
+  name_ar: string;
+  name_en?: string;
+  amount: number;
+  is_active?: boolean;
+  sort_order?: number;
 };
 
 /* ───────────────────────── campaign record <-> content ───────────────────────── */
@@ -76,9 +101,10 @@ export function toCampaignColumns(content: CampaignPageContent): {
   seo: CampaignSeo | null;
   faqs: CampaignFaq[];
 } {
-  const { prices: _prices, faq, seo, ...page } = content;
+  const { prices: _prices, faq, seo, images, ...page } = content;
+  const pageImages = imagesColumn(images);
   return {
-    page_content: page,
+    page_content: { ...page, ...(pageImages ? { images: pageImages } : {}) },
     seo: seo ?? null,
     faqs: (faq || []).map((f) => ({ question_ar: f.q.ar, answer_ar: f.a.ar, question_en: f.q.en || null, answer_en: f.a.en || null })),
   };
@@ -128,17 +154,24 @@ async function fetchCampaignForPage(slug: string, fresh: boolean): Promise<Campa
       /* try the next identifier */
     }
   }
-  // PROPOSED: GET /donation-campaigns/by-slug/{slug} (backend slugs differ from page slugs, see meta.apiSlugs).
-  for (const s of meta ? [meta.slug, ...meta.apiSlugs] : [slug]) {
-    try {
-      const rec = recordOf(await apiFetch<unknown>(`/donation-campaigns/by-slug/${encodeURIComponent(s)}`, opts));
-      if (rec) return rec;
-    } catch (e) {
-      // 404 on the first spelling usually means the route itself is missing: stop trying.
-      if ((e as { status?: number } | null)?.status === 404) break;
-    }
+
+  // Discover pages without a known backend ID from the public list instead of probing
+  // several aliases through detail routes that return noisy 404s when the campaign is absent.
+  const records = await fetchPublicList("/donation-campaigns", { per_page: 100 });
+  const candidates = new Set([slug, ...(meta ? [meta.slug, ...meta.apiSlugs] : [])].map(normalizeSlug));
+  const found = records.find((record) => {
+    const recordSlug = normalizeSlug(record.slug);
+    if (meta?.apiIds.includes(Number(record.id))) return true;
+    if (recordSlug && candidates.has(recordSlug)) return true;
+    const name = normalizeSlug(record.name_ar);
+    return !!meta?.nameKey && name.includes(normalizeSlug(meta.nameKey));
+  });
+  const foundId = Number(found?.id);
+  if (found && Number.isFinite(foundId) && foundId > 0) {
+    const rec = recordOf(await apiFetch<unknown>(`/donation-campaigns/${foundId}`, opts));
+    if (rec) return rec;
   }
-  return null;
+  return found as CampaignRecord | null;
 }
 
 /** Questions of the FAQ category linked to the campaign (dashboard → «الأسئلة الشائعة» tab). Empty when none. */
@@ -167,7 +200,26 @@ export const campaignPagesApi = {
       let fromCampaign = contentFromCampaign(rec);
       const linkedFaq = await faqOfLinkedCategory(rec);
       if (linkedFaq.length) fromCampaign = { ...(fromCampaign ?? {}), faq: linkedFaq };
-      if (fromCampaign) return { item: null, content: fromCampaign, source: "campaign" };
+      const campaign = rec
+        ? {
+            image: rec.image,
+            name_ar: rec.name_ar,
+            name_en: rec.name_en,
+            title_ar: rec.title_ar,
+            title_en: rec.title_en,
+            subtitle_ar: rec.subtitle_ar,
+            subtitle_en: rec.subtitle_en,
+            description_ar: rec.description_ar,
+            description_en: rec.description_en,
+            description: rec.description,
+            donation_packages: rec.donation_packages,
+          }
+        : undefined;
+      if (fromCampaign) return { item: null, content: fromCampaign, source: "campaign", campaign };
+      if (campaign) {
+        const legacy = await campaignPagesApi.loadLegacy(slug, opts);
+        return { ...legacy, campaign };
+      }
     } catch {
       /* fall back to the legacy item */
     }

@@ -1,8 +1,8 @@
 /**
  * Donation packages (الأسهم / الباقات) of a program or project.
- * - list + add: EXISTING endpoints (GET/POST /{kind}/{id}/donation-packages)
- * - inline edit, delete, reorder: PROPOSED endpoints; on 404/405 the row shows
- *   "يحتاج تفعيل من الباك إند" and nothing is reported as saved.
+ * - list + add: documented GET/POST endpoints (/{kind}/{id}/donation-packages)
+ * - inline edit, delete, reorder: routes documented in the latest Postman collection;
+ *   on 404/405 the row shows "يحتاج تفعيل من الباك إند" and nothing is reported as saved.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Loader2, Plus, RefreshCw, Save, Tag, Trash2 } from "lucide-react";

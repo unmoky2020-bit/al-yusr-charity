@@ -15,7 +15,7 @@ import { campaignDonateHref } from "@/data/campaignPages/index";
 const DONATE = campaignDonateHref("ramadan");
 
 /** Order of the giving-table rows (price ids from the content model). */
-const TABLE_IDS = ["iftar", "fitr", "meat", "eid_clothes", "box", "bride"];
+const TABLE_IDS = ["iftar", "fitr", "meat", "eid_clothes", "box", "bride", "meat_monthly"];
 
 /** Moon phase icon per timeline step, by index. */
 const MOON_PHASES = ["new", "half", "full"] as const;
@@ -64,7 +64,7 @@ const Counter = ({ isAr, value, setValue, min, max, step, labelAr, labelEn }: { 
 );
 
 const RamadanHero = () => {
-  const { c, t, isAr } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
+  const { c, t, isAr, campaignImage } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
   const live = useAfterLoad();
   return (
     <section className="ramadan-night relative overflow-hidden text-primary-foreground">
@@ -79,7 +79,7 @@ const RamadanHero = () => {
 
       <div className="container relative mx-auto max-w-6xl px-4 pb-20 pt-10 md:pb-24 md:pt-14">
         <CampaignCrumbs isAr={isAr} name={isAr ? "موسم الخير" : "Ramadan"} className="text-primary-foreground/80" />
-        <div className="mt-36 grid items-end gap-12 md:mt-40 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+        <div className={`mt-36 grid items-end gap-12 md:mt-40 ${campaignImage ? "md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]" : ""}`}>
           <div className="text-center md:text-start">
             <p className="text-sm font-black text-[hsl(var(--gold))]">{t(c.hero.eyebrow)}</p>
             <h1 className="mt-3 text-4xl font-black leading-[1.3] sm:text-5xl lg:text-6xl">
@@ -91,12 +91,14 @@ const RamadanHero = () => {
             </p>
             <HeroActions isAr={isAr} donateHref={DONATE} donateLabel={t(c.hero.donateLabel)} wa={waHref(isAr, "موسم الخير", "the Ramadan season")} className="mt-8 justify-center md:justify-start" />
           </div>
-          <div className="ramadan-frame relative mx-auto w-full max-w-xs p-3">
-            {["-top-3 -start-3", "-top-3 -end-3", "-bottom-3 -start-3", "-bottom-3 -end-3"].map((pos) => (
-              <Star8 key={pos} className={`absolute h-6 w-6 text-[hsl(var(--gold))] ${pos}`} />
-            ))}
-            <img src={yusrRamadanBox} alt={isAr ? "كرتونة رمضان 25 كيلو من مؤسسة اليسر" : "Al-Yusr 25 kg Ramadan box"} loading="eager" className="w-full rounded-lg object-cover" />
-          </div>
+          {campaignImage && (
+            <div className="ramadan-frame relative mx-auto flex w-[84%] justify-center p-3 md:w-full">
+              {["-top-3 -start-3", "-top-3 -end-3", "-bottom-3 -start-3", "-bottom-3 -end-3"].map((pos) => (
+                <Star8 key={pos} className={`absolute h-6 w-6 text-[hsl(var(--gold))] ${pos}`} />
+              ))}
+              <img src={campaignImage} alt={isAr ? "حملة رمضان" : "Ramadan campaign"} loading="eager" className="h-auto max-h-[min(60vh,420px)] w-auto max-w-full rounded-lg object-contain object-center" />
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -104,7 +106,7 @@ const RamadanHero = () => {
 };
 
 const RamadanMain = () => {
-  const { c, t, isAr, price, amount, section } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
+  const { c, t, isAr, price, amount, packageId, section } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
   const Arrow = isAr ? ArrowLeft : ArrowRight;
   const [people, setPeople] = useState(4);
   const [meals, setMeals] = useState(10);
@@ -134,7 +136,7 @@ const RamadanMain = () => {
             {table.map((p) => (
               <li key={p.id}>
                 <Link
-                  to={amountHref(DONATE, p.amount)}
+                  to={amountHref(DONATE, p.amount, packageId(p.id))}
                   className="group flex min-h-[72px] items-center gap-3 border-b border-dashed border-[hsl(var(--gold)/0.35)] py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <span className="min-w-0">
@@ -293,10 +295,11 @@ const RamadanMain = () => {
 };
 
 const RamadanLanding = () => {
-  const { c } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
+  const { c, campaignImage, isLoading } = useCampaignPage("ramadan", RAMADAN_DEFAULTS);
   return (
     <CampaignLandingShell
       slug="ramadan"
+      isLoading={isLoading}
       seo={c.seo}
       path="/ramadan"
       titleAr={`موسم الخير — «${c.hero.title.ar} ${c.hero.title2.ar}»`}
@@ -305,7 +308,7 @@ const RamadanLanding = () => {
       taglineEn={c.hero.lead.en}
       metaDescAr="شارك في موسم رمضان مع مؤسسة اليسر: كرتونة الخير (25 كيلو بلدي)، مطبخ وجبات الإفطار الساخنة، ذبائح مزارعنا الوقفية، تيسير الزواج 'الفرحة فرحتين'، كسوة العيد، وزكاة المال والفطر."
       metaDescEn="Support Al-Yusr's Ramadan Season: 25kg family boxes, hot iftar kitchen, endowment farm meat, bride support, orphan Eid clothing, and Zakat distribution in Egypt."
-      heroImage={yusrRamadanBox}
+      heroImage={campaignImage}
       heroAlt="كرتونة رمضان 25 كيلو من مؤسسة اليسر مع لحوم بلدي"
       hero={<RamadanHero />}
       main={<RamadanMain />}

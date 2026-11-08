@@ -19,7 +19,7 @@ export type DonationShare = {
   nameAr: string;
   nameEn: string;
   price: number; // EGP
-  /** Backend package id (donation_packages[].id) — sent as donation_package_id for program packages. */
+  /** Backend package id (donation_packages[].id), sent with the selected program/project/campaign. */
   apiId?: number;
   descAr?: string;
   descEn?: string;
@@ -51,6 +51,10 @@ export type DonationEntity = {
   en: string;
   taglineAr: string;
   taglineEn: string;
+  descriptionAr?: string;
+  descriptionEn?: string;
+  benefitsAr?: string[];
+  benefitsEn?: string[];
   image: string;
   entityType: EntityType;
   donationType: DonationType;

@@ -2,9 +2,9 @@
  * Newsletter campaigns (compose + send e-mails to confirmed subscribers) — replaces the Supabase
  * table `newsletter_campaigns` and the edge function `newsletter-send`.
  *
- * EXISTING:  GET /newsletter/statistics   (confirmed subscriber count)
- * PROPOSED:  GET/POST /newsletter-campaigns, GET/PUT/DELETE /newsletter-campaigns/{id},
- *            POST /newsletter-campaigns/{id}/send, POST /newsletter-campaigns/{id}/send-test
+ * Documented in the latest Postman collection: GET/POST /newsletter-campaigns,
+ * GET/PUT/DELETE /newsletter-campaigns/{id}, POST /send and /send-test.
+ * The collection does not include saved responses for these routes.
  * See backend-handoff/02-replace-supabase-admin.md.
  */
 import { apiFetch } from "@/data/laravelApi";

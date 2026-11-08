@@ -3,7 +3,7 @@
  *
  * Each page keeps its bespoke layout in code and reads its *content* through this model:
  * the defaults live in `src/data/campaignPages/<slug>.ts`, and an optional override saved from
- * the dashboard (as one `/content` item of type "page") is merged on top at runtime.
+ * the dashboard in the campaign's `page_content` column is merged on top at runtime.
  * Merging is defensive: a missing or malformed override always yields the defaults.
  */
 
@@ -11,7 +11,7 @@
 export type L = { ar: string; en: string };
 export const l = (ar: string, en: string): L => ({ ar, en });
 
-export type PriceItem = { id: string; label: L; amount: number; note?: L };
+export type PriceItem = { id: string; label: L; amount: number; note?: L; backendPackageNames?: string[] };
 export type StatItem = { id: string; label: L; value: number | null; unit?: L; note?: L };
 export type SectionItem = { id: string; title: L; desc: L; extra?: L };
 /**
@@ -21,6 +21,9 @@ export type SectionItem = { id: string; title: L; desc: L; extra?: L };
  */
 export type Section = { title: L; lead?: L; items: SectionItem[]; dynamic?: boolean; extraLabel?: L };
 export type FaqItem = { q: L; a: L };
+export type PageImage = { src: string; alt: L; caption?: L };
+export type ImageSlot = { label: L; hint?: L; max?: number; captions?: boolean; items: PageImage[] };
+export type ImageSlots = Record<string, ImageSlot>;
 
 export interface CampaignPageContent {
   hero: { eyebrow: L; title: L; title2: L; lead: L; donateLabel: L };
@@ -35,6 +38,8 @@ export interface CampaignPageContent {
   cta: { title: L; sub: L };
   /** Optional SEO override (dashboard "SEO & Meta" tab). Empty strings mean "use the page's static meta". */
   seo?: { title: L; description: L; keywords: L; canonical?: string; noindex?: boolean; nofollow?: boolean };
+  /** Editable image slots. The layout and the images used by each slot remain page-specific. */
+  images?: ImageSlots;
 }
 
 const isL = (v: unknown): v is L =>
@@ -42,11 +47,56 @@ const isL = (v: unknown): v is L =>
 
 const mergeL = (d: L, s?: unknown): L => (isL(s) ? { ar: s.ar || d.ar, en: s.en || d.en } : d);
 
+export function withCampaignHeroImageSlot(content: CampaignPageContent): CampaignPageContent {
+  if (content.images?.hero) return content;
+  return {
+    ...content,
+    images: {
+      ...content.images,
+      hero: {
+        label: l("صورة الهيرو", "Hero image"),
+        hint: l("تُستخدم كصورة رئيسية في مساحة الصورة بالتصميم وللمشاركة.", "Used in the page's main image area and social sharing image."),
+        max: 1,
+        items: [],
+      },
+    },
+  };
+}
+
+/** Strip editor-only slot labels and limits before persisting the image column. */
+export function imagesColumn(images?: ImageSlots): Record<string, { items: PageImage[] }> | undefined {
+  if (!images) return undefined;
+  return Object.fromEntries(Object.entries(images).map(([key, slot]) => [key, { items: slot.items }]));
+}
+
 function mergeById<T extends { id: string }>(defaults: T[], saved: unknown, mergeItem: (d: T, s: Partial<T>) => T): T[] {
   if (!Array.isArray(saved)) return defaults;
   const byId = new Map<string, Partial<T>>();
   for (const it of saved) if (it && typeof it === "object" && typeof (it as T).id === "string") byId.set((it as T).id, it as Partial<T>);
   return defaults.map((d) => (byId.has(d.id) ? mergeItem(d, byId.get(d.id)!) : d));
+}
+
+function mergeImages(defaults: ImageSlots | undefined, saved: unknown): ImageSlots | undefined {
+  if (!defaults) return undefined;
+  const input = saved && typeof saved === "object" ? (saved as Record<string, unknown>) : {};
+  const images: ImageSlots = {};
+  for (const [key, slot] of Object.entries(defaults)) {
+    const raw = input[key];
+    const rawItems = raw && typeof raw === "object" ? (raw as { items?: unknown }).items : undefined;
+    const valid = Array.isArray(rawItems)
+      ? rawItems.flatMap((item) => {
+          if (!item || typeof item !== "object" || typeof (item as PageImage).src !== "string") return [];
+          const src = (item as PageImage).src.trim();
+          if (!src) return [];
+          const alt = isL((item as PageImage).alt) ? (item as PageImage).alt : { ar: "", en: "" };
+          const caption = isL((item as PageImage).caption) ? (item as PageImage).caption : undefined;
+          return [{ src, alt, ...(caption ? { caption } : {}) }];
+        }).slice(0, slot.max ?? Infinity)
+      : [];
+    const items = Array.isArray(rawItems) && (valid.length > 0 || rawItems.length === 0) ? valid : slot.items;
+    images[key] = { ...slot, items };
+  }
+  return images;
 }
 
 /**
@@ -130,6 +180,7 @@ export function mergeCampaignContent(defaults: CampaignPageContent, saved: unkno
       label: mergeL(d.label, o.label),
       amount: typeof o.amount === "number" && isFinite(o.amount) && o.amount >= 0 ? o.amount : d.amount,
       note: d.note ? mergeL(d.note, o.note) : (isL(o.note) ? o.note : undefined),
+      backendPackageNames: d.backendPackageNames,
     })),
     stats: mergeById(defaults.stats, s.stats, (d, o) => ({
       id: d.id,
@@ -142,5 +193,6 @@ export function mergeCampaignContent(defaults: CampaignPageContent, saved: unkno
     faq: faqOk ? (s.faq as FaqItem[]) : defaults.faq,
     cta: { title: mergeL(defaults.cta.title, sc.title), sub: mergeL(defaults.cta.sub, sc.sub) },
     ...(seo ? { seo } : {}),
+    ...(defaults.images ? { images: mergeImages(defaults.images, s.images) } : {}),
   };
 }

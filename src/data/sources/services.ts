@@ -1,7 +1,7 @@
 /**
  * Service pages content source (/services/:slug and the cards on /services-map).
  *   static: `SERVICE_PAGES` / `SERVICE_PAGE_LIST` from src/data/servicePagesConfig.ts (unchanged).
- *   api:    GET /services (PROPOSED, public) mapped to `ServicePageConfig`; a slug the API does not publish
+ *   api:    GET /services (documented in Postman; public access not verified) mapped to `ServicePageConfig`; a slug the API does not publish
  *           keeps its static page, and missing fields fall back to the static page with the same slug.
  */
 import {

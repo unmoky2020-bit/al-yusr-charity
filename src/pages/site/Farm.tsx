@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Beef, Wheat, ShieldCheck, Sprout, RefreshCw, Coins, CheckCircle2, Heart, MessageCircle, Truck, Scale, Leaf, Stethoscope, Package, Users, TrendingUp, type LucideIcon } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
@@ -41,7 +42,8 @@ const TOP_STATS = ["meat_2025", "monthly", "local", "margin"];
 const IMPACT_STATS = ["families", "governorates", "jobs", "middlemen"];
 
 const Farm = () => {
-  const { c, t, isAr: isRTL, project, stat, section } = useProjectPage(PROJECT_SLUG, FARM_DEFAULTS);
+  const { c, t, isAr: isRTL, project, isLoading, stat, section } = useProjectPage(PROJECT_SLUG, FARM_DEFAULTS);
+  if (isLoading) return <PageLayout><PageLoadingState /></PageLayout>;
   const base = "https://elyusr.org";
   const wa = `https://wa.me/201097000137?text=${encodeURIComponent(isRTL ? "السلام عليكم، عايز أعرف تفاصيل المزرعة الوقفية والأضحية." : "Hi, I want to know more about the endowment farm and Qurbani.")}`;
 
@@ -307,7 +309,10 @@ const Farm = () => {
               <p className="mt-3 text-muted-foreground md:text-lg">{t(qurbani.lead)}</p>
               <ul className="mt-5 space-y-2 text-sm font-semibold text-foreground/85">
                 {qurbani.items.map((x) => (
-                  <li key={x.id} className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-secondary" />{t(x.title)}</li>
+                  <li key={x.id} className="flex w-fit max-w-full items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-secondary" />
+                    <span>{t(x.title)}</span>
+                  </li>
                 ))}
               </ul>
               <div className="mt-6 flex flex-wrap gap-3">

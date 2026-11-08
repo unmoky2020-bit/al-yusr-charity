@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
-import { CheckCircle2, Clock, XCircle, Loader2, Search, Copy, MessageCircle, Calendar, Wallet, User, Sparkles, ShieldCheck, Mail } from "lucide-react";
+import { CheckCircle2, Clock, XCircle, Loader2, Search, Copy, Calendar, Wallet, User, Sparkles, ShieldCheck, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { DonationReceipt } from "@/components/common/DonationReceipt";
+import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useLang } from "@/i18n/LangContext";
 import { donationsStore, type DonationRecord, type DonationStatus } from "@/data/donationsStore";
 import { donationsApiV1 } from "@/data/laravelApi";
@@ -181,8 +182,8 @@ const DonationTracking = () => {
           {record && (
             <>
               <div className="mt-6 rounded-3xl bg-card p-6 shadow-card md:p-8">
-                <div className="flex items-center justify-between">
-                  <div>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{lang === "ar" ? "حالة العملية" : "Status"}</p>
                     <h2 className="mt-1 text-2xl font-black text-primary md:text-3xl">
                       {record.status === "completed"  && (lang === "ar" ? "مكتمل ✓" : "Completed ✓")}
@@ -199,6 +200,19 @@ const DonationTracking = () => {
                     )}
                   </div>
                   {record.status === "processing" && <Loader2 className="h-8 w-8 animate-spin text-secondary" />}
+                  {(record.status === "pending" || record.status === "failed") && (
+                    <a
+                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                        (lang === "ar" ? "استفسار عن تبرع رقم: " : "Inquiry about donation: ") + record.ref
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex h-10 shrink-0 items-center justify-center gap-2 self-start rounded-xl bg-[#25D366] px-4 text-sm font-black text-[#073b24] shadow-soft transition hover:bg-[#20bd5a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2"
+                    >
+                      <WhatsAppIcon className="h-4 w-4" />
+                      {lang === "ar" ? "تواصل واتساب" : "WhatsApp us"}
+                    </a>
+                  )}
                 </div>
 
                 {/* Donation summary */}
@@ -276,16 +290,6 @@ const DonationTracking = () => {
 
                 {(record.status === "pending" || record.status === "failed") && (
                   <div className="mt-5 flex flex-wrap gap-2">
-                    <a
-                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-                        (lang === "ar" ? "استفسار عن تبرع رقم: " : "Inquiry about donation: ") + record.ref
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex h-10 items-center gap-2 rounded-xl bg-secondary px-4 text-sm font-black text-secondary-foreground shadow-soft hover:opacity-95"
-                    >
-                      <MessageCircle className="h-4 w-4" /> {lang === "ar" ? "تواصل واتساب" : "WhatsApp us"}
-                    </a>
                     {record.status === "failed" && (
                       <Link to="/donate" className="inline-flex h-10 items-center gap-2 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta hover:opacity-95">
                         {lang === "ar" ? "حاول مرة أخرى" : "Try again"}

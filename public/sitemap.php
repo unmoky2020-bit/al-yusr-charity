@@ -17,7 +17,7 @@ const API = 'https://api.elyusr.org/api/v1';
 const TTL = 1800;
 
 header('Content-Type: application/xml; charset=utf-8');
-header('X-Robots-Tag: noindex');
+header('Cache-Control: public, max-age=' . TTL);
 
 $base = __DIR__ . '/sitemap-base.xml';
 if (!is_file($base)) {

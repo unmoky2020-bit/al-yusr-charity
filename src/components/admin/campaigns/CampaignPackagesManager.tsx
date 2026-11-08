@@ -14,7 +14,8 @@ import type { L } from "@/data/campaignPages/types";
  * delete and reorder.
  *
  * - Live mode (`campaignId` set): every action calls the backend right away and the list only changes after a 2xx.
- *   Edit / delete / reorder use PROPOSED routes; a 404 shows "يحتاج تفعيل من الباك إند" and nothing changes.
+ *   Edit / delete / reorder routes are documented in the latest Postman collection; a 404 still means this
+ *   deployment does not have the route enabled and nothing changes.
  * - Draft mode (`campaignId` null, i.e. a campaign that is not created yet): the list is edited locally and the parent
  *   POSTs every package after the campaign is created (see `createPackagesForCampaign`).
  */
@@ -202,8 +203,8 @@ export function CampaignPackagesManager({ campaignId, packages, onChange, isAr, 
       <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-3 text-[11px] leading-relaxed text-muted-foreground">
         {live
           ? isAr
-            ? "كل تعديل هنا يُحفظ مباشرة في قاعدة البيانات (زر الحفظ بجانب كل باقة). التعديل والحذف والترتيب ومفتاح الباقة (key) تحتاج endpoints جديدة؛ لو ظهرت رسالة «يحتاج تفعيل من الباك إند» فالتغيير لم يُحفظ."
-            : "Each change is saved to the database right away. Edit / delete / reorder / key need new backend routes; \"needs backend\" means nothing was saved."
+            ? "كل تعديل هنا يُحفظ مباشرة في قاعدة البيانات (زر الحفظ بجانب كل باقة). مسارات التعديل والحذف والترتيب موثقة في Postman، لكن قد لا تكون مفعّلة على الخادم الحالي؛ ظهور رسالة «يحتاج تفعيل من الباك إند» يعني أن التغيير لم يُحفظ. حقل مفتاح الباقة (key) يحتاج تأكيدًا من الباك إند."
+            : "Each change is saved directly. Edit / delete / reorder routes are documented in Postman but may not be enabled on this server; a backend warning means nothing was saved. The package key field still needs backend confirmation."
           : isAr
             ? "حملة جديدة: الباقات دي هتتضاف لقاعدة البيانات تلقائياً بعد إنشاء الحملة."
             : "New campaign: these packages are created right after the campaign is saved."}

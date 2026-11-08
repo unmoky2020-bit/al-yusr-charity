@@ -30,6 +30,8 @@ import {
 } from "@/data/casesApi";
 import { donationsAdminApi } from "@/data/api/donationsAdminApi";
 import { donationsApiV1 } from "@/data/laravelApi";
+import { donationPaymentMethodLabel } from "@/lib/payment-method-label";
+import { resolveDonorUserProfileId } from "@/lib/donor-user-profile";
 
 const STATUS_CONFIG: Record<
   string,
@@ -88,28 +90,8 @@ const TRANSITION_CONFIG: Record<
   refunded: { labelAr: "تسجيل استرداد", labelEn: "Issue Refund", variant: "secondary" },
 };
 
-function formatMethod(method: string | null | undefined, isAr: boolean): string {
-  if (!method) return isAr ? "غير محدد" : "Not specified";
-  const m = String(method).toLowerCase();
-  if (m.includes("kashier") || m.includes("card") || m.includes("visa") || m.includes("master")) {
-    return isAr ? "بطاقة دفع بنكية (كاشير)" : "Credit Card (Kashier)";
-  }
-  if (m.includes("voda") || m.includes("wallet")) {
-    return isAr ? "محفظة فودافون كاش" : "Vodafone Cash Wallet";
-  }
-  if (m.includes("insta")) {
-    return isAr ? "شبكة المدفوعات اللحظية (InstaPay)" : "InstaPay Transfer";
-  }
-  if (m.includes("delegate") || m.includes("pickup")) {
-    return isAr ? "مندوب تحصيل منزلي" : "Delegate Home Pickup";
-  }
-  if (m.includes("cash") || m.includes("manual")) {
-    return isAr ? "نقدي بمقر الجمعية" : "Cash at Office";
-  }
-  if (m.includes("bank")) {
-    return isAr ? "تحويل بنكي مباشر" : "Bank Transfer";
-  }
-  return method;
+function formatMethod(donation: Record<string, any>, isAr: boolean): string {
+  return donationPaymentMethodLabel(donation, isAr ? "ar" : "en");
 }
 
 export default function AdminDonationDetail() {
@@ -173,6 +155,12 @@ export default function AdminDonationDetail() {
       const donorName = d.donor_name || d.name || d.donor?.name || (isAr ? "متبرع فاعل خير" : "Generous Donor");
       const donorPhone = d.donor_phone || d.phone || d.donor?.phone || "";
       const donorEmail = d.donor_email || d.email || d.donor?.email || "";
+      const donorUserProfileId = await resolveDonorUserProfileId({
+        user_id: d.donor_user_id ?? d.donor?.user_id,
+        user: d.donor?.user,
+        email: donorEmail,
+        phone: donorPhone,
+      });
 
       setRow({
         ...d,
@@ -181,10 +169,11 @@ export default function AdminDonationDetail() {
         amount: Number(d.amount || 0),
         currency: d.currency || "EGP",
         payment_status: normalizedStatus,
-        payment_method: d.payment_method?.name_ar || d.payment_method?.name_en || d.payment_method?.slug || d.payment_method || d.method || "kashier",
+        payment_method: donationPaymentMethodLabel(d, isAr ? "ar" : "en"),
         donor_name: donorName,
         donor_phone: donorPhone,
         donor_email: donorEmail,
+        donor_user_profile_id: donorUserProfileId,
         created_at: d.created_at || new Date().toISOString(),
         notes: d.notes || d.message || "",
         case: d.case,
@@ -416,7 +405,7 @@ export default function AdminDonationDetail() {
               <CreditCard className="h-4 w-4 text-primary" />
             </p>
             <p className="mt-2 text-sm sm:text-base font-black text-foreground truncate">
-              {formatMethod(row.payment_method, isAr)}
+              {formatMethod(row, isAr)}
             </p>
             <p className="text-[11px] text-muted-foreground mt-0.5 font-medium">
               {row.payment_method || "Online"}
@@ -468,6 +457,14 @@ export default function AdminDonationDetail() {
                   </p>
                 </div>
               </div>
+              {row.donor_user_profile_id && (
+                <Button asChild size="sm" variant="outline" className="gap-1.5 text-xs font-bold">
+                  <Link to={`/admin/users/${encodeURIComponent(String(row.donor_user_profile_id))}`}>
+                    <User className="h-3.5 w-3.5" />
+                    {isAr ? "عرض الملف" : "View profile"}
+                  </Link>
+                </Button>
+              )}
             </div>
 
             <dl className="space-y-3 text-xs sm:text-sm">
@@ -676,7 +673,7 @@ export default function AdminDonationDetail() {
 
             <div className="rounded-xl bg-muted/20 p-3 border border-border/40">
               <span className="text-muted-foreground font-semibold block">{isAr ? "مزود بوابة الدفع:" : "Gateway Provider:"}</span>
-              <span className="font-bold text-foreground mt-1 block">{formatMethod(row.payment_method, isAr)}</span>
+              <span className="font-bold text-foreground mt-1 block">{formatMethod(row, isAr)}</span>
             </div>
 
             <div className="rounded-xl bg-muted/20 p-3 border border-border/40">

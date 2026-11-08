@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Heart, CheckCircle2, ShieldCheck, MapPin, Truck, FileCheck2, X, Share2, Copy, Check, Sparkles } from "lucide-react";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { PageLayout } from "@/components/layout/PageLayout";
+import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import { getCampaignPageMeta } from "@/data/campaignPages/index";
 
 export type LandingProps = {
   slug: string;
+  isLoading?: boolean;
   path: string;
   titleAr: string;
   titleEn: string;
@@ -52,6 +54,8 @@ export type LandingProps = {
   finalCtaDecor?: ReactNode;
   /** Parent breadcrumb (defaults to the campaigns hub); project landings point at /projects. */
   crumbParent?: { ar: string; en: string; href: string };
+  /** Optional backend FAQ category for a linked project. */
+  faqCategorySlug?: string;
 };
 
 export const CampaignLandingShell = (p: LandingProps) => {
@@ -114,13 +118,21 @@ export const CampaignLandingShell = (p: LandingProps) => {
     ? p.titleAr.includes("—") ? p.titleAr.split("—")[0].trim() : p.titleAr
     : p.titleEn.includes("—") ? p.titleEn.split("—")[0].trim() : p.titleEn;
 
+  if (p.isLoading) {
+    return (
+      <PageLayout>
+        <PageLoadingState />
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout>
       <SEOHelmet
         title={(isAr ? p.seo?.title?.ar : p.seo?.title?.en) || (isAr ? `${p.titleAr} | مؤسسة اليسر — الدقهلية والمنصورة وكافة محافظات مصر` : `${p.titleEn} | Al-Yusr Charity Foundation — Egypt`)}
         description={(isAr ? p.seo?.description?.ar : p.seo?.description?.en) || (isAr ? p.metaDescAr : p.metaDescEn)}
         path={p.path}
-        image={p.heroImage}
+        image={p.heroImage || undefined}
       />
       <Helmet>
         <script type="application/ld+json">{JSON.stringify({
@@ -184,7 +196,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
               { name: cleanCrumbTitle },
             ]} />
           </div>
-          <div className="mt-6 grid items-center gap-8 md:grid-cols-2 min-w-0 w-full">
+          <div className={`mt-6 grid min-w-0 w-full items-center gap-8 ${p.heroImage ? "md:grid-cols-2" : ""}`}>
             <div className="text-center md:text-start flex flex-col items-center md:items-start min-w-0 w-full">
               {(p.badgeAr || p.badgeEn) && (
                 <span className="inline-flex items-center justify-center text-center gap-1.5 rounded-full bg-[hsl(45_85%_65%/0.18)] px-3.5 py-1.5 text-xs font-bold text-[hsl(45_90%_72%)] max-w-full leading-normal">
@@ -197,15 +209,15 @@ export const CampaignLandingShell = (p: LandingProps) => {
               <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-primary-foreground/90 sm:text-base md:text-lg max-w-xl text-balance">
                 {isAr ? p.taglineAr : p.taglineEn}
               </p>
-              <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-center md:justify-start gap-3 w-full max-w-md">
-                <Button asChild size="lg" className="w-full sm:w-auto flex-1 min-h-[44px] h-auto py-2.5 px-4 sm:px-6 text-xs sm:text-sm md:text-base font-black bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
-                  <Link to={p.donateHref} className="inline-flex items-center justify-center gap-2 text-center leading-normal">
+              <div className="mt-6 grid w-full max-w-md grid-cols-2 gap-2 sm:gap-3">
+                <Button asChild size="lg" className="w-full min-w-0 min-h-[44px] h-auto whitespace-normal px-2.5 py-2.5 text-xs leading-tight sm:px-6 sm:text-sm md:text-base font-black bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
+                  <Link to={p.donateHref} className="inline-flex min-w-0 items-center justify-center gap-1.5 text-center leading-tight sm:gap-2">
                     <Heart className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
                     <span>{isAr ? (p.donateLabelAr || "تبرع الآن") : (p.donateLabelEn || "Donate now")}</span>
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="w-full sm:w-auto flex-1 min-h-[44px] h-auto py-2.5 px-4 sm:px-6 text-xs sm:text-sm md:text-base font-black bg-background/10 text-primary-foreground border-primary-foreground/30 hover:bg-background/20">
-                  <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 text-center leading-normal">
+                <Button asChild size="lg" variant="outline" className="w-full min-w-0 min-h-[44px] h-auto whitespace-normal px-2.5 py-2.5 text-xs leading-tight sm:px-6 sm:text-sm md:text-base font-black bg-background/10 text-primary-foreground border-primary-foreground/30 hover:bg-background/20">
+                  <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex min-w-0 items-center justify-center gap-1.5 text-center leading-tight sm:gap-2">
                     <WhatsAppIcon className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
                     <span>{isAr ? "تواصل واتساب" : "WhatsApp"}</span>
                   </a>
@@ -236,9 +248,16 @@ export const CampaignLandingShell = (p: LandingProps) => {
                 </button>
               </div>
             </div>
-            <div className="relative w-full flex justify-center min-w-0 mt-4 md:mt-0">
-              <img src={p.heroImage} alt={p.heroAlt} loading="eager" className="mx-auto max-h-[380px] sm:max-h-[440px] md:max-h-[460px] w-auto max-w-[85vw] sm:max-w-sm md:max-w-none rounded-3xl object-contain shadow-cta ring-1 ring-primary-foreground/20" />
-            </div>
+            {p.heroImage && (
+              <div className="relative mx-auto mt-4 flex min-w-0 w-[84%] justify-center md:mt-0 md:w-full">
+                <img
+                  src={p.heroImage}
+                  alt={p.heroAlt}
+                  loading="eager"
+                  className="block h-auto max-h-[min(70vh,560px)] w-auto max-w-full rounded-3xl object-contain object-center shadow-cta ring-1 ring-primary-foreground/20"
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -375,7 +394,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
         </section>
       )}
 
-      <LocalFAQ items={isAr ? p.faq.ar : p.faq.en} donateHref={p.donateHref} id={`${p.slug}-faq`} />
+      <LocalFAQ items={isAr ? p.faq.ar : p.faq.en} categorySlug={p.faqCategorySlug} donateHref={p.donateHref} id={`${p.slug}-faq`} />
 
       {/* Final CTA — 2 buttons side by side in one single row on mobile & desktop */}
       <section className={`relative overflow-hidden pt-14 pb-28 sm:pb-36 md:pt-16 md:pb-44 text-primary-foreground ${p.finalCtaClassName ?? "pattern-hero-luxe"}`}>
@@ -383,15 +402,15 @@ export const CampaignLandingShell = (p: LandingProps) => {
         <div className="container relative mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl font-black md:text-3xl">{isAr ? (p.bottomCtaAr || "ابدأ تبرعك الآن") : (p.bottomCtaEn || "Start your donation now")}</h2>
           <p className="mt-3 text-primary-foreground/80">{isAr ? (p.bottomSubAr || "كل جنيه يصل لمستحقه — موثّق بالصور والفيديو ومتابعة ميدانية.") : (p.bottomSubEn || "Every EGP reaches the right hands — verified with photos, video and field follow-up.")}</p>
-          <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 max-w-md mx-auto w-full px-2">
-            <Button asChild size="lg" className="w-full sm:w-auto flex-1 min-h-[46px] h-auto py-3 px-4 sm:px-6 text-sm sm:text-base font-black bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
-              <Link to={p.donateHref} className="inline-flex items-center justify-center gap-2 text-center leading-normal">
+          <div className="mt-6 mx-auto grid w-full max-w-md grid-cols-2 gap-2 px-1 sm:gap-3">
+            <Button asChild size="lg" className="w-full min-w-0 min-h-[46px] h-auto whitespace-normal px-2.5 py-3 text-xs leading-tight sm:px-6 sm:text-base font-black bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
+              <Link to={p.donateHref} className="inline-flex min-w-0 items-center justify-center gap-1.5 text-center leading-tight sm:gap-2">
                 <Heart className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
                 <span>{isAr ? (p.donateLabelAr || "تبرع الآن") : (p.donateLabelEn || "Donate now")}</span>
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto flex-1 min-h-[46px] h-auto py-3 px-4 sm:px-6 text-sm sm:text-base font-black bg-background/10 text-primary-foreground border-primary-foreground/30 hover:bg-background/20">
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 text-center leading-normal">
+            <Button asChild size="lg" variant="outline" className="w-full min-w-0 min-h-[46px] h-auto whitespace-normal px-2.5 py-3 text-xs leading-tight sm:px-6 sm:text-base font-black bg-background/10 text-primary-foreground border-primary-foreground/30 hover:bg-background/20">
+              <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex min-w-0 items-center justify-center gap-1.5 text-center leading-tight sm:gap-2">
                 <WhatsAppIcon className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
                 <span>{isAr ? "تواصل واتساب" : "WhatsApp"}</span>
               </a>
@@ -428,7 +447,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
               <button
                 type="button"
                 aria-label={isAr ? "إخفاء" : "Dismiss"}
-                onClick={() => { setStickyOpen(false); try { sessionStorage.setItem(`cta-dismissed-${p.slug}`, "1"); } catch {} }}
+                onClick={() => { setStickyOpen(false); try { sessionStorage.setItem(`cta-dismissed-${p.slug}`, "1"); } catch { /* Storage may be unavailable. */ } }}
                 className="grid h-8 w-8 place-items-center rounded-full text-primary-foreground/60 hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
                 <X className="h-4 w-4" />

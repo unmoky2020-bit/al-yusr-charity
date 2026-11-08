@@ -49,9 +49,8 @@ export const StickyQurbaniCTA = ({
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    // Hide whenever site chrome (header/footer) OR the page hero is on screen.
+    // Hide over the footer, explicit exclusion areas, and hero sections.
     const selectors = [
-      "header",
       "footer",
       "[data-sticky-cta-hide]",
       ".pattern-hero-luxe",
@@ -59,15 +58,14 @@ export const StickyQurbaniCTA = ({
     ].join(",");
     const targets = Array.from(document.querySelectorAll(selectors));
     if (targets.length === 0) return;
+    const visibleTargets = new Set<Element>();
     const io = new IntersectionObserver(
       (entries) => {
-        // Track currently-visible elements across multiple targets.
-        setOverChrome((prev) => {
-          const visible = new Set<Element>();
-          entries.forEach((e) => { if (e.isIntersecting) visible.add(e.target); });
-          // Re-check all targets: any still intersecting from prior observations?
-          return entries.some((e) => e.isIntersecting) ? true : false;
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) visibleTargets.add(entry.target);
+          else visibleTargets.delete(entry.target);
         });
+        setOverChrome(visibleTargets.size > 0);
       },
       { threshold: 0.05 },
     );
