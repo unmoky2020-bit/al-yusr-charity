@@ -1,35 +1,17 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
 import { resetNotifications } from "@/data/notifications/notificationsStore";
-import { authApi, getApiToken, clearApiToken, LaravelUser } from "@/data/laravelApi";
+import { authApi, getApiToken, clearApiToken, invalidateApiCache, type LaravelUser, type SocialProvider } from "@/data/laravelApi";
 import { profileApi, volunteerAdminApi } from "@/data/api/profileApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
+import { submitContactMessage } from "@/data/api/contactApi";
 import { toast } from "@/hooks/use-toast";
 import { Permission, inferPermissions } from "./permissions";
-import { buildUserFromLaravel } from "./userBuilder";
+import { buildUserFromLaravel, type Role, type User } from "./userBuilder";
+import type { AdminAccess } from "./adminAccess";
 
-export type Role = "admin" | "editor" | "caseworker" | "case_manager" | "volunteer" | "delegate" | "donor";
+export type { Role, User };
 export type DbRole = "admin" | "editor" | "case_manager" | "volunteer" | "delegate" | "donor";
-export type VolunteerStatus = "pending" | "approved" | "rejected" | "suspended";
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  password?: string;
-  roles: Role[];
-  avatar?: string;
-  createdAt: string;
-  volunteerStatus?: VolunteerStatus;
-  skills?: string[];
-  city?: string;
-  bio?: string;
-  assignedProgram?: string;
-  permissions?: Permission[];
-  totalDonated?: number;
-  donationsCount?: number;
-  preferredProgram?: string;
-}
+export type VolunteerStatus = NonNullable<User["volunteerStatus"]>;
 
 type LoginResult = { ok: boolean; error?: string };
 
@@ -54,6 +36,13 @@ type Ctx = {
   hasRole: (role: Role) => boolean;
   hasPermission: (perm: Permission) => boolean;
   refresh: () => Promise<void>;
+  /** Google ID token / Facebook access token → signed in (donor accounts). */
+  loginWithSocial: (provider: SocialProvider, token: string) => Promise<LoginResult & { created?: boolean }>;
+  /**
+   * The server permissions of a team account (GET /me/access): undefined while loading, null when
+   * the server can't tell (older backend) or for donors.
+   */
+  access: AdminAccess | null | undefined;
 };
 
 const AuthCtx = createContext<Ctx | null>(null);
@@ -64,6 +53,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<{ token: string; user: User } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [access, setAccess] = useState<AdminAccess | null | undefined>(undefined);
+
+  // Team accounts: what their roles allow on the server decides the dashboard menu.
+  const teamKey = user && user.roles.some((r) => r !== "donor") ? `${user.id}:${user.roles.join(",")}` : "";
+  useEffect(() => {
+    if (!teamKey) {
+      setAccess(null);
+      return;
+    }
+    let alive = true;
+    setAccess(undefined);
+    authApi
+      .access()
+      .then((a) => alive && setAccess({ permissions: Array.isArray(a?.permissions) ? a.permissions : [], superAdmin: Boolean(a?.super_admin) }))
+      .catch(() => alive && setAccess(null));
+    return () => {
+      alive = false;
+    };
+  }, [teamKey]);
 
   const loadProfile = useCallback(async () => {
     const token = getApiToken();
@@ -126,6 +134,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const loginWithSocial: Ctx["loginWithSocial"] = async (provider, token) => {
+    try {
+      const res = await authApi.socialLogin(provider, token);
+      if (!res.token) return { ok: false, error: res.message };
+      const u = res.user ? buildUserFromLaravel(res.user) : await authApi.profile().then(buildUserFromLaravel);
+      setUser(u);
+      setSession({ token: res.token, user: u });
+      return { ok: true, created: Boolean(res.created) };
+    } catch (err: unknown) {
+      return { ok: false, error: err instanceof Error ? err.message : "تعذر تسجيل الدخول" };
+    }
+  };
+
   const logout = () => {
     authApi.logout().catch(() => {});
     clearApiToken();
@@ -174,24 +195,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  /**
+   * The server never lets a sign-up choose a team role, so an editor application is a normal account
+   * plus a message in the team inbox; the super admin gives the Editor role from the user's page.
+   */
   const registerEditor: Ctx["registerEditor"] = async (data) => {
+    const res = await registerDonor({ name: data.name, email: data.email, password: data.password, phone: data.phone });
+    if (!res.ok) return res;
     try {
-      const res = await authApi.register({
+      await submitContactMessage({
         name: data.name,
         email: data.email,
-        phone: data.phone,
-        password: data.password,
-        role: "editor",
+        phone: data.phone || null,
+        section: "general",
+        source: "editor-application",
+        message: ["طلب الانضمام كمحرر محتوى (المدونة).", data.city ? `المدينة: ${data.city}` : "", data.bio ? `الخبرة: ${data.bio}` : ""].filter(Boolean).join("\n"),
       });
-      if (res.token) {
-        const u = buildUserFromLaravel(res.user);
-        setUser(u);
-        setSession({ token: res.token, user: u });
-      }
-      return { ok: true };
-    } catch (err: unknown) {
-      return { ok: false, error: err instanceof Error ? err.message : "فشل التسجيل" };
+    } catch {
+      /* the account exists; the team still sees the new user in its notifications */
     }
+    return { ok: true };
   };
 
   /** PUT /profile — the local user is updated only after the server accepted the change. */
@@ -253,6 +276,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const refresh = async () => {
+    invalidateApiCache("/profile");
     await loadProfile();
   };
 
@@ -277,6 +301,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         hasRole,
         hasPermission,
         refresh,
+        loginWithSocial,
+        access,
       }}
     >
       {children}

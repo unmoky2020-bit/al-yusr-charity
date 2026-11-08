@@ -6,6 +6,7 @@
  * Performance: In-memory cache + Request deduplication + Fast SWR (Stale-While-Revalidate).
  */
 import { SUGGESTED_ACTIVITIES, SUGGESTED_WHY_US } from "@/data/aboutSuggestions";
+import { announceHeldWrite, isHeldForApproval } from "@/data/api/approval";
 
 // Single source of truth for the backend domain — never hardcode elsewhere
 const BACKEND_BASE: string =
@@ -407,6 +408,9 @@ export async function apiFetch<T = unknown>(endpoint: string, options: RequestOp
       throw new ApiError(message, res.status, errorObj?.errors, json);
     }
 
+    // An editor's change kept by the server for an admin's approval (editor.approval → 202).
+    if (method !== "GET" && isHeldForApproval(res.status, json)) announceHeldWrite(json);
+
     // Cache successful GET responses
     if (method === "GET" && useCache) {
       memoryCache.set(cacheKey, {
@@ -629,6 +633,7 @@ export interface LaravelUser {
   roles?: Array<{ id: number; name: string; slug: string } | string>;
   role_ids?: number[];
   avatar?: string | null;
+  email_verified_at?: string | null;
   created_at?: string;
   updated_at?: string;
 }
@@ -1274,6 +1279,74 @@ export const authApi = {
       },
     });
   },
+
+  /** Sends a 6-digit code to the email (same answer whether the account exists or not). */
+  async forgotPassword(email: string): Promise<{ message?: string }> {
+    return apiFetch("/forgot-password", { method: "POST", body: { email }, skipAuthClear: true });
+  },
+
+  /** Sets a new password with the emailed code; the account is signed out everywhere. */
+  async resetPassword(data: { email: string; code: string; password: string }): Promise<{ message?: string }> {
+    return apiFetch("/reset-password", {
+      method: "POST",
+      body: { ...data, password_confirmation: data.password },
+      skipAuthClear: true,
+    });
+  },
+
+  /** Super admin only: a new password for another account (signs it out everywhere). */
+  async setUserPassword(userId: number | string, password: string): Promise<{ message?: string }> {
+    return apiFetch(`/users/${userId}/password`, {
+      method: "PUT",
+      body: { password, password_confirmation: password, sign_out: true },
+    });
+  },
+
+  /** Sends a 6-digit code to the signed-in account's email (nothing when already confirmed). */
+  async sendEmailCode(): Promise<{ message?: string; verified?: boolean }> {
+    return apiFetch("/email/verification-code", { method: "POST" });
+  },
+
+  /** Confirms the signed-in account's email with the code. */
+  async verifyEmail(code: string): Promise<{ message?: string; verified?: boolean }> {
+    return apiFetch("/email/verify", { method: "POST", body: { code } });
+  },
+
+  /** Role slugs + permission slugs of the signed-in account (the dashboard menu follows them). */
+  async access(): Promise<AccountAccess> {
+    return apiFetch<AccountAccess>("/me/access", { method: "GET", useCache: false });
+  },
+
+  /** Which social sign-in buttons the server is set up for (ids only). */
+  async providers(): Promise<AuthProviders> {
+    return apiFetch<AuthProviders>("/auth/providers", { method: "GET", token: null, ttlMs: 10 * 60_000, skipAuthClear: true });
+  },
+
+  /** Google ID token / Facebook access token → our own session (donor accounts). */
+  async socialLogin(provider: SocialProvider, token: string) {
+    const body = provider === "google" ? { credential: token } : { access_token: token };
+    const res = await apiFetch<{ token: string; user: LaravelUser; message?: string; created?: boolean }>(`/auth/${provider}`, {
+      method: "POST",
+      body,
+      token: null,
+      skipAuthClear: true,
+    });
+    if (res.token) setApiToken(res.token);
+    return res;
+  },
+};
+
+export type SocialProvider = "google" | "facebook";
+
+export type AuthProviders = {
+  google: { client_id: string } | null;
+  facebook: { app_id: string } | null;
+};
+
+export type AccountAccess = {
+  roles: string[];
+  permissions: string[];
+  super_admin: boolean;
 };
 
 // ─────────────────────────────────────────────────────────────────────────────

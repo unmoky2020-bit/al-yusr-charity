@@ -1,4 +1,5 @@
 import { PHONE_COUNTRIES } from "@/data/phoneCountries";
+import { digitsOf } from "@/lib/digits";
 
 export type PhoneCountry = { code: string; dial: string; pattern: RegExp; lengths: number[] };
 
@@ -20,13 +21,7 @@ export const DEFAULT_COUNTRY = "EG";
 
 export const countryOf = (code: string): PhoneCountry => BY_CODE.get(code) ?? BY_CODE.get(DEFAULT_COUNTRY)!;
 
-/** Arabic / Western-Arabic digits only ("٠١٠ 123-45" → "01012345"). */
-export function digitsOf(v: string): string {
-  return v
-    .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x0660))
-    .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 0x06f0))
-    .replace(/\D/g, "");
-}
+export { digitsOf };
 
 /** National significant number: the national digits without the trunk "0". */
 const nsn = (national: string) => national.replace(/^0+/, "");

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Heart, Users, ShieldCheck, Mail, Lock, User as UserIcon, Phone, MapPin, Eye, EyeOff } from "lucide-react";
+import { Heart, Users, ShieldCheck, Mail, User as UserIcon, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -10,6 +10,9 @@ import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { PhoneInput } from "@/components/common/PhoneInput";
+import { PasswordField } from "@/components/auth/PasswordField";
+import { SocialSignIn } from "@/components/auth/SocialSignIn";
+import { MIN_PASSWORD, newPasswordProblem } from "@/lib/passwordRules";
 
 type Role = "donor" | "volunteer" | "editor";
 
@@ -21,7 +24,6 @@ const Register = () => {
   const [params] = useSearchParams();
   const initialRole = (params.get("role") as Role) || "donor";
   const [role, setRole] = useState<Role>(["donor", "volunteer", "editor"].includes(initialRole) ? initialRole : "donor");
-  const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", city: "", password: "", bio: "" });
 
@@ -29,8 +31,9 @@ const Register = () => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.password.length < 6) {
-      toast({ title: isRTL ? "كلمة المرور قصيرة (6 أحرف على الأقل)" : "Password too short (min 6 chars)", variant: "destructive" });
+    const problem = newPasswordProblem(form.password, form.password, lang);
+    if (problem) {
+      toast({ title: problem, variant: "destructive" });
       return;
     }
     setLoading(true);
@@ -44,24 +47,26 @@ const Register = () => {
     }
     setLoading(false);
     if (!res.ok) {
-      const msg = res.error?.toLowerCase().includes("registered") || res.error?.toLowerCase().includes("exists")
-        ? (isRTL ? "هذا البريد مسجّل بالفعل" : "Email already registered")
-        : (isRTL ? "تعذّر إنشاء الحساب — حاول مرة أخرى" : "Could not create account — try again");
-      toast({ title: msg, variant: "destructive" });
+      const taken = /registered|exists|taken|مسجل|مستخدم/i.test(res.error ?? "");
+      toast({
+        title: taken ? (isRTL ? "هذا البريد مسجّل بالفعل" : "Email already registered") : isRTL ? "تعذّر إنشاء الحساب" : "Could not create the account",
+        description: taken ? (isRTL ? "سجّل الدخول، أو استعد كلمة المرور لو نسيتها." : "Sign in, or reset your password if you forgot it.") : res.error,
+        variant: "destructive",
+      });
       return;
     }
     if (role === "editor") {
-      toast({ title: isRTL ? " تم إرسال طلبك — سيراجعه المشرف قريبًا" : " Request sent — an admin will review it shortly" });
+      toast({ title: isRTL ? "تم إنشاء حسابك وإرسال طلب المحرر" : "Account created and editor request sent", description: isRTL ? "هتوصلك صلاحية المحرر بعد موافقة الإدارة." : "You'll get editor access once the team approves." });
     } else {
-      toast({ title: isRTL ? " أهلًا بك في عائلة اليسر — تحقّق من بريدك" : " Welcome to Al-Yusr — check your inbox" });
+      toast({ title: isRTL ? "أهلًا بك في عائلة اليسر" : "Welcome to Al-Yusr" });
     }
-    nav("/login");
+    nav(role === "donor" ? "/dashboard" : "/profile");
   };
 
   const roles: { id: Role; ar: string; en: string; desc: { ar: string; en: string }; icon: typeof Heart }[] = [
     { id: "donor", ar: "متبرع", en: "Donor", icon: Heart, desc: { ar: "تابع تبرعاتك وأثرك", en: "Track donations & impact" } },
     { id: "volunteer", ar: "متطوع", en: "Volunteer", icon: Users, desc: { ar: "انضم لحملاتنا الميدانية", en: "Join field campaigns" } },
-    { id: "editor", ar: "محرر", en: "Editor", icon: ShieldCheck, desc: { ar: "إدارة الحالات والمحتوى (يحتاج موافقة)", en: "Cases & content (admin approval)" } },
+    { id: "editor", ar: "محرر", en: "Editor", icon: ShieldCheck, desc: { ar: "كتابة مقالات المدونة (بموافقة الإدارة)", en: "Write blog articles (team approval)" } },
   ];
 
   return (
@@ -111,8 +116,8 @@ const Register = () => {
             {role === "editor" && (
               <div className="mt-4 rounded-xl border border-accent/30 bg-accent/5 p-3 text-xs font-bold text-accent">
                 {isRTL
-                  ? "ملاحظة: حسابات المحررين تحتاج إلى موافقة المشرف قبل تفعيل صلاحياتهم."
-                  : "Note: Editor accounts need admin approval before permissions are granted."}
+                  ? "بننشئ حسابك وبنبعت طلبك للإدارة. صلاحية المحرر (المدونة) بتتفعّل بعد الموافقة، وكل اللي بتكتبه بيتراجع قبل النشر."
+                  : "We create your account and send your request to the team. Editor access (the blog) starts once approved, and everything you write is reviewed before it goes live."}
               </div>
             )}
 
@@ -136,13 +141,14 @@ const Register = () => {
                   <Input placeholder={isRTL ? "المدينة (مثال: المنصورة)" : "City (e.g. Mansoura)"} className="h-12 ps-9" value={form.city} onChange={(e) => set("city", e.target.value)} />
                 </div>
               )}
-              <div className="relative">
-                <Lock className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input required type={show ? "text" : "password"} placeholder={isRTL ? "كلمة المرور (6 أحرف على الأقل)" : "Password (min 6 chars)"} className="h-12 ps-9 pe-10" value={form.password} onChange={(e) => set("password", e.target.value)} />
-                <button type="button" onClick={() => setShow((s) => !s)} className="absolute end-2 top-1/2 -translate-y-1/2 rounded p-1 text-muted-foreground hover:text-foreground" aria-label="toggle password">
-                  {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
+              <PasswordField
+                required
+                minLength={MIN_PASSWORD}
+                autoComplete="new-password"
+                placeholder={isRTL ? `كلمة المرور (${MIN_PASSWORD} أحرف على الأقل)` : `Password (min ${MIN_PASSWORD} chars)`}
+                value={form.password}
+                onChange={(e) => set("password", e.target.value)}
+              />
               {(role === "volunteer" || role === "editor") && (
                 <textarea
                   placeholder={isRTL ? (role === "editor" ? "خبرتك في إدارة المحتوى/الحالات (اختياري)" : "نبذة قصيرة عنك (اختياري)") : "Short bio (optional)"}
@@ -159,6 +165,12 @@ const Register = () => {
                     : (isRTL ? "أنشئ حسابي" : "Create my account")}
               </Button>
             </form>
+
+            {role === "donor" && (
+              <div className="mt-4">
+                <SocialSignIn onSignedIn={() => nav("/dashboard", { replace: true })} />
+              </div>
+            )}
 
             <p className="mt-5 text-center text-xs text-muted-foreground">
               {isRTL ? "لديك حساب؟" : "Already have an account?"}{" "}

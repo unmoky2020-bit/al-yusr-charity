@@ -12,6 +12,9 @@ import { useAuth } from "@/auth/AuthContext";
 import { programs } from "@/data/programs";
 import { toast } from "@/hooks/use-toast";
 import { PhoneInput } from "@/components/common/PhoneInput";
+import { PasswordField } from "@/components/auth/PasswordField";
+import { SocialSignIn } from "@/components/auth/SocialSignIn";
+import { MIN_PASSWORD, newPasswordProblem } from "@/lib/passwordRules";
 
 const RegisterDonor = () => {
   const { lang } = useLang();
@@ -21,17 +24,23 @@ const RegisterDonor = () => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.password.length < 6) {
-      toast({ title: lang === "ar" ? "كلمة المرور قصيرة" : "Password too short", variant: "destructive" });
+    const problem = newPasswordProblem(form.password, form.password, lang);
+    if (problem) {
+      toast({ title: problem, variant: "destructive" });
       return;
     }
     const res = await registerDonor(form);
     if (!res.ok) {
-      toast({ title: lang === "ar" ? "البريد مسجل بالفعل" : "Email already exists", variant: "destructive" });
+      const taken = /registered|exists|taken|مسجل|مستخدم/i.test(res.error ?? "");
+      toast({
+        title: taken ? (lang === "ar" ? "البريد مسجل بالفعل" : "Email already exists") : lang === "ar" ? "تعذّر إنشاء الحساب" : "Could not create the account",
+        description: taken ? (lang === "ar" ? "سجّل الدخول، أو استعد كلمة المرور لو نسيتها." : "Sign in, or reset your password.") : res.error,
+        variant: "destructive",
+      });
       return;
     }
-    toast({ title: lang === "ar" ? " أهلًا بك في عائلة اليسر" : " Welcome to the Al-Yusr family" });
-    nav("/profile");
+    toast({ title: lang === "ar" ? "أهلًا بك في عائلة اليسر" : "Welcome to the Al-Yusr family" });
+    nav("/dashboard");
   };
 
   return (
@@ -60,7 +69,7 @@ const RegisterDonor = () => {
               <Input required placeholder={lang === "ar" ? "الاسم بالكامل" : "Full name"} className="h-12" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
               <Input required type="email" placeholder={lang === "ar" ? "البريد الإلكتروني" : "Email"} className="h-12" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
               <PhoneInput required value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
-              <Input required type="password" placeholder={lang === "ar" ? "كلمة المرور (٦ أحرف+)" : "Password (6+ chars)"} className="h-12" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+              <PasswordField required minLength={MIN_PASSWORD} withIcon={false} autoComplete="new-password" placeholder={lang === "ar" ? `كلمة المرور (${MIN_PASSWORD} أحرف أو أكثر)` : `Password (${MIN_PASSWORD}+ chars)`} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
               <UiSelect value={form.preferredProgram} onChange={(e) => setForm({ ...form, preferredProgram: e.target.value })}
                 className="h-12 w-full rounded-md border border-input bg-background px-3 text-sm font-bold">
                 <option value="">{lang === "ar" ? "البرنامج المفضل (اختياري)" : "Preferred program (optional)"}</option>
@@ -72,6 +81,9 @@ const RegisterDonor = () => {
                 {lang === "ar" ? "أنشئ حسابي" : "Create my account"}
               </Button>
             </form>
+            <div className="mt-4">
+              <SocialSignIn onSignedIn={() => nav("/dashboard", { replace: true })} />
+            </div>
             <p className="mt-5 text-center text-xs text-muted-foreground">
               {lang === "ar" ? "لديك حساب؟" : "Have an account?"} <Link to="/login" className="font-extrabold text-accent">{lang === "ar" ? "ادخل من هنا" : "Sign in"}</Link>
             </p>

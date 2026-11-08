@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { User as UserIcon, Mail, Phone, Lock, LogOut, Shield, HandHeart, HeartHandshake, Save, LayoutDashboard, ArrowLeft, ArrowRight } from "lucide-react";
+import { User as UserIcon, Mail, Phone, LogOut, Shield, HandHeart, HeartHandshake, Save, LayoutDashboard, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -12,13 +12,14 @@ import { RequireAuth } from "@/auth/RequireAuth";
 import { toast } from "@/hooks/use-toast";
 import { formatNumberEN } from "@/lib/utils";
 import { PhoneInput } from "@/components/common/PhoneInput";
+import { ChangePasswordForm } from "@/components/auth/ChangePasswordForm";
+import { EmailVerifyCard } from "@/components/auth/EmailVerifyCard";
 
 const ProfileInner = () => {
   const { lang } = useLang();
-  const { user, updateProfile, changePassword, logout } = useAuth();
+  const { user, updateProfile, logout } = useAuth();
   const nav = useNavigate();
   const [form, setForm] = useState({ name: user!.name, email: user!.email, phone: user!.phone || "", bio: user!.bio || "" });
-  const [pwd, setPwd] = useState({ old: "", neu: "", confirm: "" });
 
   const saveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,24 +27,6 @@ const ProfileInner = () => {
       await updateProfile(user!.id, { name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim(), bio: form.bio.trim() });
       toast({ title: lang === "ar" ? "تم تحديث البيانات" : "Profile updated" });
     } catch { /* AuthContext already showed the server error */ }
-  };
-
-  const savePwd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pwd.neu !== pwd.confirm) {
-      toast({ title: lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords don't match", variant: "destructive" });
-      return;
-    }
-    const res = await changePassword(user!.id, pwd.old, pwd.neu);
-    if (!res.ok) {
-      const msg = res.error === "WRONG_PASSWORD" ? (lang === "ar" ? "كلمة المرور الحالية خاطئة" : "Current password is wrong")
-        : res.error === "WEAK_PASSWORD" ? (lang === "ar" ? "كلمة المرور قصيرة (٦+)" : "Password too short (6+)")
-        : (lang === "ar" ? "خطأ" : "Error");
-      toast({ title: msg, variant: "destructive" });
-      return;
-    }
-    setPwd({ old: "", neu: "", confirm: "" });
-    toast({ title: lang === "ar" ? "تم تغيير كلمة المرور" : "Password changed" });
   };
 
   const isAdmin = user!.roles.includes("admin") || user!.roles.includes("editor");
@@ -121,6 +104,7 @@ const ProfileInner = () => {
 
             {/* Forms */}
             <div className="space-y-4">
+              <EmailVerifyCard />
               <div className="rounded-3xl bg-card p-5 shadow-card md:p-7">
                 <h3 className="text-lg font-black text-primary">{lang === "ar" ? "البيانات الشخصية" : "Personal info"}</h3>
                 <form method="post" onSubmit={saveProfile} className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -148,17 +132,9 @@ const ProfileInner = () => {
 
               <div className="rounded-3xl bg-card p-5 shadow-card md:p-7">
                 <h3 className="text-lg font-black text-primary">{lang === "ar" ? "تغيير كلمة المرور" : "Change password"}</h3>
-                <form method="post" onSubmit={savePwd} className="mt-4 grid gap-3 sm:grid-cols-3">
-                  <div className="relative sm:col-span-3">
-                    <Lock className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input type="password" required className="h-12 ps-9" placeholder={lang === "ar" ? "كلمة المرور الحالية" : "Current password"} value={pwd.old} onChange={(e) => setPwd({ ...pwd, old: e.target.value })} />
-                  </div>
-                  <Input type="password" required className="h-12" placeholder={lang === "ar" ? "كلمة المرور الجديدة" : "New password"} value={pwd.neu} onChange={(e) => setPwd({ ...pwd, neu: e.target.value })} />
-                  <Input type="password" required className="h-12" placeholder={lang === "ar" ? "تأكيد كلمة المرور" : "Confirm new password"} value={pwd.confirm} onChange={(e) => setPwd({ ...pwd, confirm: e.target.value })} />
-                  <Button type="submit" className="h-12 bg-primary font-extrabold text-primary-foreground hover:opacity-95">
-                    {lang === "ar" ? "تحديث" : "Update"}
-                  </Button>
-                </form>
+                <div className="mt-4">
+                  <ChangePasswordForm />
+                </div>
               </div>
             </div>
           </div>

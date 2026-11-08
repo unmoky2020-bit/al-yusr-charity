@@ -30,6 +30,7 @@ import {
   type LaravelUser,
 } from "@/data/laravelApi";
 import { PhoneInput } from "@/components/common/PhoneInput";
+import { SetUserPasswordCard } from "@/components/admin/users/SetUserPasswordCard";
 
 type UserProfile = LaravelUser & {
   address?: string | null;
@@ -563,6 +564,8 @@ export default function AdminUserDetail() {
                 <p><span className="font-bold text-muted-foreground">{isAr ? "الأدوار الحالية:" : "Current roles:"}</span> {assignedRoles.map((role) => roleLabel(role, isAr)).join("، ") || "—"}</p>
               </div>
             </Card>
+
+            <SetUserPasswordCard userId={profile.id} userName={profile.name} userEmail={profile.email} />
 
             <Card className="overflow-hidden">
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 p-4 sm:p-5">

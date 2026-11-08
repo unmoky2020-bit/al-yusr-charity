@@ -29,6 +29,7 @@ import {
   type Suggestion, type RelatedSuggestion,
 } from "@/lib/blog-optimize";
 import { publicUrls } from "@/lib/publicUrls";
+import { heldWritesCount } from "@/data/api/approval";
 
 type EditState = {
   slug: string;
@@ -535,6 +536,10 @@ const Inner = ({ createMode = false }: { createMode?: boolean }) => {
       return;
     }
     setSaving(true);
+    // An editor's save is held by the server for an admin's approval: nothing changed yet, so the
+    // form keeps what was typed (PendingApprovalNotice already said it went for review).
+    const heldBefore = heldWritesCount();
+    const wasHeld = () => heldWritesCount() > heldBefore;
     try {
       const content = {
         slug: normalizedSlug,
@@ -560,6 +565,10 @@ const Inner = ({ createMode = false }: { createMode?: boolean }) => {
           status,
           scheduled_at: mode === "schedule" ? new Date(draft.scheduled_at).toISOString() : null,
         });
+        if (wasHeld()) {
+          nav("/admin/blog", { replace: true });
+          return;
+        }
         toast({ title: isRTL ? (status === "published" ? "تم نشر المقال" : status === "scheduled" ? "تمت جدولة المقال" : "تم حفظ المقال كمسودة") : (status === "published" ? "Article published" : status === "scheduled" ? "Article scheduled" : "Article saved as draft") });
         nav(`/admin/blog/${created.slug}`, { replace: true });
         return;
@@ -568,12 +577,14 @@ const Inner = ({ createMode = false }: { createMode?: boolean }) => {
       if (mode === "publish") await updatePostStatus(savedId, "published");
       if (mode === "unpublish") await updatePostStatus(savedId, "draft");
       if (mode === "schedule") await updatePostStatus(savedId, "scheduled", new Date(draft.scheduled_at).toISOString());
-      try { localStorage.removeItem(draftKey(row.slug)); } catch {}
+      if (wasHeld()) return;
+      try { localStorage.removeItem(draftKey(row.slug)); } catch { /* storage unavailable */ }
       toast({ title: isRTL ? "تم الحفظ" : "Saved" });
       const newSlug = normalizedSlug;
       if (newSlug && newSlug !== row.slug) { nav(`/admin/blog/${newSlug}`, { replace: true }); return; }
       await load();
     } catch (e: unknown) {
+      if (wasHeld()) return;
       toast({ title: isRTL ? "فشل الحفظ على الخادم" : "Save failed", description: apiErrorMessage(e), variant: "destructive" });
     } finally { setSaving(false); }
   };

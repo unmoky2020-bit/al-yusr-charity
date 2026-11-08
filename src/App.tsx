@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation, useNavigationType, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster as Sonner } from "@/components/ui/sonner";
+import { PendingApprovalNotice } from "@/components/notifications/PendingApprovalNotice";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LangProvider } from "@/i18n/LangContext";
 import { AuthProvider } from "@/auth/AuthContext";
@@ -46,6 +47,7 @@ const BlogAuthor = lazy(() => import("./pages/BlogAuthor.tsx"));
 const AdminBlogSeo = lazy(() => import("./pages/admin/AdminBlogSeo.tsx"));
 const AdminBlogPostEdit = lazy(() => import("./pages/admin/AdminBlogPostEdit.tsx"));
 const Login = lazy(() => import("./pages/auth/Login.tsx"));
+const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword.tsx"));
 const RegisterVolunteer = lazy(() => import("./pages/auth/RegisterVolunteer.tsx"));
 const RegisterDonor = lazy(() => import("./pages/auth/RegisterDonor.tsx"));
 const Register = lazy(() => import("./pages/auth/Register.tsx"));
@@ -291,6 +293,7 @@ const App = () => (
         <AuthProvider>
           <TooltipProvider>
             <Sonner />
+            <PendingApprovalNotice />
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <SmoothScroll />
               <RouteTracker />
@@ -371,6 +374,7 @@ const App = () => (
                   <Route path="/faqs" element={<FaqCenter />} />
                   <Route path="/faq" element={<Navigate to="/faqs" replace />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/register/volunteer" element={<RegisterVolunteer />} />
                   <Route path="/register/donor" element={<RegisterDonor />} />
                   <Route path="/register" element={<Register />} />

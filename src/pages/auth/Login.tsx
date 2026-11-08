@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { LogIn, Mail, Lock, Eye, EyeOff, Phone, X as XIcon } from "lucide-react";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { LogIn, Mail, Phone, X as XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -9,6 +9,8 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { PasswordField } from "@/components/auth/PasswordField";
+import { SocialSignIn } from "@/components/auth/SocialSignIn";
 
 const REMEMBER_KEY = "alyusr.login.remember.v1";
 
@@ -27,26 +29,31 @@ const Login = () => {
   const { login, session, user } = useAuth();
   const nav = useNavigate();
   const [params] = useSearchParams();
+  // After a password reset the email comes back in router state (never in the URL).
+  const returnedEmail = (useLocation().state as { email?: string } | null)?.email;
   const [tab, setTab] = useState<"email" | "phone">("email");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(true);
 
   // Hydrate remembered identifier on mount
   useEffect(() => {
+    if (returnedEmail) {
+      setEmail(returnedEmail);
+      return;
+    }
     try {
       const raw = localStorage.getItem(REMEMBER_KEY);
       if (!raw) return;
       const data = JSON.parse(raw) as { email?: string };
       if (data.email) setEmail(data.email);
       setRemember(true);
-    } catch {}
-  }, []);
+    } catch { /* storage unavailable (private mode) */ }
+  }, [returnedEmail]);
 
   const clearRemembered = () => {
-    try { localStorage.removeItem(REMEMBER_KEY); } catch {}
+    try { localStorage.removeItem(REMEMBER_KEY); } catch { /* storage unavailable (private mode) */ }
     setEmail("");
     setPassword("");
     toast({ title: lang === "ar" ? "تم مسح البيانات المحفوظة" : "Saved data cleared" });
@@ -100,18 +107,17 @@ const Login = () => {
         return;
       }
       if (remember) {
-        try { localStorage.setItem(REMEMBER_KEY, JSON.stringify({ tab: "email", email: email.trim() })); } catch {}
+        try { localStorage.setItem(REMEMBER_KEY, JSON.stringify({ tab: "email", email: email.trim() })); } catch { /* storage unavailable (private mode) */ }
       } else {
-        try { localStorage.removeItem(REMEMBER_KEY); } catch {}
+        try { localStorage.removeItem(REMEMBER_KEY); } catch { /* storage unavailable (private mode) */ }
       }
       toast({ title: lang === "ar" ? "أهلًا بعودتك " : "Welcome back ", description: lang === "ar" ? "تم تسجيل الدخول بنجاح." : "You are now signed in.", });
       // Navigation handled by the session effect above.
     }, 500);
   };
 
-  // Social login (Google/Facebook) removed: it relied on Supabase + Lovable auth and always failed.
-  // Proposed Laravel Socialite flow (GET /auth/{provider}/redirect → /auth/{provider}/callback) is
-  // documented in backend-handoff/01-replace-supabase-public.md; re-add the buttons once it exists.
+  // Google / Facebook: <SocialSignIn/> shows its buttons only once the server has the keys
+  // (GET /auth/providers); a successful sign-in sets the session and the effect above navigates.
 
   return (
     <PageLayout>
@@ -155,12 +161,15 @@ const Login = () => {
                     <Mail className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input type="email" name="email" autoComplete="email" required placeholder={lang === "ar" ? "البريد الإلكتروني" : "Email"} className="h-12 ps-9" value={email} onChange={(e) => setEmail(e.target.value)} />
                   </div>
-                  <div className="relative">
-                    <Lock className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input type={show ? "text" : "password"} name="password" autoComplete="current-password" required placeholder={lang === "ar" ? "كلمة المرور" : "Password"} className="h-12 ps-9 pe-10" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <button type="button" onClick={() => setShow(!show)} className="absolute end-2 top-1/2 -translate-y-1/2 rounded p-1 text-muted-foreground hover:text-foreground" aria-label="toggle password">
-                      {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
+                  <PasswordField name="password" autoComplete="current-password" required placeholder={lang === "ar" ? "كلمة المرور" : "Password"} value={password} onChange={(e) => setPassword(e.target.value)} />
+                  <div className="flex justify-end">
+                    <Link
+                      to="/forgot-password"
+                      state={{ email: email.trim() }}
+                      className="rounded-full px-2 py-0.5 text-xs font-extrabold text-primary/80 transition hover:bg-muted hover:text-primary"
+                    >
+                      {lang === "ar" ? "نسيت كلمة المرور؟" : "Forgot your password?"}
+                    </Link>
                   </div>
                 </>
               ) : (
@@ -183,6 +192,12 @@ const Login = () => {
                 </Button>
               )}
             </form>
+
+            {tab === "email" && (
+              <div className="mt-4">
+                <SocialSignIn />
+              </div>
+            )}
 
             {/* Remember + clear */}
             <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 text-xs">

@@ -19,6 +19,9 @@ import { listMyDonations, listCaseDocuments } from "@/data/casesApi";
 import { formatServerImageUrl } from "@/data/laravelApi";
 import { toast } from "@/hooks/use-toast";
 import { NotificationsEmpty } from "@/components/notifications/NotificationsEmpty";
+import { ChangePasswordForm } from "@/components/auth/ChangePasswordForm";
+import { PhoneInput } from "@/components/common/PhoneInput";
+import { EmailVerifyCard } from "@/components/auth/EmailVerifyCard";
 
 type Tab = "impact" | "donations" | "notifications" | "account";
 const TABS: Tab[] = ["impact", "donations", "notifications", "account"];
@@ -106,7 +109,7 @@ const DonationTimeline = ({ status, dates, lang }: { status?: string | null; dat
 
 const Inner = () => {
   const { lang } = useLang();
-  const { user, updateProfile, logout, removeUser } = useAuth();
+  const { user, updateProfile, logout } = useAuth();
   const navigate = useNavigate();
   const Arrow = lang === "ar" ? ArrowLeft : ArrowRight;
   // `?tab=` opens a tab directly (the header bell links to ?tab=notifications).
@@ -185,10 +188,7 @@ const Inner = () => {
   ];
 
   const AccountTab = () => {
-    const [form, setForm] = useState({
-      name: user!.name, email: user!.email, phone: user!.phone || "",
-      currency: "EGP", language: lang,
-    });
+    const [form, setForm] = useState({ name: user!.name, email: user!.email, phone: user!.phone || "" });
     const save = async () => {
       try {
         await updateProfile(user!.id, { name: form.name, email: form.email, phone: form.phone });
@@ -196,13 +196,10 @@ const Inner = () => {
       } catch { /* AuthContext already showed the server error */ }
     };
     const onLogout = () => { logout(); navigate("/"); };
-    const onDelete = () => {
-      if (!confirm(lang === "ar" ? "تأكيد حذف الحساب نهائيًا؟" : "Permanently delete account?")) return;
-      removeUser(user!.id);
-      navigate("/");
-    };
     return (
       <div className="space-y-4">
+        <EmailVerifyCard />
+
         <div className="rounded-3xl bg-card p-6 shadow-soft md:p-8">
           <h3 className="text-lg font-extrabold text-primary">{lang === "ar" ? "التفاصيل الشخصية" : "Personal details"}</h3>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -210,50 +207,51 @@ const Inner = () => {
               <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="h-11" />
             </Field>
             <Field label={lang === "ar" ? "رقم الهاتف" : "Phone"}>
-              <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} dir="ltr" className="h-11" />
+              <PhoneInput value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} className="h-11" />
             </Field>
             <Field label={lang === "ar" ? "البريد الإلكتروني" : "Email"}>
               <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="h-11" />
             </Field>
-            <Field label={lang === "ar" ? "العملة المفضلة" : "Preferred currency"}>
-              <UiSelect value={form.currency} onChange={(e) => setForm({ ...form, currency: e.target.value })}
-                className="h-11 w-full rounded-md border border-border bg-background px-3 text-sm font-bold">
-                <option value="EGP">{lang === "ar" ? "الجنيه المصري (EGP)" : "Egyptian Pound (EGP)"}</option>
-                <option value="USD">{lang === "ar" ? "دولار أمريكي (USD)" : "US Dollar (USD)"}</option>
-                <option value="SAR">{lang === "ar" ? "ريال سعودي (SAR)" : "Saudi Riyal (SAR)"}</option>
-              </UiSelect>
-            </Field>
           </div>
-          <div className="mt-6 flex flex-wrap gap-2">
+          <div className="mt-6">
             <Button onClick={save} className="bg-orange-grad text-accent-foreground shadow-cta">{lang === "ar" ? "حفظ التغييرات" : "Save changes"}</Button>
-            <Button asChild variant="outline"><Link to="/profile">{lang === "ar" ? "إعدادات متقدمة" : "Advanced settings"}</Link></Button>
           </div>
         </div>
 
         <div className="rounded-3xl bg-card p-6 shadow-soft md:p-8">
-          <h3 className="text-lg font-extrabold text-primary">{lang === "ar" ? "طرق الدفع" : "Payment methods"}</h3>
-          <div className="mt-4 grid gap-2 sm:grid-cols-3">
-            {[{i: CreditCard, ar: "بطاقة (Kashier)", en: "Card (Kashier)"},
-              {i: Wallet, ar: "Vodafone Cash", en: "Vodafone Cash"},
-              {i: Smartphone, ar: "InstaPay", en: "InstaPay"}].map((m) => (
-              <button key={m.en} className="flex items-center gap-2 rounded-2xl border-2 border-border p-3 text-start text-sm font-extrabold transition hover:border-secondary">
-                <m.i className="h-5 w-5 text-primary" />
-                <span>{m[lang]}</span>
-              </button>
-            ))}
+          <h3 className="text-lg font-extrabold text-primary">{lang === "ar" ? "كلمة المرور" : "Password"}</h3>
+          <div className="mt-4">
+            <ChangePasswordForm size="compact" />
           </div>
         </div>
 
-        <div className="rounded-3xl border-2 border-destructive/20 bg-card p-6 shadow-soft md:p-8">
+        <div className="rounded-3xl bg-card p-6 shadow-soft md:p-8">
+          <h3 className="text-lg font-extrabold text-primary">{lang === "ar" ? "طرق الدفع المتاحة" : "Ways to pay"}</h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {lang === "ar" ? "بتختار طريقة الدفع وقت كل تبرع. مش بنحفظ بيانات بطاقتك عندنا." : "You choose how to pay with each donation. We never store your card."}
+          </p>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-3">
+            {[{i: CreditCard, ar: "بطاقة بنكية", en: "Bank card"},
+              {i: Wallet, ar: "فودافون كاش", en: "Vodafone Cash"},
+              {i: Smartphone, ar: "إنستاباي", en: "InstaPay"}].map((m) => (
+              <li key={m.en} className="flex items-center gap-2 rounded-2xl border border-border bg-muted/30 p-3 text-sm font-extrabold">
+                <m.i className="h-5 w-5 text-primary" aria-hidden />
+                <span>{m[lang]}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-3xl bg-card p-6 shadow-soft md:p-8">
           <h3 className="text-lg font-extrabold text-primary">{lang === "ar" ? "إدارة الحساب" : "Account management"}</h3>
           <div className="mt-4 flex flex-wrap gap-2">
             <Button variant="outline" onClick={onLogout}><LogOut className="h-4 w-4" /> {lang === "ar" ? "تسجيل الخروج" : "Sign out"}</Button>
-            <Button variant="outline" className="border-destructive/40 text-destructive hover:bg-destructive/5" onClick={onDelete}>
-              <Trash2 className="h-4 w-4" /> {lang === "ar" ? "حذف الحساب" : "Delete account"}
+            <Button asChild variant="outline" className="border-destructive/40 text-destructive hover:bg-destructive/5">
+              <Link to="/contact"><Trash2 className="h-4 w-4" /> {lang === "ar" ? "طلب حذف الحساب" : "Ask to delete my account"}</Link>
             </Button>
           </div>
           <p className="mt-3 text-[11px] text-muted-foreground">
-            {lang === "ar" ? "بحذف حسابك، فإنك تقبل بالشروط والأحكام الخاصة بنا." : "By deleting your account, you accept our terms and conditions."}
+            {lang === "ar" ? "الحذف بيتم من فريق اليسر بعد التأكد إنك صاحب الحساب، وسجل تبرعاتك بيتحفظ للإيصالات." : "The Al-Yusr team deletes the account after confirming it is yours; your donation records are kept for receipts."}
           </p>
         </div>
       </div>

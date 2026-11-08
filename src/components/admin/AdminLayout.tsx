@@ -7,13 +7,14 @@ import {
   HandHeart, HeartHandshake, ShieldCheck, UserCog, Megaphone, ClipboardCheck,
   ListChecks, Mail, BarChart3, Activity, Wallet, Image as ImageIcon, FolderArchive, Loader2,
   Server, Sparkles, Building2, Compass, Calendar, ChevronDown, Heart, BookOpen, Target,
-  HelpCircle, SlidersHorizontal, Bell,
+  HelpCircle, SlidersHorizontal, Bell, Lock,
 } from "lucide-react";
 import { Logo } from "@/components/common/Logo";
 import logoAsset from "@/assets/logo-circle.png";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { inferPermissions } from "@/auth/permissions";
+import { allowedAdminPaths, canOpenAdminPath } from "@/auth/adminAccess";
 import { NotificationsBell } from "@/components/common/NotificationsBell";
 import { BACKEND_PENDING_AR, PENDING_ADMIN_SCREENS, pendingForPath } from "@/data/api/backendPending";
 
@@ -84,11 +85,12 @@ const ALL_NAV_GROUPS: NavGroup[] = [
   },
 ];
 
-/** Hrefs allowed per ROLE. Roles are now strictly separated:
+/** Hrefs allowed per ROLE when the server can't say (older backend without GET /me/access):
  *  - admin        : full access
  *  - case_manager : cases / donations / reports
- *  - editor       : content + blog + review
+ *  - editor       : the blog (more only when the super admin adds a role, e.g. «محرر حالات»)
  *  - volunteer    : tasks + campaigns
+ * Editors and case managers otherwise follow their role permissions on the server (adminAccess.ts).
  */
 const ROLE_ALLOWED: Record<string, string[]> = {
   admin: ["*"],
@@ -99,14 +101,7 @@ const ROLE_ALLOWED: Record<string, string[]> = {
     "/admin/donors", "/admin/transactions",
     "/admin/profile", "/admin/notifications",
   ],
-  editor: [
-    "/admin", "/admin/analytics",
-    "/admin/homepage-content", "/admin/about-us", "/admin/axes",
-    "/admin/projects", "/admin/programs", "/admin/services", "/admin/donation-campaigns", "/admin/campaigns", "/admin/seasons", "/admin/reports",
-    "/admin/content", "/admin/stories", "/admin/site-stats", "/admin/gallery", "/admin/page-galleries", "/admin/media",
-    "/admin/review", "/admin/blog", "/admin/faqs", "/admin/newsletter", "/admin/inbox",
-    "/admin/my-tasks", "/admin/profile", "/admin/notifications", "/admin/campaigns-section",
-  ],
+  editor: ["/admin", "/admin/blog", "/admin/media", "/admin/profile", "/admin/notifications"],
   volunteer: [
     "/admin", "/admin/campaigns", "/admin/my-tasks", "/admin/profile", "/admin/notifications",
   ],
@@ -156,7 +151,7 @@ export const AdminLayout = ({
   children, title, loading = false,
 }: { children: ReactNode; title?: { ar: string; en: string }; loading?: boolean }) => {
   const { lang, setLang } = useLang();
-  const { user, logout } = useAuth();
+  const { user, logout, access } = useAuth();
   const nav = useNavigate();
   const { pathname } = useLocation();
   const pending = pendingForPath(pathname);
@@ -169,7 +164,12 @@ export const AdminLayout = ({
     ? (user?.permissions ?? inferPermissions(user?.skills))
     : [];
   const extraAllowed = Array.from(new Set(perms.flatMap((p) => PERM_GRANTS[p] ?? [])));
-  const navGroups = filterGroups(roleKey, extraAllowed);
+  // Editors and case managers: the menu and the pages follow their role permissions on the server.
+  const serverAllowed = (roleKey === "editor" || roleKey === "case_manager") && access ? allowedAdminPaths(access) : null;
+  const navGroups = serverAllowed
+    ? ALL_NAV_GROUPS.map((g) => ({ ...g, items: g.items.filter((i) => canOpenAdminPath(i.href, serverAllowed)) })).filter((g) => g.items.length > 0)
+    : filterGroups(roleKey, extraAllowed);
+  const blocked = serverAllowed !== null && !canOpenAdminPath(pathname, serverAllowed);
   const roleBadge = ROLE_LABEL[roleKey];
   const allItems = navGroups.flatMap((g) => g.items);
   const current = allItems.find((i) => i.href === pathname || (i.href !== "/admin" && pathname.startsWith(i.href)));
@@ -259,7 +259,22 @@ export const AdminLayout = ({
                   </ul>
                 </div>
               )}
-              {children}
+              {blocked ? (
+                <div className="mx-auto mt-10 max-w-md rounded-3xl bg-card p-8 text-center shadow-soft">
+                  <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-muted text-primary">
+                    <Lock className="h-6 w-6" aria-hidden />
+                  </span>
+                  <h2 className="mt-3 text-lg font-black text-primary">{lang === "ar" ? "الصفحة دي مش ضمن صلاحياتك" : "This page isn't in your permissions"}</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {lang === "ar" ? "لو محتاجها في شغلك، اطلب من المدير يضيفلك الدور المناسب من «المستخدمون والأدوار»." : "If you need it, ask the admin to add the right role for you under Users & Roles."}
+                  </p>
+                  <Link to="/admin" className="mt-5 inline-flex rounded-full bg-primary px-5 py-2 text-sm font-extrabold text-primary-foreground hover:opacity-95">
+                    {lang === "ar" ? "الرجوع للوحة التحكم" : "Back to the dashboard"}
+                  </Link>
+                </div>
+              ) : (
+                children
+              )}
             </div>
             {loading && (
               <div className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center bg-background/40 backdrop-blur-[1px]">

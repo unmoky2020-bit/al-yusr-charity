@@ -14,6 +14,8 @@ export interface User {
   email: string;
   phone?: string;
   password?: string;
+  /** The email was confirmed (code by email, or signed up with Google / Facebook). */
+  emailVerified?: boolean;
   roles: Role[];
   avatar?: string;
   createdAt: string;
@@ -74,6 +76,7 @@ export function buildUserFromLaravel(lUser: LaravelUser): User {
     name: lUser.name || (lUser.email ? lUser.email.split("@")[0] : "مستخدم"),
     email: lUser.email || "",
     phone: lUser.phone || undefined,
+    emailVerified: Boolean(lUser.email_verified_at),
     roles: mappedRoles.length ? mappedRoles : ["donor"],
     avatar: lUser.avatar || undefined,
     createdAt: lUser.created_at ? lUser.created_at.slice(0, 10) : new Date().toISOString().slice(0, 10),

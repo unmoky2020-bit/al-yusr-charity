@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User as UserIcon, Mail, Phone, Lock, Save } from "lucide-react";
+import { User as UserIcon, Mail, Save } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,12 +8,12 @@ import { useAuth } from "@/auth/AuthContext";
 import { RequireAuth } from "@/auth/RequireAuth";
 import { toast } from "@/hooks/use-toast";
 import { PhoneInput } from "@/components/common/PhoneInput";
+import { ChangePasswordForm } from "@/components/auth/ChangePasswordForm";
 
 const Inner = () => {
   const { lang } = useLang();
-  const { user, updateProfile, changePassword } = useAuth();
+  const { user, updateProfile } = useAuth();
   const [form, setForm] = useState({ name: user!.name, email: user!.email, phone: user!.phone || "" });
-  const [pwd, setPwd] = useState({ old: "", neu: "", confirm: "" });
 
   const [savingProfile, setSavingProfile] = useState(false);
   const saveProfile = async (e: React.FormEvent) => {
@@ -29,15 +29,6 @@ const Inner = () => {
       setSavingProfile(false);
     }
   };
-  const savePwd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pwd.neu !== pwd.confirm) { toast({ title: lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Mismatch", variant: "destructive" }); return; }
-    const r = await changePassword(user!.id, pwd.old, pwd.neu);
-    if (!r.ok) { toast({ title: r.error || "Error", variant: "destructive" }); return; }
-    setPwd({ old: "", neu: "", confirm: "" });
-    toast({ title: lang === "ar" ? " تم تغيير كلمة المرور" : " Password changed" });
-  };
-
   return (
     <AdminLayout title={{ ar: "حسابي", en: "My Profile" }}>
       <div className="grid gap-4 lg:grid-cols-2">
@@ -61,15 +52,9 @@ const Inner = () => {
 
         <div className="rounded-2xl bg-card p-5 shadow-soft md:p-6">
           <h2 className="text-base font-black text-primary">{lang === "ar" ? "تغيير كلمة المرور" : "Change password"}</h2>
-          <form onSubmit={savePwd} className="mt-4 space-y-3">
-            <div className="relative">
-              <Lock className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input type="password" required className="h-11 ps-9" placeholder={lang === "ar" ? "كلمة المرور الحالية" : "Current"} value={pwd.old} onChange={(e) => setPwd({ ...pwd, old: e.target.value })} />
-            </div>
-            <Input type="password" required className="h-11" placeholder={lang === "ar" ? "الجديدة" : "New"} value={pwd.neu} onChange={(e) => setPwd({ ...pwd, neu: e.target.value })} />
-            <Input type="password" required className="h-11" placeholder={lang === "ar" ? "تأكيد" : "Confirm"} value={pwd.confirm} onChange={(e) => setPwd({ ...pwd, confirm: e.target.value })} />
-            <Button type="submit" className="h-11 w-full bg-primary font-extrabold text-primary-foreground">{lang === "ar" ? "تحديث" : "Update"}</Button>
-          </form>
+          <div className="mt-4">
+            <ChangePasswordForm size="compact" />
+          </div>
         </div>
       </div>
 

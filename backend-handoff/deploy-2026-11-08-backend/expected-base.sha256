@@ -7,3 +7,12 @@ NEW  app/Notifications/DonorDonationPaidNotification.php
 NEW  app/Notifications/DonorDonationFailedNotification.php
 NEW  app/Notifications/DonorCaseUpdateNotification.php
 NEW  app/Observers/CaseUpdateObserver.php
+NEW  app/Http/Controllers/Api/V1/Auth/PasswordResetController.php
+NEW  app/Http/Controllers/Api/V1/UserManagement/UserPasswordController.php
+NEW  app/Support/EmailCode.php
+NEW  app/Http/Controllers/Api/V1/Auth/EmailVerificationController.php
+NEW  app/Http/Controllers/Api/V1/Auth/AccessController.php
+NEW  app/Http/Controllers/Api/V1/Auth/SocialAuthController.php
+NEW  app/Console/Commands/EditorAccessCommand.php
+NEW  config/social.php
+NEW  routes/api-2026-11-08.php
