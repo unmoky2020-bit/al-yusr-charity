@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { PhoneInput } from "@/components/common/PhoneInput";
 
 type Role = "donor" | "volunteer" | "editor";
 
@@ -126,8 +127,7 @@ const Register = () => {
                   <Input required type="email" placeholder={isRTL ? "البريد الإلكتروني" : "Email"} className="h-12 ps-9" value={form.email} onChange={(e) => set("email", e.target.value)} />
                 </div>
                 <div className="relative">
-                  <Phone className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input type="tel" dir="ltr" placeholder="01XXXXXXXXX" className="h-12 ps-9" value={form.phone} onChange={(e) => set("phone", e.target.value)} />
+                  <PhoneInput value={form.phone} onChange={(v) => set("phone", v)} />
                 </div>
               </div>
               {(role === "volunteer" || role === "editor") && (

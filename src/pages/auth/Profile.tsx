@@ -11,6 +11,7 @@ import { useAuth } from "@/auth/AuthContext";
 import { RequireAuth } from "@/auth/RequireAuth";
 import { toast } from "@/hooks/use-toast";
 import { formatNumberEN } from "@/lib/utils";
+import { PhoneInput } from "@/components/common/PhoneInput";
 
 const ProfileInner = () => {
   const { lang } = useLang();
@@ -132,8 +133,7 @@ const ProfileInner = () => {
                     <Input type="email" className="h-12 ps-9" placeholder={lang === "ar" ? "البريد" : "Email"} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
                   </div>
                   <div className="relative">
-                    <Phone className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input type="tel" className="h-12 ps-9" placeholder={lang === "ar" ? "الهاتف" : "Phone"} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                    <PhoneInput value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
                   </div>
                   <textarea
                     placeholder={lang === "ar" ? "نبذة مختصرة" : "Short bio"}

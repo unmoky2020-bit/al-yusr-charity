@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { PhoneInput } from "@/components/common/PhoneInput";
 
 const SKILLS_AR = ["ميدان", "توزيع", "تصوير", "محتوى", "تصميم", "ترجمة", "لوجستيات", "تعليم", "صحة"];
 const SKILLS_EN = ["Field", "Distribution", "Photo", "Content", "Design", "Translation", "Logistics", "Education", "Health"];
@@ -118,18 +119,7 @@ const RegisterVolunteer = () => {
               </div>
 
               {/* Phone — Clean RTL start alignment */}
-              <div className="relative">
-                <Phone className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  required
-                  type="tel"
-                  dir={isAR ? "rtl" : "ltr"}
-                  placeholder={isAR ? "رقم الهاتف (01XXXXXXXXX)" : "Phone number"}
-                  className="h-12 ps-10 text-start rounded-xl"
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                />
-              </div>
+              <PhoneInput egyptOnly required value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
 
               {/* City */}
               <div className="relative">

@@ -11,6 +11,8 @@ import { donationsStore } from "@/data/donationsStore";
 import { KashierCheckoutModal } from "@/components/donate/KashierCheckoutModal";
 import { usePaymentOptions, type PayoutDestination } from "@/data/paymentOptions";
 import { errorReason } from "@/lib/notify";
+import { PhoneInput } from "@/components/common/PhoneInput";
+import { isValidPhoneValue } from "@/lib/phone";
 
 type MethodId = "card_kashier" | "vodafone_cash" | "instapay" | "bank_transfer";
 
@@ -109,7 +111,7 @@ export const Donate = () => {
   /** Where to send a manual transfer (numbers / IPA / bank accounts come only from the dashboard). */
   const destinations: PayoutDestination[] = options.find((o) => o.id === selected.id)?.destinations ?? [];
   const valid = amount >= MIN_AMOUNT;
-  const phoneOk = /^(\+?\d{8,15}|01\d{9})$/.test(donorPhone.replace(/[\s-]/g, ""));
+  const phoneOk = isValidPhoneValue(donorPhone);
   const fmt = (n: number) => n.toLocaleString(isAr ? "ar-EG" : "en-US");
 
   const pickPreset = (v: number) => { setAmount(v); setCustom(""); };
@@ -314,17 +316,7 @@ export const Donate = () => {
                 <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
                   <label className="block">
                     <span className="mb-1 block text-xs font-bold text-muted-foreground">{isAr ? "رقم الموبايل *" : "Mobile number *"}</span>
-                    <input
-                      type="tel"
-                      dir="ltr"
-                      inputMode="tel"
-                      autoComplete="tel"
-                      value={donorPhone}
-                      onChange={(e) => setDonorPhone(e.target.value)}
-                      placeholder="01XXXXXXXXX"
-                      aria-invalid={!!donorPhone && !phoneOk}
-                      className="h-12 w-full rounded-xl border-2 border-border bg-background px-4 text-base font-bold transition-colors focus:border-primary focus:outline-none aria-[invalid=true]:border-destructive"
-                    />
+                    <PhoneInput value={donorPhone} onChange={setDonorPhone} invalid={!!donorPhone && !phoneOk} required />
                   </label>
                   <label className="block">
                     <span className="mb-1 block text-xs font-bold text-muted-foreground">{isAr ? "الاسم (اختياري)" : "Name (optional)"}</span>

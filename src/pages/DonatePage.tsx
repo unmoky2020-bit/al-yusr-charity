@@ -45,6 +45,8 @@ import { KashierCheckoutModal } from "@/components/donate/KashierCheckoutModal";
 import { getGatewaySettings } from "@/data/kashierGateway";
 import { usePaymentOptions, type PaymentOption, type PayoutDestination } from "@/data/paymentOptions";
 import { errorReason } from "@/lib/notify";
+import { PhoneInput } from "@/components/common/PhoneInput";
+import { isValidPhoneValue } from "@/lib/phone";
 
 type StaticMethod = {
   id: string;
@@ -539,7 +541,6 @@ const DonatePage = () => {
 
   const validateStep1 = (): Record<string, string> => {
     const errs: Record<string, string> = {};
-    const phoneRe = /^01[0-9]{9}$/;
 
     if (!isMarkounInKind) {
       if (totalAmount < 10) {
@@ -572,8 +573,8 @@ const DonatePage = () => {
     if (donor.name.trim().length === 1) {
       errs.name = lang === "ar" ? "اكتب الاسم بالكامل، أو اتركه فارغًا للتبرع كفاعل خير" : "Enter your full name or leave it empty to give anonymously";
     }
-    if (!phoneRe.test(donor.phone.trim())) {
-      errs.phone = lang === "ar" ? "رقم الهاتف غير صحيح (01 + 9 أرقام، مثال: 01012345678)" : "Phone must be 01 + 9 digits";
+    if (!isValidPhoneValue(donor.phone)) {
+      errs.phone = lang === "ar" ? "رقم الهاتف غير صحيح لهذه الدولة (مثال مصر: 01012345678)" : "This number doesn't match the selected country";
     }
     if (donor.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(donor.email.trim())) {
       errs.email = lang === "ar" ? "بريد إلكتروني غير صالح" : "Invalid email";
@@ -1012,17 +1013,14 @@ const DonatePage = () => {
                       <label className="block text-xs font-bold text-muted-foreground mb-1">
                         {lang === "ar" ? "رقم الهاتف للتواصل وإشعار التبرع *" : "Phone Number *"}
                       </label>
-                      <Input
-                        type="tel"
-                        dir="ltr"
+                      <PhoneInput
                         value={donor.phone}
-                        aria-invalid={!!fieldErrors.phone}
-                        onChange={(e) => {
-                          setDonor((d) => ({ ...d, phone: e.target.value }));
+                        invalid={!!fieldErrors.phone}
+                        onChange={(v) => {
+                          setDonor((d) => ({ ...d, phone: v }));
                           if (fieldErrors.phone) setFieldErrors((p) => ({ ...p, phone: "" }));
                         }}
-                        placeholder="01XXXXXXXXX"
-                        className="h-10 sm:h-10.5 rounded-xl bg-card border-border/70 text-xs sm:text-sm font-bold focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                        className="h-11 bg-card"
                       />
                       {fieldErrors.phone && (
                         <p className="mt-1 text-xs font-bold text-destructive">{fieldErrors.phone}</p>
@@ -1365,17 +1363,15 @@ const DonatePage = () => {
                               <label className="block text-xs font-bold text-muted-foreground mb-1">
                                 {lang === "ar" ? "رقم المحفظة التي حوّلت منها (اختياري، لتأكيد أسرع)" : "Your sending wallet number (optional)"}
                               </label>
-                              <Input
-                                type="tel"
-                                dir="ltr"
+                              <PhoneInput
+                                egyptOnly
                                 value={methodFields.vodafonePhone}
-                                aria-invalid={!!fieldErrors.vodafonePhone}
-                                onChange={(e) => {
-                                  setMethodFields((f) => ({ ...f, vodafonePhone: e.target.value }));
+                                invalid={!!fieldErrors.vodafonePhone}
+                                onChange={(v) => {
+                                  setMethodFields((f) => ({ ...f, vodafonePhone: v }));
                                   if (fieldErrors.vodafonePhone) setFieldErrors((p) => ({ ...p, vodafonePhone: "" }));
                                 }}
-                                placeholder="01XXXXXXXXX"
-                                className="h-10 sm:h-10.5 rounded-xl bg-card border-border/70 text-xs sm:text-sm font-bold w-full focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                                className="h-11 bg-card"
                               />
                               {fieldErrors.vodafonePhone && (
                                 <p className="mt-1 text-xs font-bold text-destructive">{fieldErrors.vodafonePhone}</p>

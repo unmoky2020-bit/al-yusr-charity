@@ -11,6 +11,7 @@ import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { programs } from "@/data/programs";
 import { toast } from "@/hooks/use-toast";
+import { PhoneInput } from "@/components/common/PhoneInput";
 
 const RegisterDonor = () => {
   const { lang } = useLang();
@@ -58,7 +59,7 @@ const RegisterDonor = () => {
             <form method="post" onSubmit={submit} className="mt-6 space-y-3">
               <Input required placeholder={lang === "ar" ? "الاسم بالكامل" : "Full name"} className="h-12" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
               <Input required type="email" placeholder={lang === "ar" ? "البريد الإلكتروني" : "Email"} className="h-12" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-              <Input required type="tel" placeholder={lang === "ar" ? "رقم الهاتف" : "Phone"} className="h-12" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+              <PhoneInput required value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
               <Input required type="password" placeholder={lang === "ar" ? "كلمة المرور (٦ أحرف+)" : "Password (6+ chars)"} className="h-12" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
               <UiSelect value={form.preferredProgram} onChange={(e) => setForm({ ...form, preferredProgram: e.target.value })}
                 className="h-12 w-full rounded-md border border-input bg-background px-3 text-sm font-bold">

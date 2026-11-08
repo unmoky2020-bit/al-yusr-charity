@@ -7,6 +7,7 @@ import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { RequireAuth } from "@/auth/RequireAuth";
 import { toast } from "@/hooks/use-toast";
+import { PhoneInput } from "@/components/common/PhoneInput";
 
 const Inner = () => {
   const { lang } = useLang();
@@ -52,8 +53,7 @@ const Inner = () => {
               <Input type="email" className="h-11 ps-9" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
             </div>
             <div className="relative">
-              <Phone className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input type="tel" className="h-11 ps-9" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+              <PhoneInput value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} className="h-11" />
             </div>
             <Button type="submit" disabled={savingProfile} className="h-11 w-full bg-orange-grad font-extrabold text-accent-foreground"><Save className="h-4 w-4" /> {lang === "ar" ? "حفظ" : "Save"}</Button>
           </form>

@@ -29,6 +29,7 @@ import {
   type LaravelRole,
   type LaravelUser,
 } from "@/data/laravelApi";
+import { PhoneInput } from "@/components/common/PhoneInput";
 
 type UserProfile = LaravelUser & {
   address?: string | null;
@@ -490,7 +491,7 @@ export default function AdminUserDetail() {
                 </label>
                 <label className="space-y-1.5">
                   <span className="text-xs font-bold text-muted-foreground">{isAr ? "رقم الهاتف" : "Phone"}</span>
-                  <Input type="tel" dir="ltr" value={draft.phone} onChange={(event) => setDraft({ ...draft, phone: event.target.value })} />
+                  <PhoneInput value={draft.phone ?? ""} onChange={(v) => setDraft({ ...draft, phone: v })} className="h-10" />
                 </label>
                 <label className="space-y-1.5">
                   <span className="text-xs font-bold text-muted-foreground">{isAr ? "حالة الحساب" : "Account status"}</span>

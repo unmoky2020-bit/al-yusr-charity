@@ -21,6 +21,7 @@ import { fetchFaqs } from "@/data/faqsApi";
 import { LocalFAQ } from "@/components/common/LocalFAQ";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
+import { PhoneInput } from "@/components/common/PhoneInput";
 
 /* ─── Inquiry options ─────────────────────────────────────────── */
 const INQUIRY_OPTIONS = [
@@ -588,17 +589,7 @@ const Contact = () => {
 
               {/* Phone */}
               <FieldGroup label={isRTL ? "رقم الهاتف" : "Phone (optional)"}>
-                <div className="relative">
-                  <Phone className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    type="tel"
-                    maxLength={20}
-                    placeholder="01XXXXXXXXX"
-                    className="h-12 ps-10 rounded-2xl border-border/80 bg-background/50 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:border-secondary transition-all"
-                    value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  />
-                </div>
+                <PhoneInput value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} className="rounded-2xl bg-background/50" />
               </FieldGroup>
 
               {/* Inquiry type — custom dropdown */}
