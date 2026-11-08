@@ -16,7 +16,7 @@ export type DefaultSections = Record<string, Record<string, DefaultSection>>;
  */
 export function programSlugKey(slug: unknown): string {
   const s = String(slug ?? "").trim().toLowerCase().split(/[?#]/)[0].replace(/\/+$/, "");
-  return s.split("/").filter(Boolean).pop() ?? "";
+  return (s.split("/").filter(Boolean).pop() ?? "").replace(/[\s_]+/g, "-");
 }
 
 const hasItems = (v: unknown) => Array.isArray(v) && v.length > 0;

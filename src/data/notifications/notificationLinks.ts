@@ -32,6 +32,10 @@ export const NOTIFICATION_TYPES: Record<string, NotificationTypeInfo> = {
   new_contact_message: { category: "inbox", labelAr: "رسائل", link: () => "/admin/inbox" },
   new_khabia_request: { category: "inbox", labelAr: "الخبيئة", link: () => "/admin/delegates" },
   welcome: { category: "system", labelAr: "النظام" },
+  // To the donor's own account (backend: App\Support\NotifyDonor, 8 Nov 2026).
+  donor_donation_paid: { category: "donation", labelAr: "تبرعاتي", link: () => "/dashboard?tab=donations" },
+  donor_donation_failed: { category: "donation", labelAr: "تبرعاتي", link: () => "/dashboard?tab=donations" },
+  donor_case_update: { category: "program", labelAr: "متابعة الحالات", link: (d) => (d.case_id ? `/cases/${d.case_id}` : null) },
 };
 
 export function notificationTypeInfo(type: string): NotificationTypeInfo {

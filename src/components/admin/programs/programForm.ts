@@ -2,6 +2,7 @@
  * Program editor state <-> API payload mapping (every column of GET /programs/{id}).
  */
 import type { AdminProgramRecord, ProgramTopSection } from "@/data/api/programsAdminApi";
+import { programSlugKey } from "@/data/programs/fillProgramSections";
 import {
   cleanList,
   nullableNumber,
@@ -110,7 +111,8 @@ export function programPayload(f: ProgramForm): Record<string, unknown> {
   const benefitsAr = cleanList(f.benefits_ar);
   const benefitsEn = cleanList(f.benefits_en);
   return {
-    slug: nullableString(f.slug),
+    // Same rule as the API (8 Nov): a pasted page address keeps only its last part.
+    slug: nullableString(programSlugKey(f.slug)),
     name_ar: nameAr,
     name: nameAr, // legacy column kept in sync
     name_en: nullableString(f.name_en),
