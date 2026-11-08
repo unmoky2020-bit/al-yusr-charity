@@ -180,7 +180,7 @@ const Zakat = () => {
             <ShieldCheck className="h-3.5 w-3.5" /> {isRTL ? "مشهرة 2665/2019 — شفافية 99%" : "Licensed 2665/2019"}
           </span>
           <h1 className="mt-3 text-3xl font-black leading-tight text-shadow-soft md:text-5xl">
-            {isRTL ? "حاسبة الزكاة 2026 بالدقهلية — زكاتُك بركة مالِك" : "Zakat Calculator 2026 (Dakahlia) — your Zakat, your wealth's blessing"}
+            {isRTL ? `حساب زكاة المال ${new Date().getFullYear()} بسعر الذهب اليوم — زكاتُك بركة مالِك` : `Zakat calculator ${new Date().getFullYear()} with today's gold price — your Zakat, your wealth's blessing`}
           </h1>
           <p className="mt-3 mx-auto max-w-2xl text-primary-foreground/90 md:text-lg">
             {isRTL ? "احسب زكاتك بسعر الذهب اليوم في مصر، واصرفها في أبواب موثّقة بالمنصورة وميت غمر وطلخا: كفالة يتيم، علاج، سداد ديون الغارمين، ومشاريع صغيرة تُحيي الأسر." : "Calculate Zakat with Egypt's live gold price and channel it to verified causes in Mansoura, Mit Ghamr & Talkha — orphan sponsorship, treatment, debt relief, micro-projects."}
@@ -191,6 +191,9 @@ const Zakat = () => {
             </Button>
             <Button asChild size="lg" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20">
               <a href="#channels">{isRTL ? "أبواب صرف الزكاة" : "Where to give"} <Arrow className="h-4 w-4" /></a>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20">
+              <Link to="/zakat-al-fitr">{isRTL ? "زكاة الفطر" : "Zakat al-Fitr"} <Arrow className="h-4 w-4" /></Link>
             </Button>
           </div>
         </div>

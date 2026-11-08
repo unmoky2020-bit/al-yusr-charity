@@ -70,6 +70,7 @@ const staticEntries: Entry[] = [
   { path: "/donate", changefreq: "weekly", priority: "0.9" },
   { path: "/charity-mansoura", changefreq: "weekly", priority: "0.9" },
   { path: "/charity-egypt", changefreq: "weekly", priority: "0.9" },
+  { path: "/zakat-al-fitr", changefreq: "weekly", priority: "0.9" },
   { path: "/donate-from-abroad", changefreq: "weekly", priority: "0.9" },
   { path: "/programs", changefreq: "weekly", priority: "0.85" },
   { path: "/zakat", changefreq: "weekly", priority: "0.85" },

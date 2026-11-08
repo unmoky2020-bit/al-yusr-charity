@@ -1631,7 +1631,7 @@
   "ar": {
    "title": "حاسبة زكاة المال 2026 بسعر الذهب اليوم في مصر | اليسر",
    "description": "احسب زكاة المال أونلاين بسعر الذهب اليوم في مصر (24/21/18 قيراط)، وزكاة التجارة والفطر، وأخرجها في أبواب موثّقة في المنصورة والدقهلية ومحافظات مصر: كفالة…",
-   "h1": "حاسبة الزكاة 2026 بالدقهلية — زكاتُك بركة مالِك",
+   "h1": "حساب زكاة المال 2026 بسعر الذهب اليوم — زكاتُك بركة مالِك",
    "summary": "احسب زكاتك بسعر الذهب اليوم في مصر، واصرفها في أبواب موثّقة بالمنصورة وميت غمر وطلخا: كفالة يتيم، علاج، سداد ديون الغارمين، ومشاريع صغيرة تُحيي الأسر. بسعر الذهب اللحظي اليوم في مصر. أدخل أصولك وخصم الديون لحساب صافي الزكاة. النصاب = 85 جم ذهب 24 قيراط ≈ 466,286 ج.م",
    "sections": [
     "حاسبة زكاة المال (متقدّمة)",
@@ -1649,7 +1649,7 @@
   "en": {
    "title": "Zakat Calculator Egypt 2026 — Live Gold Price | Al-Yusr",
    "description": "Calculate Zakat online with Egypt's live gold price (24/21/18K), wealth, business and Zakat al-Fitr, then give it through verified causes in Mansoura,…",
-   "h1": "Zakat Calculator 2026 (Dakahlia) — your Zakat, your wealth's blessing",
+   "h1": "Zakat calculator 2026 with today's gold price — your Zakat, your wealth's blessing",
    "summary": "Calculate Zakat with Egypt's live gold price and channel it to verified causes in Mansoura, Mit Ghamr & Talkha — orphan sponsorship, treatment, debt relief, micro-projects. Live gold price for Egypt. Enter assets and deduct debts to compute your net Zakat. Your wealth is below nisab — Zakat is not due, but voluntary sadaqah is always rewarded.",
    "sections": [
     "Advanced Zakat calculator",
@@ -1662,6 +1662,30 @@
     "Our coverage across Egypt",
     "Your trust is sacred — transparency is our guarantee",
     "Frequently asked questions"
+   ]
+  }
+ },
+ "/zakat-al-fitr": {
+  "ar": {
+   "title": "زكاة الفطر 2027: القيمة ووقت الإخراج وحاسبة الأسرة | مؤسسة…",
+   "description": "كم زكاة الفطر 2027؟ قيمتها في 2026 كانت 35 جنيهًا للفرد حسب دار الإفتاء. احسب زكاة أسرتك واعرف وقت إخراجها ومن تجب عليه، وأخرجها أونلاين مع مؤسسة اليسر.",
+   "h1": "زكاة الفطر 2027: قيمتها ووقت إخراجها",
+   "summary": "حددت دار الإفتاء المصرية زكاة الفطر لعام 1447هـ/2026م بمبلغ 35 جنيهًا كحد أدنى عن كل فرد. تُعلن قيمة 1448هـ/2027م قبيل رمضان، وسنحدّث هذه الصفحة فور إعلانها. الحد الأدنى حسب آخر إعلان لدار الإفتاء، ومن زاد فله الأجر. لم تُعلن بعد. قيمة 2026: 35 جنيهًا كحد أدنى عن الفرد",
+   "sections": [
+    "زكاة الفطر في أربع نقاط",
+    "وزكاة المال؟",
+    "أسئلة عن زكاة الفطر 2027"
+   ]
+  },
+  "en": {
+   "title": "Zakat al-Fitr 2027: amount, timing and family calculator |…",
+   "description": "How much is Zakat al-Fitr in 2027? In 2026 it was EGP 35 per person (Dar al-Ifta). Calculate your family's amount and pay it online with Al-Yusr.",
+   "h1": "Zakat al-Fitr 2027: amount and timing",
+   "summary": "Dar al-Ifta set Zakat al-Fitr for 2026 at a minimum of EGP 35 per person. The 2027 amount is announced just before Ramadan; this page is updated as soon as it is. The minimum follows Dar al-Ifta's latest announcement; giving more is rewarded. Not announced yet. 2026: EGP 35 minimum per person",
+   "sections": [
+    "Zakat al-Fitr at a glance",
+    "And Zakat al-Mal?",
+    "Questions about Zakat al-Fitr 2027"
    ]
   }
  }

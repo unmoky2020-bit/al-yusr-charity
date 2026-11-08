@@ -45,6 +45,10 @@
     # C0. Live sitemap: the built one + whatever the dashboard published since (cached 30 min).
     RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
+    # B2. The homepage goes through seo.php like every other page (canonical, page text and the links
+    #     crawlers follow). "/" is the document root directory, so rule C would serve index.html raw.
+    RewriteRule ^$ seo.php [L]
+
     # C. Allow direct access to existing files and directories
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d

@@ -118,6 +118,7 @@ const AdminDonationCampaignDetail = lazy(() => import("./pages/admin/AdminDonati
 const MarkounLanding = lazy(() => import("./pages/landings/MarkounLanding.tsx"));
 const CharityMansoura = lazy(() => import("./pages/site/CharityMansoura.tsx"));
 const CharityEgypt = lazy(() => import("./pages/site/CharityEgypt.tsx"));
+const ZakatAlFitr = lazy(() => import("./pages/site/ZakatAlFitr.tsx"));
 const DonateFromAbroad = lazy(() => import("./pages/site/DonateFromAbroad.tsx"));
 const FoodBoxLanding = lazy(() => import("./pages/landings/FoodBoxLanding.tsx"));
 const QurbaniGuaranteeLanding = lazy(() => import("./pages/landings/QurbaniGuaranteeLanding.tsx"));
@@ -324,6 +325,7 @@ const App = () => (
                   <Route path="/cases" element={<Cases />} />
                   <Route path="/cases/:ref" element={<CaseDetail />} />
                   <Route path="/zakat" element={<Zakat />} />
+                  <Route path="/zakat-al-fitr" element={<ZakatAlFitr />} />
                   <Route path="/services-map" element={<ServicesMap />} />
                   {/* 301-style redirect for retired daily-feeding page → services map */}
                   <Route path="/services/daily-feeding" element={<Navigate to="/services-map" replace />} />
