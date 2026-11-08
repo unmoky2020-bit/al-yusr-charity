@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import defaults from "./defaultPageSections.json";
-import { planSectionFill, programSlugKey, type DefaultSections } from "./fillProgramSections";
+import { clip, planRecordFill, planSectionFill, programSlugKey, type DefaultSections } from "./fillProgramSections";
 
 const D = defaults as unknown as DefaultSections;
 
@@ -42,5 +42,16 @@ describe("program page-section fill", () => {
     const text = JSON.stringify(D);
     expect(text).not.toMatch(/[0-9٠-٩]{3,}/); // no counts like 354 or prices like 300
     expect(text).not.toMatch(/ج\.م|جنيه|EGP|%/);
+  });
+
+  it("fills only the record fields that are empty, and keeps SEO descriptions short", () => {
+    const fields = planRecordFill({ name_ar: "كفالة يتيم", name_en: "Orphan Sponsorship", description_ar: "وصف من اللوحة", meta_title_en: "Kept" }, D.orphans);
+    expect(fields).not.toHaveProperty("description_ar");
+    expect(fields).not.toHaveProperty("meta_title_en");
+    expect(fields.meta_title_ar).toBe("كفالة يتيم | مؤسسة اليسر الخيرية");
+    expect(String(fields.meta_description_ar).length).toBeLessThanOrEqual(155);
+    expect(fields.benefits_ar).toEqual(D.orphans.benefits.content_ar.map((b) => (b as { text: string }).text));
+    expect(Array.isArray(fields.ai_faq_ar)).toBe(true);
+    expect(clip("كلمة ".repeat(60)).length).toBeLessThanOrEqual(155);
   });
 });

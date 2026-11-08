@@ -64,8 +64,8 @@ export default function AdminPrograms() {
       }
       toast({
         variant: failed.length ? "destructive" : "default",
-        title: written ? `تم ملء ${written} قسمًا فاضيًا في صفحات البرامج` : "كل أقسام البرامج فيها محتوى بالفعل",
-        description: failed.length ? `لم يكتمل: ${failed.join("، ")}` : "لم يتغير أي قسم كان فيه محتوى.",
+        title: written ? `تم ملء ${written} من أقسام البرامج وحقولها الفاضية` : "كل أقسام البرامج وحقولها فيها محتوى بالفعل",
+        description: failed.length ? `لم يكتمل: ${failed.join("، ")}` : "لم يتغير أي قسم أو حقل كان فيه محتوى.",
       });
     } catch (err) {
       toast({ variant: "destructive", title: "تعذّر ملء الأقسام", description: apiErrorMessageAr(err) });
@@ -189,10 +189,10 @@ export default function AdminPrograms() {
               onClick={() => void fillAllSections()}
               disabled={!!filling || programs.length === 0}
               className="gap-1.5"
-              title="يكتب المحتوى المقترح في أقسام صفحات البرامج الفاضية فقط، ولا يغيّر أي قسم فيه محتوى"
+              title="يكتب المحتوى المقترح في الأقسام والحقول الفاضية فقط (الوصف، المزايا، السيو، ملخص الذكاء الاصطناعي)، ولا يغيّر أي شيء فيه محتوى"
             >
               {filling ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-              {filling ? `جارٍ الملء ${filling}` : (isAr ? "املأ أقسام البرامج الفاضية" : "Fill empty program sections")}
+              {filling ? `جارٍ الملء ${filling}` : (isAr ? "املأ الأقسام والحقول الفاضية" : "Fill empty sections & fields")}
             </Button>
             <Button
               onClick={() => nav('/admin/programs/new')}

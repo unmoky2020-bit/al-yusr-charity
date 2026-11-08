@@ -205,8 +205,8 @@ export function PageSectionsEditor({ programId, slug }: { programId: number | st
     try {
       const written = await fillProgramSections(programsAdminApi, { id: Number(programId), slug }, await loadDefaultSections());
       toast({
-        title: written ? `تم ملء ${written} من الأقسام الفاضية` : "كل الأقسام فيها محتوى بالفعل",
-        description: written ? "راجع النصوص وعدّل ما تريد، ثم ستظهر في صفحة البرنامج." : undefined,
+        title: written ? `تم ملء ${written} من الأقسام والحقول الفاضية` : "كل الأقسام والحقول فيها محتوى بالفعل",
+        description: written ? "راجع النصوص وعدّل ما تريد. الحقول الأساسية (الوصف والسيو) تظهر بعد تحديث الصفحة." : undefined,
       });
       await load();
     } catch (err) {
@@ -381,7 +381,7 @@ export function PageSectionsEditor({ programId, slug }: { programId: number | st
         <div className="flex flex-wrap items-center gap-1">
           {slug && (
             <Button type="button" size="sm" variant="outline" className="h-8 gap-1 rounded-xl text-xs" onClick={() => void fillEmpty()} disabled={loading || !!busy}>
-              {busy === "fill" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />} املأ الأقسام الفاضية
+              {busy === "fill" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />} املأ الأقسام والحقول الفاضية
             </Button>
           )}
           <Button type="button" size="sm" variant="ghost" className="h-8 gap-1 text-xs" onClick={() => void load()} disabled={loading}>

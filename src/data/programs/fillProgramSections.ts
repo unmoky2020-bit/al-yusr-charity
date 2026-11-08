@@ -75,12 +75,73 @@ type SectionsApi = {
   updateSection(programId: number | string, sectionId: number, body: PageSectionInput): Promise<ProgramPageSection>;
 };
 
-/** Fills the empty sections of one program through the normal dashboard endpoints. Returns how many were written. */
-export async function fillProgramSections(api: SectionsApi, program: { id: number; slug?: unknown }, defaults: DefaultSections): Promise<number> {
+const isBlank = (v: unknown) =>
+  v == null || (typeof v === "string" && !v.trim()) || (Array.isArray(v) && v.length === 0);
+
+const textsOf = (section: DefaultSection | undefined, l: "ar" | "en") =>
+  ((section?.[`content_${l}`] ?? []) as Record<string, unknown>[]).map((x) => String(x.text ?? "")).filter(Boolean);
+
+/** Shortens to a search-result description (about 155 characters) at a word boundary. */
+export function clip(text: string, max = 155): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  return `${cut.slice(0, Math.max(cut.lastIndexOf(" "), max - 30)).trim()}…`;
+}
+
+/**
+ * The program record's own fields that are still empty, filled from the same suggested copy:
+ * description, long content, benefits, SEO title/description/keywords, AI summary and AI FAQ.
+ * Anything already typed in the dashboard is left as it is.
+ */
+export function planRecordFill(record: Record<string, unknown>, suggested: Record<string, DefaultSection> | undefined): Record<string, unknown> {
+  if (!suggested) return {};
+  const nameAr = String(record.name_ar ?? record.name ?? "").trim();
+  const nameEn = String(record.name_en ?? "").trim() || nameAr;
+  const out: Record<string, unknown> = {};
+  for (const l of ["ar", "en"] as const) {
+    const details = textsOf(suggested.details, l);
+    const benefits = textsOf(suggested.benefits, l);
+    const name = l === "ar" ? nameAr : nameEn;
+    const faq = ((suggested.faq?.[`content_${l}`] ?? []) as Record<string, unknown>[])
+      .map((x) => ({ question: String(x.question ?? ""), answer: String(x.answer ?? "") }))
+      .filter((x) => x.question && x.answer);
+    const want: Record<string, unknown> = {
+      [`description_${l}`]: details[0],
+      [`content_${l}`]: details.join("\n\n"),
+      [`benefits_${l}`]: benefits,
+      [`meta_title_${l}`]: name ? (l === "ar" ? `${name} | مؤسسة اليسر الخيرية` : `${name} | Al-Yusr Charity Foundation`) : undefined,
+      [`meta_description_${l}`]: details[0] ? clip(details[0]) : undefined,
+      [`keywords_${l}`]: name
+        ? (l === "ar"
+          ? `${name}، التبرع ل${name}، مؤسسة اليسر الخيرية، تبرع في المنصورة، جمعية خيرية في الدقهلية`
+          : `${name}, donate to ${name}, Al-Yusr Charity Foundation, charity in Mansoura, Egypt charity`)
+        : undefined,
+      [`ai_summary_${l}`]: details.slice(0, 2).join(" "),
+      [`ai_faq_${l}`]: faq.length ? faq : undefined,
+    };
+    for (const [k, v] of Object.entries(want)) {
+      if (!isBlank(v) && isBlank(record[k])) out[k] = v;
+    }
+  }
+  return out;
+}
+
+type ProgramsApi = SectionsApi & {
+  get(id: number | string): Promise<Record<string, unknown>>;
+  update(id: number | string, payload: Record<string, unknown>): Promise<unknown>;
+};
+
+/**
+ * Fills one program through the normal dashboard endpoints: empty page sections, then the record's
+ * empty fields. Returns how many sections and fields were written.
+ */
+export async function fillProgramSections(api: ProgramsApi, program: { id: number; slug?: unknown }, defaults: DefaultSections): Promise<number> {
   const suggested = defaults[programSlugKey(program.slug)];
   if (!suggested) return 0;
   const plan = planSectionFill(await api.listSections(program.id), suggested);
   for (const body of plan.create) await api.createSection(program.id, body);
   for (const u of plan.update) await api.updateSection(program.id, u.id, u.body);
-  return plan.create.length + plan.update.length;
+  const fields = planRecordFill(await api.get(program.id), suggested);
+  if (Object.keys(fields).length) await api.update(program.id, fields);
+  return plan.create.length + plan.update.length + Object.keys(fields).length;
 }
