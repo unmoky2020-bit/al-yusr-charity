@@ -67,7 +67,6 @@ class UpdateProgramRequest extends FormRequest
             'hero_h1_en' => 'sometimes|nullable|string|max:255',
             'hero_h3_ar' => 'sometimes|nullable|string|max:255',
             'hero_h3_en' => 'sometimes|nullable|string|max:255',
-            // Each image: an uploaded file, or a URL / storage path (media library).
             'hero_image' => $this->hasFile('hero_image') ? 'sometimes|nullable|image|mimes:jpg,jpeg,png,webp,avif|max:5120' : 'sometimes|nullable|string|max:2048',
 
             'image' => $this->hasFile('image') ? 'sometimes|nullable|image|mimes:jpg,jpeg,png,webp,avif|max:5120' : 'sometimes|nullable|string|max:2048',
