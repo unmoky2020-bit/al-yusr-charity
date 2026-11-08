@@ -157,15 +157,31 @@ export function findIgnoredCampaignFields(
   }
   const img = sent.image;
   const sentFile = typeof File !== "undefined" && img instanceof File;
-  if ((sentFile || (typeof img === "string" && img.trim())) && !(typeof returned.image === "string" && returned.image.trim())) out.push("image");
+  if (sentFile) {
+    if (!(typeof returned.image === "string" && returned.image.trim())) out.push("image");
+  } else if (typeof img === "string" && img.trim() && imagePathKey(returned.image) !== imagePathKey(img)) {
+    // A media-library link must come back as the same picture: the old image still being there is
+    // not "saved" (the server keeps only uploaded files for campaigns, see backend-handoff).
+    out.push("image");
+  }
   return out;
+}
+
+/** Storage path of an image link (".../storage/media/x.png?v=2" → "media/x.png"), so a full URL and a path compare equal. */
+export function imagePathKey(v: unknown): string {
+  if (typeof v !== "string") return "";
+  const s = v.trim().split(/[?#]/)[0];
+  if (!s) return "";
+  const i = s.indexOf("/storage/");
+  if (i >= 0) return s.slice(i + "/storage/".length);
+  return s.replace(/^https?:\/\/[^/]+/i, "").replace(/^\/+/, "").replace(/^storage\//, "");
 }
 
 export const CAMPAIGN_FIELD_LABELS_AR: Record<string, string> = {
   subtitle_ar: "العنوان الفرعي (عربي)",
   subtitle_en: "العنوان الفرعي (إنجليزي)",
   category_id: "التصنيف",
-  image: "الصورة",
+  image: "الصورة (السيرفر احتفظ بالصورة القديمة: ارفع الصورة كملف من جهازك بدل اختيارها من المكتبة)",
   page_content: "محتوى صفحة الهبوط (page_content)",
   seo: "السيو (seo)",
   faqs: "الأسئلة الشائعة (faqs)",
