@@ -22,6 +22,7 @@ import type { L } from "@/data/campaignPages/types";
 
 export type { PackagePriceKey } from "./packageHelpers";
 import type { PackagePriceKey } from "./packageHelpers";
+import { askConfirm } from "@/components/common/confirm";
 
 type Props = {
   campaignId: number | string | null;
@@ -120,7 +121,7 @@ export function CampaignPackagesManager({ campaignId, packages, onChange, isAr, 
       onChange(packages.filter((_, i) => i !== idx));
       return;
     }
-    if (!window.confirm(isAr ? `حذف الباقة «${p.name_ar}» نهائياً من قاعدة البيانات؟` : `Delete package "${p.name_ar}"?`)) return;
+    if (!await askConfirm(isAr ? `حذف الباقة «${p.name_ar}» نهائياً من قاعدة البيانات؟` : `Delete package "${p.name_ar}"?`)) return;
     const k = rowKey(p, idx);
     setBusy(k);
     try {

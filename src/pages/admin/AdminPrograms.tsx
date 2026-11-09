@@ -25,6 +25,7 @@ import { PackagesEditor } from "@/components/admin/programs/PackagesEditor";
 import { fillProgramSections, loadDefaultSections } from "@/data/programs/fillProgramSections";
 import { publicUrls } from "@/lib/publicUrls";
 import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
+import { askConfirm } from "@/components/common/confirm";
 
 export default function AdminPrograms() {
   const { lang } = useLang();
@@ -136,7 +137,7 @@ export default function AdminPrograms() {
 
   // Delete Program
   const handleDeleteProgram = async (id: number | string) => {
-    if (!confirm(isAr ? "هل أنت متأكد من حذف هذا البرنامج؟" : "Are you sure you want to delete this program?")) return;
+    if (!await askConfirm(isAr ? "هل أنت متأكد من حذف هذا البرنامج؟" : "Are you sure you want to delete this program?")) return;
     try {
       await programsAdminApi.remove(id);
       setPrograms((prev) => prev.filter((p) => String(p.id) !== String(id)));

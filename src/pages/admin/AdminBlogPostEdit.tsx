@@ -30,6 +30,7 @@ import {
 } from "@/lib/blog-optimize";
 import { publicUrls } from "@/lib/publicUrls";
 import { heldWritesCount } from "@/data/api/approval";
+import { askConfirm } from "@/components/common/confirm";
 
 type EditState = {
   slug: string;
@@ -592,7 +593,7 @@ const Inner = ({ createMode = false }: { createMode?: boolean }) => {
   const removePost = async () => {
     if (!row) return;
     const builtIn = row.id.startsWith("static-");
-    if (!confirm(builtIn
+    if (!await askConfirm(builtIn
       ? (isRTL ? "المقال ده جزء من كود الموقع، فهيتأرشف: هيختفي من المدونة والسايت ماب، وتقدر ترجّعه بالنشر تاني. نكمّل؟" : "This article ships with the site, so it will be archived (hidden from the blog and sitemap). Continue?")
       : (isRTL ? "حذف هذا المقال نهائيًا من قاعدة البيانات؟" : "Delete this article permanently?"))) return;
     setSaving(true);

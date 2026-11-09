@@ -69,12 +69,13 @@ describe("gallery source", () => {
     expect(withFb).toEqual(fb);
   });
 
-  it("static flag returns GALLERY_STATIC_IMAGES; api mode puts public API images first", () => {
+  it("static flag (or no server answer) gives the built-in set; once the server answers, only its public photos", () => {
     expect(resolveGalleryImages(undefined)).toBe(GALLERY_STATIC_IMAGES);
     expect(resolveGalleryImages(API_GALLERY, "static")).toBe(GALLERY_STATIC_IMAGES);
     const list = resolveGalleryImages(API_GALLERY, "api");
-    expect(list).toHaveLength(GALLERY_STATIC_IMAGES.length + 2); // hidden record dropped
+    expect(list).toHaveLength(2); // hidden record dropped, no built-in photos appended
     expect(list[0].id).toBe("94"); // sort_order 0 first
+    expect(resolveGalleryImages([], "api")).toEqual([]); // everything deleted → empty, not the built-in set
   });
 
   it("legacy (static-flag) merge is identical to the old Gallery.tsx logic", () => {

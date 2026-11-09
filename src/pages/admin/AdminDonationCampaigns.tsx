@@ -33,6 +33,7 @@ import { sortPackages, type PackagePriceKey } from "@/components/admin/campaigns
 import { getCampaignPageMetaForCampaign } from "@/data/campaignPages";
 import { publicUrls } from "@/lib/publicUrls";
 import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
+import { askConfirm } from "@/components/common/confirm";
 
 export default function AdminDonationCampaigns() {
   const { lang } = useLang();
@@ -224,7 +225,7 @@ export default function AdminDonationCampaigns() {
 
   // Delete Campaign
   const handleDeleteCampaign = async (id: number | string) => {
-    if (!confirm(isAr ? "هل أنت متأكد من حذف هذه الحملة؟" : "Are you sure you want to delete this campaign?")) return;
+    if (!await askConfirm(isAr ? "هل أنت متأكد من حذف هذه الحملة؟" : "Are you sure you want to delete this campaign?")) return;
     try {
       if (!String(id).startsWith("static-")) {
         await donationCampaignsApi.remove(id);
@@ -332,7 +333,7 @@ export default function AdminDonationCampaigns() {
           ? `تصنيف "${cat.name_ar}" مرتبط بـ ${linkedCount} حملة. هل تريد حذفه؟`
           : `Category "${cat.name_en || cat.name_ar}" has ${linkedCount} campaign(s). Delete anyway?`)
       : (isAr ? `هل أنت متأكد من حذف تصنيف "${cat.name_ar}"؟` : `Delete category "${cat.name_en || cat.name_ar}"?`);
-    if (!confirm(confirmMsg)) return;
+    if (!await askConfirm(confirmMsg)) return;
     setDeletingCatId(cat.id);
     try {
       await donationCampaignCategoriesApi.remove(cat.id);

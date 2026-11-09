@@ -23,6 +23,7 @@ import { GEO_GOVERNORATES } from "@/data/geoPages";
 import { articlesApi, programsApiV1, storiesApi, galleryApi } from "@/data/laravelApi";
 import { fetchFaqsAdmin, createFaq, updateFaq, deleteFaq, type FaqItem } from "@/data/faqsApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
+import { askConfirm } from "@/components/common/confirm";
 
 /** FAQ rows from Laravel `/faqs` are shown here with id `LARAVEL_FAQ:<id>` and saved back to `/faqs/{id}`. */
 const FAQ_ID_PREFIX = "LARAVEL_FAQ:";
@@ -379,7 +380,7 @@ const Inner = () => {
       navigate(`/admin/stories`);
       return;
     }
-    if (!confirm(lang === "ar" ? "تأكيد حذف هذا العنصر؟" : "Confirm delete?")) return;
+    if (!await askConfirm(lang === "ar" ? "تأكيد حذف هذا العنصر؟" : "Confirm delete?")) return;
     try {
       if (id.startsWith(FAQ_ID_PREFIX)) {
         await deleteFaq(id.slice(FAQ_ID_PREFIX.length)); // DELETE /faqs/{id}
@@ -443,7 +444,7 @@ const Inner = () => {
           </div>
         )}
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard accent label={lang === "ar" ? "إجمالي" : "Total"} value={counts.total} />
           <StatCard label={lang === "ar" ? "منشور" : "Published"} value={counts.published} />
           <StatCard label={lang === "ar" ? "مسودات" : "Drafts"} value={counts.drafts} />

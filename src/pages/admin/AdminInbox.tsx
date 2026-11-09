@@ -17,6 +17,7 @@ import {
   type ContactStatus,
 } from "@/data/api/contactMessagesApi";
 import { timeAgoAr } from "@/components/notifications/NotificationItem";
+import { askConfirm } from "@/components/common/confirm";
 
 const STATUS_TONE: Record<ContactStatus, string> = {
   new: "bg-rose-500/15 text-rose-700",
@@ -73,7 +74,7 @@ export default function AdminInbox() {
   };
 
   const remove = async (m: ContactMessage) => {
-    if (!window.confirm(`حذف رسالة ${m.name}؟`)) return;
+    if (!await askConfirm(`حذف رسالة ${m.name}؟`)) return;
     try {
       await contactMessagesApi.remove(m.id);
       setRows((r) => r.filter((x) => x.id !== m.id));

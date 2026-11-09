@@ -27,6 +27,7 @@ import {
   CheckSquare, Square, Layers, Link2, ShieldCheck, HardDrive, Images,
 } from "lucide-react";
 import { TileGridSkeleton } from "@/components/common/ContentSkeletons";
+import { askConfirm } from "@/components/common/confirm";
 
 const formatSize = (bytes: number) =>
   bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
@@ -144,7 +145,7 @@ export default function AdminMediaLibrary() {
     const msg = isAr
       ? `نقل ${paths.length} صورة لسلة المحذوفات على السيرفر؟\nالصور دي مش مستخدمة في أي مكان في الموقع، وتقدر ترجعها من السلة لو احتجتها.`
       : `Move ${paths.length} unused image(s) to the server trash? They can be restored.`;
-    if (!confirm(msg)) return;
+    if (!await askConfirm(msg)) return;
     setDeleting(true);
     try {
       const res = await deleteMedia(paths);

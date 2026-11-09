@@ -13,15 +13,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { confirmAction } from "@/components/common/confirm";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { toast } from "@/lib/notify";
 import {
   Plus, Trash2, Upload, Loader2, ArrowUp, ArrowDown,
   Eye, EyeOff, Star, Pencil, Image as ImageIcon, Link2,
-  Search, RefreshCw, ExternalLink, Copy, CheckCircle2, CopyMinus, FolderArchive, AlertTriangle,
+  Search, RefreshCw, ExternalLink, Copy, CheckCircle2, CopyMinus, FolderArchive, AlertTriangle, MoreHorizontal,
 } from "lucide-react";
 import {
   GALLERY_PROGRAMS,
@@ -97,82 +97,83 @@ function useCopy() {
 }
 
 /* ─── Image card ───────────────────────────────────────────────────────────── */
+// Four touch-sized buttons (edit, show/hide, more, delete); the rest lives in the "more" menu, so the
+// card stays one tidy row on a phone and nothing hides behind a hover.
 const ImageCard = ({
   r, isRTL, lang, onEdit, onTogglePub, onToggleFeat, onMove, onDelete, onCopyUrl,
 }: {
   r: GalleryRow; isRTL: boolean; lang: "ar" | "en";
   onEdit: () => void; onTogglePub: () => void; onToggleFeat: () => void;
   onMove: (d: -1 | 1) => void; onDelete: () => void; onCopyUrl: () => void;
-}) => (
-  <Card className="group overflow-hidden transition-shadow hover:shadow-md">
-    <div className="relative aspect-[4/3] bg-muted overflow-hidden">
-      <img
-        src={r.image_url}
-        alt={isRTL ? r.title_ar : r.title_en}
-        loading="lazy"
-        decoding="async"
-        width={r.width ?? undefined}
-        height={r.height ?? undefined}
-        className="h-full w-full object-cover opacity-0 transition-[opacity,transform] duration-300 group-hover:scale-105 [&.is-loaded]:opacity-100"
-        onLoad={(e) => e.currentTarget.classList.add("is-loaded")}
-        onError={(e) => { const img = e.currentTarget; img.src = "/placeholder.svg"; img.classList.add("is-loaded"); }}
-      />
-      {/* badges */}
-      <div className="absolute start-2 top-2 flex gap-1">
-        {r.is_featured && <Badge className="bg-amber-500 text-white px-1 py-0.5 text-[10px]"><Star className="h-2.5 w-2.5" /></Badge>}
-        {!r.is_published && <Badge variant="secondary" className="text-[10px]">{isRTL ? "مخفي" : "Hidden"}</Badge>}
+}) => {
+  const title = isRTL ? (r.title_ar || r.title_en) : (r.title_en || r.title_ar);
+  const iconBtn = "grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-background text-foreground/70 transition hover:bg-muted active:scale-95";
+  return (
+    <Card className="group flex flex-col overflow-hidden transition-shadow hover:shadow-md">
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+        <img
+          src={r.image_url}
+          alt={title}
+          loading="lazy"
+          decoding="async"
+          width={r.width ?? undefined}
+          height={r.height ?? undefined}
+          className="h-full w-full object-cover opacity-0 transition-[opacity,transform] duration-300 group-hover:scale-105 [&.is-loaded]:opacity-100"
+          onLoad={(e) => e.currentTarget.classList.add("is-loaded")}
+          onError={(e) => { const img = e.currentTarget; img.src = "/placeholder.svg"; img.classList.add("is-loaded"); }}
+        />
+        <div className="absolute start-2 top-2 flex gap-1">
+          {r.is_featured && <Badge className="bg-amber-500 px-1 py-0.5 text-[10px] text-white"><Star className="h-2.5 w-2.5" /></Badge>}
+          {!r.is_published && <Badge variant="secondary" className="text-[10px]">{isRTL ? "مخفية" : "Hidden"}</Badge>}
+        </div>
+        <Badge variant="outline" className="absolute end-2 top-2 max-w-[60%] truncate bg-card/90 text-[10px] backdrop-blur">
+          {programLabel(r.program_slug, lang)}
+        </Badge>
       </div>
-      <Badge variant="outline" className="absolute end-2 top-2 bg-card/90 text-[10px] backdrop-blur">
-        {programLabel(r.program_slug, lang)}
-      </Badge>
-      {/* hover overlay */}
-      <div className="absolute inset-0 flex items-end justify-end gap-1 p-2 opacity-0 transition-opacity group-hover:opacity-100">
-        <Button size="sm" variant="secondary" className="h-7 w-7 p-0 shadow" onClick={onCopyUrl} title="Copy URL">
-          <Copy className="h-3 w-3" />
-        </Button>
-        <a href={r.image_url} target="_blank" rel="noopener noreferrer">
-          <Button size="sm" variant="secondary" className="h-7 w-7 p-0 shadow" title="Open in tab">
-            <ExternalLink className="h-3 w-3" />
-          </Button>
-        </a>
+      <div className="flex flex-1 flex-col gap-1 p-2.5 sm:p-3">
+        <div className="line-clamp-1 text-start text-[13px] font-bold sm:text-sm" title={title}>{title}</div>
+        <div className="truncate text-start text-[11px] text-muted-foreground">
+          {[r.city, r.width && r.height ? `${r.width}×${r.height}` : ""].filter(Boolean).join(" · ") || "\u00a0"}
+        </div>
+        <div className="mt-auto flex items-center gap-1 pt-1.5">
+          <button type="button" className={iconBtn} onClick={onEdit} title={isRTL ? "تعديل" : "Edit"} aria-label={isRTL ? "تعديل" : "Edit"}>
+            <Pencil className="h-3.5 w-3.5" />
+          </button>
+          <button type="button" className={iconBtn} onClick={onTogglePub} title={r.is_published ? (isRTL ? "إخفاء" : "Hide") : (isRTL ? "نشر" : "Publish")} aria-label={r.is_published ? (isRTL ? "إخفاء" : "Hide") : (isRTL ? "نشر" : "Publish")}>
+            {r.is_published ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5 text-muted-foreground" />}
+          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button type="button" className={iconBtn} title={isRTL ? "المزيد" : "More"} aria-label={isRTL ? "المزيد" : "More"}>
+                <MoreHorizontal className="h-4 w-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align={isRTL ? "start" : "end"} className="min-w-[11rem] text-xs font-bold">
+              <DropdownMenuItem onClick={onToggleFeat} className="gap-2">
+                <Star className={`h-3.5 w-3.5 ${r.is_featured ? "fill-amber-500 text-amber-500" : ""}`} />
+                {r.is_featured ? (isRTL ? "إلغاء التثبيت" : "Unpin") : (isRTL ? "تثبيت في الأول" : "Pin first")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onMove(-1)} className="gap-2"><ArrowUp className="h-3.5 w-3.5" /> {isRTL ? "قدّمها خطوة" : "Move up"}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onMove(1)} className="gap-2"><ArrowDown className="h-3.5 w-3.5" /> {isRTL ? "أخّرها خطوة" : "Move down"}</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onCopyUrl} className="gap-2"><Copy className="h-3.5 w-3.5" /> {isRTL ? "انسخ رابط الصورة" : "Copy image link"}</DropdownMenuItem>
+              <DropdownMenuItem asChild className="gap-2">
+                <a href={r.image_url} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-3.5 w-3.5" /> {isRTL ? "افتحها في تبويب" : "Open in a tab"}</a>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <button
+            type="button"
+            className="ms-auto grid h-8 w-8 shrink-0 place-items-center rounded-lg text-destructive transition hover:bg-destructive/10 active:scale-95"
+            onClick={onDelete} title={isRTL ? "حذف" : "Delete"} aria-label={isRTL ? "حذف" : "Delete"}
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
       </div>
-    </div>
-    <div className="space-y-2 p-3">
-      <div className="text-sm font-bold line-clamp-1 text-start">
-        {isRTL ? (r.title_ar || r.title_en) : (r.title_en || r.title_ar)}
-      </div>
-      {r.city && <div className="text-xs text-muted-foreground text-start">{r.city}</div>}
-      {/* dimensions hint */}
-      {r.width && r.height && (
-        <div className="text-[10px] text-muted-foreground/60">{r.width}×{r.height}px</div>
-      )}
-      <div className="flex flex-wrap items-center gap-1 pt-1">
-        <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={onEdit} title={isRTL ? "تعديل" : "Edit"}>
-          <Pencil className="h-3.5 w-3.5" />
-        </Button>
-        <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={onTogglePub} title={isRTL ? "نشر/إخفاء" : "Publish/Hide"}>
-          {r.is_published ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
-        </Button>
-        <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={onToggleFeat} title={isRTL ? "تثبيت" : "Feature"}>
-          <Star className={`h-3.5 w-3.5 ${r.is_featured ? "fill-amber-500 text-amber-500" : ""}`} />
-        </Button>
-        <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => onMove(-1)} title="Move up">
-          <ArrowUp className="h-3.5 w-3.5" />
-        </Button>
-        <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => onMove(1)} title="Move down">
-          <ArrowDown className="h-3.5 w-3.5" />
-        </Button>
-        <Button
-          size="sm" variant="ghost"
-          className="ms-auto h-7 w-7 p-0 text-destructive hover:bg-destructive/10"
-          onClick={onDelete} title={isRTL ? "حذف" : "Delete"}
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </Button>
-      </div>
-    </div>
-  </Card>
-);
+    </Card>
+  );
+};
 
 /* ─── Main component ───────────────────────────────────────────────────────── */
 const GALLERY_QUERY_KEY = ["admin", "gallery"] as const;
@@ -206,8 +207,6 @@ const AdminGallery = () => {
   const [tab, setTab] = useState<"upload" | "library" | "url">("upload");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [dragOver, setDragOver] = useState(false);
-  const [toDelete, setToDelete] = useState<GalleryRow | null>(null);
-  const [deleting, setDeleting] = useState(false);
   const [cleaning, setCleaning] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const { copy, copied } = useCopy();
@@ -345,21 +344,23 @@ const AdminGallery = () => {
     }
   };
 
-  /* ── delete (asks first, in the dashboard's own dialog) ── */
-  const confirmDelete = async () => {
-    const r = toDelete;
-    if (!r) return;
-    setDeleting(true);
-    try {
-      await deleteGalleryImage(r);
-      setRows((rs) => rs.filter((x) => x.id !== r.id));
-      toast.success(isRTL ? "اتشالت الصورة من المعرض" : "Photo removed from the gallery");
-      setToDelete(null);
-    } catch (e) {
-      toast.error(isRTL ? "الصورة ما اتشالتش" : "Photo not removed", { description: apiErrorMessage(e) });
-    } finally {
-      setDeleting(false);
-    }
+  /* ── delete: asks in the site's confirm box, which stays open (with progress) until the server answers ── */
+  const askDelete = async (r: GalleryRow) => {
+    const title = isRTL ? (r.title_ar || r.title_en) : (r.title_en || r.title_ar);
+    const removed = await confirmAction({
+      tone: "danger",
+      image: r.image_url,
+      subject: title || undefined,
+      title: isRTL ? "تشيل الصورة دي من المعرض؟" : "Remove this photo from the gallery?",
+      description: isRTL
+        ? "هتختفي من صفحة المعرض على الموقع. الملف نفسه بيفضل في مكتبة الوسائط، فأي صفحة تانية بتستخدمه مش هتتأثر."
+        : "It disappears from the public gallery. The file stays in the media library, so other pages using it are not affected.",
+      confirmLabel: isRTL ? "أيوه، شيلها" : "Yes, remove",
+      onConfirm: () => deleteGalleryImage(r),
+    });
+    if (!removed) return;
+    setRows((rs) => rs.filter((x) => x.id !== r.id));
+    toast.success(isRTL ? "اتشالت الصورة من المعرض" : "Photo removed from the gallery");
   };
 
   const togglePub = async (r: GalleryRow) => {
@@ -546,7 +547,7 @@ const AdminGallery = () => {
                 onTogglePub={() => togglePub(r)}
                 onToggleFeat={() => toggleFeat(r)}
                 onMove={(d) => move(r, d)}
-                onDelete={() => setToDelete(r)}
+                onDelete={() => void askDelete(r)}
                 onCopyUrl={() => copy(r.image_url)}
               />
             ))}
@@ -560,41 +561,6 @@ const AdminGallery = () => {
             {isRTL ? "تم نسخ الرابط!" : "URL copied!"}
           </div>
         )}
-
-        {/* ── Delete confirmation ── */}
-        <AlertDialog open={Boolean(toDelete)} onOpenChange={(open) => { if (!open && !deleting) setToDelete(null); }}>
-          <AlertDialogContent dir={isRTL ? "rtl" : "ltr"}>
-            <AlertDialogHeader>
-              <AlertDialogTitle>{isRTL ? "تشيل الصورة دي من المعرض؟" : "Remove this photo from the gallery?"}</AlertDialogTitle>
-              <AlertDialogDescription asChild>
-                <div className="space-y-3">
-                  {toDelete && (
-                    <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/40 p-2">
-                      <img src={toDelete.image_url} alt="" className="h-14 w-20 shrink-0 rounded-lg object-cover" />
-                      <span className="line-clamp-2 text-sm font-bold text-foreground">{isRTL ? (toDelete.title_ar || toDelete.title_en) : (toDelete.title_en || toDelete.title_ar)}</span>
-                    </div>
-                  )}
-                  <p className="text-sm">
-                    {isRTL
-                      ? "هتختفي من صفحة المعرض على الموقع. الملف نفسه بيفضل في مكتبة الوسائط، فأي صفحة تانية بتستخدمه مش هتتأثر."
-                      : "It disappears from the public gallery. The file stays in the media library, so other pages using it are not affected."}
-                  </p>
-                </div>
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter className="gap-2">
-              <AlertDialogCancel disabled={deleting}>{isRTL ? "إلغاء" : "Cancel"}</AlertDialogCancel>
-              <AlertDialogAction
-                disabled={deleting}
-                onClick={(e) => { e.preventDefault(); void confirmDelete(); }}
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              >
-                {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                {isRTL ? "شيلها" : "Remove"}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
 
         {/* ── Add / Edit Dialog ── */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

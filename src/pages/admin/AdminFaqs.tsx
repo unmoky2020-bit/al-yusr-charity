@@ -26,6 +26,7 @@ import {
   type FaqItem, type FaqCategory
 } from "@/data/faqsApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
+import { askConfirm } from "@/components/common/confirm";
 
 export const AdminFaqs = () => {
   const { lang } = useLang();
@@ -394,8 +395,8 @@ export const AdminFaqs = () => {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => {
-                          if (confirm(isAr ? "هل أنت متأكد من حذف هذا السؤال؟" : "Delete this FAQ?")) {
+                        onClick={async () => {
+                          if (await askConfirm(isAr ? "هل أنت متأكد من حذف هذا السؤال؟" : "Delete this FAQ?")) {
                             deleteMutation.mutate(faq.id);
                           }
                         }}

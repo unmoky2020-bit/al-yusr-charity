@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { toast } from "@/lib/notify";
 import { useLang } from "@/i18n/LangContext";
 import { newsletterApi, type LaravelNewsletter } from "@/data/laravelApi";
+import { askConfirm } from "@/components/common/confirm";
 
 type Subscriber = {
   id: string;
@@ -186,7 +187,7 @@ const AdminNewsletter = () => {
   };
 
   const unsubscribe = async (r: Subscriber) => {
-    if (!confirm(isRTL ? `إلغاء اشتراك ${r.email}؟` : `Unsubscribe ${r.email}?`)) return;
+    if (!await askConfirm(isRTL ? `إلغاء اشتراك ${r.email}؟` : `Unsubscribe ${r.email}?`)) return;
     try {
       await newsletterApi.update(r.id, { status: "unsubscribed", unsubscribed_at: new Date().toISOString() } as any);
       toast.success(isRTL ? "تم إلغاء الاشتراك" : "Unsubscribed");
@@ -197,7 +198,7 @@ const AdminNewsletter = () => {
   };
 
   const remove = async (r: Subscriber) => {
-    if (!confirm(isRTL ? `حذف ${r.email}؟` : `Delete ${r.email}?`)) return;
+    if (!await askConfirm(isRTL ? `حذف ${r.email}؟` : `Delete ${r.email}?`)) return;
     try {
       await newsletterApi.remove(r.id);
       toast.success(isRTL ? "تم الحذف" : "Deleted");
@@ -215,7 +216,7 @@ const AdminNewsletter = () => {
       unsubscribe: isRTL ? `إلغاء ${ids.length} اشتراك؟` : `Unsubscribe ${ids.length}?`,
       delete: isRTL ? `حذف ${ids.length} مشترك؟ لا يمكن التراجع.` : `Delete ${ids.length}? Cannot be undone.`,
     };
-    if (!confirm(labels[action])) return;
+    if (!await askConfirm(labels[action])) return;
     setBusy(true);
     try {
       if (action === "delete") {
@@ -383,7 +384,7 @@ const AdminNewsletter = () => {
       )}
 
       <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
-        <table className="w-full text-sm">
+        <table className="table-cards w-full text-sm">
           <thead className="bg-muted/40 text-xs font-bold uppercase tracking-wider text-muted-foreground">
             <tr>
               <th className="w-10 p-3">
@@ -405,19 +406,19 @@ const AdminNewsletter = () => {
             )}
             {filtered.map((r) => (
               <tr key={r.id} className="border-t border-border/60 hover:bg-muted/30">
-                <td className="p-3">
+                <td className="card-check p-3">
                   <Checkbox checked={selected.has(r.id)} onCheckedChange={(c) => toggleOne(r.id, !!c)} />
                 </td>
-                <td className="p-3 font-semibold text-primary" dir="ltr">{r.email}</td>
-                <td className="p-3">
+                <td className="card-main p-3 font-semibold text-primary" dir="ltr">{r.email}</td>
+                <td data-label={isRTL ? "الحالة" : "Status"} className="p-3">
                   <Badge variant="outline" className={STATUS_STYLE[r.status]}>{r.status}</Badge>
                 </td>
-                <td className="p-3 text-xs text-muted-foreground">{r.source ?? "—"}</td>
-                <td className="p-3 text-xs uppercase">{r.lang}</td>
-                <td className="p-3 text-xs text-muted-foreground" title={new Date(r.created_at).toLocaleString(isRTL ? "ar-EG" : "en-GB")}>
+                <td data-label={isRTL ? "المصدر" : "Source"} className="p-3 text-xs text-muted-foreground">{r.source ?? "—"}</td>
+                <td data-label={isRTL ? "اللغة" : "Lang"} className="p-3 text-xs uppercase">{r.lang}</td>
+                <td data-label={isRTL ? "اشترك في" : "Joined"} className="p-3 text-xs text-muted-foreground" title={new Date(r.created_at).toLocaleString(isRTL ? "ar-EG" : "en-GB")}>
                   {new Date(r.created_at).toLocaleDateString(isRTL ? "ar-EG" : "en-GB")}
                 </td>
-                <td className="p-3">
+                <td className="card-actions p-3">
                   <div className="flex flex-wrap items-center justify-end gap-1.5">
                     {r.status === "pending" && (
                       <Button size="sm" variant="outline" onClick={() => void manualConfirm(r)} title={isRTL ? "تأكيد يدوي" : "Manual confirm"}>

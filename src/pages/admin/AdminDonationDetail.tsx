@@ -36,6 +36,7 @@ import { errorReason } from "@/lib/notify";
 import { FormSkeleton } from "@/components/common/ContentSkeletons";
 import { DeliveryStagesCard } from "@/components/admin/donations/DeliveryStagesCard";
 import { parseDelivery } from "@/lib/deliveryJourney";
+import { askConfirm } from "@/components/common/confirm";
 
 const STATUS_CONFIG: Record<
   string,
@@ -203,7 +204,7 @@ export default function AdminDonationDetail() {
     if (!row) return;
     const online = !!row.is_gateway;
     if (next === "paid" && online &&
-      !window.confirm(isAr
+      !await askConfirm(isAr
         ? "ده دفع أونلاين — بيتأكد لوحده من بوابة الدفع. علّمه «مدفوع» يدوي بس لو اتأكدت من وصول المبلغ في حساب كاشير. متأكد؟"
         : "Online payment — the gateway confirms it. Mark it paid only if you verified the money in the gateway account. Continue?")) {
       return;

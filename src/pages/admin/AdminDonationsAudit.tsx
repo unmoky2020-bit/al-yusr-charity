@@ -130,7 +130,7 @@ const AdminDonationsAudit = () => {
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
           <StatCard accent label={lang === "ar" ? "إجمالي" : "Total"} value={stats.total} />
           <StatCard label={lang === "ar" ? "إعلان مدفوع" : "Paid ad"} value={stats.paid} />
           <StatCard label="Organic" value={stats.organic} />

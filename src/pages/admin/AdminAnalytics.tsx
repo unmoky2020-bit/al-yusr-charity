@@ -49,15 +49,15 @@ const AdminAnalytics = () => {
     <AdminLayout>
       <div className="space-y-5" dir={isRTL ? "rtl" : "ltr"}>
         {/* Filters */}
-        <div className="rounded-2xl border border-border bg-card p-4 shadow-soft sm:p-5">
-          <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-2xl border border-border bg-card p-3 shadow-soft sm:p-5">
+          <div className="grid min-w-0 grid-cols-2 gap-2.5 sm:gap-3 xl:grid-cols-4">
             <label className="flex min-w-0 flex-col gap-1.5 text-xs font-bold text-muted-foreground">
               <span>{isRTL ? "من تاريخ" : "From date"}</span>
-              <Input type="date" max={filters.to} value={filters.from ?? ""} onChange={(e) => setFilter({ from: e.target.value || undefined })} className="h-10 w-full min-w-0 rounded-xl text-sm" />
+              <Input type="date" max={filters.to} value={filters.from ?? ""} onChange={(e) => setFilter({ from: e.target.value || undefined })} className="h-10 w-full min-w-0 rounded-xl px-2 text-[13px] sm:px-3 sm:text-sm" />
             </label>
             <label className="flex min-w-0 flex-col gap-1.5 text-xs font-bold text-muted-foreground">
               <span>{isRTL ? "إلى تاريخ" : "To date"}</span>
-              <Input type="date" min={filters.from} value={filters.to ?? ""} onChange={(e) => setFilter({ to: e.target.value || undefined })} className="h-10 w-full min-w-0 rounded-xl text-sm" />
+              <Input type="date" min={filters.from} value={filters.to ?? ""} onChange={(e) => setFilter({ to: e.target.value || undefined })} className="h-10 w-full min-w-0 rounded-xl px-2 text-[13px] sm:px-3 sm:text-sm" />
             </label>
             <label className="flex min-w-0 flex-col gap-1.5 text-xs font-bold text-muted-foreground">
               <span>{isRTL ? "الجهة" : "Target"}</span>

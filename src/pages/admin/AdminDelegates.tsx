@@ -108,7 +108,7 @@ const Inner = () => {
   return (
     <AdminLayout title={{ ar: "متابعة المندوبين", en: "Delegate tracking" }}>
       <div className="space-y-4" dir={isAr ? "rtl" : "ltr"}>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard accent label={isAr ? "عدد المندوبين" : "Delegates"} value={totals.delegates} />
           <StatCard label={isAr ? "إجمالي طلبات الخبيئة" : "Total Khabia"} value={totals.khabia} />
           <StatCard label={isAr ? "بانتظار تعيين مندوب" : "Awaiting assignment"} value={totals.pending} />

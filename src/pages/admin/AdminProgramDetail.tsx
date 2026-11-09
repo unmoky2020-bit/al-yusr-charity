@@ -42,6 +42,7 @@ import {
 } from "@/components/admin/programs/programForm";
 import { publicUrls } from "@/lib/publicUrls";
 import { FormSkeleton } from "@/components/common/ContentSkeletons";
+import { askConfirm } from "@/components/common/confirm";
 
 const triggerCls = "rounded-xl px-3 py-2 text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs";
 
@@ -196,7 +197,7 @@ export default function AdminProgramDetail() {
 
   const handleDelete = async () => {
     if (!id || isNew) return;
-    if (!window.confirm("هل أنت متأكد من حذف هذا البرنامج نهائياً من قاعدة البيانات؟")) return;
+    if (!await askConfirm("هل أنت متأكد من حذف هذا البرنامج نهائياً من قاعدة البيانات؟")) return;
     setDeleting(true);
     try {
       await programsAdminApi.remove(id);

@@ -12,6 +12,7 @@ import {
 } from "@/data/casesApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { compressImage } from "@/lib/image-compress";
+import { askConfirm } from "@/components/common/confirm";
 
 const KINDS: { v: CaseMediaKind; ar: string; en: string }[] = [
   { v: "before",  ar: "قبل",     en: "Before" },
@@ -80,7 +81,7 @@ export function CaseMediaManager({ caseId }: { caseId: string }) {
   };
 
   const remove = async (m: CaseMediaRow) => {
-    if (!confirm(isAr ? "حذف هذه الوسائط نهائيًا؟" : "Delete this media permanently?")) return;
+    if (!await askConfirm(isAr ? "حذف هذه الوسائط نهائيًا؟" : "Delete this media permanently?")) return;
     try { await deleteCaseMedia(m.id, m.url); toast({ title: isAr ? "تم الحذف" : "Deleted" }); await reload(); }
     catch (e) { showError(e, isAr ? "تعذّر حذف الوسائط" : "Couldn't delete media"); }
   };

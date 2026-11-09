@@ -28,6 +28,7 @@ import {
 import { LaravelRole, LaravelPermission } from "@/data/laravelApi";
 import { logActivity } from "@/lib/activityLog";
 import { errorReason } from "@/lib/notify";
+import { askConfirm } from "@/components/common/confirm";
 
 const ROLE_LABEL: Record<string, { ar: string; en: string }> = {
   admin:        { ar: "مدير", en: "Admin" },
@@ -271,7 +272,7 @@ const Inner = () => {
       toast({ title: isAr ? "لا يمكنك حذف حسابك الشخصي" : "Cannot delete your own account", variant: "destructive" });
       return;
     }
-    if (!confirm(isAr ? `هل أنت متأكد من حذف المستخدم "${name}"؟` : `Delete user "${name}"?`)) return;
+    if (!await askConfirm(isAr ? `هل أنت متأكد من حذف المستخدم "${name}"؟` : `Delete user "${name}"?`)) return;
     try {
       await deleteUser(id);
       toast({ title: isAr ? " تم حذف المستخدم" : " User deleted" });
@@ -311,7 +312,7 @@ const Inner = () => {
       toast({ title: isAr ? "لا يمكن حذف دور مدير النظام الأساسي" : "Cannot delete Super Admin role", variant: "destructive" });
       return;
     }
-    if (!confirm(isAr ? `هل أنت متأكد من حذف دور "${name}"؟` : `Delete role "${name}"?`)) return;
+    if (!await askConfirm(isAr ? `هل أنت متأكد من حذف دور "${name}"؟` : `Delete role "${name}"?`)) return;
     try {
       await deleteRole(roleId);
       toast({ title: isAr ? " تم حذف الدور" : " Role deleted" });
@@ -340,7 +341,7 @@ const Inner = () => {
     <AdminLayout title={{ ar: "المستخدمون والأدوار والصلاحيات (RBAC)", en: "Users, Roles & Permissions" }}>
       <div className="space-y-4 text-start [&_input]:text-start" dir={isAr ? "rtl" : "ltr"}>
         {/* KPI Stats */}
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard accent label={isAr ? "إجمالي المستخدمين" : "Total Users"} value={users.length} />
           <StatCard label={isAr ? "الأدوار المعرّفة" : "System Roles"} value={roles.length} />
           <StatCard label={isAr ? "إجمالي الصلاحيات" : "Permissions"} value={permissions.length} />
@@ -382,7 +383,7 @@ const Inner = () => {
             </div>
 
             <div className="overflow-x-auto rounded-2xl bg-card shadow-soft">
-              <table className="w-full text-sm">
+              <table className="table-cards w-full text-sm">
                 <thead className="bg-muted/40 text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                   <tr>
                     <th className="px-3 py-2.5 text-start">{isAr ? "المستخدم" : "User"}</th>
@@ -412,7 +413,7 @@ const Inner = () => {
                     const userRoleIds = (u.rawRoles || []).map((r) => r.id);
                     return (
                       <tr key={u.id} className="border-t border-border/60 hover:bg-muted/30 transition">
-                        <td className="px-3 py-2.5">
+                        <td className="card-main px-3 py-2.5">
                           <Link
                             to={`/admin/users/${encodeURIComponent(u.id)}`}
                             className="group flex items-center gap-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -436,10 +437,10 @@ const Inner = () => {
                             </div>
                           </Link>
                         </td>
-                        <td className="px-3 py-2.5 font-mono text-xs text-muted-foreground" dir="ltr">
+                        <td data-label={isAr ? "البريد" : "Email"} className="card-wide px-3 py-2.5 font-mono text-xs text-muted-foreground" dir="ltr">
                           {u.email || "—"}
                         </td>
-                        <td className="px-3 py-2.5">
+                        <td data-label={isAr ? "الأدوار (اضغط للتبديل)" : "Roles (tap to toggle)"} className="card-wide px-3 py-2.5">
                           <div className="flex flex-wrap gap-1">
                             {roles.map((r) => {
                               const active = userRoleIds.includes(r.id);
@@ -462,10 +463,10 @@ const Inner = () => {
                             })}
                           </div>
                         </td>
-                        <td className="px-3 py-2.5 text-xs text-muted-foreground">
+                        <td data-label={isAr ? "انضم في" : "Joined"} className="px-3 py-2.5 text-xs text-muted-foreground">
                           {u.created_at?.slice(0, 10)}
                         </td>
-                        <td className="px-3 py-2.5 text-center">
+                        <td className="card-actions px-3 py-2.5 text-center">
                           {String(u.id) !== String(user?.id) && (
                             <button
                               onClick={() => handleDeleteUser(u.id, u.full_name)}

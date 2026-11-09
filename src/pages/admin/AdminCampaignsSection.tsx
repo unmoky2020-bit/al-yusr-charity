@@ -65,6 +65,7 @@ import {
   AlertTriangle,
   Undo2,
 } from "lucide-react";
+import { askConfirm } from "@/components/common/confirm";
 
 const AdminCampaignsSection = () => {
   const {
@@ -830,8 +831,8 @@ const AdminCampaignsSection = () => {
                           size="icon"
                           variant="ghost"
                           disabled={cardBusy}
-                          onClick={() => {
-                            if (!window.confirm(isAr ? `حذف البطاقة «${c.name_ar}» من الكاروسيل؟` : `Delete card "${c.name_en || c.name_ar}"?`)) return;
+                          onClick={async () => {
+                            if (!await askConfirm(isAr ? `حذف البطاقة «${c.name_ar}» من الكاروسيل؟` : `Delete card "${c.name_en || c.name_ar}"?`)) return;
                             void runCardOp(() => deleteCard(c.id), isAr ? "تم حذف البطاقة" : "Card deleted", "DELETE /admin/homepage/carousel/items/{id}");
                           }}
                           className="h-8 w-8 rounded-lg text-muted-foreground hover:text-destructive"

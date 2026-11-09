@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { Mail, Send, Eye, MousePointerClick, Plus, Trash2, RefreshCw, ArrowLeft } from "lucide-react";
+import { askConfirm } from "@/components/common/confirm";
 
 type Campaign = NewsletterCampaign;
 
@@ -91,7 +92,7 @@ const AdminNewsletterCampaigns = () => {
 
   const sendCampaign = async (testEmail?: string) => {
     if (!active?.id) { toast({ title: "احفظ المسودة أولًا" }); return; }
-    if (!testEmail && !confirm(`إرسال الحملة لـ ${confirmedCount} مشترك مؤكد؟`)) return;
+    if (!testEmail && !await askConfirm(`إرسال الحملة لـ ${confirmedCount} مشترك مؤكد؟`)) return;
     setSending(true);
     try {
       const result = testEmail
@@ -109,7 +110,7 @@ const AdminNewsletterCampaigns = () => {
   };
 
   const remove = async (id: string) => {
-    if (!confirm("حذف الحملة وسجلها؟")) return;
+    if (!await askConfirm("حذف الحملة وسجلها؟")) return;
     try {
       await newsletterCampaignsApi.remove(id);
     } catch (e) {

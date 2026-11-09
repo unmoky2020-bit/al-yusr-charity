@@ -59,6 +59,7 @@ import { campaignPagesApi, contentFromCampaign, seoColumnFromForm, toCampaignCol
 import { publicUrls } from "@/lib/publicUrls";
 import { errorReason } from "@/lib/notify";
 import { FormSkeleton } from "@/components/common/ContentSkeletons";
+import { askConfirm } from "@/components/common/confirm";
 
 const EMPTY_SEO: CampaignSeoData = {
   meta_title_ar: "",
@@ -417,13 +418,13 @@ export default function AdminDonationCampaignDetail() {
 
   const resetPageContent = async () => {
     if (!pageMeta || !campaign || isNew) return;
-    if (!window.confirm(isAr ? "إرجاع صفحة الحملة إلى نصوصها الافتراضية؟ سيُحذف المحتوى المخصص (بما فيه الأسئلة والسيو المحفوظة) من قاعدة البيانات." : "Restore the landing page to its default texts? Saved custom content (incl. FAQs and SEO) will be removed.")) return;
+    if (!await askConfirm(isAr ? "إرجاع صفحة الحملة إلى نصوصها الافتراضية؟ سيُحذف المحتوى المخصص (بما فيه الأسئلة والسيو المحفوظة) من قاعدة البيانات." : "Restore the landing page to its default texts? Saved custom content (incl. FAQs and SEO) will be removed.")) return;
     await handleSave({ resetContent: true });
   };
 
   const handleDelete = async () => {
     if (!campaign || isNew) return;
-    if (!confirm(isAr ? `هل أنت متأكد من حذف حملة «${campaign.name_ar}»؟` : `Delete campaign "${campaign.name_ar}"?`)) return;
+    if (!await askConfirm(isAr ? `هل أنت متأكد من حذف حملة «${campaign.name_ar}»؟` : `Delete campaign "${campaign.name_ar}"?`)) return;
 
     try {
       if (campaign.id && !String(campaign.id).startsWith("static-")) {

@@ -18,6 +18,7 @@ import {
 } from "@/data/faqsApi";
 import { apiErrorMessageAr } from "@/data/api/programsAdminApi";
 import { ChoiceSelect, Field, SectionCard } from "@/components/admin/programs/FormKit";
+import { askConfirm } from "@/components/common/confirm";
 
 /** What the FAQ belongs to — only changes the wording. */
 export type FaqOwnerKind = "program" | "project" | "campaign" | "axis";
@@ -152,7 +153,7 @@ export function EntityFaqManager({
   };
 
   const removeQuestion = async (f: FaqItem) => {
-    if (!window.confirm("حذف السؤال ده؟ هيتشال من كل الصفحات اللي بتعرض التصنيف ده.")) return;
+    if (!await askConfirm("حذف السؤال ده؟ هيتشال من كل الصفحات اللي بتعرض التصنيف ده.")) return;
     setBusy(`q-${f.id}`);
     try {
       await deleteFaq(f.id);

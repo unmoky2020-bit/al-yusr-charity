@@ -9,6 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import { volunteerApplicationsApi, type VolunteerApplication } from "@/data/api/volunteerApplicationsApi";
 import { apiErrorMessage, isEndpointMissing, FEATURE_PENDING_MSG } from "@/data/api/adminApiHelpers";
 import { publicUrls } from "@/lib/publicUrls";
+import { askConfirm } from "@/components/common/confirm";
 
 type Joined = VolunteerApplication;
 
@@ -54,7 +55,7 @@ const Inner = () => {
   const filtered = useMemo(() => apps.filter((a) => tab === "all" || a.status === tab), [apps, tab]);
 
   const cancel = async (id: string) => {
-    if (!confirm(lang === "ar" ? "تأكيد إلغاء طلب المشاركة؟" : "Cancel this participation request?")) return;
+    if (!await askConfirm(lang === "ar" ? "تأكيد إلغاء طلب المشاركة؟" : "Cancel this participation request?")) return;
     try {
       await volunteerApplicationsApi.cancel(id);
     } catch (e) {

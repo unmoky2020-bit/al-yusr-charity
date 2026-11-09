@@ -224,7 +224,7 @@ export default function AdminStories() {
         </div>
 
         {/* Stats */}
-        <div className="grid gap-3 sm:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           <StatCard accent label={tr(lang, "الإجمالي", "Total")} value={stats.total} />
           <StatCard label={tr(lang, "منشور", "Published")} value={stats.published} />
           <StatCard label={tr(lang, "مسودات", "Drafts")} value={stats.draft} />

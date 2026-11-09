@@ -21,7 +21,7 @@ const StatusPill = ({ s, lang }: { s?: string; lang: "ar" | "en" }) => {
     rejected: { ar: "مرفوض", en: "Rejected",      cls: "bg-destructive/10 text-destructive" },
     suspended:{ ar: "موقوف", en: "Suspended",     cls: "bg-muted text-muted-foreground" },
   };
-  const v = map[s || "pending"];
+  const v = map[s || "pending"] ?? { ar: s || "—", en: s || "—", cls: "bg-muted text-muted-foreground" };
   return <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-extrabold ${v.cls}`}>{v[lang]}</span>;
 };
 
@@ -193,7 +193,7 @@ const Inner = () => {
             {lang === "ar" ? "تحديث" : "Refresh"}
           </Button>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard accent label={lang === "ar" ? "إجمالي المتطوعين" : "Total"} value={volunteers.length} />
           <StatCard label={lang === "ar" ? "قيد المراجعة" : "Pending"} value={volunteers.filter((v) => v.volunteerStatus === "pending").length} />
           <StatCard label={lang === "ar" ? "معتمدون" : "Approved"} value={volunteers.filter((v) => v.volunteerStatus === "approved").length} />

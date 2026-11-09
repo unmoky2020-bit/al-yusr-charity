@@ -37,6 +37,7 @@ import { getProjectPageMeta, parsePageContent, projectPageColumn } from "@/data/
 import { mergeCampaignContent, type CampaignPageContent } from "@/data/campaignPages/types";
 import { CtaPanel, HadithPanel, HeroPanel, SectionsPanel, StatsPanel } from "@/components/admin/CampaignPageContentEditor";
 import { PageImagesPanel } from "@/components/admin/PageImagesPanel";
+import { askConfirm } from "@/components/common/confirm";
 
 const triggerCls = "rounded-xl px-3 py-2 text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs";
 
@@ -232,7 +233,7 @@ export default function AdminProjectDetail() {
 
   const remove = async () => {
     if (!record) return;
-    if (!window.confirm(`حذف «${form.name}» نهائياً؟`)) return;
+    if (!await askConfirm(`حذف «${form.name}» نهائياً؟`)) return;
     try {
       await projectsAdminApi.remove(record.id);
       toast({ title: "تم حذف المشروع" });
@@ -397,7 +398,7 @@ export default function AdminProjectDetail() {
                 <div className="flex flex-wrap gap-2">
                   <Button variant="outline" size="sm" asChild><a href={pageMeta.path} target="_blank" rel="noopener noreferrer" className="gap-1"><Eye className="h-3.5 w-3.5" /> عرض الصفحة</a></Button>
                   {pageDefaults && (
-                    <Button variant="ghost" size="sm" className="gap-1" onClick={() => { if (window.confirm("ترجيع كل نصوص الصفحة للنسخة الأصلية؟ (التغيير بيتحفظ لما تدوس حفظ)")) setPageContent(pageDefaults); }}>
+                    <Button variant="ghost" size="sm" className="gap-1" onClick={async () => { if (await askConfirm("ترجيع كل نصوص الصفحة للنسخة الأصلية؟ (التغيير بيتحفظ لما تدوس حفظ)")) setPageContent(pageDefaults); }}>
                       <RefreshCw className="h-3.5 w-3.5" /> ترجيع النصوص الأصلية
                     </Button>
                   )}

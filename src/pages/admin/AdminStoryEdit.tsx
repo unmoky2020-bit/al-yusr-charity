@@ -18,6 +18,7 @@ import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { casesApiV1, type LaravelCase } from "@/data/laravelApi";
 import { publicUrls } from "@/lib/publicUrls";
 import { ImageUrlField } from "@/components/admin/programs/FormKit";
+import { askConfirm } from "@/components/common/confirm";
 
 type Story = any;
 type Program = { id: string; slug: string; title_ar: string; title_en: string };
@@ -160,7 +161,7 @@ const Inner = () => {
 
   const remove = async () => {
     if (isNew) return;
-    if (!confirm(t("حذف هذه القصة نهائيًا؟", "Delete this story permanently?"))) return;
+    if (!await askConfirm(t("حذف هذه القصة نهائيًا؟", "Delete this story permanently?"))) return;
     const { error } = await deleteStory(String(id), data.slug);
     if (error) { toast({ variant: "destructive", title: t("فشل الحذف", "Delete failed"), description: error }); return; }
     toast({ title: t("تم الحذف", "Deleted") });

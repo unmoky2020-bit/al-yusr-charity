@@ -11,6 +11,7 @@ import { useAuth } from "@/auth/AuthContext";
 import { useLang } from "@/i18n/LangContext";
 import { donationsAdminApi } from "@/data/api/donationsAdminApi";
 import { MonthTooltip, TopTargets } from "@/components/admin/donations/DonationCharts";
+import { DonationCard, DonationCardsState } from "@/components/admin/donations/DonationCard";
 import {
   donationMethodLabel, donationStatusLabel, donationStatusTone, formatCompact, formatDateTime, formatMoney, formatMonth, formatNumber,
 } from "@/lib/donationDisplay";
@@ -180,7 +181,12 @@ const DonationsOverview = () => {
               {isRTL ? "عرض الكل ←" : "View all →"}
             </Link>
           </div>
-          <div className="overflow-x-auto">
+          {/* phones: cards; wider screens: the table */}
+          <div className="space-y-2 md:hidden">
+            <DonationCardsState lang={lang} loading={latestQ.isLoading} error={latestQ.isError} empty={latestQ.data?.rows.length === 0} />
+            {latestQ.data?.rows.map((d) => <DonationCard key={d.id} d={d} lang={lang} />)}
+          </div>
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm">
               <thead className="text-[11px] font-bold text-muted-foreground">
                 <tr className="border-b border-border">

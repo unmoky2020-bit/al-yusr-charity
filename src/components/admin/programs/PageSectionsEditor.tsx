@@ -26,6 +26,7 @@ import { BilingualField, Field, ItemListEditor, SectionCard } from "./FormKit";
 import { fillProgramSections, loadDefaultSections } from "@/data/programs/fillProgramSections";
 import { DEFAULT_NAV_ITEMS, NAV_ITEM_FIELDS, SECTION_SCHEMAS, getSectionSchema } from "./sectionSchemas";
 import { str } from "./formUtils";
+import { askConfirm } from "@/components/common/confirm";
 
 type Item = Record<string, unknown>;
 
@@ -216,16 +217,16 @@ export function PageSectionsEditor({ programId, slug }: { programId: number | st
     }
   };
 
-  const openEditor = (s: ProgramPageSection) => {
+  const openEditor = async (s: ProgramPageSection) => {
     if (openId === s.id) {
-      if (draft && JSON.stringify(draft) !== JSON.stringify(toDraft(s)) && !window.confirm("لديك تعديلات غير محفوظة على هذا القسم. تجاهلها؟")) return;
+      if (draft && JSON.stringify(draft) !== JSON.stringify(toDraft(s)) && !await askConfirm("لديك تعديلات غير محفوظة على هذا القسم. تجاهلها؟")) return;
       setOpenId(null);
       setDraft(null);
       return;
     }
     if (openId !== null && draft) {
       const cur = sections.find((x) => x.id === openId);
-      if (cur && JSON.stringify(draft) !== JSON.stringify(toDraft(cur)) && !window.confirm("لديك تعديلات غير محفوظة على قسم آخر. تجاهلها؟")) return;
+      if (cur && JSON.stringify(draft) !== JSON.stringify(toDraft(cur)) && !await askConfirm("لديك تعديلات غير محفوظة على قسم آخر. تجاهلها؟")) return;
     }
     setOpenId(s.id);
     setDraft(toDraft(s));
@@ -272,7 +273,7 @@ export function PageSectionsEditor({ programId, slug }: { programId: number | st
   };
 
   const deleteSection = async (s: ProgramPageSection) => {
-    if (!window.confirm(`حذف القسم «${s.title_ar || s.section_key}» نهائياً؟`)) return;
+    if (!await askConfirm(`حذف القسم «${s.title_ar || s.section_key}» نهائياً؟`)) return;
     setBusy(`del-${s.id}`);
     try {
       await programsAdminApi.deleteSection(programId, s.id);

@@ -19,6 +19,7 @@ import {
 import { compressImage } from "@/lib/image-compress";
 import { achievementsApi, homeNumbersApi, galleryApi, formatServerImageUrl } from "@/data/laravelApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
+import { askConfirm } from "@/components/common/confirm";
 
 type Row = {
   id: string;
@@ -221,7 +222,7 @@ export default function AdminSiteStats() {
       setRows((r) => r.filter((_, i) => i !== idx));
       return;
     }
-    if (!confirm(isAr ? "حذف هذا العنصر؟" : "Delete this item?")) return;
+    if (!await askConfirm(isAr ? "حذف هذا العنصر؟" : "Delete this item?")) return;
     try {
       if (section === "home_stats") {
         await homeNumbersApi.remove(row.id);

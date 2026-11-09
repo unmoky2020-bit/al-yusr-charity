@@ -7,6 +7,7 @@ import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DonationReceipt } from "@/components/common/DonationReceipt";
+import { DonationCard, DonationCardsState } from "@/components/admin/donations/DonationCard";
 import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
 import { DONATION_STATUS_TRANSITIONS, type DonationStatus } from "@/data/casesApi";
@@ -29,10 +30,11 @@ import {
   formatNumber,
 } from "@/lib/donationDisplay";
 import type { DonationRecord } from "@/data/donationsStore";
+import { askConfirm } from "@/components/common/confirm";
 
 const PER_PAGE_OPTIONS = [25, 50, 100];
 const REFRESH_MS = 30_000;
-const selectCls = "h-9 rounded-lg border border-border bg-background px-2.5 text-xs font-bold";
+const selectCls = "h-9 w-full min-w-0 rounded-lg border border-border bg-background px-2.5 text-xs font-bold";
 
 /** The specific-record filter that goes with each target kind. */
 const TARGET_ID_KEY = { program: "program_id", project: "project_id", campaign: "donation_campaign_id" } as const;
@@ -104,7 +106,7 @@ const AdminDonations = () => {
 
   const transition = async (d: AdminDonation, next: DonationStatusKey) => {
     if (next === "paid" && d.is_gateway &&
-      !window.confirm(isAr
+      !await askConfirm(isAr
         ? "ده دفع أونلاين — بيتأكد لوحده من بوابة الدفع أول ما المتبرع يدفع. علّمه «مدفوع» يدوي بس لو اتأكدت من وصول المبلغ في حساب كاشير. متأكد؟"
         : "Online payment — the gateway confirms it automatically. Mark it paid only if you verified the money in the Kashier account. Continue?")) {
       return;
@@ -174,6 +176,31 @@ const AdminDonations = () => {
   const statusCount = (k: string) => stats?.by_status?.[k]?.count ?? 0;
   const dash = "—";
 
+
+  /** The buttons of one donation (status steps, receipt, details), shared by the table and the phone cards. */
+  const rowActions = (d: AdminDonation) => {
+    const allowed = DONATION_STATUS_TRANSITIONS[d.status as DonationStatus] ?? [];
+    return (
+      <>
+        {allowed.map((next) => (
+          <button key={next} type="button" disabled={busyId === d.id} onClick={() => void transition(d, next as DonationStatusKey)}
+            className="rounded-md bg-secondary/20 px-2 py-1 text-[10px] font-black text-primary hover:bg-secondary/30 disabled:opacity-50 max-md:px-2.5 max-md:py-1.5 max-md:text-[11px]">
+            → {donationStatusLabel(next, false, lang)}
+          </button>
+        ))}
+        {d.status === "paid" && (
+          <button type="button" onClick={() => openReceipt(d)}
+            className="inline-flex items-center gap-1 rounded-md border border-emerald-600/30 bg-emerald-500/10 px-2 py-1 text-[10px] font-black text-emerald-800 hover:bg-emerald-500/20 dark:text-emerald-300 max-md:px-2.5 max-md:py-1.5 max-md:text-[11px]">
+            <FileText className="h-3 w-3" /> {isAr ? "إيصال" : "Receipt"}
+          </button>
+        )}
+        <Link to={`/admin/donations/${d.id}`} className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2 py-1 text-[10px] font-black text-primary hover:bg-primary/20 max-md:ms-auto max-md:px-2.5 max-md:py-1.5 max-md:text-[11px]">
+          <ExternalLink className="h-3 w-3" /> {isAr ? "تفاصيل" : "Details"}
+        </Link>
+      </>
+    );
+  };
+
   return (
     <AdminLayout>
       <div dir={isAr ? "rtl" : "ltr"} className="space-y-4">
@@ -201,7 +228,7 @@ const AdminDonations = () => {
           </p>
         )}
 
-        <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
+        <div className="rounded-2xl border border-border bg-card p-3 shadow-soft sm:p-4">
           {/* Filters — every one is applied by the server */}
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <h2 className="flex items-center gap-2 text-base font-black text-primary">
@@ -225,8 +252,8 @@ const AdminDonations = () => {
             </div>
           </div>
 
-          <div className="mb-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
-            <div className="relative sm:col-span-2">
+          <div className="mb-4 grid grid-cols-2 gap-2 lg:grid-cols-4 xl:grid-cols-8">
+            <div className="relative col-span-2">
               <Search className="pointer-events-none absolute start-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input value={qInput} onChange={(e) => setQInput(e.target.value)} className="h-9 ps-8 text-xs"
                 placeholder={isAr ? "بحث: رقم العملية / الاسم / الموبايل / الإيميل" : "Search: reference / name / phone / email"} />
@@ -272,17 +299,22 @@ const AdminDonations = () => {
                 <option value="amount">{isAr ? "الأقل مبلغاً" : "Lowest amount"}</option>
               </UiSelect>
             )}
-            <label className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+            <label className="flex min-w-0 items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
               {isAr ? "من" : "From"}
-              <Input type="date" value={filters.from ?? ""} onChange={(e) => setFilter({ from: e.target.value })} className="h-9 text-xs" />
+              <Input type="date" value={filters.from ?? ""} onChange={(e) => setFilter({ from: e.target.value })} className="h-9 min-w-0 px-2 text-xs" />
             </label>
-            <label className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+            <label className="flex min-w-0 items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
               {isAr ? "إلى" : "To"}
-              <Input type="date" value={filters.to ?? ""} onChange={(e) => setFilter({ to: e.target.value })} className="h-9 text-xs" />
+              <Input type="date" value={filters.to ?? ""} onChange={(e) => setFilter({ to: e.target.value })} className="h-9 min-w-0 px-2 text-xs" />
             </label>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* phones: one card per donation */}
+          <div className="space-y-2 md:hidden">
+            <DonationCardsState lang={lang} loading={loading} error={listQuery.isError && !rows.length} empty={!loading && !listQuery.isError && rows.length === 0} />
+            {rows.map((d) => <DonationCard key={d.id} d={d} lang={lang} actions={rowActions(d)} />)}
+          </div>
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-xs">
               <thead className="bg-muted/30 text-[11px] font-extrabold text-muted-foreground">
                 <tr>
@@ -306,7 +338,6 @@ const AdminDonations = () => {
                   <tr><td colSpan={8} className="p-8 text-center font-bold text-muted-foreground">{isAr ? "مفيش تبرعات مطابقة للفلتر" : "No donations match the filters"}</td></tr>
                 )}
                 {rows.map((d) => {
-                  const allowed = DONATION_STATUS_TRANSITIONS[d.status as DonationStatus] ?? [];
                   const target = donationTargetLabel(d, lang);
                   return (
                     <tr key={d.id} className="border-t border-border/60 transition-colors hover:bg-muted/15">
@@ -329,23 +360,7 @@ const AdminDonations = () => {
                       </td>
                       <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">{formatDateTime(d.created_at, lang)}</td>
                       <td className="px-3 py-2.5">
-                        <div className="flex flex-wrap justify-end gap-1">
-                          {allowed.map((next) => (
-                            <button key={next} type="button" disabled={busyId === d.id} onClick={() => void transition(d, next as DonationStatusKey)}
-                              className="rounded-md bg-secondary/20 px-2 py-1 text-[10px] font-black text-primary hover:bg-secondary/30 disabled:opacity-50">
-                              → {donationStatusLabel(next, false, lang)}
-                            </button>
-                          ))}
-                          {d.status === "paid" && (
-                            <button type="button" onClick={() => openReceipt(d)}
-                              className="inline-flex items-center gap-1 rounded-md border border-emerald-600/30 bg-emerald-500/10 px-2 py-1 text-[10px] font-black text-emerald-800 hover:bg-emerald-500/20 dark:text-emerald-300">
-                              <FileText className="h-3 w-3" /> {isAr ? "إيصال" : "Receipt"}
-                            </button>
-                          )}
-                          <Link to={`/admin/donations/${d.id}`} className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2 py-1 text-[10px] font-black text-primary hover:bg-primary/20">
-                            <ExternalLink className="h-3 w-3" /> {isAr ? "تفاصيل" : "Details"}
-                          </Link>
-                        </div>
+                        <div className="flex flex-wrap justify-end gap-1">{rowActions(d)}</div>
                       </td>
                     </tr>
                   );

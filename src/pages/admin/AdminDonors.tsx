@@ -10,6 +10,7 @@ import { toast } from "@/hooks/use-toast";
 import { donorsApi, donationsApiV1, LaravelDonor, LaravelDonation } from "@/data/laravelApi";
 import { errorReason, notifyError, toast as notify } from "@/lib/notify";
 import { exportDonorsSheet } from "@/data/api/donorsReportApi";
+import { askConfirm } from "@/components/common/confirm";
 
 export interface DonorViewItem {
   id: string;
@@ -122,7 +123,7 @@ const Inner = () => {
   };
 
   const handleDeleteDonor = async (id: string, name: string) => {
-    if (!confirm(isAr ? `هل أنت متأكد من حذف المتبرع "${name}"؟` : `Delete donor "${name}"?`)) return;
+    if (!await askConfirm(isAr ? `هل أنت متأكد من حذف المتبرع "${name}"؟` : `Delete donor "${name}"?`)) return;
     try {
       await donorsApi.remove(id);
       toast({ title: isAr ? " تم حذف المتبرع" : " Donor deleted" });

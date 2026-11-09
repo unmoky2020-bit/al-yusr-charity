@@ -28,6 +28,7 @@ import {
   type LaravelDonationCampaign,
 } from "@/data/laravelApi";
 import { ListSkeleton } from "@/components/common/ContentSkeletons";
+import { askConfirm } from "@/components/common/confirm";
 
 
 const STATUS_OPTIONS: Array<{ v: string; ar: string; en: string; cls: string }> = [
@@ -169,7 +170,7 @@ export default function AdminCases() {
 
   // Delete Case
   const handleDeleteCase = async (id: number | string) => {
-    if (!confirm(isAr ? "هل أنت متأكد من حذف هذه الحالة؟" : "Are you sure you want to delete this case?")) return;
+    if (!await askConfirm(isAr ? "هل أنت متأكد من حذف هذه الحالة؟" : "Are you sure you want to delete this case?")) return;
     try {
       if (!String(id).startsWith("static-")) {
         await casesApiV1.remove(id);
@@ -248,7 +249,7 @@ export default function AdminCases() {
           ? `هذا التصنيف مرتبط بـ ${linkedCount} حالة. هل تريد حذفه؟ ستُصبح الحالات المرتبطة به بدون تصنيف.`
           : `This category has ${linkedCount} linked case(s). Delete anyway? Linked cases will become uncategorized.`)
       : (isAr ? "هل أنت متأكد من حذف هذا التصنيف؟" : "Delete this category?");
-    if (!confirm(confirmMsg)) return;
+    if (!await askConfirm(confirmMsg)) return;
     setDeletingCatId(id);
     try {
       await caseCategoriesApi.remove(id);
@@ -406,7 +407,7 @@ export default function AdminCases() {
         ) : (
           <div className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-soft">
             <div className="overflow-x-auto">
-              <table className="w-full text-start text-sm">
+              <table className="table-cards w-full text-start text-sm">
                 <thead className="border-b border-border bg-muted/40 text-xs font-bold text-muted-foreground">
                   <tr>
                     <th className="p-3.5 text-start">{isAr ? "كود الحالة" : "Code"}</th>
@@ -428,11 +429,11 @@ export default function AdminCases() {
 
                     return (
                       <tr key={item.id != null ? String(item.id) : `case-idx-${_idx}`} className="hover:bg-muted/30 transition-colors">
-                        <td className="p-3.5 font-mono text-xs font-bold text-primary">
+                        <td data-label={isAr ? "الكود" : "Code"} className="p-3.5 font-mono text-xs font-bold text-primary">
                           {item.code || `CASE-${item.id}`}
                         </td>
 
-                        <td className="p-3.5 max-w-[260px]">
+                        <td className="card-main p-3.5 max-w-[260px]">
                           <Link
                             to={`/admin/cases/${item.id}`}
                             className="font-bold text-foreground hover:text-primary transition line-clamp-1"
@@ -445,7 +446,7 @@ export default function AdminCases() {
                           </p>
                         </td>
 
-                        <td className="p-3.5">
+                        <td data-label={isAr ? "مرتبطة بـ" : "Linked to"} className="p-3.5">
                           {progLinked ? (
                             <span className="inline-flex items-center gap-1 rounded-md bg-blue-500/10 px-2 py-0.5 text-[11px] font-bold text-blue-700 dark:text-blue-300">
                               <BookOpen className="h-3 w-3" />
@@ -468,12 +469,12 @@ export default function AdminCases() {
                           )}
                         </td>
 
-                        <td className="p-3.5 text-xs text-muted-foreground whitespace-nowrap">
+                        <td data-label={isAr ? "المكان" : "Location"} className="p-3.5 text-xs text-muted-foreground whitespace-nowrap">
                           {item.governorate || "الدقهلية"}
                           {item.city ? ` • ${item.city}` : ""}
                         </td>
 
-                        <td className="p-3.5">
+                        <td data-label={isAr ? "الأولوية" : "Priority"} className="p-3.5">
                           <span
                             className={`rounded-md px-2 py-0.5 text-[11px] font-bold ${
                               item.priority === "high" || item.priority === "critical"
@@ -491,11 +492,11 @@ export default function AdminCases() {
                           </span>
                         </td>
 
-                        <td className="p-3.5 font-mono text-xs font-bold text-foreground whitespace-nowrap">
+                        <td data-label={isAr ? "المبلغ المطلوب" : "Target"} className="p-3.5 font-mono text-xs font-bold text-foreground whitespace-nowrap">
                           {Number(item.target_amount || 0).toLocaleString()} ج.م
                         </td>
 
-                        <td className="p-3.5">
+                        <td data-label={isAr ? "الحالة" : "Status"} className="p-3.5">
                           <span
                             className={`rounded-md px-2 py-0.5 text-[11px] font-bold ${
                               normSt === "approved"
@@ -513,7 +514,7 @@ export default function AdminCases() {
                           </span>
                         </td>
 
-                        <td className="p-3.5 text-end whitespace-nowrap">
+                        <td className="card-actions p-3.5 text-end whitespace-nowrap">
                           <div className="inline-flex items-center gap-1">
                             {normSt === "pending_review" && (
                               <Button

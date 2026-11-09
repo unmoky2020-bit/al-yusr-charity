@@ -22,6 +22,7 @@ type Application = Omit<BaseApplication, "status"> & { status: ApplicationStatus
 import { logActivity } from "@/lib/activityLog";
 import { uploadImage } from "@/data/laravelApi";
 import { publicUrls } from "@/lib/publicUrls";
+import { askConfirm } from "@/components/common/confirm";
 
 const CAMPAIGN_STATUSES: { v: CampaignStatus; ar: string; en: string; tone: string }[] = [
   { v: "draft",     ar: "مسودة",   en: "Draft",     tone: "bg-muted text-muted-foreground" },
@@ -177,7 +178,7 @@ export default function AdminCampaignDetail() {
 
   const remove = async () => {
     if (!row) return;
-    if (!confirm(isAr ? "حذف الحملة؟" : "Delete campaign?")) return;
+    if (!await askConfirm(isAr ? "حذف الحملة؟" : "Delete campaign?")) return;
     try { await deleteCampaign(row.id); toast({ title: isAr ? "تم الحذف" : "Deleted" }); nav("/admin/campaigns"); }
     catch (e) { toast({ title: apiErrorMessage(e), variant: "destructive" }); }
   };
@@ -288,7 +289,7 @@ export default function AdminCampaignDetail() {
   const bulk = async (next: ApplicationStatus) => {
     const targets = filtered.filter(a => a.status === "pending");
     if (targets.length === 0) return;
-    if (!confirm(isAr ? `تطبيق "${APP_STATUSES.find(s=>s.v===next)?.ar}" على ${targets.length} طلب؟` : `Apply to ${targets.length}?`)) return;
+    if (!await askConfirm(isAr ? `تطبيق "${APP_STATUSES.find(s=>s.v===next)?.ar}" على ${targets.length} طلب؟` : `Apply to ${targets.length}?`)) return;
     setBusy(true);
     let failed = 0;
     let lastErr: unknown = null;
@@ -351,7 +352,7 @@ export default function AdminCampaignDetail() {
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard accent label={isAr ? "أماكن مشغولة" : "Slots filled"} value={`${row.slots_filled} / ${form.slots_needed}`} sub={`${pct}%`} />
           <StatCard label={isAr ? "إجمالي الطلبات" : "Total applications"} value={counts.total} />
           <StatCard label={isAr ? "بانتظار" : "Pending"} value={counts.pending} />

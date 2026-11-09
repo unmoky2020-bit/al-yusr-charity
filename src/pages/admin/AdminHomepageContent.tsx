@@ -43,6 +43,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import brandBags from "@/assets/brand-bags.jpg";
 import brandPoster from "@/assets/brand-poster-frame.jpg";
 import { errorReason } from "@/lib/notify";
+import { askConfirm } from "@/components/common/confirm";
 
 export const AdminHomepageContent = () => {
   const { lang } = useLang();
@@ -229,8 +230,8 @@ export const AdminHomepageContent = () => {
   };
 
 
-  const handleReset = () => {
-    if (confirm(isRTL ? "استعادة القيم الأصلية؟" : "Reset to defaults?")) {
+  const handleReset = async () => {
+    if (await askConfirm(isRTL ? "استعادة القيم الأصلية؟" : "Reset to defaults?")) {
       loadContent();
     }
   };

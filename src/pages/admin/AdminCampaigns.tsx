@@ -13,6 +13,7 @@ import {
   listAllCampaigns, upsertCampaign, deleteCampaign, listApplications,
   setApplicationStatus, deleteApplication, slugify,
 } from "@/data/campaignsApi";
+import { askConfirm } from "@/components/common/confirm";
 
 const STATUS_LABEL: Record<CampaignStatus, { ar: string; en: string; cls: string }> = {
   draft:     { ar: "مسودة",  en: "Draft",     cls: "bg-muted text-muted-foreground" },
@@ -117,7 +118,7 @@ const Inner = () => {
   };
 
   const remove = async (id: string) => {
-    if (!confirm(lang === "ar" ? "حذف الحملة؟" : "Delete campaign?")) return;
+    if (!await askConfirm(lang === "ar" ? "حذف الحملة؟" : "Delete campaign?")) return;
     try { await deleteCampaign(id); load(); toast({ title: lang === "ar" ? " محذوفة" : " Deleted" }); }
     catch (e: any) { toast({ title: e.message, variant: "destructive" }); }
   };
@@ -130,7 +131,7 @@ const Inner = () => {
     } catch (e: any) { toast({ title: e.message, variant: "destructive" }); }
   };
   const removeApp = async (id: string) => {
-    if (!confirm("Delete?")) return;
+    if (!await askConfirm("Delete?")) return;
     try { await deleteApplication(id); if (appsFor) await loadApps(appsFor); load(); } catch (e: any) { toast({ title: e.message, variant: "destructive" }); }
   };
 
@@ -153,7 +154,7 @@ const Inner = () => {
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard accent label={lang === "ar" ? "إجمالي الحملات" : "Total"} value={stats.total} />
           <StatCard label={lang === "ar" ? "مفتوحة الآن" : "Open now"} value={stats.open} />
           <StatCard label={lang === "ar" ? "مقاعد متبقية" : "Slots remaining"} value={stats.needed} />
@@ -188,7 +189,7 @@ const Inner = () => {
             {filtered.map((c) => {
               const remaining = Math.max(0, c.slots_needed - c.slots_filled);
               const pct = c.slots_needed ? Math.min(100, Math.round((c.slots_filled / c.slots_needed) * 100)) : 0;
-              const st = STATUS_LABEL[c.status];
+              const st = STATUS_LABEL[c.status] ?? { ar: String(c.status ?? "—"), en: String(c.status ?? "—"), cls: "bg-muted text-muted-foreground" };
               return (
                 <div key={c.id} className="flex flex-col rounded-2xl bg-card p-4 shadow-soft">
                   <div className="flex items-start justify-between gap-2">
@@ -289,7 +290,7 @@ const Inner = () => {
               {appsLoading ? <div className="py-6 text-center text-sm text-muted-foreground">…</div> :
                 apps.length === 0 ? <div className="rounded-xl bg-muted/30 p-6 text-center text-sm text-muted-foreground">{lang === "ar" ? "لا توجد طلبات بعد" : "No applications yet"}</div> :
                 apps.map((a) => {
-                  const st = APP_STATUS[a.status];
+                  const st = APP_STATUS[a.status] ?? { ar: String(a.status ?? "—"), en: String(a.status ?? "—"), cls: "bg-muted text-muted-foreground" };
                   return (
                     <div key={a.id} className="rounded-xl bg-muted/30 p-3">
                       <div className="flex items-start justify-between gap-2">

@@ -19,6 +19,7 @@ import {
   type PackageOwnerKind,
 } from "@/data/api/programsAdminApi";
 import { NeedsBackendBadge } from "./FormKit";
+import { askConfirm } from "@/components/common/confirm";
 
 interface Draft {
   name_ar: string;
@@ -126,7 +127,7 @@ export function PackagesEditor({
   };
 
   const deleteRow = async (p: DonationPackageRow) => {
-    if (!window.confirm(`حذف الباقة «${p.name_ar}»؟`)) return;
+    if (!await askConfirm(`حذف الباقة «${p.name_ar}»؟`)) return;
     setBusy(`del-${p.id}`);
     try {
       await donationPackagesAdminApi.remove(kind, ownerId, p.id);

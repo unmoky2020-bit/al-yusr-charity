@@ -19,6 +19,7 @@ import { NOTIFICATION_TYPES } from "@/data/notifications/notificationLinks";
 import { describeWriteError } from "@/data/api/backendPending";
 import { disablePush, enablePush, getPushStatus, type PushStatus } from "@/lib/webPush";
 import { NotificationsEmpty } from "@/components/notifications/NotificationsEmpty";
+import { askConfirm } from "@/components/common/confirm";
 
 const FILTERS = [
   { key: "all", label: "الكل" },
@@ -85,7 +86,7 @@ export default function AdminNotifications() {
   };
 
   const clearRead = async () => {
-    if (!window.confirm("حذف كل الإشعارات المقروءة؟")) return;
+    if (!await askConfirm("حذف كل الإشعارات المقروءة؟")) return;
     try {
       const n = await deleteReadNotifications();
       toast.success(`اتحذف ${n} إشعار`);

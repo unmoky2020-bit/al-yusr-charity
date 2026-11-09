@@ -20,6 +20,7 @@ import {
 } from "@/data/laravelApi";
 import { apiErrorMessageAr, projectsAdminApi } from "@/data/api/programsAdminApi";
 import { PackagesEditor } from "@/components/admin/programs/PackagesEditor";
+import { askConfirm } from "@/components/common/confirm";
 
 export default function AdminProjects() {
   const { lang } = useLang();
@@ -90,7 +91,7 @@ export default function AdminProjects() {
 
   // Delete Project
   const handleDeleteProject = async (id: number | string) => {
-    if (!confirm(isAr ? "هل أنت متأكد من حذف هذا المشروع؟" : "Are you sure you want to delete this project?")) return;
+    if (!await askConfirm(isAr ? "هل أنت متأكد من حذف هذا المشروع؟" : "Are you sure you want to delete this project?")) return;
     try {
       await projectsAdminApi.remove(id);
       setProjects((prev) => prev.filter((p) => String(p.id) !== String(id)));

@@ -77,22 +77,19 @@ export function mapApiGalleryImage(raw: ApiRecord, fallback?: GalleryImage): Gal
 }
 
 /** API images first, then static images the API does not have. Empty -> static list itself. */
-function mergeApiFirst(apiImages: GalleryImage[], staticImages: GalleryImage[]): GalleryImage[] {
-  const valid = apiImages.filter((img) => img.src && img.src !== "/placeholder.svg");
-  if (!valid.length) return staticImages;
-  const ids = new Set(valid.map((d) => d.id));
-  return [...valid, ...staticImages.filter((img) => !ids.has(img.id))];
-}
 
 /** Final image list from raw /gallery records (pure; used by the hook and the tests). */
 export function resolveGalleryImages(records: ApiRecord[] | undefined, source: ContentSource = CONTENT_SOURCE): GalleryImage[] {
-  if (source === "static" || !records || !records.length) return GALLERY_STATIC_IMAGES;
+  // The built-in photos stand in only when the server can't be reached (no records at all). Once the
+  // server answers, its list IS the gallery: a photo removed in the dashboard must not come back from
+  // the built-in set (9 Nov 2026: deleted photos kept showing because the two lists were merged).
+  if (source === "static" || !records) return GALLERY_STATIC_IMAGES;
   const byId = new Map(GALLERY_STATIC_IMAGES.map((g) => [g.id, g]));
-  const mapped = records
+  return records
     .filter(isPublicRecord)
     .sort((a, b) => (num(a.sort_order) ?? 0) - (num(b.sort_order) ?? 0))
-    .map((r) => mapApiGalleryImage(r, byId.get(galleryIdOf(r) ?? "")));
-  return mergeApiFirst(mapped, GALLERY_STATIC_IMAGES);
+    .map((r) => mapApiGalleryImage(r, byId.get(galleryIdOf(r) ?? "")))
+    .filter((img) => img.src && img.src !== "/placeholder.svg");
 }
 
 /* ── Legacy path (flag = "static"): byte-for-byte the mapping Gallery.tsx used before. ── */

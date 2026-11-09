@@ -164,7 +164,7 @@ export default function AdminCampaignResults() {
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <StatCard accent label={isAr ? "إجمالي التبرعات (مطابقة)" : "Donations (matching)"} value={formatNumberEN(totals.count)} />
           <StatCard label={isAr ? "تبرعات مدفوعة (في الصفحة)" : "Paid (this page)"} value={formatNumberEN(totals.paid)} />
           <StatCard label={isAr ? "تم جمعه (في الصفحة)" : "Raised (this page)"} value={`${formatNumberEN(totals.raised)} EGP`} />

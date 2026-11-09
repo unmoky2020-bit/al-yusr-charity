@@ -4,6 +4,7 @@ import {
   BookOpen, Sparkles, AlertTriangle, CheckCircle2, Wand2,
 } from "lucide-react";
 import { auditArticleBody, cleanArticleBody } from "@/lib/article-links";
+import { askConfirm } from "@/components/common/confirm";
 
 /**
  * The article editor's toolbar (Markdown, like WordPress blocks): headings, bold, links, lists, a table,
@@ -73,7 +74,7 @@ export function ArticleToolbar({
         ))}
         <span className="mx-1 h-5 w-px bg-border" aria-hidden />
         <button type="button" disabled={!fixable}
-          onClick={() => { if (window.confirm("هنحوّل الروابط المكتوبة كنص لروابط، ونحط الكلمة المفتاحية مكان الرابط لو مكتوب كأنه كلمة. نكمّل؟")) onChange(cleanArticleBody(value, slug, focus)); }}
+          onClick={async () => { if (await askConfirm("هنحوّل الروابط المكتوبة كنص لروابط، ونحط الكلمة المفتاحية مكان الرابط لو مكتوب كأنه كلمة. نكمّل؟")) onChange(cleanArticleBody(value, slug, focus)); }}
           className="inline-flex h-8 items-center gap-1 rounded-md bg-secondary/25 px-2.5 text-[11px] font-black text-primary transition hover:bg-secondary/40 disabled:opacity-40">
           <Wand2 className="h-3.5 w-3.5" /> نظّف المقال
         </button>

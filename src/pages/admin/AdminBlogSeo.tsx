@@ -28,6 +28,7 @@ import { lintArticleSchema, type SchemaIssue } from "@/lib/lint-jsonld";
 import { toast } from "@/hooks/use-toast";
 import { BlogImportDialog } from "@/components/admin/BlogImportDialog";
 import { publicUrls } from "@/lib/publicUrls";
+import { askConfirm } from "@/components/common/confirm";
 
 type Row = {
   post: BlogPost;
@@ -185,7 +186,7 @@ const Inner = () => {
   const generateMissingOg = async () => {
     const todo = rows.filter((r) => r.db && !r.db.og_image_url);
     if (!todo.length) { toast({ title: isRTL ? "كل المقالات ليها صورة مشاركة" : "Every article has an OG image" }); return; }
-    if (!confirm(isRTL ? `هنعمل صورة مشاركة (1200×630) لـ ${todo.length} مقال من عنوانه وتصنيفه، ونحطها غلاف للي مالوش غلاف. نكمّل؟` : `Generate OG images for ${todo.length} articles?`)) return;
+    if (!await askConfirm(isRTL ? `هنعمل صورة مشاركة (1200×630) لـ ${todo.length} مقال من عنوانه وتصنيفه، ونحطها غلاف للي مالوش غلاف. نكمّل؟` : `Generate OG images for ${todo.length} articles?`)) return;
     let ok = 0;
     setBulkOg({ done: 0, total: todo.length });
     for (const r of todo) {
@@ -207,7 +208,7 @@ const Inner = () => {
     const msg = builtIn
       ? (isRTL ? `«${row.post.ar.title}» جزء من كود الموقع، فهيتأرشف ويختفي من المدونة والسايت ماب. نكمّل؟` : "This built-in article will be archived (hidden). Continue?")
       : (isRTL ? `حذف «${row.post.ar.title}» نهائيًا؟` : "Delete this article permanently?");
-    if (!confirm(msg)) return;
+    if (!await askConfirm(msg)) return;
     try {
       const r = await deletePost(row.db.id);
       toast({ title: r === "archived" ? (isRTL ? "اتأرشف المقال" : "Archived") : (isRTL ? "اتحذف المقال" : "Deleted") });
@@ -274,7 +275,7 @@ const Inner = () => {
         </div>
       </div>
       {/* KPIs */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard label={isRTL ? "إجمالي المقالات" : "Total posts"} value={totals.posts} />
         <StatCard label={isRTL ? "متوسط نقاط السيو" : "Avg SEO score"} value={`${totals.avg}/100`} accent />
         <StatCard label={isRTL ? "محتاج تحسين" : "Needs work"} value={totals.weak} />
@@ -334,8 +335,8 @@ const Inner = () => {
       </div>
 
       {/* Table */}
-      <div className="mt-4 overflow-x-auto rounded-2xl border border-border bg-card">
-        <table className="w-full min-w-[720px] text-sm">
+      <div className="mt-4 overflow-x-auto rounded-2xl border border-border bg-card max-md:overflow-visible max-md:border-0 max-md:bg-transparent">
+        <table className="table-cards w-full min-w-[720px] text-sm">
           <thead className="bg-muted/50 text-xs font-extrabold text-muted-foreground">
             <tr className="text-start">
               <th className="p-3 text-start">{isRTL ? "المقال" : "Article"}</th>
@@ -360,7 +361,7 @@ const Inner = () => {
               const meta = STATUS_LABELS[status];
               return (
                 <tr key={r.post.slug} className="border-t border-border align-top">
-                  <td className="p-3">
+                  <td className="card-main p-3">
                     <div className="flex items-start gap-2">
                       <img src={r.post.image} alt="" className="h-10 w-14 rounded object-cover" />
                       <div className="min-w-0">
@@ -396,8 +397,8 @@ const Inner = () => {
                       )}
                     </div>
                   </td>
-                  <td className={`p-3 font-black ${tone}`}>{r.score}</td>
-                  <td className="p-3">
+                  <td data-label={isRTL ? "نقاط السيو" : "SEO score"} className={`p-3 font-black ${tone}`}>{r.score}/100</td>
+                  <td className="card-actions p-3">
                     <div className="flex items-center justify-end gap-1">
                       <Link to={`/admin/blog/${r.post.slug}`} className="inline-flex items-center gap-1 rounded-md bg-orange-grad px-2 py-1 text-[11px] font-extrabold text-accent-foreground hover:opacity-90">
                         <Pencil className="h-3 w-3" /> {isRTL ? "تعديل" : "Edit"}

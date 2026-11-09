@@ -760,20 +760,22 @@ html { scrollbar-width: thin; scrollbar-color: hsl(var(--primary) / 0.35) transp
   background: hsl(var(--primary) / 0.55);
 }
 
-/* Mobile RTL polish — keep bold display headings readable on 320–420px */
+/* Mobile RTL polish — keep bold display headings readable on 320–420px.
+   Public site only: the dashboard (body.admin-body, set by AdminLayout) keeps its own compact sizes —
+   these rules made every dashboard title huge and centred the menu labels on phones (9 Nov 2026). */
 @media (max-width: 420px) {
-  h1 { font-size: clamp(1.75rem, 8vw, 2.25rem) !important; line-height: 1.15 !important; }
-  h2 { font-size: clamp(1.5rem, 7vw, 2rem) !important; line-height: 1.2 !important; }
-  .container { padding-left: 1rem !important; padding-right: 1rem !important; }
+  body:not(.admin-body) h1 { font-size: clamp(1.75rem, 8vw, 2.25rem) !important; line-height: 1.15 !important; }
+  body:not(.admin-body) h2 { font-size: clamp(1.5rem, 7vw, 2rem) !important; line-height: 1.2 !important; }
+  body:not(.admin-body) .container { padding-left: 1rem !important; padding-right: 1rem !important; }
   /* Footer columns center cleanly */
   footer .grid > * { text-align: center; }
 
   /* When a grid or flex container has a single child on small screens,
      center that child for nicer lone-item layouts in header/footer. */
-  .container .grid > *:only-child,
-  .container .flex > *:only-child,
-  nav .grid > *:only-child,
-  nav .flex > *:only-child,
+  body:not(.admin-body) .container .grid > *:only-child,
+  body:not(.admin-body) .container .flex > *:only-child,
+  body:not(.admin-body) nav .grid > *:only-child,
+  body:not(.admin-body) nav .flex > *:only-child,
   footer .grid > *:only-child,
   footer .flex > *:only-child {
     justify-self: center;
@@ -782,9 +784,9 @@ html { scrollbar-width: thin; scrollbar-color: hsl(var(--primary) / 0.35) transp
     text-align: center;
   }
   /* Ensure lone links shrink to content width so margin auto centers them */
-  .container .grid > *:only-child > a,
+  body:not(.admin-body) .container .grid > *:only-child > a,
   footer .grid > *:only-child > a,
-  nav .grid > *:only-child > a {
+  body:not(.admin-body) nav .grid > *:only-child > a {
     display: inline-block;
   }
 }
@@ -1329,3 +1331,52 @@ img, video, svg, canvas {
 /* Loading mark shared by the boot splash (index.html) and PageLoadingState. */
 @keyframes yusr-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.94); opacity: .82; } }
 @keyframes yusr-slide { 0% { transform: translateX(-110%); } 100% { transform: translateX(260%); } }
+
+/* The site's confirm box (src/components/common/confirm). */
+@keyframes confirm-pulse { 0% { transform: scale(.82); opacity: .95; } 100% { transform: scale(1.45); opacity: 0; } }
+@keyframes confirm-tilt { 0% { transform: rotate(0) scale(.86); } 45% { transform: rotate(4deg) scale(1.04); } 70% { transform: rotate(-5deg); } 100% { transform: rotate(-3deg); } }
+@keyframes confirm-wiggle { 0% { transform: rotate(0) scale(.7); } 45% { transform: rotate(-10deg) scale(1.08); } 75% { transform: rotate(6deg); } 100% { transform: rotate(0) scale(1); } }
+
+/* ── Dashboard on phones (body.admin-body) ─────────────────────────────────
+   Tables keep one line per cell and scroll sideways inside their own box instead of squeezing every
+   column into a tall stack of wrapped words. */
+@media (max-width: 767px) {
+  .admin-body main table:not(.table-cards) { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+  .admin-body main table:not(.table-cards) th,
+  .admin-body main table:not(.table-cards) td { white-space: nowrap; }
+  .admin-body main table:not(.table-cards) th { padding-top: .6rem; padding-bottom: .6rem; }
+  .admin-body main table:not(.table-cards) td { padding-top: .55rem; padding-bottom: .55rem; }
+  /* button groups inside a cell stay on one line (a wrapping group stacked buttons into very tall rows) */
+  .admin-body main table:not(.table-cards) td .flex-wrap { flex-wrap: nowrap; }
+
+  /* table.table-cards: each row becomes a card. The cell with .card-main spans the top, cells with
+     data-label show that label above their value in two neat columns, .card-actions sits at the bottom. */
+  .admin-body main table.table-cards,
+  .admin-body main table.table-cards > tbody { display: block; min-width: 0 !important; width: 100%; }
+  .admin-body main table.table-cards > thead { display: none; }
+  .admin-body main table.table-cards > tbody > tr {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem .9rem;
+    margin: .5rem; padding: .85rem; border: 1px solid hsl(var(--border) / .8); border-radius: 1.1rem;
+    background: hsl(var(--card)); box-shadow: 0 1px 2px rgb(0 0 0 / .04);
+  }
+  .admin-body main table.table-cards > tbody > tr > td {
+    display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; min-width: 0;
+    max-width: none !important; padding: 0 !important; white-space: normal; text-align: start; border: 0;
+  }
+  .admin-body main table.table-cards > tbody > tr > td[data-label]::before {
+    content: attr(data-label); font-size: 10.5px; font-weight: 800; line-height: 1.2; color: hsl(var(--muted-foreground));
+  }
+  .admin-body main table.table-cards > tbody > tr > td.card-main { grid-column: 1 / -1; order: -1; }
+  .admin-body main table.table-cards > tbody > tr > td.card-wide,
+  .admin-body main table.table-cards > tbody > tr > td[colspan] { grid-column: 1 / -1; }
+  .admin-body main table.table-cards > tbody > tr > td.card-actions {
+    grid-column: 1 / -1; order: 99; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: flex-end;
+    border-top: 1px solid hsl(var(--border) / .6); padding-top: .65rem !important;
+  }
+  /* a row checkbox sits in the card's top corner */
+  .admin-body main table.table-cards > tbody > tr { position: relative; }
+  .admin-body main table.table-cards > tbody > tr > td.card-check { position: absolute; top: .85rem; inset-inline-end: .85rem; }
+  .admin-body main table.table-cards > tbody > tr:has(> td.card-check) > td.card-main { padding-left: 2rem !important; padding-right: 2rem !important; }
+  .admin-body main table.table-cards > tbody > tr > td.card-hide,
+  .admin-body main table.table-cards > tbody > tr > td.hidden { display: none; }
+}

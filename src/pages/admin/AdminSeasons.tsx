@@ -24,6 +24,7 @@ import {
   RefreshCw,
   DatabaseZap,
 } from "lucide-react";
+import { askConfirm } from "@/components/common/confirm";
 
 /**
  * Seasons CMS: reads and writes the backend `/seasons` table (no localStorage).
@@ -205,7 +206,7 @@ export const AdminSeasons: React.FC = () => {
   };
 
   const handleDelete = async (r: SeasonRecord) => {
-    if (!window.confirm(isRTL ? `حذف الموسم «${r.name_ar}» من قاعدة البيانات؟` : `Delete season "${r.name_en || r.name_ar}"?`)) return;
+    if (!await askConfirm(isRTL ? `حذف الموسم «${r.name_ar}» من قاعدة البيانات؟` : `Delete season "${r.name_en || r.name_ar}"?`)) return;
     setBusyId(r.id);
     try {
       await seasonsApi.remove(r.id);

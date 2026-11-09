@@ -28,6 +28,7 @@ import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { DAKAHLIA_CITIES } from "@/data/dakahliaCities";
 import { axesApi, programsApiV1, projectsApi, donationCampaignsApi, type LaravelAxis, type LaravelProgram, type LaravelProject, type LaravelDonationCampaign } from "@/data/laravelApi";
 import { publicUrls } from "@/lib/publicUrls";
+import { askConfirm } from "@/components/common/confirm";
 
 type CaseRow = NonNullable<Awaited<ReturnType<typeof getCaseById>>>;
 type Relation = "none" | "program" | "project" | "campaign";
@@ -272,7 +273,7 @@ export default function AdminCaseDetail() {
 
   const remove = async () => {
     if (!row) return;
-    if (!confirm("حذف الحالة نهائياً؟ هتتحذف معاها صورها وتحديثاتها.")) return;
+    if (!await askConfirm("حذف الحالة نهائياً؟ هتتحذف معاها صورها وتحديثاتها.")) return;
     try {
       await deleteCase(row.id);
       toast({ title: "تم الحذف" });
@@ -329,7 +330,7 @@ export default function AdminCaseDetail() {
   };
 
   const removeUpd = async (uid: string) => {
-    if (!row || !confirm("حذف هذا التحديث؟")) return;
+    if (!row || !await askConfirm("حذف هذا التحديث؟")) return;
     try {
       await deleteCaseUpdate(uid);
       toast({ title: "تم الحذف" });
@@ -362,7 +363,7 @@ export default function AdminCaseDetail() {
   };
 
   const removeDoc = async (docId: string) => {
-    if (!row || !confirm("حذف المستند نهائياً؟")) return;
+    if (!row || !await askConfirm("حذف المستند نهائياً؟")) return;
     try {
       await deleteCaseDocument(docId);
       toast({ title: "تم حذف المستند" });
@@ -588,7 +589,7 @@ export default function AdminCaseDetail() {
         ) : (
           <>
             {/* Stats */}
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
               <StatCard accent label="نسبة التمويل" value={`${pct}%`} sub={`${formatNumberEN(raised)} / ${formatNumberEN(form.needed_amount)} ج.م`} />
               <StatCard label="تبرعات مدفوعة" value={paid.length} sub={`${formatNumberEN(paidTotal)} ج.م`} />
               <StatCard label="كل محاولات التبرع" value={donations.length} />

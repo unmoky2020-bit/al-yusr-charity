@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
@@ -30,6 +30,29 @@ export const AdminLayout = ({
   const { pathname } = useLocation();
   const pending = pendingForPath(pathname);
   const [open, setOpen] = useState(false);
+  const drawerRef = useRef<HTMLElement | null>(null);
+
+  // The public site's phone-only CSS (huge headings, centred lone items) must not reach the dashboard.
+  useEffect(() => {
+    document.body.classList.add("admin-body");
+    return () => document.body.classList.remove("admin-body");
+  }, []);
+
+  // Phone menu: closes on navigation and with Esc, locks the page behind it, opens at the current item.
+  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    window.addEventListener("keydown", onKey);
+    const t = window.setTimeout(() => drawerRef.current?.querySelector<HTMLElement>("[aria-current='page']")?.scrollIntoView({ block: "center" }), 60);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+      window.clearTimeout(t);
+    };
+  }, [open]);
 
   const { roleKey, navGroups, serverAllowed } = useAdminNav();
   const blocked = serverAllowed !== null && !canOpenAdminPath(pathname, serverAllowed);
@@ -57,10 +80,11 @@ export const AdminLayout = ({
 
         {/* Sidebar - mobile drawer */}
         {open && (
-          <div className="fixed inset-0 z-50 md:hidden" onClick={() => setOpen(false)}>
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-xs" />
+          <div className="fixed inset-0 z-[120] md:hidden" onClick={() => setOpen(false)} role="dialog" aria-modal="true" aria-label={lang === "ar" ? "قائمة لوحة التحكم" : "Dashboard menu"}>
+            <div className="absolute inset-0 bg-[#03140b]/60 backdrop-blur-[2px] animate-in fade-in-0 duration-200" />
             <aside
-              className="absolute inset-y-0 start-0 flex w-72 max-w-[85vw] flex-col text-primary-foreground shadow-2xl"
+              ref={drawerRef}
+              className={`absolute inset-y-0 start-0 flex w-[86vw] max-w-[320px] flex-col text-primary-foreground shadow-2xl animate-in duration-300 ease-out ${lang === "ar" ? "slide-in-from-right-full rounded-s-3xl" : "slide-in-from-left-full rounded-e-3xl"}`}
               dir={lang === "ar" ? "rtl" : "ltr"}
               style={{ backgroundColor: "hsl(152 55% 14%)" }}
               onClick={(e) => e.stopPropagation()}
@@ -72,37 +96,39 @@ export const AdminLayout = ({
 
         {/* Main */}
         <div className="flex flex-1 flex-col overflow-hidden">
-          <header className="bg-subhero sticky top-0 z-30 flex h-[61px] shrink-0 items-center justify-between gap-2 border-b border-secondary/20 px-3 backdrop-blur md:px-6">
+          <header className="bg-subhero sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-secondary/20 px-3 backdrop-blur md:h-[61px] md:px-6">
             <div className="flex min-w-0 items-center gap-2">
               <button
                 onClick={() => setOpen(true)}
                 aria-label="Open menu"
-                className="grid h-9 w-9 place-items-center rounded-lg border border-secondary/30 bg-primary-foreground/10 text-primary-foreground md:hidden"
+                aria-expanded={open}
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-secondary/30 bg-primary-foreground/10 text-primary-foreground transition active:scale-95 md:hidden"
               >
                 <Menu className="h-4 w-4" />
               </button>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <h1 className="truncate text-base font-black text-primary-foreground md:text-xl">{pageTitle}</h1>
+                  <h1 className="truncate text-[15px] font-black leading-tight text-primary-foreground md:text-xl">{pageTitle}</h1>
                 </div>
                 <p className="hidden text-[11px] text-primary-foreground/70 md:block">
                   {lang === "ar" ? "مؤسسة اليسر الخيرية — لوحة الإدارة" : "Al-Yusr Foundation — Admin"}
                 </p>
               </div>
             </div>
-            <div className="flex shrink-0 items-center gap-1.5">
+            <div className="flex shrink-0 items-center gap-1 md:gap-1.5">
               <NotificationsBell />
               <button
                 onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-                className="flex h-9 items-center gap-1 rounded-lg border border-secondary/30 bg-primary-foreground/10 px-2.5 text-xs font-bold text-primary-foreground hover:bg-primary-foreground/20"
+                className="flex h-9 items-center gap-1 rounded-xl border border-secondary/30 bg-primary-foreground/10 px-2 text-xs font-bold text-primary-foreground hover:bg-primary-foreground/20 md:px-2.5"
                 aria-label="toggle language"
               >
-                <Globe className="h-3.5 w-3.5" />
+                <Globe className="hidden h-3.5 w-3.5 sm:block" />
                 {lang === "ar" ? "EN" : "ع"}
               </button>
               <Link
                 to="/"
-                className="flex h-9 items-center gap-1 rounded-lg bg-secondary px-3 text-xs font-bold text-secondary-foreground hover:opacity-90"
+                aria-label={lang === "ar" ? "فتح الموقع" : "Open the site"}
+                className="flex h-9 items-center gap-1 rounded-xl bg-secondary px-2.5 text-xs font-bold text-secondary-foreground hover:opacity-90 md:px-3"
               >
                 <ArrowUpRight className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">{lang === "ar" ? "الموقع" : "Site"}</span>
@@ -110,7 +136,7 @@ export const AdminLayout = ({
             </div>
           </header>
 
-          <main className="relative flex-1 overflow-y-auto p-3 md:p-6">
+          <main className="relative flex-1 overflow-y-auto overflow-x-hidden px-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 md:p-6">
             <div key={pathname} className="admin-fade-in admin-stagger">
               {pending && (
                 <div className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900" dir="rtl">
@@ -187,11 +213,11 @@ const SidebarContent = ({
             </span>
           </span>
         </Link>
-        <button onClick={onNavigate} className="rounded-md p-1 text-primary-foreground/70 hover:text-primary-foreground md:hidden" aria-label="close">
+        <button onClick={onNavigate} className="grid h-9 w-9 place-items-center rounded-xl bg-primary-foreground/10 text-primary-foreground/80 transition hover:text-primary-foreground active:scale-95 md:hidden" aria-label={lang === "ar" ? "اقفل القائمة" : "Close menu"}>
           <X className="h-5 w-5" />
         </button>
       </div>
-      <nav className="flex-1 space-y-4 overflow-y-auto p-3">
+      <nav className="flex-1 space-y-4 overflow-y-auto overscroll-contain p-3">
         {groups.map((g) => (
           <div key={g.ar}>
             <div className="px-3 pb-1.5 text-[10px] font-extrabold uppercase tracking-wider text-secondary/80">
@@ -210,7 +236,7 @@ const SidebarContent = ({
                   return (
                     <div key={it.href} className="space-y-1">
                       <div
-                        className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs sm:text-sm font-bold transition text-start ${
+                        className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-[13.5px] font-bold transition text-start md:py-2 md:text-sm ${
                           isParentActive
                             ? "bg-secondary text-secondary-foreground shadow-md font-black"
                             : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"
@@ -282,7 +308,7 @@ const SidebarContent = ({
                     to={it.href}
                     end={it.href === "/admin"}
                     onClick={onNavigate}
-                    className={`flex w-full items-center justify-start gap-3 rounded-xl px-3 py-2 text-xs sm:text-sm font-bold transition text-start ${
+                    className={`flex w-full items-center justify-start gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-bold transition text-start md:py-2 md:text-sm ${
                       active
                         ? "bg-secondary text-secondary-foreground shadow-md font-black"
                         : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"

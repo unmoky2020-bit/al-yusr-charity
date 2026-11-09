@@ -14,6 +14,7 @@ import { LazyImage } from "@/components/common/LazyImage";
 import { GALLERY_PROGRAMS } from "@/data/galleryApi";
 import { type GalleryImage } from "@/data/galleryImages";
 import { useGalleryImages } from "@/data/sources/gallery";
+import { TileGridSkeleton } from "@/components/common/ContentSkeletons";
 import { responsiveImage } from "@/lib/image-srcset";
 
 const PAGE_SIZE = 8;
@@ -63,8 +64,8 @@ const Gallery = () => {
   const [cat, setCat] = useState<string>("all");
   const [page, setPage] = useState(1);
 
-  // Live merged list (DB rows first, static images as fallback/seed) — resolved by the content source.
-  const { images: allImages } = useGalleryImages();
+  // The server's photos (the built-in set only when the server can't be reached).
+  const { images: allImages, isLoading: imagesLoading } = useGalleryImages();
 
   // Build category chips from active program slugs found in current data, plus "all".
   const activeSlugs = useMemo(() => {
@@ -286,7 +287,13 @@ const Gallery = () => {
 
         
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
+          {imagesLoading && <TileGridSkeleton count={8} className="lg:!grid-cols-4" />}
+          {!imagesLoading && filtered.length === 0 && (
+            <p className="mx-auto max-w-md rounded-2xl border border-dashed border-border p-8 text-center text-sm font-bold text-muted-foreground">
+              {isRTL ? "مفيش صور في القسم ده دلوقتي." : "No photos here yet."}
+            </p>
+          )}
+          <div className={`grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 ${imagesLoading ? "hidden" : ""}`}>
             {pageItems.map((img) => (
               <GalleryCard
                 key={img.id}

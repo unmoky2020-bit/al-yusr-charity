@@ -238,7 +238,7 @@ const Page = () => {
         </div>
 
         {/* KPIs */}
-        <div className="grid gap-3 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <StatCard label={isAr ? "مشاهدات الصفحة" : "Page views"} value={formatNumberEN(stats.views)} />
           <StatCard label={isAr ? "نقرات CTA" : "CTA clicks"} value={formatNumberEN(stats.clicks)} sub={`CTR ${stats.ctr.toFixed(1)}%`} />
           <StatCard label={isAr ? "تبرعات مكتملة" : "Conversions"} value={formatNumberEN(stats.conversions)} sub={`CVR ${stats.cvr.toFixed(1)}%`} />
