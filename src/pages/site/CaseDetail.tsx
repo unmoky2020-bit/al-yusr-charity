@@ -18,6 +18,7 @@ import {
   type Urgency, type CaseMediaRow, type CaseDocumentRow, type JourneyStepRow, type CaseRow, type CaseMediaKind,
 } from "@/data/casesApi";
 import { caseFunding, daysLeft, suggestedAmounts } from "@/lib/caseFunding";
+import { CaseTransparency } from "@/components/impact/CaseTransparency";
 import { formatNumberEN } from "@/lib/utils";
 import { track } from "@/lib/track";
 import { CaseShare } from "@/components/cases/CaseShare";
@@ -523,6 +524,8 @@ const CaseDetail = () => {
                 </div>
               ))}
             </section>
+
+            {c.ref_code && <CaseTransparency code={c.ref_code} lang={isRTL ? "ar" : "en"} />}
 
             {docs.length > 0 && (
               <section aria-labelledby="docs-h">

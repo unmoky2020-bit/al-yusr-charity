@@ -789,6 +789,17 @@ html { scrollbar-width: thin; scrollbar-color: hsl(var(--primary) / 0.35) transp
   body:not(.admin-body) nav .grid > *:only-child > a {
     display: inline-block;
   }
+  /* Blocks that lay out their own lone items (impact report, case money, a donation's log) keep
+     them in place: a single photo, badge or chart bar must not jump to the middle. */
+  body:not(.admin-body) .keep-flow .grid > *:only-child,
+  body:not(.admin-body) .keep-flow .flex > *:only-child,
+  body:not(.admin-body) .keep-flow.grid > *:only-child,
+  body:not(.admin-body) .keep-flow.flex > *:only-child {
+    justify-self: auto;
+    margin-left: 0;
+    margin-right: 0;
+    text-align: inherit;
+  }
 }
 
 /* Print: receipt only */
@@ -1336,6 +1347,8 @@ img, video, svg, canvas {
 @keyframes confirm-pulse { 0% { transform: scale(.82); opacity: .95; } 100% { transform: scale(1.45); opacity: 0; } }
 @keyframes confirm-tilt { 0% { transform: rotate(0) scale(.86); } 45% { transform: rotate(4deg) scale(1.04); } 70% { transform: rotate(-5deg); } 100% { transform: rotate(-3deg); } }
 @keyframes confirm-wiggle { 0% { transform: rotate(0) scale(.7); } 45% { transform: rotate(-10deg) scale(1.08); } 75% { transform: rotate(6deg); } 100% { transform: rotate(0) scale(1); } }
+/* The face-blur editor's scan line while faces are being found. */
+@keyframes scan { 0% { top: -33%; } 100% { top: 100%; } }
 
 /* ── Dashboard on phones (body.admin-body) ─────────────────────────────────
    Tables keep one line per cell and scroll sideways inside their own box instead of squeezing every

@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard, TrendingUp, HandCoins, Users, FolderKanban, FileEdit, FileBarChart2, HandHeart, HeartHandshake, ShieldCheck, UserCog, Megaphone, ClipboardCheck, ListChecks, Mail, BarChart3, Activity, Wallet, Image as ImageIcon, FolderArchive, Sparkles, Building2, Compass, Calendar, BookOpen, HelpCircle, SlidersHorizontal, Bell,
+  LayoutDashboard, PackageCheck, TrendingUp, HandCoins, Users, FolderKanban, FileEdit, FileBarChart2, HandHeart, HeartHandshake, ShieldCheck, UserCog, Megaphone, ClipboardCheck, ListChecks, Mail, BarChart3, Activity, Wallet, Image as ImageIcon, FolderArchive, Sparkles, Building2, Compass, Calendar, BookOpen, HelpCircle, SlidersHorizontal, Bell,
 } from "lucide-react";
 import { useAuth } from "@/auth/AuthContext";
 import { inferPermissions } from "@/auth/permissions";
@@ -26,6 +26,7 @@ export const ALL_NAV_GROUPS: NavGroup[] = [
     ar: "إدارة العمليات والمشاريع", en: "Operations & Projects",
     items: [
       { href: "/admin/donations", ar: "التبرعات", en: "Donations", icon: HandCoins },
+      { href: "/admin/distributions", ar: "أيام التوزيع", en: "Distribution days", icon: PackageCheck },
       { href: "/admin/payment-methods", ar: "طرق الدفع", en: "Payment Methods", icon: Wallet },
       { href: "/admin/cases", ar: "الحالات", en: "Cases", icon: Users },
       { href: "/admin/projects", ar: "إدارة المشاريع", en: "Projects Management", icon: FolderKanban },
@@ -87,7 +88,7 @@ const ROLE_ALLOWED: Record<string, string[]> = {
   admin: ["*"],
   case_manager: [
     "/admin", "/admin/analytics",
-    "/admin/donations", "/admin/cases", "/admin/my-cases", "/admin/delegates", "/admin/projects", "/admin/programs", "/admin/axes", "/admin/services", "/admin/donation-campaigns",
+    "/admin/donations", "/admin/distributions", "/admin/cases", "/admin/my-cases", "/admin/delegates", "/admin/projects", "/admin/programs", "/admin/axes", "/admin/services", "/admin/donation-campaigns",
     "/admin/campaigns", "/admin/my-tasks", "/admin/reports", "/admin/volunteers",
     "/admin/donors", "/admin/transactions",
     "/admin/profile", "/admin/notifications",

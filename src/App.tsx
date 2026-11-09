@@ -56,6 +56,11 @@ const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.tsx"));
 const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics.tsx"));
 const AdminDonations = lazy(() => import("./pages/admin/AdminDonations.tsx"));
 const AdminDonationsAudit = lazy(() => import("./pages/admin/AdminDonationsAudit.tsx"));
+const AdminDistributions = lazy(() => import("./pages/admin/AdminDistributions.tsx"));
+const AdminDistributionNew = lazy(() => import("./pages/admin/AdminDistributionNew.tsx"));
+const AdminDistributionDetail = lazy(() => import("./pages/admin/AdminDistributionDetail.tsx"));
+const ImpactReport = lazy(() => import("./pages/site/ImpactReport.tsx"));
+const ImpactTargetReport = lazy(() => import("./pages/site/ImpactTargetReport.tsx"));
 const AdminCases = lazy(() => import("./pages/admin/AdminCases.tsx"));
 const AdminCaseDetail = lazy(() => import("./pages/admin/AdminCaseDetail.tsx"));
 const AdminProjects = lazy(() => import("./pages/admin/AdminProjects.tsx"));
@@ -343,6 +348,8 @@ const App = () => (
                   {import.meta.env.DEV && <Route path="/dev/hero-breakpoints" element={<HeroBreakpointTest />} />}
                   <Route path="/farm" element={<Farm />} />
                   <Route path="/trust" element={<Trust />} />
+                  <Route path="/impact" element={<ImpactReport />} />
+                  <Route path="/impact/:kind/:key" element={<ImpactTargetReport />} />
                   <Route path="/markoun" element={<MarkounLanding />} />
                   <Route path="/food-box" element={<FoodBoxLanding />} />
                   <Route path="/qurbani-guarantee" element={<QurbaniGuaranteeLanding />} />
@@ -388,6 +395,9 @@ const App = () => (
                   <Route path="/admin/faqs" element={<RequireAuth roles={["admin", "editor"]}><AdminFaqs /></RequireAuth>} />
                   <Route path="/admin/donations" element={<RequireAuth roles={["admin", "caseworker"]}><AdminDonations /></RequireAuth>} />
                   <Route path="/admin/donations/audit" element={<RequireAuth roles={["admin"]}><AdminDonationsAudit /></RequireAuth>} />
+                  <Route path="/admin/distributions" element={<RequireAuth roles={["admin", "caseworker"]}><AdminDistributions /></RequireAuth>} />
+                  <Route path="/admin/distributions/new" element={<RequireAuth roles={["admin", "caseworker"]}><AdminDistributionNew /></RequireAuth>} />
+                  <Route path="/admin/distributions/:id" element={<RequireAuth roles={["admin", "caseworker"]}><AdminDistributionDetail /></RequireAuth>} />
                   <Route path="/admin/cases" element={<RequireAuth roles={["admin", "caseworker", "volunteer"]}><AdminCases /></RequireAuth>} />
                   <Route path="/admin/cases/:id" element={<RequireAuth roles={["admin", "caseworker", "volunteer"]}><AdminCaseDetail /></RequireAuth>} />
                   <Route path="/admin/projects" element={<RequireAuth roles={["admin", "caseworker"]}><AdminProjects /></RequireAuth>} />

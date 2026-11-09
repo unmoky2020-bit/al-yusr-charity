@@ -7,6 +7,7 @@ import {
   Filter, MapPin, Save, Settings2, X,
 } from "lucide-react";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
+import { MyFollowedCases } from "@/components/admin/cases/transparency/MyFollowedCases";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -311,6 +312,8 @@ export default function AdminCases() {
             </Button>
           </div>
         </div>
+
+        <MyFollowedCases />
 
         {/* Real Backend Statistics Bar */}
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-6">

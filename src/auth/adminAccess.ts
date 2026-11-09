@@ -13,6 +13,7 @@ export const PAGE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = {
   "/admin/analytics": ["reports.view"],
   "/admin/reports": ["reports.view"],
   "/admin/donations": ["donations.view"],
+  "/admin/distributions": ["donations.view"],
   "/admin/payment-methods": ["payment_methods.view"],
   "/admin/cases": ["cases.view", "cases.create", "cases.update"],
   "/admin/projects": ["projects.create", "projects.update"],

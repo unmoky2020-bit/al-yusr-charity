@@ -1,0 +1,17 @@
+74f5d3321877df076ed11266ce2bc2125623ce69db209f4f924df0f6d938978f app/Support/DeliverySteps.php
+2a39603ff3f56ccfb320a0634e4b750047abeb4daa4c5aaed6fda80de7f46514 app/Http/Controllers/Api/V1/Donation/DonationDeliveryController.php
+31ee733058089860acb8429e66e75e9d2a8bf47d49365eca9f1eec249be28a58 app/Notifications/DonorDeliveryStageNotification.php
+NEW app/Http/Controllers/Api/V1/Impact/CaseFileController.php
+NEW app/Http/Controllers/Api/V1/Impact/DistributionController.php
+NEW app/Http/Controllers/Api/V1/Impact/ImpactController.php
+NEW app/Models/Impact/CaseFollower.php
+NEW app/Models/Impact/CaseItem.php
+NEW app/Models/Impact/CaseOutcome.php
+NEW app/Models/Impact/Distribution.php
+NEW app/Notifications/CaseFollowerAssignedNotification.php
+NEW app/Support/Impact/Evidence.php
+NEW app/Support/Impact/ImpactNumbers.php
+NEW app/Support/Impact/People.php
+NEW app/Support/Impact/Targets.php
+NEW database/migrations/2026_11_09_000003_create_impact_tables.php
+NEW routes/api-2026-11-09-impact.php

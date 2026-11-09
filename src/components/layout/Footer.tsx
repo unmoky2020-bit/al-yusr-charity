@@ -12,6 +12,7 @@ import { track } from "@/lib/track";
 import ctaHourglass from "@/assets/cta-hourglass-banner.jpg";
 import logoCircle from "@/assets/logo-circle.png";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
+import { IMPACT_REPORT_PUBLIC } from "@/config/impact";
 import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
 export const Footer = () => {
@@ -343,6 +344,7 @@ export const Footer = () => {
               <li><Link to="/projects" {...prefetchHandlers("/projects")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "مشاريعنا" : "Projects"}</Link></li>
               <li><Link to="/cases" {...prefetchHandlers("/cases")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الحالات الإنسانية" : "Cases"}</Link></li>
               <li><Link to="/trust" {...prefetchHandlers("/trust")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الشفافية" : "Transparency"}</Link></li>
+              {IMPACT_REPORT_PUBLIC && <li><Link to="/impact" {...prefetchHandlers("/impact")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "تقرير الأثر" : "Impact report"}</Link></li>}
               <li><Link to="/gallery" {...prefetchHandlers("/gallery")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "معرض الصور" : "Gallery"}</Link></li>
               <li><Link to="/blog" {...prefetchHandlers("/blog")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المدونة" : "Blog"}</Link></li>
               <li><Link to="/faqs" {...prefetchHandlers("/faqs")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الأسئلة الشائعة" : "FAQs"}</Link></li>

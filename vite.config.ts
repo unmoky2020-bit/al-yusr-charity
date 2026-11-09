@@ -50,6 +50,9 @@ export default defineConfig(({ mode }) => ({
   build: {
     target: "es2020",
     sourcemap: false,
+    // The face-blur model files are fetched at run time: keep them as real files (never data: URLs,
+    // which a strict connect-src policy would block).
+    assetsInlineLimit: (file: string) => (file.includes("@vladmandic/face-api/model/") ? false : undefined),
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {

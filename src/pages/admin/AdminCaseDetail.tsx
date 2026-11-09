@@ -22,6 +22,7 @@ import {
 import { CaseMediaManager } from "@/components/admin/CaseMediaManager";
 import { CaseShareBox } from "@/components/admin/cases/CaseShareBox";
 import { CaseSeoPanel } from "@/components/admin/cases/CaseSeoPanel";
+import { CaseFilePanel } from "@/components/admin/cases/transparency/CaseFilePanel";
 import { compressImage } from "@/lib/image-compress";
 import { ChoiceSelect, Field, ImageUrlField, SectionCard } from "@/components/admin/programs/FormKit";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
@@ -615,6 +616,7 @@ export default function AdminCaseDetail() {
             <Tabs value={tab} onValueChange={setTab} dir="rtl">
               <TabsList className="h-auto flex-wrap justify-start gap-1 rounded-2xl bg-muted/60 p-1">
                 <TabsTrigger value="data" className="text-xs font-bold">البيانات</TabsTrigger>
+                <TabsTrigger value="file" className="text-xs font-bold">ملف الشفافية</TabsTrigger>
                 <TabsTrigger value="updates" className="text-xs font-bold">تحديثات الأثر ({updates.length})</TabsTrigger>
                 <TabsTrigger value="media" className="text-xs font-bold">الصور والفيديو ({mediaCount})</TabsTrigger>
                 <TabsTrigger value="documents" className="text-xs font-bold">المستندات ({docs.length})</TabsTrigger>
@@ -623,6 +625,10 @@ export default function AdminCaseDetail() {
               </TabsList>
 
               <TabsContent value="data" className="mt-4">{dataTab}</TabsContent>
+
+              <TabsContent value="file" className="mt-4">
+                {row && <CaseFilePanel caseId={Number(row.id)} publicUrl={code ? publicUrls.case(code) : undefined} />}
+              </TabsContent>
 
               <TabsContent value="updates" className="mt-4 space-y-4">
                 <SectionCard icon={<MessageSquarePlus className="h-4 w-4 text-primary" />} title="تحديثات الأثر"
