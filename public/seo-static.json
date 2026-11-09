@@ -44,7 +44,6 @@
    "h1": "مؤسسة اليسر الخيرية",
    "summary": "مؤسسة غير ربحية أُشهرت عام 2019 بوزارة التضامن الاجتماعي، هدفها أن تصل الصدقة إلى مستحقيها في المنصورة والدقهلية وسائر محافظات مصر. بعد أكثر من عشر سنوات في العمل الخيري، كان لا بد من كيان منظم ومرخّص يجمع أعمالنا ويضبط جمع التبرعات وتوزيعها؛ مؤسسة قادرة على تغيير مفهوم العمل الخيري، ويكبر أثرها مع كل مبادرة. الإشهار الرسمي هو نقطة البداية فقط. ما يميز اليسر منظومة عمل متكاملة تضمن أن تصل كل صدقة إلى من يستحقها، وأن ترى بنفسك أين ذهب تبرعك.",
    "sections": [
-    "إحصائيات الأثر",
     "قصتنا",
     "لسنا مجرد مؤسسة مشهرة رسمياً",
     "رؤيتنا لعام 2030",
@@ -53,7 +52,8 @@
     "قيمنا",
     "أنشطتنا الدائمة",
     "اعتماد وثقة رسمية",
-    "رحلتنا وتاريخنا"
+    "تواصل ومقر المؤسسة",
+    "أسئلة شائعة عن مؤسسة اليسر"
    ]
   },
   "en": {
@@ -62,7 +62,6 @@
    "h1": "Al-Yusr Charity Foundation",
    "summary": "Non-profit foundation established in 2019, registered with the Ministry of Social Solidarity. Our mission is to deliver charity directly to those who truly deserve it across Egypt. Al-Yusr Charity Foundation was born after more than a decade of direct grassroots volunteering across Egyptian villages, officially incorporated in 2019 (#2665) to maximize donation impact with transparency. We seek to create sustainable impact and improve beneficiaries' quality of life.",
    "sections": [
-    "Our impact numbers",
     "Our Story",
     "More than an officially registered NGO",
     "Vision 2030 Roadmap",
@@ -71,7 +70,8 @@
     "Our Values",
     "Our Ongoing Activities",
     "Official Accreditation",
-    "Our Journey & Milestones"
+    "Contact & Headquarters",
+    "Frequently Asked Questions"
    ]
   }
  },
@@ -184,6 +184,42 @@
     "Eid Prayer at Al-Siddiq Mosque, Mansoura",
     "Udhiyah & Distribution Activities in Mansoura",
     "Underserved Dakahlia Villages — 2026 Aid Map"
+   ]
+  }
+ },
+ "/bride": {
+  "ar": {
+   "title": "جواز عروسة | تجهيز العرائس اليتيمات — مؤسسة اليسر الخيرية",
+   "description": "ساهم في تجهيز عروسة يتيمة مع مؤسسة اليسر الخيرية: أجهزة وأثاث لبيتها الجديد بعد بحث ميداني، وتسليم موثّق بالصور. سهمك يبدأ من أي مبلغ.",
+   "h1": "جواز عروسة",
+   "summary": "هو جهاز عروسة… لكنه في الحقيقة جهاز حسنات ساهم في تجهيز عروسة يتيمة مع مؤسسة اليسر الخيرية: أجهزة وأثاث لبيتها الجديد بعد بحث ميداني، وتسليم موثّق بالصور. سهمك يبدأ من أي مبلغ. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "جواز عروسة",
+    "ليه جواز عروسة؟",
+    "تبرعك بيعمل إيه",
+    "اختار مساهمتك",
+    "تجارة رابحة — تدفع ثمن جهاز اليوم، وتجني حسنات لسنين",
+    "هتتابع تبرعك لحد ما يوصل",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "شارك في جهاز عروسة وافرح معاها"
+   ]
+  },
+  "en": {
+   "title": "Bride's trousseau | Helping orphan brides — Al-Yusr",
+   "description": "Help furnish an orphan bride's new home with Al-Yusr: appliances and furniture after a field visit, with documented delivery.",
+   "h1": "Bride's Wedding",
+   "summary": "It's a bride's trousseau… but really, it's a trousseau of rewards Help furnish an orphan bride's new home with Al-Yusr: appliances and furniture after a field visit, with documented delivery. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Bride's Wedding",
+    "Why a bride's trousseau?",
+    "What your gift does",
+    "Choose your gift",
+    "A winning trade — pay for a trousseau today, reap rewards for years",
+    "Follow your gift until it arrives",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "Share in a bride's trousseau"
    ]
   }
  },
@@ -848,6 +884,40 @@
     "Related programs & campaigns",
     "Frequently Asked Questions",
     "Help raise an educated generation that holds the Qur'an"
+   ]
+  }
+ },
+ "/orphans": {
+  "ar": {
+   "title": "كفالة يتيم شهرية | اكفل يتيمًا مع مؤسسة اليسر الخيرية",
+   "description": "اكفل يتيمًا مع مؤسسة اليسر الخيرية: كفالة شهرية بعد بحث ميداني تغطي احتياجات الطفل الأساسية، مع متابعة دورية وتقرير يطمئنك عليه.",
+   "h1": "كفالة يتيم",
+   "summary": "كافل اليتيم في الجنة كهاتين — كفالة شاملة شهرية اكفل يتيمًا مع مؤسسة اليسر الخيرية: كفالة شهرية بعد بحث ميداني تغطي احتياجات الطفل الأساسية، مع متابعة دورية وتقرير يطمئنك عليه. مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع.",
+   "sections": [
+    "كفالة يتيم",
+    "ليه تكفل يتيم؟",
+    "تبرعك بيعمل إيه",
+    "اختار مساهمتك",
+    "هتتابع تبرعك لحد ما يوصل",
+    "حملات وبرامج ذات صلة",
+    "أسئلة شائعة حول الحملة",
+    "اكفل يتيم وكن رفيق النبي ﷺ في الجنة"
+   ]
+  },
+  "en": {
+   "title": "Monthly orphan sponsorship | Al-Yusr Charity",
+   "description": "Sponsor an orphan with Al-Yusr: a monthly sponsorship after a field visit, covering the child's basic needs, with regular follow-up.",
+   "h1": "Orphan Sponsorship",
+   "summary": "Sponsor of the orphan is with me in Paradise — full monthly sponsorship Sponsor an orphan with Al-Yusr: a monthly sponsorship after a field visit, covering the child's basic needs, with regular follow-up. Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors.",
+   "sections": [
+    "Orphan Sponsorship",
+    "Why sponsor an orphan?",
+    "What your gift does",
+    "Choose your gift",
+    "Follow your gift until it arrives",
+    "Related programs & campaigns",
+    "Frequently Asked Questions",
+    "Sponsor an orphan today"
    ]
   }
  },
