@@ -44,6 +44,7 @@
    "h1": "مؤسسة اليسر الخيرية",
    "summary": "مؤسسة غير ربحية أُشهرت عام 2019 بوزارة التضامن الاجتماعي، هدفها أن تصل الصدقة إلى مستحقيها في المنصورة والدقهلية وسائر محافظات مصر. بعد أكثر من عشر سنوات في العمل الخيري، كان لا بد من كيان منظم ومرخّص يجمع أعمالنا ويضبط جمع التبرعات وتوزيعها؛ مؤسسة قادرة على تغيير مفهوم العمل الخيري، ويكبر أثرها مع كل مبادرة. الإشهار الرسمي هو نقطة البداية فقط. ما يميز اليسر منظومة عمل متكاملة تضمن أن تصل كل صدقة إلى من يستحقها، وأن ترى بنفسك أين ذهب تبرعك.",
    "sections": [
+    "إحصائيات الأثر",
     "قصتنا",
     "لسنا مجرد مؤسسة مشهرة رسمياً",
     "رؤيتنا لعام 2030",
@@ -52,8 +53,7 @@
     "قيمنا",
     "أنشطتنا الدائمة",
     "اعتماد وثقة رسمية",
-    "تواصل ومقر المؤسسة",
-    "أسئلة شائعة عن مؤسسة اليسر"
+    "رحلتنا وتاريخنا"
    ]
   },
   "en": {
@@ -62,6 +62,7 @@
    "h1": "Al-Yusr Charity Foundation",
    "summary": "Non-profit foundation established in 2019, registered with the Ministry of Social Solidarity. Our mission is to deliver charity directly to those who truly deserve it across Egypt. Al-Yusr Charity Foundation was born after more than a decade of direct grassroots volunteering across Egyptian villages, officially incorporated in 2019 (#2665) to maximize donation impact with transparency. We seek to create sustainable impact and improve beneficiaries' quality of life.",
    "sections": [
+    "Our impact numbers",
     "Our Story",
     "More than an officially registered NGO",
     "Vision 2030 Roadmap",
@@ -70,8 +71,7 @@
     "Our Values",
     "Our Ongoing Activities",
     "Official Accreditation",
-    "Contact & Headquarters",
-    "Frequently Asked Questions"
+    "Our Journey & Milestones"
    ]
   }
  },
@@ -327,10 +327,10 @@
  },
  "/contact": {
   "ar": {
-   "title": "تواصل معنا — جمعيات خيرية بالمنصورة والدقهلية | مؤسسة اليسر",
-   "description": "تواصل مع فريق اليسر للاستفسار عن التبرع أو التطوع أو دعم الأسر المحتاجة عبر الصدقات والزكاة والأضاحي والكفالات مع توثيق مباشر.",
+   "title": "تواصل مع مؤسسة اليسر الخيرية — رقم التليفون وواتساب…",
+   "description": "كلّم مؤسسة اليسر الخيرية على 0109 700 0137 أو واتساب، أو ابعت على info@elyusr.org. مقرنا: المنصورة، تقسيم خطاب، بجوار وكالة المنصورة. السبت – الخميس: 10 ص – 9…",
    "h1": "رسالتك أمانة عندنا نرد خلال ٢٤ ساعة",
-   "summary": "سواء أردت أن تتبرّع، أو تقترح حالة، أو تتطوّع، أو تطمئن على وصول كرتونة، ففريقنا متاح من السبت إلى الخميس، من 10 صباحًا حتى 9 مساءً. من البريد الإلكتروني وواتساب إلى المكالمات والزيارات الميدانية، فريقنا مستعد لمتابعة طلبك وضمان وصول التبرعات بأسرع الطرق وأوضحها، وبكل أمانة. إشهار رقم 2665 لسنة 2019 — وزارة التضامن الاجتماعي. كل تبرع موثّق بالصور والفيديو، وكل رسالة نرد عليها بأمانة تامة.",
+   "summary": "سواء أردت أن تتبرّع، أو تقترح حالة، أو تتطوّع، أو تطمئن على وصول كرتونة، ففريقنا متاح من السبت إلى الخميس، من 10 صباحًا حتى 9 مساءً. من البريد الإلكتروني وواتساب إلى المكالمات والزيارات الميدانية، فريقنا مستعد لمتابعة طلبك وضمان وصول التبرعات بأسرع الطرق وأوضحها، وبكل أمانة. كلّمنا بالطريقة اللي تريحك، أو زورنا في مواعيد العمل.",
    "sections": [
     "كل تفاصيل الاتصال بين يديك",
     "أرسل إلينا رسالتك",
@@ -339,10 +339,10 @@
    ]
   },
   "en": {
-   "title": "Contact Us — charity support in Mansoura and Dakahlia |…",
-   "description": "Contact the Al-Yusr team for donation questions, volunteering, or support for needy families through sadaqah, zakat, qurbani, and sponsorship with direct…",
+   "title": "Contact Al-Yusr Charity — phone, WhatsApp and address in…",
+   "description": "Call Al-Yusr Charity on +20 109 700 0137 or WhatsApp, or email info@elyusr.org. Office: Mansoura, Khattab District, next to Mansoura Agency. Sat – Thu: 10am –…",
    "h1": "Your message is a trust reply within 24 hours",
-   "summary": "Whether you want to donate, suggest a case, volunteer, or confirm a delivery — our team is here Saturday to Thursday, 10am–9pm. From email and WhatsApp to calls and field visits — our team is ready to follow up your request and ensure donations arrive fastest and most transparently. Registered NGO #2665 (2019) under the Ministry of Social Solidarity. Every donation is verified and documented.",
+   "summary": "Whether you want to donate, suggest a case, volunteer, or confirm a delivery — our team is here Saturday to Thursday, 10am–9pm. From email and WhatsApp to calls and field visits — our team is ready to follow up your request and ensure donations arrive fastest and most transparently. Reach us the way you like, or visit during office hours.",
    "sections": [
     "All contact details within reach",
     "Send us your message",
