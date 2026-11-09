@@ -22,6 +22,7 @@ import { DonationReceipt } from "@/components/common/DonationReceipt";
 import { donationPaymentMethodLabel } from "@/lib/payment-method-label";
 import { resolveDonorUserProfileId } from "@/lib/donor-user-profile";
 import { errorReason } from "@/lib/notify";
+import { FormSkeleton } from "@/components/common/ContentSkeletons";
 
 
 type DonorRow = {
@@ -140,14 +141,7 @@ export default function AdminDonorDetail() {
   if (loading) {
     return (
       <AdminLayout>
-        <div className="grid place-items-center py-24">
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p className="text-sm font-bold text-muted-foreground">
-              {isAr ? "جاري تحميل بيانات المتبرع..." : "Loading donor profile..."}
-            </p>
-          </div>
-        </div>
+        <FormSkeleton sections={3} />
       </AdminLayout>
     );
   }

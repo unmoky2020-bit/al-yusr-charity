@@ -14,6 +14,8 @@ export const HADITH = {
   farm: { ar: "ما من مسلمٍ يغرِسُ غرسًا، أو يزرعُ زرعًا، فيأكلُ منه طيرٌ أو إنسانٌ أو بهيمةٌ، إلا كان له به صدقة", en: "No Muslim plants a tree or sows a crop from which a bird, a person or an animal eats, except that it is charity for him.", sourceAr: "متفق عليه (البخاري ومسلم)", sourceEn: "Agreed upon (Bukhari & Muslim)" },
   quran: { ar: "خيرُكم مَن تعلَّمَ القرآنَ وعلَّمَه", en: "The best of you are those who learn the Qur'an and teach it.", sourceAr: "رواه البخاري", sourceEn: "Sahih al-Bukhari" },
   food: { ar: "يا أيها الناس، أفشوا السلام، وأطعِموا الطعام، وصِلوا الأرحام، وصلّوا بالليل والناس نيام، تدخلوا الجنة بسلام", en: "O people, spread peace, feed the hungry, keep the ties of kinship, and pray at night while people sleep, and you will enter Paradise in peace.", sourceAr: "رواه الترمذي وقال: حسن صحيح، وابن ماجه", sourceEn: "al-Tirmidhi (who graded it hasan sahih) and Ibn Majah" },
+  bride: { ar: "ومَن فرَّج عن مسلمٍ كُربةً فرَّج اللهُ عنه كُربةً من كُرُبات يوم القيامة، ومَن سَتَرَ مسلمًا سَتَرَه اللهُ يومَ القيامة", en: "Whoever relieves a Muslim of a hardship, Allah will relieve him of a hardship on the Day of Resurrection; and whoever covers a Muslim, Allah will cover him on the Day of Resurrection.", sourceAr: "متفق عليه", sourceEn: "Bukhari and Muslim" },
+  orphans: { ar: "أنا وكافلُ اليتيمِ في الجنةِ هكذا — وأشار بالسبابةِ والوُسطى", en: "I and the one who sponsors an orphan will be in Paradise like this — and he held up his index and middle fingers.", sourceAr: "رواه البخاري", sourceEn: "Sahih al-Bukhari" },
 } satisfies Record<string, Hadith>;
 
 type Tone = "light" | "dark" | "night" | "winter" | "paper";

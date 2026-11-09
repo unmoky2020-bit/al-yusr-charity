@@ -41,6 +41,7 @@ import {
   type TopSectionForm,
 } from "@/components/admin/programs/programForm";
 import { publicUrls } from "@/lib/publicUrls";
+import { FormSkeleton } from "@/components/common/ContentSkeletons";
 
 const triggerCls = "rounded-xl px-3 py-2 text-xs font-bold data-[state=active]:bg-card data-[state=active]:shadow-xs";
 
@@ -213,10 +214,7 @@ export default function AdminProgramDetail() {
   if (loading) {
     return (
       <AdminLayout>
-        <div className="flex h-[50vh] flex-col items-center justify-center gap-3 text-muted-foreground" dir="rtl">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm font-bold">جاري تحميل تفاصيل البرنامج…</p>
-        </div>
+        <FormSkeleton sections={4} />
       </AdminLayout>
     );
   }

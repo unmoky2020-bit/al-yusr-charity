@@ -58,6 +58,7 @@ import { getCampaignPageMetaForCampaign, mergeCampaignContent, withCampaignHeroI
 import { campaignPagesApi, contentFromCampaign, seoColumnFromForm, toCampaignColumns } from "@/data/campaignPages/api";
 import { publicUrls } from "@/lib/publicUrls";
 import { errorReason } from "@/lib/notify";
+import { FormSkeleton } from "@/components/common/ContentSkeletons";
 
 const EMPTY_SEO: CampaignSeoData = {
   meta_title_ar: "",
@@ -442,10 +443,7 @@ export default function AdminDonationCampaignDetail() {
   if (loading || !campaign) {
     return (
       <AdminLayout title={{ ar: "تفاصيل الحملة", en: "Campaign Details" }}>
-        <div className="flex flex-col items-center justify-center py-24">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="mt-3 text-sm text-muted-foreground">{isAr ? "جاري تحميل تفاصيل الحملة..." : "Loading campaign..."}</p>
-        </div>
+        <FormSkeleton sections={3} />
       </AdminLayout>
     );
   }

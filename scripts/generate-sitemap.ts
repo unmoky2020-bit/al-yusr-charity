@@ -101,6 +101,8 @@ const staticEntries: Entry[] = [
   // Project landings (linked from /projects)
   { path: "/takrim", changefreq: "monthly", priority: "0.8" },
   { path: "/water", changefreq: "monthly", priority: "0.8" },
+  { path: "/bride", changefreq: "weekly", priority: "0.85" },
+  { path: "/orphans", changefreq: "weekly", priority: "0.85" },
   { path: "/nurseries", changefreq: "monthly", priority: "0.8" },
   { path: "/mosques", changefreq: "monthly", priority: "0.8" },
   { path: "/medical", changefreq: "monthly", priority: "0.8" },

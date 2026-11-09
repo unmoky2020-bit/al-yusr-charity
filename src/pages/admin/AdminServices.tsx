@@ -33,6 +33,7 @@ import {
   useServiceDelete,
 } from "@/hooks/useServices";
 import type { ServiceDetail, DonationTier } from "@/data/servicesApi";
+import { FormSkeleton, ListSkeleton } from "@/components/common/ContentSkeletons";
 
 const SECTORS = [
   { v: "food",    ar: "غذاء",     en: "Food" },
@@ -162,7 +163,7 @@ const AdminServices = () => {
           </div>
 
           {loadingList ? (
-            <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+            <ListSkeleton rows={6} />
           ) : (
             <div className="rounded-2xl border border-border bg-card overflow-hidden">
               <table className="w-full text-sm">
@@ -269,7 +270,7 @@ const AdminServices = () => {
   // ── Edit / New view ───────────────────────────────────────────────────────
   const isNew = slugParam === "new";
   if (!isNew && loadingDetail) {
-    return <AdminLayout><div className="flex justify-center py-24"><Loader2 className="h-10 w-10 animate-spin text-primary" /></div></AdminLayout>;
+    return <AdminLayout><FormSkeleton sections={3} /></AdminLayout>;
   }
 
   const BackIcon = isRTL ? ArrowRight : ArrowLeft;

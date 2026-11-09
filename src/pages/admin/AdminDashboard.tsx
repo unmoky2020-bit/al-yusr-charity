@@ -5,6 +5,9 @@ import {
   Activity, AlertTriangle, CheckCircle2, ExternalLink, FolderHeart, HeartHandshake, Layers, RefreshCw, TrendingUp, Users, Wallet,
 } from "lucide-react";
 import { AdminLayout, StatCard, ChartCard } from "@/components/admin/AdminLayout";
+import { useAdminNav } from "@/components/admin/adminNav";
+import { FormSkeleton } from "@/components/common/ContentSkeletons";
+import { useAuth } from "@/auth/AuthContext";
 import { useLang } from "@/i18n/LangContext";
 import { donationsAdminApi } from "@/data/api/donationsAdminApi";
 import { MonthTooltip, TopTargets } from "@/components/admin/donations/DonationCharts";
@@ -15,10 +18,66 @@ import {
 const REFRESH_MS = 60_000;
 
 /**
- * Dashboard home. Counts from GET /dashboard, money from GET /donations/stats (paid only), latest rows from
- * GET /donations — nothing is summed in the browser.
+ * Dashboard home. Accounts that may see donations get the money overview; everyone else (a content
+ * editor, a volunteer) gets the sections they work in — never the donation figures.
  */
 const AdminDashboard = () => {
+  const { user, access } = useAuth();
+  const isTeamWithServerAccess = !!user?.roles.some((r) => r === "editor" || r === "case_manager");
+  // Wait for the account's server permissions before choosing (no flash of donation figures).
+  if (isTeamWithServerAccess && access === undefined) {
+    return <AdminLayout><FormSkeleton sections={2} /></AdminLayout>;
+  }
+  const canSeeDonations = access
+    ? access.superAdmin || access.permissions.includes("donations.view")
+    : !!user?.roles.some((r) => r === "admin" || r === "case_manager");
+  return canSeeDonations ? <DonationsOverview /> : <TeamHome />;
+};
+
+/** The sections this account may open, as big shortcuts (content editors, volunteers). */
+const TeamHome = () => {
+  const { lang } = useLang();
+  const isRTL = lang === "ar";
+  const { user } = useAuth();
+  const { navGroups } = useAdminNav();
+  const items = navGroups.flatMap((g) => g.items).filter((i) => i.href !== "/admin");
+  return (
+    <AdminLayout>
+      <div className="space-y-6" dir={isRTL ? "rtl" : "ltr"}>
+        <section className="relative overflow-hidden rounded-2xl pattern-hero-luxe p-6 text-primary-foreground shadow-card md:p-8">
+          <p className="text-sm text-primary-foreground/75">{isRTL ? "أهلًا" : "Welcome"}</p>
+          <h2 className="mt-1 text-2xl font-black md:text-3xl">{user?.name}</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-primary-foreground/85">
+            {isRTL
+              ? "دي الأقسام اللي تقدر تشتغل فيها. أي حاجة بتضيفها أو بتعدّلها بتروح للإدارة تراجعها وتوافق عليها قبل ما تتنشر على الموقع."
+              : "These are the sections you work in. What you add or change goes to the admins for approval before it is published."}
+          </p>
+        </section>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((i) => (
+            <Link
+              key={i.href}
+              to={i.href}
+              className="group flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-secondary/60 hover:shadow-card"
+            >
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary transition group-hover:bg-secondary">
+                <i.icon className="h-5 w-5" />
+              </span>
+              <span className="flex-1 text-sm font-extrabold text-primary">{i[lang]}</span>
+              <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 transition group-hover:opacity-100" />
+            </Link>
+          ))}
+        </div>
+      </div>
+    </AdminLayout>
+  );
+};
+
+/**
+ * Money overview. Counts from GET /dashboard, money from GET /donations/stats (paid only), latest rows from
+ * GET /donations — nothing is summed in the browser.
+ */
+const DonationsOverview = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
 

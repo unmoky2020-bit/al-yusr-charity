@@ -6,6 +6,8 @@
 export const PROGRAM_LANDINGS: Record<string, string> = {
   odhya: "/qurbani",
   water: "/water",
+  bride: "/bride",
+  orphans: "/orphans",
   box: "/food-box",
   "monthly-meat": "/food-box",
   "food-box": "/food-box",

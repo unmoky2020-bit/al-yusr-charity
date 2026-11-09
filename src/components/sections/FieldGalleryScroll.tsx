@@ -33,13 +33,13 @@ type Cell = {
 const IMAGES: Cell[] = [
   { src: food,    href: "/programs/box",        ar: "كرتونة العزومة في بيت أسرة بالدقهلية",    en: "Family Box delivered in Dakahlia",        axisAr: "الغذاء",   axisEn: "Food" },
   { src: health,  href: "/programs/treatment",  ar: "قافلة طبية مجانية لقرى الدقهلية",          en: "Free medical convoy in Dakahlia villages", axisAr: "الصحة",    axisEn: "Health" },
-  { src: orphans, href: "/programs/orphans",    ar: "كفالة يتيم — ابتسامة من قلب الميدان",      en: "Orphan sponsorship — smiles from the field", axisAr: "الأيتام", axisEn: "Orphans" },
+  { src: orphans, href: "/orphans",    ar: "كفالة يتيم — ابتسامة من قلب الميدان",      en: "Orphan sponsorship — smiles from the field", axisAr: "الأيتام", axisEn: "Orphans" },
   { src: truck,   href: "/programs/kitchen",    ar: "شاحنة اليسر توزّع الخير من المنصورة",     en: "Al-Yusr truck distributing aid from Mansoura", axisAr: "المطبخ", axisEn: "Kitchen" },
   { src: family,  href: "/about",               ar: "أسرة استلمت تبرعك… ودعت لك",                en: "A family that received your gift — and prayed for you", axisAr: "الأثر", axisEn: "Impact" },
   // Extra rows below the cinematic scroll
   { src: classroom,      href: "/programs/education", ar: "ادفع مصروفه — فصل في مدرسة بطلخا",    en: "Pay His Tuition — a class in Talkha",   axisAr: "التعليم", axisEn: "Education" },
   { src: bags,           href: "/programs/box",       ar: "تجهيز حقائب الغذاء قبل التوزيع",        en: "Food bags prepared before distribution", axisAr: "الغذاء",  axisEn: "Food" },
-  { src: girl,           href: "/programs/orphans",   ar: "طفلة يتيمة تسلّمت كفالتها الشهرية",     en: "An orphan girl received her monthly sponsorship", axisAr: "الأيتام", axisEn: "Orphans" },
+  { src: girl,           href: "/orphans",   ar: "طفلة يتيمة تسلّمت كفالتها الشهرية",     en: "An orphan girl received her monthly sponsorship", axisAr: "الأيتام", axisEn: "Orphans" },
   { src: farm,           href: "/programs/odhya",     ar: "مزرعة الأضاحي — كشف بيطري قبل الذبح",  en: "Sacrifice farm — vet check before slaughter", axisAr: "الأضحية", axisEn: "Qurbani" },
   { src: volunteerField, href: "/volunteer",          ar: "متطوعو اليسر في قرى الدقهلية",          en: "Al-Yusr volunteers in Dakahlia villages", axisAr: "التطوع", axisEn: "Volunteer" },
 ];

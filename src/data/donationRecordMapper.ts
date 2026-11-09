@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { DonationRecord, DonationStatus } from "./donationsStore";
+import { parseDelivery } from "@/lib/deliveryJourney";
 
 /**
  * Convert a donation returned by the backend (e.g. GET /donations/track/{ref}) into the
@@ -73,6 +74,8 @@ export const fromLaravelRow = (row: any): DonationRecord => {
     programLabel: programName,
     method:       methodVal as any,
     status:       mapStatus(row.payment_status || row.status || "pending"),
+    rawStatus:    String(row.status || row.payment_status || "pending").toLowerCase(),
+    delivery:     parseDelivery(row.delivery),
     createdAt:    row.created_at || new Date().toISOString(),
     updatedAt:    row.updated_at || row.created_at || new Date().toISOString(),
     items,

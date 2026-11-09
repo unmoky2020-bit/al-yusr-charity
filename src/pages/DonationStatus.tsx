@@ -8,6 +8,7 @@ import { useLang } from "@/i18n/LangContext";
 import { toast } from "@/hooks/use-toast";
 import { donationsApiV1 } from "@/data/laravelApi";
 import { donationsStore } from "@/data/donationsStore";
+import { ListSkeleton } from "@/components/common/ContentSkeletons";
 
 type TxStatus = "pending" | "processing" | "paid" | "failed" | "refunded";
 
@@ -227,7 +228,7 @@ export default function DonationStatus() {
         <div className="container mx-auto max-w-2xl px-4">
           <div className="rounded-3xl bg-card p-6 shadow-card md:p-10">
             {loading ? (
-              <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+              <ListSkeleton rows={3} />
             ) : !ref ? (
               <div className="text-center text-muted-foreground">
                 {lang === "ar" ? "لم يتم العثور على هذه العملية." : "Transaction not found."}

@@ -23,7 +23,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/lib/notify";
+import { errorReason, toast } from "@/lib/notify";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { programs } from "@/data/programs";
 import { DONATION_ENTITIES, type DonationEntity } from "@/data/donationEntities";
 import {
@@ -81,7 +85,9 @@ const AdminCampaignsSection = () => {
   const [savingSettings, setSavingSettings] = useState(false);
   const [cardBusy, setCardBusy] = useState(false);
 
-  const { metrics, reset: resetMetrics } = useCampaignsMetrics();
+  const [metricsDays, setMetricsDays] = useState(30);
+  const { metrics, loading: metricsLoading, error: metricsError, reset: resetMetrics } = useCampaignsMetrics(metricsDays);
+  const [confirmReset, setConfirmReset] = useState(false);
   const { lang } = useLang();
   const isAr = lang === "ar";
 
@@ -856,28 +862,68 @@ const AdminCampaignsSection = () => {
                   </h2>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {isAr
-                      ? "عدّادات تفاعل الزوار مع بطاقات الكاروسيل على الصفحة الرئيسية."
-                      : "Click counters and views on homepage carousel cards."}
+                      ? "كل زوار الموقع (مش جهازك بس): مرات ظهور القسم ونقرات كل بطاقة. بيانات مجمّعة باليوم من غير أي بيانات شخصية."
+                      : "Every visitor (not just this browser): section views and clicks per card, counted per day, no personal data."}
+                    {metrics.updatedAt && (
+                      <span className="ms-1 font-bold">{isAr ? `آخر تفاعل: ${metrics.updatedAt}` : `Last activity: ${metrics.updatedAt}`}</span>
+                    )}
                   </p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    resetMetrics();
-                    toast.success(isAr ? "تم تصفير العدادات" : "Counters Reset");
-                  }}
-                  className="rounded-xl font-bold text-xs gap-1.5"
-                >
-                  {isAr ? "تصفير السجلات" : "Reset Logs"}
-                </Button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex rounded-xl border border-border p-0.5">
+                    {[7, 30, 90].map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() => setMetricsDays(d)}
+                        className={`rounded-lg px-2.5 py-1 text-xs font-bold transition ${metricsDays === d ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}
+                      >
+                        {isAr ? `${d} يوم` : `${d}d`}
+                      </button>
+                    ))}
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => setConfirmReset(true)} className="rounded-xl font-bold text-xs gap-1.5">
+                    {isAr ? "تصفير العدادات" : "Reset counters"}
+                  </Button>
+                </div>
               </div>
+              {metricsError && (
+                <p className="rounded-xl bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800">
+                  {isAr ? "تعذّر تحميل الإحصائيات من السيرفر." : "Couldn't load the stats from the server."}
+                </p>
+              )}
+              <AlertDialog open={confirmReset} onOpenChange={setConfirmReset}>
+                <AlertDialogContent dir={isAr ? "rtl" : "ltr"}>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>{isAr ? "تصفّر عدادات التفاعل؟" : "Reset the counters?"}</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {isAr ? "كل الأرقام اللي اتجمعت لحد دلوقتي هتتمسح ويبدأ العد من الأول." : "All counts so far are deleted and counting starts again."}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter className="gap-2">
+                    <AlertDialogCancel>{isAr ? "إلغاء" : "Cancel"}</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={async () => {
+                        try {
+                          await resetMetrics();
+                          toast.success(isAr ? "اتصفّرت العدادات" : "Counters reset");
+                        } catch (err) {
+                          toast.error(isAr ? "العدادات ما اتصفّرتش" : "Reset failed", { description: errorReason(err) });
+                        }
+                      }}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {isAr ? "صفّر" : "Reset"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <StatTile
                   icon={TrendingUp}
                   label={isAr ? "مرات ظهور القسم" : "Section Views"}
-                  value={metrics.sectionViews}
+                  value={metricsLoading ? "…" : metrics.sectionViews}
                 />
                 <StatTile
                   icon={MousePointerClick}
@@ -1189,7 +1235,7 @@ const AdminCampaignsSection = () => {
 
 export default AdminCampaignsSection;
 
-const StatTile = ({ icon: Icon, label, value }: { icon: typeof TrendingUp; label: string; value: number }) => (
+const StatTile = ({ icon: Icon, label, value }: { icon: typeof TrendingUp; label: string; value: number | string }) => (
   <div className="rounded-xl border border-border bg-background p-4 text-center">
     <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-muted-foreground">
       <Icon className="h-4 w-4 text-secondary" />

@@ -14,6 +14,7 @@ import {
   fetchFaqs, fetchFaqCategories, FAQ_PAGE_CATEGORIES,
   type FaqItem, type FaqCategory
 } from "@/data/faqsApi";
+import { ListSkeleton } from "@/components/common/ContentSkeletons";
 
 
 export const FaqCenter = () => {
@@ -214,7 +215,7 @@ export const FaqCenter = () => {
       </section>
 
       {/* ─── Category Filter Navigation — no icons in pills ─── */}
-      <section className="sticky top-16 z-30 border-b border-border/80 bg-background/95 backdrop-blur shadow-sm">
+      <section className="sticky top-20 z-30 border-b border-border/80 bg-background/95 backdrop-blur shadow-sm">
         <div className="container mx-auto max-w-6xl px-4 py-3">
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
             <button
@@ -264,10 +265,7 @@ export const FaqCenter = () => {
       <section className="py-12 md:py-20 bg-background" dir={isAr ? "rtl" : "ltr"}>
         <div className="container mx-auto max-w-4xl px-4">
           {isLoading ? (
-            <div className="py-20 text-center text-muted-foreground">
-              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-              <p className="mt-4 font-bold">{isAr ? "جارٍ تحميل الأسئلة الشائعة..." : "Loading FAQs..."}</p>
-            </div>
+            <ListSkeleton rows={6} />
           ) : filteredFaqs.length === 0 ? (
             <div className="rounded-3xl border border-dashed border-border bg-card p-12 text-center">
               <HelpCircle className="mx-auto h-12 w-12 text-muted-foreground/40" />

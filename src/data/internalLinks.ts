@@ -14,7 +14,7 @@ export type LinkRule = {
 export const INTERNAL_LINK_RULES: LinkRule[] = [
   { match: /صك\s*الأضحية/, href: "/programs/qurbani", ar: "صك الأضحية" },
   { match: /كرتونة\s*العزومة|كرتونة\s*رمضان|كرتونة\s*غذائية/, href: "/programs/box", ar: "كرتونة العزومة" },
-  { match: /كفالة\s*يتيم|الأيتام/, href: "/programs/orphans", ar: "كفالة يتيم" },
+  { match: /كفالة\s*يتيم|الأيتام/, href: "/orphans", ar: "كفالة يتيم" },
   { match: /زكاة\s*المال|حاسبة\s*الزكاة/, href: "/donate?type=zakat", ar: "احسب زكاتك" },
   { match: /زكاة\s*الفطر/, href: "/donate?type=zakat-fitr", ar: "زكاة الفطر" },
   { match: /قافلة\s*طبية|قوافل\s*طبية|علاج|أدوية/, href: "/programs/health", ar: "برنامج الصحة" },

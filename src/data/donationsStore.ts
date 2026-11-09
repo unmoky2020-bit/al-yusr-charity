@@ -1,3 +1,4 @@
+import type { DeliveryInfo } from "@/lib/deliveryJourney";
 export type DonationStatus = "pending" | "processing" | "completed" | "failed";
 /**
  * Methods are now driven by the public.payment_methods table (key column),
@@ -31,6 +32,10 @@ export interface DonationRecord {
   receiptDataUrl?: string;
   /** Filename of the uploaded receipt (manual methods) */
   receiptFilename?: string;
+  /** Backend status as sent (pending / paid / failed / refunded), for the delivery journey. */
+  rawStatus?: string;
+  /** Delivery steps after payment (family identified → prepared → delivered). */
+  delivery?: DeliveryInfo | null;
 }
 
 const KEY = "alyusr_donations";

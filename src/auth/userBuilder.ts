@@ -3,8 +3,15 @@
  * Extracted from AuthContext.tsx so that file only exports React components/hooks,
  * which is required for Vite Fast Refresh to work correctly.
  */
-import { LaravelUser } from "@/data/laravelApi";
+import { formatServerImageUrl, type LaravelUser, type ProfilePreferences } from "@/data/laravelApi";
 import type { Permission } from "./permissions";
+
+/** Stored avatar ("avatars/x.jpg", "/storage/…" or a full link) → a link the browser can load. */
+function avatarUrl(raw?: string | null): string | undefined {
+  const v = (raw || "").trim();
+  if (!v) return undefined;
+  return formatServerImageUrl(v) || v;
+}
 
 export type Role = "admin" | "editor" | "caseworker" | "case_manager" | "volunteer" | "delegate" | "donor";
 
@@ -22,7 +29,12 @@ export interface User {
   volunteerStatus?: "pending" | "approved" | "rejected" | "suspended";
   skills?: string[];
   city?: string;
+  governorate?: string;
   bio?: string;
+  /** Staff accounts: the job shown on their profile. */
+  jobTitle?: string;
+  preferences?: ProfilePreferences;
+  lastLoginAt?: string;
   assignedProgram?: string;
   permissions?: Permission[];
   totalDonated?: number;
@@ -78,7 +90,13 @@ export function buildUserFromLaravel(lUser: LaravelUser): User {
     phone: lUser.phone || undefined,
     emailVerified: Boolean(lUser.email_verified_at),
     roles: mappedRoles.length ? mappedRoles : ["donor"],
-    avatar: lUser.avatar || undefined,
+    avatar: avatarUrl(lUser.avatar_url || lUser.avatar),
+    bio: lUser.bio || undefined,
+    city: lUser.city || undefined,
+    governorate: lUser.governorate || undefined,
+    jobTitle: lUser.job_title || undefined,
+    preferences: lUser.preferences && typeof lUser.preferences === "object" ? lUser.preferences : undefined,
+    lastLoginAt: lUser.last_login_at || undefined,
     createdAt: lUser.created_at ? lUser.created_at.slice(0, 10) : new Date().toISOString().slice(0, 10),
   };
 }

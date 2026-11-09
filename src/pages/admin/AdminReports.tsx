@@ -28,6 +28,8 @@ import {
 import { toast } from "@/lib/notify";
 import { donationsApi, casesApi, volunteersApi } from "@/data/laravelApi";
 import { exportStyledExcel, ExcelColumn } from "@/lib/exportExcel";
+import { ListSkeleton } from "@/components/common/ContentSkeletons";
+import { buildDonorsSheet, fetchDonorsReport } from "@/data/api/donorsReportApi";
 
 interface ReportItem {
   id: string;
@@ -42,6 +44,19 @@ interface ReportItem {
 }
 
 const REPORTS_CATALOG: ReportItem[] = [
+  {
+    id: "donors-roster",
+    titleAr: "كشف المتبرعين (العملاء) وبيانات التواصل",
+    titleEn: "Donors (customers) and contact details",
+    category: "donations",
+    categoryAr: "التبرعات والمالية",
+    descriptionAr:
+      "متبرع في كل سطر: الاسم والموبايل والبريد والمحافظة والعنوان، عدد تبرعاته وإجمالي المدفوع، أول وآخر تبرع وآخر جهة تبرّع لها",
+    descriptionEn:
+      "One donor per row: name, phone, email, place, number of donations, total paid, first and last donation",
+    approxSize: "—",
+    columnsCount: 16,
+  },
   {
     id: "donations-all",
     titleAr: "سجل كافة التبرعات المكتملة والقيد التنفيذ",
@@ -125,6 +140,11 @@ export const AdminReports: React.FC = () => {
 
   // دالة لجلب البيانات وتجهيز أعمدة وتفاصيل التقرير
   const getReportPayload = async (reportId: string): Promise<ReportDataset> => {
+    if (reportId === "donors-roster") {
+      const { rows, paidTotal } = await fetchDonorsReport();
+      const sheet = buildDonorsSheet(rows, paidTotal);
+      return { columns: sheet.columns, data: sheet.data, metaItems: sheet.metaItems, summary: sheet.summary };
+    }
     if (reportId === "donations-all") {
       let donations: any[] = [];
       try {
@@ -971,8 +991,8 @@ export const AdminReports: React.FC = () => {
               {/* جسم المعاينة والجدول */}
               <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
                 {isPreviewLoading ? (
-                  <div className="py-16 text-center space-y-3">
-                    <Loader2 className="mx-auto h-8 w-8 animate-spin text-emerald-600" />
+                  <div className="space-y-3">
+                    <ListSkeleton rows={5} />
                     <p className="text-xs text-muted-foreground font-bold">
                       {isRTL ? "جاري تجهيز بيانات المعاينة..." : "Loading preview..."}
                     </p>

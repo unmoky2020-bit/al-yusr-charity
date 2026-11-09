@@ -35,6 +35,7 @@ import imgFood from "@/assets/axis-food.jpg";
 import imgHealth from "@/assets/axis-health.jpg";
 import imgEdu from "@/assets/axis-education.jpg";
 import { publicUrls } from "@/lib/publicUrls";
+import { FormSkeleton } from "@/components/common/ContentSkeletons";
 
 const DEFAULT_AXES_IMAGES: Record<string, string> = {
   food: imgFood,
@@ -198,9 +199,7 @@ export const AdminAxisDetail: React.FC = () => {
   if (loading) {
     return (
       <AdminLayout title={{ ar: "تعديل تفاصيل المحور", en: "Edit Axis Details" }}>
-        <div className="flex h-64 items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
-        </div>
+        <FormSkeleton sections={2} />
       </AdminLayout>
     );
   }

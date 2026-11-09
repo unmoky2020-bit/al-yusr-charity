@@ -209,7 +209,7 @@ export const SERVICES_AXES_AR: Axis[] = [
         id: "marriage",
         title: "تيسير زواج اليتيمات — فرحتها فرحتان",
         intro: "تجهيز عرائس الأيتام بأفضل الخامات (9 عرائس في 2025).",
-        href: "/programs/bride",
+        href: "/bride",
         cta_ar: "جهّز عروسًا",
         cta_en: "Sponsor a bride",
         items: [
@@ -222,7 +222,7 @@ export const SERVICES_AXES_AR: Axis[] = [
         id: "orphans",
         title: "رفيق النبي ﷺ — كفالة الأيتام",
         intro: "رعاية تربوية وتعليمية وصحية ومادية — 354 طالبًا تحت الكفالة في 2025.",
-        href: "/programs/orphans",
+        href: "/orphans",
         cta_ar: "اكفل يتيمًا",
         cta_en: "Sponsor an orphan",
         items: [

@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
 import bride from "@/assets/yusr-bride.png";
+import { AdaptiveImageFrame } from "@/components/common/AdaptiveImageFrame";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -100,14 +101,7 @@ export const BrideTrousseau = ({ image, title, description, benefits, donateHref
       <div className={`container relative mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 md:gap-12 ${imageSrc ? "md:grid-cols-2 md:items-center" : ""} lg:px-8`}>
         {imageSrc && (
           <div data-bt="img" className="relative order-2 md:order-1">
-            <div className="absolute -inset-3 rounded-[2.5rem] bg-secondary/15 blur-2xl" aria-hidden />
-            <img
-              src={imageSrc}
-              alt={isAR ? "برنامج تجهيز العرائس" : "Bride trousseau program"}
-              loading="lazy"
-              decoding="async"
-              className="relative w-full rounded-[2rem] object-contain shadow-card ring-1 ring-secondary/30"
-            />
+            <AdaptiveImageFrame src={imageSrc} alt={isAR ? "برنامج تجهيز العرائس" : "Bride trousseau program"} initialShape="portrait" />
           </div>
         )}
 

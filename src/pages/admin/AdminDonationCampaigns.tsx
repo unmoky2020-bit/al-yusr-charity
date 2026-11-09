@@ -32,6 +32,7 @@ import { CampaignPackagesManager } from "@/components/admin/campaigns/CampaignPa
 import { sortPackages, type PackagePriceKey } from "@/components/admin/campaigns/packageHelpers";
 import { getCampaignPageMetaForCampaign } from "@/data/campaignPages";
 import { publicUrls } from "@/lib/publicUrls";
+import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
 
 export default function AdminDonationCampaigns() {
   const { lang } = useLang();
@@ -500,10 +501,7 @@ export default function AdminDonationCampaigns() {
 
         {/* Campaigns Grid */}
         {loading ? (
-          <div className="py-20 text-center">
-            <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
-            <p className="mt-2 text-sm text-muted-foreground">{isAr ? "جاري تحميل الحملات..." : "Loading campaigns..."}</p>
-          </div>
+          <CardGridSkeleton count={6} />
         ) : filtered.length === 0 ? (
           <div className="rounded-2xl border-2 border-dashed border-border py-16 text-center bg-card/50">
             <Megaphone className="mx-auto h-10 w-10 text-muted-foreground/50" />

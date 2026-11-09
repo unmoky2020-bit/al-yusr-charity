@@ -26,8 +26,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
       className="toaster group z-[99999] pointer-events-none"
       toastOptions={{
         duration: 3200,
+        // No z-index here: Sonner layers stacked toasts itself (newest on top). A fixed z-index on
+        // every toast let the older, content-hidden toast paint over the newest one, so a second
+        // toast made both look empty. The toaster container above carries the page-level z-index.
         style: {
-          zIndex: 99999,
           pointerEvents: "auto",
         },
         classNames: {

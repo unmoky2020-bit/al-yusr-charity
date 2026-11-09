@@ -20,7 +20,7 @@ const PROGRAM_LABELS: Record<string, { ar: string; en: string; href: string }> =
   box: { ar: "كرتونة العزومة", en: "Family Food Box", href: "/programs/box" },
   orphan: { ar: "كفالة يتيم", en: "Sponsor an Orphan", href: "/programs/orphan" },
   water: { ar: "وصلات المياه", en: "Clean Water", href: "/programs/water" },
-  bride: { ar: "تجهيز العرائس", en: "Brides Trousseau", href: "/programs/bride" },
+  bride: { ar: "تجهيز العرائس", en: "Brides Trousseau", href: "/bride" },
   education: { ar: "تعليم وأيتام", en: "Education", href: "/programs/education" },
   health: { ar: "علاج مرضى", en: "Medical Aid", href: "/programs/health" },
   zakat: { ar: "الزكاة", en: "Zakat", href: "/zakat" },

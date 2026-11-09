@@ -10,6 +10,7 @@ import { useCampaignsSettings, getVisibleCampaignPrograms } from "@/data/campaig
 import { formatServerImageUrl } from "@/data/laravelApi";
 import { recordCampaignClick, recordSectionView } from "@/lib/campaignsMetrics";
 import { DONATION_ENTITIES } from "@/data/donationEntities";
+import { programHref } from "@/data/programLandings";
 
 export const clampSlide = (index: number, total: number) => {
   if (total <= 0) return 0;
@@ -1215,7 +1216,9 @@ const getCardDonateUrl = (p: any): string => {
 
 const getCardDetailsUrl = (p: any): string => {
   if (p.detailsUrl && typeof p.detailsUrl === "string" && p.detailsUrl.trim() && p.detailsUrl !== "/programs" && p.detailsUrl !== "/programs/") {
-    return p.detailsUrl;
+    // A generic program page that now has its own landing (e.g. /programs/orphans → /orphans).
+    const generic = /^\/programs\/([a-z0-9-]+)\/?$/.exec(p.detailsUrl.trim());
+    return generic ? programHref(generic[1]) : p.detailsUrl;
   }
   const { slug, type } = detectSlugFromCard(p);
   if (type === "campaign") {
@@ -1224,7 +1227,7 @@ const getCardDetailsUrl = (p: any): string => {
   if (type === "project") {
     return `/projects/${encodeURIComponent(slug)}`;
   }
-  return `/programs/${encodeURIComponent(slug)}`;
+  return programHref(slug);
 };
 
 /* ── Card component ───────────────────────────────────────────────────── */
@@ -1287,7 +1290,7 @@ const CampaignCard = memo(function CampaignCard({ p, i, total, lang, isRTL, Arro
         loading="lazy"
         decoding="async"
         onError={handleImageError}
-        className="absolute inset-0 h-full w-full object-cover object-center"
+        className="absolute inset-0 h-full w-full object-cover object-[50%_25%]"
       />
 
       {/* Cinematic dark gradient overlay from bottom to top for maximum text contrast */}
@@ -1431,7 +1434,8 @@ const FinalCTACard = ({
           size="sm"
           className="h-9 sm:h-10 flex-1 min-w-0 border-secondary/50 bg-primary-foreground/5 px-3 text-[11px] sm:text-xs font-extrabold text-primary-foreground hover:bg-secondary/15"
         >
-          <Link to="/campaigns" onClick={() => recordCampaignClick("__cta__", "details_click")}>
+          {/* The cards here are programs, so "browse all" opens the programs page (8 Nov 2026). */}
+          <Link to="/programs" onClick={() => recordCampaignClick("__cta__", "details_click")}>
             <HeartHandshake className="h-4 w-4" />
             {isRTL ? "تصفح كل الحملات" : "Browse all campaigns"}
           </Link>

@@ -444,7 +444,7 @@ const Trust = () => {
           </dl>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild variant="outline"><Link to="/cases">{isRTL ? "الحالات الموثّقة" : "Verified cases"}</Link></Button>
-            <Button asChild variant="outline"><Link to="/about#achievements">{isRTL ? "إنجازاتنا" : "Our achievements"}</Link></Button>
+            <Button asChild variant="outline"><Link to="/about">{isRTL ? "من نحن" : "About us"}</Link></Button>
             <Button asChild variant="outline"><Link to="/services-map">{isRTL ? "خريطة الخدمات" : "Services map"}</Link></Button>
           </div>
         </div>

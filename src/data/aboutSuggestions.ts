@@ -32,7 +32,7 @@ const A = (icon: string, title_ar: string, title_en: string, description_ar: str
 
 /** «أنشطتنا الدائمة» — the 15 most requested kinds of giving, each linked to its page on the site. */
 export const SUGGESTED_ACTIVITIES: AboutUsProgramItem[] = [
-  A("Baby", "كفالة يتيم", "Orphan sponsorship", "كفالة شهرية تغطي احتياجات اليتيم من أكل وتعليم وعلاج.", "Monthly sponsorship covering an orphan's food, schooling and care.", "/programs/orphans"),
+  A("Baby", "كفالة يتيم", "Orphan sponsorship", "كفالة شهرية تغطي احتياجات اليتيم من أكل وتعليم وعلاج.", "Monthly sponsorship covering an orphan's food, schooling and care.", "/orphans"),
   A("Soup", "إطعام — وجبة ساخنة", "Hot meals", "وجبات ساخنة تُطبخ وتُوزَّع على الأسر الأولى بالرعاية.", "Hot meals cooked and delivered to families in need.", "/programs/kitchen"),
   A("Package", "كرتونة غذائية شهرية", "Monthly food box", "كرتونة أساسيات تصل إلى الأسرة كل شهر.", "A box of staples delivered to a family every month.", "/programs/box"),
   A("Moon", "إفطار صائم وكرتونة رمضان", "Iftar & Ramadan boxes", "وجبات إفطار وكراتين رمضان للأسر المستحقة.", "Iftar meals and Ramadan boxes for families in need.", "/ramadan"),
@@ -41,7 +41,7 @@ export const SUGGESTED_ACTIVITIES: AboutUsProgramItem[] = [
   A("HeartPulse", "علاج المرضى والقوافل الطبية", "Medical aid & convoys", "عمليات وأدوية وقوافل طبية مجانية للمحتاجين.", "Surgeries, medicines and free medical convoys.", "/programs/treatment"),
   A("GraduationCap", "التعليم ومصروفات الطلاب", "Education & school fees", "مصروفات دراسية وأدوات تعليمية للطلاب غير القادرين.", "School fees and supplies for students who can't afford them.", "/programs/education"),
   A("BookOpen", "تحفيظ القرآن الكريم", "Quran memorisation", "حلقات ومكاتب تحفيظ القرآن ومكافآت للمحفّظين.", "Quran circles and support for teachers.", "/programs/quran"),
-  A("Gift", "تيسير زواج اليتيمات", "Helping orphan brides marry", "تجهيز العرائس بالأجهزة والمستلزمات الأساسية.", "Essential appliances and household items for brides.", "/programs/bride"),
+  A("Gift", "تيسير زواج اليتيمات", "Helping orphan brides marry", "تجهيز العرائس بالأجهزة والمستلزمات الأساسية.", "Essential appliances and household items for brides.", "/bride"),
   A("HandCoins", "كفالة الأسر شهريًا", "Monthly family sponsorship", "مساعدة شهرية ثابتة للأسر الأولى بالرعاية.", "A fixed monthly allowance for families most in need.", "/programs/monthly-sponsorship"),
   A("Beef", "صكوك الأضاحي واللحوم", "Qurbani & meat", "ذبح وتوزيع لحوم الأضاحي على الأسر المستحقة.", "Qurbani slaughter and meat distribution to families.", "/qurbani"),
   A("Shirt", "كسوة وبطاطين الشتاء", "Winter clothing & blankets", "ملابس وأغطية شتوية للأسر في البرد.", "Warm clothes and blankets for families in winter.", "/setr"),

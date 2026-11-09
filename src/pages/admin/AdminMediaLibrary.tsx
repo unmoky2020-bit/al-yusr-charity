@@ -26,6 +26,7 @@ import {
   Search, Upload, Loader2, Check, Copy, Image as ImageIcon, RefreshCw, Trash2, ExternalLink,
   CheckSquare, Square, Layers, Link2, ShieldCheck, HardDrive, Images,
 } from "lucide-react";
+import { TileGridSkeleton } from "@/components/common/ContentSkeletons";
 
 const formatSize = (bytes: number) =>
   bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
@@ -276,12 +277,7 @@ export default function AdminMediaLibrary() {
           </div>
         )}
 
-        {loading && (
-          <div className="flex h-60 flex-col items-center justify-center gap-3">
-            <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
-            <p className="text-sm text-muted-foreground">{isAr ? "بنجمع الصور ونشوف كل واحدة مستخدمة فين..." : "Loading images and their usage..."}</p>
-          </div>
-        )}
+        {loading && <TileGridSkeleton count={12} />}
 
         {!loading && !pendingBackend && filtered.length === 0 && (
           <Card className="flex h-60 flex-col items-center justify-center gap-3 border-dashed text-center">

@@ -164,11 +164,12 @@ export const Footer = () => {
         </section>
       )}
 
-      {/* Newsletter — a calm card with a seal, floating over the previous section */}
+      {/* Newsletter — a calm card with a seal, floating over the previous section. On phones the card
+          is tall (stacked), so a percentage lift would cover the page's last lines; it rises a fixed 40px there. */}
       <div className="relative overflow-visible">
         <div className={compactNewsletter
           ? "container relative z-30 mx-auto max-w-4xl px-4 pt-10 sm:px-6 md:pt-12"
-          : "container relative z-30 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -translate-y-[15%] -mb-7 sm:-mb-8 md:-mb-10"}>
+          : "container relative z-30 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -translate-y-10 md:-translate-y-[15%] -mb-7 sm:-mb-8 md:-mb-10"}>
           <div className={`relative mx-auto w-full overflow-hidden bg-[#fbfcf8] text-[#0b4429] ring-1 ring-[#0b4429]/[0.08] ${compactNewsletter ? "rounded-3xl shadow-[0_20px_50px_-30px_rgba(6,48,28,0.6)]" : "rounded-[2rem] shadow-[0_30px_70px_-34px_rgba(6,48,28,0.5)]"}`}>
             {/* warm light: an orange glow from both top corners and a hairline inner frame */}
             <div aria-hidden className="pointer-events-none absolute -top-28 -left-24 h-72 w-72 rounded-full bg-[#f58220]/[0.16] blur-3xl" />
@@ -342,7 +343,6 @@ export const Footer = () => {
               <li><Link to="/projects" {...prefetchHandlers("/projects")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "مشاريعنا" : "Projects"}</Link></li>
               <li><Link to="/cases" {...prefetchHandlers("/cases")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الحالات الإنسانية" : "Cases"}</Link></li>
               <li><Link to="/trust" {...prefetchHandlers("/trust")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الشفافية" : "Transparency"}</Link></li>
-              <li><Link to="/about#achievements" {...prefetchHandlers("/about")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "إنجازاتنا" : "Achievements"}</Link></li>
               <li><Link to="/gallery" {...prefetchHandlers("/gallery")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "معرض الصور" : "Gallery"}</Link></li>
               <li><Link to="/blog" {...prefetchHandlers("/blog")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المدونة" : "Blog"}</Link></li>
               <li><Link to="/faqs" {...prefetchHandlers("/faqs")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الأسئلة الشائعة" : "FAQs"}</Link></li>

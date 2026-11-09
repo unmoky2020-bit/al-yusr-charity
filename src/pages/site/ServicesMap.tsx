@@ -465,7 +465,7 @@ const ServicesMap = () => {
                 { label: isRTL ? "باب الجنة" : "Bab Al-Jannah", href: "/donate?program=general", Icon: Sparkles },
                 { label: isRTL ? "سيارة تكريم الإنسان" : "Honor Vehicle", href: "/services/honor-vehicle", Icon: Truck },
                 { label: isRTL ? "كفالة طالب" : "Student Sponsorship", href: "/programs/education", Icon: GraduationCap },
-                { label: isRTL ? "كفالة أسرة" : "Family Sponsorship", href: "/programs/orphans", Icon: HeartHandshake },
+                { label: isRTL ? "كفالة أسرة" : "Family Sponsorship", href: "/orphans", Icon: HeartHandshake },
               ];
 
               const row2 = [

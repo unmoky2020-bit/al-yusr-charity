@@ -217,7 +217,7 @@ const QurbaniLanding = () => {
       {/* Sticky in-page nav — keeps users oriented across long content */}
       <nav
         aria-label={isAr ? "فهرس صفحة صك أضحية الدقهلية" : "Dakahlia Qurbani page table of contents"}
-        className="sticky top-16 z-30 border-y border-border/70 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70"
+        className="sticky top-20 z-30 border-y border-border/70 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70"
       >
         <div className="container mx-auto flex items-center justify-center gap-2 overflow-x-auto px-4 py-2 text-xs font-extrabold text-primary [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:text-sm">
           <ol className="flex items-center gap-2">

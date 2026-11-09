@@ -12,6 +12,8 @@ import { useQuery } from "@tanstack/react-query";
 import { axesApi, contentApi, getApiToken, formatServerImageUrl } from "@/data/laravelApi";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { campaignDonateHref } from "@/data/campaignPages/index";
+import { entityDonateHref } from "@/data/entityShares";
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
 /**
@@ -100,6 +102,12 @@ export const WorkAxes = () => {
 
   // Pillars mapped dynamically from backend liveAxes — unified single source of truth
   const pillars = useMemo(() => {
+    // Each pillar opens the campaign that serves it (8 Nov 2026); other pillars keep their own page.
+    const CAMPAIGN_OF_AXIS: Record<string, { href: string; donate: string; ar: string; en: string }> = {
+      food: { href: "/food-box", donate: campaignDonateHref("food"), ar: "حملة الغذاء الشهري", en: "Monthly food campaign" },
+      health: { href: "/medical", donate: entityDonateHref("project", "medical"), ar: "مجمع اليسر الطبي", en: "Al-Yusr medical complex" },
+      education: { href: "/athar", donate: campaignDonateHref("athar"), ar: "حملة أثر", en: "Athar education campaign" },
+    };
     if (!liveAxes || liveAxes.length === 0) return [];
     const sorted = [...liveAxes].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
 
@@ -123,13 +131,14 @@ export const WorkAxes = () => {
         id: axis.id,
         number: num,
         slug: axis.slug,
-        donateSlug: axis.slug,
+        donateHref: CAMPAIGN_OF_AXIS[axis.slug]?.donate ?? `/donate?program=${axis.slug}`,
         anchorId: `axis-${axis.slug}`,
         tag: isAR ? (axis.badge_ar || axis.name_ar) : (axis.badge_en || axis.name_en || axis.name_ar),
         title: isAR ? axis.name_ar : (axis.name_en || axis.name_ar),
         desc: isAR ? (axis.description_ar || "") : (axis.description_en || axis.description_ar || ""),
         bullets,
-        href: `/axes/${axis.slug}`,
+        href: CAMPAIGN_OF_AXIS[axis.slug]?.href ?? `/axes/${axis.slug}`,
+        campaign: CAMPAIGN_OF_AXIS[axis.slug] ? (isAR ? CAMPAIGN_OF_AXIS[axis.slug].ar : CAMPAIGN_OF_AXIS[axis.slug].en) : "",
         img: serverImg,
         fallbackImg: fallbackImages[axis.slug] || imgFood,
         accent: accents[idx % accents.length],
@@ -356,7 +365,7 @@ export const WorkAxes = () => {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          navigate(`/donate?program=${p.donateSlug}`, { preventScrollReset: false });
+                          navigate(p.donateHref, { preventScrollReset: false });
                         }}
                         aria-label={`${isAR ? "تبرع لمحور" : "Donate to"} ${p.title}`}
                         className="inline-flex items-center gap-1.5 rounded-full bg-orange-grad px-4 py-2 text-[12.5px] font-extrabold text-accent-foreground shadow-cta transition hover:-translate-y-0.5 hover:opacity-95"
@@ -365,7 +374,7 @@ export const WorkAxes = () => {
                         {isAR ? "تبرع الآن" : "Donate now"}
                       </button>
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1.5 text-[12.5px] font-extrabold text-accent ring-1 ring-accent/20 transition-all duration-300 group-hover:gap-3 group-hover:bg-accent group-hover:text-accent-foreground group-focus-visible:bg-accent group-focus-visible:text-accent-foreground">
-                        {isAR ? "اعرف أكثر" : "Learn more"}
+                        {p.campaign || (isAR ? "اعرف أكثر" : "Learn more")}
                         <Arrow className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
                       </span>
                     </div>

@@ -1,0 +1,14 @@
+578f30fada8f0060a2fd60bd3b2dd8351c67ada2472d12ff8f6cf5c69c227aaa app/Http/Controllers/Api/V1/Gallery/GalleryImageController.php
+6a86cd08923e6e8c0b2a61f0008b69ef0bb39688222b8374bdadb1727cc28d07 app/Http/Controllers/Api/V1/Dashboard/DashboardController.php
+2f8df0dfeb79316831ed295b50e9d9c9a085483a00db19dc684ce4b3637776a7 app/Http/Resources/DonationResource.php
+581dde71f5e3235a47b89ae7625d8615c6f7d48e88d6261ae33a509dc628a56e app/Http/Controllers/Api/V1/Donation/DonationController.php
+NEW app/Support/StaffAccess.php
+NEW app/Support/DeliverySteps.php
+NEW app/Http/Controllers/Api/V1/Auth/ProfileController.php
+NEW app/Http/Controllers/Api/V1/Donation/DonationDeliveryController.php
+NEW app/Notifications/DonorDeliveryStageNotification.php
+NEW app/Http/Controllers/Api/V1/Reports/DonorsReportController.php
+NEW app/Http/Controllers/Api/V1/Engagement/EngagementController.php
+NEW database/migrations/2026_11_09_000001_add_profile_fields_to_users_table.php
+NEW database/migrations/2026_11_09_000002_create_engagement_counters_table.php
+NEW routes/api-2026-11-09.php

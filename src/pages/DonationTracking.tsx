@@ -13,8 +13,8 @@ import { useLang } from "@/i18n/LangContext";
 import { donationsStore, type DonationRecord, type DonationStatus } from "@/data/donationsStore";
 import { donationsApiV1 } from "@/data/laravelApi";
 import { fromLaravelRow } from "@/data/donationRecordMapper";
+import { DeliveryJourney } from "@/components/donations/DeliveryJourney";
 
-const STEPS: DonationStatus[] = ["pending", "processing", "completed"];
 const WHATSAPP_NUMBER = "201097000137";
 const POLL_INTERVAL_MS = 30_000; // poll every 30 seconds instead of realtime
 
@@ -265,28 +265,14 @@ const DonationTracking = () => {
                   )}
                 </div>
 
-                {record.status !== "failed" && (
-                  <div className="mt-6 grid grid-cols-3 gap-2">
-                    {STEPS.map((s, i) => {
-                      const idx = STEPS.indexOf(record.status as DonationStatus);
-                      const reached = idx >= i;
-                      return (
-                        <div key={s} className="flex flex-col items-center text-center">
-                          <div className={`grid h-10 w-10 place-items-center rounded-full text-sm font-black transition ${
-                            reached ? "bg-secondary text-secondary-foreground shadow-cta" : "bg-muted text-muted-foreground"
-                          }`}>
-                            {reached ? <CheckCircle2 className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
-                          </div>
-                          <span className={`mt-2 text-xs font-bold ${reached ? "text-primary" : "text-muted-foreground"}`}>
-                            {s === "pending"    && (lang === "ar" ? "تم الاستلام"    : "Received")}
-                            {s === "processing" && (lang === "ar" ? "قيد المعالجة"   : "Processing")}
-                            {s === "completed"  && (lang === "ar" ? "تم التأكيد"     : "Confirmed")}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                {/* registered → paid → family identified → prepared → delivered */}
+                <DeliveryJourney
+                  className="mt-6"
+                  status={record.rawStatus ?? (record.status === "completed" ? "paid" : record.status)}
+                  delivery={record.delivery ?? null}
+                  createdAt={record.createdAt}
+                  lang={lang}
+                />
 
                 {(record.status === "pending" || record.status === "failed") && (
                   <div className="mt-5 flex flex-wrap gap-2">

@@ -65,6 +65,7 @@ function IconPick({ value, onChange }: { value?: string | null; onChange: (v: st
   );
 }
 import aboutHero from "@/assets/about-hero-classroom.jpg";
+import { FormSkeleton } from "@/components/common/ContentSkeletons";
 
 // Cleaned of legacy local storage caching to ensure 100% synchronization with Laravel API
 
@@ -308,9 +309,7 @@ export default function AdminAboutUs() {
   if (loading) {
     return (
       <AdminLayout title={{ ar: "محتوى صفحة من نحن", en: "About Us Content CMS" }}>
-        <div className="flex h-96 items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
-        </div>
+        <FormSkeleton sections={3} />
       </AdminLayout>
     );
   }

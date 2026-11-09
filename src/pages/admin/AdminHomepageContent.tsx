@@ -33,7 +33,6 @@ import {
 } from "lucide-react";
 import {
   contentApi,
-  galleryApi,
   formatServerImageUrl,
   LaravelHomepageContent,
   invalidateApiCache,
@@ -95,11 +94,8 @@ export const AdminHomepageContent = () => {
         setPreviewUrls((p) => ({ ...p, [field]: undefined }));
       }
 
-      // Also try backup upload to gallery for media library cataloging
-      try {
-        const title = field === "section2_main_image" ? "بوستر_اليسر_الرئيسي" : "صورة_كراتين_وقوافل_الخير";
-        await galleryApi.uploadImage(file, title);
-      } catch {}
+      // (No second copy into the photo gallery: the media library already lists every stored file,
+      //  and each copy used to appear as a public photo on /gallery.)
 
       // Invalidate homepage query cache so other components update immediately
       invalidateApiCache("/homepage/content");

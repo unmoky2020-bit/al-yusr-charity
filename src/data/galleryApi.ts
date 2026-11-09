@@ -111,11 +111,6 @@ export async function uploadGalleryImage(file: File): Promise<{ url: string; pat
   return { url, path, width, height };
 }
 
-/** Stored files are deleted by Laravel together with the gallery row (DELETE /gallery/{id}). */
-export async function deleteGalleryStorageObject(_path: string | null | undefined) {
-  // Nothing to do on the client.
-}
-
 import { GALLERY_STATIC_IMAGES } from "./galleryImages";
 
 const staticAsRows: GalleryRow[] = GALLERY_STATIC_IMAGES.map((img, idx) => ({
@@ -182,14 +177,25 @@ export async function listPublishedGalleryImages(): Promise<GalleryRow[]> {
   return staticAsRows;
 }
 
-export async function listAllGalleryImages(): Promise<GalleryRow[]> {
-  try {
-    const laravelItems = await laravelGalleryApi.listAll();
-    if (Array.isArray(laravelItems) && laravelItems.length > 0) {
-      return laravelItems.map((item: LaravelGalleryItem, idx: number) => mapLaravelGallery(item, idx));
-    }
-  } catch {}
-  return staticAsRows;
+/**
+ * Every row of the photo gallery for the dashboard, straight from the server (all pages, no cache,
+ * no built-in sample photos). Throws when the server can't be reached, so the screen can say so
+ * instead of showing photos that can't be edited.
+ */
+export async function listGalleryForAdmin(): Promise<GalleryRow[]> {
+  const items: LaravelGalleryItem[] = [];
+  for (let page = 1; page <= 20; page++) {
+    const res = await apiFetch<{ data?: LaravelGalleryItem[]; meta?: { last_page?: number }; last_page?: number }>("/gallery", {
+      method: "GET",
+      params: { per_page: 100, page },
+      useCache: false,
+    });
+    const data = Array.isArray(res?.data) ? res.data : [];
+    items.push(...data);
+    const last = Number(res?.meta?.last_page ?? res?.last_page ?? 1);
+    if (data.length === 0 || page >= last) break;
+  }
+  return items.map((item, idx) => mapLaravelGallery(item, idx));
 }
 
 export type GalleryUpsertInput = Partial<Omit<GalleryRow, "id" | "created_at" | "updated_at">> & {
@@ -229,42 +235,52 @@ export async function upsertGalleryImage(row: GalleryUpsertInput): Promise<Galle
     ? await laravelGalleryApi.update(targetId, payload as Partial<LaravelGalleryItem>)
     : await laravelGalleryApi.create(payload as Partial<LaravelGalleryItem>);
   if (draftId && row.image_url) uploadedDraftIds.delete(row.image_url);
+  invalidateApiCache("/gallery");
+  if (!result || !(result as LaravelGalleryItem).id) throw new Error("الخادم لم يُرجع الصورة بعد الحفظ");
   return mapLaravelGallery(result, 0);
 }
 
+/** Removes the photo from the gallery. The stored file stays in the media library (other pages may use it). */
 export async function deleteGalleryImage(row: GalleryRow) {
-  await deleteGalleryStorageObject(row.storage_path);
-  try {
-    await laravelGalleryApi.remove(row.id);
-  } catch (e) {
-    throw new Error(String(e));
-  }
+  await laravelGalleryApi.remove(row.id);
+  invalidateApiCache("/gallery");
 }
 
 export async function toggleGalleryPublished(id: string, value: boolean) {
-  try {
-    await laravelGalleryApi.update(id, { is_public: value } as any);
-  } catch (e) { throw new Error(String(e)); }
+  await laravelGalleryApi.update(id, { is_public: value } as Partial<LaravelGalleryItem>);
+  invalidateApiCache("/gallery");
 }
 
 export async function toggleGalleryFeatured(id: string, value: boolean) {
-  try {
-    await laravelGalleryApi.update(id, { is_featured: value } as any);
-  } catch (e) { throw new Error(String(e)); }
+  await laravelGalleryApi.update(id, { is_featured: value } as Partial<LaravelGalleryItem>);
+  invalidateApiCache("/gallery");
 }
 
-export async function moveGalleryImage(rows: GalleryRow[], id: string, direction: -1 | 1) {
+/**
+ * Move a photo one place up (-1) or down (1) in the list as shown (highest sort_order first, like the
+ * server and the public page). Returns the reordered list for the screen; the two rows are saved.
+ */
+export async function moveGalleryImage(rows: GalleryRow[], id: string, direction: -1 | 1): Promise<GalleryRow[]> {
   const idx = rows.findIndex((r) => r.id === id);
   const swap = idx + direction;
-  if (idx < 0 || swap < 0 || swap >= rows.length) return;
+  if (idx < 0 || swap < 0 || swap >= rows.length) return rows;
   const a = rows[idx];
   const b = rows[swap];
+  // Swap the two numbers; when they are equal (common for older rows) step the moved one past its neighbour.
+  let orderA = b.sort_order;
+  const orderB = a.sort_order;
+  if (orderA === orderB) orderA = direction === -1 ? orderB + 1 : orderB - 1;
   const results = await Promise.allSettled([
-    laravelGalleryApi.update(a.id, { sort_order: b.sort_order } as Partial<LaravelGalleryItem>),
-    laravelGalleryApi.update(b.id, { sort_order: a.sort_order } as Partial<LaravelGalleryItem>),
+    laravelGalleryApi.update(a.id, { sort_order: orderA } as Partial<LaravelGalleryItem>),
+    laravelGalleryApi.update(b.id, { sort_order: orderB } as Partial<LaravelGalleryItem>),
   ]);
+  invalidateApiCache("/gallery");
   const failed = results.find((r): r is PromiseRejectedResult => r.status === "rejected");
   if (failed) throw failed.reason instanceof Error ? failed.reason : new Error(String(failed.reason));
+  const next = rows.slice();
+  next[idx] = { ...b, sort_order: orderB };
+  next[swap] = { ...a, sort_order: orderA };
+  return next;
 }
 
 /**
@@ -272,7 +288,7 @@ export async function moveGalleryImage(rows: GalleryRow[], id: string, direction
  * Returns { kept, deleted } counts.
  */
 export async function deduplicateGalleryImages(): Promise<{ kept: number; deleted: number }> {
-  const items = await listAllGalleryImages();
+  const items = await listGalleryForAdmin();
   const seen = new Map<string, string>();
   const toDelete: string[] = [];
   for (const row of items) {

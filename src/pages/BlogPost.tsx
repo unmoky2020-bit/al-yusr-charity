@@ -202,7 +202,7 @@ const BlogPost = () => {
   return (
     <PageLayout>
       {isPreview && (
-        <div className="sticky top-16 z-40 border-b border-amber-300 bg-amber-100/95 py-2 text-center text-xs font-extrabold text-amber-900 backdrop-blur dark:bg-amber-500/20 dark:text-amber-200">
+        <div className="sticky top-20 z-40 border-b border-amber-300 bg-amber-100/95 py-2 text-center text-xs font-extrabold text-amber-900 backdrop-blur dark:bg-amber-500/20 dark:text-amber-200">
           <Eye className="me-1 inline h-3.5 w-3.5" />
           {lang === "ar" ? "وضع المعاينة — هذه الصفحة لم تنشر بعد" : "Preview mode — this page is not yet published"}
         </div>

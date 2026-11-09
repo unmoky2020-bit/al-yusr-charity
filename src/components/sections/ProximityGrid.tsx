@@ -20,13 +20,13 @@ const ITEM_HREF: Record<string, string> = {
   "زكاة المال": "/zakat",         "Zakat": "/zakat",
   "إفطار صائم": "/programs/box",  "Iftar Meals": "/programs/box",
   "أضحية مباركة": "/programs/odhya", "Qurbani": "/programs/odhya",
-  "كفالة يتيم": "/programs/orphans", "Orphan Sponsorship": "/programs/orphans",
+  "كفالة يتيم": "/orphans", "Orphan Sponsorship": "/orphans",
   "علاج المرضى": "/programs/treatment", "Medical Care": "/programs/treatment",
   "كفالة طالب": "/programs/education", "Student Sponsorship": "/programs/education",
   "كسوة العيد": "/donate",        "Eid Clothing": "/donate",
   "سُقيا الماء": "/programs/water", "Clean Water": "/programs/water",
   "إيواء أسرة": "/programs/shelter", "Family Shelter": "/programs/shelter",
-  "جهاز عروس": "/programs/bride", "Bride Trousseau": "/programs/bride",
+  "جهاز عروس": "/bride", "Bride Trousseau": "/bride",
   "كرتونة الخير": "/programs/box", "Aid Carton": "/programs/box",
 };
 

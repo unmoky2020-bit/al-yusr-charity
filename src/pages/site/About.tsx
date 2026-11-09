@@ -122,6 +122,13 @@ const STAT_ICON_RULES: [RegExp, string][] = [
 ];
 const statIconFor = (title: string) => STAT_ICON_RULES.find(([re]) => re.test(title))?.[1] ?? "Sparkles";
 
+/**
+ * About-page blocks the foundation asked to hide (8 Nov 2026): the figures panel under the hero
+ * («إنجازاتنا») and «رحلتنا وتاريخنا». Their content stays editable in the dashboard; set a flag back
+ * to true to show the block again (and restore its menu/footer links).
+ */
+const SHOW_SECTION = { achievements: false, timeline: false };
+
 const About = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
@@ -360,7 +367,7 @@ const About = () => {
         { name: isRTL ? "رؤية 2030" : "Vision 2030", url: `${base}/about#vision2030` },
         { name: isRTL ? "لماذا تثق بنا" : "Why Trust Us", url: `${base}/about#trust` },
         { name: isRTL ? "قيمنا"   : "Our values", url: `${base}/about#values` },
-        { name: isRTL ? "إنجازاتنا" : "Achievements", url: `${base}/about#achievements` },
+        ...(SHOW_SECTION.achievements ? [{ name: isRTL ? "إنجازاتنا" : "Achievements", url: `${base}/about#achievements` }] : []),
       ]} />
       <FAQSchema items={faq} />
 
@@ -437,7 +444,6 @@ const About = () => {
                 <div className="absolute -inset-4 rounded-[2.5rem] bg-secondary/15 blur-2xl" aria-hidden />
                 {loading && !aboutDataLive ? (
                   <div className="relative w-full aspect-[16/10] sm:aspect-[16/10] md:aspect-[4/3] rounded-[2rem] border-4 border-secondary/30 bg-white/10 animate-pulse shadow-card flex items-center justify-center">
-                    <div className="h-10 w-10 rounded-full border-2 border-secondary/40 border-t-secondary animate-spin" />
                   </div>
                 ) : (
                   <img
@@ -458,6 +464,7 @@ const About = () => {
               </div>
             </div>
 
+            {SHOW_SECTION.achievements && (<>
             {/* Achievements — the only place the figures show (dashboard → من نحن → الأرقام والإحصائيات). */}
             <div
               id="achievements"
@@ -504,6 +511,7 @@ const About = () => {
                   : (aboutData.achievements?.title_en || `${statsYear ? `${statsYear} impact` : "Impact"} — verified across Egypt`)}
               </div>
             </div>
+            </>)}
 
             {/* Scroll-down Arrow */}
             <div className="mt-8 flex justify-center md:mt-10">
@@ -685,12 +693,12 @@ const About = () => {
                           <>
                             تم بفضل الله وتبرعاتكم إنجاز{" "}
                             <span className="font-black text-secondary tabular-nums" dir="ltr">{progressVal}%</span>{" "}
-                            من الخطة التنموية عبر مزارع الوقف والمجمعات الطبية وكفالات التعليم وسقيا الماء.
+                            من الخطة التنموية عبر مزارع الوقف والمجمعات الطبية وكفالات التعليم.
                           </>
                         ) : (
                           <>
                             <span className="font-black text-secondary tabular-nums" dir="ltr">{progressVal}%</span>{" "}
-                            of the vision achieved through endowment farms, medical clinics, education aid, and pure water lines.
+                            of the vision achieved through endowment farms, medical clinics and education sponsorships.
                           </>
                         )}
                       </p>
@@ -853,6 +861,7 @@ const About = () => {
           </div>
         </section>
 
+        {SHOW_SECTION.timeline && (<>
         {/* TIMELINE / MILESTONES — Sticky Milestone Cards & Photo Collage */}
         <section id="timeline" className="scroll-mt-24 py-16 md:py-24 pb-28 md:pb-36 bg-background border-y border-border/40">
           <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -977,6 +986,7 @@ const About = () => {
             </div>
           </div>
         </section>
+        </>)}
 
         {/* CONTACT + MAP */}
         <section id="contact" className="scroll-mt-24 py-16 md:py-24 bg-muted/30 border-y border-border/50">

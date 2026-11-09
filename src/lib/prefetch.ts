@@ -21,6 +21,8 @@ const map: Record<string, () => Promise<unknown>> = {
   "/charity-mansoura": () => import("@/pages/site/CharityMansoura.tsx"),
   "/charity-egypt": () => import("@/pages/site/CharityEgypt.tsx"),
   "/zakat-al-fitr": () => import("@/pages/site/ZakatAlFitr.tsx"),
+  "/bride": () => import("@/pages/landings/BrideLanding.tsx"),
+  "/orphans": () => import("@/pages/landings/OrphansLanding.tsx"),
   "/donate-from-abroad": () => import("@/pages/site/DonateFromAbroad.tsx"),
 };
 

@@ -39,7 +39,6 @@ import { fetchFaqs } from "@/data/faqsApi";
 import { usePrograms } from "@/data/sources/programs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BrideTrousseau } from "@/components/sections/BrideTrousseau";
-import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
 import { Helmet } from "react-helmet-async";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { motion, useReducedMotion } from "motion/react";
@@ -489,18 +488,15 @@ const Projects = () => {
             </p>
           </div>
           {programsLoading && (
-            <div className="w-full space-y-6 md:space-y-8" aria-busy="true" aria-label={isRTL ? "جارٍ تحميل البرامج" : "Loading programs"}>
-              {[0, 1, 2].map((i) => (
-                <div key={i} className={`flex ${i % 2 ? "lg:justify-end" : "lg:justify-start"}`}>
-                  <div className={`flex w-full flex-col gap-4 overflow-hidden rounded-[28px] border border-primary/10 bg-card p-3 shadow-card md:flex-row lg:w-[90%] ${i % 2 ? "md:flex-row-reverse" : ""}`}>
-                    <div className="flex-1 space-y-3 p-3 md:py-8">
-                      <Skeleton className="h-5 w-24 rounded-full" />
-                      <Skeleton className="h-8 w-2/3" />
-                      <Skeleton className="h-4 w-full" />
-                      <Skeleton className="h-4 w-5/6" />
-                      <Skeleton className="mt-4 h-8 w-40 rounded-full" />
-                    </div>
-                    <Skeleton className="aspect-[4/3] w-full rounded-[20px] md:aspect-auto md:min-h-[260px] md:w-1/2" />
+            <div className="grid w-full gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-label={isRTL ? "جارٍ تحميل البرامج" : "Loading programs"}>
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="overflow-hidden rounded-[28px] border border-primary/10 bg-card p-2.5 shadow-card">
+                  <Skeleton className="aspect-[4/3] w-full rounded-[20px]" />
+                  <div className="space-y-3 p-3">
+                    <Skeleton className="h-7 w-2/3" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                    <Skeleton className="mt-2 h-8 w-40 rounded-full" />
                   </div>
                 </div>
               ))}
@@ -512,42 +508,42 @@ const Projects = () => {
             </p>
           )}
           {!programsLoading && (
-          <StickyStack className="w-full overflow-x-clip" gap="mb-6 md:mb-8">
-            {programs.map((p, idx) => {
-              // Static (JIT-safe) sticky offsets that cascade so each card peeks under the next.
-              const offsets = [
-                "top-[84px] md:top-[88px]",
-                "top-[96px] md:top-[102px]",
-                "top-[108px] md:top-[116px]",
-                "top-[120px] md:top-[130px]",
-              ];
-              const offset = offsets[idx % offsets.length];
-              const reverse = idx % 2 === 1;
-              // Large screens: one card to the start side, the next to the end side (zigzag, like /arboun).
-              return (
-                <StickyStackItem key={p.slug} index={idx} top={offset}>
-                  <div className={`flex w-full ${reverse ? "lg:justify-end" : "lg:justify-start"}`}>
+            // One straight grid of upright cards: photo on top, then name, line, price and the link,
+            // stacked in that order on every screen (8 Nov 2026: no zigzag, no side-by-side halves).
+            <ul className="grid w-full gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {programs.map((p, idx) => (
+                <li key={p.slug} className="flex">
                   <Link
                     to={programHref(p.slug)}
                     data-source="projects"
                     data-label={`project-${p.slug}`}
-                    className={`group relative isolate mx-auto flex w-full transform-gpu flex-col overflow-hidden rounded-[28px] lg:mx-0 lg:min-h-[320px] lg:w-[90%] lg:max-w-none border border-primary/10 bg-card shadow-card ring-1 ring-primary/5 transition-colors duration-300 [backface-visibility:hidden] hover:border-secondary/50 md:items-stretch md:bg-gradient-to-b md:from-card md:to-card/95 ${reverse ? "md:flex-row-reverse" : "md:flex-row"}`}
+                    className="group flex w-full flex-col overflow-hidden rounded-[28px] border border-primary/10 bg-card shadow-card ring-1 ring-primary/5 transition duration-300 hover:-translate-y-1 hover:border-secondary/50 hover:shadow-cta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
-                    {/* Content first in DOM so it reads first on large screens */}
-                    <div className="order-2 flex flex-1 flex-col px-5 pb-5 pt-4 text-start md:order-1 md:w-1/2 md:justify-center md:px-6 md:py-6">
+                    <div className="relative m-2.5 mb-0 aspect-[4/3] overflow-hidden rounded-[20px] bg-gradient-to-br from-primary/5 to-secondary/10">
+                      <img
+                        decoding="async"
+                        src={p.image}
+                        alt={p[lang].name}
+                        loading={idx < 3 ? "eager" : "lazy"}
+                        fetchpriority={idx === 0 ? "high" : "auto"}
+                        className="absolute inset-0 h-full w-full object-cover object-[50%_22%] transition-transform duration-700 group-hover:scale-[1.04]"
+                      />
+                      <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/30 to-transparent" />
                       {p.season && (
-                        <span className="mb-2 inline-flex w-fit rounded-full bg-accent/15 px-3 py-1 text-[11px] font-extrabold text-accent">
+                        <span className="absolute start-3 top-3 rounded-full bg-card/95 px-3 py-1 text-[11px] font-extrabold text-accent shadow-soft">
                           {p.season[lang]}
                         </span>
                       )}
-                      <h3 className="text-2xl font-black leading-tight text-primary md:text-[28px]">{p[lang].name}</h3>
-                      <p className="mt-2 text-sm font-semibold leading-7 text-muted-foreground md:text-base">{p[lang].tagline}</p>
-                      <p className="mt-2 line-clamp-2 text-xs leading-6 text-muted-foreground md:text-sm">{p[lang].desc}</p>
-                      <div className="mt-4 inline-flex w-fit max-w-full items-center gap-1.5 text-xs font-extrabold text-muted-foreground">
-                        <CheckCircle2 className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="flex flex-1 flex-col px-5 pb-5 pt-4 text-start">
+                      <h3 className="text-xl font-black leading-tight text-primary md:text-[22px]">{p[lang].name}</h3>
+                      <p className="mt-2 text-sm font-semibold leading-7 text-muted-foreground">{p[lang].tagline}</p>
+                      {p[lang].desc && <p className="mt-1.5 line-clamp-2 text-xs leading-6 text-muted-foreground">{p[lang].desc}</p>}
+                      <div className="mt-3 inline-flex w-fit max-w-full items-center gap-1.5 text-xs font-extrabold text-muted-foreground">
+                        <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
                         <span>{isRTL ? "موثّق ومراجع ميدانيًا" : "Field-verified and reviewed"}</span>
                       </div>
-                      <div className="mt-5 flex flex-wrap items-center gap-2.5">
+                      <div className="mt-auto flex flex-col items-start gap-2.5 pt-5">
                         {p.priceFrom > 0 && (
                           <span className="rounded-full bg-secondary/20 px-3 py-1 text-xs font-extrabold text-primary">
                             {isRTL ? `يبدأ من ${p.priceFrom} ج` : `From ${p.priceFrom} EGP`}
@@ -558,24 +554,10 @@ const Projects = () => {
                         </span>
                       </div>
                     </div>
-                    {/* Image */}
-                    <div className="relative order-1 m-2.5 aspect-[4/3] overflow-hidden rounded-[20px] bg-gradient-to-br from-primary/5 to-secondary/10 md:order-2 md:m-3 md:aspect-auto md:w-1/2 md:shrink-0 md:self-stretch">
-                      <img
-                        decoding="async"
-                        src={p.image}
-                        alt={p[lang].name}
-                        loading={idx < 2 ? "eager" : "lazy"}
-                        fetchpriority={idx === 0 ? "high" : "auto"}
-                        className="absolute inset-0 h-full w-full object-cover md:transition-transform md:duration-700 md:group-hover:scale-[1.04]"
-                      />
-                      <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
-                    </div>
                   </Link>
-                  </div>
-                </StickyStackItem>
-              );
-            })}
-          </StickyStack>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
 

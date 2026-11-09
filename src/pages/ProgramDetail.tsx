@@ -47,6 +47,7 @@ import { PageLoadingState } from "@/components/common/PageLoadingState";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { programSeo } from "@/data/programSeo";
 import { ProgramUnavailable } from "@/components/programs/ProgramUnavailable";
+import { AdaptiveImageFrame } from "@/components/common/AdaptiveImageFrame";
 
 type SubOption = {
   id: string;
@@ -59,37 +60,6 @@ type SubOption = {
   amount: number | null;
   image_url: string | null;
   sort_order: number;
-};
-
-const ProgramHeroImage = ({ src, alt }: { src: string; alt: string }) => {
-  const [loaded, setLoaded] = useState(false);
-  const [failed, setFailed] = useState(false);
-
-  return (
-    <div className="relative mx-auto flex min-h-[220px] w-full max-w-[520px] items-center justify-center md:min-h-[300px]">
-      <div className="absolute -inset-4 rounded-[2.5rem] bg-secondary/25 blur-3xl" />
-      <div className="relative flex min-h-[220px] w-full items-center justify-center overflow-hidden rounded-[2rem] bg-primary/30 shadow-card md:min-h-[300px] md:rounded-[2.5rem]">
-        {!failed && (
-          <img
-            src={src}
-            alt={alt}
-            fetchPriority="high"
-            decoding="async"
-            loading="eager"
-            onLoad={() => setLoaded(true)}
-            onError={() => setFailed(true)}
-            className={`mx-auto block h-auto max-h-[min(68vh,520px)] w-auto max-w-full object-contain object-center transition-opacity duration-200 ${loaded ? "opacity-100" : "opacity-0"}`}
-          />
-        )}
-        {!loaded && (
-          <div className="absolute inset-0 flex items-center justify-center text-primary-foreground/50" aria-live="polite">
-            <ImageIcon className="h-8 w-8" aria-hidden="true" />
-            {failed && <span className="sr-only">تعذر تحميل صورة البرنامج</span>}
-          </div>
-        )}
-      </div>
-    </div>
-  );
 };
 
 const ProgramDetail = () => {
@@ -319,8 +289,8 @@ const ProgramDetail = () => {
         data-source={`program-${program.slug}-hero`}
         className="relative -mt-px overflow-hidden pattern-hero-luxe hero-pattern-fade text-primary-foreground"
       >
-        <div className={`container relative mx-auto grid gap-10 px-4 py-12 md:items-center md:py-20 ${hasHeroImage ? "md:grid-cols-2" : ""}`}>
-          <div className="order-1 text-center md:order-none md:text-start">
+        <div className={`container relative mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:items-center md:py-20 lg:px-8 ${hasHeroImage ? "md:grid-cols-2" : ""}`}>
+          <div className="text-center md:text-start">
             <div className="flex justify-center text-primary-foreground/80 md:justify-start">
               <Breadcrumbs
                 items={[
@@ -386,7 +356,13 @@ const ProgramDetail = () => {
           </div>
 
           {hasHeroImage && (
-            <ProgramHeroImage key={`${program.slug}:${hero.image}`} src={hero.image} alt={hero.title} />
+            <AdaptiveImageFrame
+              key={`${program.slug}:${hero.image}`}
+              src={hero.image}
+              alt={hero.title}
+              priority
+              initialShape={program.slug === "bride" || program.slug === "orphans" ? "portrait" : "landscape"}
+            />
           )}
         </div>
       </section>
@@ -424,7 +400,7 @@ const ProgramDetail = () => {
         data-source={`program-${program.slug}-benefits`}
         className="scroll-mt-28 bg-background py-14 md:py-20"
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/25 border border-secondary/40 px-3.5 py-1 text-xs font-black text-black shadow-xs">
               <Sparkles className="h-3.5 w-3.5 text-primary" /> {isRTL ? "لماذا هذا البرنامج؟" : "Why this program"}
@@ -525,7 +501,7 @@ const ProgramDetail = () => {
         data-source={`program-${program.slug}-how`}
         className="scroll-mt-24 bg-muted/30 py-14 md:py-20"
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-xl font-black text-primary md:text-3xl">
               {isRTL ? "كيف يعمل البرنامج؟" : "How does it work?"}
@@ -817,7 +793,7 @@ const ProgramDetail = () => {
         data-source={`program-${program.slug}-related`}
         className="scroll-mt-24 bg-background py-14 md:py-20"
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 text-center">
             <h2 className="text-xl font-black text-primary md:text-2xl">
               {isRTL ? "برامج أخرى قد تهمك" : "More programs you might like"}

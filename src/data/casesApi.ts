@@ -370,16 +370,6 @@ export async function deleteCase(id: string) {
   }
 }
 
-export async function listMyDonations() {
-  try {
-    const all = await donationsApiV1.listAll();
-    if (Array.isArray(all) && all.length > 0) {
-      return all as unknown as DonationRow[];
-    }
-  } catch { }
-  return [];
-}
-
 export async function listAllDonations(filters?: {
   status?: DonationStatus | "all";
   method?: string | "all";
@@ -601,6 +591,8 @@ export async function createDonation(input: {
   payment_method?: string;
   payment_status?: string;
   idempotency_key?: string;
+  /** Delegate pickup: where and when the delegate collects the money (stored on the donation). */
+  pickup?: { governorate?: string; city?: string; address?: string; preferredTime?: string } | null;
 }) {
   const refCode = `YSR-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
   const now = new Date().toISOString();
@@ -673,6 +665,14 @@ export async function createDonation(input: {
       notes: input.message || "تبرع عبر بوابة اليسر",
       [targetField.key]: targetField.value,
       ...(input.target?.packageId ? { donation_package_id: input.target.packageId } : {}),
+      ...(input.pickup
+        ? {
+            pickup_governorate: input.pickup.governorate?.trim() || undefined,
+            pickup_city: input.pickup.city?.trim() || undefined,
+            pickup_address: input.pickup.address?.trim() || undefined,
+            pickup_preferred_time: input.pickup.preferredTime?.trim() || undefined,
+          }
+        : {}),
     });
   } catch (err) {
     // Never continue with a donation the server did not record: the caller shows this message.

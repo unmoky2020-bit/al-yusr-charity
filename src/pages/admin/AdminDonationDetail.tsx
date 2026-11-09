@@ -33,6 +33,9 @@ import { donationsApiV1 } from "@/data/laravelApi";
 import { donationPaymentMethodLabel } from "@/lib/payment-method-label";
 import { resolveDonorUserProfileId } from "@/lib/donor-user-profile";
 import { errorReason } from "@/lib/notify";
+import { FormSkeleton } from "@/components/common/ContentSkeletons";
+import { DeliveryStagesCard } from "@/components/admin/donations/DeliveryStagesCard";
+import { parseDelivery } from "@/lib/deliveryJourney";
 
 const STATUS_CONFIG: Record<
   string,
@@ -182,6 +185,7 @@ export default function AdminDonationDetail() {
         project: d.project,
         donation_campaign: d.donation_campaign,
         donation_package: d.donation_package,
+        delivery: parseDelivery(d.delivery),
       });
     } catch (e: any) {
       toast({ title: isAr ? "خطأ في التحميل" : "Load error", description: errorReason(e), variant: "destructive" });
@@ -229,14 +233,7 @@ export default function AdminDonationDetail() {
   if (loading || !row) {
     return (
       <AdminLayout>
-        <div className="grid place-items-center py-32">
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 className="h-9 w-9 animate-spin text-emerald-600" />
-            <p className="text-sm font-bold text-muted-foreground">
-              {isAr ? "جاري تحميل تفاصيل التبرع..." : "Loading donation details..."}
-            </p>
-          </div>
-        </div>
+        <FormSkeleton sections={3} />
       </AdminLayout>
     );
   }
@@ -642,6 +639,16 @@ export default function AdminDonationDetail() {
             </div>
           </section>
         </div>
+
+        {/* Delivery steps the donor follows (after payment) */}
+        <DeliveryStagesCard
+          donationId={row.id}
+          status={row.payment_status}
+          delivery={row.delivery ?? null}
+          createdAt={row.created_at}
+          isAr={isAr}
+          onSaved={(delivery) => setRow((r) => (r ? { ...r, delivery } : r))}
+        />
 
         {/* Payment Transaction Audit & Technical Details */}
         <section className="rounded-2xl border border-border/80 bg-card p-5 shadow-soft space-y-4">

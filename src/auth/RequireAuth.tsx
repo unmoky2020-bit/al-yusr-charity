@@ -1,19 +1,15 @@
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth, Role } from "./AuthContext";
+import { RouteLoading } from "@/components/common/RouteLoading";
 
 const toDb = (r: Role) => (r === "caseworker" ? "case_manager" : r);
 
 export const RequireAuth = ({ children, roles }: { children: ReactNode; roles?: Role[] }) => {
   const { user, loading, session } = useAuth();
   const loc = useLocation();
-  if (loading || (session && !user)) {
-    return (
-      <div className="grid min-h-[60vh] place-items-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary" aria-label="loading" />
-      </div>
-    );
-  }
+  // Same mark as the boot splash and the route fallback: the account check never shows a spinner.
+  if (loading || (session && !user)) return <RouteLoading />;
   if (!session || !user) return <Navigate to={`/login?next=${encodeURIComponent(loc.pathname)}`} replace />;
   if (roles && roles.length) {
     const want = roles.map(toDb);

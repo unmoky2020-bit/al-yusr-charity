@@ -533,14 +533,18 @@ export function resource<T = Record<string, unknown>>(basePath: string, opts: { 
         if (Array.isArray(res)) {
           return { data: res as T[], total: res.length };
         }
-        const obj = res as { data?: T[]; total?: number; current_page?: number; last_page?: number; per_page?: number };
+        type Paging = { total?: number; current_page?: number; last_page?: number; per_page?: number };
+        // Plain paginator: paging at the top. API Resource collections: paging under `meta`.
+        // Reading only the top level made every list stop at its first page (100 rows).
+        const obj = res as { data?: T[]; meta?: Paging } & Paging;
         if (Array.isArray(obj?.data)) {
+          const meta: Paging = obj.meta ?? {};
           return {
             data: obj.data,
-            total: obj.total ?? obj.data.length,
-            current_page: obj.current_page,
-            last_page: obj.last_page,
-            per_page: obj.per_page,
+            total: obj.total ?? meta.total ?? obj.data.length,
+            current_page: obj.current_page ?? meta.current_page,
+            last_page: obj.last_page ?? meta.last_page,
+            per_page: obj.per_page ?? meta.per_page,
           };
         }
         return { data: [], total: 0 };
@@ -633,9 +637,26 @@ export interface LaravelUser {
   roles?: Array<{ id: number; name: string; slug: string } | string>;
   role_ids?: number[];
   avatar?: string | null;
+  /** Absolute avatar link (sent by the profile endpoints). */
+  avatar_url?: string | null;
   email_verified_at?: string | null;
+  bio?: string | null;
+  city?: string | null;
+  governorate?: string | null;
+  job_title?: string | null;
+  preferences?: ProfilePreferences | null;
+  last_login_at?: string | null;
   created_at?: string;
   updated_at?: string;
+}
+
+/** How the person likes to be contacted (saved on their account). */
+export interface ProfilePreferences {
+  whatsapp_updates?: boolean;
+  email_updates?: boolean;
+  preferred_contact?: "whatsapp" | "phone" | "email";
+  /** Pre-tick «فاعل خير» (hide my name) on the donation form. */
+  anonymous_by_default?: boolean;
 }
 
 export interface LaravelRole {
@@ -1458,56 +1479,52 @@ export const programsApiV1 = {
 };
 export const programsApi = programsApiV1;
 
-/**
- * Upload an image file to the Laravel backend.
- * Uses POST /gallery which is the verified working upload endpoint.
- * Falls back to /media/upload and /upload for backward-compatibility.
- */
-export async function uploadImage(
-  file: File,
-  folder = "programs"
-): Promise<string> {
-  // First try the gallery endpoint which is confirmed working
-  try {
-    const fd = new FormData();
-    fd.append("image", file);
-    fd.append("title_ar", folder);
-    fd.append("title_en", folder);
-    const res = await apiFetch<{ data?: { image?: string; url?: string }; image?: string; url?: string }>("/gallery", {
-      method: "POST",
-      body: fd,
-      useCache: false,
-    });
-    const path = res?.data?.image || res?.data?.url || res?.image || res?.url || "";
-    if (path) {
-      return path;
-    }
-  } catch (galleryErr) {
-    console.warn("uploadImage /gallery failed, trying legacy endpoints:", galleryErr);
-  }
+/** Old upload folder names → media library collections (the backend accepts only these). */
+const MEDIA_COLLECTION_OF: Record<string, string> = {
+  programs: "programs", program: "programs",
+  campaigns: "campaigns", campaign: "campaigns", "donation-campaigns": "campaigns",
+  cases: "cases", case: "cases",
+  blog: "blog", articles: "blog",
+  pages: "pages", homepage: "pages", about: "pages", content: "pages",
+  og: "og", gallery: "gallery",
+};
 
-  // Fallback to legacy endpoints
-  const fd2 = new FormData();
-  fd2.append("file", file);
-  fd2.append("folder", folder);
-  const endpoints = [`/media/upload`, `/upload`];
-  let lastErr: unknown;
-  for (const ep of endpoints) {
-    try {
-      const res = await apiFetch<{ path?: string; url?: string; data?: { path?: string; url?: string } }>(ep, {
-        method: "POST",
-        body: fd2,
-        useCache: false,
-      });
-      const path = res?.path || res?.url || res?.data?.path || res?.data?.url || "";
-      if (path) {
-        return path;
-      }
-    } catch (e) {
-      lastErr = e;
-    }
-  }
-  throw lastErr ?? new Error("Upload failed — backend has no working upload endpoint");
+/** Absolute URL to save for a stored file (one "/storage/" segment). */
+function storedFileUrl(raw: string): string {
+  let u = (raw || "").trim().replace(/\/storage\/(?:storage\/)+/g, "/storage/");
+  if (!u || /^https?:\/\//i.test(u)) return u;
+  u = u.replace(/^\/+/, "");
+  return `${BACKEND_BASE}/${u.startsWith("storage/") ? u : `storage/${u}`}`;
+}
+
+/**
+ * Store an image in the media library (POST /media) and return its absolute URL.
+ * The library keeps one copy of identical files and knows where each file is used.
+ * It never creates a row in the public photo gallery: that gallery is curated from /admin/gallery.
+ */
+export async function uploadToMediaLibrary(file: Blob, collection = "general", fileName?: string): Promise<string> {
+  const name = fileName || (file as File).name || "image.jpg";
+  const fd = new FormData();
+  fd.append("file", file, name);
+  fd.append("collection", MEDIA_COLLECTION_OF[collection] || "general");
+  const res = await apiFetch<{ data?: { url?: string; path?: string }; url?: string; path?: string }>("/media", {
+    method: "POST",
+    body: fd,
+    useCache: false,
+  });
+  invalidateApiCache("/media");
+  const url = storedFileUrl(res?.data?.url || res?.url || res?.data?.path || res?.path || "");
+  if (!url) throw new Error("لم يرجع الخادم رابط الصورة المرفوعة");
+  return url;
+}
+
+/**
+ * Upload an image for a record (program, campaign, case…) and return the URL to save on it.
+ * Goes to the media library: before 8 Nov 2026 this posted to /gallery, so every upload also
+ * appeared as a public photo in the site's gallery.
+ */
+export async function uploadImage(file: File, folder = "programs"): Promise<string> {
+  return uploadToMediaLibrary(file, folder);
 }
 
 export const projectsApiV1 = resource<LaravelProject>("/projects", { imageLinks: true });
@@ -1742,39 +1759,11 @@ export const galleryApi = {
   async listPublic(params?: { city?: string; program?: string; search?: string }) {
     return baseGalleryResource.listAll({ is_public: "true", ...params });
   },
-  async uploadImage(file: File, title: string = "صورة مرفوعة"): Promise<string> {
-    // 1. Try Laravel API first (saves to server storage: /api/v1/gallery)
-    const formData = new FormData();
-    formData.append("image", file);
-    formData.append("title_ar", title);
-    formData.append("title_en", title);
-    formData.append("is_public", "1");
-    try {
-      const res = await apiFetch<{ data?: { image?: string; image_url?: string; url?: string; external_url?: string } | LaravelGalleryItem }>("/gallery", {
-        method: "POST",
-        body: formData,
-      });
-      const dataObj = (res && typeof res === "object" && "data" in res ? res.data : res) as Record<string, unknown>;
-      const rawUrl = (dataObj?.image || dataObj?.image_url || dataObj?.url || dataObj?.external_url) as string | undefined;
-      if (rawUrl && typeof rawUrl === "string") {
-        let finalUrl = rawUrl;
-        if (!rawUrl.startsWith("http://") && !rawUrl.startsWith("https://")) {
-          const clean = rawUrl.replace(/^\/+/, "");
-          finalUrl = clean.startsWith("storage/")
-            ? `${BACKEND_BASE}/${clean}`
-            : `${BACKEND_BASE}/storage/${clean}`;
-        }
-
-        return finalUrl.replace(/\/storage\/(?:storage\/)+/g, "/storage/");
-      }
-    } catch (laravelErr: any) {
-      // Do NOT fall back to base64 — base64 data URLs exceed the backend's 2048-char
-      // field limit on fallback_image / image fields and will cause 422 validation errors.
-      throw new Error(
-        laravelErr?.message ||
-          (typeof laravelErr === "string" ? laravelErr : "فشل رفع الصورة للسيرفر — تحقق من الاتصال وأعد المحاولة")
-      );
-    }
+  /** Store an image for a page section (media library). Does NOT add it to the public gallery. */
+  async uploadImage(file: Blob, title: string = "صورة مرفوعة"): Promise<string> {
+    const ext = ((file as File).name || "").match(/\.[a-z0-9]+$/i)?.[0] || ".jpg";
+    const base = title.replace(/[\\/:*?"<>|\s]+/g, "-").slice(0, 60) || "image";
+    return uploadToMediaLibrary(file, "pages", `${base}${ext}`);
   },
 };
 

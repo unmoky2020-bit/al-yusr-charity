@@ -1,5 +1,6 @@
 import { useLang } from "@/i18n/LangContext";
 import { PAGE_LOADING_ATTR } from "@/lib/bootSplash";
+import { LoadingMark } from "@/components/common/LoadingMark";
 
 /**
  * The one loading state of the site: route fallbacks, page gates and the boot splash in index.html
@@ -18,18 +19,7 @@ export function PageLoadingState() {
       aria-live="polite"
     >
       <span className="sr-only">{lang === "ar" ? "جارٍ التحميل" : "Loading"}</span>
-      <div className="grid justify-items-center gap-4" aria-hidden="true">
-        <img
-          src="/icons/icon-144.png"
-          alt=""
-          width={64}
-          height={64}
-          className="h-16 w-16 rounded-full motion-safe:animate-[yusr-pulse_1.6s_ease-in-out_infinite]"
-        />
-        <span className="relative block h-[3px] w-28 overflow-hidden rounded-full bg-primary/10">
-          <span className="absolute inset-y-0 w-2/5 rounded-full bg-primary motion-safe:animate-[yusr-slide_1.2s_ease-in-out_infinite]" />
-        </span>
-      </div>
+      <LoadingMark />
     </div>
   );
 }

@@ -1,75 +1,109 @@
-import { useState } from "react";
-import { User as UserIcon, Mail, Save } from "lucide-react";
+import type { ReactNode } from "react";
+import { Bell, CalendarDays, Clock, KeyRound, ShieldCheck, UserRound } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
-import { RequireAuth } from "@/auth/RequireAuth";
-import { toast } from "@/hooks/use-toast";
-import { PhoneInput } from "@/components/common/PhoneInput";
 import { ChangePasswordForm } from "@/components/auth/ChangePasswordForm";
+import { EmailVerifyCard } from "@/components/auth/EmailVerifyCard";
+import { AvatarUploader } from "@/components/account/AvatarUploader";
+import { ProfileDetailsForm } from "@/components/account/ProfileDetailsForm";
+import { ContactPreferences } from "@/components/account/ContactPreferences";
 
-const Inner = () => {
+const ROLE_LABEL: Record<string, { ar: string; en: string }> = {
+  admin: { ar: "مدير", en: "Admin" },
+  editor: { ar: "محرر محتوى", en: "Content editor" },
+  caseworker: { ar: "باحث حالات", en: "Caseworker" },
+  case_manager: { ar: "مسؤول حالات", en: "Case manager" },
+  volunteer: { ar: "متطوع", en: "Volunteer" },
+  delegate: { ar: "مندوب", en: "Delegate" },
+  donor: { ar: "متبرع", en: "Donor" },
+};
+
+function Panel({ icon: Icon, title, children }: { icon: typeof UserRound; title: string; children: ReactNode }) {
+  return (
+    <section className="rounded-2xl border border-border/60 bg-card p-5 shadow-soft md:p-6">
+      <h2 className="mb-4 flex items-center gap-2 text-base font-black text-primary">
+        <Icon className="h-4.5 w-4.5 text-secondary" /> {title}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+/** The team member's own account inside the dashboard: photo, details, contact, password, access. */
+const AdminProfile = () => {
   const { lang } = useLang();
-  const { user, updateProfile } = useAuth();
-  const [form, setForm] = useState({ name: user!.name, email: user!.email, phone: user!.phone || "" });
+  const ar = lang === "ar";
+  const { user, access } = useAuth();
+  if (!user) return null;
 
-  const [savingProfile, setSavingProfile] = useState(false);
-  const saveProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSavingProfile(true);
-    try {
-      // PUT /profile — AuthContext shows the destructive toast on failure.
-      await updateProfile(user!.id, { name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim() });
-      toast({ title: lang === "ar" ? " تم تحديث البيانات" : " Profile updated" });
-    } catch {
-      /* error already shown */
-    } finally {
-      setSavingProfile(false);
-    }
-  };
+  const fmt = (iso?: string) =>
+    iso ? new Date(iso).toLocaleString(ar ? "ar-EG" : "en-GB", { year: "numeric", month: "long", day: "numeric" }) : "";
+  const permissionsCount = access?.superAdmin ? null : access?.permissions.length ?? null;
+
   return (
     <AdminLayout title={{ ar: "حسابي", en: "My Profile" }}>
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-2xl bg-card p-5 shadow-soft md:p-6">
-          <h2 className="text-base font-black text-primary">{lang === "ar" ? "البيانات الشخصية" : "Personal info"}</h2>
-          <form onSubmit={saveProfile} className="mt-4 space-y-3">
-            <div className="relative">
-              <UserIcon className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input className="h-11 ps-9" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+      <div className="space-y-5 pb-6">
+        {/* Identity */}
+        <section className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-soft">
+          <div className="h-16 pattern-hero-luxe md:h-20" aria-hidden />
+          <div className="flex flex-col items-center gap-4 px-5 pb-5 text-center md:flex-row md:items-end md:text-start">
+            <AvatarUploader size="md" className="-mt-10 md:-mt-12" />
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl font-black text-primary">{user.name}</h1>
+              <p className="text-xs font-bold text-muted-foreground">
+                {[user.jobTitle, ...user.roles.map((r) => (ROLE_LABEL[r] ? ROLE_LABEL[r][lang] : r))].filter(Boolean).join(" • ")}
+              </p>
+              <p className="mt-1 truncate text-xs text-muted-foreground" dir="ltr">{user.email}</p>
             </div>
-            <div className="relative">
-              <Mail className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input type="email" className="h-11 ps-9" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+            <div className="flex flex-wrap justify-center gap-2 text-xs md:justify-end">
+              <EmailVerifyCard />
+              {user.createdAt && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 font-bold text-muted-foreground">
+                  <CalendarDays className="h-3.5 w-3.5" /> {ar ? "من" : "Since"} {fmt(user.createdAt)}
+                </span>
+              )}
+              {user.lastLoginAt && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 font-bold text-muted-foreground">
+                  <Clock className="h-3.5 w-3.5" /> {ar ? "آخر دخول" : "Last sign-in"} {fmt(user.lastLoginAt)}
+                </span>
+              )}
             </div>
-            <div className="relative">
-              <PhoneInput value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} className="h-11" />
-            </div>
-            <Button type="submit" disabled={savingProfile} className="h-11 w-full bg-orange-grad font-extrabold text-accent-foreground"><Save className="h-4 w-4" /> {lang === "ar" ? "حفظ" : "Save"}</Button>
-          </form>
-        </div>
-
-        <div className="rounded-2xl bg-card p-5 shadow-soft md:p-6">
-          <h2 className="text-base font-black text-primary">{lang === "ar" ? "تغيير كلمة المرور" : "Change password"}</h2>
-          <div className="mt-4">
-            <ChangePasswordForm size="compact" />
           </div>
-        </div>
-      </div>
+        </section>
 
-      <div className="mt-4 rounded-2xl bg-secondary/10 p-4">
-        <h3 className="text-sm font-black text-primary">{lang === "ar" ? "صلاحياتك" : "Your roles"}</h3>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {user!.roles.map((r) => <span key={r} className="rounded-full bg-secondary text-secondary-foreground px-3 py-1 text-xs font-extrabold">{r}</span>)}
+        <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+          <Panel icon={UserRound} title={ar ? "البيانات الشخصية" : "Personal details"}>
+            <ProfileDetailsForm showJobTitle />
+          </Panel>
+          <div className="space-y-5">
+            <Panel icon={KeyRound} title={ar ? "كلمة المرور" : "Password"}>
+              <ChangePasswordForm size="compact" />
+            </Panel>
+            <Panel icon={ShieldCheck} title={ar ? "صلاحياتك" : "Your access"}>
+              <div className="flex flex-wrap gap-1.5">
+                {user.roles.map((r) => (
+                  <span key={r} className="rounded-full bg-secondary px-3 py-1 text-xs font-extrabold text-secondary-foreground">
+                    {ROLE_LABEL[r] ? ROLE_LABEL[r][lang] : r}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                {access?.superAdmin
+                  ? ar ? "عندك كل الصلاحيات (مدير عام)." : "You have every permission (super admin)."
+                  : permissionsCount !== null
+                    ? ar ? `عندك ${permissionsCount} صلاحية. المدير العام هو اللي يقدر يزوّد أو يشيل صلاحيات من صفحة المستخدمين.` : `${permissionsCount} permissions. The super admin manages them from Users.`
+                    : ar ? "الصلاحيات بيحددها المدير العام من صفحة المستخدمين." : "The super admin manages permissions from Users."}
+              </p>
+            </Panel>
+            <Panel icon={Bell} title={ar ? "التواصل والإشعارات" : "Contact & updates"}>
+              <ContactPreferences showDonorOptions={false} />
+            </Panel>
+          </div>
         </div>
       </div>
     </AdminLayout>
   );
 };
-
-const AdminProfile = () => (
-  <RequireAuth roles={["admin", "editor"]}><Inner /></RequireAuth>
-);
 
 export default AdminProfile;

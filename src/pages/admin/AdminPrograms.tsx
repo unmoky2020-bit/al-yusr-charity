@@ -24,6 +24,7 @@ import { apiErrorMessageAr, programsAdminApi } from "@/data/api/programsAdminApi
 import { PackagesEditor } from "@/components/admin/programs/PackagesEditor";
 import { fillProgramSections, loadDefaultSections } from "@/data/programs/fillProgramSections";
 import { publicUrls } from "@/lib/publicUrls";
+import { CardGridSkeleton } from "@/components/common/ContentSkeletons";
 
 export default function AdminPrograms() {
   const { lang } = useLang();
@@ -298,10 +299,7 @@ export default function AdminPrograms() {
 
         {/* Programs Grid */}
         {loading ? (
-          <div className="py-20 text-center">
-            <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
-            <p className="mt-2 text-sm text-muted-foreground">{isAr ? "جاري تحميل البرامج..." : "Loading programs..."}</p>
-          </div>
+          <CardGridSkeleton count={6} />
         ) : filtered.length === 0 ? (
           <div className="rounded-2xl border-2 border-dashed border-border py-16 text-center bg-card/50">
             <BookOpen className="mx-auto h-10 w-10 text-muted-foreground/50" />

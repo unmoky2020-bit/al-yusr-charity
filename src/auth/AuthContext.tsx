@@ -36,6 +36,8 @@ type Ctx = {
   hasRole: (role: Role) => boolean;
   hasPermission: (perm: Permission) => boolean;
   refresh: () => Promise<void>;
+  /** Put a user the server just returned (profile save, new photo) into the session. */
+  applyServerUser: (lUser: LaravelUser) => void;
   /** Google ID token / Facebook access token → signed in (donor accounts). */
   loginWithSocial: (provider: SocialProvider, token: string) => Promise<LoginResult & { created?: boolean }>;
   /**
@@ -217,6 +219,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return { ok: true };
   };
 
+  const applyServerUser = useCallback((lUser: LaravelUser) => {
+    if (!lUser || !(lUser.id || lUser.email)) return;
+    const next = buildUserFromLaravel(lUser);
+    // A reply without roles must not turn a team account into a donor: keep the roles we have.
+    const sentRoles = (Array.isArray(lUser.roles) && lUser.roles.length > 0) || Boolean(lUser.role);
+    setUser((prev) => (prev ? { ...prev, ...next, roles: sentRoles ? next.roles : prev.roles } : next));
+    setSession((prev) => (prev ? { ...prev, user: { ...prev.user, ...next, roles: sentRoles ? next.roles : prev.user.roles } } : prev));
+  }, []);
+
   /** PUT /profile — the local user is updated only after the server accepted the change. */
   const updateProfile: Ctx["updateProfile"] = async (_id, patch) => {
     try {
@@ -226,10 +237,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         phone: patch.phone,
         bio: patch.bio,
         city: patch.city,
+        governorate: patch.governorate,
+        job_title: patch.jobTitle,
+        preferences: patch.preferences,
       });
-      const next = saved && (saved.id || saved.email) ? buildUserFromLaravel(saved as LaravelUser) : null;
-      setUser((prev) => (prev ? (next ? { ...prev, ...next } : { ...prev, ...patch }) : prev));
-      setSession((prev) => (prev ? { ...prev, user: next ? { ...prev.user, ...next } : { ...prev.user, ...patch } } : prev));
+      if (saved && (saved.id || saved.email)) applyServerUser(saved);
+      else {
+        setUser((prev) => (prev ? { ...prev, ...patch } : prev));
+        setSession((prev) => (prev ? { ...prev, user: { ...prev.user, ...patch } } : prev));
+      }
     } catch (err) {
       // Some callers do not await: surface the failure here as well, then reject.
       toast({ variant: "destructive", title: "فشل حفظ الملف الشخصي", description: apiErrorMessage(err) });
@@ -301,6 +317,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         hasRole,
         hasPermission,
         refresh,
+        applyServerUser,
         loginWithSocial,
         access,
       }}

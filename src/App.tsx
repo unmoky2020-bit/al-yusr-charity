@@ -8,8 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LangProvider } from "@/i18n/LangContext";
 import { AuthProvider } from "@/auth/AuthContext";
 import { bindAnchorClickTracker, track } from "@/lib/track";
-import { PageLoadingState } from "@/components/common/PageLoadingState";
-import { PageLayout } from "@/components/layout/PageLayout";
+import { RouteLoading } from "@/components/common/RouteLoading";
 const Index = lazy(() => import("./pages/Index.tsx"));
 import { SmoothScroll } from "@/components/common/SmoothScroll";
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
@@ -136,6 +135,8 @@ const MedicalLanding = lazy(() => import("./pages/landings/MedicalLanding.tsx"))
 const AshrLanding = lazy(() => import("./pages/landings/AshrLanding.tsx"));
 const Misbaha = lazy(() => import("./pages/site/Misbaha.tsx"));
 const CampaignsPage = lazy(() => import("./pages/site/CampaignsPage.tsx"));
+const BrideLanding = lazy(() => import("./pages/landings/BrideLanding.tsx"));
+const OrphansLanding = lazy(() => import("./pages/landings/OrphansLanding.tsx"));
 const FaqCenter = lazy(() => import("./pages/site/FaqCenter.tsx"));
 const AdminFaqs = lazy(() => import("./pages/admin/AdminFaqs.tsx"));
 import { RequireAuth } from "./auth/RequireAuth";
@@ -281,11 +282,6 @@ const LegacyBlogSeoRedirect = () => {
  * While a page's code loads: the same loader as the page gates, inside the site header for public
  * pages (so the header never disappears between pages) and on its own for the dashboard.
  */
-function RouteFallback() {
-  const { pathname } = useLocation();
-  if (pathname.startsWith("/admin")) return <PageLoadingState />;
-  return <PageLayout><PageLoadingState /></PageLayout>;
-}
 
 const App = () => (
   <HelmetProvider>
@@ -298,7 +294,7 @@ const App = () => (
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <SmoothScroll />
               <RouteTracker />
-              <Suspense fallback={<RouteFallback />}>
+              <Suspense fallback={<RouteLoading />}>
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/programs" element={<Projects />} />
@@ -357,6 +353,8 @@ const App = () => (
                   <Route path="/arboun" element={<ArbounLanding />} />
                   <Route path="/takrim" element={<TakrimLanding />} />
                   <Route path="/water" element={<WaterLanding />} />
+                  <Route path="/bride" element={<BrideLanding />} />
+                  <Route path="/orphans" element={<OrphansLanding />} />
                   <Route path="/nurseries" element={<NurseriesLanding />} />
                   <Route path="/mosques" element={<MosquesLanding />} />
                   <Route path="/medical" element={<MedicalLanding />} />

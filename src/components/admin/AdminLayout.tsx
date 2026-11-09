@@ -2,142 +2,16 @@ import { ReactNode, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
-  LayoutDashboard, TrendingUp, HandCoins, Users, FolderKanban, Layers,
-  FileEdit, FileBarChart2, ArrowUpRight, Menu, X, Globe, LogOut,
-  HandHeart, HeartHandshake, ShieldCheck, UserCog, Megaphone, ClipboardCheck,
-  ListChecks, Mail, BarChart3, Activity, Wallet, Image as ImageIcon, FolderArchive, Loader2,
-  Server, Sparkles, Building2, Compass, Calendar, ChevronDown, Heart, BookOpen, Target,
-  HelpCircle, SlidersHorizontal, Bell, Lock,
+  Users, Layers, ArrowUpRight, Menu, X, Globe, LogOut, HeartHandshake, ShieldCheck, BarChart3, Sparkles, ChevronDown, Heart, BookOpen, Target, Lock,
 } from "lucide-react";
 import { Logo } from "@/components/common/Logo";
 import logoAsset from "@/assets/logo-circle.png";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
-import { inferPermissions } from "@/auth/permissions";
-import { allowedAdminPaths, canOpenAdminPath } from "@/auth/adminAccess";
+import { useAdminNav, type NavGroup } from "@/components/admin/adminNav";
+import { canOpenAdminPath } from "@/auth/adminAccess";
 import { NotificationsBell } from "@/components/common/NotificationsBell";
 import { BACKEND_PENDING_AR, PENDING_ADMIN_SCREENS, pendingForPath } from "@/data/api/backendPending";
-
-type NavItem = { href: string; ar: string; en: string; icon: typeof LayoutDashboard };
-
-type NavGroup = { ar: string; en: string; items: NavItem[] };
-
-const ALL_NAV_GROUPS: NavGroup[] = [
-  {
-    ar: "الرئيسية", en: "Main",
-    items: [
-      { href: "/admin", ar: "لوحة التحكم", en: "Dashboard", icon: LayoutDashboard },
-      { href: "/admin/analytics", ar: "التحليلات", en: "Analytics", icon: TrendingUp },
-      { href: "/admin/notifications", ar: "الإشعارات", en: "Notifications", icon: Bell },
-    ],
-  },
-  {
-    ar: "إدارة العمليات والمشاريع", en: "Operations & Projects",
-    items: [
-      { href: "/admin/donations", ar: "التبرعات", en: "Donations", icon: HandCoins },
-      { href: "/admin/payment-methods", ar: "طرق الدفع", en: "Payment Methods", icon: Wallet },
-      { href: "/admin/cases", ar: "الحالات", en: "Cases", icon: Users },
-      { href: "/admin/projects", ar: "إدارة المشاريع", en: "Projects Management", icon: FolderKanban },
-      { href: "/admin/programs", ar: "إدارة البرامج", en: "Programs Management", icon: BookOpen },
-      { href: "/admin/donation-campaigns", ar: "إدارة الحملات والمبادرات", en: "Donation Campaigns", icon: Megaphone },
-      { href: "/admin/campaigns", ar: "حملات التطوع الميدانية", en: "Volunteer Campaigns", icon: Users },
-      { href: "/admin/seasons", ar: "إدارة المواسم", en: "Seasons CMS", icon: Calendar },
-      { href: "/admin/reports", ar: "التقارير والتصدير", en: "Reports & Exports", icon: FileBarChart2 },
-    ],
-  },
-  {
-    ar: "إدارة محتوى الموقع", en: "Website CMS",
-    items: [
-      { href: "/admin/homepage-content", ar: "الهيرو والبراند بروميس", en: "Hero & Brand Promise", icon: Sparkles },
-      { href: "/admin/about-us", ar: "محتوى من نحن", en: "About Us CMS", icon: Building2 },
-      { href: "/admin/axes", ar: "محاور رسالتنا", en: "Work Axes", icon: Compass },
-      { href: "/admin/site-stats", ar: "الأرقام والإنجازات", en: "Stats & Numbers", icon: BarChart3 },
-      { href: "/admin/campaigns-section", ar: "كاروسيل الرئيسية", en: "Homepage Carousel", icon: SlidersHorizontal },
-      { href: "/admin/stories", ar: "قصص الأثر", en: "Stories CMS", icon: HeartHandshake },
-      { href: "/admin/media", ar: "مكتبة الوسائط", en: "Media Library", icon: FolderArchive },
-      { href: "/admin/gallery", ar: "معرض الصور", en: "Photo Gallery", icon: ImageIcon },
-      { href: "/admin/content", ar: "محتوى الموقع", en: "Website Content", icon: FileEdit },
-      { href: "/admin/page-galleries", ar: "معارض صور الصفحات", en: "Page Galleries", icon: ImageIcon },
-      { href: "/admin/blog", ar: "المدونة", en: "Blog", icon: BookOpen },
-      { href: "/admin/faqs", ar: "الأسئلة الشائعة", en: "FAQs CMS", icon: HelpCircle },
-      { href: "/admin/inbox", ar: "رسائل تواصل معنا", en: "Contact inbox", icon: Mail },
-      { href: "/admin/newsletter", ar: "النشرة البريدية", en: "Newsletter", icon: Mail },
-      { href: "/admin/review",  ar: "مراجعة واعتماد التعديلات", en: "Change Approvals", icon: ClipboardCheck },
-    ],
-  },
-  {
-    ar: "فريق العمل والأشخاص", en: "People & Team",
-    items: [
-      { href: "/admin/volunteers", ar: "المتطوعون", en: "Volunteers", icon: HandHeart },
-      { href: "/admin/my-tasks", ar: "مهامي الميدانية", en: "My Tasks", icon: ListChecks },
-      { href: "/admin/delegates", ar: "متابعة المندوبين", en: "Delegate Tracking", icon: ShieldCheck },
-      { href: "/admin/donors", ar: "سجل المتبرعين", en: "Donors", icon: HeartHandshake },
-      { href: "/admin/users", ar: "المستخدمون والأدوار", en: "Users & Roles", icon: UserCog },
-    ],
-  },
-  {
-    ar: "التسويق والأمان", en: "Marketing & Audit",
-    items: [
-      { href: "/admin/ad-campaigns", ar: "حملات إعلانية", en: "Ad Campaigns", icon: Megaphone },
-      { href: "/admin/activity", ar: "سجل النشاط", en: "Activity Log", icon: Activity },
-      { href: "/admin/profile", ar: "حسابي", en: "My Profile", icon: UserCog },
-    ],
-  },
-];
-
-/** Hrefs allowed per ROLE when the server can't say (older backend without GET /me/access):
- *  - admin        : full access
- *  - case_manager : cases / donations / reports
- *  - editor       : the blog (more only when the super admin adds a role, e.g. «محرر حالات»)
- *  - volunteer    : tasks + campaigns
- * Editors and case managers otherwise follow their role permissions on the server (adminAccess.ts).
- */
-const ROLE_ALLOWED: Record<string, string[]> = {
-  admin: ["*"],
-  case_manager: [
-    "/admin", "/admin/analytics",
-    "/admin/donations", "/admin/cases", "/admin/my-cases", "/admin/delegates", "/admin/projects", "/admin/programs", "/admin/axes", "/admin/services", "/admin/donation-campaigns",
-    "/admin/campaigns", "/admin/my-tasks", "/admin/reports", "/admin/volunteers",
-    "/admin/donors", "/admin/transactions",
-    "/admin/profile", "/admin/notifications",
-  ],
-  editor: ["/admin", "/admin/blog", "/admin/media", "/admin/profile", "/admin/notifications"],
-  volunteer: [
-    "/admin", "/admin/campaigns", "/admin/my-tasks", "/admin/profile", "/admin/notifications",
-  ],
-  delegate: [
-    "/admin", "/admin/my-cases", "/admin/my-tasks", "/admin/profile", "/admin/notifications",
-  ],
-};
-
-/** Volunteer permission → extra hrefs they unlock when granted. */
-const PERM_GRANTS: Record<string, string[]> = {
-  "content.write":   ["/admin/content", "/admin/stories", "/admin/review"],
-  "content.publish": ["/admin/content", "/admin/stories", "/admin/review", "/admin/blog"],
-  "cases.manage":    ["/admin/cases"],
-  "field.coordinate":["/admin/campaigns", "/admin/my-tasks"],
-  "media.upload":    ["/admin/content"],
-};
-
-/** Pick the strongest single role for badge + base permissions. */
-const pickRoleKey = (roles: string[] | undefined): string => {
-  if (!roles || !roles.length) return "volunteer";
-  if (roles.includes("admin")) return "admin";
-  if (roles.includes("case_manager") || roles.includes("caseworker")) return "case_manager";
-  if (roles.includes("editor")) return "editor";
-  if (roles.includes("delegate")) return "delegate";
-  if (roles.includes("volunteer")) return "volunteer";
-  return "volunteer";
-};
-
-const filterGroups = (roleKey: string, extra: string[] = []): NavGroup[] => {
-  const base = ROLE_ALLOWED[roleKey] ?? [];
-  if (base.includes("*")) return ALL_NAV_GROUPS;
-  const allow = new Set([...base, ...extra]);
-  return ALL_NAV_GROUPS
-    .map((g) => ({ ...g, items: g.items.filter((i) => allow.has(i.href)) }))
-    .filter((g) => g.items.length > 0);
-};
 
 const ROLE_LABEL: Record<string, { ar: string; en: string; cls: string }> = {
   admin:     { ar: "مدير",  en: "Admin",     cls: "bg-secondary text-secondary-foreground" },
@@ -151,24 +25,13 @@ export const AdminLayout = ({
   children, title, loading = false,
 }: { children: ReactNode; title?: { ar: string; en: string }; loading?: boolean }) => {
   const { lang, setLang } = useLang();
-  const { user, logout, access } = useAuth();
+  const { user, logout } = useAuth();
   const nav = useNavigate();
   const { pathname } = useLocation();
   const pending = pendingForPath(pathname);
   const [open, setOpen] = useState(false);
 
-  const roleKey = pickRoleKey(user?.roles as unknown as string[] | undefined);
-  // Volunteers can unlock additional sections via skill-derived permissions
-  // (e.g. "content.write" → /admin/content + /admin/review).
-  const perms = roleKey === "volunteer"
-    ? (user?.permissions ?? inferPermissions(user?.skills))
-    : [];
-  const extraAllowed = Array.from(new Set(perms.flatMap((p) => PERM_GRANTS[p] ?? [])));
-  // Editors and case managers: the menu and the pages follow their role permissions on the server.
-  const serverAllowed = (roleKey === "editor" || roleKey === "case_manager") && access ? allowedAdminPaths(access) : null;
-  const navGroups = serverAllowed
-    ? ALL_NAV_GROUPS.map((g) => ({ ...g, items: g.items.filter((i) => canOpenAdminPath(i.href, serverAllowed)) })).filter((g) => g.items.length > 0)
-    : filterGroups(roleKey, extraAllowed);
+  const { roleKey, navGroups, serverAllowed } = useAdminNav();
   const blocked = serverAllowed !== null && !canOpenAdminPath(pathname, serverAllowed);
   const roleBadge = ROLE_LABEL[roleKey];
   const allItems = navGroups.flatMap((g) => g.items);
@@ -277,11 +140,10 @@ export const AdminLayout = ({
               )}
             </div>
             {loading && (
-              <div className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center bg-background/40 backdrop-blur-[1px]">
-                <div className="mt-6 flex items-center gap-2 rounded-full bg-card/95 px-4 py-2 text-xs font-bold text-primary shadow-lg ring-1 ring-border/60">
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  {lang === "ar" ? "جاري التحميل…" : "Loading…"}
-                </div>
+              // A thin moving line at the top (same motion as the site's loading mark): the page
+              // underneath stays readable instead of blurring and blinking.
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[3px] overflow-hidden bg-primary/10" role="status" aria-label={lang === "ar" ? "جاري التحميل" : "Loading"}>
+                <span className="absolute inset-y-0 w-2/5 rounded-full bg-primary motion-safe:animate-[yusr-slide_1.2s_ease-in-out_infinite]" />
               </div>
             )}
           </main>

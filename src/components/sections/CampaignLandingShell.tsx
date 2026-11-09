@@ -13,6 +13,7 @@ import { Helmet } from "react-helmet-async";
 import { toast } from "@/lib/notify";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { getCampaignPageMeta } from "@/data/campaignPages/index";
+import { AdaptiveImageFrame } from "@/components/common/AdaptiveImageFrame";
 
 export type LandingProps = {
   slug: string;
@@ -56,6 +57,11 @@ export type LandingProps = {
   finalCtaDecor?: ReactNode;
   /** Parent breadcrumb (defaults to the campaigns hub); project landings point at /projects. */
   crumbParent?: { ar: string; en: string; href: string };
+  /**
+   * "poster" (default): the hero image is a designed poster, shown whole (contain).
+   * "photo": a real photo, shown in a frame that follows its shape and covers it (faces kept).
+   */
+  heroFrame?: "poster" | "photo";
 };
 
 export const CampaignLandingShell = (p: LandingProps) => {
@@ -248,7 +254,10 @@ export const CampaignLandingShell = (p: LandingProps) => {
                 </button>
               </div>
             </div>
-            {p.heroImage && (
+            {p.heroImage && p.heroFrame === "photo" && (
+              <AdaptiveImageFrame src={p.heroImage} alt={p.heroAlt} priority initialShape="portrait" className="mt-4 md:mt-0" />
+            )}
+            {p.heroImage && p.heroFrame !== "photo" && (
               <div className="relative mx-auto mt-4 flex min-w-0 w-[84%] justify-center md:mt-0 md:w-full">
                 <img
                   src={p.heroImage}

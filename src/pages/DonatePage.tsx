@@ -47,6 +47,9 @@ import { usePaymentOptions, type PaymentOption, type PayoutDestination } from "@
 import { errorReason } from "@/lib/notify";
 import { PhoneInput } from "@/components/common/PhoneInput";
 import { isValidPhoneValue } from "@/lib/phone";
+import { LoadingMark } from "@/components/common/LoadingMark";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { EGYPT_GOVERNORATES } from "@/data/egyptGovernorates";
 
 type StaticMethod = {
   id: string;
@@ -108,6 +111,14 @@ const badgeClasses: Record<string, string> = {
 };
 
 export type { DonationItemState };
+
+/** When the delegate may come (saved on the donation as pickup_preferred_time). */
+const PICKUP_SLOTS = [
+  { ar: "صباحًا (9 – 12)", en: "Morning (9–12)" },
+  { ar: "ظهرًا (12 – 4)", en: "Afternoon (12–4)" },
+  { ar: "مساءً (4 – 9)", en: "Evening (4–9)" },
+  { ar: "أي وقت", en: "Any time" },
+] as const;
 
 const DonatePage = () => {
   // Backend programs / projects / campaigns (static list only while loading or when the API is unreachable).
@@ -293,11 +304,16 @@ const DonatePage = () => {
   useEffect(() => {
     if (!user) return;
     setDonor((d) => ({
-      name:  d.name  || user.name  || "",
+      // «تبرعاتي باسم فاعل خير» in the profile: leave the name empty (the receipt says فاعل خير).
+      name:  d.name  || (user.preferences?.anonymous_by_default ? "" : user.name) || "",
       email: d.email || user.email || "",
       phone: d.phone || user.phone || "",
     }));
-    setMethodFields((f) => ({ ...f, pickupCity: f.pickupCity || (user as any).city || "" }));
+    setMethodFields((f) => ({
+      ...f,
+      pickupCity: f.pickupCity || user.city || "",
+      pickupGovernorate: user.governorate || f.pickupGovernorate,
+    }));
   }, [user]);
 
   useEffect(() => {
@@ -442,7 +458,7 @@ const DonatePage = () => {
 
   const [methodFields, setMethodFields] = useState({
     vodafonePhone: "", instapayHandle: "", bankRef: "",
-    pickupAddress: "", pickupCity: "", pickupTime: "",
+    pickupAddress: "", pickupCity: "", pickupTime: "", pickupGovernorate: "الدقهلية",
   });
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -596,7 +612,7 @@ const DonatePage = () => {
         errs.pickupAddress = lang === "ar" ? "اكتب عنوانًا تفصيليًا واضحًا" : "Enter a clear address";
       }
       if (methodFields.pickupCity.trim().length < 2) {
-        errs.pickupCity = lang === "ar" ? "اكتب المدينة / المحافظة" : "Enter your city";
+        errs.pickupCity = lang === "ar" ? "اكتب المدينة أو المنطقة" : "Enter your city or area";
       }
     }
     return errs;
@@ -636,6 +652,14 @@ const DonatePage = () => {
                 isDelegatePickup ? `Pickup: ${methodFields.pickupCity} - ${methodFields.pickupAddress}` : "",
               ].filter(Boolean).join(" | ") || undefined,
               idempotency_key: idemKey.current,
+              pickup: isDelegatePickup
+                ? {
+                    governorate: methodFields.pickupGovernorate,
+                    city: methodFields.pickupCity,
+                    address: methodFields.pickupAddress,
+                    preferredTime: methodFields.pickupTime,
+                  }
+                : null,
             });
             const refGenerated = saved?.ref_code || `YSR-${Date.now().toString(36).toUpperCase()}`;
             const receiptItems = items.map(receiptLine);
@@ -708,7 +732,7 @@ const DonatePage = () => {
       {verifyingReturn && (
         <div className="fixed inset-0 z-[70] grid place-items-center bg-background/90 backdrop-blur-sm" role="status" aria-live="polite">
           <div className="flex flex-col items-center gap-3 text-center">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <LoadingMark />
             <p className="text-base font-black text-primary">{lang === "ar" ? "جارٍ تأكيد عملية الدفع…" : "Confirming your payment…"}</p>
           </div>
         </div>
@@ -1490,7 +1514,22 @@ const DonatePage = () => {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div>
                           <label className="block text-xs font-bold text-muted-foreground mb-1">
-                            {lang === "ar" ? "المدينة / المحافظة *" : "City / Governorate *"}
+                            {lang === "ar" ? "المحافظة *" : "Governorate *"}
+                          </label>
+                          <Select value={methodFields.pickupGovernorate} onValueChange={(v) => setMethodFields((f) => ({ ...f, pickupGovernorate: v }))}>
+                            <SelectTrigger className="h-10 sm:h-10.5 rounded-xl bg-card border-border/70 text-xs sm:text-sm font-bold">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="max-h-72">
+                              {EGYPT_GOVERNORATES.map((g) => (
+                                <SelectItem key={g.ar} value={g.ar}>{lang === "ar" ? g.ar : g.en}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-muted-foreground mb-1">
+                            {lang === "ar" ? "المدينة / المنطقة *" : "City / area *"}
                           </label>
                           <Input
                             type="text"
@@ -1500,24 +1539,34 @@ const DonatePage = () => {
                               setMethodFields((f) => ({ ...f, pickupCity: e.target.value }));
                               if (fieldErrors.pickupCity) setFieldErrors((p) => ({ ...p, pickupCity: "" }));
                             }}
-                            placeholder={lang === "ar" ? "مثال: القاهرة - المعادي" : "e.g. Cairo - Maadi"}
+                            placeholder={lang === "ar" ? "مثال: المنصورة - حي الجامعة" : "e.g. Mansoura - University district"}
                             className="h-10 sm:h-10.5 rounded-xl bg-card border-border/70 text-xs sm:text-sm font-bold focus:border-secondary focus:ring-2 focus:ring-secondary/20"
                           />
                           {fieldErrors.pickupCity && (
                             <p className="mt-1 text-xs font-bold text-destructive">{fieldErrors.pickupCity}</p>
                           )}
                         </div>
-                        <div>
-                          <label className="block text-xs font-bold text-muted-foreground mb-1">
-                            {lang === "ar" ? "الوقت المفضل للاستلام" : "Preferred Pickup Time"}
-                          </label>
-                          <Input
-                            type="text"
-                            value={methodFields.pickupTime}
-                            onChange={(e) => setMethodFields((f) => ({ ...f, pickupTime: e.target.value }))}
-                            placeholder={lang === "ar" ? "صباحًا / مساءً" : "Morning / Evening"}
-                            className="h-10 sm:h-10.5 rounded-xl bg-card border-border/70 text-xs sm:text-sm font-bold focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                          />
+                      </div>
+                      <div>
+                        <span className="block text-xs font-bold text-muted-foreground mb-1">
+                          {lang === "ar" ? "الوقت المناسب لزيارة المندوب" : "Best time for the delegate's visit"}
+                        </span>
+                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                          {PICKUP_SLOTS.map((slot) => {
+                            const value = lang === "ar" ? slot.ar : slot.en;
+                            const active = methodFields.pickupTime === value;
+                            return (
+                              <button
+                                key={slot.ar}
+                                type="button"
+                                onClick={() => setMethodFields((f) => ({ ...f, pickupTime: value }))}
+                                className={`rounded-xl border px-2 py-2 text-[11px] font-extrabold transition sm:text-xs ${active ? "border-secondary bg-secondary/15 text-primary" : "border-border/70 bg-card text-muted-foreground hover:border-secondary/60"}`}
+                                aria-pressed={active}
+                              >
+                                {value}
+                              </button>
+                            );
+                          })}
                         </div>
                       </div>
                       <div>
@@ -1688,13 +1737,41 @@ const DonatePage = () => {
                     </div>
 
                     <h2 className="mt-2 sm:mt-3 text-xl sm:text-2xl font-black text-primary md:text-3xl">
-                      {lang === "ar" ? "جزاك الله خيرًا!" : "May God reward you!"}
+                      {isDelegatePickup
+                        ? (lang === "ar" ? "اتسجّل طلب المندوب" : "Pickup request received")
+                        : (lang === "ar" ? "جزاك الله خيرًا!" : "May God reward you!")}
                     </h2>
                     <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-muted-foreground max-w-md mx-auto font-medium">
-                      {lang === "ar"
-                        ? "تم تسجيل طلب تبرعك بنجاح. سنؤكد الاستلام ونتواصل معك عبر واتساب."
-                        : "Your donation has been recorded. We will confirm receipt and reach out via WhatsApp."}
+                      {isDelegatePickup
+                        ? (lang === "ar"
+                          ? "هيكلمك مندوب اليسر خلال 24 ساعة (ما عدا الجمعة) يحدد معاك ميعاد الزيارة، وبيسلّمك إيصال رسمي بالمبلغ وقت الاستلام. التبرع بيتأكد «مدفوع» أول ما المندوب يستلم المبلغ."
+                          : "An Al-Yusr delegate will call you within 24 hours (except Fridays) to set the visit, and hands you an official receipt. The donation is marked paid once the delegate collects it.")
+                        : (lang === "ar"
+                          ? "تم تسجيل طلب تبرعك بنجاح. سنؤكد الاستلام ونتواصل معك عبر واتساب."
+                          : "Your donation has been recorded. We will confirm receipt and reach out via WhatsApp.")}
                     </p>
+
+                    {isDelegatePickup && (
+                      <dl className="mx-auto mt-4 grid w-full max-w-md gap-2 rounded-2xl border border-border/70 bg-card p-4 text-start text-xs sm:text-sm">
+                        <div className="flex items-start justify-between gap-3">
+                          <dt className="font-bold text-muted-foreground">{lang === "ar" ? "مكان الاستلام" : "Pickup place"}</dt>
+                          <dd className="text-end font-extrabold text-primary">
+                            {[methodFields.pickupGovernorate, methodFields.pickupCity].filter(Boolean).join(" – ")}
+                            <span className="block text-[11px] font-semibold text-muted-foreground">{methodFields.pickupAddress}</span>
+                          </dd>
+                        </div>
+                        {methodFields.pickupTime && (
+                          <div className="flex items-center justify-between gap-3">
+                            <dt className="font-bold text-muted-foreground">{lang === "ar" ? "الوقت المناسب" : "Best time"}</dt>
+                            <dd className="font-extrabold text-primary">{methodFields.pickupTime}</dd>
+                          </div>
+                        )}
+                        <div className="flex items-center justify-between gap-3">
+                          <dt className="font-bold text-muted-foreground">{lang === "ar" ? "المبلغ اللي هيستلمه المندوب" : "Amount to hand over"}</dt>
+                          <dd className="font-black text-primary">{totalAmount.toLocaleString(lang === "ar" ? "ar-EG" : "en-US")} {lang === "ar" ? "ج.م" : "EGP"}</dd>
+                        </div>
+                      </dl>
+                    )}
 
                     {/* Dua Message */}
                     <div className="mt-3.5 inline-flex items-center justify-center gap-2 rounded-2xl bg-secondary/15 border border-secondary/35 px-4 py-2.5 text-xs sm:text-sm font-black text-slate-900 dark:text-secondary shadow-xs">
@@ -1726,7 +1803,13 @@ const DonatePage = () => {
                         <div className="mt-2 text-xs font-extrabold text-muted-foreground flex items-center justify-center gap-1.5">
                           <span>{lang === "ar" ? "الحالة:" : "Status:"}</span>
                           <span className="rounded-full px-2.5 py-0.5 bg-secondary text-slate-950 font-black text-xs shadow-2xs">
-                            {record.status}
+                            {record.status === "completed"
+                              ? (lang === "ar" ? "تم التأكيد" : "Confirmed")
+                              : record.status === "failed"
+                                ? (lang === "ar" ? "ما اكتملش" : "Not completed")
+                                : isDelegatePickup
+                                  ? (lang === "ar" ? "بانتظار زيارة المندوب" : "Awaiting the delegate")
+                                  : (lang === "ar" ? "بانتظار تأكيد الدفع" : "Awaiting confirmation")}
                           </span>
                         </div>
                       </div>
@@ -1753,7 +1836,7 @@ const DonatePage = () => {
                           <a
                             href={`https://wa.me/201097000137?text=${encodeURIComponent(
                               lang === "ar"
-                                ? `السلام عليكم، قمت بتسجيل تبرع لدى مؤسسة اليسر.\nرقم التبرع: ${record?.ref ?? ""}\nالمبلغ: ${totalAmount} ج.م\nالبرامج: ${itemsBreakdownText}\nطريقة الدفع: ${selectedMethod.ar}\nبرجاء التأكيد.`
+                                ? `السلام عليكم، قمت بتسجيل تبرع لدى مؤسسة اليسر.\nرقم التبرع: ${record?.ref ?? ""}\nالمبلغ: ${totalAmount} ج.م\nالبرامج: ${itemsBreakdownText}\nطريقة الدفع: ${selectedMethod.ar}${isDelegatePickup ? `\nعنوان الاستلام: ${[methodFields.pickupGovernorate, methodFields.pickupCity, methodFields.pickupAddress].filter(Boolean).join(" – ")}${methodFields.pickupTime ? `\nالوقت المناسب: ${methodFields.pickupTime}` : ""}` : ""}\nبرجاء التأكيد.`
                                 : `Hello, I submitted a donation to Al-Yusr.\nRef: ${record?.ref ?? ""}\nAmount: ${totalAmount} EGP\nPrograms: ${itemsBreakdownText}\nMethod: ${selectedMethod.en}\nPlease confirm.`
                             )}`}
                             target="_blank"

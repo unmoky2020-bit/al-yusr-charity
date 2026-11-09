@@ -9,14 +9,25 @@ import { apiErrorMessageAr } from "@/data/api/errors";
  *
  *   toast.success("تم الحفظ")                    toast.error("تعذّر الحفظ", { description })
  *   notifyError(err, "تعذّر الحفظ")              → readable Arabic reason from any API error
+ *
+ * The same message shown again while it is still on screen (a button pressed twice) replaces the
+ * visible toast instead of stacking a copy under it.
  */
 type Message = ReactNode;
+type Kind = "success" | "error" | "info" | "warning";
+
+/** A stable id for a plain-text message, so a repeat updates the toast already on screen. */
+function sameMessageId(kind: Kind, message: Message, opts?: ExternalToast): ExternalToast | undefined {
+  if (opts?.id !== undefined || typeof message !== "string") return opts;
+  const description = typeof opts?.description === "string" ? opts.description : "";
+  return { ...opts, id: `${kind}:${message}:${description}` };
+}
 
 export const toast = {
-  success: (message: Message, opts?: ExternalToast) => sonner.success(message, opts),
-  error: (message: Message, opts?: ExternalToast) => sonner.error(message, opts),
-  info: (message: Message, opts?: ExternalToast) => sonner.info(message, opts),
-  warning: (message: Message, opts?: ExternalToast) => sonner.warning(message, opts),
+  success: (message: Message, opts?: ExternalToast) => sonner.success(message, sameMessageId("success", message, opts)),
+  error: (message: Message, opts?: ExternalToast) => sonner.error(message, sameMessageId("error", message, opts)),
+  info: (message: Message, opts?: ExternalToast) => sonner.info(message, sameMessageId("info", message, opts)),
+  warning: (message: Message, opts?: ExternalToast) => sonner.warning(message, sameMessageId("warning", message, opts)),
   loading: (message: Message, opts?: ExternalToast) => sonner.loading(message, opts),
   dismiss: (id?: string | number) => sonner.dismiss(id),
 };
@@ -28,5 +39,5 @@ export function errorReason(err: unknown): string {
 
 /** Error toast with a readable reason: `notifyError(err, "تعذّر الحفظ")`. */
 export function notifyError(err: unknown, title: Message = "حدث خطأ") {
-  return sonner.error(title, { description: errorReason(err) });
+  return toast.error(title, { description: errorReason(err) });
 }

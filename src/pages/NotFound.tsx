@@ -22,13 +22,13 @@ export default function NotFound() {
   const quickLinks = isAr
     ? [
         { label: "صكوك الأضحية", href: "/qurbani", desc: "تبرع أضحية مضمون وموزّع بدقة" },
-        { label: "كفالة أيتام", href: "/programs/orphans", desc: "رعاية كاملة لليتيم شهريًا" },
+        { label: "كفالة أيتام", href: "/orphans", desc: "رعاية كاملة لليتيم شهريًا" },
         { label: "حساب الزكاة", href: "/zakat", desc: "احسب زكاتك وادفعها بسهولة" },
         { label: "كرتونة الخير", href: "/programs/food", desc: "إطعام أسر متعففة في القرى" },
       ]
     : [
         { label: "Qurbani Shares", href: "/qurbani", desc: "Guaranteed slaughter & distribution" },
-        { label: "Orphan Sponsorship", href: "/programs/orphans", desc: "Full monthly care for orphans" },
+        { label: "Orphan Sponsorship", href: "/orphans", desc: "Full monthly care for orphans" },
         { label: "Zakat Calculator", href: "/zakat", desc: "Calculate and pay zakat easily" },
         { label: "Food Boxes", href: "/programs/food", desc: "Feeding families in rural villages" },
       ];

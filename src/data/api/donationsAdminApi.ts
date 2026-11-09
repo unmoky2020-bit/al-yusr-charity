@@ -8,6 +8,7 @@
  * Every number on those pages comes from here; nothing is summed from the current page in the browser.
  */
 import { apiFetch, invalidateApiCache } from "@/data/laravelApi";
+import { parseDelivery, type DeliveryInfo, type DeliveryStage } from "@/lib/deliveryJourney";
 
 export type DonationStatusKey = "pending" | "paid" | "failed" | "refunded" | "cancelled";
 export type TargetKind = "program" | "project" | "campaign" | "case";
@@ -214,6 +215,19 @@ export const donationsAdminApi = {
     });
     invalidateApiCache("/donations");
     return String(res?.data?.status ?? "");
+  },
+
+  /**
+   * PATCH /donations/{id}/delivery — where a PAID donation is on its way to the family.
+   * The donor's account is notified unless `notify` is false. Returns the saved steps.
+   */
+  async setDelivery(id: number | string, stage: DeliveryStage, opts?: { note?: string; notify?: boolean }): Promise<DeliveryInfo | null> {
+    const res = await apiFetch<{ data?: { delivery?: unknown } }>(`/donations/${id}/delivery`, {
+      method: "PATCH",
+      body: { stage, note: opts?.note?.trim() || undefined, notify: opts?.notify ?? true },
+    });
+    invalidateApiCache("/donations");
+    return parseDelivery(res?.data?.delivery);
   },
 
   /** Every row matching the filters (pages of 100, capped) — for CSV export. */

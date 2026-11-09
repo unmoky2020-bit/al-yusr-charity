@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Search, Phone, Loader2, ExternalLink, Plus, Trash2, X, Mail } from "lucide-react";
+import { Search, Phone, Loader2, ExternalLink, Plus, Trash2, X, Mail, FileSpreadsheet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AdminLayout, StatCard } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,8 @@ import { useLang } from "@/i18n/LangContext";
 import { RequireAuth } from "@/auth/RequireAuth";
 import { toast } from "@/hooks/use-toast";
 import { donorsApi, donationsApiV1, LaravelDonor, LaravelDonation } from "@/data/laravelApi";
-import { errorReason } from "@/lib/notify";
+import { errorReason, notifyError, toast as notify } from "@/lib/notify";
+import { exportDonorsSheet } from "@/data/api/donorsReportApi";
 
 export interface DonorViewItem {
   id: string;
@@ -29,6 +30,20 @@ const Inner = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newDonor, setNewDonor] = useState({ name: "", email: "", phone: "" });
   const [adding, setAdding] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  /** The customers sheet: one row per donor with phone, email, place and giving totals (Excel). */
+  const exportSheet = async () => {
+    setExporting(true);
+    try {
+      const n = await exportDonorsSheet();
+      notify.success(isAr ? `اتصدّر شيت العملاء (${n} متبرع)` : `Donors sheet exported (${n})`);
+    } catch (err) {
+      notifyError(err, isAr ? "الشيت ما اتصدّرش" : "Export failed");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const reload = async () => {
     setLoading(true);
@@ -136,6 +151,10 @@ const Inner = () => {
             <Button onClick={() => void reload()} variant="outline" size="sm" disabled={loading} className="h-9 gap-1 font-bold">
               <Loader2 className={`h-3.5 w-3.5 ${loading ? "animate-spin" : "hidden"}`} />
               <span>{isAr ? "تحديث" : "Refresh"}</span>
+            </Button>
+            <Button onClick={() => void exportSheet()} variant="outline" size="sm" disabled={exporting} className="h-9 gap-1 font-bold">
+              <FileSpreadsheet className="h-4 w-4" />
+              <span>{exporting ? (isAr ? "بنجهّز الشيت…" : "Preparing…") : isAr ? "تصدير شيت العملاء" : "Export donors sheet"}</span>
             </Button>
             <Button onClick={() => setShowAddModal(true)} size="sm" className="h-9 bg-orange-grad text-accent-foreground font-bold">
               <Plus className="h-4 w-4 me-1.5" />

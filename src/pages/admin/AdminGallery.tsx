@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,17 +12,22 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "@/lib/notify";
 import {
   Plus, Trash2, Upload, Loader2, ArrowUp, ArrowDown,
   Eye, EyeOff, Star, Pencil, Image as ImageIcon, Link2,
-  Search, RefreshCw, ExternalLink, Copy, CheckCircle2,
+  Search, RefreshCw, ExternalLink, Copy, CheckCircle2, CopyMinus, FolderArchive, AlertTriangle,
 } from "lucide-react";
 import {
   GALLERY_PROGRAMS,
   GalleryRow,
   deleteGalleryImage,
-  listAllGalleryImages,
+  listGalleryForAdmin,
   moveGalleryImage,
   programLabel,
   toggleGalleryFeatured,
@@ -106,8 +113,9 @@ const ImageCard = ({
         decoding="async"
         width={r.width ?? undefined}
         height={r.height ?? undefined}
-        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-        onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+        className="h-full w-full object-cover opacity-0 transition-[opacity,transform] duration-300 group-hover:scale-105 [&.is-loaded]:opacity-100"
+        onLoad={(e) => e.currentTarget.classList.add("is-loaded")}
+        onError={(e) => { const img = e.currentTarget; img.src = "/placeholder.svg"; img.classList.add("is-loaded"); }}
       />
       {/* badges */}
       <div className="absolute start-2 top-2 flex gap-1">
@@ -167,12 +175,27 @@ const ImageCard = ({
 );
 
 /* ─── Main component ───────────────────────────────────────────────────────── */
+const GALLERY_QUERY_KEY = ["admin", "gallery"] as const;
+
 const AdminGallery = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
 
-  const [rows, setRows] = useState<GalleryRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  // One request, shared and de-duplicated: the photos stay on screen while they refresh, so the
+  // page shows its placeholders once (first visit) and never blinks after a save, move or delete.
+  const { data: rows = [], isPending: loading, isFetching, isError, refetch } = useQuery({
+    queryKey: GALLERY_QUERY_KEY,
+    queryFn: listGalleryForAdmin,
+    staleTime: 30_000,
+    refetchOnWindowFocus: false,
+  });
+  const setRows = useCallback(
+    (update: (rs: GalleryRow[]) => GalleryRow[]) => queryClient.setQueryData<GalleryRow[]>(GALLERY_QUERY_KEY, (rs) => update(rs ?? [])),
+    [queryClient],
+  );
+  const reload = useCallback(() => queryClient.invalidateQueries({ queryKey: GALLERY_QUERY_KEY }), [queryClient]);
+
   const [search, setSearch] = useState("");
   const [filterProgram, setFilterProgram] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<"all" | "published" | "hidden" | "featured">("all");
@@ -183,53 +206,29 @@ const AdminGallery = () => {
   const [tab, setTab] = useState<"upload" | "library" | "url">("upload");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [toDelete, setToDelete] = useState<GalleryRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [cleaning, setCleaning] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const { copy, copied } = useCopy();
 
-  const [cleaning, setCleaning] = useState(false);
-
-  /* ── data fetch ── */
-  const reload = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await listAllGalleryImages();
-      setRows(data);
-    } catch (e) {
-      toast.error(isRTL ? "تعذّر تحميل الصور" : "Failed to load images", { description: apiErrorMessage(e) });
-    } finally {
-      setLoading(false);
-    }
-  }, [isRTL]);
-
-  const handleCleanDuplicates = useCallback(async (silent = false) => {
+  /** Same picture added more than once: keep the first, remove the extra rows (files stay). */
+  const handleCleanDuplicates = async () => {
     setCleaning(true);
     try {
       const res = await deduplicateGalleryImages();
       if (res.deleted > 0) {
-        if (!silent) {
-          toast.success(isRTL ? `تم حذف ${res.deleted} صورة مكررة بنجاح!` : `Successfully deleted ${res.deleted} duplicate images!`);
-        }
+        toast.success(isRTL ? `اتشالت ${res.deleted} صورة متكررة من المعرض` : `Removed ${res.deleted} duplicate photos`);
         await reload();
-      } else if (!silent) {
-        toast.info(isRTL ? "لا توجد صور مكررة." : "No duplicate images found.");
+      } else {
+        toast.info(isRTL ? "مفيش صور متكررة في المعرض" : "No duplicate photos");
       }
-    } catch (e: any) {
-      if (!silent) {
-        toast.error(isRTL ? "فشل إزالة التكرار" : "Failed to remove duplicates");
-      }
+    } catch (e) {
+      toast.error(isRTL ? "تعذّر شيل الصور المتكررة" : "Couldn't remove duplicates", { description: apiErrorMessage(e) });
     } finally {
       setCleaning(false);
     }
-  }, [isRTL, reload]);
-
-  useEffect(() => {
-    const init = async () => {
-      await reload();
-      // Auto-clean duplicates on mount silently
-      await handleCleanDuplicates(true);
-    };
-    init();
-  }, [reload, handleCleanDuplicates]);
+  };
 
   /* ── filtering (memoized) ── */
   const filtered = useMemo(() => {
@@ -338,7 +337,7 @@ const AdminGallery = () => {
       });
       toast.success(isRTL ? "تم الحفظ بنجاح" : "Saved successfully");
       setDialogOpen(false);
-      await reload();
+      void reload();
     } catch (e: unknown) {
       toast.error((isRTL ? "فشل الحفظ: " : "Save failed: ") + apiErrorMessage(e));
     } finally {
@@ -346,15 +345,20 @@ const AdminGallery = () => {
     }
   };
 
-  /* ── delete ── */
-  const onDelete = async (r: GalleryRow) => {
-    if (!confirm(isRTL ? `حذف "${r.title_ar || r.title_en}" نهائيًا؟` : `Delete "${r.title_en || r.title_ar}" permanently?`)) return;
+  /* ── delete (asks first, in the dashboard's own dialog) ── */
+  const confirmDelete = async () => {
+    const r = toDelete;
+    if (!r) return;
+    setDeleting(true);
     try {
       await deleteGalleryImage(r);
-      toast.success(isRTL ? "تم الحذف" : "Deleted");
       setRows((rs) => rs.filter((x) => x.id !== r.id));
+      toast.success(isRTL ? "اتشالت الصورة من المعرض" : "Photo removed from the gallery");
+      setToDelete(null);
     } catch (e) {
-      toast.error(isRTL ? "فشل الحذف" : "Delete failed", { description: apiErrorMessage(e) });
+      toast.error(isRTL ? "الصورة ما اتشالتش" : "Photo not removed", { description: apiErrorMessage(e) });
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -374,36 +378,62 @@ const AdminGallery = () => {
 
   const move = async (r: GalleryRow, dir: -1 | 1) => {
     try {
-      await moveGalleryImage(filtered, r.id, dir);
+      const reordered = await moveGalleryImage(filtered, r.id, dir);
+      const byId = new Map(reordered.map((x) => [x.id, x]));
+      // Put the two moved rows back in the full list in their new places.
+      setRows((rs) => {
+        const ids = filtered.map((x) => x.id);
+        const nextIds = reordered.map((x) => x.id);
+        const out = rs.slice();
+        ids.forEach((id, i) => {
+          if (id === nextIds[i]) return;
+          const at = out.findIndex((x) => x.id === id);
+          const repl = byId.get(nextIds[i]);
+          if (at >= 0 && repl) out[at] = repl;
+        });
+        return out;
+      });
     } catch (e) {
       toast.error(isRTL ? "فشل حفظ الترتيب" : "Failed to save order", { description: apiErrorMessage(e) });
+      await reload();
     }
-    await reload();
   };
 
   return (
     <AdminLayout>
       <Helmet>
-        <title>{isRTL ? "مكتبة الصور | لوحة التحكم" : "Image Library | Admin"}</title>
+        <title>{isRTL ? "معرض الصور | لوحة التحكم" : "Photo Gallery | Admin"}</title>
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
       <div className="space-y-5">
         {/* ── Header ── */}
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
+          <div className="min-w-0">
             <h1 className="text-2xl font-black text-primary">
-              {isRTL ? "مكتبة الصور" : "Image Library"}
+              {isRTL ? "معرض الصور" : "Photo Gallery"}
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
               {isRTL
-                ? "ارفع، صنّف، ورتّب صور المعرض وعزّز أداء السيو وسرعة التحميل"
-                : "Upload, organize, and optimize gallery images for maximum SEO and page load speed"}
+                ? "الصور اللي بتظهر للزوار في صفحة «معرض الصور» على الموقع: المنشورة بس هي اللي بتظهر، والمثبّتة بتطلع في الأول. صور البرامج والحملات والصفحات مكانها مكتبة الوسائط."
+                : "The photos visitors see on the site's Gallery page: only published ones show, featured ones first. Images used by programs, campaigns and pages live in the media library."}
             </p>
+            <div className="mt-2 flex flex-wrap gap-3 text-xs font-bold">
+              <a href="/gallery" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
+                <ExternalLink className="h-3.5 w-3.5" /> {isRTL ? "شوف المعرض على الموقع" : "View the public gallery"}
+              </a>
+              <Link to="/admin/media" className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary hover:underline">
+                <FolderArchive className="h-3.5 w-3.5" /> {isRTL ? "مكتبة الوسائط (كل الملفات)" : "Media library (all files)"}
+              </Link>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={reload} disabled={loading} title={isRTL ? "تحديث" : "Refresh"}>
-              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" onClick={() => void refetch()} disabled={isFetching} title={isRTL ? "تحديث" : "Refresh"}>
+              <RefreshCw className={`h-4 w-4 ${isFetching && !loading ? "animate-spin" : ""}`} />
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => void handleCleanDuplicates()} disabled={cleaning || loading} title={isRTL ? "شيل الصور المتكررة" : "Remove duplicates"}>
+              <CopyMinus className="h-4 w-4" />
+              <span className="hidden sm:inline">{isRTL ? "شيل المتكرر" : "Duplicates"}</span>
             </Button>
             <Button onClick={openNew} className="bg-orange-grad text-accent-foreground shadow-cta">
               <Plus className="h-4 w-4" />
@@ -421,7 +451,9 @@ const AdminGallery = () => {
             { label: isRTL ? "مثبتة" : "Featured", value: stats.featured, color: "text-amber-500" },
           ].map((s) => (
             <Card key={s.label} className="p-3 text-center">
-              <div className={`text-2xl font-black ${s.color}`}>{s.value}</div>
+              {loading
+                ? <Skeleton className="mx-auto mb-1 h-8 w-12 rounded-lg" />
+                : <div className={`text-2xl font-black ${s.color}`}>{s.value}</div>}
               <div className="text-xs text-muted-foreground">{s.label}</div>
             </Card>
           ))}
@@ -469,11 +501,25 @@ const AdminGallery = () => {
 
         {/* ── Grid ── */}
         {loading ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" aria-busy="true">
             {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="aspect-[4/3] animate-pulse rounded-2xl bg-muted" />
+              <Card key={i} className="overflow-hidden">
+                <Skeleton className="aspect-[4/3] w-full rounded-none" />
+                <div className="space-y-2 p-3">
+                  <Skeleton className="h-4 w-4/5" />
+                  <Skeleton className="h-7 w-full rounded-lg" />
+                </div>
+              </Card>
             ))}
           </div>
+        ) : isError && rows.length === 0 ? (
+          <Card className="p-10 text-center">
+            <AlertTriangle className="mx-auto mb-3 h-10 w-10 text-amber-500" />
+            <p className="font-bold">{isRTL ? "تعذّر تحميل صور المعرض من السيرفر" : "Couldn't load the gallery from the server"}</p>
+            <Button variant="outline" className="mt-4" onClick={() => void refetch()}>
+              <RefreshCw className="h-4 w-4" /> {isRTL ? "حاول تاني" : "Try again"}
+            </Button>
+          </Card>
         ) : filtered.length === 0 ? (
           <Card className="p-12 text-center text-muted-foreground">
             <ImageIcon className="mx-auto mb-3 h-12 w-12 opacity-30" />
@@ -500,7 +546,7 @@ const AdminGallery = () => {
                 onTogglePub={() => togglePub(r)}
                 onToggleFeat={() => toggleFeat(r)}
                 onMove={(d) => move(r, d)}
-                onDelete={() => onDelete(r)}
+                onDelete={() => setToDelete(r)}
                 onCopyUrl={() => copy(r.image_url)}
               />
             ))}
@@ -514,6 +560,41 @@ const AdminGallery = () => {
             {isRTL ? "تم نسخ الرابط!" : "URL copied!"}
           </div>
         )}
+
+        {/* ── Delete confirmation ── */}
+        <AlertDialog open={Boolean(toDelete)} onOpenChange={(open) => { if (!open && !deleting) setToDelete(null); }}>
+          <AlertDialogContent dir={isRTL ? "rtl" : "ltr"}>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{isRTL ? "تشيل الصورة دي من المعرض؟" : "Remove this photo from the gallery?"}</AlertDialogTitle>
+              <AlertDialogDescription asChild>
+                <div className="space-y-3">
+                  {toDelete && (
+                    <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/40 p-2">
+                      <img src={toDelete.image_url} alt="" className="h-14 w-20 shrink-0 rounded-lg object-cover" />
+                      <span className="line-clamp-2 text-sm font-bold text-foreground">{isRTL ? (toDelete.title_ar || toDelete.title_en) : (toDelete.title_en || toDelete.title_ar)}</span>
+                    </div>
+                  )}
+                  <p className="text-sm">
+                    {isRTL
+                      ? "هتختفي من صفحة المعرض على الموقع. الملف نفسه بيفضل في مكتبة الوسائط، فأي صفحة تانية بتستخدمه مش هتتأثر."
+                      : "It disappears from the public gallery. The file stays in the media library, so other pages using it are not affected."}
+                  </p>
+                </div>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="gap-2">
+              <AlertDialogCancel disabled={deleting}>{isRTL ? "إلغاء" : "Cancel"}</AlertDialogCancel>
+              <AlertDialogAction
+                disabled={deleting}
+                onClick={(e) => { e.preventDefault(); void confirmDelete(); }}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                {isRTL ? "شيلها" : "Remove"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         {/* ── Add / Edit Dialog ── */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

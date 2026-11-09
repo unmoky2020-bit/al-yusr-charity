@@ -489,7 +489,7 @@ const Zakat = () => {
               { icon: HomeIcon, t: isRTL ? "سهم سَتر" : "Shelter share (Satr)", d: isRTL ? "تسقيف وترميم منزل لأسرة." : "Roof and home repair for a family.", to: "/programs/shelter" },
               { icon: Wheat, t: isRTL ? "كرتونة الخير 25 كيلو" : "Food box 25kg", d: isRTL ? "إطعام أسرة لمدة شهر كامل." : "Feed a family for a full month.", to: "/programs/box" },
               { icon: Coins, t: isRTL ? "صك الأضحية" : "Qurbani share", d: isRTL ? "لحوم بلدي من مزارعنا دون ربح." : "Farm-fresh meat at cost — no margin.", to: "/qurbani" },
-              { icon: HandHeart, t: isRTL ? "تجهيز عروس" : "Bride preparation", d: isRTL ? "تجهيز يتيمة بأجهزة ومستلزمات بيتها." : "Outfitting an orphan bride's home.", to: "/programs/bride" },
+              { icon: HandHeart, t: isRTL ? "تجهيز عروس" : "Bride preparation", d: isRTL ? "تجهيز يتيمة بأجهزة ومستلزمات بيتها." : "Outfitting an orphan bride's home.", to: "/bride" },
               { icon: Stethoscope, t: isRTL ? "سهم العلاج" : "Treatment share", d: isRTL ? "دواء أو عملية جراحية عاجلة." : "Medication or urgent surgery.", to: "/cases?cat=medication" },
             ].map(({ icon: Icon, t, d, to }) => (
               <Link key={t} to={to} className="group rounded-3xl border border-border bg-card p-5 shadow-soft transition hover:-translate-y-1 hover:shadow-card">

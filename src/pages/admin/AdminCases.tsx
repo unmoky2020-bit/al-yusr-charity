@@ -27,6 +27,7 @@ import {
   type LaravelProject,
   type LaravelDonationCampaign,
 } from "@/data/laravelApi";
+import { ListSkeleton } from "@/components/common/ContentSkeletons";
 
 
 const STATUS_OPTIONS: Array<{ v: string; ar: string; en: string; cls: string }> = [
@@ -388,10 +389,7 @@ export default function AdminCases() {
 
         {/* Cases Table / Cards */}
         {loading ? (
-          <div className="py-20 text-center">
-            <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
-            <p className="mt-2 text-sm text-muted-foreground">{isAr ? "جاري تحميل الحالات..." : "Loading cases..."}</p>
-          </div>
+          <ListSkeleton rows={8} />
         ) : filtered.length === 0 ? (
           <div className="rounded-2xl border-2 border-dashed border-border py-16 text-center bg-card/50">
             <Users className="mx-auto h-10 w-10 text-muted-foreground/50" />
