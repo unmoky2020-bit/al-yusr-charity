@@ -38,11 +38,14 @@ const ROLE_LABEL: Record<string, { ar: string; en: string }> = {
   donor:        { ar: "متبرع", en: "Donor" },
   delegate:     { ar: "مندوب ميداني", en: "Field Delegate" },
   case_manager: { ar: "مسؤول حالات", en: "Case Manager" },
+  "case-editor":   { ar: "محرر حالات", en: "Case Editor" },
+  "media-library": { ar: "مكتبة الوسائط", en: "Media Library" },
 };
 
 const MODULE_TITLES: Record<string, { ar: string; en: string }> = {
   content:                { ar: "المحتوى والمقالات",      en: "Content & Blog" },
   gallery:                { ar: "معرض الصور",            en: "Gallery" },
+  media:                  { ar: "مكتبة الوسائط (عرض = تفتح المكتبة، رفع = ترفع صور بس)", en: "Media library (view = browse, upload = upload only)" },
   blog_seo:               { ar: "سيو المقالات",          en: "Blog SEO" },
   homepage:               { ar: "محتوى الصفحة الرئيسية",   en: "Homepage CMS" },
   newsletter:             { ar: "النشرة البريدية",        en: "Newsletter" },
@@ -72,6 +75,7 @@ const ACTION_LABEL: Record<string, { ar: string; en: string }> = {
   delete:  { ar: "حذف", en: "Delete" },
   approve: { ar: "اعتماد", en: "Approve" },
   reject:  { ar: "رفض", en: "Reject" },
+  upload:  { ar: "رفع", en: "Upload" },
 };
 
 const Inner = () => {

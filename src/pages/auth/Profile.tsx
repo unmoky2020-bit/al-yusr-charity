@@ -81,9 +81,9 @@ const Profile = () => {
           <div className="mt-6 grid items-start gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
             {/* ── Identity card ── */}
             <aside className="overflow-hidden rounded-3xl border border-border/60 bg-card shadow-card lg:sticky lg:top-24">
-              <div className="h-20 pattern-hero-luxe" aria-hidden />
-              <div className="-mt-14 px-5 pb-5 text-center">
-                <AvatarUploader />
+              <div className="h-28 pattern-hero-luxe sm:h-32" aria-hidden />
+              <div className="-mt-16 px-5 pb-5 text-center">
+                <AvatarUploader size="xl" />
                 <h1 className="mt-3 text-xl font-black text-primary">{user.name}</h1>
                 {user.jobTitle && <p className="mt-0.5 text-xs font-bold text-muted-foreground">{user.jobTitle}</p>}
                 <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-secondary/20 px-3 py-1 text-xs font-extrabold text-primary">

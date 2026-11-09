@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allowedAdminPaths, canOpenAdminPath } from "./adminAccess";
+import { accessAllows, allowedAdminPaths, canOpenAdminPath } from "./adminAccess";
 
 describe("admin access from role permissions", () => {
   const blogOnly = allowedAdminPaths({
@@ -26,6 +26,21 @@ describe("admin access from role permissions", () => {
     expect(canOpenAdminPath("/admin/cases", withCases)).toBe(true);
     expect(canOpenAdminPath("/admin/cases/12", withCases)).toBe(true);
     expect(canOpenAdminPath("/admin/donations", withCases)).toBe(false);
+  });
+
+  it("uploading alone doesn't open the media library (browsing needs media.view)", () => {
+    const uploadOnly = allowedAdminPaths({ superAdmin: false, permissions: ["blog_seo.update", "media.upload"] });
+    expect(canOpenAdminPath("/admin/media", uploadOnly)).toBe(false);
+    expect(canOpenAdminPath("/admin/blog", uploadOnly)).toBe(true);
+  });
+
+  it("accessAllows: yes / no from the roles, unknown while loading", () => {
+    const editor = { superAdmin: false, permissions: ["media.upload"] };
+    expect(accessAllows(editor, "media.upload")).toBe(true);
+    expect(accessAllows(editor, "media.view")).toBe(false);
+    expect(accessAllows({ superAdmin: true, permissions: [] }, "media.delete")).toBe(true);
+    expect(accessAllows(undefined, "media.view")).toBeUndefined();
+    expect(accessAllows(null, "media.view")).toBeUndefined();
   });
 
   it("the super admin opens everything", () => {

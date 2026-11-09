@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   X, Heart, User as UserIcon, LogIn, ChevronDown, Languages, HelpCircle, Sofa, Briefcase, Sprout, ShieldCheck,
-  Images, SearchCheck, Info, BookOpen, Phone, FolderKanban, type LucideIcon,
+  Trophy, Images, SearchCheck, Info, BookOpen, Phone, FolderKanban, type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/common/Logo";
@@ -101,6 +101,7 @@ export const Navbar = () => {
   type MoreLink = { to: string; ar: string; en: string; descAr: string; descEn: string; Icon: LucideIcon; group: "about" | "give" };
   const moreLinks: MoreLink[] = [
     { to: "/trust", ar: "الشفافية", en: "Transparency", descAr: "تقارير وأرقام الصرف", descEn: "Reports and spending", Icon: ShieldCheck, group: "about" },
+    { to: "/about#achievements", ar: "إنجازاتنا", en: "Our achievements", descAr: "ما تحقق بتبرعاتكم", descEn: "What your gifts did", Icon: Trophy, group: "about" },
     { to: "/gallery", ar: "معرض الصور", en: "Gallery", descAr: "صور من الميدان", descEn: "Photos from the field", Icon: Images, group: "about" },
     { to: "/faqs", ar: "الأسئلة الشائعة", en: "FAQs", descAr: "الزكاة والتبرع والإيصالات", descEn: "Zakat, giving, receipts", Icon: HelpCircle, group: "about" },
     { to: "/donate/track", ar: "تتبع تبرعك", en: "Track donation", descAr: "برقم التبرع", descEn: "With your reference", Icon: SearchCheck, group: "give" },

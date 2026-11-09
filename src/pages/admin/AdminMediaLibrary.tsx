@@ -9,6 +9,7 @@ import { toast } from "@/lib/notify";
 import { useLang } from "@/i18n/LangContext";
 import { ChoiceSelect } from "@/components/admin/programs/FormKit";
 import { describeWriteError, isEndpointMissing, BACKEND_PENDING_AR } from "@/data/api/backendPending";
+import { ApiError } from "@/data/laravelApi";
 import {
   listMediaFull,
   uploadMedia,
@@ -18,7 +19,8 @@ import {
   MEDIA_COLLECTION_LABELS_AR,
   MEDIA_FOLDER_LABELS_AR,
   MEDIA_ACCEPT,
-  MEDIA_MAX_BYTES,
+  MEDIA_RULES_AR,
+  mediaFileProblem,
   type MediaCollection,
   type MediaFile,
 } from "@/data/api/mediaApi";
@@ -28,6 +30,7 @@ import {
 } from "lucide-react";
 import { TileGridSkeleton } from "@/components/common/ContentSkeletons";
 import { askConfirm } from "@/components/common/confirm";
+import { useCan } from "@/auth/useCan";
 
 const formatSize = (bytes: number) =>
   bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
@@ -59,6 +62,11 @@ export default function AdminMediaLibrary() {
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [deleting, setDeleting] = useState(false);
+  // Browsing needs media.view (the dashboard shows «مش ضمن صلاحياتك» without it); moving files
+  // to the trash needs media.delete. The server checks both too.
+  const can = useCan();
+  const canView = can("media.view");
+  const canDelete = can("media.delete") !== false;
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -71,13 +79,13 @@ export default function AdminMediaLibrary() {
       setSelected(new Set());
     } catch (err) {
       if (isEndpointMissing(err)) setPendingBackend(true);
-      else toast.error(describeWriteError(err));
+      else if (!(err instanceof ApiError && err.status === 403)) toast.error(describeWriteError(err)); // 403: the page says it's not in the account's permissions
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { if (canView !== false) load(); }, [load, canView]);
 
   const stats = useMemo(() => {
     const unused = files.filter((f) => f.in_use === false);
@@ -98,7 +106,7 @@ export default function AdminMediaLibrary() {
   }, [files, search, folder, usage]);
 
   /** Only files the server would remove: unused (a used copy is never selectable). */
-  const removable = (f: MediaFile) => hasUsage && f.in_use === false;
+  const removable = (f: MediaFile) => canDelete && hasUsage && f.in_use === false;
   const selectable = filtered.filter(removable);
   const allSelected = selectable.length > 0 && selectable.every((f) => selected.has(f.path));
   const toggle = (path: string) => setSelected((s) => { const n = new Set(s); if (n.has(path)) n.delete(path); else n.add(path); return n; });
@@ -106,9 +114,9 @@ export default function AdminMediaLibrary() {
 
   const handleUpload = async (list: FileList) => {
     const picked = Array.from(list);
-    const bad = picked.find((f) => !MEDIA_ACCEPT.includes(f.type) || f.size > MEDIA_MAX_BYTES);
-    if (bad) {
-      toast.error(isAr ? `«${bad.name}»: الصيغ المسموحة JPG و PNG و WebP و GIF و AVIF، والحد الأقصى 5 ميجابايت` : `"${bad.name}": JPG, PNG, WebP, GIF, AVIF up to 5 MB`);
+    const problem = picked.map((f) => mediaFileProblem(f, isAr ? "ar" : "en")).find(Boolean);
+    if (problem) {
+      toast.error(problem);
       return;
     }
     setUploading(true);
@@ -191,6 +199,7 @@ export default function AdminMediaLibrary() {
                 "Every image stored on the server, with where it is used. Identical uploads are stored once. The public gallery has its own screen and can pick photos from here."
               )}
             </p>
+            {isAr && <p className="mt-1 text-[11.5px] font-semibold text-muted-foreground/90">{MEDIA_RULES_AR}</p>}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Button variant="outline" size="sm" onClick={load} disabled={loading} className="gap-1.5">
@@ -266,10 +275,13 @@ export default function AdminMediaLibrary() {
 
         {/* Bulk bar */}
         {hasUsage && selectable.length > 0 && (
-          <div className="sticky top-16 z-20 mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-card/95 p-2.5 shadow-sm backdrop-blur">
-            <button type="button" onClick={toggleAll} className="inline-flex items-center gap-2 text-sm font-bold text-primary">
+          // A strip glued under the dashboard header while the grid scrolls: <main> is the scroll box,
+          // so the negative top / side margins cancel its padding (pt-3 / md:p-6, px-3).
+          <div className="sticky -top-3 z-20 -mx-3 mb-4 flex flex-wrap items-center justify-between gap-2 border-y border-border bg-background/95 px-3 py-2 shadow-[0_10px_18px_-16px_rgba(6,48,28,0.55)] backdrop-blur md:-top-6 md:-mx-6 md:px-6">
+            <button type="button" onClick={toggleAll} aria-pressed={allSelected} className="inline-flex min-h-9 items-center gap-2 rounded-lg px-1.5 text-sm font-bold text-primary hover:bg-muted/60">
               {allSelected ? <CheckSquare className="h-4 w-4 text-emerald-600" /> : <Square className="h-4 w-4" />}
               {isAr ? `اختار كل الصور اللي مش مستخدمة هنا (${selectable.length})` : `Select all unused here (${selectable.length})`}
+              {selected.size > 0 && <span className="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-black text-red-700">{isAr ? `متحدد ${selected.size}` : `${selected.size} selected`}</span>}
             </button>
             <Button size="sm" variant="destructive" disabled={!selected.size || deleting} onClick={() => remove(Array.from(selected))} className="gap-1.5">
               {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}

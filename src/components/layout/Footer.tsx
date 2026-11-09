@@ -179,7 +179,7 @@ export const Footer = () => {
             <div aria-hidden className="pointer-events-none absolute inset-2 rounded-[1.6rem] ring-1 ring-[#0b4429]/[0.06]" />
 
             {!subscribed ? (
-              <div className={`relative grid items-center ${compactNewsletter ? "gap-4 px-5 py-6 sm:px-7 md:grid-cols-[1fr_1.1fr] md:gap-8" : "gap-7 px-5 pb-10 pt-9 sm:px-8 md:grid-cols-[1.1fr_1fr] md:gap-12 md:px-12 md:py-11"}`}>
+              <div className={`relative grid items-center ${compactNewsletter ? "gap-4 px-5 py-6 sm:px-7 md:grid-cols-[1fr_1.1fr] md:gap-8" : "gap-7 px-5 pb-10 pt-9 sm:px-8 md:px-12 md:py-11 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-12"}`}>
                 {compactNewsletter ? (
                   <div className="flex items-center gap-3 text-center md:text-start">
                     <span className="hidden h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#0b4429] text-[#a3e635] sm:grid" aria-hidden>
@@ -344,6 +344,7 @@ export const Footer = () => {
               <li><Link to="/projects" {...prefetchHandlers("/projects")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "مشاريعنا" : "Projects"}</Link></li>
               <li><Link to="/cases" {...prefetchHandlers("/cases")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الحالات الإنسانية" : "Cases"}</Link></li>
               <li><Link to="/trust" {...prefetchHandlers("/trust")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الشفافية" : "Transparency"}</Link></li>
+              <li><Link to="/about#achievements" {...prefetchHandlers("/about")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "إنجازاتنا" : "Achievements"}</Link></li>
               {IMPACT_REPORT_PUBLIC && <li><Link to="/impact" {...prefetchHandlers("/impact")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "تقرير الأثر" : "Impact report"}</Link></li>}
               <li><Link to="/gallery" {...prefetchHandlers("/gallery")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "معرض الصور" : "Gallery"}</Link></li>
               <li><Link to="/blog" {...prefetchHandlers("/blog")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المدونة" : "Blog"}</Link></li>

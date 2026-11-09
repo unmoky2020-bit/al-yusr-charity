@@ -14,7 +14,11 @@ import { cn } from "@/lib/utils";
  * «أكّد بريدك»: a 6-digit code to the account's email, typed back here. Confirmed accounts see a
  * small badge instead. Shown only once the server has the email-code routes.
  */
-export function EmailVerifyCard({ className }: { className?: string }) {
+export function EmailVerifyCard({ className, layout = "stack" }: {
+  className?: string;
+  /** "stack": icon centred above the text (phones, narrow side cards). "row": the same on phones, one row from sm up. */
+  layout?: "stack" | "row";
+}) {
   const { lang } = useLang();
   const ar = lang === "ar";
   const { user, refresh } = useAuth();
@@ -65,18 +69,26 @@ export function EmailVerifyCard({ className }: { className?: string }) {
     }
   };
 
+  const row = layout === "row";
+  const sendButton = (
+    <Button type="button" disabled={busy} onClick={() => void send()} className={cn("h-10 w-full bg-primary font-extrabold text-primary-foreground", row ? "mt-4 sm:mt-0 sm:w-auto sm:shrink-0 sm:px-6" : "mt-4")}>
+      {busy ? (ar ? "جارٍ الإرسال…" : "Sending…") : ar ? "ابعت رمز التأكيد" : "Send the code"}
+    </Button>
+  );
+
   return (
     <div className={cn("rounded-3xl border border-secondary/30 bg-secondary/10 p-5", className)}>
-      <div className="flex items-start gap-3">
-        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-card text-primary shadow-soft">
-          <MailCheck className="h-5 w-5" aria-hidden />
+      <div className={cn("flex flex-col items-center gap-3 text-center", row && "sm:flex-row sm:gap-4 sm:text-start")}>
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-card text-primary shadow-soft">
+          <MailCheck className="h-6 w-6" aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
           <h3 className="text-base font-black text-primary">{ar ? "أكّد بريدك الإلكتروني" : "Confirm your email"}</h3>
-          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
+          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
             {ar ? "عشان إيصالات تبرعك وإشعاراتك توصل صح، وتقدر تستعيد حسابك لو نسيت كلمة المرور." : "So your receipts and updates arrive, and you can always recover your account."}
           </p>
         </div>
+        {row && !sent && <div className="hidden sm:block">{sendButton}</div>}
       </div>
       {sent ? (
         <div className="mt-4 space-y-3">
@@ -91,9 +103,7 @@ export function EmailVerifyCard({ className }: { className?: string }) {
           </div>
         </div>
       ) : (
-        <Button type="button" disabled={busy} onClick={() => void send()} className="mt-4 h-10 w-full bg-primary font-extrabold text-primary-foreground sm:w-auto sm:px-6">
-          {busy ? (ar ? "جارٍ الإرسال…" : "Sending…") : ar ? "ابعت رمز التأكيد" : "Send the code"}
-        </Button>
+        <div className={row ? "sm:hidden" : undefined}>{sendButton}</div>
       )}
     </div>
   );

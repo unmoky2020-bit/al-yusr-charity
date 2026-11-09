@@ -39,6 +39,7 @@ import { fetchFaqs } from "@/data/faqsApi";
 import { usePrograms } from "@/data/sources/programs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BrideTrousseau } from "@/components/sections/BrideTrousseau";
+import { StickyStack, StickyStackItem } from "@/components/ui/sticky-stack";
 import { Helmet } from "react-helmet-async";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { motion, useReducedMotion } from "motion/react";
@@ -56,6 +57,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
+/** Sticky offsets (static so Tailwind keeps them) that cascade, so each card peeks under the next. */
+const STACK_TOPS = [
+  "top-[88px] md:top-[96px]",
+  "top-[100px] md:top-[110px]",
+  "top-[112px] md:top-[124px]",
+  "top-[124px] md:top-[138px]",
+];
 
 const Projects = () => {
   const { lang, t } = useLang();
@@ -488,15 +497,16 @@ const Projects = () => {
             </p>
           </div>
           {programsLoading && (
-            <div className="grid w-full gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-label={isRTL ? "جارٍ تحميل البرامج" : "Loading programs"}>
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="overflow-hidden rounded-[28px] border border-primary/10 bg-card p-2.5 shadow-card">
-                  <Skeleton className="aspect-[4/3] w-full rounded-[20px]" />
-                  <div className="space-y-3 p-3">
-                    <Skeleton className="h-7 w-2/3" />
+            <div className="mx-auto w-full max-w-5xl space-y-6 md:space-y-8" aria-busy="true" aria-label={isRTL ? "جارٍ تحميل البرامج" : "Loading programs"}>
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="flex flex-col overflow-hidden rounded-[28px] border border-primary/10 bg-card p-2.5 shadow-card md:h-[340px] md:flex-row">
+                  <Skeleton className="aspect-[16/10] w-full rounded-[20px] md:order-2 md:aspect-auto md:h-full md:w-[46%]" />
+                  <div className="flex-1 space-y-3 p-4 md:order-1 md:p-8">
+                    <Skeleton className="h-5 w-24 rounded-full" />
+                    <Skeleton className="h-8 w-2/3" />
                     <Skeleton className="h-4 w-full" />
                     <Skeleton className="h-4 w-5/6" />
-                    <Skeleton className="mt-2 h-8 w-40 rounded-full" />
+                    <Skeleton className="mt-4 h-9 w-44 rounded-full" />
                   </div>
                 </div>
               ))}
@@ -507,57 +517,61 @@ const Projects = () => {
               {isRTL ? "يجري تحديث البرامج الآن. يمكنك التبرع للصندوق العام أو التواصل معنا عبر واتساب." : "Programs are being updated. You can give to the general fund or WhatsApp us."}
             </p>
           )}
-          {!programsLoading && (
-            // One straight grid of upright cards: photo on top, then name, line, price and the link,
-            // stacked in that order on every screen (8 Nov 2026: no zigzag, no side-by-side halves).
-            <ul className="grid w-full gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {!programsLoading && programs.length > 0 && (
+            // Sticky stack: each card sticks under the header and the next one slides over it.
+            // Every card has the same size and sits in the middle (no zigzag on large screens):
+            // text on the start side, photo on the end side; on phones the photo is on top.
+            <StickyStack className="mx-auto w-full max-w-5xl" gap="mb-6 md:mb-8">
               {programs.map((p, idx) => (
-                <li key={p.slug} className="flex">
+                <StickyStackItem key={p.slug} index={idx} top={STACK_TOPS[idx % STACK_TOPS.length]} className="mb-6 md:mb-8">
                   <Link
                     to={programHref(p.slug)}
                     data-source="projects"
                     data-label={`project-${p.slug}`}
-                    className="group flex w-full flex-col overflow-hidden rounded-[28px] border border-primary/10 bg-card shadow-card ring-1 ring-primary/5 transition duration-300 hover:-translate-y-1 hover:border-secondary/50 hover:shadow-cta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="group relative flex w-full flex-col overflow-hidden rounded-[28px] border border-primary/10 bg-card shadow-[0_-10px_30px_-18px_rgba(6,48,28,0.35),0_18px_40px_-28px_rgba(6,48,28,0.45)] ring-1 ring-primary/5 transition-colors duration-300 hover:border-secondary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:h-[340px] md:flex-row lg:h-[360px]"
                   >
-                    <div className="relative m-2.5 mb-0 aspect-[4/3] overflow-hidden rounded-[20px] bg-gradient-to-br from-primary/5 to-secondary/10">
+                    <div className="relative order-1 m-2.5 aspect-[16/10] overflow-hidden rounded-[20px] bg-gradient-to-br from-primary/5 to-secondary/10 md:order-2 md:m-3 md:aspect-auto md:w-[46%] md:shrink-0">
                       <img
                         decoding="async"
                         src={p.image}
                         alt={p[lang].name}
-                        loading={idx < 3 ? "eager" : "lazy"}
+                        loading={idx < 2 ? "eager" : "lazy"}
                         fetchpriority={idx === 0 ? "high" : "auto"}
-                        className="absolute inset-0 h-full w-full object-cover object-[50%_22%] transition-transform duration-700 group-hover:scale-[1.04]"
+                        className="absolute inset-0 h-full w-full object-cover object-[50%_30%] transition-transform duration-700 ease-out md:group-hover:scale-[1.03]"
                       />
-                      <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/30 to-transparent" />
-                      {p.season && (
-                        <span className="absolute start-3 top-3 rounded-full bg-card/95 px-3 py-1 text-[11px] font-extrabold text-accent shadow-soft">
-                          {p.season[lang]}
-                        </span>
-                      )}
+                      <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/25 to-transparent" />
                     </div>
-                    <div className="flex flex-1 flex-col px-5 pb-5 pt-4 text-start">
-                      <h3 className="text-xl font-black leading-tight text-primary md:text-[22px]">{p[lang].name}</h3>
-                      <p className="mt-2 text-sm font-semibold leading-7 text-muted-foreground">{p[lang].tagline}</p>
-                      {p[lang].desc && <p className="mt-1.5 line-clamp-2 text-xs leading-6 text-muted-foreground">{p[lang].desc}</p>}
-                      <div className="mt-3 inline-flex w-fit max-w-full items-center gap-1.5 text-xs font-extrabold text-muted-foreground">
-                        <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                        <span>{isRTL ? "موثّق ومراجع ميدانيًا" : "Field-verified and reviewed"}</span>
+                    <div className="order-2 flex min-w-0 flex-1 flex-col px-5 pb-5 pt-3 text-start md:order-1 md:justify-center md:px-9 md:py-8">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono text-[11px] font-bold tracking-widest text-muted-foreground/70" dir="ltr">
+                          {String(idx + 1).padStart(2, "0")} / {String(programs.length).padStart(2, "0")}
+                        </span>
+                        {p.season && (
+                          <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-[11px] font-extrabold text-accent">{p.season[lang]}</span>
+                        )}
                       </div>
-                      <div className="mt-auto flex flex-col items-start gap-2.5 pt-5">
+                      <h3 className="mt-2 text-[22px] font-black leading-tight text-primary md:text-[30px]">{p[lang].name}</h3>
+                      <p className="mt-2 text-sm font-semibold leading-7 text-foreground/75 md:text-[15px]">{p[lang].tagline}</p>
+                      {p[lang].desc && <p className="mt-1.5 line-clamp-2 text-xs leading-6 text-muted-foreground md:text-sm">{p[lang].desc}</p>}
+                      <p className="mt-3 inline-flex w-fit max-w-full items-center gap-1.5 text-xs font-extrabold text-muted-foreground">
+                        <CheckCircle2 className="h-4 w-4 shrink-0 text-secondary" />
+                        {isRTL ? "موثّق ومراجع ميدانيًا" : "Field-verified and reviewed"}
+                      </p>
+                      <div className="mt-5 flex flex-wrap items-center gap-2.5">
                         {p.priceFrom > 0 && (
-                          <span className="rounded-full bg-secondary/20 px-3 py-1 text-xs font-extrabold text-primary">
+                          <span className="rounded-full bg-secondary/20 px-3 py-1.5 text-xs font-extrabold text-primary">
                             {isRTL ? `يبدأ من ${p.priceFrom} ج` : `From ${p.priceFrom} EGP`}
                           </span>
                         )}
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1.5 text-[12.5px] font-extrabold text-accent ring-1 ring-accent/20 transition-all duration-300 group-hover:gap-3 group-hover:bg-accent group-hover:text-accent-foreground">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[12.5px] font-extrabold text-primary-foreground transition-all duration-300 group-hover:gap-2.5 group-hover:bg-accent group-hover:text-accent-foreground">
                           {t.programs.learnMore} <Arrow className="h-3.5 w-3.5" />
                         </span>
                       </div>
                     </div>
                   </Link>
-                </li>
+                </StickyStackItem>
               ))}
-            </ul>
+            </StickyStack>
           )}
         </div>
 

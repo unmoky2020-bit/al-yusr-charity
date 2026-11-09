@@ -27,7 +27,9 @@ export const PAGE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = {
   "/admin/axes": ["axes.update"],
   "/admin/site-stats": ["home_numbers.update", "achievements.update"],
   "/admin/stories": ["stories.create", "stories.update"],
-  "/admin/media": ["media.view", "media.upload"],
+  // Browsing the whole library is its own permission: "media.upload" alone only uploads
+  // (the image pickers of the other pages), it doesn't open the library.
+  "/admin/media": ["media.view"],
   "/admin/gallery": ["gallery.update"],
   "/admin/page-galleries": ["gallery.update"],
   "/admin/content": ["content.create", "content.update"],
@@ -40,6 +42,15 @@ export const PAGE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = {
   "/admin/donors": ["donors.view"],
   "/admin/users": ["users.view"],
 };
+
+/**
+ * Whether the account's roles give `perm`: true / false, or undefined while GET /me/access loads
+ * or when the server can't tell (older backend). The server still checks every request.
+ */
+export function accessAllows(access: AdminAccess | null | undefined, perm: string): boolean | undefined {
+  if (!access) return undefined;
+  return access.superAdmin || access.permissions.includes(perm);
+}
 
 /** Every page the account may open; "all" for the super admin. */
 export function allowedAdminPaths(access: AdminAccess): "all" | Set<string> {

@@ -181,11 +181,20 @@ export async function deleteReadNotifications() {
   return res.deleted ?? 0;
 }
 
-/** One page of the full list (the notifications screen). */
-export async function fetchNotificationsPage(params: { page: number; unread?: boolean; type?: string; perPage?: number }) {
+/** One page of the full list (the notifications screen). `types`: several kinds at once ("a,b,prefix_*"). */
+export async function fetchNotificationsPage(params: { page: number; unread?: boolean; type?: string; types?: string[]; perPage?: number }) {
   const res = await apiFetch<{ data?: Row[]; meta?: { current_page: number; last_page: number; total: number }; unread_count?: number }>(
     "/notifications",
-    { params: { page: params.page, per_page: params.perPage ?? 25, unread: params.unread ? 1 : undefined, type: params.type || undefined }, useCache: false },
+    {
+      params: {
+        page: params.page,
+        per_page: params.perPage ?? 25,
+        unread: params.unread ? 1 : undefined,
+        type: params.type || undefined,
+        types: params.types?.length ? params.types.join(",") : undefined,
+      },
+      useCache: false,
+    },
   );
   if (typeof res.unread_count === "number") emit({ unread: res.unread_count });
   return { items: (res.data ?? []).map(mapNotification), meta: res.meta ?? { current_page: 1, last_page: 1, total: 0 } };

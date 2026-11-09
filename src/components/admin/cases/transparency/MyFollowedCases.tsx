@@ -4,17 +4,28 @@ import { ChevronLeft, UserRoundCheck } from "lucide-react";
 import { caseFileApi } from "@/data/api/impactApi";
 import { egp } from "@/lib/impactLabels";
 
-/** «الحالات اللي بتتابعها»: the cases the signed-in member was assigned to follow (hidden when none). */
-export function MyFollowedCases() {
+/**
+ * «الحالات اللي بتتابعها»: the cases the signed-in member was assigned to follow (hidden when none).
+ * `limit` keeps it short on the dashboard home, with a link to the cases screen for the rest.
+ */
+export function MyFollowedCases({ limit }: { limit?: number } = {}) {
   const { data } = useQuery({ queryKey: ["my-followed-cases"], queryFn: () => caseFileApi.myCases(), staleTime: 60_000, retry: false });
   if (!data?.length) return null;
+  const shown = limit ? data.slice(0, limit) : data;
   return (
     <section className="rounded-3xl border border-secondary/40 bg-secondary/10 p-4">
-      <h2 className="flex items-center gap-2 text-sm font-black text-primary">
-        <UserRoundCheck className="h-4 w-4" />الحالات اللي بتتابعها ({data.length})
-      </h2>
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="flex items-center gap-2 text-sm font-black text-primary">
+          <UserRoundCheck className="h-4 w-4" />الحالات اللي بتتابعها ({data.length})
+        </h2>
+        {shown.length < data.length && (
+          <Link to="/admin/cases" className="inline-flex items-center gap-0.5 text-xs font-bold text-accent hover:underline">
+            كل الحالات<ChevronLeft className="h-3.5 w-3.5" aria-hidden />
+          </Link>
+        )}
+      </div>
       <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-        {data.map((c) => {
+        {shown.map((c) => {
           const t = c.file.totals;
           const pct = t.collected > 0 ? Math.min(100, Math.round((t.spent / t.collected) * 100)) : 0;
           const missing = c.file.items.filter((i) => (i.status === "purchased" || i.status === "delivered") && !i.receipt_url).length;

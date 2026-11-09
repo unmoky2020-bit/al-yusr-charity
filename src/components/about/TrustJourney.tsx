@@ -59,11 +59,13 @@ export const TrustJourney = ({ steps, isRTL }: { steps: TrustStep[]; isRTL: bool
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
   const fmt = (n: number) => n.toLocaleString(isRTL ? "ar-EG" : "en-US");
 
+  // Registration first, from the start side (right in Arabic) like the heading above it; the seal sits
+  // after it. The number reads from the right in Arabic: 2665 first, then the year.
   const sealBlock = (className: string) => (
-    <div className={`items-center gap-5 ${className}`}>
-      <TrustSeal stamped={stamped} reduced={reduced} isRTL={isRTL} />
-      <div className="min-w-0">
-        <div className="font-mono text-2xl font-black tabular-nums text-primary" dir="ltr">2665 / 2019</div>
+    <div className={`items-center gap-6 ${className}`}>
+      <div className="min-w-0 flex-1">
+        <p className="text-xs font-black text-accent">{isRTL ? "رقم الإشهار" : "Registration no."}</p>
+        <div className="mt-1 font-mono text-3xl font-black tabular-nums text-primary" dir={isRTL ? "rtl" : "ltr"}>2665 / 2019</div>
         <div className="mt-1 text-sm font-bold text-muted-foreground">
           {isRTL ? "إشهار رسمي بوزارة التضامن الاجتماعي" : "Registered with the Ministry of Social Solidarity"}
         </div>
@@ -75,6 +77,7 @@ export const TrustJourney = ({ steps, isRTL }: { steps: TrustStep[]; isRTL: bool
           <Arrow className="h-4 w-4" />
         </Link>
       </div>
+      <TrustSeal stamped={stamped} reduced={reduced} isRTL={isRTL} />
     </div>
   );
 

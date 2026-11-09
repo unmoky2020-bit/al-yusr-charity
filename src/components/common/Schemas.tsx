@@ -42,6 +42,18 @@ export const SiteSchemas = () => (
           legalName: "مؤسسة اليسر الخيرية المشهرة برقم 2665 لسنة 2019",
           telephone: "+201097000137",
           email: "info@elyusr.org",
+          contactPoint: [
+            {
+              "@type": "ContactPoint",
+              contactType: "customer support",
+              telephone: ORG.phoneE164,
+              email: ORG.email,
+              url: "https://elyusr.org/contact",
+              areaServed: "EG",
+              availableLanguage: ["ar", "en"],
+              hoursAvailable: { "@type": "OpeningHoursSpecification", dayOfWeek: [...ORG.hours.days], opens: ORG.hours.opens, closes: ORG.hours.closes },
+            },
+          ],
           address: {
             "@type": "PostalAddress",
             streetAddress: "تقسيم خطاب، بجوار وكالة المنصورة",
@@ -306,6 +318,24 @@ export const ArticleSchema = ({
       ...(timeRequiredMinutes ? { timeRequired: `PT${timeRequiredMinutes}M` } : {}),
       // what voice assistants / AI answers should read first: the title and the short answer box
       speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", "#quick-answer"] },
+    })}</script>
+  </Helmet>
+);
+
+/** /contact: a ContactPage about the foundation (its phone, email, office and hours are on the NGO above). */
+export const ContactPageSchema = () => (
+  <Helmet>
+    <script type="application/ld+json">{JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "@id": "https://elyusr.org/contact#page",
+      url: "https://elyusr.org/contact",
+      name: "تواصل مع مؤسسة اليسر الخيرية",
+      description: `رقم التليفون وواتساب ${ORG.phoneDisplay}، البريد ${ORG.email}، والمقر: ${ORG.addressAr}.`,
+      inLanguage: "ar-EG",
+      isPartOf: { "@id": "https://elyusr.org/#website" },
+      about: { "@id": "https://elyusr.org/#org" },
+      mainEntity: { "@id": "https://elyusr.org/#local" },
     })}</script>
   </Helmet>
 );

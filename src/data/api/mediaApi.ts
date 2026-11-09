@@ -13,6 +13,7 @@
  * Older backends (before v2) answer without in_use / folders; the screens treat those as unknown.
  */
 import { apiFetch, formatServerImageUrl, invalidateApiCache } from "@/data/laravelApi";
+import { compressImage } from "@/lib/image-compress";
 
 export const MEDIA_COLLECTIONS = ["blog", "og", "pages", "programs", "campaigns", "cases", "gallery", "general"] as const;
 export type MediaCollection = (typeof MEDIA_COLLECTIONS)[number];
@@ -98,8 +99,52 @@ export interface MediaList {
   hasUsage: boolean;
 }
 
+/** What the server stores at most (after the browser has shrunk the photo). */
 export const MEDIA_MAX_BYTES = 5 * 1024 * 1024;
+/** A phone photo may be bigger before upload: it is shrunk in the browser first. */
+export const MEDIA_INPUT_MAX_BYTES = 25 * 1024 * 1024;
+/** Longest side of a stored photo (enough for a full-width hero on a sharp screen). */
+export const MEDIA_MAX_EDGE = 2400;
 export const MEDIA_ACCEPT = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
+/** Kept exactly as they are (animation / already compact). */
+const AS_IS_TYPES = ["image/gif", "image/avif"];
+
+/** The upload rules in one line, for the upload boxes. */
+export const MEDIA_RULES_AR = "JPG أو PNG أو WebP لحد 25 ميجا (بتتصغّر لوحدها لـ 2400 بكسل، وبيتشال منها مكان التصوير) — GIF و AVIF لحد 5 ميجا.";
+
+/** Why this file can't be uploaded, or null when it can. */
+export function mediaFileProblem(file: Pick<File, "type" | "size" | "name">, lang: "ar" | "en" = "ar"): string | null {
+  const ar = lang === "ar";
+  if (!MEDIA_ACCEPT.includes(file.type)) {
+    return /\.hei[cf]$/i.test(file.name)
+      ? (ar ? `«${file.name}» صورة آيفون (HEIC): ارفعها من المتصفح على الموبايل، أو حوّلها JPG الأول.` : `"${file.name}" is HEIC: upload it from the phone's browser or convert it to JPG.`)
+      : (ar ? `«${file.name}»: الصيغ المسموحة JPG و PNG و WebP و GIF و AVIF.` : `"${file.name}": use JPG, PNG, WebP, GIF or AVIF.`);
+  }
+  const limit = AS_IS_TYPES.includes(file.type) ? MEDIA_MAX_BYTES : MEDIA_INPUT_MAX_BYTES;
+  if (file.size > limit) {
+    const mb = Math.round(limit / 1024 / 1024);
+    return ar ? `«${file.name}» أكبر من ${mb} ميجا.` : `"${file.name}" is larger than ${mb} MB.`;
+  }
+  return null;
+}
+
+/**
+ * Before upload: a photo is shrunk to MEDIA_MAX_EDGE and under the server limit, and a JPEG loses its
+ * camera data (the GPS location of a family's home must never reach the public site).
+ * GIF / AVIF and the generated social images ("og") go as they are.
+ */
+async function prepareForLibrary(file: Blob, fileName: string, collection: MediaCollection): Promise<{ blob: Blob; name: string }> {
+  if (collection === "og" || AS_IS_TYPES.includes(file.type) || !file.type.startsWith("image/")) return { blob: file, name: fileName };
+  const original = file instanceof File ? file : new File([file], fileName, { type: file.type });
+  try {
+    const out = await compressImage(original, { maxEdge: MEDIA_MAX_EDGE, quality: 0.86, maxSizeBytes: MEDIA_MAX_BYTES - 256 * 1024, stripMetadata: true });
+    if (out === original) return { blob: file, name: fileName };
+    const ext = out.name.split(".").pop() || "jpg";
+    return { blob: out, name: `${fileName.replace(/\.[^.]+$/, "") || "image"}.${ext}` };
+  } catch {
+    return { blob: file, name: fileName }; // the browser couldn't read it: the server decides
+  }
+}
 
 const BACKEND_ORIGIN = (import.meta.env?.VITE_BACKEND_URL as string | undefined) || "https://api.elyusr.org";
 
@@ -164,14 +209,19 @@ export async function findIdenticalMedia(blob: Blob): Promise<MediaFile | null> 
 
 export type UploadResult = MediaFile & { duplicate: boolean };
 
-/** Upload to the library. An identical image that is already stored comes back instead (`duplicate`). */
+/**
+ * Upload to the library (POST /media, permission media.upload). The photo is prepared first
+ * (see prepareForLibrary). An identical image that is already stored comes back instead (`duplicate`).
+ */
 export async function uploadMedia(file: Blob, fileName: string, collection: MediaCollection = "general"): Promise<UploadResult> {
+  const { blob, name } = await prepareForLibrary(file, fileName, collection);
+  if (blob.size > MEDIA_MAX_BYTES) throw new Error(`«${name}» أكبر من 5 ميجا حتى بعد التصغير — جرّب صورة أصغر.`);
   const body = new FormData();
-  body.append("file", file, fileName);
+  body.append("file", blob, name);
   body.append("collection", collection);
   const res = await apiFetch<{ data: RawFile; url?: string; duplicate?: boolean }>("/media", { method: "POST", body });
   invalidateApiCache("/media");
-  const f = res.data ?? ({ path: "", url: res.url || "", name: fileName, collection, size: file.size, last_modified: "" } as RawFile);
+  const f = res.data ?? ({ path: "", url: res.url || "", name, collection, size: blob.size, last_modified: "" } as RawFile);
   return { ...toFile({ ...f, url: f.url || res.url || "" }), duplicate: Boolean(res.duplicate) };
 }
 

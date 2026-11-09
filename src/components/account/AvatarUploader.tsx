@@ -18,7 +18,13 @@ export function initialsOf(name: string): string {
   return `${words[0][0]}${words[1][0]}`;
 }
 
-type Props = { size?: "md" | "lg"; className?: string };
+type Props = { size?: "md" | "lg" | "xl"; className?: string };
+
+const BOX: Record<NonNullable<Props["size"]>, string> = {
+  md: "h-20 w-20 text-2xl",
+  lg: "h-28 w-28 text-3xl",
+  xl: "h-32 w-32 text-4xl md:h-36 md:w-36",
+};
 
 /**
  * The account photo with "change" and "remove" actions. The photo is shrunk in the browser (640px,
@@ -33,7 +39,7 @@ export function AvatarUploader({ size = "lg", className }: Props) {
   const [broken, setBroken] = useState(false);
   if (!user) return null;
 
-  const box = size === "lg" ? "h-28 w-28 text-3xl" : "h-20 w-20 text-2xl";
+  const box = BOX[size];
   const photo = user.avatar && !broken ? user.avatar : "";
 
   const onFile = async (e: ChangeEvent<HTMLInputElement>) => {

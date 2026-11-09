@@ -12,6 +12,7 @@ import { useLang } from "@/i18n/LangContext";
 import { getLucideIcon } from "@/lib/lucide-icon";
 import { LucideIconPicker } from "@/components/admin/LucideIconPicker";
 import { MediaPickerModal } from "@/components/admin/MediaPickerModal";
+import { useCan } from "@/auth/useCan";
 import {
   Plus, Save, Trash2, GripVertical, Upload, Image as ImageIcon,
   ArrowUp, ArrowDown, Eye, EyeOff, Undo2, Loader2,
@@ -80,6 +81,7 @@ export default function AdminSiteStats() {
   const prevImage = useRef<Record<number, string | null>>({});
   const [uploadingIdx, setUploadingIdx] = useState<number | null>(null);
   const [mediaPickerIdx, setMediaPickerIdx] = useState<number | null>(null);
+  const canBrowseMedia = useCan()("media.view") !== false;
 
   // Revoke any local preview URLs on unmount to avoid memory leaks
   useEffect(() => () => {
@@ -488,17 +490,19 @@ export default function AdminSiteStats() {
                               value={displayImageUrl ?? ""}
                               onChange={(e) => setRowImage(idx, e.target.value || null)}
                             />
-                            {/* Pick from media library */}
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className="gap-1 text-xs h-9 shrink-0"
-                              onClick={() => setMediaPickerIdx(idx)}
-                            >
-                              <ImageIcon className="h-3.5 w-3.5" />
-                              {isAr ? "من المكتبة" : "Library"}
-                            </Button>
+                            {/* Pick from media library (needs media.view) */}
+                            {canBrowseMedia && (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                className="gap-1 text-xs h-9 shrink-0"
+                                onClick={() => setMediaPickerIdx(idx)}
+                              >
+                                <ImageIcon className="h-3.5 w-3.5" />
+                                {isAr ? "من المكتبة" : "Library"}
+                              </Button>
+                            )}
                             {/* Direct upload button */}
                             <label className={`inline-flex cursor-pointer items-center gap-1 rounded-md border px-3 py-2 text-xs hover:bg-muted shrink-0 h-9 ${uploadingIdx === idx ? "opacity-60 pointer-events-none" : ""}`}>
                               {uploadingIdx === idx

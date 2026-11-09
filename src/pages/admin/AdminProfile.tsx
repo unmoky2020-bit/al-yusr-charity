@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Bell, CalendarDays, Clock, KeyRound, ShieldCheck, UserRound } from "lucide-react";
+import { BadgeCheck, Bell, CalendarDays, Clock, KeyRound, ShieldCheck, UserRound } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
@@ -44,31 +44,38 @@ const AdminProfile = () => {
   return (
     <AdminLayout title={{ ar: "حسابي", en: "My Profile" }}>
       <div className="space-y-5 pb-6">
-        {/* Identity */}
-        <section className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-soft">
-          <div className="h-16 pattern-hero-luxe md:h-20" aria-hidden />
-          <div className="flex flex-col items-center gap-4 px-5 pb-5 text-center md:flex-row md:items-end md:text-start">
-            <AvatarUploader size="md" className="-mt-10 md:-mt-12" />
-            <div className="min-w-0 flex-1">
-              <h1 className="text-xl font-black text-primary">{user.name}</h1>
-              <p className="text-xs font-bold text-muted-foreground">
-                {[user.jobTitle, ...user.roles.map((r) => (ROLE_LABEL[r] ? ROLE_LABEL[r][lang] : r))].filter(Boolean).join(" • ")}
-              </p>
-              <p className="mt-1 truncate text-xs text-muted-foreground" dir="ltr">{user.email}</p>
+        {/* Identity: cover, photo, name and facts; the email box under them when the address isn't confirmed */}
+        <section className="overflow-hidden rounded-3xl border border-border/60 bg-card shadow-soft">
+          <div className="h-28 pattern-hero-luxe sm:h-32 md:h-36" aria-hidden />
+          <div className="px-5 pb-6 md:px-8">
+            <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-end md:gap-6 md:text-start">
+              <AvatarUploader size="xl" className="-mt-16 md:-mt-[4.5rem]" />
+              <div className="min-w-0 flex-1 md:pb-8">
+                <h1 className="text-2xl font-black text-primary md:text-[1.75rem]">{user.name}</h1>
+                <p className="mt-1 text-sm font-bold text-muted-foreground">
+                  {[user.jobTitle, ...user.roles.map((r) => (ROLE_LABEL[r] ? ROLE_LABEL[r][lang] : r))].filter(Boolean).join(" • ")}
+                </p>
+                <p className="mt-1 truncate text-sm text-muted-foreground"><bdi dir="ltr">{user.email}</bdi></p>
+                <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs md:justify-start">
+                  {user.emailVerified && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 font-extrabold text-emerald-700">
+                      <BadgeCheck className="h-3.5 w-3.5" /> {ar ? "بريدك مؤكَّد" : "Email confirmed"}
+                    </span>
+                  )}
+                  {user.createdAt && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 font-bold text-muted-foreground">
+                      <CalendarDays className="h-3.5 w-3.5" /> {ar ? "معانا من" : "Since"} {fmt(user.createdAt)}
+                    </span>
+                  )}
+                  {user.lastLoginAt && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 font-bold text-muted-foreground">
+                      <Clock className="h-3.5 w-3.5" /> {ar ? "آخر دخول" : "Last sign-in"} {fmt(user.lastLoginAt)}
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
-            <div className="flex flex-wrap justify-center gap-2 text-xs md:justify-end">
-              <EmailVerifyCard />
-              {user.createdAt && (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 font-bold text-muted-foreground">
-                  <CalendarDays className="h-3.5 w-3.5" /> {ar ? "من" : "Since"} {fmt(user.createdAt)}
-                </span>
-              )}
-              {user.lastLoginAt && (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 font-bold text-muted-foreground">
-                  <Clock className="h-3.5 w-3.5" /> {ar ? "آخر دخول" : "Last sign-in"} {fmt(user.lastLoginAt)}
-                </span>
-              )}
-            </div>
+            {!user.emailVerified && <EmailVerifyCard layout="row" className="mt-6" />}
           </div>
         </section>
 

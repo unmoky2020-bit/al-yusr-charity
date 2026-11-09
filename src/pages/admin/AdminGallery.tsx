@@ -38,6 +38,7 @@ import {
   takeLibraryImage,
 } from "@/data/galleryApi";
 import { MediaPickerModal } from "@/components/admin/MediaPickerModal";
+import { useCan } from "@/auth/useCan";
 import { formatServerImageUrl } from "@/data/laravelApi";
 import { apiErrorMessage } from "@/data/api/adminApiHelpers";
 import { useLang } from "@/i18n/LangContext";
@@ -206,6 +207,8 @@ const AdminGallery = () => {
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState<"upload" | "library" | "url">("upload");
   const [pickerOpen, setPickerOpen] = useState(false);
+  // «من مكتبة الوسائط» needs media.view; uploading a file or a link works without it.
+  const canBrowseMedia = useCan()("media.view") !== false;
   const [dragOver, setDragOver] = useState(false);
   const [cleaning, setCleaning] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -575,7 +578,7 @@ const AdminGallery = () => {
 
             {/* ── Tab: upload / url ── */}
             <div className="flex gap-2 rounded-xl border border-border p-1 bg-muted/40">
-              {(["upload", "library", "url"] as const).map((t) => (
+              {(canBrowseMedia ? (["upload", "library", "url"] as const) : (["upload", "url"] as const)).map((t) => (
                 <button
                   key={t}
                   type="button"

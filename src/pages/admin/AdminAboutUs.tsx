@@ -1430,10 +1430,11 @@ export default function AdminAboutUs() {
                   <Textarea
                     value={data.story.mission_ar || data.story.mission?.description_ar || ""}
                     onChange={(e) => updateStory("mission_ar", e.target.value)}
-                    rows={3}
-                    placeholder="بناء إنسان واعٍ جسديًا، نفسيًا وبصريًا..."
-                    className="rounded-xl resize-none text-xs leading-relaxed"
+                    rows={5}
+                    placeholder={"بناء إنسان واعٍ جسديًا وثقافيًا وصحيًا.\nجسديًا: …\nثقافيًا: …\nصحيًا: …"}
+                    className="rounded-xl resize-y text-xs leading-relaxed"
                   />
+                  <p className="text-[11px] text-muted-foreground">السطر الأول هو الرسالة، وكل سطر بعده بيظهر كنقطة في الموقع (اكتب «العنوان: الشرح»).</p>
                 </div>
               </div>
 
@@ -1473,9 +1474,9 @@ export default function AdminAboutUs() {
                   <Textarea
                     value={data.story.mission_en || ""}
                     onChange={(e) => updateStory("mission_en", e.target.value)}
-                    rows={3}
-                    placeholder="We seek to create sustainable impact..."
-                    className="rounded-xl resize-none text-xs leading-relaxed"
+                    rows={5}
+                    placeholder={"Building people who are aware in body, mind and health.\nBody: …\nMind: …\nHealth: …"}
+                    className="rounded-xl resize-y text-xs leading-relaxed"
                   />
                 </div>
               </div>

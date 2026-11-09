@@ -2,10 +2,15 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import {
-  Activity, AlertTriangle, CheckCircle2, ExternalLink, FolderHeart, HeartHandshake, Layers, RefreshCw, TrendingUp, Users, Wallet,
+  Activity, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, ExternalLink, FolderHeart, HeartHandshake, Layers, RefreshCw, TrendingUp, Users, Wallet,
 } from "lucide-react";
 import { AdminLayout, StatCard, ChartCard } from "@/components/admin/AdminLayout";
-import { useAdminNav } from "@/components/admin/adminNav";
+import { useAdminNav, type NavItem } from "@/components/admin/adminNav";
+import { WelcomeCard } from "@/components/admin/home/WelcomeCard";
+import { LatestNotificationsCard } from "@/components/admin/home/LatestNotificationsCard";
+import { EditorPostsCard } from "@/components/admin/home/EditorPostsCard";
+import { SECTION_HINTS, pickRoleHome } from "@/components/admin/home/roleHome";
+import { MyFollowedCases } from "@/components/admin/cases/transparency/MyFollowedCases";
 import { FormSkeleton } from "@/components/common/ContentSkeletons";
 import { useAuth } from "@/auth/AuthContext";
 import { useLang } from "@/i18n/LangContext";
@@ -35,42 +40,71 @@ const AdminDashboard = () => {
   return canSeeDonations ? <DonationsOverview /> : <TeamHome />;
 };
 
-/** The sections this account may open, as big shortcuts (content editors, volunteers). */
-const TeamHome = () => {
+/** Greeting, role and the role's most used actions (only those the account may open). */
+function useHomeIntro() {
   const { lang } = useLang();
+  const { user, access } = useAuth();
+  const { roleKey, navGroups } = useAdminNav();
+  const sections = new Set(navGroups.flatMap((g) => g.items.map((i) => i.href)));
+  const role = pickRoleHome(roleKey);
+  return {
+    lang,
+    roleKey,
+    navGroups,
+    name: user?.name ?? "",
+    roleLabel: roleKey === "admin" && access?.superAdmin ? (lang === "ar" ? "مدير عام" : "Super admin") : role.label[lang],
+    note: role.note[lang],
+    actions: role.actions.filter((a) => sections.has(a.section)).map((a) => ({ to: a.to, label: a.label[lang], icon: a.icon, primary: a.primary })),
+  };
+}
+
+/** Home of the accounts that don't see donations (content editors, delegates, volunteers). */
+const TeamHome = () => {
+  const { lang, roleKey, navGroups, ...intro } = useHomeIntro();
   const isRTL = lang === "ar";
-  const { user } = useAuth();
-  const { navGroups } = useAdminNav();
   const items = navGroups.flatMap((g) => g.items).filter((i) => i.href !== "/admin");
   return (
     <AdminLayout>
-      <div className="space-y-6" dir={isRTL ? "rtl" : "ltr"}>
-        <section className="relative overflow-hidden rounded-2xl pattern-hero-luxe p-6 text-primary-foreground shadow-card md:p-8">
-          <p className="text-sm text-primary-foreground/75">{isRTL ? "أهلًا" : "Welcome"}</p>
-          <h2 className="mt-1 text-2xl font-black md:text-3xl">{user?.name}</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-primary-foreground/85">
-            {isRTL
-              ? "دي الأقسام اللي تقدر تشتغل فيها. أي حاجة بتضيفها أو بتعدّلها بتروح للإدارة تراجعها وتوافق عليها قبل ما تتنشر على الموقع."
-              : "These are the sections you work in. What you add or change goes to the admins for approval before it is published."}
-          </p>
-        </section>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((i) => (
-            <Link
-              key={i.href}
-              to={i.href}
-              className="group flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-secondary/60 hover:shadow-card"
-            >
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary transition group-hover:bg-secondary">
-                <i.icon className="h-5 w-5" />
-              </span>
-              <span className="flex-1 text-sm font-extrabold text-primary">{i[lang]}</span>
-              <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 transition group-hover:opacity-100" />
-            </Link>
-          ))}
+      <div className="space-y-5" dir={isRTL ? "rtl" : "ltr"}>
+        <WelcomeCard lang={lang} {...intro} />
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,23rem)] lg:items-start">
+          <div className="min-w-0 space-y-5">
+            {items.some((i) => i.href === "/admin/blog") && <EditorPostsCard lang={lang} />}
+            {roleKey !== "editor" && <MyFollowedCases limit={4} />}
+            <SectionsGrid items={items} lang={lang} />
+          </div>
+          <LatestNotificationsCard lang={lang} />
         </div>
       </div>
     </AdminLayout>
+  );
+};
+
+/** «أقسامك»: every section the account may open, with one line on what is inside. */
+const SectionsGrid = ({ items, lang }: { items: NavItem[]; lang: "ar" | "en" }) => {
+  const Go = lang === "ar" ? ChevronLeft : ChevronRight;
+  return (
+    <section>
+      <h3 className="mb-3 text-sm font-black text-primary">{lang === "ar" ? "أقسامك" : "Your sections"}</h3>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {items.map((i) => (
+          <Link
+            key={i.href}
+            to={i.href}
+            className="group flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-secondary/60 hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary transition group-hover:bg-secondary">
+              <i.icon className="h-5 w-5" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-extrabold text-primary">{i[lang]}</span>
+              {SECTION_HINTS[i.href] && <span className="mt-0.5 block truncate text-xs font-semibold text-muted-foreground">{SECTION_HINTS[i.href][lang]}</span>}
+            </span>
+            <Go className="h-4 w-4 shrink-0 text-muted-foreground transition group-hover:text-primary" />
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 };
 
@@ -79,7 +113,7 @@ const TeamHome = () => {
  * GET /donations — nothing is summed in the browser.
  */
 const DonationsOverview = () => {
-  const { lang } = useLang();
+  const { lang, roleKey: _roleKey, navGroups: _navGroups, ...intro } = useHomeIntro();
   const isRTL = lang === "ar";
 
   const countsQ = useQuery({ queryKey: ["admin-dashboard", "counts"], queryFn: donationsAdminApi.dashboard, refetchInterval: REFRESH_MS });
@@ -100,7 +134,8 @@ const DonationsOverview = () => {
   return (
     <AdminLayout>
       <div className="space-y-6" dir={isRTL ? "rtl" : "ltr"}>
-        <div className="flex items-center justify-end gap-2 text-[11px] font-bold text-muted-foreground">
+        <WelcomeCard compact lang={lang} {...intro} />
+        <div className="-mb-3 flex items-center justify-end gap-2 text-[11px] font-bold text-muted-foreground">
           {fetching && <RefreshCw className="h-3.5 w-3.5 animate-spin text-primary" />}
           {isRTL ? "المبالغ = التبرعات المدفوعة فقط" : "Amounts = paid donations only"}
         </div>
@@ -127,6 +162,8 @@ const DonationsOverview = () => {
             value={s ? (s.success_rate == null ? dash : `${formatNumber(s.success_rate, lang)}%`) : dash}
             sub={s ? (isRTL ? `${formatNumber(s.by_status?.failed?.count ?? 0, lang)} عملية فاشلة` : `${s.by_status?.failed?.count ?? 0} failed`) : undefined} />
         </div>
+
+        <MyFollowedCases limit={3} />
 
         {/* Content & people — each figure once, with its own label */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">

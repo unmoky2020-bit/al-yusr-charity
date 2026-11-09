@@ -48,3 +48,12 @@ export const ORG = {
 export const googleReviewLink = () => ORG.reviewUrl || ORG.mapsUrl;
 
 export const whatsappLink = (text: string) => `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(text)}`;
+
+/** Open right now? Office hours are Cairo time (ORG.hours), whatever the visitor's clock says. */
+export function isOfficeOpen(now = new Date()): boolean {
+  const parts = new Intl.DateTimeFormat("en-GB", { timeZone: "Africa/Cairo", weekday: "long", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(now);
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
+  const minutes = Number(get("hour")) * 60 + Number(get("minute"));
+  const at = (hhmm: string) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));
+  return (ORG.hours.days as readonly string[]).includes(get("weekday")) && minutes >= at(ORG.hours.opens) && minutes < at(ORG.hours.closes);
+}

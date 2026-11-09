@@ -93,7 +93,8 @@ const ROLE_ALLOWED: Record<string, string[]> = {
     "/admin/donors", "/admin/transactions",
     "/admin/profile", "/admin/notifications",
   ],
-  editor: ["/admin", "/admin/blog", "/admin/media", "/admin/profile", "/admin/notifications"],
+  // The media library opens only with the server permission media.view (see adminAccess).
+  editor: ["/admin", "/admin/blog", "/admin/profile", "/admin/notifications"],
   volunteer: [
     "/admin", "/admin/campaigns", "/admin/my-tasks", "/admin/profile", "/admin/notifications",
   ],

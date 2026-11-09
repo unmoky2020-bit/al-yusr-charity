@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { MediaPickerModal } from "@/components/admin/MediaPickerModal";
 import { LField } from "@/components/admin/CampaignPageContentEditor";
 import { describeWriteError } from "@/data/api/backendPending";
-import { MEDIA_ACCEPT, MEDIA_MAX_BYTES, uploadMedia } from "@/data/api/mediaApi";
+import { MEDIA_ACCEPT, mediaFileProblem, uploadMedia } from "@/data/api/mediaApi";
+import { useCan } from "@/auth/useCan";
 import { pageImageUrl } from "@/data/pageImages";
 import type { CampaignPageContent, ImageSlot, PageImage } from "@/data/campaignPages/types";
 
@@ -30,10 +31,13 @@ function ImageSource({ src, onChange, label }: { src: string; onChange: (v: stri
   const [uploading, setUploading] = useState(false);
   const preview = pageImageUrl(src);
   const isAsset = src.startsWith("asset:");
+  // Picking from the whole library needs media.view; uploading alone is enough for everyone else.
+  const canBrowse = useCan()("media.view") !== false;
 
   const upload = async (file: File) => {
-    if (!MEDIA_ACCEPT.includes(file.type) || file.size > MEDIA_MAX_BYTES) {
-      toast.error("الصيغ المسموحة JPG و PNG و WebP و GIF و AVIF، والحد الأقصى 5 ميجابايت");
+    const problem = mediaFileProblem(file);
+    if (problem) {
+      toast.error(problem);
       return;
     }
     setUploading(true);
@@ -66,9 +70,11 @@ function ImageSource({ src, onChange, label }: { src: string; onChange: (v: stri
               if (f) void upload(f);
             }} />
           </label>
-          <Button type="button" size="sm" variant="outline" className="h-9 shrink-0 gap-1 rounded-xl text-xs font-bold" onClick={() => setPickerOpen(true)}>
-            <FolderOpen className="h-3.5 w-3.5" /> من المكتبة
-          </Button>
+          {canBrowse && (
+            <Button type="button" size="sm" variant="outline" className="h-9 shrink-0 gap-1 rounded-xl text-xs font-bold" onClick={() => setPickerOpen(true)}>
+              <FolderOpen className="h-3.5 w-3.5" /> من المكتبة
+            </Button>
+          )}
         </div>
         <Input dir="ltr" value={src} placeholder="https://… أو ارفع صورة" className="h-9 rounded-xl font-mono text-[11px]" onChange={(e) => onChange(e.target.value.trim())} />
         {isAsset && <p className="text-[11px] text-muted-foreground">صورة أصلية من تصميم الموقع.</p>}

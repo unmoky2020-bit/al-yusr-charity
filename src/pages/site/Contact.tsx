@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Send, Building2, Clock, ShieldCheck, Heart, User, MessageSquare, ChevronDown, ArrowLeft, ArrowRight, Copy, Check, Sparkles } from "lucide-react";
+import { Phone, Mail, MapPin, Send, ShieldCheck, Heart, User, MessageSquare, ChevronDown } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
-import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
+import { SiteSchemas, BreadcrumbSchema, ContactPageSchema } from "@/components/common/Schemas";
+import { ContactChannels } from "@/components/contact/ContactChannels";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -134,7 +135,7 @@ const Contact = () => {
       setCopiedBank(true);
       toast({ title: isRTL ? "تم نسخ رقم الحساب البنكي" : "Bank account number copied" });
       setTimeout(() => setCopiedBank(false), 2000);
-    } catch {}
+    } catch { /* no clipboard (old browser / http): the number stays on screen */ }
   };
 
   const handleCopyPhone = () => {
@@ -143,7 +144,7 @@ const Contact = () => {
       setCopiedPhone(true);
       toast({ title: isRTL ? "تم نسخ رقم الهاتف" : "Phone number copied" });
       setTimeout(() => setCopiedPhone(false), 2000);
-    } catch {}
+    } catch { /* no clipboard (old browser / http): the number stays on screen */ }
   };
 
   const { data: rawContactFaqs } = useQuery({
@@ -196,7 +197,7 @@ const Contact = () => {
         toast({ title: isRTL ? "تم استلام رسالتك بالفعل " : "Your message was already received " });
         return;
       }
-    } catch {}
+    } catch { /* private mode: no duplicate check, the server still dedupes */ }
     setSending(true);
     setWhatsAppFallback(null);
     try {
@@ -210,7 +211,7 @@ const Contact = () => {
       });
       const ref = ref_code ?? "";
       setRefCode(ref || null);
-      try { localStorage.setItem("alyusr.contact.last", JSON.stringify({ email: form.email, at: Date.now(), ref })); } catch {}
+      try { localStorage.setItem("alyusr.contact.last", JSON.stringify({ email: form.email, at: Date.now(), ref })); } catch { /* private mode */ }
       track("contact_submit", { fbEvent: "Lead", payload: { ref } });
       toast({
         title: ref
@@ -245,12 +246,15 @@ const Contact = () => {
   return (
     <PageLayout>
       <SEOHelmet
-        title={isRTL ? "تواصل معنا — جمعيات خيرية بالمنصورة والدقهلية | مؤسسة اليسر" : "Contact Us — charity support in Mansoura and Dakahlia | Al-Yusr"}
-        description={isRTL ? "تواصل مع فريق اليسر للاستفسار عن التبرع أو التطوع أو دعم الأسر المحتاجة عبر الصدقات والزكاة والأضاحي والكفالات مع توثيق مباشر." : "Contact the Al-Yusr team for donation questions, volunteering, or support for needy families through sadaqah, zakat, qurbani, and sponsorship with direct documentation."}
+        title={isRTL ? "تواصل مع مؤسسة اليسر الخيرية — رقم التليفون وواتساب والعنوان في المنصورة" : "Contact Al-Yusr Charity — phone, WhatsApp and address in Mansoura"}
+        description={isRTL
+          ? `كلّم مؤسسة اليسر الخيرية على ${ORG.phoneDisplay} أو واتساب، أو ابعت على ${ORG.email}. مقرنا: ${ORG.addressAr}. ${ORG.hours.labelAr}. نرد خلال 24 ساعة على أسئلة التبرع والزكاة والتطوع.`
+          : `Call Al-Yusr Charity on +20 109 700 0137 or WhatsApp, or email ${ORG.email}. Office: ${ORG.addressEn}. ${ORG.hours.labelEn}. We reply within 24 hours.`}
         path="/contact"
         keywords={isRTL ? "تواصل معنا, جمعيات خيرية بالمنصورة, جمعيات خيرية بالدقهلية, تبرع, اليسر, واتساب, حساب بنكي, صدقات, زكاة, أضاحي, كفالة أيتام, تطوع" : "contact us, charity in Mansoura, charity in Dakahlia, donate, al-yusr, WhatsApp, sadaqah, zakat, qurbani, volunteer"}
       />
       <SiteSchemas />
+      <ContactPageSchema />
       <BreadcrumbSchema items={[
         { name: isRTL ? "الرئيسية" : "Home", url: `${base}/` },
         { name: isRTL ? "تواصل معنا" : "Contact", url: `${base}/contact` },
@@ -330,8 +334,8 @@ const Contact = () => {
                     {isRTL ? "كل تفاصيل الاتصال بين يديك" : "All contact details within reach"}
                   </h2>
                 </div>
-                <span className="inline-flex items-center self-start sm:self-auto rounded-full bg-secondary/15 px-3.5 py-1.5 text-[11px] font-black uppercase tracking-wider text-primary ring-1 ring-secondary/30 shadow-xs">
-                  {isRTL ? "متاحون 7 أيام" : "Available 7 Days"}
+                <span className="inline-flex items-center self-start sm:self-auto rounded-full bg-secondary/15 px-3.5 py-1.5 text-[11px] font-black text-primary ring-1 ring-secondary/30 shadow-xs">
+                  {isRTL ? "نرد خلال 24 ساعة" : "Reply within 24h"}
                 </span>
               </div>
               <p className="relative mt-2.5 text-xs sm:text-sm leading-relaxed text-muted-foreground">
@@ -341,166 +345,15 @@ const Contact = () => {
               </p>
             </div>
 
-            {/* Contact cards grid (Solid bg-card, no transparency) */}
-            <div className="grid gap-3.5 sm:grid-cols-2">
-              {/* Phone / WA / email */}
-              <div className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border/80 bg-card p-5 shadow-card transition-all duration-300 hover:border-secondary/60 hover:shadow-glow">
-                <div aria-hidden className="pointer-events-none absolute -top-12 -end-12 h-28 w-28 rounded-full bg-secondary/10 blur-2xl transition group-hover:bg-secondary/20" />
-                
-                <div>
-                  <div className="mb-4 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2.5">
-                      <span className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary/20 text-primary ring-1 ring-secondary/30 shadow-xs">
-                        <Phone className="h-5 w-5" />
-                      </span>
-                      <div>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-secondary">
-                          {isRTL ? "قنوات التواصل" : "Channels"}
-                        </span>
-                        <h3 className="text-base font-black text-foreground">
-                          {isRTL ? "تواصل سريع" : "Quick contact"}
-                        </h3>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    {/* Phone */}
-                    <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5 transition hover:border-secondary/40 hover:bg-card">
-                      <a href="tel:+201097000137" className="flex items-center gap-2.5 min-w-0 flex-1">
-                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
-                          <Phone className="h-4 w-4" />
-                        </span>
-                        <div className="min-w-0">
-                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "اتصال هاتفي" : "Direct Call"}</div>
-                          <span dir="ltr" className="text-xs sm:text-sm font-extrabold text-foreground hover:text-primary transition-colors">
-                            +20 109 700 0137
-                          </span>
-                        </div>
-                      </a>
-                      <button
-                        type="button"
-                        onClick={handleCopyPhone}
-                        title={isRTL ? "نسخ الرقم" : "Copy number"}
-                        className="rounded-xl border border-border/80 bg-card p-2 text-muted-foreground hover:text-primary hover:border-secondary/40 transition shrink-0"
-                      >
-                        {copiedPhone ? <Check className="h-3.5 w-3.5 text-secondary" /> : <Copy className="h-3.5 w-3.5" />}
-                      </button>
-                    </div>
-
-                    {/* Email */}
-                    <a
-                      href={`mailto:${FOUNDATION_EMAIL}`}
-                      className="group/mail flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5 transition hover:border-secondary/40 hover:bg-card"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary group-hover/mail:bg-primary group-hover/mail:text-primary-foreground transition-colors">
-                          <Mail className="h-4 w-4" />
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "البريد الإلكتروني" : "Email"}</div>
-                          <div className="text-xs sm:text-sm font-extrabold text-foreground truncate group-hover/mail:text-primary transition-colors">
-                            {FOUNDATION_EMAIL}
-                          </div>
-                        </div>
-                      </div>
-                      <ArrowLeft className={`h-4 w-4 shrink-0 text-muted-foreground group-hover/mail:text-primary transition-transform ${isRTL ? "group-hover/mail:-translate-x-1" : "rotate-180 group-hover/mail:translate-x-1"}`} />
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* Address / bank / hours */}
-              <div className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border/80 bg-card p-5 shadow-card transition-all duration-300 hover:border-secondary/60 hover:shadow-glow">
-                <div aria-hidden className="pointer-events-none absolute -top-12 -start-12 h-28 w-28 rounded-full bg-secondary/15 blur-2xl transition group-hover:bg-secondary/25" />
-                
-                <div>
-                  <div className="mb-4 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2.5">
-                      <span className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary/20 text-primary ring-1 ring-secondary/30 shadow-xs">
-                        <Building2 className="h-5 w-5" />
-                      </span>
-                      <div>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-secondary">
-                          {isRTL ? "المقر والمواعيد" : "HQ & Times"}
-                        </span>
-                        <h3 className="text-base font-black text-foreground">
-                          {isRTL ? "التفاصيل المهمة" : "Useful details"}
-                        </h3>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    {/* Address */}
-                    <a
-                      href="#contact-map"
-                      className="group/addr flex items-start justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5 transition hover:border-secondary/40 hover:bg-card"
-                    >
-                      <div className="flex items-start gap-2.5 min-w-0">
-                        <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
-                          <MapPin className="h-4 w-4" />
-                        </span>
-                        <div className="min-w-0">
-                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "المقر الرئيسي" : "Headquarters"}</div>
-                          <div className="text-xs font-bold leading-relaxed text-foreground group-hover/addr:text-primary transition-colors">
-                            {isRTL ? "المنصورة، تقسيم خطاب، بجوار وكالة المنصورة" : "Mansoura, Khattab District, next to Mansoura Agency"}
-                          </div>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-black text-secondary hover:underline shrink-0 pt-1">
-                        {isRTL ? "الخريطة" : "Map"}
-                      </span>
-                    </a>
-
-                    {/* Official bank account (from the dashboard) */}
-                    {bankAccount && (
-                    <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5 transition hover:border-secondary/40 hover:bg-card">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
-                          <Building2 className="h-4 w-4" />
-                        </span>
-                        <div className="min-w-0">
-                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "الحساب البنكي الرسمي" : "Official bank account"} {bankAccountLabel(bankAccount).split(":")[0]}</div>
-                          <span dir="ltr" className="text-xs sm:text-sm font-black font-mono tracking-wider text-foreground">
-                            {bankAccount.value}
-                          </span>
-                        </div>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={handleCopyBank}
-                        className="h-7 px-2.5 gap-1 rounded-xl text-[11px] font-bold border-secondary/40 text-primary hover:bg-secondary/15 shrink-0"
-                      >
-                        {copiedBank ? <Check className="h-3 w-3 text-secondary" /> : <Copy className="h-3 w-3" />}
-                        <span>{copiedBank ? (isRTL ? "تم" : "Done") : (isRTL ? "نسخ" : "Copy")}</span>
-                      </Button>
-                    </div>
-                    )}
-
-                    {/* Hours */}
-                    <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-muted/20 p-2.5">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
-                          <Clock className="h-4 w-4" />
-                        </span>
-                        <div className="min-w-0">
-                          <div className="text-[10px] font-bold text-muted-foreground">{isRTL ? "مواعيد الاستقبال" : "Working Hours"}</div>
-                          <span className="text-xs font-extrabold text-foreground">
-                            {isRTL ? ORG.hours.labelAr : ORG.hours.labelEn}
-                          </span>
-                        </div>
-                      </div>
-                      <span className="inline-flex shrink-0 items-center rounded-full bg-secondary/15 px-2 py-0.5 text-[10px] font-black text-primary">
-                        {isRTL ? "مفتوح" : "Open"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* One calm box: every way to reach us, and where / when to visit */}
+            <ContactChannels
+              isRTL={isRTL}
+              copiedPhone={copiedPhone}
+              onCopyPhone={handleCopyPhone}
+              bank={bankAccount ? { title: bankAccountLabel(bankAccount).split(":")[0], value: bankAccount.value } : null}
+              copiedBank={copiedBank}
+              onCopyBank={handleCopyBank}
+            />
 
             {/* Trust strip (Solid bg-card, no transparency) */}
             <div className="relative overflow-hidden rounded-3xl border border-border/80 border-s-4 border-s-secondary bg-card p-4 sm:p-5 shadow-card">

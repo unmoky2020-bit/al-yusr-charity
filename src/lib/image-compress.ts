@@ -2,15 +2,17 @@
  * Client-side image compression using <canvas>.
  * - Skips SVG and GIF (animated) files — returns the original.
  * - Resizes the longest edge down to `maxEdge` while preserving aspect ratio.
- * - Re-encodes as WebP with `quality` (falls back to JPEG when needed).
- * - Iteratively reduces quality until file is under `maxSizeBytes` (default 2MB).
- * - Returns the original file if compression would *increase* the size.
+ * - Re-encodes photos as JPEG with `quality`; PNG stays PNG (transparency).
+ * - Lowers the JPEG quality step by step until the file is under `maxSizeBytes` (default 2MB),
+ *   then shrinks the dimensions if it is still too big.
+ * - Returns the original file if compression would *increase* the size, unless `stripMetadata`
+ *   asks to drop a JPEG's camera data (EXIF with the GPS location), which only a re-encode removes.
  */
 export async function compressImage(
   file: File,
-  opts: { maxEdge?: number; quality?: number; maxSizeBytes?: number } = {},
+  opts: { maxEdge?: number; quality?: number; maxSizeBytes?: number; stripMetadata?: boolean } = {},
 ): Promise<File> {
-  const { maxEdge = 1600, quality = 0.82, maxSizeBytes = 2 * 1024 * 1024 } = opts;
+  const { maxEdge = 1600, quality = 0.82, maxSizeBytes = 2 * 1024 * 1024, stripMetadata = false } = opts;
 
   // Pass-through for vector and animated formats
   if (file.type === "image/svg+xml" || file.type === "image/gif") return file;
@@ -44,7 +46,7 @@ export async function compressImage(
   while (attempts < 8) {
     blob = await canvasToBlob(canvas, targetMime, q);
     if (!blob) break;
-    if (blob.size <= maxSizeBytes) break;
+    if (blob.size <= maxSizeBytes || isPng) break; // PNG ignores quality: shrink the size below instead
     q = Math.max(0.3, q - 0.1); // reduce quality by 10% each iteration
     attempts++;
   }
@@ -69,8 +71,8 @@ export async function compressImage(
 
   if (!blob) return file;
 
-  // Bail out if compression actually grew the file
-  if (blob.size >= file.size && scale === 1) return file;
+  // Bail out if compression actually grew the file (but a JPEG asked to lose its camera data keeps the re-encode)
+  if (blob.size >= file.size && scale === 1 && !(stripMetadata && file.type === "image/jpeg" && blob.size <= maxSizeBytes)) return file;
 
   const baseName = file.name.replace(/\.[^.]+$/, "") || "image";
   return new File([blob], `${baseName}.${ext}`, { type: blob.type, lastModified: Date.now() });

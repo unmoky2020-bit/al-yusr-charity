@@ -16,7 +16,8 @@ import { LucideIconPicker } from "@/components/admin/LucideIconPicker";
 import { formatServerImageUrl } from "@/data/laravelApi";
 import { describeWriteError } from "@/data/api/backendPending";
 import { toast } from "@/lib/notify";
-import { MEDIA_ACCEPT, MEDIA_MAX_BYTES, uploadMedia, type MediaCollection } from "@/data/api/mediaApi";
+import { MEDIA_ACCEPT, mediaFileProblem, uploadMedia, type MediaCollection } from "@/data/api/mediaApi";
+import { useCan } from "@/auth/useCan";
 import { NEEDS_BACKEND_AR, type FaqItem } from "@/data/api/programsAdminApi";
 import { toKebabIcon } from "./formUtils";
 import type { ItemField } from "./sectionSchemas";
@@ -380,11 +381,14 @@ export function ImageUrlField({
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const preview = value ? formatServerImageUrl(value) || value : "";
+  // Picking from the whole library needs media.view; uploading alone is enough for everyone else.
+  const canBrowse = useCan()("media.view") !== false;
 
   const upload = async (file: File) => {
     setError("");
-    if (!MEDIA_ACCEPT.includes(file.type) || file.size > MEDIA_MAX_BYTES) {
-      setError("الصيغ المسموحة JPG و PNG و WebP و GIF و AVIF، والحد الأقصى 5 ميجابايت");
+    const problem = mediaFileProblem(file);
+    if (problem) {
+      setError(problem);
       return;
     }
     setUploading(true);
@@ -439,9 +443,11 @@ export function ImageUrlField({
           </button>
           <Input dir="ltr" value={value} placeholder="https://… رابط الصورة" className="h-9 min-w-0 flex-1 rounded-xl font-mono text-xs"
             onChange={(e) => { setError(""); onChange(e.target.value.trim()); }} />
-          <Button type="button" size="icon" variant="outline" className="h-9 w-9 shrink-0 rounded-xl" title="اختيار من مكتبة الوسائط" onClick={() => setPickerOpen(true)}>
-            <FolderOpen className="h-4 w-4" />
-          </Button>
+          {canBrowse && (
+            <Button type="button" size="icon" variant="outline" className="h-9 w-9 shrink-0 rounded-xl" title="اختيار من مكتبة الوسائط" onClick={() => setPickerOpen(true)}>
+              <FolderOpen className="h-4 w-4" />
+            </Button>
+          )}
           {value && (
             <Button type="button" size="icon" variant="ghost" className="h-9 w-9 shrink-0 rounded-xl text-destructive" title="إزالة الصورة" onClick={() => onChange("")}>
               <X className="h-4 w-4" />

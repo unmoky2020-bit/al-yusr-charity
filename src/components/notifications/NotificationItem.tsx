@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
-import { Bell, HandCoins, Inbox, Target, Trash2, UserPlus } from "lucide-react";
+import { Bell, ClipboardCheck, FolderHeart, HandCoins, HandHeart, Inbox, Target, Trash2, UserPlus } from "lucide-react";
 import type { AppNotification } from "@/data/notifications/notificationsStore";
 import type { NotificationCategory } from "@/data/notifications/notificationLinks";
 
 const ICONS: Record<NotificationCategory, typeof Bell> = {
   donation: HandCoins,
+  case: FolderHeart,
+  review: ClipboardCheck,
+  team: HandHeart,
   user: UserPlus,
   program: Target,
   inbox: Inbox,
@@ -68,7 +71,7 @@ export function NotificationItem({
           type="button"
           onClick={() => onDelete(n)}
           aria-label="حذف الإشعار"
-          className="absolute bottom-2 end-3 hidden rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive group-hover:block"
+          className="absolute bottom-2 end-3 hidden rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:block group-hover:block [@media(hover:none)]:block"
         >
           <Trash2 className="h-3.5 w-3.5" />
         </button>

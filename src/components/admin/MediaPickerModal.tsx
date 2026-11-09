@@ -18,18 +18,22 @@ import {
   Image as ImageIcon,
   RefreshCw,
   Layers,
+  ShieldCheck,
 } from "lucide-react";
 import { formatServerImageUrl } from "@/data/laravelApi";
 import { describeWriteError } from "@/data/api/backendPending";
 import {
   listMedia,
+  mediaFileProblem,
   uploadMedia,
   MEDIA_ACCEPT,
-  MEDIA_MAX_BYTES,
   MEDIA_COLLECTIONS,
   MEDIA_COLLECTION_LABELS_AR,
+  MEDIA_RULES_AR,
   type MediaCollection,
 } from "@/data/api/mediaApi";
+import { ApiError } from "@/data/laravelApi";
+import { useCan } from "@/auth/useCan";
 
 /** One media-library file, in the shape the grid below renders. */
 type PickerImage = { id: string; image: string; preview?: string; external_url?: string; title_ar: string; title_en?: string; city?: string; program?: string; donation_program?: string; collection: string };
@@ -61,8 +65,14 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
   const [collection, setCollection] = useState<MediaCollection | "">("");
   const [selectedUrl, setSelectedUrl] = useState<string | null>(currentValue || null);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
+  const [dragOver, setDragOver] = useState(false);
+  // Browsing the library needs media.view; without it the box only uploads (media.upload).
+  const can = useCan();
+  const [browseDenied, setBrowseDenied] = useState(false);
+  const uploadOnly = can("media.view") === false || browseDenied;
 
   const loadGallery = useCallback(async () => {
+    if (uploadOnly) return;
     setLoading(true);
     try {
       // The media library (GET /media) — the same files as /admin/media.
@@ -70,11 +80,12 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
       const files = (await listMedia({ scope: "all" })).filter((f) => !f.duplicate_of);
       setImages(files.map((f) => ({ id: f.path, image: f.url, preview: f.preview, title_ar: f.name, title_en: f.name, program: f.collection, collection: f.collection })));
     } catch (err) {
-      toast.error(describeWriteError(err, "GET /media"));
+      if (err instanceof ApiError && err.status === 403) setBrowseDenied(true);
+      else toast.error(describeWriteError(err, "GET /media"));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [uploadOnly]);
 
   useEffect(() => {
     if (open) {
@@ -125,16 +136,17 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
   // Upload straight into the media library («عام» folder) and select it.
   const handleUpload = async (file: File) => {
     if (!file) return;
-    if (!MEDIA_ACCEPT.includes(file.type) || file.size > MEDIA_MAX_BYTES) {
-      toast.error(isAr ? "الصيغ المسموحة JPG و PNG و WebP و GIF و AVIF، والحد الأقصى 5 ميجابايت" : "JPG, PNG, WebP, GIF or AVIF up to 5 MB");
+    const problem = mediaFileProblem(file, isAr ? "ar" : "en");
+    if (problem) {
+      toast.error(problem);
       return;
     }
     setUploading(true);
     try {
       const saved = await uploadMedia(file, file.name, collection || "general");
       setSelectedUrl(saved.url);
-      if (saved.duplicate) toast.info(isAr ? "الصورة دي موجودة في المكتبة قبل كده — اخترناها لك من غير ما نرفعها تاني" : "Already in the library — selected the existing copy");
-      else toast.success(isAr ? "تم رفع الصورة لمكتبة الوسائط" : "Uploaded to the media library");
+      if (saved.duplicate) toast.info(isAr ? "الصورة دي موجودة قبل كده — استخدمنا نفس النسخة من غير ما نرفعها تاني" : "Already stored — the existing copy is used");
+      else toast.success(isAr ? "اترفعت الصورة" : "Image uploaded");
       await loadGallery();
     } catch (err) {
       toast.error(describeWriteError(err, "POST /media"));
@@ -173,25 +185,40 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
                 {title || (isAr ? "مكتبة الصور والوسائط" : "Media Library")}
               </DialogTitle>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {isAr
+                {uploadOnly
+                  ? (isAr ? "ارفع صورة من جهازك" : "Upload an image from your device")
+                  : isAr
                   ? "اختر صورة محفوظة من السيرفر أو ارفع صورة جديدة مباشرة"
                   : "Pick an existing image from server or upload a new one"}
               </p>
             </div>
           </div>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={loadGallery}
-            disabled={loading}
-            className="h-8 w-8 p-0 rounded-lg text-muted-foreground hover:text-foreground"
-            title={isAr ? "تحديث" : "Refresh"}
-          >
-            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-          </Button>
+          {!uploadOnly && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={loadGallery}
+              disabled={loading}
+              className="h-8 w-8 p-0 rounded-lg text-muted-foreground hover:text-foreground"
+              title={isAr ? "تحديث" : "Refresh"}
+            >
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+            </Button>
+          )}
         </DialogHeader>
 
+        {uploadOnly ? (
+          <UploadOnlyBody
+            isAr={isAr}
+            uploading={uploading}
+            previewUrl={selectedUrl ? formatServerImageUrl(selectedUrl) || selectedUrl : ""}
+            dragOver={dragOver}
+            setDragOver={setDragOver}
+            onFile={handleUpload}
+          />
+        ) : (
+        <>
         {/* Toolbar: Search + Upload */}
         <div className="space-y-2 border-b border-border/60 bg-muted/20 p-3 sm:px-4 sm:py-3">
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_176px_auto] sm:items-center">
@@ -242,7 +269,7 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
               )}
               <input
                 type="file"
-                accept="image/*"
+                accept={MEDIA_ACCEPT.join(",")}
                 className="hidden"
                 disabled={uploading}
                 onChange={(e) => {
@@ -368,23 +395,25 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
             </div>
           )}
         </div>
+        </>
+        )}
 
         {/* Selected info & Action Footer */}
         <DialogFooter className="border-t border-border/70 bg-card p-3 sm:p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <div className="flex min-w-0 flex-1 items-center gap-3">
-            {selectedUrl && selectedImage ? (
+            {selectedUrl && (selectedImage || uploadOnly) ? (
               <>
                 <img
-                  src={selectedImage.preview || formatServerImageUrl(selectedUrl) || selectedUrl}
+                  src={selectedImage?.preview || formatServerImageUrl(selectedUrl) || selectedUrl}
                   alt=""
                   className="h-12 w-16 shrink-0 rounded-lg border border-border object-cover"
                 />
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold text-muted-foreground">{isAr ? "الصورة المحددة" : "Selected image"}</p>
-                  <p className="truncate text-sm font-bold text-foreground" title={selectedImage.title_ar}>
-                    {selectedImage.title_ar || selectedImage.title_en || (isAr ? "صورة" : "Image")}
+                  <p className="truncate text-sm font-bold text-foreground" dir={selectedImage ? undefined : "ltr"} title={selectedImage?.title_ar || selectedUrl}>
+                    {selectedImage ? selectedImage.title_ar || selectedImage.title_en || (isAr ? "صورة" : "Image") : selectedUrl.split("/").pop()}
                   </p>
-                  <p className="truncate text-[10px] text-muted-foreground">{collectionLabel(selectedImage.collection)}</p>
+                  {selectedImage && <p className="truncate text-[10px] text-muted-foreground">{collectionLabel(selectedImage.collection)}</p>}
                 </div>
                 <button
                   type="button"
@@ -397,7 +426,9 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
               </>
             ) : (
               <span className="text-xs text-muted-foreground">
-                {isAr ? "اختار صورة من المكتبة أو ارفع صورة جديدة" : "Choose an image or upload a new one"}
+                {uploadOnly
+                  ? (isAr ? "ارفع صورة عشان تختارها" : "Upload an image to choose it")
+                  : isAr ? "اختار صورة من المكتبة أو ارفع صورة جديدة" : "Choose an image or upload a new one"}
               </span>
             )}
           </div>
@@ -428,3 +459,79 @@ export const MediaPickerModal: React.FC<MediaPickerModalProps> = ({
     </Dialog>
   );
 };
+
+/** Upload-only body (the account may upload but not browse the library): a drop zone, the rules, the picture. */
+function UploadOnlyBody({ isAr, uploading, previewUrl, dragOver, setDragOver, onFile }: {
+  isAr: boolean;
+  uploading: boolean;
+  previewUrl: string;
+  dragOver: boolean;
+  setDragOver: (v: boolean) => void;
+  onFile: (file: File) => void;
+}) {
+  const rules = [
+    { Icon: ImageIcon, text: isAr ? MEDIA_RULES_AR : "JPG, PNG or WebP up to 25 MB (shrunk to 2400 px, location data removed) — GIF and AVIF up to 5 MB." },
+    { Icon: ShieldCheck, text: isAr ? "صور حقيقية من شغلنا بس. وشوش الأطفال والأسر تظهر بموافقتهم، أو تتغطّى." : "Real photos of our work only. Children's and families' faces only with their consent, or blurred." },
+    { Icon: Layers, text: isAr ? "مكتبة الوسائط الكاملة بتتفتح بإذن من الإدارة." : "The full media library opens with the admins' permission." },
+  ];
+  return (
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+      <label
+        onDragOver={(e) => { e.preventDefault(); if (!dragOver) setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragOver(false);
+          const f = e.dataTransfer.files?.[0];
+          if (f && !uploading) onFile(f);
+        }}
+        className={`relative flex min-h-[240px] cursor-pointer flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border-2 border-dashed p-5 text-center transition focus-within:ring-2 focus-within:ring-emerald-500 ${
+          dragOver ? "border-emerald-500 bg-emerald-50/70 dark:bg-emerald-500/10" : "border-border bg-muted/20 hover:border-emerald-500/60"
+        } ${uploading ? "pointer-events-none" : ""}`}
+      >
+        {previewUrl ? (
+          <>
+            <img src={previewUrl} alt="" className="max-h-[280px] w-auto max-w-full rounded-xl object-contain shadow-sm" />
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-background px-3 py-1.5 text-xs font-bold text-emerald-700 shadow-sm ring-1 ring-border dark:text-emerald-400">
+              <Upload className="h-3.5 w-3.5" /> {isAr ? "تغيير الصورة" : "Replace image"}
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="grid h-14 w-14 place-items-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <Upload className="h-6 w-6" />
+            </span>
+            <span className="text-sm font-black text-foreground">{isAr ? "اسحب الصورة هنا، أو اضغط عشان تختارها" : "Drop an image here, or tap to choose"}</span>
+          </>
+        )}
+        {uploading && (
+          <span className="absolute inset-0 grid place-items-center bg-background/70 backdrop-blur-[1px]">
+            <span className="inline-flex items-center gap-2 text-sm font-bold text-emerald-700 dark:text-emerald-400">
+              <Loader2 className="h-5 w-5 animate-spin" /> {isAr ? "بنجهّز الصورة ونرفعها…" : "Preparing and uploading…"}
+            </span>
+          </span>
+        )}
+        <input
+          type="file"
+          accept={MEDIA_ACCEPT.join(",")}
+          className="sr-only"
+          disabled={uploading}
+          aria-label={isAr ? "اختيار صورة للرفع" : "Choose an image to upload"}
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            e.target.value = "";
+            if (f) onFile(f);
+          }}
+        />
+      </label>
+      <ul className="mt-4 space-y-2">
+        {rules.map(({ Icon, text }) => (
+          <li key={text} className="flex items-start gap-2 text-[11.5px] font-semibold leading-5 text-muted-foreground">
+            <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600/80" aria-hidden />
+            <span>{text}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

@@ -43,6 +43,7 @@ import {
   Layers,
   Award,
   Check,
+  type LucideIcon,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { useQuery } from "@tanstack/react-query";
@@ -64,47 +65,47 @@ import imgHandsSprout from "@/assets/hands-sprout.jpg";
 import imgJourneyMain from "@/assets/field/convoy-2026-day-distribution.jpg";
 import imgJourneyTeam from "@/assets/contact-hero-volunteers.jpg";
 import { useSiteStats } from "@/hooks/useSiteStats";
+import { useReveal } from "@/hooks/useReveal";
 import { getLucideIcon } from "@/lib/lucide-icon";
 import { aboutUsApi, AboutUsData, ABOUT_US_DEFAULT_DATA, resolveStorageUrl, getApiToken } from "@/data/laravelApi";
 import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
-/** Lightweight scroll-trigger reveal hook (IntersectionObserver — no JS deps). */
-const useReveal = () => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
-      el.querySelectorAll<HTMLElement>("[data-reveal]").forEach((n) => n.classList.add("is-visible"));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            (e.target as HTMLElement).classList.add("is-visible");
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
-    );
-    const observeAll = () => {
-      el.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-visible)").forEach((n) => {
-        io.observe(n);
-      });
-    };
-    observeAll();
-    const mo = new MutationObserver(() => observeAll());
-    mo.observe(el, { childList: true, subtree: true });
-    return () => {
-      io.disconnect();
-      mo.disconnect();
-    };
-  }, []);
-  return ref;
-};
+/**
+ * «رسالتنا» from the dashboard: the first line is the statement; every next line shows as a point
+ * («جسديًا: …» → the part before the colon in bold, with its own icon).
+ */
+const MISSION_ICONS: [RegExp, LucideIcon][] = [
+  [/جسد|body|physic/i, HandHeart],
+  [/ثقاف|تعليم|mind|cultur|educat/i, BookOpen],
+  [/صح|health|medic/i, Stethoscope],
+];
+function MissionText({ text }: { text: string }) {
+  const [statement, ...points] = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  return (
+    <>
+      <p className="mt-2 text-base font-bold leading-relaxed text-foreground/90 md:text-lg">{statement}</p>
+      {points.length > 0 && (
+        <ul className="mt-4 space-y-2.5">
+          {points.map((line, i) => {
+            const cut = line.indexOf(":") > 0 ? line.indexOf(":") : line.indexOf("：");
+            const label = cut > 0 ? line.slice(0, cut).trim() : "";
+            const body = cut > 0 ? line.slice(cut + 1).trim() : line;
+            const Icon = MISSION_ICONS.find(([re]) => re.test(label || line))?.[1] ?? CheckCircle2;
+            return (
+              <li key={i} className="flex items-start gap-3 rounded-2xl bg-secondary/[0.07] p-3 ring-1 ring-secondary/15">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-secondary/20 text-primary"><Icon className="h-4 w-4" /></span>
+                <span className="min-w-0 text-sm leading-relaxed text-foreground/85 md:text-[15px]">
+                  {label && <b className="font-black text-primary">{label}: </b>}{body}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </>
+  );
+}
 
 /** Icon for an achievement card from its title (the dashboard has no icon field for these). */
 const STAT_ICON_RULES: [RegExp, string][] = [
@@ -121,13 +122,6 @@ const STAT_ICON_RULES: [RegExp, string][] = [
   [/أطراف|اطراف|prosthe|كرسي/i, "Accessibility"],
 ];
 const statIconFor = (title: string) => STAT_ICON_RULES.find(([re]) => re.test(title))?.[1] ?? "Sparkles";
-
-/**
- * About-page blocks the foundation asked to hide (8 Nov 2026): the figures panel under the hero
- * («إنجازاتنا») and «رحلتنا وتاريخنا». Their content stays editable in the dashboard; set a flag back
- * to true to show the block again (and restore its menu/footer links).
- */
-const SHOW_SECTION = { achievements: false, timeline: false };
 
 const About = () => {
   const { lang } = useLang();
@@ -367,7 +361,7 @@ const About = () => {
         { name: isRTL ? "رؤية 2030" : "Vision 2030", url: `${base}/about#vision2030` },
         { name: isRTL ? "لماذا تثق بنا" : "Why Trust Us", url: `${base}/about#trust` },
         { name: isRTL ? "قيمنا"   : "Our values", url: `${base}/about#values` },
-        ...(SHOW_SECTION.achievements ? [{ name: isRTL ? "إنجازاتنا" : "Achievements", url: `${base}/about#achievements` }] : []),
+        { name: isRTL ? "إنجازاتنا" : "Achievements", url: `${base}/about#achievements` },
       ]} />
       <FAQSchema items={faq} />
 
@@ -464,7 +458,6 @@ const About = () => {
               </div>
             </div>
 
-            {SHOW_SECTION.achievements && (<>
             {/* Achievements — the only place the figures show (dashboard → من نحن → الأرقام والإحصائيات). */}
             <div
               id="achievements"
@@ -511,7 +504,6 @@ const About = () => {
                   : (aboutData.achievements?.title_en || `${statsYear ? `${statsYear} impact` : "Impact"} — verified across Egypt`)}
               </div>
             </div>
-            </>)}
 
             {/* Scroll-down Arrow */}
             <div className="mt-8 flex justify-center md:mt-10">
@@ -569,15 +561,15 @@ const About = () => {
                   <Target className="h-6 w-6 text-secondary" />
                 </div>
                 <h3 className="mt-4 text-xl font-black text-primary">{isRTL ? "رسالتنا" : "Our Mission"}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-foreground/85 md:text-base font-medium">
-                  {isRTL
+                <MissionText
+                  text={isRTL
                     ? (aboutData.story?.mission_ar ||
                        (typeof aboutData.story?.mission === "object" ? (aboutData.story.mission as any)?.description_ar : null) ||
                        "بناء إنسان واعٍ جسديًا وثقافيًا وصحيًا.")
                     : (aboutData.story?.mission_en ||
                        (typeof aboutData.story?.mission === "object" ? (aboutData.story.mission as any)?.description_en : null) ||
                        "Building an individual who is physically, culturally, and medically empowered.")}
-                </p>
+                />
               </div>
 
               <div data-reveal className="reveal-up rounded-3xl border border-border bg-card p-6 shadow-soft md:p-8">
@@ -585,7 +577,7 @@ const About = () => {
                   <Eye className="h-6 w-6 text-secondary" />
                 </div>
                 <h3 className="mt-4 text-xl font-black text-primary">{isRTL ? "هدفنا" : "Our Goal"}</h3>
-                <ul className="mt-2 space-y-2 text-sm leading-relaxed text-foreground/85 md:text-base font-medium">
+                <ul className="mt-4 space-y-2.5">
                   {(() => {
                     // Try API goals array first, then fallback to static
                     const apiGoals = Array.isArray(aboutData.story?.goals_ar)
@@ -605,9 +597,9 @@ const About = () => {
                     ];
                     const goals = apiGoals || (isRTL ? staticGoalsAr : staticGoalsEn);
                     return goals.map((g: string, gi: number) => (
-                      <li key={gi} className="flex items-start gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-secondary shrink-0 mt-1" />
-                        <span>{g}</span>
+                      <li key={gi} className="flex items-start gap-3 rounded-2xl bg-secondary/[0.07] p-3 ring-1 ring-secondary/15">
+                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-secondary/20 text-primary"><CheckCircle2 className="h-4 w-4" /></span>
+                        <span className="min-w-0 text-sm font-semibold leading-relaxed text-foreground/85 md:text-[15px]">{g}</span>
                       </li>
                     ));
                   })()}
@@ -861,7 +853,6 @@ const About = () => {
           </div>
         </section>
 
-        {SHOW_SECTION.timeline && (<>
         {/* TIMELINE / MILESTONES — Sticky Milestone Cards & Photo Collage */}
         <section id="timeline" className="scroll-mt-24 py-16 md:py-24 pb-28 md:pb-36 bg-background border-y border-border/40">
           <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -986,7 +977,6 @@ const About = () => {
             </div>
           </div>
         </section>
-        </>)}
 
         {/* CONTACT + MAP */}
         <section id="contact" className="scroll-mt-24 py-16 md:py-24 bg-muted/30 border-y border-border/50">

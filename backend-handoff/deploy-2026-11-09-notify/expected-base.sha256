@@ -1,0 +1,13 @@
+d5c237c7168fc45a45c3acff227ad95efaf2beaed3c15045930437858eddd239 app/Observers/DonationObserver.php
+3205b2d1d4580de15f7eef0c8a57171c1c670a906e1e7a8a57ffd6ae60123e03 app/Http/Controllers/Api/V1/Notification/NotificationController.php
+f720e185207a343d4c19fc99dbb317a4187efbcd7d38a303a695bbdd77ffb943 bootstrap/providers.php
+NEW app/Support/ChangeRequestLabel.php
+NEW app/Notifications/ChangeRequestSubmittedNotification.php
+NEW app/Notifications/ChangeRequestReviewedNotification.php
+NEW app/Notifications/NewVolunteerNotification.php
+NEW app/Notifications/NewCampaignApplicationNotification.php
+NEW app/Notifications/FollowedCaseDonationNotification.php
+NEW app/Observers/ContentChangeRequestObserver.php
+NEW app/Observers/VolunteerObserver.php
+NEW app/Observers/VolunteerCampaignApplicationObserver.php
+NEW app/Providers/TeamNotificationsServiceProvider.php
