@@ -242,7 +242,7 @@ export const BrandPromise = () => {
               <p data-bp="copy-item" className="mx-auto mt-4 max-w-lg text-sm font-medium leading-relaxed text-foreground/85 sm:text-base md:mx-0 md:text-lg">
                 {isRTL ? c.section2_description_ar : c.section2_description_en}
               </p>
-              <div data-bp="copy-item" className="mt-7 flex w-auto max-w-[340px] sm:max-w-none flex-row items-center justify-center gap-3 sm:gap-4 md:justify-start mx-auto md:mx-0">
+              <div data-bp="copy-item" className="mt-7 flex w-auto max-w-[340px] sm:max-w-none flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 md:justify-start mx-auto md:mx-0">
                 <Button asChild size="lg" className="h-11 px-5 rounded-2xl bg-orange-grad text-xs sm:text-sm font-black text-accent-foreground no-underline shadow-cta hover:opacity-95 sm:h-12 sm:px-7 flex-1 sm:flex-initial">
                   <Link to={primaryCtaLink}>
                     <PrimaryIcon className="h-4 w-4 sm:h-5 sm:w-5" />
