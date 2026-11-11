@@ -94,9 +94,9 @@ const bumpStreak = (): number => {
     return 0;
   }
 };
-const hijriToday = (isAr: boolean) => {
+const todayLabel = (isAr: boolean) => {
   try {
-    return new Intl.DateTimeFormat(isAr ? "ar-EG-u-ca-islamic-umalqura" : "en-u-ca-islamic-umalqura", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
+    return new Intl.DateTimeFormat(isAr ? "ar-EG-u-nu-latn" : "en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date());
   } catch {
     return "";
   }
@@ -354,8 +354,8 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
             ) : (
               <>
                 <div className="mb-4 flex flex-wrap items-center justify-center gap-2 text-xs font-black">
-                  {hijriToday(isAr) && (
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white/85"><CalendarDays className="h-3.5 w-3.5 text-secondary" /> {hijriToday(isAr)}</span>
+                  {todayLabel(isAr) && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white/85"><CalendarDays className="h-3.5 w-3.5 text-secondary" /> {todayLabel(isAr)}</span>
                   )}
                   {siteStats && siteStats.total > 0 && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white/85">
@@ -367,6 +367,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 <p className="mt-3 text-base text-primary-foreground/85 md:text-lg">
                   {isAr ? "قل الذكر واضغط على المسبحة. يتغيّر الذكر مع كل ضغطة لتجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، ويمكنك أن تختار ذكرًا واحدًا إن أردت. يُحفظ عدّادك على جهازك طوال اليوم، ويبدأ من جديد مع كل يوم." : "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count stays on this device for the day and starts fresh each new day."}
                 </p>
+                <UmmahRoomCard isAr={isAr} />
               </>
             )}
           </div>
@@ -573,7 +574,6 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
       </section>
 
       {roomSlug && room && roomState === "ok" && <RoomExtras isAr={isAr} room={room} pageUrl={pageUrl} />}
-      {!roomSlug && <UmmahRoomCard isAr={isAr} />}
       {!roomSlug && <MemorialCreate isAr={isAr} onCreated={(slug) => navigate(`/misbaha/${slug}?new=1`)} />}
       {storyOpen && room && <StoryDialog isAr={isAr} room={room} pageUrl={pageUrl} onClose={() => setStoryOpen(false)} />}
 
