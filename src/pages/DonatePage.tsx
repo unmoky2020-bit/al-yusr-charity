@@ -715,7 +715,9 @@ const DonatePage = () => {
     reader.readAsDataURL(file);
   };
 
-  if (hasLinkTarget && (entitiesLoading || initializedLinkKey !== linkKey)) {
+  // Wait for the server's programs before drawing the form, so the built-in names and pictures
+  // never flash before the dashboard's own (a failed request falls back to the built-in list).
+  if (entitiesLoading || (hasLinkTarget && initializedLinkKey !== linkKey)) {
     return (
       <PageLayout>
         <div className="container mx-auto max-w-3xl animate-pulse px-4 py-12" role="status" aria-busy="true">

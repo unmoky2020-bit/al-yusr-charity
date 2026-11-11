@@ -1111,7 +1111,9 @@ img, video, svg, canvas {
 .about-teaser .about-teaser-line { transform: scaleX(0); transition: transform 900ms var(--ease-out-soft); }
 .about-teaser .about-teaser-stop { opacity: 0; transform: translateY(10px); transition: opacity 420ms var(--ease-out-soft), transform 420ms var(--ease-out-soft); }
 .about-teaser .about-teaser-dot { transform: scale(0.2); opacity: 0; transition: transform 300ms var(--ease-out-soft), opacity 300ms var(--ease-out-soft); }
+.about-teaser .about-teaser-line.origin-top { transform: scaleY(0); } /* phones: the rail runs down */
 .about-teaser[data-in] .about-teaser-line { transform: scaleX(1); }
+.about-teaser[data-in] .about-teaser-line.origin-top { transform: scaleY(1); }
 .about-teaser[data-in] .about-teaser-stop { opacity: 1; transform: none; }
 .about-teaser[data-in] .about-teaser-dot { transform: scale(1); opacity: 1; }
 @media (prefers-reduced-motion: reduce) {

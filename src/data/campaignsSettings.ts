@@ -236,6 +236,9 @@ function applyCarousel(base: CampaignsSectionSettings, res: LaravelCarouselRespo
  */
 export const useCampaignsSettings = () => {
   const [settings, setSettings] = useState<CampaignsSectionSettings>(DEFAULT_CAMPAIGNS_SETTINGS);
+  // False until the server answered (or failed): the section shows its skeleton meanwhile, so the
+  // built-in title and cards never flash before the dashboard's own.
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -248,13 +251,14 @@ export const useCampaignsSettings = () => {
       let next = applyCarousel(DEFAULT_CAMPAIGNS_SETTINGS, carousel);
       if (section) next = applySectionRecord(next, section);
       if (next !== DEFAULT_CAMPAIGNS_SETTINGS) setSettings(next);
+      setReady(true);
     })();
     return () => {
       cancelled = true;
     };
   }, []);
 
-  return { settings };
+  return { settings, ready };
 };
 
 /* ───────────────────────── dashboard hook ───────────────────────── */

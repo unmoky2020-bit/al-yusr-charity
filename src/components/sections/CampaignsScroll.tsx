@@ -109,7 +109,7 @@ export const CampaignsScroll = () => {
   const { lang } = useLang();
   const isRTL = lang === "ar";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
-  const { settings } = useCampaignsSettings();
+  const { settings, ready } = useCampaignsSettings();
   const items = useMemo(() => getVisibleCampaignPrograms(settings), [settings]);
   const showFinalCta = settings.showFinalCta;
   const totalSlides = items.length + (showFinalCta ? 1 : 0);
@@ -522,9 +522,9 @@ export const CampaignsScroll = () => {
 
   const showSkipButton = enableScrollTrigger && settings.showSkipButton !== false;
 
-  if (!mounted) {
+  if (!mounted || !ready) {
     return (
-      <section id="campaigns" className="relative z-0 isolate bg-background py-16 px-4" dir={isRTL ? "rtl" : "ltr"}>
+      <section id="campaigns" aria-busy="true" className="relative z-0 isolate bg-background py-16 px-4" dir={isRTL ? "rtl" : "ltr"}>
         <div className="container mx-auto flex flex-col items-center text-center">
           <div className="h-6 w-32 rounded-full bg-primary/10 animate-pulse mb-3" />
           <div className="h-9 w-64 sm:w-96 rounded-xl bg-primary/15 animate-pulse mb-2" />

@@ -55,7 +55,7 @@ export const CampaignCrumbs = ({ isAr, name, className = "" }: { isAr: boolean; 
 export const HeroActions = ({
   isAr, donateHref, donateLabel, wa, tone = "dark", className = "",
 }: { isAr: boolean; donateHref: string; donateLabel: string; wa: string; tone?: "dark" | "light"; className?: string }) => (
-  <div className={`grid w-full max-w-md grid-cols-2 gap-2 sm:gap-3 ${className}`}>
+  <div className={`mx-auto grid w-full max-w-md grid-cols-2 gap-2 sm:gap-3 md:mx-0 ${className}`}>
     <Link
       to={donateHref}
       className="inline-flex min-w-0 min-h-12 items-center justify-center gap-1.5 rounded-xl bg-orange-grad px-2.5 py-2 text-center text-xs font-black leading-tight text-accent-foreground shadow-cta transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:gap-2 sm:px-6 sm:text-base"

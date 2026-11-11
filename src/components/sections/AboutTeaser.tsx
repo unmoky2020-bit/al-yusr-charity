@@ -84,7 +84,33 @@ export const AboutTeaser = () => {
         </div>
 
         <div ref={ref} className="about-teaser md:col-span-7" data-in={inView || undefined}>
-          <ol className="relative grid grid-cols-3 gap-3 sm:gap-6">
+          {/* Phones: the journey reads top to bottom — a rail with one card per stop */}
+          <ol className="keep-flow relative space-y-4 sm:hidden">
+            <span aria-hidden className="absolute bottom-10 start-[15px] top-3 w-[2px] bg-primary-foreground/15" />
+            <span aria-hidden className="about-teaser-line absolute bottom-10 start-[15px] top-3 w-[2px] origin-top bg-secondary" />
+            {stops.map((s, i) => (
+              <li key={s.t} className="about-teaser-stop relative ps-12 text-start" style={{ transitionDelay: `${120 + i * 220}ms` }}>
+                <span aria-hidden className={`absolute start-0 top-3 grid h-8 w-8 place-items-center rounded-full border-2 border-secondary ${s.y ? "bg-[hsl(152_65%_11%)]" : "bg-secondary text-secondary-foreground shadow-[0_0_0_6px_hsl(var(--secondary)/0.15)]"}`}>
+                  {s.y ? <span className="h-2.5 w-2.5 rounded-full bg-secondary" /> : <Sprout className="h-4 w-4" />}
+                </span>
+                <div className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/[0.06] p-4 backdrop-blur-[2px]">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h3 className="text-base font-black leading-snug text-primary-foreground">{s.t}</h3>
+                    {s.y && <span className="shrink-0 font-mono text-2xl font-black tabular-nums leading-none text-secondary" dir="ltr">{s.y}</span>}
+                  </div>
+                  <p className="mt-1.5 text-sm leading-relaxed text-primary-foreground/80">{s.d}</p>
+                  {!s.y && (
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      <Link to="/donate" className="inline-flex min-h-11 items-center justify-center rounded-xl bg-secondary px-3 text-sm font-black text-secondary-foreground">{isRTL ? "تبرّع" : "Give"}</Link>
+                      <Link to="/volunteer" className="inline-flex min-h-11 items-center justify-center rounded-xl border border-secondary/60 px-3 text-sm font-black text-secondary">{isRTL ? "انضم إلينا" : "Join us"}</Link>
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          <ol className="relative hidden grid-cols-3 gap-3 sm:grid sm:gap-6">
             <span aria-hidden className="absolute end-[16.666%] start-[16.666%] top-[11px] h-[2px] bg-primary-foreground/15" />
             <span aria-hidden className="about-teaser-line absolute end-[16.666%] start-[16.666%] top-[11px] h-[2px] bg-secondary ltr:origin-left rtl:origin-right" />
             {/* the line keeps going past the last stop: the journey is not over */}
