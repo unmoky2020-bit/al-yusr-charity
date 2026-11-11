@@ -19,7 +19,7 @@ vi.mock("@/data/campaignsSettings", async (orig) => {
     tagline_ar: "", tagline_en: "", image: "/og-ar.jpg", priceFrom: 100, detailsUrl: "/programs", donateUrl: "/donate?program=x", is_active: true,
   }));
   const settings = { ...actual.DEFAULT_CAMPAIGNS_SETTINGS, cards, showFinalCta: false, enableScrollTrigger: true, scrollSpeed: 1 };
-  return { ...actual, useCampaignsSettings: () => ({ settings, isLoading: false }) };
+  return { ...actual, useCampaignsSettings: () => ({ settings, ready: true }) };
 });
 
 import { CampaignsScroll } from "@/components/sections/CampaignsScroll";
