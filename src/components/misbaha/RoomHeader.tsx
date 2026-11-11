@@ -55,14 +55,14 @@ export function RoomHeader({
       <p className="mt-2 text-base font-bold text-white/80">{roomTagline(room.kind, room.gender, isAr)}</p>
 
       <div className="mx-auto mt-6 max-w-sm rounded-3xl bg-white/10 px-5 py-4 ring-1 ring-white/10">
-        <div className="flex items-center justify-center gap-3">
-          <Users className="h-6 w-6 shrink-0 text-secondary" />
-          <span className="font-mono text-4xl font-black tabular-nums" aria-live="polite">{fmt(room.total_count)}</span>
+        <div className="flex flex-col items-center gap-1.5 sm:flex-row sm:justify-center sm:gap-3">
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-secondary/15 sm:h-auto sm:w-auto sm:bg-transparent"><Users className="h-5 w-5 shrink-0 text-secondary sm:h-6 sm:w-6" /></span>
+          <span className="font-mono text-5xl font-black tabular-nums leading-none sm:text-4xl" aria-live="polite">{fmt(room.total_count)}</span>
         </div>
-        <p className="mt-1 text-xs font-bold text-white/70">
-          {isAr ? "ذكر قاله جميع المشاركين" : "dhikr said by everyone so far"}
+        <p className="mt-2 flex flex-col items-center gap-1.5 text-xs font-bold text-white/70 sm:mt-1 sm:flex-row sm:justify-center sm:gap-2">
+          <span>{isAr ? "ذكر قاله جميع المشاركين" : "dhikr said by everyone so far"}</span>
           {live && (
-            <span className="ms-2 inline-flex items-center gap-1 text-secondary">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-2.5 py-0.5 text-secondary sm:bg-transparent sm:p-0">
               <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-secondary opacity-60 motion-reduce:hidden" /><span className="relative inline-flex h-2 w-2 rounded-full bg-secondary" /></span>
               {isAr ? "مباشر" : "live"}
             </span>

@@ -404,7 +404,7 @@ const Cases = () => {
                   </button>
                 )}
               </p>
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="keep-flow grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {list.slice(0, shown).map((c) => <CaseCard key={c.id || c.ref_code} c={c} isRTL={isRTL} showOwner />)}
               </div>
               {shown < list.length && (

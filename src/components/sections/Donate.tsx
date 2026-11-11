@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Check, Copy, Heart, Loader2, Lock, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Copy, Heart, Loader2, Lock, ShieldCheck, Truck } from "lucide-react";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { useLang } from "@/i18n/LangContext";
 import { useToast } from "@/hooks/use-toast";
@@ -14,14 +14,16 @@ import { errorReason } from "@/lib/notify";
 import { PhoneInput } from "@/components/common/PhoneInput";
 import { isValidPhoneValue } from "@/lib/phone";
 
-type MethodId = "card_kashier" | "vodafone_cash" | "instapay" | "bank_transfer";
+type MethodId = "card_kashier" | "vodafone_cash" | "instapay" | "bank_transfer" | "delegate_pickup";
 
 /** How each method looks here; which ones are offered comes from the dashboard (usePaymentOptions). */
-const METHODS: { id: MethodId; ar: string; en: string; noteAr: string; noteEn: string; logo: string; manual: boolean }[] = [
+const METHODS: { id: MethodId; ar: string; en: string; noteAr: string; noteEn: string; logo: string; manual: boolean; pickup?: boolean }[] = [
   { id: "card_kashier", ar: "بطاقة بنكية أو محفظة", en: "Card or mobile wallet", noteAr: "دفع فوري عبر كاشير", noteEn: "Instant via Kashier", logo: "/images/payments/kashier.svg", manual: false },
   { id: "instapay", ar: "إنستاباي", en: "InstaPay", noteAr: "تحويل لحظي", noteEn: "Instant transfer", logo: "/images/payments/instapay.png", manual: true },
   { id: "vodafone_cash", ar: "فودافون كاش", en: "Vodafone Cash", noteAr: "تحويل للمحفظة", noteEn: "Wallet transfer", logo: "/images/payments/vodafone.svg", manual: true },
   { id: "bank_transfer", ar: "تحويل بنكي", en: "Bank transfer", noteAr: "حساب المؤسسة الرسمي", noteEn: "Official account", logo: "/images/payments/cib.svg", manual: true },
+  // Home pickup needs an address and a time: it continues on the full donation page.
+  { id: "delegate_pickup", ar: "مندوب اليسر", en: "Al-Yusr delegate", noteAr: "استلام من البيت مجانًا", noteEn: "Free home pickup", logo: "", manual: false, pickup: true },
 ];
 
 const PRESETS = [100, 250, 500, 1000];
@@ -123,6 +125,11 @@ export const Donate = () => {
 
   const submit = async () => {
     if (!valid || processing) return;
+    if (selected.pickup) {
+      trackDonationStarted({ amount, method, source: "home-quick" });
+      navigate(`/donate?amount=${amount}&method=delegate_pickup`);
+      return;
+    }
     if (!selected.manual && !phoneOk) return;
     trackDonationStarted({ amount, method, source: "home-quick" });
 
@@ -183,6 +190,8 @@ export const Donate = () => {
 
   const ctaLabel = !valid
     ? (isAr ? `أقل مبلغ ${fmt(MIN_AMOUNT)} جنيه` : `Minimum ${MIN_AMOUNT} EGP`)
+    : selected.pickup
+      ? (isAr ? "اطلب مندوب اليسر" : "Request a delegate")
     : !selected.manual && !phoneOk
       ? (isAr ? "اكتب رقم موبايلك للمتابعة" : "Enter your mobile number to continue")
     : selected.manual
@@ -247,8 +256,9 @@ export const Donate = () => {
             <fieldset className="mt-7">
               <legend className="text-sm font-black text-primary">{isAr ? "٢. طريقة الدفع" : "2. Payment method"}</legend>
               <div role="radiogroup" className="mt-3 grid gap-2.5 sm:grid-cols-2">
-                {offered.map((m) => {
+                {offered.map((m, i) => {
                   const on = method === m.id;
+                  const lone = offered.length % 2 === 1 && i === offered.length - 1;
                   return (
                     <button
                       key={m.id}
@@ -256,7 +266,7 @@ export const Donate = () => {
                       role="radio"
                       aria-checked={on}
                       onClick={() => setMethod(m.id)}
-                      className={`flex min-h-[60px] items-center gap-3 rounded-xl border-2 px-4 py-2.5 text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                      className={`flex min-h-[60px] items-center gap-3 rounded-xl border-2 px-4 py-2.5 text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${lone ? "sm:col-span-2 " : ""}${
                         on ? "border-primary bg-primary/[0.04]" : "border-border hover:border-primary/40"
                       }`}
                     >
@@ -267,7 +277,7 @@ export const Donate = () => {
                         <span className="block text-sm font-black text-primary">{isAr ? m.ar : m.en}</span>
                         <span className="block text-xs text-muted-foreground">{isAr ? m.noteAr : m.noteEn}</span>
                       </span>
-                      <img src={m.logo} alt="" className="h-6 w-auto max-w-[64px] shrink-0 object-contain" loading="lazy" />
+                      {m.pickup ? <Truck className="h-6 w-6 shrink-0 text-primary" aria-hidden /> : <img src={m.logo} alt="" className="h-6 w-auto max-w-[64px] shrink-0 object-contain" loading="lazy" />}
                     </button>
                   );
                 })}
@@ -310,7 +320,7 @@ export const Donate = () => {
             )}
 
             {/* 3. Donor (card payments) */}
-            {!selected.manual && (
+            {!selected.manual && !selected.pickup && (
               <fieldset className="mt-7">
                 <legend className="text-sm font-black text-primary">{isAr ? "٣. بياناتك" : "3. Your details"}</legend>
                 <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
@@ -341,10 +351,10 @@ export const Donate = () => {
             <button
               type="button"
               onClick={submit}
-              disabled={!valid || processing || (!selected.manual && !phoneOk)}
+              disabled={!valid || processing || (!selected.manual && !selected.pickup && !phoneOk)}
               className="mt-7 inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-orange-grad text-base font-black text-accent-foreground shadow-cta transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {processing ? <Loader2 className="h-5 w-5 animate-spin" /> : selected.manual ? <WhatsAppIcon className="h-5 w-5" /> : <Lock className="h-5 w-5" />}
+              {processing ? <Loader2 className="h-5 w-5 animate-spin" /> : selected.pickup ? <Truck className="h-5 w-5" /> : selected.manual ? <WhatsAppIcon className="h-5 w-5" /> : <Lock className="h-5 w-5" />}
               {processing ? (isAr ? "جارٍ فتح بوابة الدفع..." : "Opening secure checkout...") : ctaLabel}
             </button>
 

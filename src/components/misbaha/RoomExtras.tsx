@@ -99,21 +99,31 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
           <div className="rounded-3xl bg-gradient-to-br from-[#f3fae6] to-card p-5 ring-1 ring-secondary/30">
             {kind === "sick" ? (
               <>
-                <h3 className="flex items-center gap-2 text-lg font-black text-primary"><HeartPulse className="h-5 w-5 text-secondary" /> {isAr ? "داووا مرضاكم بالصدقة" : "Charity for healing"}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{isAr ? `ساهم في علاج مريض محتاج بنية شفاء ${room.name}.` : `Help treat a patient in need, with the intention of ${room.name}'s healing.`}</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Link to="/cases" className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta">{isAr ? "حالات العلاج" : "Medical cases"}</Link>
-                  <Link to="/donate" className="inline-flex h-10 items-center rounded-xl border border-border bg-card px-4 text-sm font-black text-primary">{isAr ? "صدقة عامة" : "General charity"}</Link>
+                <div className="keep-flow flex items-start gap-3 text-start">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-secondary/25 text-primary"><HeartPulse className="h-5 w-5" /></span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg font-black leading-snug text-primary">{isAr ? "داووا مرضاكم بالصدقة" : "Charity for healing"}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{isAr ? `ساهم في علاج مريض محتاج بنية شفاء ${room.name}.` : `Help treat a patient in need, with the intention of ${room.name}'s healing.`}</p>
+                  </div>
+                </div>
+                <div className="keep-flow mt-4 flex flex-wrap gap-2">
+                  <Link to="/cases" className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta">{isAr ? "حالات العلاج" : "Medical cases"}</Link>
+                  <Link to="/donate" className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-black text-primary">{isAr ? "صدقة عامة" : "General charity"}</Link>
                 </div>
               </>
             ) : (
               <>
-                <h3 className="flex items-center gap-2 text-lg font-black text-primary"><HandHeart className="h-5 w-5 text-secondary" /> {isAr ? (kind === "deceased" ? `صدقة جارية ${room.gender === "f" ? "على روحها" : "على روحه"}` : "صدقة جارية بنية المجموعة") : "An ongoing charity"}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{isAr ? "يظل أجرها جاريًا: سقيا ماء أو حفر بئر أو مساهمة في حالة." : "Its reward keeps running: water, a well, or a case."}</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Link to="/water" className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta"><Droplets className="h-4 w-4" /> {isAr ? "سقيا ماء" : "Water"}</Link>
-                  <Link to="/cases" className="inline-flex h-10 items-center rounded-xl border border-border bg-card px-4 text-sm font-black text-primary">{isAr ? "ساهم في حالة" : "Fund a case"}</Link>
-                  <Link to="/donate" className="inline-flex h-10 items-center rounded-xl border border-border bg-card px-4 text-sm font-black text-primary">{isAr ? "تبرع" : "Donate"}</Link>
+                <div className="keep-flow flex items-start gap-3 text-start">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-secondary/25 text-primary"><HandHeart className="h-5 w-5" /></span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg font-black leading-snug text-primary">{isAr ? (kind === "deceased" ? `صدقة جارية ${room.gender === "f" ? "على روحها" : "على روحه"}` : "صدقة جارية بنية المجموعة") : "An ongoing charity"}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{isAr ? "يظل أجرها جاريًا: سقيا ماء أو حفر بئر أو مساهمة في حالة." : "Its reward keeps running: water, a well, or a case."}</p>
+                  </div>
+                </div>
+                <div className="keep-flow mt-4 flex flex-wrap gap-2">
+                  <Link to="/water" className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta"><Droplets className="h-4 w-4" /> {isAr ? "سقيا ماء" : "Water"}</Link>
+                  <Link to="/cases" className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-black text-primary">{isAr ? "ساهم في حالة" : "Fund a case"}</Link>
+                  <Link to="/donate" className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-black text-primary">{isAr ? "تبرع" : "Donate"}</Link>
                 </div>
               </>
             )}

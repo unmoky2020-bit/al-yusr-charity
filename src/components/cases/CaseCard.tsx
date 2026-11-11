@@ -27,7 +27,7 @@ export function CasePosterCard({ c, isRTL, showOwner = false, className = "" }: 
   const egp = isRTL ? "ج" : "EGP";
   const tag = owner || c.category_name_ar;
   return (
-    <article className={`group relative isolate aspect-[4/5] overflow-hidden rounded-[1.6rem] bg-[#06301c] shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-card ${className}`}>
+    <article className={`group relative isolate aspect-[4/5] w-full overflow-hidden rounded-[1.6rem] bg-[#06301c] shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-card ${className}`}>
       <img src={c.cover_image_url || "/images/cases/case-placeholder.svg"} alt="" loading="lazy" decoding="async"
         className="absolute inset-0 -z-10 h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
       <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-black/95 via-black/45 to-transparent" />

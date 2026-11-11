@@ -110,7 +110,7 @@ export function LinkedCasesSection({
         ) : variant === "carousel" ? (
           <CasesCarousel key={owner ?? "all"} cases={shown} isRTL={isRTL} showOwner={showOwner && !owner} label={title} />
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="keep-flow grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {shown.map((c) => <CaseCard key={c.id} c={c} isRTL={isRTL} showOwner={showOwner} />)}
           </div>
         )}
