@@ -85,7 +85,7 @@ export function CasesCarousel({
             c={c}
             isRTL={isRTL}
             showOwner={showOwner}
-            className="w-[78%] shrink-0 snap-start sm:w-[44%] lg:w-[30.5%] xl:w-[23.6%]"
+            className={cases.length === 1 ? "w-full shrink-0 snap-start sm:w-[60%] lg:w-[40%] xl:w-[32%]" : "w-[84%] shrink-0 snap-start sm:w-[44%] lg:w-[30.5%] xl:w-[23.6%]"} // a lone card fills the phone instead of floating small
           />
         ))}
       </div>

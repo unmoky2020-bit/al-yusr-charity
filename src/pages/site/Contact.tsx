@@ -315,7 +315,7 @@ const Contact = () => {
 
       {/* ── Main content ─────────────────────────────────────────── */}
       <section className="pattern-programs relative overflow-x-clip py-8 md:py-12 pb-16 md:pb-24">
-        <div className="container relative mx-auto grid min-w-0 max-w-6xl gap-6 px-4 lg:grid-cols-2 lg:items-start">
+        <div className="container relative mx-auto grid min-w-0 max-w-6xl gap-6 px-4 lg:grid-cols-2 lg:items-stretch">
 
           {/* ── Info column (Right in RTL) ───────────────────────── */}
           <div className="flex min-w-0 flex-col gap-4">
@@ -408,7 +408,8 @@ const Contact = () => {
             <input type="text" name="website" value={hp} onChange={(e) => setHp(e.target.value)} autoComplete="off" tabIndex={-1} aria-hidden className="absolute left-[-9999px] h-0 w-0 opacity-0" />
 
             {/* Fields */}
-            <div className="relative mt-6 grid gap-4 sm:grid-cols-2">
+            {/* On wide screens the form is as tall as the info column: the message box takes the spare room */}
+            <div className="relative mt-6 grid flex-1 gap-4 sm:grid-cols-2 lg:grid-rows-[auto_auto_minmax(0,1fr)]">
               {/* Name */}
               <FieldGroup label={isRTL ? "الاسم *" : "Name *"}>
                 <div className="relative">
@@ -459,14 +460,14 @@ const Contact = () => {
                 <label className="text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                   {isRTL ? "رسالتك *" : "Your message *"}
                 </label>
-                <div className="relative">
+                <div className="relative flex-1">
                   <MessageSquare className="pointer-events-none absolute start-3.5 top-3.5 h-4 w-4 text-muted-foreground" />
                   <Textarea
                     required
                     maxLength={1000}
                     rows={4}
                     placeholder={isRTL ? "اكتب رسالتك أو استفسارك هنا بكل تفصيل..." : "Write your message here..."}
-                    className="rounded-2xl ps-10 resize-none border-border/80 bg-background/50 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:border-secondary transition-all"
+                    className="h-full min-h-[7.5rem] rounded-2xl ps-10 resize-none border-border/80 bg-background/50 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:border-secondary transition-all"
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                   />

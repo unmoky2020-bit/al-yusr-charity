@@ -108,6 +108,7 @@ const staticEntries: Entry[] = [
   { path: "/medical", changefreq: "monthly", priority: "0.8" },
   { path: "/ten-days", changefreq: "weekly", priority: "0.8" },
   { path: "/misbaha", changefreq: "monthly", priority: "0.7" },
+  { path: "/misbaha/ummah", changefreq: "daily", priority: "0.7" },
   // Trust / help / participation
   { path: "/trust", changefreq: "monthly", priority: "0.7" },
   { path: "/faqs", changefreq: "monthly", priority: "0.7" },

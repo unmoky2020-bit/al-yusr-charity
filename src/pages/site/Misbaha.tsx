@@ -8,6 +8,7 @@ import { RoomHeader } from "@/components/misbaha/RoomHeader";
 import { RoomExtras } from "@/components/misbaha/RoomExtras";
 import { StoryDialog } from "@/components/misbaha/StoryDialog";
 import { MemorialCreate } from "@/components/misbaha/MemorialCreate";
+import { UMMAH_ROOM_SLUG, UmmahRoomCard } from "@/components/misbaha/UmmahRoomCard";
 import { track } from "@/lib/track";
 import { isEndpointMissing } from "@/data/api/backendPending";
 import { drawMisbahaSummary } from "@/lib/misbahaSummaryImage";
@@ -324,8 +325,8 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
     <PageLayout>
       {roomSlug ? (
         // Shared misbaha pages carry a family's loved one's name: kept out of search results.
-        <SEOHelmet noindex
-          title={room ? `${isAr ? "سبحة" : "Tasbih"} ${roomTitle(room.kind, room.gender, room.name, isAr)} | ${isAr ? "مؤسسة اليسر" : "Al-Yusr"}` : (isAr ? "سبحة مشتركة | مؤسسة اليسر" : "Shared tasbih | Al-Yusr")}
+        <SEOHelmet noindex={roomSlug !== UMMAH_ROOM_SLUG /* the public one for everyone is a page of the site */}
+          title={roomSlug === UMMAH_ROOM_SLUG ? (isAr ? "سبحة جميع المسلمين والمسلمات | سبحة جماعية أونلاين — مؤسسة اليسر" : "The misbaha of all Muslims | shared online tasbih — Al-Yusr") : room ? `${isAr ? "سبحة" : "Tasbih"} ${roomTitle(room.kind, room.gender, room.name, isAr)} | ${isAr ? "مؤسسة اليسر" : "Al-Yusr"}` : (isAr ? "سبحة مشتركة | مؤسسة اليسر" : "Shared tasbih | Al-Yusr")}
           description={isAr ? "شارك بالتسبيح والاستغفار والصلاة على النبي ﷺ، ويُضاف كل ذكر إلى عدّاد واحد." : "Join in with tasbih, istighfar and salawat; every dhikr adds to one shared count."}
           path={`/misbaha/${roomSlug}`}
           image={`https://elyusr.org/og/misbaha-${room?.kind ?? "deceased"}.jpg?v=2026.11`}
@@ -572,6 +573,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
       </section>
 
       {roomSlug && room && roomState === "ok" && <RoomExtras isAr={isAr} room={room} pageUrl={pageUrl} />}
+      {!roomSlug && <UmmahRoomCard isAr={isAr} />}
       {!roomSlug && <MemorialCreate isAr={isAr} onCreated={(slug) => navigate(`/misbaha/${slug}?new=1`)} />}
       {storyOpen && room && <StoryDialog isAr={isAr} room={room} pageUrl={pageUrl} onClose={() => setStoryOpen(false)} />}
 

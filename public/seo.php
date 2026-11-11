@@ -152,6 +152,15 @@ function misbaha_room_page(string $slug, string $lang): array
             @file_put_contents($file, json_encode($room), LOCK_EX);
         }
     }
+    if ($slug === 'ummah') { // the standing public misbaha: a real page of the site, kept in search
+        return [[
+            'title' => $lang === 'en' ? 'The misbaha of all Muslims | shared online tasbih — Al-Yusr' : 'سبحة جميع المسلمين والمسلمات | سبحة جماعية أونلاين — مؤسسة اليسر',
+            'description' => $lang === 'en'
+                ? 'One shared tasbih for everyone: remember Allah and pray for all Muslims, living and dead. Every dhikr adds to one count.'
+                : 'سبحة إلكترونية جماعية مفتوحة للجميع: اذكر الله وادعُ للمسلمين والمسلمات، الأحياء منهم والأموات، وكل ذكر بيتضاف لعدّاد واحد يشارك فيه الكل.',
+            'image' => SITE . '/og/misbaha-group.jpg?v=2026.11',
+        ], 200];
+    }
     $kind = in_array($room['kind'] ?? '', ['deceased', 'sick', 'group'], true) ? $room['kind'] : 'deceased';
     $image = SITE . '/og/misbaha-' . $kind . '.jpg?v=2026.11';
     if (! is_array($room) || empty($room['name'])) {
