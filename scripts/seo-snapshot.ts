@@ -40,7 +40,7 @@ try {
 
 const PORT = 4391;
 const ORIGIN = `http://127.0.0.1:${PORT}`;
-const DYNAMIC = /^\/(cases|programs|axes|stories|blog)\/[^/]+$/;
+const DYNAMIC = /^\/(cases|programs|axes|stories|blog|misbaha)\/[^/]+$/;
 const SKIP = new Set(["/donate/track"]);
 
 type Snapshot = { title: string; description: string; h1?: string; summary?: string; sections?: string[] };
