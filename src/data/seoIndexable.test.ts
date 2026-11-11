@@ -36,3 +36,14 @@ describe("local pages kept in search", () => {
     }
   });
 });
+
+describe("seo.php knows every route of the app", () => {
+  it("APP_ROOTS has the first segment of each <Route path>", () => {
+    const php = readFileSync(resolve(__dirname, "../../public/seo.php"), "utf8");
+    const roots = new Set((/const APP_ROOTS = '([^']+)';/.exec(php)?.[1] ?? "").split("|"));
+    const app = readFileSync(resolve(__dirname, "../App.tsx"), "utf8");
+    const used = [...app.matchAll(/path="\/([^"/:*]+)/g)].map((m) => m[1]);
+    expect(used.length).toBeGreaterThan(40);
+    for (const seg of used) expect(roots.has(seg), seg).toBe(true);
+  });
+});

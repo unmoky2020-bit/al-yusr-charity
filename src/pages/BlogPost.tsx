@@ -259,25 +259,6 @@ const BlogPost = () => {
             </div>
             <h1 className={`${heroTextAlign} mt-4 max-w-5xl text-2xl font-black leading-tight sm:text-3xl md:text-4xl lg:text-5xl mx-auto md:mx-0`}>{c.title}</h1>
             <p className={`${heroTextAlign} mt-3.5 max-w-4xl text-sm font-medium leading-relaxed text-primary-foreground/90 sm:text-base md:text-lg mx-auto md:mx-0`}>{c.excerpt}</p>
-            <div className="mt-7 w-full max-w-7xl rounded-3xl border border-white/80 bg-white p-5 text-sm text-slate-900 shadow-card ring-1 ring-black/5 md:p-8">
-              <p className="font-bold leading-relaxed text-slate-900 text-sm md:text-base">
-                {lang === "ar" ? "هذا المقال يوضح كيف تتحول جهود مؤسسة اليسر إلى دعم حقيقي موثق في الميدان مع دعوة صريحة للمساهمة." : "This article shows how Al-Yusr turns relief efforts into real, documented field impact with a clear donation invitation."}
-              </p>
-              <ul className="mt-4 grid gap-3 sm:grid-cols-2 text-xs sm:text-sm font-bold leading-6 text-slate-800">
-                <li className="flex items-start gap-2.5">
-                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-700">
-                    <Check className="h-3.5 w-3.5" />
-                  </span>
-                  <span>{lang === "ar" ? "توثيق بالصورة والفيديو لكل عملية توزيع." : "Documented proof for every distribution."}</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-700">
-                    <Check className="h-3.5 w-3.5" />
-                  </span>
-                  <span>{lang === "ar" ? "دعم مباشر للأسر المستحقة في الدقهلية." : "Direct support for deserving families in Dakahlia."}</span>
-                </li>
-              </ul>
-            </div>
           </div>
         </header>
 

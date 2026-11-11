@@ -32,6 +32,22 @@ const NOINDEX_PAGES = '#^/(?:login|register(?:/[a-z]+)?|forgot-password|profile|
  */
 const APP_SECTIONS = '#^/(?:programs|blog|cases|stories|axes|campaigns|services|projects|donate|qurbani|dakahlia|geo|misbaha|seasons|volunteer)/#';
 
+/*
+ | First path segment of every route the app has (src/App.tsx; a test keeps the two in step).
+ | Anything else is not a page of the site: crawlers get a real 404, not a copy of the homepage.
+ */
+const APP_ROOTS = 'about|admin|arboun|ashr|athar|axes|blog|bride|c|campaign|campaigns|cases|charity-egypt|charity-mansoura|contact|dakahlia|dashboard|dev|dhill|donate|donate-from-abroad|education-campaign|faq|faqs|farm|food-box|forgot-password|freelancers|gallery|geo|impact|khabia|login|mansoura|markoun|medical|misbaha|mosques|newsletter|nurseries|orphans|payment|privacy|profile|programs|projects|qurbani|qurbani-guarantee|ramadan|register|seasons|services|services-map|setr|stories|takrim|tasbih|ten-days|terms|trust|volunteer|volunteer-campaigns|water|zakat|zakat-al-fitr';
+
+/*
+ | The language is a query (?lang=en), never a folder. Old /en/… and /ar/… links (and the soft-404
+ | copies Google stored for them) move to the real address with one permanent redirect.
+ */
+if (preg_match('#^/(en|ar)(?:/(.*))?$#', (string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), $m)) {
+    $rest = '/' . trim($m[2] ?? '', '/');
+    header('Location: ' . SITE . ($rest === '/' ? '/' : $rest) . ($m[1] === 'en' ? '?lang=en' : ''), true, 301);
+    exit;
+}
+
 $index = @file_get_contents(__DIR__ . '/index.html');
 if ($index === false) {
     http_response_code(503);
@@ -54,6 +70,10 @@ try {
     $unknown = $page === null && $path !== '/' && ! preg_match(APP_SECTIONS, $path);
     if ($unknown || preg_match(NOINDEX_LOCAL, $path) || preg_match(NOINDEX_PAGES, $path)) {
         $page = ['robots' => 'noindex,follow'] + ($page ?? []);
+    }
+
+    if ($path !== '/' && ! preg_match('#^/(?:' . APP_ROOTS . ')(?:/|$)#', $path)) {
+        $status = 404;
     }
 
     http_response_code($status === 404 ? 404 : 200);

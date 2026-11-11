@@ -32,7 +32,19 @@ export type BlogPost = {
   en: { title: string; excerpt: string; body: string[]; tags: string[] };
 };
 
-export const blogPosts: BlogPost[] = [
+/**
+ * Built-in posts taken off the site (11 Nov 2026): comparisons with other charities, "best charity"
+ * claims and countdown urgency — they cost trust with readers and search engines. Their database
+ * copies are archived too. To bring one back, rewrite it first, then remove its slug from here.
+ */
+const RETIRED_SLUGS = new Set([
+  "afdal-moassasa-khairya-mansoura",
+  "compare-aleysr-vs-others",
+  "afdal-jamiya-khairya-dakahlia-2026",
+  "dalil-sak-odhya-dakahlia-2026-13-yom",
+]);
+
+const allPosts: BlogPost[] = [
   {
     slug: "shade-campaign-sqya-2026",
     image: waterImg,
@@ -1563,5 +1575,7 @@ export const blogPosts: BlogPost[] = [
     },
   },
 ];
+
+export const blogPosts: BlogPost[] = allPosts.filter((p) => !RETIRED_SLUGS.has(p.slug));
 
 export const getPost = (slug: string) => blogPosts.find((p) => p.slug === slug);

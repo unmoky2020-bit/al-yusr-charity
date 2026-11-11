@@ -260,7 +260,6 @@ async function fetchPrograms(): Promise<Entry[]> {
 // Static seed blog slugs that live in src/data/blog.ts (not in DB).
 // Listed inline to avoid importing the blog module (which pulls Vite asset aliases).
 const STATIC_BLOG_SLUGS: { slug: string; date: string }[] = [
-  { slug: "dalil-sak-odhya-dakahlia-2026-13-yom", date: "2026-05-14" },
   { slug: "odhya-2026-mansoura", date: "2026-04-10" },
   { slug: "zakat-mal-2026-calculator", date: "2026-01-05" },
 ];
