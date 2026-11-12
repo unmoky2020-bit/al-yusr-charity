@@ -386,7 +386,7 @@ export default function AdminProjectDetail() {
               </div>
             </SectionCard>
             <SectionCard icon={<DollarSign className="h-4 w-4 text-primary" />} title="باقات المساهمة"
-              description="الإضافة تعمل الآن. التعديل والحذف والترتيب تحتاج المسارات المقترحة في الباك إند.">
+              description="أضف الباقات والأسهم، وعدّل الاسم والمبلغ والتفعيل والترتيب من هنا.">
               <PackagesEditor kind="projects" ownerId={record ? record.id : null} />
             </SectionCard>
           </TabsContent>

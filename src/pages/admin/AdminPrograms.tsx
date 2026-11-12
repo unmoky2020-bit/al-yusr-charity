@@ -486,7 +486,7 @@ export default function AdminPrograms() {
             </DialogTitle>
           </DialogHeader>
           <p className="text-xs text-muted-foreground">
-            الإضافة تعمل الآن. تعديل الاسم/المبلغ/التفعيل والحذف والترتيب تحتاج المسارات المقترحة في الباك إند، وستظهر رسالة واضحة لو لم تكن مفعّلة.
+            أضف الباقات والأسهم، وعدّل الاسم والمبلغ والتفعيل والترتيب من هنا.
           </p>
           {pkgProgram && <PackagesEditor kind="programs" ownerId={pkgProgram.id} />}
           <DialogFooter>
