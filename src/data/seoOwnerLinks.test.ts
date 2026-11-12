@@ -5,7 +5,7 @@ import { OWNER_PAGES, OWNER_RELATED, relatedOwners } from "./seoOwnerLinks";
 const ownersInCsv = () =>
   new Set(
     readFileSync("docs/seo-keywords.csv", "utf8")
-      .replace(/^﻿/, "")
+      .replace(/^\uFEFF/, "")
       .split(/\r?\n/)
       .slice(1)
       .map((l) => l.split(",")[2])

@@ -11,6 +11,7 @@ import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { prefetchHandlers } from "@/lib/prefetch";
 import { NotificationsBell } from "@/components/common/NotificationsBell";
+import { useSiteBlocks } from "@/data/siteBlocks";
 
 export const Navbar = () => {
   const { t, lang, setLang } = useLang();
@@ -113,7 +114,8 @@ export const Navbar = () => {
 
   // Primary navigation (always in the bar on desktop; sizes tighten on 1024–1280 px so nothing overlaps).
   const hasCases = useHasCases();
-  const links: { to: string; label: string; highlight?: boolean; wide?: boolean; Icon?: LucideIcon; descAr?: string; descEn?: string }[] = [
+  type NavItem = { to: string; label: string; highlight?: boolean; wide?: boolean; Icon?: LucideIcon; descAr?: string; descEn?: string };
+  const builtInLinks: NavItem[] = [
     { to: "/about",     label: t.nav.about, wide: true, Icon: Info, descAr: "من نحن وكيف نعمل", descEn: "Who we are" },
     { to: "/programs",  label: lang === "ar" ? "برامجنا" : "Programs" },
     { to: "/projects",  label: lang === "ar" ? "مشاريعنا" : "Projects", wide: true, Icon: FolderKanban, descAr: "مشاريع الخير الكبيرة", descEn: "Our larger projects" },
@@ -123,6 +125,18 @@ export const Navbar = () => {
     { to: "/blog",      label: lang === "ar" ? "المدونة" : "Blog", wide: true, Icon: BookOpen, descAr: "قصص ومقالات", descEn: "Stories and articles" },
     { to: "/contact",   label: t.nav.contact, wide: true, Icon: Phone, descAr: "واتساب وهاتف وعنوان", descEn: "WhatsApp, phone, address" },
   ];
+  // The dashboard's header links («روابط القوائم», site block nav_links.header) replace the list above;
+  // a link to a built-in page keeps its icon and description. Internal pages only, 9 at most (the bar's width).
+  const { nav_links } = useSiteBlocks();
+  const savedHeader = (nav_links?.header ?? [])
+    .filter((l) => l.href.startsWith("/") && (hasCases || !l.href.startsWith("/cases")))
+    .slice(0, 9);
+  const links: NavItem[] = savedHeader.length
+    ? savedHeader.map((l) => {
+        const known = builtInLinks.find((b) => b.to === l.href);
+        return { ...(known ?? {}), to: l.href, label: lang === "ar" ? l.label_ar : l.label_en || l.label_ar };
+      })
+    : builtInLinks;
 
   const isActive = (to: string) => {
     if (to.startsWith("/#")) return location.pathname === "/" && location.hash === to.slice(1);

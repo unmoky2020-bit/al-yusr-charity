@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Building2, Check, ChevronLeft, ChevronRight, Clock, Copy, Mail, MapPin, Phone } from "lucide-react";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
-import { ORG, isOfficeOpen, whatsappLink } from "@/data/orgInfo";
+import { ORG, isOfficeOpen, whatsappLink, useOrg } from "@/data/orgInfo";
 
 function Row({ icon, label, children, action }: { icon: ReactNode; label: string; children: ReactNode; action?: ReactNode }) {
   return (
@@ -30,6 +30,7 @@ export function ContactChannels({ isRTL, copiedPhone, onCopyPhone, bank, copiedB
   copiedBank: boolean;
   onCopyBank: () => void;
 }) {
+  useOrg(); // re-render when the dashboard's organisation data arrives
   const open = isOfficeOpen();
   const Go = isRTL ? ChevronLeft : ChevronRight;
   return (

@@ -8,7 +8,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { FaqSection, ProgramsGrid, StepsCard } from "@/components/common/SeoLandingParts";
 import { useLang } from "@/i18n/LangContext";
-import { ORG, whatsappLink } from "@/data/orgInfo";
+import { ORG, whatsappLink, useOrg } from "@/data/orgInfo";
 
 const PATH = "/donate-from-abroad";
 const SITE = "https://elyusr.org";
@@ -21,6 +21,7 @@ const SITE = "https://elyusr.org";
  */
 const DonateFromAbroad = () => {
   const { lang } = useLang();
+  useOrg(); // re-render when the dashboard's organisation data arrives
   const ar = lang === "ar";
   const Arrow = ar ? ArrowLeft : ArrowRight;
 

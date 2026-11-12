@@ -1,12 +1,14 @@
 import { Helmet } from "react-helmet-async";
-import { ORG } from "@/data/orgInfo";
+import { ORG, useOrg } from "@/data/orgInfo";
 import { QURBANI_SEASON } from "@/data/qurbaniSeason";
 
 /** Site-wide Organization, LocalBusiness & WebSite schema injection.
  * Targets the keyword "اليسر" for Egyptian search dominance.
  * Distinct from a local electronics brand also called "اليسر".
  */
-export const SiteSchemas = () => (
+export const SiteSchemas = () => {
+  useOrg();
+  return (
   <Helmet>
     <script type="application/ld+json">{JSON.stringify({
       "@context": "https://schema.org",
@@ -40,8 +42,8 @@ export const SiteSchemas = () => (
           nonprofitStatus: "NonprofitType",
           taxID: "2665/2019",
           legalName: "مؤسسة اليسر الخيرية المشهرة برقم 2665 لسنة 2019",
-          telephone: "+201097000137",
-          email: "info@elyusr.org",
+          telephone: ORG.phoneE164,
+          email: ORG.email,
           contactPoint: [
             {
               "@type": "ContactPoint",
@@ -63,9 +65,8 @@ export const SiteSchemas = () => (
             addressCountry: "EG",
           },
           sameAs: [
-            "https://facebook.com/Elyosr.Charity",
-            "https://instagram.com/elyosr.charity",
-            "https://wa.me/201097000137",
+            ...Object.values(ORG.social).filter(Boolean),
+            `https://wa.me/${ORG.whatsapp}`,
             ORG.mapsUrl,
           ],
           areaServed: [
@@ -115,7 +116,7 @@ export const SiteSchemas = () => (
           ],
           image: "https://elyusr.org/og-image.jpg",
           url: "https://elyusr.org/",
-          telephone: "+201097000137",
+          telephone: ORG.phoneE164,
           priceRange: "Free",
           address: {
             "@type": "PostalAddress",
@@ -159,7 +160,8 @@ export const SiteSchemas = () => (
       ],
     })}</script>
   </Helmet>
-);
+  );
+};
 
 interface BreadcrumbProps { items: { name: string; url: string }[]; }
 export const BreadcrumbSchema = ({ items }: BreadcrumbProps) => (
@@ -323,7 +325,9 @@ export const ArticleSchema = ({
 );
 
 /** /contact: a ContactPage about the foundation (its phone, email, office and hours are on the NGO above). */
-export const ContactPageSchema = () => (
+export const ContactPageSchema = () => {
+  useOrg();
+  return (
   <Helmet>
     <script type="application/ld+json">{JSON.stringify({
       "@context": "https://schema.org",
@@ -338,4 +342,5 @@ export const ContactPageSchema = () => (
       mainEntity: { "@id": "https://elyusr.org/#local" },
     })}</script>
   </Helmet>
-);
+  );
+};

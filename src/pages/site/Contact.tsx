@@ -14,7 +14,7 @@ import { toast } from "@/hooks/use-toast";
 import { track } from "@/lib/track";
 import { submitContactMessage, buildWhatsAppUrl } from "@/data/api/contactApi";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
-import { ORG } from "@/data/orgInfo";
+import { ORG, useOrg } from "@/data/orgInfo";
 import { z } from "zod";
 
 import { useQuery } from "@tanstack/react-query";
@@ -113,6 +113,7 @@ function FieldGroup({ label, children }: { label: string; children: React.ReactN
 /* ════════════════════════════════════════════════════════════════ */
 const Contact = () => {
   const { lang } = useLang();
+  useOrg(); // re-render when the dashboard's organisation data arrives
   const isRTL = lang === "ar";
   // The official account from the dashboard's payment methods (hidden when none is active).
   const bankAccount = useBankAccounts()[0];

@@ -18,7 +18,7 @@ import { usePrograms } from "@/data/sources/programs";
 import { isListedProgram } from "@/data/programScope";
 import { programHref } from "@/data/programLandings";
 import { DAKAHLIA_CITIES } from "@/data/dakahliaCities";
-import { ORG, googleReviewLink, whatsappLink } from "@/data/orgInfo";
+import { ORG, googleReviewLink, whatsappLink, useOrg } from "@/data/orgInfo";
 
 const PATH = "/charity-mansoura";
 const SITE = "https://elyusr.org";
@@ -32,6 +32,7 @@ const SITE = "https://elyusr.org";
  */
 const CharityMansoura = () => {
   const { lang } = useLang();
+  useOrg(); // re-render when the dashboard's organisation data arrives
   const ar = lang === "ar";
   const Arrow = ar ? ArrowLeft : ArrowRight;
   const { programs: allPrograms, isLoading: programsLoading } = usePrograms();

@@ -4,7 +4,8 @@ import { useHasVolunteerCampaigns } from "@/data/useHasVolunteerCampaigns";
 import { Link, useLocation } from "react-router-dom";
 import { Facebook, Instagram, Phone, Mail, MapPin, Building2, BadgeCheck, HandHeart, HeartHandshake, Heart, ShieldCheck, Beef, Sparkles, ArrowLeft, Clock, Send, Bell, CheckCircle2 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
-import { ORG } from "@/data/orgInfo";
+import { ORG, useOrg } from "@/data/orgInfo";
+import { useSiteBlocks, type NavLink } from "@/data/siteBlocks";
 import { useLang } from "@/i18n/LangContext";
 import { prefetchHandlers } from "@/lib/prefetch";
 import { useState } from "react";
@@ -13,13 +14,17 @@ import { newsletterApi } from "@/data/laravelApi";
 import { track } from "@/lib/track";
 import ctaHourglass from "@/assets/cta-hourglass-banner.jpg";
 import logoCircle from "@/assets/logo-circle.png";
-import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 import { IMPACT_REPORT_PUBLIC } from "@/config/impact";
 import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
 export const Footer = () => {
   const { t, lang } = useLang();
+  useOrg(); // re-render when the dashboard's organisation data arrives
   const hasCases = useHasCases();
+  // Menus from the dashboard («روابط القوائم», site block nav_links); the built-in lists below show until saved.
+  const { nav_links } = useSiteBlocks();
+  const footerQuick = (nav_links?.footer ?? []).filter((l) => l.column === "quick" && (hasCases || !l.href.startsWith("/cases")));
+  const footerCampaigns = (nav_links?.footer ?? []).filter((l) => l.column === "campaigns");
   const hasVolunteerCampaigns = useHasVolunteerCampaigns();
   const isRTL = lang === "ar";
   const bankAccounts = useBankAccounts();
@@ -339,6 +344,7 @@ export const Footer = () => {
           <div>
             <h3 className="mb-4 text-base sm:text-lg font-extrabold text-secondary">{t.footer.quickLinks}</h3>
             <ul className="mx-auto footer-links grid max-w-xs grid-cols-2 gap-x-3 gap-y-2 text-xs sm:text-sm font-bold sm:max-w-none">
+              {footerQuick.length ? footerQuick.map((l) => <FooterLinkItem key={l.href + l.label_ar} link={l} lang={lang} />) : (<>
               <li><Link to="/about" {...prefetchHandlers("/about")} className="block text-primary-foreground/85 hover:text-secondary">{t.nav.about}</Link></li>
               <li><Link to="/charity-mansoura" {...prefetchHandlers("/charity-mansoura")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "جمعية خيرية بالمنصورة" : "Charity in Mansoura"}</Link></li>
               <li><Link to="/charity-egypt" {...prefetchHandlers("/charity-egypt")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "اتبرع من أي محافظة" : "Give from anywhere in Egypt"}</Link></li>
@@ -358,6 +364,7 @@ export const Footer = () => {
               {hasVolunteerCampaigns
                 ? <li><Link to="/volunteer-campaigns" {...prefetchHandlers("/volunteer-campaigns")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملات التطوع" : "Volunteer Opps"}</Link></li>
                 : <li><Link to="/volunteer" {...prefetchHandlers("/volunteer")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "تطوّع معنا" : "Volunteer"}</Link></li>}
+              </>)}
             </ul>
           </div>
 
@@ -369,6 +376,7 @@ export const Footer = () => {
               </Link>
             </h3>
             <ul className="mx-auto footer-links grid max-w-xs grid-cols-2 gap-x-3 gap-y-2 text-xs sm:text-sm font-bold sm:max-w-none">
+              {footerCampaigns.length ? footerCampaigns.map((l) => <FooterLinkItem key={l.href + l.label_ar} link={l} lang={lang} />) : (<>
               <li><Link to="/dhill" {...prefetchHandlers("/dhill")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة ظِلّ" : "Dhill (Water)"}</Link></li>
               <li><Link to="/setr" {...prefetchHandlers("/setr")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة سِتْر" : "Setr (Winter)"}</Link></li>
               <li><Link to="/markoun" {...prefetchHandlers("/markoun")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة مَرْكُون" : "Markoun In-Kind"}</Link></li>
@@ -383,6 +391,7 @@ export const Footer = () => {
               <li><Link to="/ramadan" {...prefetchHandlers("/ramadan")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "موسم رمضان المبارك" : "Ramadan Season"}</Link></li>
               <li><Link to="/food-box" {...prefetchHandlers("/food-box")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الغذاء الشهري" : "Monthly Food"}</Link></li>
               <li><Link to="/qurbani" {...prefetchHandlers("/qurbani")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "صكوك الأضاحي" : "Qurbani Shares"}</Link></li>
+              </>)}
               <li className="col-span-2 pt-1"><Link to="/campaigns" {...prefetchHandlers("/campaigns")} className="inline-flex items-center gap-1 text-accent hover:underline">{lang === "ar" ? "عرض كل الحملات والمبادرات ←" : "View all campaigns →"}</Link></li>
             </ul>
           </div>
@@ -393,19 +402,19 @@ export const Footer = () => {
             <ul className="mx-auto inline-flex max-w-xs flex-col gap-2.5 text-xs sm:text-sm sm:mx-0 sm:max-w-none">
               <li className="flex items-start justify-center gap-2 sm:justify-start">
                 <MapPin className="mt-0.5 hidden h-4 w-4 shrink-0 text-secondary sm:inline-block" aria-hidden />
-                <span className="text-primary-foreground/80">{t.footer.address}</span>
+                <span className="text-primary-foreground/80">{isRTL ? ORG.addressAr : ORG.addressEn}</span>
               </li>
               <li className="flex items-center justify-center gap-2 sm:justify-start">
                 <Phone className="hidden h-4 w-4 shrink-0 text-secondary sm:inline-block" aria-hidden />
-                <a href="tel:+201097000137" dir="ltr" className="text-primary-foreground/80 hover:text-secondary">+20 109 700 0137</a>
+                <a href={`tel:${ORG.phoneE164}`} dir="ltr" className="text-primary-foreground/80 hover:text-secondary">{ORG.phoneDisplay}</a>
               </li>
               <li className="flex items-center justify-center gap-2 sm:justify-start">
                 <WhatsAppIcon className="hidden h-4 w-4 shrink-0 text-secondary sm:inline-block" />
-                <a href="https://wa.me/201097000137" target="_blank" rel="noopener" dir="ltr" className="text-primary-foreground/80 hover:text-secondary">WhatsApp</a>
+                <a href={`https://wa.me/${ORG.whatsapp}`} target="_blank" rel="noopener" dir="ltr" className="text-primary-foreground/80 hover:text-secondary">WhatsApp</a>
               </li>
               <li className="flex items-center justify-center gap-2 sm:justify-start">
                 <Mail className="hidden h-4 w-4 shrink-0 text-secondary sm:inline-block" aria-hidden />
-                <a href={`mailto:${FOUNDATION_EMAIL}`} className="text-primary-foreground/80 hover:text-secondary">{FOUNDATION_EMAIL}</a>
+                <a href={`mailto:${ORG.email}`} className="text-primary-foreground/80 hover:text-secondary">{ORG.email}</a>
               </li>
               {bankAccounts.map((acc) => (
                 <li key={acc.value} className="flex items-start justify-center gap-2 sm:justify-start">
@@ -416,15 +425,19 @@ export const Footer = () => {
             </ul>
 
             <div className="mt-4 flex justify-center sm:justify-start gap-2.5">
-              <a href="https://www.facebook.com/Elyosr.Charity/" target="_blank" rel="noopener" aria-label="Facebook"
+              {ORG.social.facebook && (
+              <a href={ORG.social.facebook} target="_blank" rel="noopener" aria-label="Facebook"
                 className="grid h-9 w-9 place-items-center rounded-full bg-primary-foreground/10 transition hover:bg-secondary hover:text-secondary-foreground">
                 <Facebook className="h-4 w-4" />
               </a>
-              <a href={`https://instagram.com/${t.contact.facebook}`} target="_blank" rel="noopener" aria-label="Instagram"
+              )}
+              {ORG.social.instagram && (
+              <a href={ORG.social.instagram} target="_blank" rel="noopener" aria-label="Instagram"
                 className="grid h-9 w-9 place-items-center rounded-full bg-primary-foreground/10 transition hover:bg-secondary hover:text-secondary-foreground">
                 <Instagram className="h-4 w-4" />
               </a>
-              <a href="https://wa.me/201097000137" target="_blank" rel="noopener" aria-label="WhatsApp"
+              )}
+              <a href={`https://wa.me/${ORG.whatsapp}`} target="_blank" rel="noopener" aria-label="WhatsApp"
                 className="grid h-9 w-9 place-items-center rounded-full bg-primary-foreground/10 transition hover:bg-secondary hover:text-secondary-foreground">
                 <WhatsAppIcon className="h-4 w-4" />
               </a>
@@ -488,6 +501,19 @@ const STAMP_HOLES = (() => {
  * The newsletter's postage stamp: a paper stamp with perforated edges (an SVG mask, so the holes are
  * exact), the logo, «بريد الخير» and the site address.
  */
+/** One dashboard-defined footer link: internal paths through the router, https links in a new tab. */
+function FooterLinkItem({ link, lang }: { link: NavLink; lang: string }) {
+  const label = lang === "ar" ? link.label_ar : link.label_en || link.label_ar;
+  const cls = "block text-primary-foreground/85 hover:text-secondary";
+  return (
+    <li>
+      {link.href.startsWith("/")
+        ? <Link to={link.href} {...prefetchHandlers(link.href.split(/[?#]/)[0])} className={cls}>{label}</Link>
+        : <a href={link.href} target="_blank" rel="noopener noreferrer" className={cls}>{label}</a>}
+    </li>
+  );
+}
+
 function NewsletterSeal({ isRTL }: { isRTL: boolean }) {
   return (
     // the stamp alone, centred on phones

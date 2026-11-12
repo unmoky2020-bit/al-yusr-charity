@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { ORG } from "@/data/orgInfo";
+import { ORG, useOrg } from "@/data/orgInfo";
+import { useSiteBlocks } from "@/data/siteBlocks";
 import { useEffect, useRef, useState, useMemo, type ReactNode } from "react";
 import {
   ShieldCheck,
@@ -125,6 +126,7 @@ const statIconFor = (title: string) => STAT_ICON_RULES.find(([re]) => re.test(ti
 
 const About = () => {
   const { lang } = useLang();
+  useOrg(); // re-render when the dashboard's organisation data arrives
   const isRTL = lang === "ar";
   const bankAccounts = useBankAccounts();
   const bankText = bankAccounts[0] ? bankAccountLabel(bankAccounts[0]) : "";
@@ -172,8 +174,10 @@ const About = () => {
     }));
   }, [aboutData.values, isRTL]);
 
-  // Timeline is not in the API yet — keep static until backend adds it
-  const timeline: { y: string; t: string; d: ReactNode }[] = isRTL
+  // Timeline: the dashboard's milestones («محطات من نحن», site block about_milestones); the built-in list
+  // below only shows until they are saved.
+  const { about_milestones: savedMilestones } = useSiteBlocks();
+  const builtInTimeline: { y: string; t: string; d: ReactNode }[] = isRTL
     ? [
         { y: "2019", t: "البداية الرسمية: تأسيس مؤسسة اليسر الخيرية", d: "انطلقت المؤسسة رسميًا في أواخر 2019 بإشهار رقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي، لتبدأ رحلة منظمة في العمل الخيري وخدمة المستحقين." },
         { y: "2020", t: "بناء منظومة متكاملة للعطاء", d: <>بدأ العمل على محاور <Link to="/programs" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">الغذاء والتعليم والصحة</Link>، لتقديم دعم متكامل يراعي احتياجات الإنسان الأساسية.</> },
@@ -189,6 +193,14 @@ const About = () => {
         { y: "2023", t: "Dhill & Markoun Initiatives", d: "Clean water taps, village supply lines, and in-kind recycling." },
         { y: "2025", t: "Record Impact Year Across Egypt", d: "1,400 Ramadan boxes, 3,000+ monthly food boxes, 385 water taps, 122 roofs, and 5 tons of meat." },
       ];
+
+  const timeline: { y: string; t: string; d: ReactNode }[] = savedMilestones?.length
+    ? savedMilestones.map((m) => ({
+        y: m.year,
+        t: isRTL ? m.title_ar : m.title_en || m.title_ar,
+        d: (isRTL ? m.text_ar : m.text_en || m.text_ar) ?? "",
+      }))
+    : builtInTimeline;
 
   const stickyOffsets = ["top-[84px] md:top-[96px]", "top-[100px] md:top-[116px]", "top-[116px] md:top-[136px]"];
   const Arrow = isRTL ? ArrowLeft : ArrowRight;

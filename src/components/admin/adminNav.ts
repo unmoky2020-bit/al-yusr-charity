@@ -44,6 +44,7 @@ export const ALL_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/about-us", ar: "محتوى من نحن", en: "About Us CMS", icon: Building2 },
       { href: "/admin/axes", ar: "محاور رسالتنا", en: "Work Axes", icon: Compass },
       { href: "/admin/site-stats", ar: "الأرقام والإنجازات", en: "Stats & Numbers", icon: BarChart3 },
+      { href: "/admin/site-blocks", ar: "بيانات المؤسسة والقوائم", en: "Organisation & menus", icon: Building2 },
       { href: "/admin/campaigns-section", ar: "كاروسيل الرئيسية", en: "Homepage Carousel", icon: SlidersHorizontal },
       { href: "/admin/stories", ar: "قصص الأثر", en: "Stories CMS", icon: HeartHandshake },
       { href: "/admin/media", ar: "مكتبة الوسائط", en: "Media Library", icon: FolderArchive },

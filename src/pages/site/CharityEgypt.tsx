@@ -13,7 +13,7 @@ import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { FaqSection, ProgramsGrid, StepsCard } from "@/components/common/SeoLandingParts";
 import { useLang } from "@/i18n/LangContext";
-import { ORG, whatsappLink } from "@/data/orgInfo";
+import { ORG, whatsappLink, useOrg } from "@/data/orgInfo";
 
 const PATH = "/charity-egypt";
 const SITE = "https://elyusr.org";
@@ -26,6 +26,7 @@ const SITE = "https://elyusr.org";
  */
 const CharityEgypt = () => {
   const { lang } = useLang();
+  useOrg(); // re-render when the dashboard's organisation data arrives
   const hasCases = useHasCases();
   const ar = lang === "ar";
   const Arrow = ar ? ArrowLeft : ArrowRight;

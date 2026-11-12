@@ -1,5 +1,6 @@
 import { useEffect, lazy, Suspense, useRef } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SiteBlocksSync } from "@/data/siteBlocks";
 import { BrowserRouter, Route, Routes, useLocation, useNavigationType, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -91,6 +92,7 @@ const AdminPaymentTransactions = lazy(() => import("./pages/admin/AdminPaymentTr
 const AdminAdCampaigns = lazy(() => import("./pages/admin/AdminAdCampaigns.tsx"));
 const AdminCampaignResults = lazy(() => import("./pages/admin/AdminCampaignResults.tsx"));
 const AdminSiteStats = lazy(() => import("./pages/admin/AdminSiteStats.tsx"));
+const AdminSiteBlocks = lazy(() => import("./pages/admin/AdminSiteBlocks.tsx"));
 const AdminReports = lazy(() => import("./pages/admin/AdminReports.tsx"));
 const AdminGallery = lazy(() => import("./pages/admin/AdminGallery.tsx"));
 const AdminPageGalleries = lazy(() => import("./pages/admin/AdminPageGalleries.tsx"));
@@ -298,6 +300,7 @@ const App = () => (
           <TooltipProvider>
             <Sonner />
             <ConfirmHost />
+            <SiteBlocksSync />
             <PendingApprovalNotice />
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <SmoothScroll />
@@ -452,6 +455,7 @@ const App = () => (
                   <Route path="/admin/ad-campaigns" element={<RequireAuth roles={["admin", "editor"]}><AdminAdCampaigns /></RequireAuth>} />
                   <Route path="/admin/campaign-results" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignResults /></RequireAuth>} />
                   <Route path="/admin/site-stats" element={<RequireAuth roles={["admin", "editor"]}><AdminSiteStats /></RequireAuth>} />
+                  <Route path="/admin/site-blocks" element={<RequireAuth roles={["admin", "editor"]}><AdminSiteBlocks /></RequireAuth>} />
                   <Route path="/admin/gallery" element={<RequireAuth roles={["admin"]}><AdminGallery /></RequireAuth>} />
                   <Route path="/admin/page-galleries" element={<RequireAuth roles={["admin", "editor"]}><AdminPageGalleries /></RequireAuth>} />
                   <Route path="/admin/media" element={<RequireAuth roles={["admin", "editor"]}><AdminMediaLibrary /></RequireAuth>} />

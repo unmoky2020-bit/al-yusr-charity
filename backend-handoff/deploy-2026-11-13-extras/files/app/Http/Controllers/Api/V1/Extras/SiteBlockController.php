@@ -121,20 +121,20 @@ class SiteBlockController extends Controller
             $this->expect(is_array($list) && array_is_list($list) && count($list) <= 40, "value.$group", 'قائمة مش صحيحة.');
             $out[$group] = [];
             foreach ($list as $i => $l) {
+                $this->expect(is_array($l), "value.$group.$i", 'رابط مش صحيح.');
                 $href = trim((string) ($l['href'] ?? ''));
                 $label = trim((string) ($l['label_ar'] ?? ''));
                 $this->expect($label !== '' && mb_strlen($label) <= 80, "value.$group.$i.label_ar", 'اكتب اسم الرابط.');
-                $this->expect(preg_match('#^(/[^\s]*|https://[^\s]+)$#', $href) === 1, "value.$group.$i.href", 'الرابط لازم يبدأ بـ / أو https://');
+                $this->expect(preg_match('#^(/(?!/)[^\s]*|https://[^\s]+)$#', $href) === 1, "value.$group.$i.href", 'الرابط لازم يبدأ بـ / أو https://');
                 $row = ['label_ar' => $label, 'href' => $href];
                 $en = trim((string) ($l['label_en'] ?? ''));
                 if ($en !== '') {
                     $row['label_en'] = mb_substr($en, 0, 80);
                 }
-                if (! empty($l['group_ar'])) {
-                    $row['group_ar'] = mb_substr(trim((string) $l['group_ar']), 0, 60);
-                }
-                if (! empty($l['group_en'])) {
-                    $row['group_en'] = mb_substr(trim((string) $l['group_en']), 0, 60);
+                if ($group === 'footer') {
+                    $col = (string) ($l['column'] ?? 'quick');
+                    $this->expect(in_array($col, ['quick', 'campaigns'], true), "value.$group.$i.column", 'العمود لازم يكون quick أو campaigns.');
+                    $row['column'] = $col;
                 }
                 $out[$group][] = $row;
             }
