@@ -68,8 +68,8 @@ const BlogCategoryView = ({ slug }: { slug: string }) => {
       ]} />
 
       <section className="pattern-hero-luxe hero-pattern-fade text-primary-foreground">
-        <div className="container mx-auto px-4 py-12 md:py-16">
-          <div className="text-primary-foreground/85">
+        <div className="container mx-auto max-w-4xl px-4 py-12 text-center md:py-16">
+          <div className="flex justify-center text-primary-foreground/85">
             <Breadcrumbs items={[
               { name: t.nav.home, href: "/" },
               { name: isRTL ? "المدونة" : "Blog", href: "/blog" },
@@ -80,7 +80,7 @@ const BlogCategoryView = ({ slug }: { slug: string }) => {
           <h1 className="mt-5 text-2xl font-black md:text-4xl">
             {isRTL ? `كل مقالات: ${meta.name}` : `All articles: ${meta.name}`}
           </h1>
-          <p className="mt-3 max-w-2xl text-primary-foreground/85">{meta.description}</p>
+          <p className="mx-auto mt-3 max-w-2xl text-primary-foreground/85">{meta.description}</p>
           <div className="mt-3 text-xs font-bold text-secondary">
             {isRTL ? `${sorted.length} مقالة · المنصورة - الدقهلية` : `${sorted.length} articles · Mansoura - Dakahlia`}
           </div>
