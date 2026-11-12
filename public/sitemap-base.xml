@@ -42,6 +42,14 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/charity-egypt" />
   </url>
   <url>
+    <loc>https://elyusr.org/zakat-al-fitr</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/zakat-al-fitr" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/zakat-al-fitr?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/zakat-al-fitr" />
+  </url>
+  <url>
     <loc>https://elyusr.org/donate-from-abroad</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -234,6 +242,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/water" />
   </url>
   <url>
+    <loc>https://elyusr.org/bride</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/bride" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/bride?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/bride" />
+  </url>
+  <url>
+    <loc>https://elyusr.org/orphans</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/orphans" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/orphans?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/orphans" />
+  </url>
+  <url>
     <loc>https://elyusr.org/nurseries</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -275,7 +299,7 @@
   </url>
   <url>
     <loc>https://elyusr.org/misbaha/ummah</loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/misbaha/ummah" />
     <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/misbaha/ummah?lang=en" />
@@ -565,6 +589,15 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/kafala-yatim-mansoura" />
   </url>
   <url>
+    <loc>https://elyusr.org/blog/afdal-moassasa-khairya-mansoura</loc>
+    <lastmod>2026-01-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/afdal-moassasa-khairya-mansoura" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/afdal-moassasa-khairya-mansoura?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/afdal-moassasa-khairya-mansoura" />
+  </url>
+  <url>
     <loc>https://elyusr.org/blog/shafafiya-tawtheeq-2026</loc>
     <lastmod>2026-02-01</lastmod>
     <changefreq>weekly</changefreq>
@@ -664,6 +697,15 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/3elaj-wa-adwiya-2025" />
   </url>
   <url>
+    <loc>https://elyusr.org/blog/compare-aleysr-vs-others</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/compare-aleysr-vs-others" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/compare-aleysr-vs-others?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/compare-aleysr-vs-others" />
+  </url>
+  <url>
     <loc>https://elyusr.org/blog/campaign-success-cases</loc>
     <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
@@ -680,6 +722,15 @@
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/akherqarar-altabarroa-online" />
     <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/akherqarar-altabarroa-online?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/akherqarar-altabarroa-online" />
+  </url>
+  <url>
+    <loc>https://elyusr.org/blog/afdal-jamiya-khairya-dakahlia-2026</loc>
+    <lastmod>2026-02-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/afdal-jamiya-khairya-dakahlia-2026" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/afdal-jamiya-khairya-dakahlia-2026?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/afdal-jamiya-khairya-dakahlia-2026" />
   </url>
   <url>
     <loc>https://elyusr.org/blog/tabarro-shahri-mansoura-2026</loc>
@@ -851,6 +902,15 @@
     <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/akbar-akhta2-tabarro3-online-2026" />
     <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/akbar-akhta2-tabarro3-online-2026?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/akbar-akhta2-tabarro3-online-2026" />
+  </url>
+  <url>
+    <loc>https://elyusr.org/blog/dalil-sak-odhya-dakahlia-2026-13-yom</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="ar-EG" href="https://elyusr.org/blog/dalil-sak-odhya-dakahlia-2026-13-yom" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://elyusr.org/blog/dalil-sak-odhya-dakahlia-2026-13-yom?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://elyusr.org/blog/dalil-sak-odhya-dakahlia-2026-13-yom" />
   </url>
   <url>
     <loc>https://elyusr.org/blog/markoun-campaign-dakahlia-2026</loc>

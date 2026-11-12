@@ -16,8 +16,10 @@ export function RelatedOwnerLinks() {
   const Arrow = ar ? ArrowLeft : ArrowRight;
   return (
     <nav aria-label={ar ? "صفحات قريبة" : "Related pages"} className="border-t border-border/60 bg-muted/30">
-      <div className="container mx-auto max-w-6xl px-4 py-8">
-        <h2 className="text-sm font-black text-primary">{ar ? "صفحات قد تهمك" : "You may also need"}</h2>
+      {/* Bottom padding: the footer's newsletter card is pulled up over the section before it. */}
+      <div className="container mx-auto max-w-6xl px-4 pb-20 pt-8 md:pb-32">
+        {/* A heading role on a <p>: the site-wide mobile rule blows every <h2> up to display size. */}
+        <p role="heading" aria-level={2} className="text-sm font-black text-primary">{ar ? "صفحات قد تهمك" : "You may also need"}</p>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {links.map((l) => (
             <li key={l.path}>
