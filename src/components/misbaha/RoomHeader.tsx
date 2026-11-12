@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Check, Copy, Image as ImageIcon, Plus, Share2, Sparkles, Users } from "lucide-react";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { MISBAHA_ROOMS_PENDING_AR, type MisbahaRoom } from "@/data/api/misbahaRoomsApi";
+import { AddToHome } from "@/components/misbaha/AddToHome";
 import { kindMeta, roomTagline, roomTitle } from "@/data/memorialDuas";
 
 /** Top of a shared misbaha page: whose it is, the live shared total, and the main share actions. */
@@ -97,6 +98,7 @@ export function RoomHeader({
         <button type="button" onClick={onCopy} className="inline-flex h-11 items-center gap-2 rounded-xl border border-white/25 px-4 text-sm font-black text-white hover:bg-white/10">
           {copied ? <Check className="h-4 w-4 text-secondary" /> : <Copy className="h-4 w-4" />} {copied ? (isAr ? "تم النسخ" : "Copied") : isAr ? "انسخ الرابط" : "Copy link"}
         </button>
+        <AddToHome isAr={isAr} slug={room.slug} name={room.name} />
         {onNativeShare && (
           <button type="button" onClick={onNativeShare} className="grid h-11 w-11 place-items-center rounded-xl border border-white/25 text-white hover:bg-white/10" aria-label={isAr ? "مشاركة" : "Share"}>
             <Share2 className="h-4 w-4" />

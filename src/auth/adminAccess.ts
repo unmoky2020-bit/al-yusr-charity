@@ -35,6 +35,7 @@ export const PAGE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = {
   "/admin/content": ["content.create", "content.update"],
   "/admin/blog": ["blog_seo.create", "blog_seo.update", "blog_seo.view"],
   "/admin/faqs": ["faqs.update", "faq_categories.update"],
+  "/admin/misbaha": ["content.view"],
   "/admin/inbox": ["contact_messages.view"],
   "/admin/newsletter": ["newsletter.view"],
   "/admin/review": ["content_change_requests.view"],

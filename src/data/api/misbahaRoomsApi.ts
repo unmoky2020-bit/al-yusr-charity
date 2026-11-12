@@ -77,4 +77,23 @@ export const misbahaRoomsApi = {
   },
 };
 
+/** A row as the team sees it in the dashboard (GET /admin/misbaha-rooms). */
+export type AdminMisbahaRoom = MisbahaRoom & { id: number; is_hidden?: boolean | number | null; updated_at?: string | null };
+
+export const misbahaAdminApi = {
+  /** Every room, newest first (the server pages at 100; we walk the pages). */
+  async list(): Promise<AdminMisbahaRoom[]> {
+    const out: AdminMisbahaRoom[] = [];
+    for (let page = 1; page <= 50; page++) {
+      const res = await apiFetch<{ data?: AdminMisbahaRoom[]; last_page?: number }>("/admin/misbaha-rooms", { params: { per_page: 100, page }, useCache: false });
+      out.push(...(res?.data ?? []));
+      if (!res?.last_page || page >= res.last_page) break;
+    }
+    return out;
+  },
+  async setHidden(id: number, hidden: boolean): Promise<void> {
+    await apiFetch(`/admin/misbaha-rooms/${id}`, { method: "PATCH", body: { is_hidden: hidden } });
+  },
+};
+
 export const MISBAHA_ROOMS_PENDING_AR = "السبح المشتركة قيد التفعيل على الخادم حاليًا. حاول بعد قليل، ويمكنك أن تسبّح هنا كالمعتاد حتى يتم تفعيلها.";

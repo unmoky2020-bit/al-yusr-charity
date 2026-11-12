@@ -144,6 +144,7 @@ const CampaignsPage = lazy(() => import("./pages/site/CampaignsPage.tsx"));
 const BrideLanding = lazy(() => import("./pages/landings/BrideLanding.tsx"));
 const OrphansLanding = lazy(() => import("./pages/landings/OrphansLanding.tsx"));
 const FaqCenter = lazy(() => import("./pages/site/FaqCenter.tsx"));
+const AdminMisbaha = lazy(() => import("./pages/admin/AdminMisbaha.tsx"));
 const AdminFaqs = lazy(() => import("./pages/admin/AdminFaqs.tsx"));
 import { RequireAuth } from "./auth/RequireAuth";
 
@@ -392,6 +393,7 @@ const App = () => (
 
                   <Route path="/admin" element={<RequireAuth roles={["admin", "editor", "caseworker", "volunteer"]}><AdminDashboard /></RequireAuth>} />
                   <Route path="/admin/analytics" element={<RequireAuth roles={["admin", "caseworker"]}><AdminAnalytics /></RequireAuth>} />
+                  <Route path="/admin/misbaha" element={<RequireAuth roles={["admin", "editor"]}><AdminMisbaha /></RequireAuth>} />
                   <Route path="/admin/faqs" element={<RequireAuth roles={["admin", "editor"]}><AdminFaqs /></RequireAuth>} />
                   <Route path="/admin/donations" element={<RequireAuth roles={["admin", "caseworker"]}><AdminDonations /></RequireAuth>} />
                   <Route path="/admin/donations/audit" element={<RequireAuth roles={["admin"]}><AdminDonationsAudit /></RequireAuth>} />

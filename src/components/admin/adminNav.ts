@@ -52,6 +52,7 @@ export const ALL_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/page-galleries", ar: "معارض صور الصفحات", en: "Page Galleries", icon: ImageIcon },
       { href: "/admin/blog", ar: "المدونة", en: "Blog", icon: BookOpen },
       { href: "/admin/faqs", ar: "الأسئلة الشائعة", en: "FAQs CMS", icon: HelpCircle },
+      { href: "/admin/misbaha", ar: "السبح المشتركة", en: "Shared misbahas", icon: Sparkles },
       { href: "/admin/inbox", ar: "رسائل تواصل معنا", en: "Contact inbox", icon: Mail },
       { href: "/admin/newsletter", ar: "النشرة البريدية", en: "Newsletter", icon: Mail },
       { href: "/admin/review",  ar: "مراجعة واعتماد التعديلات", en: "Change Approvals", icon: ClipboardCheck },
