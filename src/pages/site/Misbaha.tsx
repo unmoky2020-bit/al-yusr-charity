@@ -556,13 +556,13 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
               </figure>
               )}
 
-              <div className="mt-6 flex flex-wrap gap-2 border-t border-border pt-5">
-                <button type="button" onClick={share} className="inline-flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
+              <div className="keep-flow mt-6 grid gap-2 border-t sm:flex sm:flex-wrap border-border pt-5">
+                <button type="button" onClick={share} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
                   {copied ? <Check className="h-4 w-4 text-secondary" /> : <Share2 className="h-4 w-4" />}
                   {copied ? (isAr ? "تم نسخ الرابط" : "Link copied") : isAr ? "شارك المسبحة، والدال على الخير كفاعله" : "Share the tasbih"}
                 </button>
                 {!isCustom && (
-                  <button type="button" onClick={shareDhikr} className="inline-flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
+                  <button type="button" onClick={shareDhikr} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
                     {dhikrCopied ? <Check className="h-4 w-4 text-secondary" /> : <Share2 className="h-4 w-4" />}
                     {dhikrCopied ? (isAr ? "تم النسخ" : "Copied") : isAr ? "أرسل هذا الذكر لمن تحب" : "Send this dhikr"}
                   </button>

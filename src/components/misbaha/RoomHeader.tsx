@@ -88,20 +88,20 @@ export function RoomHeader({
       </div>
       {room.created_by && <p className="mt-3 text-xs font-bold text-white/60">{isAr ? `أنشأها ${room.created_by}` : `Created by ${room.created_by}`}</p>}
 
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-        <a href={waHref} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#25D366] px-5 text-sm font-black text-white shadow-cta transition hover:brightness-95">
+      <div className="keep-flow mx-auto mt-5 grid max-w-md grid-cols-2 gap-2 sm:flex sm:max-w-none sm:flex-wrap sm:items-center sm:justify-center">
+        <a href={waHref} target="_blank" rel="noopener noreferrer" className="col-span-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 text-sm font-black text-white shadow-cta transition hover:brightness-95 sm:h-11">
           <WhatsAppIcon className="h-4 w-4" /> {isAr ? "أرسلها عبر واتساب" : "WhatsApp"}
         </a>
-        <button type="button" onClick={onStory} className="inline-flex h-11 items-center gap-2 rounded-xl bg-secondary px-5 text-sm font-black text-slate-950 shadow-cta transition hover:-translate-y-0.5">
-          <ImageIcon className="h-4 w-4" /> {isAr ? "صورة للستوري" : "Story image"}
+        <button type="button" onClick={onStory} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-secondary px-3 text-sm font-black text-slate-950 shadow-cta transition hover:-translate-y-0.5 sm:px-5">
+          <ImageIcon className="h-4 w-4 shrink-0" /> {isAr ? "صورة للستوري" : "Story image"}
         </button>
-        <button type="button" onClick={onCopy} className="inline-flex h-11 items-center gap-2 rounded-xl border border-white/25 px-4 text-sm font-black text-white hover:bg-white/10">
-          {copied ? <Check className="h-4 w-4 text-secondary" /> : <Copy className="h-4 w-4" />} {copied ? (isAr ? "تم النسخ" : "Copied") : isAr ? "انسخ الرابط" : "Copy link"}
+        <button type="button" onClick={onCopy} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-3 text-sm font-black text-white hover:bg-white/10 sm:px-4">
+          {copied ? <Check className="h-4 w-4 shrink-0 text-secondary" /> : <Copy className="h-4 w-4 shrink-0" />} {copied ? (isAr ? "تم النسخ" : "Copied") : isAr ? "انسخ الرابط" : "Copy link"}
         </button>
-        <AddToHome isAr={isAr} slug={room.slug} name={room.name} />
+        <AddToHome isAr={isAr} slug={room.slug} name={room.name} wide={!onNativeShare} />
         {onNativeShare && (
-          <button type="button" onClick={onNativeShare} className="grid h-11 w-11 place-items-center rounded-xl border border-white/25 text-white hover:bg-white/10" aria-label={isAr ? "مشاركة" : "Share"}>
-            <Share2 className="h-4 w-4" />
+          <button type="button" onClick={onNativeShare} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-3 text-sm font-black text-white hover:bg-white/10 sm:w-11 sm:px-0" aria-label={isAr ? "مشاركة" : "Share"}>
+            <Share2 className="h-4 w-4 shrink-0" /> <span className="sm:hidden">{isAr ? "مشاركة" : "Share"}</span>
           </button>
         )}
       </div>

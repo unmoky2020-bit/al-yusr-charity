@@ -13,7 +13,7 @@ const isStandalone = () =>
  * «ضعها على الشاشة الرئيسية»: a shortcut that opens this misbaha itself. While the room is open the
  * page's manifest and iOS title point at the room, so the phone saves the room and not the site's home.
  */
-export function AddToHome({ isAr, slug, name }: { isAr: boolean; slug: string; name: string }) {
+export function AddToHome({ isAr, slug, name, wide }: { isAr: boolean; slug: string; name: string; wide?: boolean }) {
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(false);
   const promptRef = useRef<InstallEvent | null>(null);
@@ -70,10 +70,10 @@ export function AddToHome({ isAr, slug, name }: { isAr: boolean; slug: string; n
       <button
         type="button"
         onClick={onClick}
-        className="inline-flex h-11 items-center gap-2 rounded-xl border border-white/25 px-4 text-sm font-black text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+        className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-3 text-sm font-black text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary sm:px-4 ${wide ? "col-span-2 sm:col-span-1" : ""}`}
       >
-        <Smartphone className="h-4 w-4" />
-        {done ? (isAr ? "اتضافت للشاشة الرئيسية" : "Added to home screen") : isAr ? "ضعها على شاشة موبايلك" : "Add to home screen"}
+        <Smartphone className="h-4 w-4 shrink-0" />
+        {done ? (isAr ? "اتضافت للشاشة" : "Added") : isAr ? "أضِفها للشاشة" : "Add to home"}
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent dir={isAr ? "rtl" : "ltr"} className="max-w-sm rounded-3xl">
