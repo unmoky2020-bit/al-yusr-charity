@@ -44,8 +44,11 @@ const Campaigns = () => {
           {loading ? (
             <div className="mt-10 grid place-items-center text-muted-foreground">…</div>
           ) : items.length === 0 ? (
-            <div className="mt-10 rounded-2xl bg-card p-10 text-center shadow-soft">
-              <p className="text-muted-foreground">{lang === "ar" ? "لا توجد حملات مفتوحة حاليًا. عُد قريبًا." : "No open campaigns right now."}</p>
+            <div className="mx-auto mt-6 max-w-md rounded-3xl border border-border bg-card p-8 text-center shadow-soft">
+              <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-secondary/20 text-primary"><Users2 className="h-6 w-6" /></div>
+              <h2 className="mt-3 text-lg font-black text-primary">{lang === "ar" ? "مفيش حملة مفتوحة دلوقتي" : "No open campaign right now"}</h2>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{lang === "ar" ? "سجّل كمتطوع، وأول ما تتفتح حملة هنكلمك." : "Register as a volunteer and we will call you when a campaign opens."}</p>
+              <Link to="/volunteer" className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-6 text-sm font-black text-primary-foreground">{lang === "ar" ? "سجّل كمتطوع" : "Register as a volunteer"}</Link>
             </div>
           ) : (
             <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">

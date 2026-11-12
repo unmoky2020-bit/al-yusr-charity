@@ -61,46 +61,6 @@ export const slugify = (s: string) =>
     .replace(/[^\p{L}\p{N}-]/gu, "")
     .slice(0, 80) || `c-${Date.now()}`;
 
-const DEFAULT_CAMPAIGNS: Campaign[] = [
-  {
-    id: "camp-1",
-    slug: "ramadan-food-boxes-2026",
-    title_ar: "حملة تعبئة وتوزيع كراتين رمضان 2026",
-    title_en: "Ramadan 2026 Food Box Packing & Distribution",
-    description_ar: "تجهيز وتعبئة 5000 كرتونة مواد غذائية لأسر القرى الأكثر احتياجًا في الدقهلية.",
-    description_en: "Packing and delivering 5,000 food parcels to impoverished families.",
-    city: "المنصورة",
-    location: "مقر مستودع مؤسسة اليسر - المنصورة",
-    event_date: "2026-03-15",
-    capacity: 50,
-    accepted_count: 32,
-    status: "open",
-    program_slug: "food",
-    required_skills: ["تعبئة", "تنظيم", "قيادة سيارات"],
-    cover_image_url: null,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "camp-2",
-    slug: "medical-convoy-sherbin",
-    title_ar: "قافلة اليسر الطبية الشاملة بقرى شربين",
-    title_en: "Comprehensive Medical Convoy in Sherbin",
-    description_ar: "يوم طبي متكامل للكشف وصرف العلاج المجاني وإجراء الفحوصات لكبار السن والأطفال.",
-    description_en: "Full medical day providing free consultations and medicine in Sherbin villages.",
-    city: "شربين",
-    location: "الوحدة الصحية - قرى شربين",
-    event_date: "2026-04-05",
-    capacity: 30,
-    accepted_count: 18,
-    status: "open",
-    program_slug: "health",
-    required_skills: ["تمريض", "صيدلة", "استقبال وتنظيم"],
-    cover_image_url: null,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-];
 
 function mapLaravelCampaign(lc: LaravelVolunteerCampaign): Campaign {
   return {
@@ -139,14 +99,10 @@ function toLaravelPayload(c: Record<string, unknown>): Record<string, unknown> {
   return out;
 }
 
+/** Open volunteer campaigns exactly as the dashboard has them; none there means none here. */
 export const listPublicCampaigns = async (): Promise<Campaign[]> => {
-  try {
-    const data = await volunteerCampaignsApi.listAll();
-    if (Array.isArray(data) && data.length > 0) {
-      return data.map(mapLaravelCampaign);
-    }
-  } catch {}
-  return DEFAULT_CAMPAIGNS;
+  const data = await volunteerCampaignsApi.listAll();
+  return Array.isArray(data) ? data.map(mapLaravelCampaign) : [];
 };
 
 /**
@@ -158,14 +114,14 @@ export const listAllCampaigns = async (): Promise<Campaign[]> => {
   return data.map(mapLaravelCampaign);
 };
 
-/** Public page lookup (keeps the public demo fallback via listPublicCampaigns). */
+/** Public page lookup by slug or id. */
 export const getCampaignBySlug = async (slug: string): Promise<Campaign | null> => {
   try {
     const all = await listPublicCampaigns();
-    const found = all.find((c) => c.slug === slug || String(c.id) === slug);
-    if (found) return found;
-  } catch {}
-  return DEFAULT_CAMPAIGNS.find((c) => c.slug === slug) || null;
+    return all.find((c) => c.slug === slug || String(c.id) === slug) ?? null;
+  } catch {
+    return null;
+  }
 };
 
 /** Admin lookup: GET /volunteer-campaigns/{id}. Returns null only on 404; other errors throw. */

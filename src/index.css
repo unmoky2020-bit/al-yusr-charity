@@ -1394,3 +1394,9 @@ img, video, svg, canvas {
   .admin-body main table.table-cards > tbody > tr > td.card-hide,
   .admin-body main table.table-cards > tbody > tr > td.hidden { display: none; }
 }
+
+/* Footer link columns on phones: two tidy columns, and a lone last link sits centred under them. */
+@media (max-width: 639px) {
+  .footer-links > li { text-align: center; text-wrap: balance; }
+  .footer-links > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}

@@ -1,5 +1,6 @@
 import { Logo } from "@/components/common/Logo";
 import { useHasCases } from "@/data/useHasCases";
+import { useHasVolunteerCampaigns } from "@/data/useHasVolunteerCampaigns";
 import { Link, useLocation } from "react-router-dom";
 import { Facebook, Instagram, Phone, Mail, MapPin, Building2, BadgeCheck, HandHeart, HeartHandshake, Heart, ShieldCheck, Beef, Sparkles, ArrowLeft, Clock, Send, Bell, CheckCircle2 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
@@ -19,6 +20,7 @@ import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 export const Footer = () => {
   const { t, lang } = useLang();
   const hasCases = useHasCases();
+  const hasVolunteerCampaigns = useHasVolunteerCampaigns();
   const isRTL = lang === "ar";
   const bankAccounts = useBankAccounts();
   const bankText = bankAccounts[0] ? bankAccountLabel(bankAccounts[0]) : "";
@@ -336,7 +338,7 @@ export const Footer = () => {
           {/* 2. Quick Links — 2 columns on mobile */}
           <div>
             <h3 className="mb-4 text-base sm:text-lg font-extrabold text-secondary">{t.footer.quickLinks}</h3>
-            <ul className="mx-auto grid max-w-xs grid-cols-2 gap-x-3 gap-y-2 text-xs sm:text-sm font-bold sm:max-w-none">
+            <ul className="mx-auto footer-links grid max-w-xs grid-cols-2 gap-x-3 gap-y-2 text-xs sm:text-sm font-bold sm:max-w-none">
               <li><Link to="/about" {...prefetchHandlers("/about")} className="block text-primary-foreground/85 hover:text-secondary">{t.nav.about}</Link></li>
               <li><Link to="/charity-mansoura" {...prefetchHandlers("/charity-mansoura")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "جمعية خيرية بالمنصورة" : "Charity in Mansoura"}</Link></li>
               <li><Link to="/charity-egypt" {...prefetchHandlers("/charity-egypt")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "اتبرع من أي محافظة" : "Give from anywhere in Egypt"}</Link></li>
@@ -353,7 +355,9 @@ export const Footer = () => {
               <li><Link to="/faqs" {...prefetchHandlers("/faqs")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الأسئلة الشائعة" : "FAQs"}</Link></li>
               <li><Link to="/donate/track" {...prefetchHandlers("/donate/track")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "تتبع تبرعك" : "Track donation"}</Link></li>
               <li><Link to="/contact" {...prefetchHandlers("/contact")} className="block text-primary-foreground/85 hover:text-secondary">{t.nav.contact}</Link></li>
-              <li><Link to="/volunteer-campaigns" {...prefetchHandlers("/volunteer-campaigns")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملات التطوع" : "Volunteer Opps"}</Link></li>
+              {hasVolunteerCampaigns
+                ? <li><Link to="/volunteer-campaigns" {...prefetchHandlers("/volunteer-campaigns")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملات التطوع" : "Volunteer Opps"}</Link></li>
+                : <li><Link to="/volunteer" {...prefetchHandlers("/volunteer")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "تطوّع معنا" : "Volunteer"}</Link></li>}
             </ul>
           </div>
 
@@ -364,17 +368,17 @@ export const Footer = () => {
                 {lang === "ar" ? "حملات ومبادرات اليسر" : "Al-Yusr Campaigns"}
               </Link>
             </h3>
-            <ul className="mx-auto grid max-w-xs grid-cols-2 gap-x-3 gap-y-2 text-xs sm:text-sm font-bold sm:max-w-none">
-              <li><Link to="/dhill" {...prefetchHandlers("/dhill")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة ظِلّ (سقيا وأسقف)" : "Dhill (Water)"}</Link></li>
-              <li><Link to="/setr" {...prefetchHandlers("/setr")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة سِتْر (الشتاء)" : "Setr (Winter)"}</Link></li>
-              <li><Link to="/markoun" {...prefetchHandlers("/markoun")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة مَرْكُون (الأجهزة)" : "Markoun In-Kind"}</Link></li>
+            <ul className="mx-auto footer-links grid max-w-xs grid-cols-2 gap-x-3 gap-y-2 text-xs sm:text-sm font-bold sm:max-w-none">
+              <li><Link to="/dhill" {...prefetchHandlers("/dhill")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة ظِلّ" : "Dhill (Water)"}</Link></li>
+              <li><Link to="/setr" {...prefetchHandlers("/setr")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة سِتْر" : "Setr (Winter)"}</Link></li>
+              <li><Link to="/markoun" {...prefetchHandlers("/markoun")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة مَرْكُون" : "Markoun In-Kind"}</Link></li>
               <li><Link to="/arboun" {...prefetchHandlers("/arboun")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "مبادرة عربون خير" : "Arboun Khair"}</Link></li>
-              <li><Link to="/takrim" {...prefetchHandlers("/takrim")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "تكريم الإنسان (غسل ونقل الموتى)" : "Takrim (funeral service)"}</Link></li>
+              <li><Link to="/takrim" {...prefetchHandlers("/takrim")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "تكريم الإنسان" : "Takrim (funeral service)"}</Link></li>
               <li><Link to="/water" {...prefetchHandlers("/water")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "سقيا الماء" : "Clean water"}</Link></li>
               <li><Link to="/medical" {...prefetchHandlers("/medical")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المساعدات الطبية" : "Medical aid"}</Link></li>
               <li><Link to="/ten-days" {...prefetchHandlers("/ten-days")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "صدقات العشر الأوائل" : "The ten days"}</Link></li>
               <li><Link to="/misbaha" {...prefetchHandlers("/misbaha")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المسبحة الإلكترونية" : "Digital tasbih"}</Link></li>
-              <li><Link to="/nurseries" {...prefetchHandlers("/nurseries")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حضانات اليسر ودور التحفيظ" : "Nurseries & Qur'an houses"}</Link></li>
+              <li><Link to="/nurseries" {...prefetchHandlers("/nurseries")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حضانات اليسر" : "Nurseries & Qur'an houses"}</Link></li>
               <li><Link to="/athar" {...prefetchHandlers("/athar")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة أَثَر التعليمية" : "Athar Education"}</Link></li>
               <li><Link to="/ramadan" {...prefetchHandlers("/ramadan")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "موسم رمضان المبارك" : "Ramadan Season"}</Link></li>
               <li><Link to="/food-box" {...prefetchHandlers("/food-box")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الغذاء الشهري" : "Monthly Food"}</Link></li>
