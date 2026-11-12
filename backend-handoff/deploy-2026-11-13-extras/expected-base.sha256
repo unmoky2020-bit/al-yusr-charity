@@ -1,0 +1,6 @@
+NEW app/Http/Controllers/Api/V1/Extras/PackageImageController.php
+NEW app/Http/Controllers/Api/V1/Extras/SiteBlockController.php
+NEW app/Models/Extras/PackageImage.php
+NEW app/Models/Extras/SiteBlock.php
+NEW database/migrations/2026_11_13_000001_create_package_images_and_site_blocks.php
+NEW routes/api-2026-11-13-extras.php

@@ -27,6 +27,7 @@ import {
   useSourced,
   withExtra,
 } from "./_shared";
+import { fetchPackageImages, type PackageImageMap } from "@/data/api/packageImagesApi";
 
 /** Backend slug -> static entity id, where the two differ. */
 export const ENTITY_ID_ALIASES: Record<string, string> = {
@@ -89,6 +90,8 @@ export function mapApiCase(c: ApiRecord): LinkedCase {
   if (c.priority === "high" || c.priority === "urgent" || c.is_urgent === true) out.urgent = true;
   const story = pick(c.story_ar, c.description_ar, c.description);
   if (story) out.storyAr = story;
+  const photo = image(c.cover_image_url, c.cover_image, c.image);
+  if (photo && !photo.includes("case-placeholder")) out.image = photo;
   return out;
 }
 
@@ -156,7 +159,28 @@ export function mapApiEntity(raw: ApiRecord, kind: EntityType, fallback?: Donati
   return out;
 }
 
-export type EntityRecords = { programs: ApiRecord[]; projects: ApiRecord[]; campaigns: ApiRecord[] };
+export type EntityRecords = {
+  programs: ApiRecord[];
+  projects: ApiRecord[];
+  campaigns: ApiRecord[];
+  /** package_id → picture (GET /package-images); optional so an older payload still resolves. */
+  packageImages?: PackageImageMap;
+};
+
+/** Puts each package's picture on its share (matched by the backend package id). */
+export function withPackageImages(entities: DonationEntity[], images: PackageImageMap | undefined): DonationEntity[] {
+  if (!images || !Object.keys(images).length) return entities;
+  return entities.map((e) => {
+    if (!e.shares.some((s) => s.apiId && images[s.apiId])) return e;
+    return {
+      ...e,
+      shares: e.shares.map((s) => {
+        const img = s.apiId ? images[s.apiId] : undefined;
+        return img ? { ...s, image: img.image, imageAlt: img.altAr || s.nameAr } : s;
+      }),
+    };
+  });
+}
 
 const KIND_ORDER: EntityType[] = ["program", "project", "campaign"];
 
@@ -204,7 +228,7 @@ export function resolveDonationEntities(
   }
   const general = out.findIndex((e) => e.id === "general");
   if (general > 0) out.unshift(...out.splice(general, 1));
-  return out;
+  return withPackageImages(out, raw.packageImages);
 }
 
 /** The entity a donate link points at: ?entity=<id>, or ?program= / ?project= / ?campaign=<slug or id>. */
@@ -237,12 +261,13 @@ export function findEntityForLink(
 
 export async function fetchEntityRecords(): Promise<EntityRecords> {
   const settle = (p: Promise<ApiRecord[]>) => p.catch((): ApiRecord[] => []);
-  const [programs, projects, campaigns] = await Promise.all([
+  const [programs, projects, campaigns, packageImages] = await Promise.all([
     settle(fetchPublicList("/programs", { per_page: 100 })),
     settle(fetchPublicList("/projects", { per_page: 100 })),
     settle(fetchPublicList("/donation-campaigns", { per_page: 100 })),
+    fetchPackageImages(),
   ]);
-  return { programs, projects, campaigns };
+  return { programs, projects, campaigns, packageImages };
 }
 
 /** All donation entities. `fromApi` = the list comes from the backend (not the offline fallback). */

@@ -24,6 +24,9 @@ export type DonationShare = {
   descAr?: string;
   descEn?: string;
   popular?: boolean;
+  /** The package's own picture (GET /package-images), when the team set one. */
+  image?: string;
+  imageAlt?: string;
 };
 
 export type LinkedCase = {
@@ -40,6 +43,8 @@ export type LinkedCase = {
   raisedAmount: number;
   urgent?: boolean;
   storyAr?: string;
+  /** The case's own photo; absent = the neutral Al-Yusr card (never a stock photo). */
+  image?: string;
 };
 
 export type DonationEntity = {

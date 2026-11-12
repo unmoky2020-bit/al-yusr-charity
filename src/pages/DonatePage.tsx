@@ -19,8 +19,9 @@ import { useLang } from "@/i18n/LangContext";
 import { SimpleDonateHero } from "@/components/sections/SimpleDonateHero";
 import { donationsStore, type DonationRecord } from "@/data/donationsStore";
 import { toast } from "@/hooks/use-toast";
-import { createDonation, getCaseByRef, listPublicCases, verifyDonationPayment, type CaseRow } from "@/data/casesApi";
+import { CASE_PLACEHOLDER_IMAGE, createDonation, getCaseByRef, listPublicCases, verifyDonationPayment, type CaseRow } from "@/data/casesApi";
 import { attachCases, linkedCaseId, ownerOfCase } from "@/data/donationCases";
+import { duplicateLines, takenByOthers } from "@/data/basketDuplicates";
 import { caseFunding } from "@/lib/caseFunding";
 import { fromLaravelRow } from "@/data/donationRecordMapper";
 import { useAuth } from "@/auth/AuthContext";
@@ -555,6 +556,21 @@ const DonatePage = () => {
     return lang === "ar" ? `سلة تبرعات (${items.length} بنود)` : `Donation Basket (${items.length} items)`;
   }, [items, lang, DONATION_ENTITIES, caseOfItem]);
 
+  /** The picture of the basket summary: the case photo, else the first chosen share's picture, else the program's. */
+  const summaryImage = useMemo(() => {
+    const first = items[0];
+    const ent = first ? DONATION_ENTITIES.find((x) => x.id === first.entityId) : undefined;
+    if (first && items.length === 1) {
+      const c = caseOfItem(first);
+      if (c) return c.cs.image || CASE_PLACEHOLDER_IMAGE;
+      if (first.donationMode === "shares" && ent) {
+        const sh = Object.keys(first.selectedShares).map((id) => ent.shares.find((x) => x.id === id)).find((x) => x?.image);
+        if (sh?.image) return sh.image;
+      }
+    }
+    return selectedProgram.image;
+  }, [items, DONATION_ENTITIES, caseOfItem, selectedProgram.image]);
+
   const validateStep1 = (): Record<string, string> => {
     const errs: Record<string, string> = {};
 
@@ -584,6 +600,19 @@ const DonatePage = () => {
         }
       });
     }
+
+    // The same share, case or general amount can't be in two lines (the receipt and the case's
+    // remaining amount would be wrong).
+    const dups = duplicateLines(items);
+    items.forEach((it, idx) => {
+      const first = dups[it.id];
+      if (first !== undefined && !errs[`amount_${it.id}`]) {
+        errs[`amount_${it.id}`] =
+          lang === "ar"
+            ? `البند رقم (${idx + 1}) مكرر مع البند رقم (${first}). زوّد العدد أو المبلغ هناك واحذف التكرار.`
+            : `Item #${idx + 1} repeats item #${first}. Raise the amount there and remove this one.`;
+      }
+    });
 
     // Name is optional (empty = «فاعل خير»); the phone is always required to confirm the donation.
     if (donor.name.trim().length === 1) {
@@ -924,6 +953,7 @@ const DonatePage = () => {
                         error={fieldErrors[`amount_${it.id}`]}
                         lang={lang}
                         entities={DONATION_ENTITIES}
+                        taken={takenByOthers(items, it.id)}
                         onUpdate={updateItem}
                         onRemove={removeItem}
                       />
@@ -1081,9 +1111,9 @@ const DonatePage = () => {
                   <div className="rounded-2xl border border-border/70 bg-muted/30 p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-2xs">
                     <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                       <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl overflow-hidden border border-border/80 shrink-0 bg-muted shadow-2xs">
-                        {selectedProgram.image ? (
+                        {summaryImage ? (
                           <img
-                            src={selectedProgram.image}
+                            src={summaryImage}
                             alt={programLabel}
                             className="h-full w-full object-cover"
                           />
@@ -1197,9 +1227,9 @@ const DonatePage = () => {
                   <div className="flex items-center justify-between gap-2.5 rounded-xl border border-secondary/25 bg-secondary/[0.07] px-3 py-1.5 text-xs font-bold text-primary w-full sm:w-auto shadow-2xs">
                     <div className="flex items-center gap-2 min-w-0">
                       <div className="h-7 w-7 rounded-lg overflow-hidden border border-border/70 shrink-0 bg-muted">
-                        {selectedProgram.image ? (
+                        {summaryImage ? (
                           <img
-                            src={selectedProgram.image}
+                            src={summaryImage}
                             alt={programLabel}
                             className="h-full w-full object-cover"
                           />

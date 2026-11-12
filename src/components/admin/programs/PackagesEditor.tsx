@@ -20,6 +20,7 @@ import {
 } from "@/data/api/programsAdminApi";
 import { NeedsBackendBadge } from "./FormKit";
 import { askConfirm } from "@/components/common/confirm";
+import { PackageImageButton } from "./PackageImageButton";
 
 interface Draft {
   name_ar: string;
@@ -214,7 +215,7 @@ export function PackagesEditor({
             const d = drafts[p.id] || toDraft(p);
             const dirty = !sameDraft(d, toDraft(p));
             return (
-              <div key={p.id} className={`grid grid-cols-1 items-center gap-2 rounded-2xl border p-2.5 sm:grid-cols-[auto_1fr_1fr_8rem_auto_auto] ${dirty ? "border-primary/50 bg-primary/5" : "border-border/70 bg-muted/30"}`}>
+              <div key={p.id} className={`grid grid-cols-1 items-center gap-2 rounded-2xl border p-2.5 sm:grid-cols-[auto_auto_1fr_1fr_8rem_auto_auto] ${dirty ? "border-primary/50 bg-primary/5" : "border-border/70 bg-muted/30"}`}>
                 <div className="flex items-center gap-0.5">
                   <Button type="button" size="icon" variant="ghost" className="h-7 w-7" disabled={i === 0 || !!busy} onClick={() => void moveRow(i, i - 1)} aria-label="لأعلى">
                     <ArrowUp className="h-3.5 w-3.5" />
@@ -223,6 +224,7 @@ export function PackagesEditor({
                     <ArrowDown className="h-3.5 w-3.5" />
                   </Button>
                 </div>
+                <PackageImageButton packageId={p.id} nameAr={p.name_ar || d.name_ar} />
                 <Input dir="rtl" value={d.name_ar} placeholder="اسم الباقة بالعربية" className="h-9 rounded-xl text-xs" onChange={(e) => setDraft(p.id, { name_ar: e.target.value })} />
                 <Input dir="ltr" value={d.name_en} placeholder="Package name (EN)" className="h-9 rounded-xl text-left text-xs" onChange={(e) => setDraft(p.id, { name_en: e.target.value })} />
                 <Input dir="ltr" type="number" min={1} value={d.amount} placeholder="المبلغ" className="h-9 rounded-xl text-xs" onChange={(e) => setDraft(p.id, { amount: e.target.value })} />

@@ -29,6 +29,7 @@ import {
 import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { DonationPackageCard } from "@/components/donate/DonationPackageCard";
+import { usePackageImages } from "@/data/api/packageImagesApi";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
 import { SiteSchemas, BreadcrumbSchema } from "@/components/common/Schemas";
@@ -74,6 +75,7 @@ const ProgramDetail = () => {
   const isRTL = lang === "ar";
   // Program FAQ: own questions -> linked FAQ category -> "programs" category (see src/data/programFaqs.ts).
   const linkedFaqs = useProgramFaqs(program, isRTL, []);
+  const packageImages = usePackageImages();
 
   // Always run hooks before early return
   useEffect(() => {
@@ -117,7 +119,7 @@ const ProgramDetail = () => {
   const subOptions: SubOption[] = (program.packages ?? []).map((pk, i) => ({
     id: String(pk.id), slug: pk.slug, packageId: pk.id,
     title_ar: pk.nameAr, title_en: pk.nameEn, description_ar: null, description_en: null,
-    amount: pk.amount || null, image_url: null, sort_order: i,
+    amount: pk.amount || null, image_url: packageImages[Number(pk.id)]?.image ?? null, sort_order: i,
   }));
   const safeSubOptions = subOptions;
   const displaySubOptions = subOptions;
@@ -457,6 +459,7 @@ const ProgramDetail = () => {
                     title={(isRTL ? o.title_ar : (o.title_en || o.title_ar)) ?? ""}
                     description={isRTL ? o.description_ar : (o.description_en || o.description_ar)}
                     amount={o.amount}
+                    image={o.image_url}
                     donateHref={donateHref}
                     detailsHref={o.slug ? detailsHref : undefined}
                     source={`program-${program.slug}-options`}

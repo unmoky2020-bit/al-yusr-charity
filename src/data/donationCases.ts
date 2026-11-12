@@ -9,6 +9,7 @@
 import type { CaseRow } from "@/data/casesApi";
 import type { DonationEntity, LinkedCase } from "@/data/donationEntities";
 import { caseFunding } from "@/lib/caseFunding";
+import { CASE_PLACEHOLDER_IMAGE } from "@/data/casesApi";
 
 export const linkedCaseId = (apiId: string | number) => `case-${apiId}`;
 
@@ -27,6 +28,8 @@ export function rowToLinkedCase(c: CaseRow): LinkedCase {
   if (apiId > 0) out.apiId = apiId;
   if (c.city) out.city = c.city;
   if (c.is_urgent || c.urgency === "high") out.urgent = true;
+  const img = c.cover_image_url || c.cover_image;
+  if (img && img !== CASE_PLACEHOLDER_IMAGE) out.image = img;
   return out;
 }
 

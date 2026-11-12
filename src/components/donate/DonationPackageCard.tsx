@@ -10,6 +10,8 @@ export type DonationPackageCardProps = {
   description?: string | null;
   /** Amount in EGP; a package without a fixed amount shows «بالمبلغ الذي تختاره». */
   amount?: number | null;
+  /** The package's own picture (dashboard → الباقة → صورة); no picture = no image block. */
+  image?: string | null;
   donateHref: string;
   detailsHref?: string;
   /** Analytics: data-source / data-label of the two links. */
@@ -24,14 +26,19 @@ export type DonationPackageCardProps = {
  * covers, then one clear action. Used by program pages; landing pages keep their own price lists.
  */
 export function DonationPackageCard({
-  lang, title, description, amount, donateHref, detailsHref, source, label, onDonate, onDetails,
+  lang, title, description, amount, image, donateHref, detailsHref, source, label, onDonate, onDetails,
 }: DonationPackageCardProps) {
   const ar = lang === "ar";
   const Arrow = ar ? ArrowLeft : ArrowRight;
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-primary/10 bg-card shadow-soft transition duration-300 hover:-translate-y-1 hover:border-secondary/60 hover:shadow-card">
-      <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-l from-secondary via-primary/60 to-secondary opacity-70 transition group-hover:opacity-100" />
+      <span aria-hidden className="absolute inset-x-0 top-0 z-10 h-1 bg-gradient-to-l from-secondary via-primary/60 to-secondary opacity-70 transition group-hover:opacity-100" />
+      {image && (
+        <div className="aspect-[16/9] overflow-hidden bg-muted">
+          <img src={image} alt={title} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" loading="lazy" decoding="async" />
+        </div>
+      )}
 
       <div className="flex flex-1 flex-col gap-4 p-6">
         <div className="flex items-baseline gap-2" dir={ar ? "rtl" : "ltr"}>

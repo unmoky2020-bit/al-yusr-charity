@@ -1,9 +1,26 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown, Search, X, Check, Plus, Minus, Trash2 } from "lucide-react";
+import { ChevronDown, Search, X, Check, Plus, Minus, Trash2, Tag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useDonationEntities } from "@/data/sources/donationEntities";
 import type { DonationEntity } from "@/data/donationEntities";
+import { caseKey, generalKey, shareKey } from "@/data/basketDuplicates";
+import { CASE_PLACEHOLDER_IMAGE } from "@/data/casesApi";
+
+/** The picture at the start of a share / case card: its own photo, or a neutral tile (never a stock photo). */
+function OptionThumb({ src, alt, kind }: { src?: string; alt: string; kind: "share" | "case" }) {
+  const [broken, setBroken] = useState(false);
+  const url = !broken && src ? src : kind === "case" ? CASE_PLACEHOLDER_IMAGE : "";
+  return (
+    <span className="block h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-border/60 bg-muted">
+      {url ? (
+        <img src={url} alt={src && !broken ? alt : ""} className="h-full w-full object-cover" loading="lazy" decoding="async" onError={() => setBroken(true)} />
+      ) : (
+        <span className="grid h-full w-full place-items-center bg-primary/5 text-primary/60"><Tag className="h-5 w-5" /></span>
+      )}
+    </span>
+  );
+}
 
 export type DonationItemState = {
   id: string;
@@ -30,13 +47,16 @@ interface Props {
   lang: string;
   /** The form's entity list (with the backend cases attached); defaults to the plain list. */
   entities?: DonationEntity[];
+  /** What the other basket lines already hold (key → their 1-based number): those can't be picked here. */
+  taken?: Map<string, number>;
   onUpdate: (updated: DonationItemState) => void;
   onRemove: (id: string) => void;
 }
 
 export function DonationEntityItem({
-  item, index, totalItems, error, lang, entities: entitiesProp, onUpdate, onRemove,
+  item, index, totalItems, error, lang, entities: entitiesProp, taken, onUpdate, onRemove,
 }: Props) {
+  const takenBy = (key: string) => taken?.get(key);
   const isAR = lang === "ar";
   const { entities: ownEntities } = useDonationEntities();
   const entities = entitiesProp?.length ? entitiesProp : ownEntities;
@@ -57,6 +77,7 @@ export function DonationEntityItem({
 
   const typeLabel = TYPE_LABEL[selectedEntity.entityType] || TYPE_LABEL.program;
   const hasShares = selectedEntity.shares.length > 0;
+  const hasShareImages = selectedEntity.shares.some((sh) => !!sh.image);
   const hasCases  = selectedEntity.cases.length > 0;
   const isMarkoun = !!selectedEntity.isMarkoun;
 
@@ -108,13 +129,16 @@ export function DonationEntityItem({
   // ── Entity Selection ──
   const selectEntity = (id: string) => {
     const next = entities.find((e) => e.id === id) || entities[0];
-    const defMode = next.isMarkoun ? "in_kind" : "general";
+    // The general amount of this program is already in another line: start on a free share instead.
+    const freeShare = next.shares.find((sh) => !takenBy(shareKey(next.id, sh.id)));
+    const useShare = !next.isMarkoun && !!takenBy(generalKey(next.id)) && !!freeShare;
+    const defMode = next.isMarkoun ? "in_kind" : useShare ? "shares" : "general";
     onUpdate({
       ...item,
       entityId:      next.id,
       donationMode:  defMode,
-      amount:        defMode === "in_kind" ? 0 : (next.priceFrom || 100),
-      selectedShares: {},
+      amount:        defMode === "in_kind" ? 0 : useShare && freeShare ? freeShare.price : (next.priceFrom || 100),
+      selectedShares: useShare && freeShare ? { [freeShare.id]: 1 } : {},
       selectedCaseId: null,
     });
     setDropdownOpen(false);
@@ -127,10 +151,10 @@ export function DonationEntityItem({
     } else if (m === "general") {
       onUpdate({ ...item, donationMode: "general", amount: item.amount > 0 ? item.amount : (selectedEntity.priceFrom || 100), selectedShares: {}, selectedCaseId: null });
     } else if (m === "shares") {
-      const first = selectedEntity.shares[0];
+      const first = selectedEntity.shares.find((sh) => !takenBy(shareKey(selectedEntity.id, sh.id)));
       onUpdate({ ...item, donationMode: "shares", selectedShares: first ? { [first.id]: 1 } : {}, amount: first?.price ?? (selectedEntity.priceFrom || 100), selectedCaseId: null });
     } else if (m === "case") {
-      const first = selectedEntity.cases[0];
+      const first = selectedEntity.cases.find((c) => !takenBy(caseKey(c.id)));
       onUpdate({ ...item, donationMode: "case", selectedCaseId: first?.id || null, amount: item.amount > 0 ? item.amount : 250, selectedShares: {} });
     }
   };
@@ -138,6 +162,7 @@ export function DonationEntityItem({
   // ── Shares Counter ──
   const updateShareCount = (shareId: string, delta: number) => {
     const prev = item.selectedShares[shareId] || 0;
+    if (delta > 0 && prev === 0 && takenBy(shareKey(selectedEntity.id, shareId))) return;
     const next = Math.max(0, prev + delta);
     const updated = { ...item.selectedShares };
     if (next === 0) delete updated[shareId]; else updated[shareId] = next;
@@ -385,6 +410,13 @@ export function DonationEntityItem({
         {/* ══ MODE: General ══ */}
         {item.donationMode === "general" && (
           <div className="space-y-2.5 rounded-xl border border-border/60 bg-muted/15 p-3">
+            {takenBy(generalKey(selectedEntity.id)) && (
+              <p role="status" className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1.5 text-[11px] font-bold text-amber-800 dark:text-amber-300">
+                {isAR
+                  ? `التبرع العام لـ«${selectedEntity.ar}» موجود في البند ${takenBy(generalKey(selectedEntity.id))}. زوّد المبلغ هناك، أو اختار سهمًا أو حالة هنا.`
+                  : `A general amount for this is already in item #${takenBy(generalKey(selectedEntity.id))}. Raise it there, or pick a share or case here.`}
+              </p>
+            )}
             <p className="text-[11px] text-muted-foreground leading-relaxed">
               {isAR
                 ? "مبلغ مفتوح يُوزَّع على أولويات هذا البرنامج وأشد احتياجاته إلحاحًا"
@@ -434,47 +466,50 @@ export function DonationEntityItem({
               {selectedEntity.shares.map((share) => {
                 const count = item.selectedShares[share.id] || 0;
                 const selected = count > 0;
+                const inLine = selected ? undefined : takenBy(shareKey(selectedEntity.id, share.id));
+                const name = isAR ? share.nameAr : share.nameEn;
                 return (
                   <div key={share.id}
-                    className={`rounded-xl border p-2.5 transition-all ${
-                      selected ? "border-secondary bg-secondary/8 ring-1 ring-secondary/25" : "border-border/70 bg-card"
+                    className={`flex h-full flex-col rounded-xl border p-2.5 transition-all ${
+                      selected ? "border-secondary bg-secondary/[0.08] ring-1 ring-secondary/30" : inLine ? "border-border/50 bg-muted/30 opacity-70" : "border-border/70 bg-card"
                     }`}>
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0">
-                        <p className="text-xs font-black text-primary leading-snug">
-                          {isAR ? share.nameAr : share.nameEn}
-                        </p>
+                    <div className="flex items-start gap-2.5">
+                      {hasShareImages && <OptionThumb src={share.image} alt={share.imageAlt || name} kind="share" />}
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-black text-primary leading-snug sm:text-[13px]">{name}</p>
                         {share.descAr && (
-                          <p className="text-[10.5px] text-muted-foreground mt-0.5">
+                          <p className="mt-0.5 line-clamp-2 text-[10.5px] text-muted-foreground">
                             {isAR ? share.descAr : share.descEn}
                           </p>
                         )}
                       </div>
-                      <span className="text-sm font-black text-primary shrink-0 whitespace-nowrap">
-                        {share.price.toLocaleString()} {isAR ? "ج" : "EGP"}
+                      <span className="shrink-0 whitespace-nowrap text-sm font-black text-primary">
+                        {share.price.toLocaleString("en-US")} {isAR ? "ج" : "EGP"}
                       </span>
                     </div>
-                    <div className="mt-2 flex items-center justify-between pt-2 border-t border-border/30">
-                      <span className="text-[10.5px] text-muted-foreground font-bold">
+                    <div className="mt-auto flex items-center justify-between gap-2 border-t border-border/30 pt-2">
+                      <span className="text-[10.5px] font-bold text-muted-foreground">
                         {selected
-                          ? `${isAR ? "الإجمالي:" : "Subtotal:"} ${(share.price * count).toLocaleString()} ${isAR ? "ج" : "EGP"}`
-                          : (isAR ? "لم يُختر بعد" : "Not selected")}
+                          ? `${isAR ? "الإجمالي:" : "Subtotal:"} ${(share.price * count).toLocaleString("en-US")} ${isAR ? "ج" : "EGP"}`
+                          : inLine
+                            ? (isAR ? `مختار في البند ${inLine}` : `Already in item #${inLine}`)
+                            : (isAR ? "لم يُختر بعد" : "Not selected")}
                       </span>
                       {selected ? (
-                        <div className="flex items-center gap-1 bg-card border border-border/60 rounded-lg p-0.5">
-                          <button type="button" onClick={() => updateShareCount(share.id, -1)}
-                            className="grid h-6 w-6 place-items-center rounded-md hover:bg-destructive/10 hover:text-destructive text-primary cursor-pointer transition">
+                        <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-card p-0.5">
+                          <button type="button" onClick={() => updateShareCount(share.id, -1)} aria-label={isAR ? `تقليل ${name}` : `Fewer ${name}`}
+                            className="grid h-7 w-7 place-items-center rounded-md text-primary transition hover:bg-destructive/10 hover:text-destructive cursor-pointer">
                             <Minus className="h-3 w-3" />
                           </button>
-                          <span className="w-6 text-center text-xs font-black text-primary">{count}</span>
-                          <button type="button" onClick={() => updateShareCount(share.id, 1)}
-                            className="grid h-6 w-6 place-items-center rounded-md bg-secondary text-slate-950 hover:opacity-90 cursor-pointer transition">
+                          <span className="w-6 text-center text-xs font-black text-primary" aria-live="polite">{count}</span>
+                          <button type="button" onClick={() => updateShareCount(share.id, 1)} aria-label={isAR ? `زيادة ${name}` : `More ${name}`}
+                            className="grid h-7 w-7 place-items-center rounded-md bg-secondary text-slate-950 transition hover:opacity-90 cursor-pointer">
                             <Plus className="h-3 w-3" />
                           </button>
                         </div>
                       ) : (
-                        <button type="button" onClick={() => updateShareCount(share.id, 1)}
-                          className="h-7 px-3 text-xs font-bold rounded-lg border border-secondary/50 text-primary hover:bg-secondary hover:text-slate-950 transition cursor-pointer">
+                        <button type="button" disabled={!!inLine} onClick={() => updateShareCount(share.id, 1)}
+                          className="h-8 rounded-lg border border-secondary/50 px-3 text-xs font-bold text-primary transition hover:bg-secondary hover:text-slate-950 cursor-pointer disabled:cursor-not-allowed disabled:border-border disabled:text-muted-foreground disabled:hover:bg-transparent">
                           {isAR ? "+ اختيار" : "+ Select"}
                         </button>
                       )}
@@ -512,15 +547,19 @@ export function DonationEntityItem({
                 const pct = need > 0 ? Math.min(100, Math.floor((raised / need) * 100)) : 0;
                 const loc = "en-US";
                 const place = [cs.beneficiaryName, cs.city || cs.governorate].filter(Boolean).join(" — ");
+                const inLine = sel ? undefined : takenBy(caseKey(cs.id));
                 return (
-                  <button type="button" role="radio" aria-checked={sel} key={cs.id}
+                  <button type="button" role="radio" aria-checked={sel} key={cs.id} disabled={!!inLine}
                     onClick={() => onUpdate({ ...item, selectedCaseId: cs.id, amount: left > 0 && item.amount > left ? left : item.amount })}
-                    className={`flex h-full flex-col rounded-xl border p-3 text-start transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary ${
-                      sel ? "border-secondary bg-secondary/[0.08] ring-1 ring-secondary/30" : "border-border/70 bg-card hover:border-secondary/40"
+                    className={`flex h-full flex-col rounded-xl border p-2.5 text-start transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary disabled:cursor-not-allowed ${
+                      sel ? "border-secondary bg-secondary/[0.08] ring-1 ring-secondary/30" : inLine ? "border-border/50 bg-muted/30 opacity-70" : "border-border/70 bg-card hover:border-secondary/40"
                     }`}>
-                    <span className="flex w-full items-start gap-2">
-                      <span className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full border-2 ${sel ? "border-secondary bg-secondary" : "border-border"}`}>
-                        {sel && <Check className="h-2.5 w-2.5 text-slate-950" strokeWidth={4} />}
+                    <span className="flex w-full items-start gap-2.5">
+                      <span className="relative">
+                        <OptionThumb src={cs.image} alt={isAR ? cs.titleAr : cs.titleEn} kind="case" />
+                        <span className={`absolute -start-1 -top-1 grid h-4 w-4 place-items-center rounded-full border-2 bg-card ${sel ? "border-secondary bg-secondary" : "border-border"}`}>
+                          {sel && <Check className="h-2.5 w-2.5 text-slate-950" strokeWidth={4} />}
+                        </span>
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="line-clamp-2 block text-xs font-black leading-5 text-primary sm:text-[13px]">
@@ -549,7 +588,10 @@ export function DonationEntityItem({
                         </span>
                       </span>
                     )}
-                    <span className="mt-1 block font-mono text-[10px] text-muted-foreground/80" dir="ltr">#{cs.refCode}</span>
+                    <span className="mt-1 flex items-center justify-between gap-2 text-[10px]">
+                      <span className="font-mono text-muted-foreground/80" dir="ltr">#{cs.refCode}</span>
+                      {inLine && <span className="font-bold text-muted-foreground">{isAR ? `مختارة في البند ${inLine}` : `In item #${inLine}`}</span>}
+                    </span>
                   </button>
                 );
               })}

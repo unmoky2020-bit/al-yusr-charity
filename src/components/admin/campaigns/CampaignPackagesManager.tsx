@@ -23,6 +23,7 @@ import type { L } from "@/data/campaignPages/types";
 export type { PackagePriceKey } from "./packageHelpers";
 import type { PackagePriceKey } from "./packageHelpers";
 import { askConfirm } from "@/components/common/confirm";
+import { PackageImageButton } from "@/components/admin/programs/PackageImageButton";
 
 type Props = {
   campaignId: number | string | null;
@@ -243,7 +244,10 @@ export function CampaignPackagesManager({ campaignId, packages, onChange, isAr, 
                       <ArrowDown className="h-3.5 w-3.5" />
                     </Button>
                   </div>
-                  <label className="grid gap-1 text-[11px] font-bold text-muted-foreground sm:col-span-3">
+                  <div className="flex items-end sm:col-span-1">
+                    <PackageImageButton packageId={live ? p.id : null} nameAr={p.name_ar || d.name_ar} />
+                  </div>
+                  <label className="grid gap-1 text-[11px] font-bold text-muted-foreground sm:col-span-2">
                     {isAr ? "الاسم (عربي) *" : "Name (AR) *"}
                     <Input dir="rtl" className="h-9 text-xs" value={d.name_ar} onChange={(e) => editRow(p, idx, { name_ar: e.target.value })} />
                   </label>
