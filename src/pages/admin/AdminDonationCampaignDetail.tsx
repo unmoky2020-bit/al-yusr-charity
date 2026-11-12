@@ -336,7 +336,7 @@ export default function AdminDonationCampaignDetail() {
         subtitle_en: campaign.subtitle_en?.trim() || null,
         description_ar: campaign.description_ar?.trim() || campaign.name_ar.trim(),
         description_en: campaign.description_en?.trim() || null,
-        target_amount: Number(campaign.target_amount || 0),
+        target_amount: Number(campaign.target_amount || 0) > 0 ? Number(campaign.target_amount) : null,
         collected_amount: Number(campaign.collected_amount || 0),
         minimum_amount: Number(campaign.minimum_amount || 50),
         donation_available: campaign.donation_available !== false,

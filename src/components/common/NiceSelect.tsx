@@ -48,7 +48,7 @@ export function NiceSelect({
         dir={dir}
         position="popper"
         sideOffset={6}
-        className="z-[160] max-h-80 rounded-2xl border-border/80 p-1 shadow-card"
+        className="z-[160] max-h-80 w-[var(--radix-select-trigger-width)] max-w-[calc(100vw-1.5rem)] rounded-2xl border-border/80 p-1 shadow-card [&_[role=option]]:whitespace-normal [&_[role=option]]:text-start"
       >
         {options.map((o) => (
           <SelectPrimitive.Item

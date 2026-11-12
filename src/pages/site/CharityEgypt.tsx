@@ -137,9 +137,9 @@ const CharityEgypt = () => {
               : "Al-Yusr Charity Foundation is an NGO registered under No. 2665 of 2019, based in Mansoura. You can give online from any governorate, and your gift reaches families in need in Dakahlia and the governorates our projects reach."}
           </p>
 
-          <div className="mx-auto mt-7 grid max-w-4xl grid-cols-2 gap-2.5 text-start sm:gap-3 lg:grid-cols-4">
-            {intents.filter((x) => hasCases || x.to !== "/cases").map(({ to, Icon, t, d, accent }) => (
-              <Link key={t} to={to} className={`group flex h-full flex-col gap-2 rounded-2xl border p-4 transition hover:-translate-y-0.5 ${accent ? "border-transparent bg-orange-grad text-accent-foreground shadow-cta" : "border-white/15 bg-white/10 text-primary-foreground backdrop-blur-md hover:bg-white/15"}`}>
+          <div className={`mx-auto mt-7 grid max-w-4xl grid-cols-2 gap-2.5 text-start sm:gap-3 ${hasCases ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
+            {intents.filter((x) => hasCases || x.to !== "/cases").map(({ to, Icon, t, d, accent }, i, all) => (
+              <Link key={t} to={to} className={`${all.length % 2 === 1 && i === all.length - 1 ? "col-span-2 lg:col-span-1 " : ""}group flex h-full flex-col gap-2 rounded-2xl border p-4 transition hover:-translate-y-0.5 ${accent ? "border-transparent bg-orange-grad text-accent-foreground shadow-cta" : "border-white/15 bg-white/10 text-primary-foreground backdrop-blur-md hover:bg-white/15"}`}>
                 <Icon className={`h-6 w-6 ${accent ? "" : "text-secondary"}`} />
                 <span className="text-[15px] font-black leading-snug sm:text-base">{t}</span>
                 <span className={`text-[11.5px] font-bold leading-relaxed sm:text-xs ${accent ? "text-accent-foreground/90" : "text-primary-foreground/75"}`}>{d}</span>

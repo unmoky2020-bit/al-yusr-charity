@@ -6,7 +6,7 @@
  * The editor sends them; if the backend drops them, the save result says so (no fake success).
  */
 import type { AdminProjectRecord } from "@/data/api/programsAdminApi";
-import {
+import { openAmount,
   cleanList,
   emptySeo,
   nullableNumber,
@@ -101,8 +101,8 @@ export function projectPayload(f: ProjectForm): Record<string, unknown> {
     short_description: nullableString(f.short_description),
     short_description_en: nullableString(f.short_description_en),
     description: nullableString(f.description),
-    target_amount: nullableNumber(f.target_amount),
-    starting_price: nullableNumber(f.starting_price),
+    target_amount: openAmount(f.target_amount),
+    starting_price: openAmount(f.starting_price),
     display_order: nullableNumber(f.display_order),
     cover_image: nullableString(f.cover_image),
     is_active: f.is_active,

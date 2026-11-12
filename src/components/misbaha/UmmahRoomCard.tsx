@@ -22,7 +22,7 @@ export function UmmahRoomCard({ isAr }: { isAr: boolean }) {
     <Link
       to={`/misbaha/${UMMAH_ROOM_SLUG}`}
       dir={isAr ? "rtl" : "ltr"}
-      className="keep-flow group mx-auto mt-6 flex w-full max-w-xl items-center gap-3 rounded-2xl border border-secondary/35 bg-white/[0.07] p-3 text-start backdrop-blur-sm transition hover:border-secondary/70 hover:bg-white/[0.11] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary sm:gap-4 sm:p-4"
+      className="keep-flow group mx-auto flex w-full max-w-2xl items-center gap-3 rounded-2xl border border-secondary/40 bg-[hsl(152_60%_12%)] p-3 text-start shadow-[0_18px_40px_-18px_rgba(0,0,0,0.55)] transition hover:border-secondary/80 hover:bg-[hsl(152_60%_14%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary sm:gap-4 sm:p-4"
     >
       <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary text-secondary-foreground sm:h-12 sm:w-12">
         <Globe2 className="h-5 w-5 sm:h-6 sm:w-6" />

@@ -3,7 +3,7 @@
  */
 import type { AdminProgramRecord, ProgramTopSection } from "@/data/api/programsAdminApi";
 import { programSlugKey } from "@/data/programs/fillProgramSections";
-import {
+import { openAmount,
   cleanList,
   nullableNumber,
   nullableString,
@@ -137,8 +137,8 @@ export function programPayload(f: ProgramForm): Record<string, unknown> {
     benefits_en: benefitsEn,
     axis_id: f.axis_id ? Number(f.axis_id) : null,
     season_ids: [...f.season_ids].sort((a, b) => a - b),
-    target_amount: nullableNumber(f.target_amount),
-    minimum_amount: nullableNumber(f.minimum_amount),
+    target_amount: openAmount(f.target_amount),
+    minimum_amount: openAmount(f.minimum_amount),
     donation_available: f.donation_available,
     status: f.status,
     is_active: f.is_active,
@@ -219,7 +219,7 @@ export function topSectionPayload(f: TopSectionForm, original: ProgramTopSection
     image: nullableString(f.image),
     primary_button_ar: nullableString(f.primary_button_ar),
     whatsapp_button_ar: nullableString(f.whatsapp_button_ar),
-    minimum_amount: nullableNumber(f.minimum_amount),
+    minimum_amount: openAmount(f.minimum_amount),
     currency_ar: nullableString(f.currency_ar),
     donation_available: f.donation_available,
   };

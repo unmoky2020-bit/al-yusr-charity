@@ -28,6 +28,12 @@ export function nullableString(s: string): string | null {
   return t ? t : null;
 }
 
+/** An amount that may be left open: empty or zero means «no target / no minimum» and is sent as null. */
+export function openAmount(s: string): number | null {
+  const n = nullableNumber(s);
+  return n !== null && n > 0 ? n : null;
+}
+
 export function nullableNumber(s: string): number | null {
   const t = (s ?? "").trim();
   if (!t) return null;

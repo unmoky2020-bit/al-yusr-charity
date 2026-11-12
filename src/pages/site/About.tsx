@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ORG } from "@/data/orgInfo";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo, type ReactNode } from "react";
 import {
   ShieldCheck,
   Heart,
@@ -173,14 +173,13 @@ const About = () => {
   }, [aboutData.values, isRTL]);
 
   // Timeline is not in the API yet — keep static until backend adds it
-  const timeline = isRTL
+  const timeline: { y: string; t: string; d: ReactNode }[] = isRTL
     ? [
-        { y: "2000–2019", t: "البداية: فريق اجتمع على عمل الخير", d: "فريق جمعه هدف واحد: خدمة الأسر المستحقة. وعلى مدار السنين بنى خبرته في الميدان قبل التأسيس الرسمي." },
-        { y: "2019", t: "تأسيس وإشهار مؤسسة اليسر", d: "في الشهرين الأخيرين من عام 2019 صدر الإشهار الرسمي رقم 2665 من وزارة التضامن الاجتماعي." },
-        { y: "2020", t: "إطلاق محاور الغذاء والتعليم والصحة", d: "جعلنا بناء الإنسان محورًا رئيسيًا لكل المبادرات والقوافل الميدانية." },
-        { y: "2022", t: "حملة سِتْر للشتاء", d: "أسقف عازلة وألحفة فايبر وملابس شتوية وأبواب وشبابيك لبيوت أهالينا." },
-        { y: "2023", t: "حملة ظِلّ ومبادرة مَرْكُون", d: "سقيا الماء وتوصيل خطوط القرى، وإعادة تدوير الأثاث والأجهزة والأدوية." },
-        { y: "2025", t: "إنجازات قياسية في كافة المحافظات", d: "1400 كرتونة رمضان، 3000+ كرتونة شهرية، 385 وصلة مياه، و122 سقفًا، و5 أطنان من اللحوم." },
+        { y: "2019", t: "البداية الرسمية: تأسيس مؤسسة اليسر الخيرية", d: "انطلقت المؤسسة رسميًا في أواخر 2019 بإشهار رقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي، لتبدأ رحلة منظمة في العمل الخيري وخدمة المستحقين." },
+        { y: "2020", t: "بناء منظومة متكاملة للعطاء", d: <>بدأ العمل على محاور <Link to="/programs" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">الغذاء والتعليم والصحة</Link>، لتقديم دعم متكامل يراعي احتياجات الإنسان الأساسية.</> },
+        { y: "2022", t: "توسيع مظلة الحماية الاجتماعية", d: <>إطلاق <Link to="/setr" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">حملة سِتْر</Link> لتوفير الاحتياجات الأساسية للأسر، من ترميم الأسقف إلى الأغطية والملابس الشتوية وتجهيزات المنزل.</> },
+        { y: "2023", t: "من المساعدة إلى الحلول المستدامة", d: <>التوسع في مشروعات <Link to="/water" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">توصيل المياه</Link>، وإطلاق <Link to="/markoun" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">مبادرة مَرْكُون</Link> لإعادة تدوير الأثاث والأجهزة والملابس والكتب والاستفادة منها.</> },
+        { y: "2025", t: "مرحلة التوسع وقياس الأثر", d: <>إنجازات ميدانية واسعة في <Link to="/food-box" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">دعم الغذاء</Link> و<Link to="/dhill" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">توصيل المياه وتأهيل المنازل</Link> وتوفير اللحوم.</> },
       ]
     : [
         { y: "2000–2019", t: "The start: a team for good", d: "A team united by one aim, serving families in need, which built its field experience over the years before official incorporation." },
@@ -862,10 +861,10 @@ const About = () => {
                 {isRTL ? "محطات من تاريخ العطاء" : "History & Milestones"}
               </span>
               <h2 data-reveal className="reveal-up mt-3 text-2xl font-black text-primary md:text-4xl">
-                {isRTL ? "رحلتنا وتاريخنا" : "Our Journey & Milestones"}
+                {isRTL ? "رحلة من العطاء.. إلى صناعة الأثر" : "Our Journey & Milestones"}
               </h2>
               <p data-reveal className="reveal-up mt-3 text-sm text-muted-foreground md:text-base">
-                {isRTL ? "من فريق اجتمع على عمل الخير إلى مؤسسة مشهرة رسميًا، والمسيرة مستمرة." : "From a team that came together to do good to an officially registered foundation, and the journey continues."}
+                {isRTL ? "منذ البداية وحتى اليوم، رؤيتنا أن يتجاوز العمل الخيري تقديم المساعدة إلى بناء إنسان ومجتمع أكثر استقرارًا." : "From a team that came together to do good to an officially registered foundation, and the journey continues."}
               </p>
             </div>
 

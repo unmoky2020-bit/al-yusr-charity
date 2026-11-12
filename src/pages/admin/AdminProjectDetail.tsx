@@ -380,8 +380,8 @@ export default function AdminProjectDetail() {
           <TabsContent value="packages" className="space-y-4" dir="rtl">
             <SectionCard icon={<DollarSign className="h-4 w-4 text-primary" />} title="المبالغ">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <Field label="هدف الجمع (target_amount)"><Input dir="ltr" type="number" value={form.target_amount} className="h-10 rounded-xl" onChange={(e) => set("target_amount", e.target.value)} /></Field>
-                <Field label="السعر يبدأ من (starting_price)"><Input dir="ltr" type="number" value={form.starting_price} className="h-10 rounded-xl" onChange={(e) => set("starting_price", e.target.value)} /></Field>
+                <Field label="هدف الجمع — اتركه فارغًا لو مفتوح"><Input dir="ltr" type="number" value={form.target_amount} className="h-10 rounded-xl" onChange={(e) => set("target_amount", e.target.value)} /></Field>
+                <Field label="السعر يبدأ من — اختياري"><Input dir="ltr" type="number" value={form.starting_price} className="h-10 rounded-xl" onChange={(e) => set("starting_price", e.target.value)} /></Field>
                 <Field label="المحصّل (للعرض فقط)"><Input dir="ltr" disabled value={String(raised)} className="h-10 rounded-xl" /></Field>
               </div>
             </SectionCard>

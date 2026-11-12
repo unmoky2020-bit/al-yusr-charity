@@ -131,8 +131,8 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
             )}
           </div>
 
-          <Link to="/misbaha#memorial" className="flex items-center justify-center gap-2 rounded-2xl border border-dashed border-border px-4 py-3 text-sm font-black text-primary transition hover:border-secondary hover:bg-secondary/10">
-            <Plus className="h-4 w-4" /> {isAr ? "أنشئ سبحة لشخص آخر عزيز عليك" : "Create one for someone else"}
+          <Link to="/misbaha#memorial" className="keep-flow flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-dashed border-border px-4 py-3 text-center text-sm font-black text-primary transition hover:border-secondary hover:bg-secondary/10">
+            <Plus className="h-4 w-4 shrink-0" /> {isAr ? "أنشئ سبحة لشخص آخر عزيز عليك" : "Create one for someone else"}
           </Link>
         </div>
       </div>

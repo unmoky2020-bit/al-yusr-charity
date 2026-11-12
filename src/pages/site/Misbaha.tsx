@@ -367,7 +367,6 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 <p className="mt-3 text-base text-primary-foreground/85 md:text-lg">
                   {isAr ? "قل الذكر واضغط على المسبحة. يتغيّر الذكر مع كل ضغطة لتجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، ويمكنك أن تختار ذكرًا واحدًا إن أردت. يُحفظ عدّادك على جهازك طوال اليوم، ويبدأ من جديد مع كل يوم." : "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count stays on this device for the day and starts fresh each new day."}
                 </p>
-                <UmmahRoomCard isAr={isAr} />
               </>
             )}
           </div>
@@ -574,6 +573,12 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
       </section>
 
       {roomSlug && room && roomState === "ok" && <RoomExtras isAr={isAr} room={room} pageUrl={pageUrl} />}
+      {/* The all-Muslims room rides the seam: half on the green hero, half on the light section below. */}
+      {!roomSlug && (
+        <div className="relative z-10 -mt-10 bg-gradient-to-b from-transparent from-50% to-muted/40 to-50% px-4">
+          <UmmahRoomCard isAr={isAr} />
+        </div>
+      )}
       {!roomSlug && <MemorialCreate isAr={isAr} onCreated={(slug) => navigate(`/misbaha/${slug}?new=1`)} />}
       {storyOpen && room && <StoryDialog isAr={isAr} room={room} pageUrl={pageUrl} onClose={() => setStoryOpen(false)} />}
 
