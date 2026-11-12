@@ -691,18 +691,21 @@ const Projects = () => {
             </motion.div>
           )}
 
-          {/* Hidden SEO matrix — every Dakahlia city × program permutation
-              rendered as crawlable links. Visually hidden but readable to
-              search engines and AI answer engines (sr-only keeps it in DOM
-              flow, off-screen). */}
-          <div className="sr-only" aria-hidden="false">
-            <h2>{isRTL ? "كل برامج اليسر في مدن وقرى الدقهلية" : "All Al-Yusr programs across Dakahlia cities and villages"}</h2>
-            <p>
+          {/* Every Dakahlia city × program page, as a visible (collapsed) list: it used to be sr-only,
+              which search engines treat as hidden text. */}
+          <details className="group mt-10 rounded-2xl border border-border/70 bg-card p-4 text-start sm:p-5">
+            <summary className="cursor-pointer list-none text-sm font-black text-primary marker:hidden">
+              <span className="inline-flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-secondary" />
+                {isRTL ? "كل برامج اليسر في مدن وقرى الدقهلية والمحافظات" : "All Al-Yusr programs across Dakahlia and Egypt's governorates"}
+              </span>
+            </summary>
+            <p className="mt-3 text-xs leading-relaxed text-muted-foreground sm:text-sm">
               {isRTL
                 ? "تغطية شاملة لبرامج الأضحية والكرتونة وزكاة المال وكفالة اليتيم والتعليم والمياه وتجهيز العرائس وستر البيوت في كل مدن وقرى محافظة الدقهلية: المنصورة، ميت غمر، بلقاس، دكرنس، شربين، أجا، السنبلاوين، طلخا، نبروه، المطرية، الجمالية، ميت سلسيل، بني عبيد، المنزلة. تبرّع لأي مدينة عبر مؤسسة اليسر الخيرية."
                 : "Comprehensive Al-Yusr coverage for Qurbani, food box, Zakat, orphan sponsorship, education, water, bride trousseau and home shelter across every Dakahlia city and village: Mansoura, Mit Ghamr, Belqas, Dikirnis, Sherbin, Aga, Sinbillawayn, Talkha, Nabaroh, Matareya, Gamalia, Mit Salsil, Bani Ubaid, Manzala."}
             </p>
-            <ul>
+            <ul className="mt-3 grid gap-x-4 gap-y-1.5 text-xs sm:grid-cols-2 lg:grid-cols-3 [&_a]:text-primary/80 [&_a:hover]:text-primary [&_a:hover]:underline">
               {DAKAHLIA_CITIES.flatMap((c) =>
                 c.programs.map((slug) => {
                   const prog = programs.find((p) => p.slug === slug);
@@ -734,7 +737,7 @@ const Projects = () => {
                 }),
               )}
             </ul>
-          </div>
+          </details>
         </div>
       </section>
 

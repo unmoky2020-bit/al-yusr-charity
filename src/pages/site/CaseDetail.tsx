@@ -623,7 +623,7 @@ const CaseDetail = () => {
                             (isVideo(item.media_url) ? (
                               <video src={item.media_url} controls className="mt-3 max-h-72 w-full rounded-xl bg-black object-contain" />
                             ) : (
-                              <img src={item.media_url} alt="" loading="lazy" className="mt-3 max-h-72 w-full rounded-xl object-cover" />
+                              <img src={item.media_url} alt={item.title || ""} loading="lazy" className="mt-3 max-h-72 w-full rounded-xl object-cover" />
                             ))}
                         </div>
                       </li>

@@ -84,7 +84,7 @@ export function TargetCard({ t, lang }: { t: ImpactTargetRow; lang: Lang }) {
   return (
     <Link to={impactPath(t)} className="group flex gap-3 rounded-3xl border border-border bg-card p-3 shadow-soft transition hover:-translate-y-0.5 hover:border-secondary/60">
       <div className="h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-muted">
-        {t.image && <img src={img(t.image)} alt="" loading="lazy" className="h-full w-full object-cover" />}
+        {t.image && <img src={img(t.image)} alt={t.name} loading="lazy" className="h-full w-full object-cover" />}
       </div>
       <div className="min-w-0 flex-1">
         <span className="rounded-full bg-secondary/15 px-2 py-0.5 text-[10px] font-black text-primary">{KIND_LABEL[t.kind][lang]}</span>

@@ -164,6 +164,16 @@ export const CampaignLandingShell = (p: LandingProps) => {
               target: `https://elyusr.org${p.donateHref}`,
             },
             {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: isAr ? "الرئيسية" : "Home", item: "https://elyusr.org/" },
+                p.crumbParent
+                  ? { "@type": "ListItem", position: 2, name: isAr ? p.crumbParent.ar : p.crumbParent.en, item: `https://elyusr.org${p.crumbParent.href}` }
+                  : { "@type": "ListItem", position: 2, name: isAr ? "الحملات" : "Campaigns", item: "https://elyusr.org/campaigns" },
+                { "@type": "ListItem", position: 3, name: isAr ? p.titleAr : p.titleEn, item: pageUrl },
+              ],
+            },
+            {
               "@type": "WebPage",
               "@id": pageUrl,
               url: pageUrl,
@@ -177,18 +187,6 @@ export const CampaignLandingShell = (p: LandingProps) => {
           ]
         })}</script>
       </Helmet>
-
-      {/* Invisible High-Intent Semantic AI Overview microdata (indexed by Google SGE, Perplexity, Gemini, Bing without UI clutter) */}
-      <div className="sr-only ai-overview-content" aria-hidden="false">
-        <h2>{isAr ? p.titleAr : p.titleEn}</h2>
-        <p>{isAr ? p.taglineAr : p.taglineEn}</p>
-        <p>{isAr ? p.metaDescAr : p.metaDescEn}</p>
-        <p>
-          {isAr
-            ? "مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي. تغطي حملاتنا محافظة الدقهلية (المنصورة، ميت غمر، طلخا، بلقاس، شربين، السنبلاوين) وكافة محافظات مصر. يتم توثيق 100% من التبرعات وإيصالها بكرامة مع إرسال صور وفيديوهات للمتبرع."
-            : "Al-Yusr Charity Foundation is officially registered under No. 2665/2019 with the Egyptian Ministry of Social Solidarity. We cover Dakahlia (Mansoura, Mit Ghamr, Talkha) and all Egypt governorates with 100% verified photo and video proof sent directly to donors."}
-        </p>
-      </div>
 
       {p.hero ?? (
       <section className="relative overflow-x-clip pattern-hero-luxe hero-pattern-fade text-primary-foreground w-full">
@@ -406,6 +404,23 @@ export const CampaignLandingShell = (p: LandingProps) => {
       )}
 
       <LocalFAQ items={isAr ? p.faq.ar : p.faq.en} categorySlug={p.faqCategorySlug} donateHref={p.donateHref} id={`${p.slug}-faq`} />
+
+      {/* A short visible summary (it used to be sr-only text for crawlers, which search engines treat as hidden text). */}
+      <section aria-labelledby={`${p.slug}-summary`} className="ai-overview-content bg-background">
+        <div className="container mx-auto max-w-3xl px-4 py-10 text-center">
+          <h2 id={`${p.slug}-summary`} className="text-lg font-black text-primary md:text-xl">
+            {isAr ? `${p.titleAr} باختصار` : `${p.titleEn} in short`}
+          </h2>
+          {(isAr ? p.metaDescAr : p.metaDescEn) && (
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{isAr ? p.metaDescAr : p.metaDescEn}</p>
+          )}
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">
+            {isAr
+              ? "مؤسسة اليسر الخيرية جمعية أهلية مشهرة برقم 2665 لسنة 2019، مقرها المنصورة بمحافظة الدقهلية. بعد التبرع يصلك رقم تتابع به تبرعك خطوة بخطوة."
+              : "Al-Yusr Charity Foundation is a registered Egyptian NGO (No. 2665/2019) based in Mansoura, Dakahlia. After you give, you get a reference to follow your donation step by step."}
+          </p>
+        </div>
+      </section>
 
       {/* Final CTA — 2 buttons side by side in one single row on mobile & desktop */}
       <section className={`relative overflow-hidden pt-14 pb-28 sm:pb-36 md:pt-16 md:pb-44 text-primary-foreground ${p.finalCtaClassName ?? "pattern-hero-luxe"}`}>

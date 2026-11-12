@@ -977,10 +977,6 @@ const ArbounLanding = () => {
         </div>
       )}
 
-      {/* ── Semantic Programmatic SEO (sr-only) ──────────────────── */}
-      <div className="sr-only">
-        مبادرة عربون خير للفريلانسرز والمستقلين في مصر، زكاة العمل الحر، تبرعات مطوري البرمجيات ومصممي الجرافيك وكتاب المحتوى، تبرع بالدولار، كفالة يتيم المنصورة، تيسير زواج عرائس يتيمات بالدقهلية، سقيا الماء، أسقف معزولة، مؤسسة اليسر الخيرية مشهرة برقم 2665 لسنة 2019 وزارة التضامن الاجتماعي، شارة فريلانسر معتمدة، freelance charity Egypt, remote workers zakat Egypt, Arab digital nomads charity pledge, Al-Yusr NGO Mansoura.
-      </div>
     </PageLayout>
   );
 };

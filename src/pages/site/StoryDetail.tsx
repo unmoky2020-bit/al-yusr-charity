@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/i18n/LangContext";
@@ -97,6 +98,25 @@ export default function StoryDetail() {
         path={`/stories/${slug}`}
         image={seo.og_image_url || story.image_url || undefined}
       />
+      <BreadcrumbSchema
+        items={[
+          { name: isAR ? "الرئيسية" : "Home", url: "https://elyusr.org/" },
+          { name: isAR ? "قصص الأثر" : "Stories", url: "https://elyusr.org/stories" },
+          { name: title, url: `https://elyusr.org/stories/${slug}` },
+        ]}
+      />
+      {story.created_at && (
+        <ArticleSchema
+          url={`https://elyusr.org/stories/${slug}`}
+          headline={metaTitle}
+          description={metaDesc}
+          image={(seo.og_image_url || story.image_url || "https://elyusr.org/logo-512.png") as string}
+          datePublished={story.created_at}
+          dateModified={story.updated_at}
+          section={isAR ? "قصص الأثر" : "Impact stories"}
+          inLanguage={isAR ? "ar" : "en"}
+        />
+      )}
 
       <article dir={isAR ? "rtl" : "ltr"} className="min-h-screen bg-background pb-16">
         {/* Header Hero Banner */}

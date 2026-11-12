@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { CalendarDays, MapPin, Users2, ArrowLeft, Check } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { SEOHelmet } from "@/components/common/SEOHelmet";
+import { Helmet } from "react-helmet-async";
+import { BreadcrumbSchema } from "@/components/common/Schemas";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -92,6 +94,35 @@ const CampaignDetail = () => {
         path={`/campaigns/${c.slug}`}
         image={heroImage}
       />
+      <BreadcrumbSchema
+        items={[
+          { name: lang === "ar" ? "الرئيسية" : "Home", url: "https://elyusr.org/" },
+          { name: lang === "ar" ? "حملات التطوع" : "Volunteer campaigns", url: "https://elyusr.org/campaigns" },
+          { name: title, url: `https://elyusr.org/campaigns/${c.slug}` },
+        ]}
+      />
+      {c.event_date && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Event",
+            name: title,
+            description: (desc || "").slice(0, 300) || undefined,
+            startDate: c.event_date,
+            eventStatus: "https://schema.org/EventScheduled",
+            eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+            location: {
+              "@type": "Place",
+              name: c.location || c.city || (lang === "ar" ? "المنصورة" : "Mansoura"),
+              address: { "@type": "PostalAddress", addressLocality: c.city || "Mansoura", addressRegion: "Dakahlia", addressCountry: "EG" },
+            },
+            ...(c.cover_image_url || heroImage ? { image: [c.cover_image_url || heroImage] } : {}),
+            organizer: { "@type": "NGO", "@id": "https://elyusr.org/#org", name: "مؤسسة اليسر الخيرية", url: "https://elyusr.org/" },
+            isAccessibleForFree: true,
+            url: `https://elyusr.org/campaigns/${c.slug}`,
+          })}</script>
+        </Helmet>
+      )}
       <section className="pattern-hero-luxe hero-pattern-fade text-primary-foreground">
         <div className="container mx-auto max-w-4xl px-4 py-10 md:py-14">
           <div className="text-primary-foreground/85"><Breadcrumbs items={[
