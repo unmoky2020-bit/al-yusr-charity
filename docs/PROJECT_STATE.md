@@ -19,7 +19,7 @@
 ```bash
 npm ci && npm run dev                      # http://localhost:8080
 npx tsc --noEmit -p tsconfig.app.json      # لازم 0 أخطاء
-npm test                                   # 252 اختبار في 59 ملف
+npm test                                   # 244 اختبار في 57 ملف
 ```
 
 ## نشر الواجهة
