@@ -1,3 +1,4 @@
+import { useHasCases } from "@/data/useHasCases";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
@@ -25,6 +26,7 @@ const SITE = "https://elyusr.org";
  */
 const CharityEgypt = () => {
   const { lang } = useLang();
+  const hasCases = useHasCases();
   const ar = lang === "ar";
   const Arrow = ar ? ArrowLeft : ArrowRight;
 
@@ -136,7 +138,7 @@ const CharityEgypt = () => {
           </p>
 
           <div className="mx-auto mt-7 grid max-w-4xl grid-cols-2 gap-2.5 text-start sm:gap-3 lg:grid-cols-4">
-            {intents.map(({ to, Icon, t, d, accent }) => (
+            {intents.filter((x) => hasCases || x.to !== "/cases").map(({ to, Icon, t, d, accent }) => (
               <Link key={t} to={to} className={`group flex h-full flex-col gap-2 rounded-2xl border p-4 transition hover:-translate-y-0.5 ${accent ? "border-transparent bg-orange-grad text-accent-foreground shadow-cta" : "border-white/15 bg-white/10 text-primary-foreground backdrop-blur-md hover:bg-white/15"}`}>
                 <Icon className={`h-6 w-6 ${accent ? "" : "text-secondary"}`} />
                 <span className="text-[15px] font-black leading-snug sm:text-base">{t}</span>

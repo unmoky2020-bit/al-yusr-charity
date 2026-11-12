@@ -1,3 +1,4 @@
+import { useHasCases } from "@/data/useHasCases";
 import { useMemo } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { Heart, MapPin, ShieldCheck, Users, Truck, CheckCircle2, ArrowLeft, ArrowRight, Phone, Clock, Award, Quote, Building2, FileCheck2, Banknote, HandHeart, Sparkles } from "lucide-react";
@@ -217,6 +218,7 @@ const SHOW_UNCONFIRMED_CLAIMS = false;
 const DonateCity = () => {
   const { city = "" } = useParams<{ city: string }>();
   const { lang } = useLang();
+  const hasCases = useHasCases();
 
   const cityData = useMemo(() => DAKAHLIA_CITIES.find((c) => c.slug === city), [city]);
   const rich = RICH_COPY[city];
@@ -555,7 +557,7 @@ const DonateCity = () => {
             </h3>
             <div className="flex flex-wrap gap-2 text-xs font-semibold">
               {[
-                { to: "/cases", ar: `حالات محتاجة في ${cityName}`, en: `Needy cases in ${cityName}` },
+                ...(hasCases ? [{ to: "/cases", ar: `حالات محتاجة في ${cityName}`, en: `Needy cases in ${cityName}` }] : []),
                 { to: `/qurbani/${city}`, ar: `أضحية ${cityName}`, en: `Qurbani in ${cityName}` },
                 { to: "/programs/orphan", ar: `كفالة يتيم في الدقهلية`, en: "Orphan sponsorship in Dakahlia" },
                 { to: "/zakat", ar: "حساب الزكاة 2026", en: "Zakat calculator 2026" },

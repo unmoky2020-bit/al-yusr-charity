@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useHasCases } from "@/data/useHasCases";
 import { Link, useLocation } from "react-router-dom";
 import {
   X, Heart, User as UserIcon, LogIn, ChevronDown, Languages, HelpCircle, Sofa, Briefcase, Sprout, ShieldCheck,
@@ -111,13 +112,14 @@ export const Navbar = () => {
   ];
 
   // Primary navigation (always in the bar on desktop; sizes tighten on 1024–1280 px so nothing overlaps).
+  const hasCases = useHasCases();
   const links: { to: string; label: string; highlight?: boolean; wide?: boolean; Icon?: LucideIcon; descAr?: string; descEn?: string }[] = [
     { to: "/about",     label: t.nav.about, wide: true, Icon: Info, descAr: "من نحن وكيف نعمل", descEn: "Who we are" },
     { to: "/programs",  label: lang === "ar" ? "برامجنا" : "Programs" },
     { to: "/projects",  label: lang === "ar" ? "مشاريعنا" : "Projects", wide: true, Icon: FolderKanban, descAr: "مشاريع الخير الكبيرة", descEn: "Our larger projects" },
     { to: "/campaigns", label: lang === "ar" ? "حملاتنا" : "Campaigns" },
     { to: "/misbaha",   label: lang === "ar" ? "المسبحة" : "Tasbih" },
-    { to: "/cases",     label: lang === "ar" ? "الحالات" : "Cases" },
+    ...(hasCases ? [{ to: "/cases", label: lang === "ar" ? "الحالات" : "Cases" }] : []),
     { to: "/blog",      label: lang === "ar" ? "المدونة" : "Blog", wide: true, Icon: BookOpen, descAr: "قصص ومقالات", descEn: "Stories and articles" },
     { to: "/contact",   label: t.nav.contact, wide: true, Icon: Phone, descAr: "واتساب وهاتف وعنوان", descEn: "WhatsApp, phone, address" },
   ];

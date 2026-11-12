@@ -1,3 +1,4 @@
+import { useHasCases } from "@/data/useHasCases";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { BookOpen, Check, Copy, Droplets, Facebook, HandHeart, HeartPulse, Plus, Send } from "lucide-react";
@@ -16,6 +17,7 @@ const SURAHS = [
 /** Below the counter on a shared misbaha: duas to say, Quran, ready share message, ongoing charity. */
 export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: MisbahaRoom; pageUrl: string }) {
   const duas = roomDuas(room.kind, room.gender, room.name);
+  const hasCases = useHasCases();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [reps, setReps] = useState<Record<string, number>>({});
   const message = `${roomShareText(room.kind, room.gender, room.name, isAr)}\n${pageUrl}`;
@@ -107,7 +109,7 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
                   </div>
                 </div>
                 <div className="keep-flow mt-4 flex flex-wrap gap-2">
-                  <Link to="/cases" className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta">{isAr ? "حالات العلاج" : "Medical cases"}</Link>
+                  {hasCases && <Link to="/cases" className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta">{isAr ? "حالات العلاج" : "Medical cases"}</Link>}
                   <Link to="/donate" className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-black text-primary">{isAr ? "صدقة عامة" : "General charity"}</Link>
                 </div>
               </>
@@ -122,7 +124,7 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
                 </div>
                 <div className="keep-flow mt-4 flex flex-wrap gap-2">
                   <Link to="/water" className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-orange-grad px-4 text-sm font-black text-accent-foreground shadow-cta"><Droplets className="h-4 w-4" /> {isAr ? "سقيا ماء" : "Water"}</Link>
-                  <Link to="/cases" className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-black text-primary">{isAr ? "ساهم في حالة" : "Fund a case"}</Link>
+                  {hasCases && <Link to="/cases" className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-black text-primary">{isAr ? "ساهم في حالة" : "Fund a case"}</Link>}
                   <Link to="/donate" className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-black text-primary">{isAr ? "تبرع" : "Donate"}</Link>
                 </div>
               </>

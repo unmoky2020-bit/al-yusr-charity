@@ -1,4 +1,5 @@
 import { Logo } from "@/components/common/Logo";
+import { useHasCases } from "@/data/useHasCases";
 import { Link, useLocation } from "react-router-dom";
 import { Facebook, Instagram, Phone, Mail, MapPin, Building2, BadgeCheck, HandHeart, HeartHandshake, Heart, ShieldCheck, Beef, Sparkles, ArrowLeft, Clock, Send, Bell, CheckCircle2 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
@@ -17,6 +18,7 @@ import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 
 export const Footer = () => {
   const { t, lang } = useLang();
+  const hasCases = useHasCases();
   const isRTL = lang === "ar";
   const bankAccounts = useBankAccounts();
   const bankText = bankAccounts[0] ? bankAccountLabel(bankAccounts[0]) : "";
@@ -342,7 +344,7 @@ export const Footer = () => {
               <li><Link to="/zakat-al-fitr" {...prefetchHandlers("/zakat-al-fitr")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "زكاة الفطر" : "Zakat al-Fitr"}</Link></li>
               <li><Link to="/programs" {...prefetchHandlers("/programs")} className="block text-primary-foreground/85 hover:text-secondary">{t.nav.programs}</Link></li>
               <li><Link to="/projects" {...prefetchHandlers("/projects")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "مشاريعنا" : "Projects"}</Link></li>
-              <li><Link to="/cases" {...prefetchHandlers("/cases")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الحالات الإنسانية" : "Cases"}</Link></li>
+              {hasCases && <li><Link to="/cases" {...prefetchHandlers("/cases")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الحالات الإنسانية" : "Cases"}</Link></li>}
               <li><Link to="/trust" {...prefetchHandlers("/trust")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "الشفافية" : "Transparency"}</Link></li>
               <li><Link to="/about#achievements" {...prefetchHandlers("/about")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "إنجازاتنا" : "Achievements"}</Link></li>
               {IMPACT_REPORT_PUBLIC && <li><Link to="/impact" {...prefetchHandlers("/impact")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "تقرير الأثر" : "Impact report"}</Link></li>}

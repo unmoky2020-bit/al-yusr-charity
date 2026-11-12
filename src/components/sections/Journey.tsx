@@ -1,3 +1,4 @@
+import { useHasCases } from "@/data/useHasCases";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, Send, ArrowRight, ArrowLeft, Sparkles, ShieldCheck, Users, ChevronRight, ChevronLeft } from "lucide-react";
@@ -86,6 +87,7 @@ const cases: CaseCTA[] = [
  */
 export const Journey = () => {
   const { t, lang } = useLang();
+  const hasCases = useHasCases();
   const isRTL = lang === "ar";
   const sectionRef = useRef<HTMLElement | null>(null);
   const stepRefs = useRef<(HTMLElement | null)[]>([]);
@@ -504,7 +506,7 @@ export const Journey = () => {
                             </Button>
                           )}
                           <Button asChild size="sm" className="bg-orange-grad text-accent-foreground shadow-cta hover:opacity-95">
-                            <Link to={c.href} data-cta="journey-step-cta" data-step={i + 1}>
+                            <Link to={c.href === "/cases" && !hasCases ? "/donate" : c.href} data-cta="journey-step-cta" data-step={i + 1}>
                               <Heart className="h-4 w-4" />
                               {isRTL ? c.labelAr : c.labelEn}
                             </Link>
