@@ -216,6 +216,7 @@ const MosquesLanding = () => {
       heroImage={heroImage}
       heroAlt={title.ar}
       main={<MosquesMain ctx={ctx} />}
+      linkedProjectId={project?.id}
       relatedLinks={[
         { href: "/projects", ar: "كل مشاريع اليسر", en: "All projects" },
         { href: "/water", ar: "سقيا الماء", en: "Clean water" },

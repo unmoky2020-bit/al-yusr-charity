@@ -51,6 +51,8 @@ export type LandingProps = {
   hero?: ReactNode;
   /** Bespoke main content (replaces trust strip, pricing, pillars, steps, body and gallery). */
   main?: ReactNode;
+  /** A project landing (/water, /mosques, /nurseries): show the cases linked to that project in the dashboard. */
+  linkedProjectId?: number | string;
   /** Extra classes for the closing CTA section (e.g. a seasonal theme). */
   finalCtaClassName?: string;
   /** Optional decoration rendered at the top of the closing CTA. */
@@ -381,9 +383,9 @@ export const CampaignLandingShell = (p: LandingProps) => {
       </>)}
 
       {/* Cases linked to this campaign in the dashboard (renders nothing when there are none). */}
-      {campaignId && (
-        <LinkedCasesSection filter={{ campaignId }} isRTL={isAr} className="bg-muted/30"
-          title={isAr ? "حالات تُجمع لها التبرعات في هذه الحملة" : "Cases this campaign is funding"}
+      {(campaignId || p.linkedProjectId) && (
+        <LinkedCasesSection filter={p.linkedProjectId ? { projectId: p.linkedProjectId } : { campaignId }} isRTL={isAr} className="bg-muted/30"
+          title={isAr ? p.linkedProjectId ? "حالات ضمن هذا المشروع" : "حالات تُجمع لها التبرعات في هذه الحملة" : p.linkedProjectId ? "Cases in this project" : "Cases this campaign is funding"}
           subtitle={isAr ? "اختر حالة بعينها وتابع تحديثاتها بالصور حتى تكتمل." : "Pick a specific case and follow its photo updates until it is complete."} />
       )}
 

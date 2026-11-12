@@ -112,6 +112,7 @@ const WaterLanding = () => {
     heroImage={heroImage}
     heroAlt="توصيل مياه شرب نظيفة لبيت أسرة مستحقة من مؤسسة اليسر"
     main={<WaterMain ctx={ctx} />}
+    linkedProjectId={project?.id}
     relatedLinks={[
       { href: "/projects", ar: "كل مشاريع اليسر", en: "All projects" },
       { href: "/dhill", ar: "حملة ظِلّ (سقيا وأسقف)", en: "Dhill campaign" },

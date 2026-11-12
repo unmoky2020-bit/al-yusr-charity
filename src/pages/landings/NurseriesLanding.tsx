@@ -256,6 +256,7 @@ const NurseriesLanding = () => {
       heroImage={heroImage}
       heroAlt={title.ar}
       main={<NurseriesMain ctx={ctx} />}
+      linkedProjectId={project?.id}
       relatedLinks={[
         { href: "/projects", ar: "كل مشاريع اليسر", en: "All projects" },
         { href: "/athar", ar: "حملة أثر (التعليم)", en: "Athar (education)" },
