@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Droplets, Utensils, Package, HeartHandshake, Sparkles, ShieldCheck, ArrowLeft, Heart, BadgeCheck, FileCheck2, Camera } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
@@ -314,7 +315,7 @@ export const RamadanImpact = () => {
                 <span className="relative h-2 w-2 rounded-full bg-secondary" />
               </span>
               {isAR ? "رقم الشفافية: " : "Transparency line: "}
-              <a href="tel:+201097000137" dir="ltr" className="text-secondary hover:underline">+20 109 700 0137</a>
+              <a href={`tel:${ORG.phoneE164}`} dir="ltr" className="text-secondary hover:underline">{ORG.phoneDisplay}</a>
             </div>
 
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">

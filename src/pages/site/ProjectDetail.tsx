@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowLeft, ArrowRight, Heart, SearchX, Target, Sparkles } from "lucide-react";
@@ -58,7 +59,7 @@ const ProjectDetail = () => {
   const lede = isAR ? project.descAr : project.descEn || project.descAr;
   const body = project.description && project.description !== project.descAr ? project.description : "";
   const donateHref = `/donate?project=${encodeURIComponent(project.slug)}`;
-  const waHref = `https://wa.me/201097000137?text=${encodeURIComponent(
+  const waHref = `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     isAR ? `السلام عليكم، أود الاستفسار عن مشروع ${name}.` : `Hello, I would like to ask about ${name}.`,
   )}`;
   const hasProjectImage = project.image && project.image !== "/placeholder.svg";

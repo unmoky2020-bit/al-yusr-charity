@@ -9,10 +9,11 @@
  * success after a real 2xx. On failure they offer a WhatsApp fallback (buildWhatsAppUrl)
  * so the visitor's message is never lost.
  */
+import { ORG } from "@/data/orgInfo";
 import { apiFetch } from "@/data/laravelApi";
 
 /** Foundation WhatsApp number (international format, no "+"). */
-export const FOUNDATION_WHATSAPP = "201097000137";
+export const FOUNDATION_WHATSAPP = ORG.whatsapp;
 /** The foundation's only public email address. */
 export const FOUNDATION_EMAIL = "info@elyusr.org";
 

@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Heart, Beef, Users, Sparkles, ShieldCheck, MapPin, Truck, Stethoscope, Eye, BookOpen, BadgeCheck, Clock, Target } from "lucide-react";
@@ -360,7 +361,7 @@ export const QurbaniCampaign = () => {
               </Link>
             </Button>
             <a
-              href="https://wa.me/201097000137?text=أريد%20حجز%20صك%20أضحية"
+              href={`https://wa.me/${ORG.whatsapp}?text=أريد%20حجز%20صك%20أضحية`}
               target="_blank"
               rel="noopener"
               data-cta="qurbani-whatsapp-quality"

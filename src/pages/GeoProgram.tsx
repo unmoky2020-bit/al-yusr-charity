@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Heart, MapPin, Phone, ShieldCheck, HelpCircle, Sparkles, Truck, FileCheck2, ClipboardCheck, ArrowRight, ArrowLeft } from "lucide-react";
@@ -36,7 +37,7 @@ const GeoProgram = () => {
   const gName = isRTL ? geo.ar : geo.en;
   const path = `/geo/${geo.slug}/${prog.slug}`;
   const url = `https://elyusr.org${path}`;
-  const waHref = `https://wa.me/201097000137?text=${encodeURIComponent(
+  const waHref = `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     isRTL ? `السلام عليكم، أودّ معرفة تفاصيل ${prog.ar.name} في ${gName}.` : `Hi, tell me more about ${prog.en.name} in ${gName}.`,
   )}`;
 

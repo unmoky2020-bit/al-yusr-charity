@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { l, type CampaignPageContent } from "./types";
 import { img } from "@/data/pageImages";
 
@@ -291,8 +292,8 @@ const arboun: CampaignPageContent = {
     {
       q: l("كيف أحصل على شارة «مستقل داعم»؟", "How do I get the 'Impact Freelancer' badge?"),
       a: l(
-        "شارة «مستقل داعم» هي شارة رقمية تقدمها مؤسسة اليسر للفريلانسرز المشاركين في مبادرة عربون خير، لإضافتها إلى البورتفوليو أو الموقع الشخصي أو حسابات GitHub و Behance كأصل أخلاقي يميزك أمام عملائك. بعد إتمام تبرعك من أرباح مشروعك عبر صفحة عربون خير، تواصل معنا عبر واتساب على 01097000137 لاستلام الشارة.",
-        "The 'Impact Freelancer' badge is a digital badge Al-Yusr Charity offers to freelancers taking part in Arboun Khair, to display on your portfolio, personal site, GitHub or Behance as a verified impact asset that sets you apart with clients. After completing your pledge from your project earnings on the Arboun Khair page, contact us on WhatsApp at 01097000137 to receive your badge.",
+        `شارة «مستقل داعم» هي شارة رقمية تقدمها مؤسسة اليسر للفريلانسرز المشاركين في مبادرة عربون خير، لإضافتها إلى البورتفوليو أو الموقع الشخصي أو حسابات GitHub و Behance كأصل أخلاقي يميزك أمام عملائك. بعد إتمام تبرعك من أرباح مشروعك عبر صفحة عربون خير، تواصل معنا عبر واتساب على ${ORG.phoneDisplay} لاستلام الشارة.`,
+        `The 'Impact Freelancer' badge is a digital badge Al-Yusr Charity offers to freelancers taking part in Arboun Khair, to display on your portfolio, personal site, GitHub or Behance as a verified impact asset that sets you apart with clients. After completing your pledge from your project earnings on the Arboun Khair page, contact us on WhatsApp at ${ORG.phoneDisplay} to receive your badge.`,
       ),
     },
     {

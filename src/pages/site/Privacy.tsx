@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Link } from "react-router-dom";
 import { Lock, ShieldCheck } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -9,7 +10,6 @@ import { FOUNDATION_EMAIL } from "@/data/api/contactApi";
 
 const BASE = "https://elyusr.org";
 const EMAIL = FOUNDATION_EMAIL;
-const PHONE = "+20 109 700 0137";
 const UPDATED = { ar: "29 أكتوبر 2026", en: "29 October 2026" };
 
 /** paras → list → note, in that order. */
@@ -107,7 +107,7 @@ const AR: Block[] = [
       "أن تسحب موافقتك على الرسائل والإشعارات في أي وقت.",
       "أن تقدّم شكوى إلى مركز حماية البيانات الشخصية في مصر.",
     ],
-    note: `لتقديم أي من هذه الطلبات، راسلنا على ${EMAIL} أو عبر واتساب ${PHONE}، وسنرد في أقرب وقت.`,
+    note: `لتقديم أي من هذه الطلبات، راسلنا على ${EMAIL} أو عبر واتساب ${ORG.phoneDisplay}، وسنرد في أقرب وقت.`,
   },
   {
     id: "children",
@@ -215,7 +215,7 @@ const EN: Block[] = [
       "Withdraw consent to messages and notifications at any time.",
       "Complain to Egypt's Personal Data Protection Centre.",
     ],
-    note: `For any of these, email ${EMAIL} or WhatsApp ${PHONE}; we reply as soon as possible.`,
+    note: `For any of these, email ${EMAIL} or WhatsApp ${ORG.phoneDisplay}; we reply as soon as possible.`,
   },
   {
     id: "children",

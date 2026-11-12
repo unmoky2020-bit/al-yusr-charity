@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 /**
  * Campaign SEO Store & Preset Data (from Official Campaign Landing Pages PDF)
  * Provides curated SEO metadata used as defaults for an empty SEO form. Not a storage layer.
@@ -105,8 +106,8 @@ export const OFFICIAL_CAMPAIGN_SEO_PRESETS: Record<string, CampaignSeoData> = {
   markoon: {
     meta_title_ar: "حملة مركون | تبرع بالأثاث والأجهزة والملابس والأدوية والكتب — اليسر",
     meta_title_en: "Markoon Campaign | Donate Furniture, Appliances, Clothes, Medicine & Books — Al-Yusr",
-    meta_description_ar: "تبرع بما هو مركون في بيتك: أثاث وأجهزة كهربائية وملابس وأدوية وكتب. مندوب المؤسسة يصلك حتى باب المنزل لاستلام تبرعاتك وتوثيقها. اتصل 01097000137.",
-    meta_description_en: "Donate what is stored away at home: furniture, appliances, clothes, medicine and books. Our representative comes to your door to collect and document your donation. Call 01097000137.",
+    meta_description_ar: `تبرع بما هو مركون في بيتك: أثاث وأجهزة كهربائية وملابس وأدوية وكتب. مندوب المؤسسة يصلك حتى باب المنزل لاستلام تبرعاتك وتوثيقها. اتصل ${ORG.phoneDisplay}.`,
+    meta_description_en: `Donate what is stored away at home: furniture, appliances, clothes, medicine and books. Our representative comes to your door to collect and document your donation. Call ${ORG.phoneDisplay}.`,
     focus_keywords_ar: "حملة مركون، تبرع بالأثاث، تبرع بالأجهزة الكهربائية، تبرع بالملابس المستعملة، تبرع بالأدوية، تبرع بالكتب، مندوب لاستلام التبرعات",
     focus_keywords_en: "Markoon campaign, donate furniture Egypt, donate used clothes, donate medicine, donate books, donation pickup",
     canonical_url: "https://elyusr.org/campaigns/markoon",

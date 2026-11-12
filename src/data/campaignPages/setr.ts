@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { l, type CampaignPageContent } from "./types";
 import { img } from "@/data/pageImages";
 
@@ -153,8 +154,8 @@ const SETR: CampaignPageContent = {
     {
       q: l("كيف أتبرع لحملة سِتر من خارج مصر؟", "How can I donate to Setr from outside Egypt?"),
       a: l(
-        "يمكنك التبرع من أي دولة عبر صفحة التبرع بالبطاقة الائتمانية (فيزا/ماستركارد)، أو بالتحويل البنكي على الحسابات الرسمية للمؤسسة. ولأي استفسار راسلنا على واتساب +20 109 700 0137 ويصلك الإيصال وتوثيق التسليم على الرقم نفسه.",
-        "You can give from any country through the donate page by credit card (Visa/Mastercard), or by bank transfer to the foundation's official accounts. For help, message us on WhatsApp at +20 109 700 0137; your receipt and delivery documentation reach you on the same number.",
+        `يمكنك التبرع من أي دولة عبر صفحة التبرع بالبطاقة الائتمانية (فيزا/ماستركارد)، أو بالتحويل البنكي على الحسابات الرسمية للمؤسسة. ولأي استفسار راسلنا على واتساب ${ORG.phoneDisplay} ويصلك الإيصال وتوثيق التسليم على الرقم نفسه.`,
+        `You can give from any country through the donate page by credit card (Visa/Mastercard), or by bank transfer to the foundation's official accounts. For help, message us on WhatsApp at ${ORG.phoneDisplay}; your receipt and delivery documentation reach you on the same number.`,
       ),
     },
     {

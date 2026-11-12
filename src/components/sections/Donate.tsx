@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
@@ -138,7 +139,7 @@ export const Donate = () => {
       const msg = isAr
         ? `السلام عليكم، حوّلت ${fmt(amount)} جنيه تبرعًا عامًّا عن طريق ${selected.ar}، ومرفق صورة التحويل.`
         : `Hello, I transferred ${amount} EGP as a general donation via ${selected.en}. The transfer receipt is attached.`;
-      window.open(`https://wa.me/201097000137?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
+      window.open(`https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
       return;
     }
 

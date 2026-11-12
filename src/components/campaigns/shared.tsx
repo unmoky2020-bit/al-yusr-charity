@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
@@ -33,7 +34,7 @@ export const amountHref = (donateHref: string, amount: number, packageId?: strin
 };
 
 export const waHref = (isAr: boolean, titleAr: string, titleEn: string) =>
-  `https://wa.me/201097000137?text=${encodeURIComponent(
+  `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     isAr ? `السلام عليكم، أود الاستفسار عن ${titleAr}.` : `Hi, I would like to ask about ${titleEn}.`,
   )}`;
 

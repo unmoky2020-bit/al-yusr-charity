@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -221,7 +222,7 @@ const ProgramDetail = () => {
           availableChannel: {
             "@type": "ServiceChannel",
             serviceUrl: `${baseUrl}/donate?program=${program.slug}`,
-            servicePhone: "+201097000137",
+            servicePhone: ORG.phoneE164,
           },
           termsOfService: `${baseUrl}/terms`,
           isRelatedTo: related.map((r) => ({
@@ -333,13 +334,13 @@ const ProgramDetail = () => {
                 className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base border-secondary/50 bg-secondary/10 text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground"
               >
                 <a
-                  href="https://wa.me/201097000137"
+                  href={`https://wa.me/${ORG.whatsapp}`}
                   target="_blank"
                   rel="noopener"
                   dir="ltr"
                   data-source={`program-${program.slug}`}
                   data-label="hero-whatsapp"
-                  onClick={() => trackCta("hero-whatsapp", "https://wa.me/201097000137", "Contact")}
+                  onClick={() => trackCta("hero-whatsapp", "https://wa.me/${ORG.whatsapp}", "Contact")}
                   className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"
                 >
                   <WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> WhatsApp
@@ -575,13 +576,13 @@ const ProgramDetail = () => {
             </Button>
             <Button asChild size="lg" variant="outline" className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base">
               <a
-                href="https://wa.me/201097000137"
+                href={`https://wa.me/${ORG.whatsapp}`}
                 target="_blank"
                 rel="noopener"
                 dir="ltr"
                 data-source={`program-${program.slug}`}
                 data-label="details-whatsapp"
-                onClick={() => trackCta("details-whatsapp", "https://wa.me/201097000137", "Contact")}
+                onClick={() => trackCta("details-whatsapp", "https://wa.me/${ORG.whatsapp}", "Contact")}
                 className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"
               >
                 <WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />

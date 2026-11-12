@@ -55,7 +55,7 @@ export function ContactChannels({ isRTL, copiedPhone, onCopyPhone, bank, copiedB
             </button>
           }
         >
-          <a href={`tel:${ORG.phoneE164}`} dir="ltr" className="hover:text-primary hover:underline">+20 109 700 0137</a>
+          <a href={`tel:${ORG.phoneE164}`} dir="ltr" className="hover:text-primary hover:underline">{ORG.phoneDisplay}</a>
         </Row>
         <Row
           icon={<WhatsAppIcon className="h-4 w-4" />}

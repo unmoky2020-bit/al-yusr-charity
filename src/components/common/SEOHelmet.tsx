@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Helmet } from "react-helmet-async";
 import { useLang } from "@/i18n/LangContext";
 import { absoluteSiteUrl } from "@/lib/site-runtime";
@@ -122,7 +123,7 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
               ? "مؤسسة أهلية مشهرة برقم 2665 لسنة 2019 مقرها المنصورة، الدقهلية: تبرعات وزكاة وصكوك أضحية وكفالة أيتام وحالات إنسانية موثّقة."
               : "Registered Egyptian NGO (No. 2665 of 2019) based in Mansoura, Dakahlia: donations, zakat, qurbani, orphan sponsorship and verified cases.",
             taxID: "2665/2019",
-            foundingDate: "2019",
+            foundingDate: "2019-10",
             knowsAbout: [
               "Zakat Calculation",
               "Qurbani Share Distribution Eid 2026",
@@ -139,7 +140,7 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
               addressRegion: "الدقهلية",
               addressCountry: "EG"
             },
-            telephone: "+201097000137",
+            telephone: ORG.phoneE164,
             areaServed: [
               { "@type": "Country", name: "مصر" },
               { "@type": "AdministrativeArea", name: "محافظة الدقهلية" },
@@ -148,7 +149,7 @@ export const SEOHelmet = ({ title, description, path = "/", image, ogType = "web
             sameAs: [
               "https://facebook.com/Elyosr.Charity",
               "https://instagram.com/elyosr.charity",
-              "https://wa.me/201097000137"
+              "https://wa.me/${ORG.whatsapp}"
             ]
           },
           {

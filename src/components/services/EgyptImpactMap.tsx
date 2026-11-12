@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useState } from "react";
 import {
   MapPin,
@@ -29,9 +30,7 @@ const GOOGLE_MAPS_LINK = "https://maps.app.goo.gl/VYc3KdxrU1DQWwFf6";
 const GOOGLE_MAPS_EMBED_SRC =
   "https://maps.google.com/maps?q=31.0298521,31.3655258+(%D9%85%D8%A4%D8%B3%D8%B3%D8%A9%20%D8%A7%D9%84%D9%8A%D8%B3%D8%B1%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1%D9%8A%D8%A9)&t=&z=17&ie=UTF8&iwloc=B&output=embed";
 
-const PHONE_NUMBER = "+201097000137";
-const PHONE_DISPLAY = "01097000137";
-const WHATSAPP_LINK = "https://wa.me/201097000137";
+const WHATSAPP_LINK = `https://wa.me/${ORG.whatsapp}`;
 
 const GOVERNORATES = [
   {
@@ -397,9 +396,9 @@ export const EgyptImpactMap = () => {
                     asChild
                     className="h-11 rounded-2xl bg-orange-grad hover:opacity-95 font-black text-white shadow-md transition active:scale-95 text-xs sm:text-sm border-0"
                   >
-                    <a href={`tel:${PHONE_NUMBER}`} className="flex items-center justify-center gap-1.5 sm:gap-2">
+                    <a href={`tel:${ORG.phoneE164}`} className="flex items-center justify-center gap-1.5 sm:gap-2">
                       <Phone className="h-4 w-4 text-white shrink-0" />
-                      <span dir="ltr">{PHONE_DISPLAY}</span>
+                      <span dir="ltr">{ORG.phoneDisplay}</span>
                     </a>
                   </Button>
                 </div>

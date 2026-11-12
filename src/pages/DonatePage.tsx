@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
-import { googleReviewLink } from "@/data/orgInfo";
+import { googleReviewLink, ORG } from "@/data/orgInfo";
 import { useSearchParams, Link, useNavigate, useLocation } from "react-router-dom";
 import confetti from "canvas-confetti";
 import {
@@ -1161,7 +1161,7 @@ const DonatePage = () => {
                     </div>
                     <div className="flex items-center gap-2 w-full sm:w-auto">
                       <a
-                        href={`https://wa.me/201097000137?text=${encodeURIComponent(
+                        href={`https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
                           lang === "ar"
                             ? `السلام عليكم، أريد التبرع عينيًا في حملة مركون.\nالاسم: ${donor.name || "..."}\nالهاتف: ${donor.phone || "..."}`
                             : `Hello, I want to donate in-kind to Markoun.\nName: ${donor.name || "..."}\nPhone: ${donor.phone || "..."}`
@@ -1866,7 +1866,7 @@ const DonatePage = () => {
                         )}
                         <Button asChild size="lg" variant="outline" className="rounded-xl h-11 sm:h-12 px-2 sm:px-4 text-[11px] sm:text-sm font-bold w-full justify-center border-border/80 bg-card hover:bg-muted">
                           <a
-                            href={`https://wa.me/201097000137?text=${encodeURIComponent(
+                            href={`https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
                               lang === "ar"
                                 ? `السلام عليكم، قمت بتسجيل تبرع لدى مؤسسة اليسر.\nرقم التبرع: ${record?.ref ?? ""}\nالمبلغ: ${totalAmount} ج.م\nالبرامج: ${itemsBreakdownText}\nطريقة الدفع: ${selectedMethod.ar}${isDelegatePickup ? `\nعنوان الاستلام: ${[methodFields.pickupGovernorate, methodFields.pickupCity, methodFields.pickupAddress].filter(Boolean).join(" – ")}${methodFields.pickupTime ? `\nالوقت المناسب: ${methodFields.pickupTime}` : ""}` : ""}\nبرجاء التأكيد.`
                                 : `Hello, I submitted a donation to Al-Yusr.\nRef: ${record?.ref ?? ""}\nAmount: ${totalAmount} EGP\nPrograms: ${itemsBreakdownText}\nMethod: ${selectedMethod.en}\nPlease confirm.`

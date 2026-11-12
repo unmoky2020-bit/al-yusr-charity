@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { CheckCircle2, Clock, ShieldCheck, Receipt as ReceiptIcon, Heart, MessageCircle, ArrowLeft } from "lucide-react";
@@ -158,7 +159,7 @@ const QurbaniConfirm = () => {
                     </Link>
                   </Button>
                   <a
-                    href={`https://wa.me/201097000137?text=${waText}`}
+                    href={`https://wa.me/${ORG.whatsapp}?text=${waText}`}
                     target="_blank" rel="noopener"
                     onClick={() => {
                       const p = { source: "qurbani-confirm", transaction_id: rec.ref };

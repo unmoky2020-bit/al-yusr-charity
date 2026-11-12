@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
@@ -53,7 +54,7 @@ const CityProgram = () => {
 
   const path = `/dakahlia/${cityObj.slug}/${prog.slug}`;
   const url = `https://elyusr.org${path}`;
-  const waHref = `https://wa.me/201097000137?text=${encodeURIComponent(
+  const waHref = `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     isRTL ? `السلام عليكم، أودّ معرفة تفاصيل ${pName} في ${cName}.` : `Hi, tell me about ${pName} in ${cName}.`,
   )}`;
 

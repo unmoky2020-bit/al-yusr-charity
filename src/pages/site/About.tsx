@@ -179,19 +179,18 @@ const About = () => {
   const { about_milestones: savedMilestones } = useSiteBlocks();
   const builtInTimeline: { y: string; t: string; d: ReactNode }[] = isRTL
     ? [
-        { y: "2019", t: "البداية الرسمية: تأسيس مؤسسة اليسر الخيرية", d: "انطلقت المؤسسة رسميًا في أواخر 2019 بإشهار رقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي، لتبدأ رحلة منظمة في العمل الخيري وخدمة المستحقين." },
+        { y: "2019", t: "البداية الرسمية: تأسيس مؤسسة اليسر الخيرية", d: "انطلقت المؤسسة رسميًا في أكتوبر 2019 بإشهار رقم 2665 لسنة 2019 بوزارة التضامن الاجتماعي، لتبدأ رحلة منظمة في العمل الخيري وخدمة المستحقين." },
         { y: "2020", t: "بناء منظومة متكاملة للعطاء", d: <>بدأ العمل على محاور <Link to="/programs" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">الغذاء والتعليم والصحة</Link>، لتقديم دعم متكامل يراعي احتياجات الإنسان الأساسية.</> },
         { y: "2022", t: "توسيع مظلة الحماية الاجتماعية", d: <>إطلاق <Link to="/setr" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">حملة سِتْر</Link> لتوفير الاحتياجات الأساسية للأسر، من ترميم الأسقف إلى الأغطية والملابس الشتوية وتجهيزات المنزل.</> },
         { y: "2023", t: "من المساعدة إلى الحلول المستدامة", d: <>التوسع في مشروعات <Link to="/water" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">توصيل المياه</Link>، وإطلاق <Link to="/markoun" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">مبادرة مَرْكُون</Link> لإعادة تدوير الأثاث والأجهزة والملابس والكتب والاستفادة منها.</> },
         { y: "2025", t: "مرحلة التوسع وقياس الأثر", d: <>إنجازات ميدانية واسعة في <Link to="/food-box" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">دعم الغذاء</Link> و<Link to="/dhill" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">توصيل المياه وتأهيل المنازل</Link> وتوفير اللحوم.</> },
       ]
     : [
-        { y: "2000–2019", t: "The start: a team for good", d: "A team united by one aim, serving families in need, which built its field experience over the years before official incorporation." },
-        { y: "2019", t: "Incorporation of Al-Yusr", d: "Officially registered NGO (#2665 / 2019) with the Ministry of Social Solidarity." },
-        { y: "2020", t: "Food, Health & Education Pillars", d: "Placing human development at the heart of all programs." },
-        { y: "2022", t: "Winter Setr Campaign", d: "Insulated roofs, thermal comforters, warm clothing, doors & windows." },
-        { y: "2023", t: "Dhill & Markoun Initiatives", d: "Clean water taps, village supply lines, and in-kind recycling." },
-        { y: "2025", t: "Record Impact Year Across Egypt", d: "1,400 Ramadan boxes, 3,000+ monthly food boxes, 385 water taps, 122 roofs, and 5 tons of meat." },
+        { y: "2019", t: "The official start: Al-Yusr Charity Foundation is founded", d: "The foundation was officially registered in October 2019 under No. 2665 of 2019 with the Ministry of Social Solidarity, starting an organised journey of serving people in need." },
+        { y: "2020", t: "Building a complete system of giving", d: <>Work began on the <Link to="/programs" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">food, education and health</Link> pillars, to meet people's basic needs as a whole.</> },
+        { y: "2022", t: "Widening social protection", d: <>The <Link to="/setr" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">Setr campaign</Link> was launched for families' basic needs: from repairing roofs to blankets, winter clothes and home essentials.</> },
+        { y: "2023", t: "From aid to lasting solutions", d: <>More <Link to="/water" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">water connection</Link> projects, and the <Link to="/markoun" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">Markoun initiative</Link> to reuse furniture, appliances, clothes and books.</> },
+        { y: "2025", t: "Growth and measuring impact", d: <>Wide field work in <Link to="/food-box" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">food support</Link>, <Link to="/dhill" className="font-black text-primary underline decoration-secondary decoration-2 underline-offset-4 hover:text-primary-glow">water and home repairs</Link>, and meat distribution.</> },
       ];
 
   const timeline: { y: string; t: string; d: ReactNode }[] = savedMilestones?.length
@@ -1018,11 +1017,11 @@ const About = () => {
 
               {/* Contact cards (Column 2 on desktop) */}
               <div className="space-y-3 order-1 lg:order-2">
-                <a href="tel:+201097000137" data-source="about" data-label="about-phone" className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
+                <a href={`tel:${ORG.phoneE164}`} data-source="about" data-label="about-phone" className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><Phone className="h-5 w-5 text-secondary" /></div>
-                  <div><div className="font-extrabold text-primary">{isRTL ? "هاتف" : "Phone"}</div><div dir="ltr" className="text-sm text-muted-foreground font-bold">+20 109 700 0137</div></div>
+                  <div><div className="font-extrabold text-primary">{isRTL ? "هاتف" : "Phone"}</div><div dir="ltr" className="text-sm text-muted-foreground font-bold">{ORG.phoneDisplay}</div></div>
                 </a>
-                <a href="https://wa.me/201097000137" target="_blank" rel="noopener" data-source="about" data-label="about-whatsapp" className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
+                <a href={`https://wa.me/${ORG.whatsapp}`} target="_blank" rel="noopener" data-source="about" data-label="about-whatsapp" className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card">
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary/15 text-primary"><WhatsAppIcon className="h-5 w-5 text-secondary" /></div>
                   <div><div className="font-extrabold text-primary">WhatsApp</div><div className="text-sm text-muted-foreground">{isRTL ? "رد فوري — اضغط للمحادثة" : "Instant reply — tap to chat"}</div></div>
                 </a>

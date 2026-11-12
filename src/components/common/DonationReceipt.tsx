@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useState } from "react";
 import { Download, ShieldCheck, CheckCircle2, Building2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -74,7 +75,7 @@ export const DonationReceipt = ({ d }: { d: DonationRecord }) => {
         legalTitle: "توثيق رسمي وقانوني",
         legalNote: "هذا الإيصال مُعتمد إلكترونياً من قبل مؤسسة اليسر الخيرية ولا يحتاج إلى توقيع خطي، ومسجل رسمياً بالسجلات المالية للمؤسسة بموجب ترخيص وزارة التضامن الاجتماعي رقم 2665 لسنة 2019.",
         footerMoto: "مؤسسة اليسر الخيرية — معاً نصل بصدقتك لمن يستحق",
-        footerContact: "المقر الرئيسي: المنصورة، الدقهلية، جمهورية مصر العربية | هاتف: 01097000137 | https://elyusr.org",
+        footerContact: `المقر الرئيسي: المنصورة، الدقهلية، جمهورية مصر العربية | هاتف: ${ORG.phoneDisplay} | https://elyusr.org`,
         download: "تحميل إيصال PDF",
         downloading: "جارٍ إنشاء ملف PDF...",
       }
@@ -106,7 +107,7 @@ export const DonationReceipt = ({ d }: { d: DonationRecord }) => {
         legalTitle: "Official Legal Certification",
         legalNote: "This official electronic receipt is issued and verified by Al-Yusr Charity Foundation under license #2665/2019, and requires no manual signature.",
         footerMoto: "Al-Yusr Charity Foundation — Reaching Those in Need Together",
-        footerContact: "HQ: Mansoura, Dakahlia, Egypt | Tel: +201097000137 | https://elyusr.org",
+        footerContact: `HQ: Mansoura, Dakahlia, Egypt | Tel: ${ORG.phoneE164} | https://elyusr.org`,
         download: "Download PDF Receipt",
         downloading: "Generating PDF...",
       };
@@ -399,7 +400,7 @@ export const DonationReceipt = ({ d }: { d: DonationRecord }) => {
           <div className="text-[10.5px] mt-0.5 flex flex-wrap items-center justify-center gap-1.5">
             <span>{isAr ? "المقر الرئيسي: المنصورة، الدقهلية، جمهورية مصر العربية" : "HQ: Mansoura, Dakahlia, Egypt"}</span>
             <span>|</span>
-            <span>{isAr ? "هاتف: 01097000137" : "Tel: +201097000137"}</span>
+            <span>{isAr ? `هاتف: ${ORG.phoneDisplay}` : `Tel: ${ORG.phoneE164}`}</span>
             <span>|</span>
             <a
               href="https://elyusr.org/"

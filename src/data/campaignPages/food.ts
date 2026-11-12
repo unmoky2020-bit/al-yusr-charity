@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { l, type CampaignPageContent } from "./types";
 import { img } from "@/data/pageImages";
 
@@ -304,8 +305,8 @@ const FOOD: CampaignPageContent = {
     {
       q: l("كيف أتبرع من خارج مصر؟", "How can I donate from outside Egypt?"),
       a: l(
-        "عبر صفحة التبرع بالبطاقة الائتمانية (فيزا/ماستركارد) من أي دولة، أو بالتحويل البنكي على الحسابات الرسمية للمؤسسة. ولأي استفسار راسلنا على واتساب +20 109 700 0137 ويصلك الإيصال والتوثيق على الرقم نفسه.",
-        "Through the donate page by credit card (Visa/Mastercard) from any country, or by bank transfer to the foundation's official accounts. For help, message us on WhatsApp at +20 109 700 0137; your receipt and documentation reach you on the same number.",
+        `عبر صفحة التبرع بالبطاقة الائتمانية (فيزا/ماستركارد) من أي دولة، أو بالتحويل البنكي على الحسابات الرسمية للمؤسسة. ولأي استفسار راسلنا على واتساب ${ORG.phoneDisplay} ويصلك الإيصال والتوثيق على الرقم نفسه.`,
+        `Through the donate page by credit card (Visa/Mastercard) from any country, or by bank transfer to the foundation's official accounts. For help, message us on WhatsApp at ${ORG.phoneDisplay}; your receipt and documentation reach you on the same number.`,
       ),
     },
   ],

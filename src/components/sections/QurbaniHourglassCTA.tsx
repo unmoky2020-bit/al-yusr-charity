@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Clock, ShieldCheck, Eye, Gem, MessageCircle, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import hourglass from "@/assets/qurbani-hourglass.webp";
@@ -87,7 +88,7 @@ export const QurbaniHourglassCTA = () => {
             </Button>
             <Button asChild size="lg" className="bg-[#25D366] text-white hover:bg-[#1ebe5b]">
               <a
-                href={`https://wa.me/201097000137?text=${encodeURIComponent(isRTL ? "أودّ حجز صك أضحية مع مؤسسة اليسر" : "I'd like to book a Qurbani share with Al-Yusr")}`}
+                href={`https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(isRTL ? "أودّ حجز صك أضحية مع مؤسسة اليسر" : "I'd like to book a Qurbani share with Al-Yusr")}`}
                 target="_blank" rel="noopener noreferrer" dir="ltr"
                 onClick={() => onCta("whatsapp")}
               >

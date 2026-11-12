@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Heart, MessageCircle, CheckCircle2, ShieldCheck, ArrowLeft, ArrowRight, Lock } from "lucide-react";
@@ -20,7 +21,7 @@ const SeasonDetail = () => {
   if (!season) return <Navigate to="/programs" replace />;
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
-  const wa = `https://wa.me/201097000137?text=${encodeURIComponent(
+  const wa = `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     isAr ? `أرغب في التبرع أو الاستفسار عن: ${season.titleAr}` : `I want to donate / ask about: ${season.titleEn}`,
   )}`;
 

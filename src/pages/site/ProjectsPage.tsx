@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Link } from "react-router-dom";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import {
@@ -197,7 +198,7 @@ const ProjectsPage = () => {
               <Arrow className="h-4 w-4 shrink-0" />
             </Link>
             <a
-              href={`https://wa.me/201097000137?text=${waMsg}`}
+              href={`https://wa.me/${ORG.whatsapp}?text=${waMsg}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex w-full min-w-0 items-center justify-center gap-1.5 rounded-2xl border border-white/25 bg-black/20 px-2.5 py-3.5 text-center text-[11px] font-bold leading-tight text-white backdrop-blur-md transition hover:bg-black/30 hover:border-white/40 sm:w-auto sm:gap-2 sm:px-6 sm:text-base"
@@ -683,7 +684,7 @@ const ProjectsPage = () => {
                 {/* Button: Centered on mobile, aligned on desktop */}
                 <div className="w-full md:w-auto shrink-0 pt-2 md:pt-0 flex justify-center md:justify-end">
                   <a
-                    href={`https://wa.me/201097000137?text=${waSponsorMsg}`}
+                    href={`https://wa.me/${ORG.whatsapp}?text=${waSponsorMsg}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl bg-secondary px-8 py-4 text-sm sm:text-base font-black text-slate-950 shadow-xl shadow-secondary/30 transition-all hover:bg-secondary/90 hover:scale-[1.02] active:scale-[0.98]"

@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -422,7 +423,7 @@ export const FaqCenter = () => {
 
               <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                 <a
-                  href={`https://wa.me/201097000137?text=${encodeURIComponent(
+                  href={`https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
                     isAr ? "السلام عليكم، لديّ استفسار بخصوص مؤسسة اليسر." : "Hello, I have an inquiry about Al-Yusr."
                   )}`}
                   target="_blank"
@@ -434,11 +435,11 @@ export const FaqCenter = () => {
                 </a>
 
                 <a
-                  href="tel:01097000137"
+                  href={`tel:${ORG.phoneE164}`}
                   className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-bold text-foreground hover:bg-muted transition"
                 >
                   <Phone className="h-4 w-4 text-primary" />
-                  <span>01097000137</span>
+                  <span>{ORG.phoneDisplay}</span>
                 </a>
 
                 <Link

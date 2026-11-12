@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, CheckCircle2, ShieldCheck, MapPin, Truck, FileCheck2, X, Share2, Copy, Check, Sparkles } from "lucide-react";
@@ -75,7 +76,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
   const [hideNearFooter, setHideNearFooter] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const wa = `https://wa.me/201097000137?text=${encodeURIComponent(
+  const wa = `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     isAr ? `السلام عليكم، أرغب في الاستفسار عن التبرع لـ${p.titleAr}.` : `Hi, I would like to inquire about ${p.titleEn}.`
   )}`;
 
@@ -152,7 +153,7 @@ export const CampaignLandingShell = (p: LandingProps) => {
               alternateName: ["مؤسسة اليسر", "جمعية اليسر", "Al-Yusr Charity Foundation"],
               url: "https://elyusr.org/",
               logo: "https://elyusr.org/logo-512.png",
-              telephone: "+201097000137",
+              telephone: ORG.phoneE164,
               taxID: "2665/2019",
               areaServed: ["Egypt", "Dakahlia", "Mansoura", "Mit Ghamr", "Talkha", "Belqas", "Kafr El Sheikh"],
             },

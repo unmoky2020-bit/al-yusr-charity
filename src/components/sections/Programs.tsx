@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft, ArrowRight, Utensils, Stethoscope, GraduationCap, Droplets, Home,
@@ -19,9 +20,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { programHref } from "@/data/programLandings";
 
 /** WhatsApp number used by the org (digits only, E.164-friendly). */
-const WA_NUMBER = "201097000137";
 const waUrl = (text: string) =>
-  `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+  `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(text)}`;
 
 /** SessionStorage key for the lightweight in-page performance panel. */
 const PERF_KEY = "alyusr.programs.perf.v1";

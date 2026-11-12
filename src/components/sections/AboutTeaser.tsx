@@ -37,13 +37,13 @@ export const AboutTeaser = () => {
   /** Two dated milestones, then a mark (not a number) for the journey that continues. */
   const stops = isRTL
     ? [
-        { y: "2000", t: "البداية: فريق للخير", d: "فريق اجتمع على خدمة الأسر المستحقة، واكتسب خبرته من العمل الميداني." },
-        { y: "2019", t: "الإشهار الرسمي", d: "مؤسسة مشهرة برقم 2665 بوزارة التضامن الاجتماعي." },
+        { y: "2019", t: "الإشهار الرسمي", d: "مؤسسة مشهرة في أكتوبر 2019 برقم 2665 بوزارة التضامن الاجتماعي." },
+        { y: "2020", t: "منظومة متكاملة للعطاء", d: "بداية العمل على محاور الغذاء والتعليم والصحة لخدمة الأسر المستحقة." },
         { y: null, t: "والمسيرة مستمرة", d: "تتوسع المؤسسة ويستمر عطاؤها بانضمامك إلينا أو بتبرعك." },
       ]
     : [
-        { y: "2000", t: "The start: a team for good", d: "A team that came together to serve families in need and built its field experience." },
-        { y: "2019", t: "Official registration", d: "Registered foundation No. 2665 with the Ministry of Social Solidarity." },
+        { y: "2019", t: "Official registration", d: "Registered in October 2019 as foundation No. 2665 with the Ministry of Social Solidarity." },
+        { y: "2020", t: "A complete system of giving", d: "Work began on the food, education and health pillars for families in need." },
         { y: null, t: "And the journey continues", d: "The foundation grows and lasts as you join us or give." },
       ];
 

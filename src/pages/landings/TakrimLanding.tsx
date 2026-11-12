@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -26,11 +27,9 @@ import { useLang } from "@/i18n/LangContext";
 import { useTakrimContent, useTakrimContentState, type TakrimShare } from "@/data/takrimContent";
 
 const DONATE = "/donate?project=takrim";
-const PHONE = "+201097000137";
-const PHONE_DISPLAY = "+20 109 700 0137";
 
 const waService = (isAr: boolean) =>
-  `https://wa.me/201097000137?text=${encodeURIComponent(
+  `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     isAr
       ? "السلام عليكم، أرغب في طلب خدمة الغسل والتكفين ونقل المتوفى من مؤسسة اليسر.\nمكان المتوفى: \nموعد صلاة الجنازة: "
       : "Hello, I would like to request Al-Yusr's washing, shrouding and funeral transport service.\nLocation: \nFuneral prayer time: ",
@@ -188,13 +187,13 @@ const TakrimHero = ({ image }: { image: string }) => {
                   {isAr ? "اطلب عبر واتساب" : "Request on WhatsApp"}
                 </a>
                 <a
-                  href={`tel:${PHONE}`}
+                  href={`tel:${ORG.phoneE164}`}
                   className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-xl border border-primary/20 px-4 text-primary transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 >
                   <Phone className="h-5 w-5 shrink-0" />
                   <span className="flex flex-col items-start leading-tight">
                     <span className="text-base font-black">{isAr ? "اتصل الآن" : "Call now"}</span>
-                    <span dir="ltr" className="font-mono text-xs font-bold tabular-nums text-muted-foreground">{PHONE_DISPLAY}</span>
+                    <span dir="ltr" className="font-mono text-xs font-bold tabular-nums text-muted-foreground">{ORG.phoneDisplay}</span>
                   </span>
                 </a>
               </div>

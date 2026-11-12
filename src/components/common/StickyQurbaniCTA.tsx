@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, X } from "lucide-react";
@@ -75,7 +76,7 @@ export const StickyQurbaniCTA = ({
 
   if (!open || overChrome) return null;
 
-  const wa = `https://wa.me/201097000137?text=${encodeURIComponent(
+  const wa = `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     waText || (isAr ? "السلام عليكم، أود معرفة تفاصيل دعم المزرعة الوقفية." : "Hi, I'd like details on supporting the endowment farm."),
   )}`;
 

@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Heart, Home, Sparkles, ShieldCheck, Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
@@ -31,7 +32,7 @@ export const BrideTrousseau = ({ image, title, description, benefits, donateHref
   const [ratio, setRatio] = useState(3 / 4);
   const delay = (i: number) => ({ transitionDelay: `${i * 70}ms` });
 
-  const wa = "https://wa.me/201097000137?text=" + encodeURIComponent(
+  const wa = `https://wa.me/${ORG.whatsapp}?text=` + encodeURIComponent(
     isAR ? "السلام عليكم، أرغب في معرفة تكلفة أجهزة جهاز العروس (ثلاجة/بوتاجاز)" : "Hi, I'd like to know the cost of bride trousseau appliances",
   );
 

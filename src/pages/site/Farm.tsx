@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Beef, Wheat, ShieldCheck, Sprout, RefreshCw, Coins, CheckCircle2, Heart, MessageCircle, Truck, Scale, Leaf, Stethoscope, Package, Users, TrendingUp, type LucideIcon } from "lucide-react";
@@ -45,7 +46,7 @@ const Farm = () => {
   const { c, t, isAr: isRTL, project, isLoading, stat, section } = useProjectPage(PROJECT_SLUG, FARM_DEFAULTS);
   if (isLoading) return <PageLayout><PageLoadingState /></PageLayout>;
   const base = "https://elyusr.org";
-  const wa = `https://wa.me/201097000137?text=${encodeURIComponent(isRTL ? "السلام عليكم، أريد معرفة تفاصيل المزرعة الوقفية والأضحية." : "Hi, I want to know more about the endowment farm and Qurbani.")}`;
+  const wa = `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(isRTL ? "السلام عليكم، أريد معرفة تفاصيل المزرعة الوقفية والأضحية." : "Hi, I want to know more about the endowment farm and Qurbani.")}`;
 
   /** "4 طن", "100%", "1,200 أسرة". A stat with no number shows nothing. */
   const statText = (st?: StatItem) => {

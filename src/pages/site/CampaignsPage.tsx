@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useState, memo } from "react";
 import { LinkedCasesSection } from "@/components/cases/LinkedCasesSection";
 import { Link } from "react-router-dom";
@@ -295,12 +296,12 @@ const CAMPAIGNS_DATA = [
     image: markounPuzzle,
     category: "sustainability",
     featured: true,
-    priceFromAr: "تبرع عيني بمندوب (01097000137)",
-    priceFromEn: "Doorstep Pickup (01097000137)",
+    priceFromAr: `تبرع عيني بمندوب (${ORG.phoneDisplay})`,
+    priceFromEn: `Doorstep Pickup (${ORG.phoneDisplay})`,
     pillars: [
       { ar: "أثاث وأجهزة كهربائية مفحوصة ومجددة", en: "Refurbished furniture & appliances" },
       { ar: "صيدلية مستدامة للأدوية الفائضة مجانًا", en: "Valid-expiry community medicine" },
-      { ar: "مندوب المؤسسة يصل إلى باب بيتك (01097000137)", en: "Doorstep pickup: 01097000137" },
+      { ar: `مندوب المؤسسة يصل إلى باب بيتك (${ORG.phoneDisplay})`, en: `Doorstep pickup: ${ORG.phoneDisplay}` },
     ],
   },
   {
@@ -463,7 +464,7 @@ export const CampaignsPage = () => {
             alternateName: ["اليسر", "مؤسسة اليسر", "جمعية اليسر", "Al-Yusr Charity", "Elyusr"],
             url: "https://elyusr.org/",
             logo: "https://elyusr.org/logo-512.png",
-            telephone: "+201097000137",
+            telephone: ORG.phoneE164,
             address: {
               "@type": "PostalAddress",
               streetAddress: "تقسيم خطاب، بجوار وكالة المنصورة",
@@ -507,7 +508,7 @@ export const CampaignsPage = () => {
                 name: "كيف أطلب مندوب مؤسسة اليسر لاستلام التبرعات العينية من المنزل؟",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "يمكنك الاتصال مباشرة بالخط الساخن 01097000137 ليصلك مندوب مؤسسة اليسر بسيارات المؤسسة لفحص الأثاث والأجهزة الكهربائية والملابس واستلامها وتجديدها لصالح الأسر الأكثر احتياجًا.",
+                  text: `يمكنك الاتصال مباشرة بالخط الساخن ${ORG.phoneDisplay} ليصلك مندوب مؤسسة اليسر بسيارات المؤسسة لفحص الأثاث والأجهزة الكهربائية والملابس واستلامها وتجديدها لصالح الأسر الأكثر احتياجًا.`,
                 },
               },
               {
@@ -564,7 +565,7 @@ export const CampaignsPage = () => {
             </Link>
 
             <a
-              href="https://wa.me/201097000137"
+              href={`https://wa.me/${ORG.whatsapp}`}
               target="_blank"
               rel="noopener"
               className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] px-6 py-2.5 text-xs font-black text-white shadow-lg transition hover:brightness-105"
@@ -745,9 +746,9 @@ export const CampaignsPage = () => {
                   size="lg"
                   className="flex-1 h-11 sm:h-12 px-3 sm:px-6 rounded-2xl bg-orange-grad font-black text-xs sm:text-sm text-accent-foreground shadow-cta hover:opacity-95 shrink-0"
                 >
-                  <a href="tel:01097000137" className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
+                  <a href={`tel:${ORG.phoneE164}`} className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
                     <PhoneCall className="h-4 w-4 shrink-0" />
-                    <span>01097000137</span>
+                    <span>{ORG.phoneDisplay}</span>
                   </a>
                 </Button>
                 <Button

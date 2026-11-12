@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -155,7 +156,7 @@ const ProgramOptionDetail = () => {
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="w-full min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:w-auto sm:px-4 sm:text-base border-secondary/50 bg-transparent text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground">
-                <a href="https://wa.me/201097000137" target="_blank" rel="noopener" dir="ltr" className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"><WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> WhatsApp</a>
+                <a href={`https://wa.me/${ORG.whatsapp}`} target="_blank" rel="noopener" dir="ltr" className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"><WhatsAppIcon className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" /> WhatsApp</a>
               </Button>
               <Button asChild size="lg" variant="outline" className="col-span-2 mx-auto w-full max-w-[16rem] min-w-0 whitespace-normal px-2.5 text-xs leading-tight sm:mx-0 sm:w-auto sm:max-w-none sm:px-4 sm:text-base border-secondary/50 bg-transparent text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground">
                 <Link to={`/programs/${slug}`} className="inline-flex min-w-0 flex-wrap items-center justify-center gap-1.5 text-center leading-tight sm:gap-2"><Arrow className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />{isRTL ? "كل خيارات البرنامج" : "All program options"}</Link>

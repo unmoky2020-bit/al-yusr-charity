@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
@@ -25,8 +26,6 @@ import { bankAccountLabel, useBankAccounts } from "@/data/paymentOptions";
 import { usePaymentOptions } from "@/data/paymentOptions";
 
 const BASE = "https://elyusr.org";
-const PHONE = "+20 109 700 0137";
-const WA_NUMBER = "201097000137";
 const EMAIL = FOUNDATION_EMAIL;
 const LICENSE = "2665/2019";
 
@@ -50,7 +49,7 @@ const Trust = () => {
   const transferApps = payOptions.filter((o) => o.kind === "wallet" || o.kind === "instant");
   const walletNames = { ar: transferApps.map((o) => o.nameAr).join(" و"), en: transferApps.map((o) => o.nameEn).join(" & ") };
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
-  const wa = (text: string) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+  const wa = (text: string) => `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(text)}`;
   // Impact numbers: the same live figures as the homepage (dashboard → أرقام الصفحة الرئيسية).
   const { data: stats, loading: statsLoading } = useSiteStats("home_stats");
 
@@ -203,10 +202,10 @@ const Trust = () => {
               alternateName: "مؤسسة اليسر الخيرية",
               url: `${BASE}/`,
               logo: `${BASE}/icons/icon-512.png`,
-              foundingDate: "2019",
+              foundingDate: "2019-10",
               taxID: LICENSE,
               email: EMAIL,
-              telephone: PHONE,
+              telephone: ORG.phoneDisplay,
               areaServed: { "@type": "Country", name: "Egypt" },
               hasCredential: [
                 { "@type": "EducationalOccupationalCredential", name: "Ministry of Social Solidarity license", identifier: LICENSE },
@@ -497,7 +496,7 @@ const Trust = () => {
             <div>
               <h2 className="text-xl font-black text-primary md:text-2xl">{isRTL ? "تواصل مع فريق المتبرعين" : "Contact the donor team"}</h2>
               <ul className="mt-4 space-y-2.5 text-sm text-foreground/85">
-                <li><a href={`tel:+${WA_NUMBER}`} className="inline-flex items-center gap-2 hover:text-secondary"><Phone className="h-4 w-4 text-secondary" /><span dir="ltr">{PHONE}</span></a></li>
+                <li><a href={`tel:+${ORG.whatsapp}`} className="inline-flex items-center gap-2 hover:text-secondary"><Phone className="h-4 w-4 text-secondary" /><span dir="ltr">{ORG.phoneDisplay}</span></a></li>
                 <li><a href={wa(isRTL ? "السلام عليكم، لديّ سؤال عن تبرع." : "Hi, I have a question about a donation.")} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-secondary"><MessageCircle className="h-4 w-4 text-secondary" />{isRTL ? "واتساب" : "WhatsApp"}</a></li>
                 <li><a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-2 hover:text-secondary"><Mail className="h-4 w-4 text-secondary" />{EMAIL}</a></li>
                 <li><Link to="/contact" className="inline-flex items-center gap-2 font-extrabold text-primary underline decoration-secondary decoration-2 underline-offset-4">{isRTL ? "كل وسائل التواصل" : "All contact options"} <Arrow className="h-3.5 w-3.5" /></Link></li>

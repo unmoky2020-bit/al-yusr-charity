@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Link } from "react-router-dom";
 import { Heart, MessageCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,7 @@ export const DonationTiers = ({ programSlug, tiers, title_ar, title_en }: Props)
   const { lang } = useLang();
   const isRTL = lang === "ar";
   const wa = (n: number, unitAr: string, unitEn: string) =>
-    `https://wa.me/201097000137?text=${encodeURIComponent(
+    `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
       isRTL ? `أريد التبرع بـ ${n} جنيه — ${unitAr}` : `I'd like to donate ${n} EGP — ${unitEn}`
     )}`;
 

@@ -221,7 +221,7 @@ const DonateFromAbroad = () => {
             <h2 className="text-2xl font-black text-primary md:text-3xl">{ar ? "تتواصل معانا إزاي من برا" : "Reaching us from abroad"}</h2>
             <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-3 md:text-[15px]">
               {[
-                { Icon: Phone, k: ar ? "واتساب وتليفون" : "WhatsApp & phone", v: "+20 109 700 0137", ltr: true },
+                { Icon: Phone, k: ar ? "واتساب وتليفون" : "WhatsApp & phone", v: ORG.phoneDisplay, ltr: true },
                 { Icon: Clock, k: ar ? "بتوقيت القاهرة" : "Cairo time", v: ar ? ORG.hours.labelAr : ORG.hours.labelEn },
                 { Icon: Mail, k: ar ? "الإيميل" : "Email", v: ORG.email, ltr: true },
               ].map(({ Icon, k, v, ltr }) => (

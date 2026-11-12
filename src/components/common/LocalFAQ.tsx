@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -33,7 +34,7 @@ export const LocalFAQ = ({
 }) => {
   const { lang } = useLang();
   const isAr = lang === "ar";
-  const wa = `https://wa.me/201097000137?text=${encodeURIComponent(
+  const wa = `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     waText || (isAr ? "السلام عليكم، لدي سؤال عن التبرع للحملة." : "Hi, I have a question about donating to the campaign."),
   )}`;
 

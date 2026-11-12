@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { l, type CampaignPageContent } from "@/data/campaignPages/types";
 
 /**
@@ -166,7 +167,7 @@ const FARM: CampaignPageContent = {
     { q: l("كيف أتأكد من أن صكي وصل إلى أسرة مستحقة فعلًا؟", "How do I know my share reaches a deserving family?"), a: l("تدخل كل أسرة قاعدة بيانات اليسر بعد معاينة الفريق الميداني وتأكيد إمام المسجد أو الوحدة الاجتماعية في القرية، ونرسل لك رقم متابعة لتتبع تبرعك.", "Every family is vetted by our field team and confirmed by the local imam or social unit, and you get a tracking reference.") },
     { q: l("هل يمكنني حجز صك أضحية وأنا خارج مصر؟", "Can I reserve from outside Egypt?"), a: l("نعم، يمكنك الحجز أونلاين بفيزا أو ماستر كارد من أي دولة، أو التحويل عبر إنستاباي إلى الحساب الرسمي للمؤسسة، وسنرسل لك التوثيق على واتساب.", "Yes, pay online by Visa or Mastercard from any country, or transfer via InstaPay to the official account. We send proof on WhatsApp.") },
     { q: l("هل هناك فرق بين ماشية المزرعة الوقفية والماشية المستوردة؟", "Is waqf-farm livestock different from imported meat?"), a: l("ماشيتنا بلدي 100% من المزرعة الوقفية بالدقهلية، محصّنة بسجل بيطري، ومُربّاة على أعلاف بلدي دون هرمونات، وهذا ما يجعل اللحم طازجًا وآمنًا للأسر.", "Our livestock is 100% local from the Dakahlia waqf farm, vaccinated and raised on hormone-free local feed.") },
-    { q: l("هل يمكنني زيارة المزرعة قبل الحجز؟", "Can I visit the farm before reserving?"), a: l("نعم، نرحب بزيارة المتبرعين للمزرعة الوقفية بالدقهلية بموعد مسبق. تواصل معنا على واتساب 01097000137 لنحدد لك موعدًا.", "Yes, donor visits are welcome by appointment. WhatsApp us on 01097000137.") },
+    { q: l("هل يمكنني زيارة المزرعة قبل الحجز؟", "Can I visit the farm before reserving?"), a: l(`نعم، نرحب بزيارة المتبرعين للمزرعة الوقفية بالدقهلية بموعد مسبق. تواصل معنا على واتساب ${ORG.phoneDisplay} لنحدد لك موعدًا.`, `Yes, donor visits are welcome by appointment. WhatsApp us on ${ORG.phoneDisplay}.`) },
   ],
 
   cta: {

@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { CheckCircle2, Clock, XCircle, Loader2, Search, Copy, Calendar, Wallet, User, Sparkles, ShieldCheck, Mail } from "lucide-react";
@@ -15,7 +16,6 @@ import { donationsApiV1 } from "@/data/laravelApi";
 import { fromLaravelRow } from "@/data/donationRecordMapper";
 import { DeliveryJourney } from "@/components/donations/DeliveryJourney";
 
-const WHATSAPP_NUMBER = "201097000137";
 const POLL_INTERVAL_MS = 30_000; // poll every 30 seconds instead of realtime
 
 const statusLabel = (s: string, lang: "ar" | "en") => {
@@ -202,7 +202,7 @@ const DonationTracking = () => {
                   {record.status === "processing" && <Loader2 className="h-8 w-8 animate-spin text-secondary" />}
                   {(record.status === "pending" || record.status === "failed") && (
                     <a
-                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                      href={`https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
                         (lang === "ar" ? "استفسار عن تبرع رقم: " : "Inquiry about donation: ") + record.ref
                       )}`}
                       target="_blank"
@@ -277,7 +277,7 @@ const DonationTracking = () => {
                 {(record.status === "pending" || record.status === "failed") && (
                   <div className="mt-5 flex flex-wrap gap-2">
                     <a
-                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                      href={`https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
                         (lang === "ar" ? "استفسار عن تبرع رقم: " : "Inquiry about donation: ") + record.ref
                       )}`}
                       target="_blank"

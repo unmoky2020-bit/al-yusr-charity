@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import logoImg from "@/assets/logo-circle.png";
 
 export interface ReceiptItem {
@@ -589,7 +590,7 @@ export async function downloadReceiptPdf(data: ReceiptData): Promise<void> {
               مؤسسة اليسر الخيرية — معًا نوصل صدقتك إلى من يستحقها
             </div>
             <div style="font-size: 9px; font-weight: 700; color: #64748b;">
-              المقر الرئيسي: المنصورة، الدقهلية، جمهورية مصر العربية | هاتف: 01097000137 | https://elyusr.org
+              المقر الرئيسي: المنصورة، الدقهلية، جمهورية مصر العربية | هاتف: ${esc(ORG.phoneDisplay)} | https://elyusr.org
             </div>
             <div style="font-size: 8px; color: #94a3b8; margin-top: 3px; direction: ltr; font-weight: 600;">
               Transaction ID: ${esc(data.ref)} • Electronic Proof of Donation • Al-Yusr Financial Core System

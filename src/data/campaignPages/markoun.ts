@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { l, type CampaignPageContent } from "./types";
 import { img } from "@/data/pageImages";
 
@@ -138,7 +139,7 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
         {
           id: "send",
           title: l("أرسل كلمة «تبرع»", "Send 'Donate'"),
-          desc: l("أرسل رسالة بكلمة «تبرع» على واتساب أو اتصل برقم 01097000137، وحدّد نوع المركون لديك.", "Send 'Donate' via WhatsApp or phone call."),
+          desc: l(`أرسل رسالة بكلمة «تبرع» على واتساب أو اتصل برقم ${ORG.phoneDisplay}، وحدّد نوع المركون لديك.`, "Send 'Donate' via WhatsApp or phone call."),
         },
         {
           id: "pickup",
@@ -196,8 +197,8 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
     {
       q: l("كيف أتبرع بالمركون لديّ، ومن يستلمه؟", "How do I donate my items and who collects them?"),
       a: l(
-        "كل ما عليك: أرسل كلمة «تبرع» في رسالة واتساب على 01097000137 أو اتصل بنا، وسيصلك مندوبنا بسيارة المؤسسة المجهزة حتى باب منزلك ليستلم منك كل المركون بسهولة ورقي، ودون أي مجهود منك.",
-        "Simply text 'Donate' via WhatsApp to 01097000137, and our representative will collect the items directly from your doorstep.",
+        `كل ما عليك: أرسل كلمة «تبرع» في رسالة واتساب على ${ORG.phoneDisplay} أو اتصل بنا، وسيصلك مندوبنا بسيارة المؤسسة المجهزة حتى باب منزلك ليستلم منك كل المركون بسهولة ورقي، ودون أي مجهود منك.`,
+        `Simply text 'Donate' via WhatsApp to ${ORG.phoneDisplay}, and our representative will collect the items directly from your doorstep.`,
       ),
     },
     {
@@ -231,8 +232,8 @@ const MARKOUN_DEFAULTS: CampaignPageContent = {
     {
       q: l("هل يصل مندوب مَرْكون إلى كل مراكز الدقهلية؟", "Does the Markoun courier reach all of Dakahlia?"),
       a: l(
-        "تنطلق سيارات حملة مَرْكون من مقر مؤسسة اليسر الخيرية بالمنصورة وتغطي محافظة الدقهلية. أرسل كلمة «تبرع» على واتساب 01097000137 مع عنوانك ونوع المركون لديك، ونتفق معك على موعد استلام مجاني يناسبك.",
-        "Markoun pickup vans operate from Al-Yusr's headquarters in Mansoura and cover Dakahlia governorate. Text 'Donate' on WhatsApp to 01097000137 with your address and the type of items, and we will arrange a free pickup time that suits you.",
+        `تنطلق سيارات حملة مَرْكون من مقر مؤسسة اليسر الخيرية بالمنصورة وتغطي محافظة الدقهلية. أرسل كلمة «تبرع» على واتساب ${ORG.phoneDisplay} مع عنوانك ونوع المركون لديك، ونتفق معك على موعد استلام مجاني يناسبك.`,
+        `Markoun pickup vans operate from Al-Yusr's headquarters in Mansoura and cover Dakahlia governorate. Text 'Donate' on WhatsApp to ${ORG.phoneDisplay} with your address and the type of items, and we will arrange a free pickup time that suits you.`,
       ),
     },
     {

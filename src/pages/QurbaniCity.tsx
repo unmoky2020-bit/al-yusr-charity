@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -173,7 +174,7 @@ const QurbaniCityView = ({ city }: { city: NonNullable<ReturnType<typeof getCity
                   </Link>
                 </Button>
                 <Button asChild size="sm" variant="outline" className="border-secondary/40 bg-primary-foreground/5 text-primary-foreground hover:bg-secondary/20 hover:text-primary-foreground">
-                  <a href="tel:+201097000137" dir="ltr"><Phone className="h-4 w-4" />+20 109 700 0137</a>
+                  <a href={`tel:${ORG.phoneE164}`} dir="ltr"><Phone className="h-4 w-4" />{ORG.phoneDisplay}</a>
                 </Button>
               </div>
             </div>

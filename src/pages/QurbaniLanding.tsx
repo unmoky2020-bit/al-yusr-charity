@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Link } from "react-router-dom";
 import { Heart, ShieldCheck, Camera, Truck, MapPin, CheckCircle2, Clock, Phone, AlertTriangle, Beef, Sparkles, BadgeCheck, FileCheck2 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -170,7 +171,7 @@ const QurbaniLanding = () => {
           {/* Lime contact pill */}
           <div className="mx-auto mt-6 max-w-3xl rounded-[2rem] bg-secondary p-5 text-center text-secondary-foreground shadow-cta">
             <div className="space-y-1.5 text-sm font-extrabold md:text-base">
-              <div>{isAr ? "أرقامنا:" : "Phones:"} <span className="font-mono">01097000137</span> – {isAr ? "يمكنك طلب مندوب يصل إلى منزلك" : "Home pickup available"}</div>
+              <div>{isAr ? "أرقامنا:" : "Phones:"} <span className="font-mono">{ORG.phoneDisplay}</span> – {isAr ? "يمكنك طلب مندوب يصل إلى منزلك" : "Home pickup available"}</div>
               {bankText && <div>{isAr ? "الحساب البنكي" : "Bank account"} <span className="font-mono">{bankText}</span></div>}
               <div>{isAr ? "العنوان: المنصورة، تقسيم خطاب، بجوار وكالة المنصورة" : "Address: Mansoura, Khattab District, next to Mansoura Agency"}</div>
             </div>
@@ -179,7 +180,7 @@ const QurbaniLanding = () => {
                 <Link to="/donate?program=odhya"><Heart className="h-5 w-5" />{isAr ? "احجز صك الأضحية" : "Reserve a share"}</Link>
               </Button>
               <a
-                href="https://wa.me/201097000137?text=عايز%20احجز%20صك%20أضحية%20من%20الموقع"
+                href={`https://wa.me/${ORG.whatsapp}?text=عايز%20احجز%20صك%20أضحية%20من%20الموقع`}
                 target="_blank" rel="noopener"
                 className="inline-flex h-11 items-center gap-2 rounded-md border-2 border-primary/30 bg-primary px-5 text-sm font-extrabold text-primary-foreground hover:bg-primary/90"
               >

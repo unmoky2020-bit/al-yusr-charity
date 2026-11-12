@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Link } from "react-router-dom";
 import { ReactNode } from "react";
 import { Heart, MessageCircle, ArrowRight, ArrowLeft, CheckCircle2 } from "lucide-react";
@@ -41,7 +42,7 @@ export const ServicePage = ({ config }: { config: ServicePageConfig }) => {
   const path = `/services/${config.slug}`;
   const title = isRTL ? config.seo_title_ar : config.seo_title_en;
   const description = isRTL ? config.seo_desc_ar : config.seo_desc_en;
-  const wa = `https://wa.me/201097000137?text=${encodeURIComponent(
+  const wa = `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     isRTL ? `أريد التبرع لخدمة: ${config.title_ar}` : `I'd like to donate to: ${config.title_en}`
   )}`;
 

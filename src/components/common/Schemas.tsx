@@ -38,7 +38,7 @@ export const SiteSchemas = () => {
           logo: { "@type": "ImageObject", url: "https://elyusr.org/logo.png", width: 512, height: 512 },
           image: "https://elyusr.org/og-image.jpg",
           description: "مؤسسة اليسر الخيرية — مؤسسة خيرية مصرية مشهرة (رقم 2665) تعمل في محافظات مصر، ومقرها الرئيسي في المنصورة بمحافظة الدقهلية. تعمل في رعاية الأيتام والأرامل وتوزيع الصدقات والزكاة وصكوك الأضحية والمساعدات الشهرية للأسر المستحقة.",
-          foundingDate: "2019",
+          foundingDate: "2019-10",
           nonprofitStatus: "NonprofitType",
           taxID: "2665/2019",
           legalName: "مؤسسة اليسر الخيرية المشهرة برقم 2665 لسنة 2019",

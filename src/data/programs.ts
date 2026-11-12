@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import odhya from "@/assets/poster-odhya.webp";
 import zakat from "@/assets/program-zakat-new.jpg";
 import meat from "@/assets/poster-meat.webp";
@@ -490,12 +491,12 @@ export const programs: ProgramContent[] = [
         "الملابس والكساء: فرز وتنظيف وتقديم بكرامة تامة",
         "الصيدلية المستدامة: فرز الأدوية الصالحة تحت إشراف طبي وتوزيعها مجانًا",
         "المعرفة والتعليم: كتب مدرسية وثقافية لإعادة تدوير المعرفة",
-        "راحة المتبرع: مندوب المؤسسة يصلك حتى باب المنزل (01097000137)",
+        `راحة المتبرع: مندوب المؤسسة يصلك حتى باب المنزل (${ORG.phoneDisplay})`,
       ],
       longContent: [
         "«حملة مركون» هي أول حملة مصرية تنطلق برؤية فريدة: أن تبني حياة كريمة وتُعمّر بيوتًا من كنز مركون في منزلك. نحن لا نجمع مجرد أغراض فائضة، بل نعيد صياغة الأمل وننقل الدفء والاستقرار من بيوتكم إلى بيوت أهالينا المستحقين.",
         "نعتمد على نظام رقمي وقواعد بيانات دقيقة تضمن ذهاب كل قطعة تبرع عيني إلى مكانها الصحيح والأنسب لاحتياج الأسرة الفعلي، مع فحص وتأهيل وصيانة دقيقة لتصل إلى المستفيدين وكأنها جديدة تمامًا.",
-        "وفّرنا منظومة استلام متكاملة؛ فلست بحاجة إلى مغادرة منزلك، وبمجرد تواصلك معنا (01097000137) يتوجه مندوبنا الرسمي بمركبات المؤسسة لاستلام التبرعات وتوثيقها باحترافية.",
+        `وفّرنا منظومة استلام متكاملة؛ فلست بحاجة إلى مغادرة منزلك، وبمجرد تواصلك معنا (${ORG.phoneDisplay}) يتوجه مندوبنا الرسمي بمركبات المؤسسة لاستلام التبرعات وتوثيقها باحترافية.`,
       ],
     },
     en: {
@@ -508,7 +509,7 @@ export const programs: ProgramContent[] = [
         "Clothing: sorted, cleaned, and presented with full dignity",
         "Sustainable Pharmacy: valid medication checked by medical staff",
         "Books & Education: school and cultural books redistributed",
-        "Doorstep pickup service by official delegates: 01097000137",
+        `Doorstep pickup service by official delegates: ${ORG.phoneDisplay}`,
       ],
       longContent: [
         "Markoun is the first Egyptian initiative dedicated to restoring and matching surplus household goods with validated deserving families, preserving donor convenience and recipient dignity.",

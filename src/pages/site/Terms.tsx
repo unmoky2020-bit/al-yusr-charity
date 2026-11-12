@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, Mail, Phone, Printer } from "lucide-react";
@@ -441,13 +442,13 @@ const Terms = () => {
                 {isRTL ? "لأي استفسار أو طلب استرداد، يُرجى التواصل معنا عبر القنوات الرسمية التالية مع ذكر الرقم المرجعي للإيصال." : "For any enquiry or refund request, please contact us through the official channels below, quoting your receipt reference number."}
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
-                <a href="https://wa.me/201097000137" target="_blank" rel="noopener" data-source="terms" data-label="whatsapp"
+                <a href={`https://wa.me/${ORG.whatsapp}`} target="_blank" rel="noopener" data-source="terms" data-label="whatsapp"
                   className="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-primary px-5 text-sm font-black text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                   <WhatsAppIcon className="h-4 w-4" /> {isRTL ? "واتساب" : "WhatsApp"}
                 </a>
-                <a href="tel:+201097000137" data-source="terms" data-label="phone"
+                <a href={`tel:${ORG.phoneE164}`} data-source="terms" data-label="phone"
                   className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-border px-5 text-sm font-bold text-primary transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                  <Phone className="h-4 w-4" /> <span dir="ltr">+20 109 700 0137</span>
+                  <Phone className="h-4 w-4" /> <span dir="ltr">{ORG.phoneDisplay}</span>
                 </a>
                 <a href={`mailto:${FOUNDATION_EMAIL}`} data-source="terms" data-label="email"
                   className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-border px-5 text-sm font-bold text-primary transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">

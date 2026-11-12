@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { Link } from "react-router-dom";
 import { useState, useMemo, useCallback } from "react";
 import {
@@ -102,7 +103,7 @@ const Projects = () => {
       ? "السلام عليكم، أريد أن أعرف أنسب برنامج للتبرع أو للمساعدة مع مؤسسة اليسر."
       : "Hello, I'd like to learn which Al-Yusr program is best for donation or support."
   );
-  const waHref = `https://wa.me/201097000137?text=${waMsg}`;
+  const waHref = `https://wa.me/${ORG.whatsapp}?text=${waMsg}`;
   const highlights = [
     isRTL ? "بحث اجتماعي قبل الصرف" : "Social assessment before spending",
     isRTL ? "تسليم بكرامة حتى باب البيت" : "Dignified doorstep delivery",
@@ -208,7 +209,7 @@ const Projects = () => {
           { q: "هل تبرعي يصل فعلًا للمستحقين؟", a: "نعم. كل تبرع يمر ببحث اجتماعي ميداني للأسر، ثم يُسلَّم بكرامة حتى باب البيت، ويُوثَّق بصور وفيديو تصلك عبر واتساب أو البريد بعد التنفيذ." },
           { q: "هل أحصل على إيصال رسمي بالتبرع؟", a: "بمجرد إتمام الدفع يصلك إيصال إلكتروني فوري برقم مرجعي يمكنك أن تتابع به حالة تبرعك من صفحة «تتبع التبرع»." },
           { q: "ما الفرق بين التبرع لبرنامج والتبرع لحالة موثّقة؟", a: "التبرع لبرنامج (مثل صك أضحية أو كرتونة عزومة) يُوزَّع على أسر متعددة حسب الأشد احتياجًا، أما التبرع لحالة موثّقة فيذهب إلى حالة فردية بعينها مع متابعة نتيجتها." },
-          { q: "هل يمكنني تخصيص تبرعي لمحافظة معينة؟", a: "نعم. تركيزنا الأساسي محافظة الدقهلية بكل مدنها وقراها، ونغطي أيضًا حالات في كفر الشيخ والصعيد. اطلب التخصيص من فريقنا على واتساب 201097000137+." },
+          { q: "هل يمكنني تخصيص تبرعي لمحافظة معينة؟", a: `نعم. تركيزنا الأساسي محافظة الدقهلية بكل مدنها وقراها، ونغطي أيضًا حالات في كفر الشيخ والصعيد. اطلب التخصيص من فريقنا على واتساب ${ORG.phoneE164}.` },
           { q: "ما طرق الدفع المتاحة؟", a: "فيزا/ماستر كارد، Vodafone Cash، InstaPay، تحويل بنكي على CIB، أو دفع نقدي لدى ممثل المؤسسة في المنصورة." },
           { q: "هل المؤسسة مرخّصة رسميًا؟", a: "مؤسسة اليسر الخيرية مرخّصة من وزارة التضامن الاجتماعي تحت رقم إشهار 2665/2019، ومقرها الرئيسي بالمنصورة - الدقهلية." },
           { q: "كيف أتطوع أو أنضم إلى فريق العمل؟", a: "ادخل صفحة «تطوّع معنا» من القائمة، واختر المجال المناسب لمهاراتك، ثم قدّم طلبك. نوفّر تدريبًا ميدانيًا ومتابعة لكل متطوع جديد." },
@@ -218,7 +219,7 @@ const Projects = () => {
           { q: "Does my donation really reach the beneficiaries?", a: "Yes — every donation goes through field social assessment, dignified doorstep delivery, and is documented with photos and videos shared with you on WhatsApp or email after execution." },
           { q: "Will I receive an official receipt?", a: "An electronic receipt with a reference code is emailed to you instantly so you can track the case from our donation tracking page." },
           { q: "What is the difference between donating to a program and donating to a verified case?", a: "Program donations (e.g. a Qurbani voucher or food box) are distributed across multiple families by need. A verified case donation goes to one specific family with outcome follow-up." },
-          { q: "Can I designate my donation to a specific governorate?", a: "Yes. Our primary focus is Dakahlia (all cities and villages); we also serve cases in Kafr El-Sheikh and Upper Egypt. Request a designation via WhatsApp +201097000137." },
+          { q: "Can I designate my donation to a specific governorate?", a: `Yes. Our primary focus is Dakahlia (all cities and villages); we also serve cases in Kafr El-Sheikh and Upper Egypt. Request a designation via WhatsApp ${ORG.phoneE164}.` },
           { q: "What payment methods are supported?", a: "Visa/Mastercard, Vodafone Cash, InstaPay, bank transfer to CIB, or in-person cash via our Mansoura representative." },
           { q: "Is the foundation officially licensed?", a: "Al-Yusr Charity Foundation is licensed by the Ministry of Social Solidarity under license number 2665/2019, headquartered in Mansoura, Dakahlia." },
           { q: "How can I volunteer or join the field team?", a: "Visit our volunteer campaigns page, pick a campaign, and apply for the slot that matches your skills. We provide field training and follow-up for every new volunteer." },

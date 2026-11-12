@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useLang } from "@/i18n/LangContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -307,7 +308,7 @@ export const ProximityGrid = () => {
             </Button>
             {/* WhatsApp — lime green */}
             <a
-              href="https://wa.me/201097000137"
+              href={`https://wa.me/${ORG.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-[hsl(82_75%_48%)] px-6 py-2.5 text-sm font-black text-[#1a2a00] shadow-lg transition hover:brightness-105"

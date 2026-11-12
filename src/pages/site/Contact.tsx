@@ -141,7 +141,7 @@ const Contact = () => {
 
   const handleCopyPhone = () => {
     try {
-      navigator.clipboard.writeText("+201097000137");
+      navigator.clipboard.writeText(ORG.phoneE164);
       setCopiedPhone(true);
       toast({ title: isRTL ? "تم نسخ رقم الهاتف" : "Phone number copied" });
       setTimeout(() => setCopiedPhone(false), 2000);
@@ -250,7 +250,7 @@ const Contact = () => {
         title={isRTL ? "تواصل مع مؤسسة اليسر الخيرية — رقم التليفون وواتساب والعنوان في المنصورة" : "Contact Al-Yusr Charity — phone, WhatsApp and address in Mansoura"}
         description={isRTL
           ? `كلّم مؤسسة اليسر الخيرية على ${ORG.phoneDisplay} أو واتساب، أو ابعت على ${ORG.email}. مقرنا: ${ORG.addressAr}. ${ORG.hours.labelAr}. نرد خلال 24 ساعة على أسئلة التبرع والزكاة والتطوع.`
-          : `Call Al-Yusr Charity on +20 109 700 0137 or WhatsApp, or email ${ORG.email}. Office: ${ORG.addressEn}. ${ORG.hours.labelEn}. We reply within 24 hours.`}
+          : `Call Al-Yusr Charity on ${ORG.phoneDisplay} or WhatsApp, or email ${ORG.email}. Office: ${ORG.addressEn}. ${ORG.hours.labelEn}. We reply within 24 hours.`}
         path="/contact"
         keywords={isRTL ? "تواصل معنا, جمعيات خيرية بالمنصورة, جمعيات خيرية بالدقهلية, تبرع, اليسر, واتساب, حساب بنكي, صدقات, زكاة, أضاحي, كفالة أيتام, تطوع" : "contact us, charity in Mansoura, charity in Dakahlia, donate, al-yusr, WhatsApp, sadaqah, zakat, qurbani, volunteer"}
       />
@@ -289,7 +289,7 @@ const Contact = () => {
           {/* CTA buttons */}
           <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
             <a
-              href="tel:+201097000137"
+              href={`tel:${ORG.phoneE164}`}
               className="inline-flex items-center gap-1.5 rounded-full bg-orange-grad px-6 py-2.5 text-xs font-black text-accent-foreground shadow-cta transition hover:opacity-90"
             >
               <Phone className="h-4 w-4" />

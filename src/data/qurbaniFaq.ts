@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 /** Shared Qurbani FAQ — single source for component rendering AND structured-data tests. */
 export type QA = { q: string; a: string };
 
@@ -12,7 +13,7 @@ export const FAQ_AR: QA[] = [
   { q: "متى يُفتح حجز صك الأضحية؟", a: "نعلن موعد فتح الحجز على صفحة الأضحية وصفحاتنا على مواقع التواصل قبل العيد بوقت كافٍ. ويُغلق الحجز عند نفاد الكميات أو قبل العيد بأسبوعين، أيهما أقرب؛ لذلك ننصح بالحجز المبكر." },
   { q: "هل يمكنني الدفع أونلاين بالفيزا أو فودافون كاش أو إنستاباي؟", a: "نعم. نقبل فيزا وماستركارد عبر بوابة دفع آمنة، وفودافون كاش، وإنستاباي، والتحويل البنكي على حساب CIB رقم 100043605733." },
   { q: "هل يمكنني حجز صك أضحية باسم شخص متوفى؟", a: "نعم. نسجّل الأضحية باسم من تختاره (متوفى أو حي)، ويُذكر اسمه عند النية وقت الذبح، ويظهر في الإيصال وفي صور التوثيق." },
-  { q: "هل يُجزئ صك الأضحية عن العقيقة؟", a: "للعقيقة أحكام فقهية تختلف عن الأضحية. لدينا برنامج عقيقة منفصل بمستوى التوثيق نفسه؛ تواصل معنا على واتساب 01097000137 لمعرفة تفاصيل العقيقة." },
+  { q: "هل يُجزئ صك الأضحية عن العقيقة؟", a: `للعقيقة أحكام فقهية تختلف عن الأضحية. لدينا برنامج عقيقة منفصل بمستوى التوثيق نفسه؛ تواصل معنا على واتساب ${ORG.phoneDisplay} لمعرفة تفاصيل العقيقة.` },
   { q: "هل تُوزَّع الأضحية كاملة على بيت واحد أم على أكثر من بيت؟", a: "نوزّع كل صك (سُبع بقري أو جاموسي، أو خروف كامل) على 5–7 أسر في القرية المستهدفة نفسها بالدقهلية، حتى يفرح أكبر عدد من البيوت يوم العيد." },
   { q: "هل يتم الذبح على الطريقة الشرعية؟", a: "نعم، يتم الذبح على يد جزّار ملتزم بالذبح الشرعي مع التسمية والتكبير، ونوثّق العملية بفيديو مرتبط برقم تتبع الصك." },
   { q: "هل يمكنني حضور الذبح بنفسي؟", a: "نعم. إذا كنت من سكان الدقهلية يمكنك حضور الذبح في المسلخ المعتمد بعد التنسيق المسبق، وسنوفر لك مكانًا مظللًا وكوب شاي 😊." },
@@ -33,7 +34,7 @@ export const FAQ_EN: QA[] = [
   { q: "When does Qurbani booking open?", a: "We announce the opening date on the Qurbani page and our social pages well before Eid. Booking closes when stock runs out or two weeks before Eid — whichever is sooner. Book early." },
   { q: "Can I pay online by Visa, Vodafone Cash or InstaPay?", a: "Yes. We accept Visa/Mastercard via a secure gateway, Vodafone Cash, InstaPay, and bank transfer to CIB account 100043605733." },
   { q: "Can I dedicate my Qurbani to a deceased person?", a: "Yes. We register the share in any name you choose (deceased or living), the name is mentioned at slaughter, and it appears on the receipt and in your documentation." },
-  { q: "Does a Qurbani share cover an Aqiqah?", a: "Aqiqah has different rulings. We offer a dedicated Aqiqah program with the same documentation — WhatsApp 01097000137 for details." },
+  { q: "Does a Qurbani share cover an Aqiqah?", a: `Aqiqah has different rulings. We offer a dedicated Aqiqah program with the same documentation — WhatsApp ${ORG.phoneDisplay} for details.` },
   { q: "Is the whole share given to one family or many?", a: "Each share (1/7 cow or buffalo, or a whole sheep) is split across 5–7 families in the same Dakahlia village to bring joy to as many homes as possible." },
   { q: "Is the slaughter Sharia-compliant?", a: "Yes — performed by a licensed butcher with Tasmiyah and Takbir, and documented on video tied to your share's tracking number." },
   { q: "Can I attend the slaughter in person?", a: "Yes. Dakahlia residents can attend at our certified abattoir after coordination — we'll save you a shaded spot and a cup of tea 😊." },

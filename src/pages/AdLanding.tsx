@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -77,7 +78,7 @@ const AdLanding = () => {
     c.target_url ||
     (c.program_slug ? `/donate?program=${encodeURIComponent(c.program_slug)}` : "/donate");
   const donateHref = appendUtm(baseDonate);
-  const wa = `https://wa.me/201097000137?text=${encodeURIComponent(
+  const wa = `https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
     isAr ? `استفسار عن: ${headline}` : `Ask about: ${headline}`,
   )}`;
 

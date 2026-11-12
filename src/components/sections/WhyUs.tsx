@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { ShieldCheck, Target, Eye, BadgeCheck, MessageCircle, ArrowLeft, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLang } from "@/i18n/LangContext";
@@ -58,7 +59,7 @@ export const WhyUs = () => {
         {/* Two CTAs — row on every screen */}
         <div className="mx-auto mt-6 grid max-w-2xl grid-cols-2 gap-2.5 md:mt-8 md:gap-3">
           <a
-            href={`https://wa.me/201097000137?text=${waMsg}`}
+            href={`https://wa.me/${ORG.whatsapp}?text=${waMsg}`}
             target="_blank"
             rel="noopener"
             data-source="why-us"

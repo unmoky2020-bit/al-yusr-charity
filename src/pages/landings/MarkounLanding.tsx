@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -123,7 +124,7 @@ const MarkounLanding = () => {
       ? "تبرع - أرغب في التبرع بمركون من منزلي (أثاث / أجهزة / ملابس / أدوية / كتب) ضمن حملة مركون"
       : "Donate - I want to donate surplus items (furniture / appliances / clothes / meds / books) via Markoun"
   );
-  const waUrl = `https://wa.me/201097000137?text=${waDonateText}`;
+  const waUrl = `https://wa.me/${ORG.whatsapp}?text=${waDonateText}`;
 
   if (isLoading) {
     return (
@@ -138,7 +139,7 @@ const MarkounLanding = () => {
       <FAQSchema items={c.faq.map((f) => ({ q: t(f.q), a: t(f.a) }))} />
       <SEOHelmet
         title={c.seo?.title?.[isRTL ? "ar" : "en"] || (isRTL ? "التبرع بالملابس المستعملة والأثاث في المنصورة | مَرْكون" : "Donate used clothes & furniture in Mansoura | Markoun — Al-Yusr")}
-        description={c.seo?.description?.[isRTL ? "ar" : "en"] || (isRTL ? "حملة مَرْكُون: كنزك المركون يبني حياة لغيرك. أول حملة مصرية منظمة لإعادة استخدام الأثاث المنزلي والأجهزة الكهربائية والملابس والأدوية والكتب. يصلك مندوبنا حتى باب بيتك مجانًا في المنصورة والدقهلية: 01097000137." : "Markoun Campaign: Egypt's premier in-kind reuse initiative. Repurposing surplus furniture, electronics, clothing, medicine, and books with free doorstep pickup across Mansoura & Dakahlia.")}
+        description={c.seo?.description?.[isRTL ? "ar" : "en"] || (isRTL ? `حملة مَرْكُون: كنزك المركون يبني حياة لغيرك. أول حملة مصرية منظمة لإعادة استخدام الأثاث المنزلي والأجهزة الكهربائية والملابس والأدوية والكتب. يصلك مندوبنا حتى باب بيتك مجانًا في المنصورة والدقهلية: ${ORG.phoneDisplay}.` : "Markoun Campaign: Egypt's premier in-kind reuse initiative. Repurposing surplus furniture, electronics, clothing, medicine, and books with free doorstep pickup across Mansoura & Dakahlia.")}
         path="/markoun"
         image={posterSrc || undefined}
         keywords={
@@ -169,7 +170,7 @@ const MarkounLanding = () => {
               name: "مؤسسة اليسر الخيرية",
               alternateName: "مؤسسة اليسر",
               url: "https://elyusr.org/",
-              telephone: "+201097000137",
+              telephone: ORG.phoneE164,
               taxID: "2665/2019",
             },
             serviceType: "استلام وتجديد وتوزيع التبرعات العينية (أثاث، أجهزة، ملابس، أدوية، كتب)",
@@ -178,7 +179,7 @@ const MarkounLanding = () => {
               "@type": "ServiceChannel",
               servicePhone: {
                 "@type": "ContactPoint",
-                telephone: "+201097000137",
+                telephone: ORG.phoneE164,
                 contactType: "customer service",
               },
             },
@@ -247,7 +248,7 @@ const MarkounLanding = () => {
               <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs font-black text-primary-foreground/85 lg:justify-start">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 backdrop-blur">
                   <Phone className="h-3.5 w-3.5 text-accent" />
-                  <a href="tel:01097000137" dir="ltr">01097000137</a>
+                  <a href={`tel:${ORG.phoneE164}`} dir="ltr">{ORG.phoneDisplay}</a>
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 backdrop-blur">
                   <Truck className="h-3.5 w-3.5 text-secondary" />
@@ -463,14 +464,14 @@ const MarkounLanding = () => {
                     className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--whatsapp,142_70%_42%))] px-5 py-2.5 text-xs font-black text-white shadow-lg transition hover:brightness-105"
                   >
                     <WhatsAppIcon className="h-4 w-4" />
-                    <span>01097000137</span>
+                    <span>{ORG.phoneDisplay}</span>
                   </a>
                   <a
-                    href="tel:01097000137"
+                    href={`tel:${ORG.phoneE164}`}
                     className="inline-flex items-center gap-2 rounded-full bg-white/15 px-5 py-2.5 text-xs font-black text-white backdrop-blur hover:bg-white/25"
                   >
                     <Phone className="h-4 w-4 text-secondary" />
-                    <span>01097000137</span>
+                    <span>{ORG.phoneDisplay}</span>
                   </a>
                 </div>
               </div>

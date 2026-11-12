@@ -1,3 +1,4 @@
+import { ORG } from "@/data/orgInfo";
 import { useEffect, useRef } from "react";
 import { Heart, Truck, Sparkles, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -181,7 +182,7 @@ export const CartonJourney = () => {
             className="group h-11 flex-1 border-0 bg-[#25D366] px-3 text-[13px] font-extrabold text-white shadow-cta hover:bg-[#1ebe5b] hover:text-white sm:h-12 sm:px-6 sm:text-base"
           >
             <a
-              href={`https://wa.me/201097000137?text=${encodeURIComponent(
+              href={`https://wa.me/${ORG.whatsapp}?text=${encodeURIComponent(
                 isAr
                   ? "السلام عليكم، أرغب في التبرع بكرتونة من مؤسسة اليسر."
                   : "Hello, I'd like to sponsor an Al-Yusr aid carton.",
