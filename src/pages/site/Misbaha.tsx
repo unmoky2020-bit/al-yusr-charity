@@ -189,9 +189,11 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
         .catch(() => { pendingAdd.current += n; });
     };
     const t = window.setInterval(flush, 3000);
+    // iPhone Safari often skips visibilitychange when the tab or app is closed; pagehide still fires.
     const onHide = () => { if (document.visibilityState === "hidden") flush(); };
     document.addEventListener("visibilitychange", onHide);
-    return () => { window.clearInterval(t); document.removeEventListener("visibilitychange", onHide); flush(); };
+    window.addEventListener("pagehide", flush);
+    return () => { window.clearInterval(t); document.removeEventListener("visibilitychange", onHide); window.removeEventListener("pagehide", flush); flush(); };
   }, [roomSlug, roomState]);
 
   // A shared link can open a specific dhikr: /misbaha?d=astaghfir
@@ -256,6 +258,28 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
     }
     vibrate(completes ? [40, 60, 40] : 8);
   }, [countKey, target, count, dhikr.id, roomSlug, roomState, st.today, streak]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Phones count on the finger lifting, not on the browser's click: iPhone Safari drops or delays
+  // clicks on fast repeated taps (and on the first tap after a hover change), so taps went missing.
+  // A finger that moved (a scroll) is not a tap; the click that follows a counted touch is ignored.
+  const ringTouch = useRef<{ x: number; y: number } | null>(null);
+  const touchCountedAt = useRef(0);
+  const onRingDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (e.pointerType === "mouse") return;
+    ringTouch.current = { x: e.clientX, y: e.clientY };
+  };
+  const onRingUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const start = ringTouch.current;
+    ringTouch.current = null;
+    if (!start || e.pointerType === "mouse") return;
+    if (Math.hypot(e.clientX - start.x, e.clientY - start.y) > 12) return;
+    touchCountedAt.current = Date.now();
+    tap();
+  };
+  const onRingClick = () => {
+    if (Date.now() - touchCountedAt.current < 800) return;
+    tap();
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -385,9 +409,13 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
               </div>
               <button
                 type="button"
-                onClick={tap}
+                onPointerDown={onRingDown}
+                onPointerUp={onRingUp}
+                onPointerCancel={() => { ringTouch.current = null; }}
+                onClick={onRingClick}
+                onContextMenu={(e) => e.preventDefault()}
                 className={`misbaha-ring relative aspect-square w-full max-w-[340px] select-none rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary/60 ${done ? "misbaha-done" : ""}`}
-                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", WebkitTouchCallout: "none" }}
                 aria-label={isAr ? `اضغط بعد أن تقول: ${dhikr.text}. العدد ${count}` : `Tap after saying: ${dhikr.en}. Count ${count}`}
               >
                 <svg viewBox="0 0 300 300" className="h-full w-full" aria-hidden>

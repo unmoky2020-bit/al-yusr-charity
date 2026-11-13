@@ -2,17 +2,19 @@
 # ─────────────────────────────────────────────────────────────────────────────
 #  Turn on real email for api.elyusr.org (today MAIL_MAILER=log: every email — the
 #  confirmation code, password reset, welcome — is written to the log and never sent).
-#  Uses the Hostinger mailbox info@elyusr.org. YOU type its password here (it is not shown and
+#  Mailbox roles: support@elyusr.org SENDS every email from the system (codes, account activation,
+#  receipts, automations, newsletter); info@elyusr.org is the public contact address and only RECEIVES
+#  (every email carries Reply-To: info@). YOU type support@'s password here (it is not shown and
 #  not saved anywhere except the server's .env). Then a test email goes to the address you give.
 #    ssh -t -p 65002 u389354171@195.35.26.214 "bash ~/mail-setup.sh"
 # ─────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 APP="${APP:-$HOME/domains/api.elyusr.org/public_html}"
-FROM="${FROM:-info@elyusr.org}"
+FROM="${FROM:-support@elyusr.org}"
 cd "$APP"
 cp .env "$HOME/backups/env-before-mail-$(date +%Y%m%d-%H%M%S)" 2>/dev/null || { mkdir -p "$HOME/backups"; cp .env "$HOME/backups/env-before-mail-$(date +%Y%m%d-%H%M%S)"; }
 
-echo "البريد اللي هيبعت: $FROM (smtp.hostinger.com:465)"
+echo "البريد اللي هيبعت: $FROM (smtp.hostinger.com:465) — والردود بتروح لـ info@elyusr.org"
 read -rsp "اكتب كلمة مرور صندوق $FROM (مش هتظهر): " PASS; echo
 [[ -n "$PASS" ]] || { echo "مفيش كلمة مرور. مفيش حاجة اتغيرت."; exit 1; }
 read -rp "ابعت رسالة تجربة لأي بريد (مثلاً بريدك الشخصي): " TO

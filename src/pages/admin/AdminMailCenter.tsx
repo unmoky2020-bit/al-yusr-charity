@@ -83,7 +83,7 @@ export default function AdminMailCenter() {
           <div>
             <h1 className="text-2xl font-black text-primary">مركز البريد</h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              كل إيميل بيطلع من الموقع: بيتبعت من <b dir="ltr">{o?.from || "info@elyusr.org"}</b>، والردود بتروح لـ <b dir="ltr">{o?.reply_to || "support@elyusr.org"}</b>.
+              كل إيميل بيطلع من الموقع: بيتبعت من <b dir="ltr">{o?.from || "support@elyusr.org"}</b>، والردود بتروح لـ <b dir="ltr">{o?.reply_to || "info@elyusr.org"}</b>.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

@@ -71,6 +71,8 @@ export const misbahaRoomsApi = {
       method: "POST",
       body: { count },
       skipAuthClear: true,
+      // the last batch is sent as the page closes: keepalive lets it finish after the tab is gone
+      keepalive: true,
     });
     const total = res?.total ?? res?.data?.total;
     return typeof total === "number" ? total : null;
