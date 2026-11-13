@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { HeartPulse, Moon, Plus, Users } from "lucide-react";
+import { ChevronDown, HeartPulse, Moon, Plus, Users } from "lucide-react";
 import { NiceSelect, fromNice, toNice } from "@/components/common/NiceSelect";
 import { ALL_DHIKR } from "@/data/adhkar";
 import { misbahaRoomsApi, MISBAHA_ROOMS_PENDING_AR, type MisbahaGender, type MisbahaKind, type MisbahaRoom } from "@/data/api/misbahaRoomsApi";
@@ -27,6 +27,8 @@ export function MemorialCreate({ isAr, onCreated }: { isAr: boolean; onCreated: 
   const [goal, setGoal] = useState<number>(10000);
   const [dhikrId, setDhikrId] = useState<string>("");
   const [busy, setBusy] = useState(false);
+  // Only kind + name are needed; the rest has good defaults and stays folded unless wanted.
+  const [more, setMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<MisbahaRoom[] | null>(null);
   const [filter, setFilter] = useState<MisbahaKind | "all">("all");
@@ -124,34 +126,52 @@ export function MemorialCreate({ isAr, onCreated }: { isAr: boolean; onCreated: 
               )}
             </div>
 
-            <div>
-              <label htmlFor="memorial-by" className="text-sm font-black text-primary">{isAr ? "اسمك (اختياري)" : "Your name (optional)"}</label>
-              <input id="memorial-by" value={by} onChange={(e) => setBy(e.target.value)} maxLength={60} autoComplete="name"
-                placeholder={isAr ? "مثلًا: أولاده وأحفاده" : "e.g. His children and grandchildren"}
-                className="mt-1 h-12 w-full rounded-xl border border-border bg-background px-3 font-bold outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/30" />
-            </div>
-
-            <fieldset>
-              <legend className="mb-2 text-sm font-black text-primary">{isAr ? "هدف السبحة" : "Shared goal"}</legend>
-              <div className="flex flex-wrap gap-2">
-                {GOALS.map((n) => (
-                  <button key={n} type="button" aria-pressed={goal === n} onClick={() => setGoal(n)}
-                    className={`h-10 rounded-full px-4 text-sm font-black transition ${goal === n ? "bg-secondary text-slate-950 shadow-sm" : "border border-border bg-background text-primary hover:border-secondary"}`}>
-                    {goalLabel(n)}
-                  </button>
-                ))}
+            <div className="rounded-2xl border border-border">
+              <button type="button" onClick={() => setMore((v) => !v)} aria-expanded={more} aria-controls="memorial-more"
+                className="flex w-full items-center justify-between gap-3 px-4 py-3 text-start">
+                <span>
+                  <b className="block text-sm font-black text-primary">{isAr ? "خيارات إضافية (اختياري)" : "More options (optional)"}</b>
+                  <span className="block text-[11px] font-bold text-muted-foreground">
+                    {isAr
+                      ? `الهدف: ${goalLabel(goal)} · الذكر: ${dhikrId ? (ALL_DHIKR.find((x) => x.id === dhikrId)?.text ?? "") : "أذكار متنوّعة"}${by.trim() ? ` · من: ${by.trim()}` : ""}`
+                      : `Goal: ${goalLabel(goal)} · ${dhikrId ? "one dhikr" : "varied dhikr"}`}
+                  </span>
+                </span>
+                <ChevronDown className={`h-4 w-4 shrink-0 text-primary transition-transform ${more ? "rotate-180" : ""}`} />
+              </button>
+              {more && (
+              <div id="memorial-more" className="space-y-5 border-t border-border px-4 pb-4 pt-4">
+              <div>
+                <label htmlFor="memorial-by" className="text-sm font-black text-primary">{isAr ? "اسمك (اختياري)" : "Your name (optional)"}</label>
+                <input id="memorial-by" value={by} onChange={(e) => setBy(e.target.value)} maxLength={60} autoComplete="name"
+                  placeholder={isAr ? "مثلًا: أولاده وأحفاده" : "e.g. His children and grandchildren"}
+                  className="mt-1 h-12 w-full rounded-xl border border-border bg-background px-3 font-bold outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/30" />
               </div>
-            </fieldset>
 
-            <div>
-              <label htmlFor="memorial-dhikr" className="text-sm font-black text-primary">{isAr ? "الذكر الذي يظهر عند فتح السبحة" : "Dhikr shown first"}</label>
-              <div className="mt-1">
-                <NiceSelect id="memorial-dhikr" dir={dir} value={toNice(dhikrId)} onChange={(v) => setDhikrId(fromNice(v))} ariaLabel={isAr ? "الذكر المقترح" : "Suggested dhikr"}
-                  options={[
-                    { value: "", label: isAr ? "أذكار متنوّعة" : "Varied dhikr", hint: isAr ? "تتغيّر مع كل ضغطة" : "changes with every tap" },
-                    ...DHIKR_CHOICES.map((id) => ALL_DHIKR.find((x) => x.id === id)).filter(Boolean).map((d) => ({ value: d!.id, label: isAr ? d!.text : d!.en })),
-                  ]} />
+              <fieldset>
+                <legend className="mb-2 text-sm font-black text-primary">{isAr ? "هدف السبحة" : "Shared goal"}</legend>
+                <div className="flex flex-wrap gap-2">
+                  {GOALS.map((n) => (
+                    <button key={n} type="button" aria-pressed={goal === n} onClick={() => setGoal(n)}
+                      className={`h-10 rounded-full px-4 text-sm font-black transition ${goal === n ? "bg-secondary text-slate-950 shadow-sm" : "border border-border bg-background text-primary hover:border-secondary"}`}>
+                      {goalLabel(n)}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+
+              <div>
+                <label htmlFor="memorial-dhikr" className="text-sm font-black text-primary">{isAr ? "الذكر الذي يظهر عند فتح السبحة" : "Dhikr shown first"}</label>
+                <div className="mt-1">
+                  <NiceSelect id="memorial-dhikr" dir={dir} value={toNice(dhikrId)} onChange={(v) => setDhikrId(fromNice(v))} ariaLabel={isAr ? "الذكر المقترح" : "Suggested dhikr"}
+                    options={[
+                      { value: "", label: isAr ? "أذكار متنوّعة" : "Varied dhikr", hint: isAr ? "تتغيّر مع كل ضغطة" : "changes with every tap" },
+                      ...DHIKR_CHOICES.map((id) => ALL_DHIKR.find((x) => x.id === id)).filter(Boolean).map((d) => ({ value: d!.id, label: isAr ? d!.text : d!.en })),
+                    ]} />
+                </div>
               </div>
+              </div>
+              )}
             </div>
 
             {/* What visitors will see */}
