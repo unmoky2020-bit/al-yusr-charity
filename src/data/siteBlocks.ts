@@ -3,6 +3,7 @@
  *   org_info          the organisation's contact data      → applied over src/data/orgInfo.ts
  *   about_milestones  the About-page timeline              → replaces the built-in timeline
  *   nav_links         header links + footer columns        → replace the built-in menus
+ *   about_teaser      the home page's «من نحن» section     → heading, paragraph, up to 4 stops (bundle 13g)
  * GET /site-blocks is public; PUT/DELETE /admin/site-blocks/{key} need settings.update.
  * Until the bundle is deployed (404) or when a block is empty, the site keeps its built-in copy.
  */
@@ -18,7 +19,9 @@ export type NavLinks = { header?: NavLink[]; footer?: FooterLink[] };
 /** The SEO map (dashboard «خريطة السيو»): keyword → Google position (null = not in the top 100). */
 export type SeoProgressEntry = { pos: number | null; date?: string; page?: string; note?: string };
 export type SeoProgress = Record<string, SeoProgressEntry>;
-export type SiteBlocks = { org_info?: RemoteOrgInfo; about_milestones?: Milestone[]; nav_links?: NavLinks; seo_progress?: SeoProgress };
+export type TeaserStop = { year?: string; title_ar: string; title_en?: string; text_ar?: string; text_en?: string };
+export type AboutTeaserBlock = { title_ar?: string; title_en?: string; text_ar?: string; text_en?: string; stops?: TeaserStop[] };
+export type SiteBlocks = { org_info?: RemoteOrgInfo; about_milestones?: Milestone[]; nav_links?: NavLinks; seo_progress?: SeoProgress; about_teaser?: AboutTeaserBlock };
 export type SiteBlockKey = keyof SiteBlocks;
 
 const str = (v: unknown, max: number) => (typeof v === "string" && v.trim() ? v.trim().slice(0, max) : undefined);
@@ -91,6 +94,34 @@ export function parseSeoProgress(v: unknown): SeoProgress {
   return out;
 }
 
+export function parseAboutTeaser(v: unknown): AboutTeaserBlock | null {
+  if (!v || typeof v !== "object" || Array.isArray(v)) return null;
+  const r = v as Record<string, unknown>;
+  const out: AboutTeaserBlock = {};
+  const ta = str(r.title_ar, 200), te = str(r.title_en, 200), xa = str(r.text_ar, 1500), xe = str(r.text_en, 1500);
+  if (ta) out.title_ar = ta;
+  if (te) out.title_en = te;
+  if (xa) out.text_ar = xa;
+  if (xe) out.text_en = xe;
+  if (Array.isArray(r.stops)) {
+    const stops = r.stops.slice(0, 4).map((m): TeaserStop | null => {
+      if (!m || typeof m !== "object") return null;
+      const s = m as Record<string, unknown>;
+      const title = str(s.title_ar, 200);
+      if (!title) return null;
+      const row: TeaserStop = { title_ar: title };
+      const y = str(s.year, 20), t2 = str(s.title_en, 200), a = str(s.text_ar, 600), e = str(s.text_en, 600);
+      if (y) row.year = y;
+      if (t2) row.title_en = t2;
+      if (a) row.text_ar = a;
+      if (e) row.text_en = e;
+      return row;
+    }).filter((m): m is TeaserStop => !!m);
+    if (stops.length) out.stops = stops;
+  }
+  return Object.keys(out).length ? out : null;
+}
+
 export function parseSiteBlocks(res: unknown): SiteBlocks {
   const body = res && typeof res === "object" && "data" in (res as object) ? (res as { data: unknown }).data : res;
   if (!body || typeof body !== "object" || Array.isArray(body)) return {};
@@ -103,6 +134,8 @@ export function parseSiteBlocks(res: unknown): SiteBlocks {
   if (nav.header?.length || nav.footer?.length) out.nav_links = nav;
   const seo = parseSeoProgress(b.seo_progress);
   if (Object.keys(seo).length) out.seo_progress = seo;
+  const teaser = parseAboutTeaser(b.about_teaser);
+  if (teaser) out.about_teaser = teaser;
   return out;
 }
 

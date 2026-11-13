@@ -17,14 +17,14 @@ const API = 'https://api.elyusr.org/api/v1/seo/page';
 const CACHE_TTL = 300; // seconds; the API caches 5 minutes too
 const DYNAMIC = '#^/(cases|programs|axes|stories|blog)/[^/]+$#';
 const ROOMS_API = 'https://api.elyusr.org/api/v1/misbaha-rooms/';
-const MISBAHA_ROOM = '#^/misbaha/([a-z0-9]{4,24})$#';
+const MISBAHA_ROOM = '#^/misbaha/(?!confirm$|unsubscribe$)([a-z0-9]{4,24})$#';
 /*
  | Templated local pages (same text, another place name) stay reachable but out of search, except
  | the home city: src/data/seoIndexable.ts has the same rule (a test keeps the two in step).
  */
 const NOINDEX_LOCAL = '#^/(?:geo/[^/]+/[^/]+|dakahlia/(?!mansoura/)[^/]+/[^/]+|qurbani/(?!mansoura$|confirm$)[^/]+)$#';
 /* Account and confirmation pages never belong in search. */
-const NOINDEX_PAGES = '#^/(?:login|register(?:/[a-z]+)?|forgot-password|profile|dashboard|donate/track|donation/status|qurbani/confirm)$#';
+const NOINDEX_PAGES = '#^/(?:login|register(?:/[a-z]+)?|forgot-password|verify-email|profile|dashboard|donate/track|donation/status|qurbani/confirm|misbaha/confirm|misbaha/unsubscribe|newsletter/confirm|newsletter/unsubscribe)$#';
 /*
  | Sections whose pages come from the API or the app (programs, articles, cases…). Any other path
  | without an entry in seo-static.json is not a page of the site (a typo, an old link): crawlers get
@@ -36,7 +36,7 @@ const APP_SECTIONS = '#^/(?:programs|blog|cases|stories|axes|campaigns|services|
  | First path segment of every route the app has (src/App.tsx; a test keeps the two in step).
  | Anything else is not a page of the site: crawlers get a real 404, not a copy of the homepage.
  */
-const APP_ROOTS = 'about|admin|arboun|ashr|athar|axes|blog|bride|c|campaign|campaigns|cases|charity-egypt|charity-mansoura|contact|dakahlia|dashboard|dev|dhill|donate|donate-from-abroad|education-campaign|faq|faqs|farm|food-box|forgot-password|freelancers|gallery|geo|impact|khabia|login|mansoura|markoun|medical|misbaha|mosques|newsletter|nurseries|orphans|payment|privacy|profile|programs|projects|qurbani|qurbani-guarantee|ramadan|register|seasons|services|services-map|setr|stories|takrim|tasbih|ten-days|terms|trust|volunteer|volunteer-campaigns|water|zakat|zakat-al-fitr';
+const APP_ROOTS = 'about|admin|arboun|ashr|athar|axes|blog|bride|c|campaign|campaigns|cases|charity-egypt|charity-mansoura|contact|dakahlia|dashboard|dev|dhill|donate|donate-from-abroad|education-campaign|faq|faqs|farm|food-box|forgot-password|freelancers|gallery|geo|impact|khabia|login|mansoura|markoun|medical|misbaha|mosques|newsletter|nurseries|orphans|payment|privacy|profile|programs|projects|qurbani|qurbani-guarantee|ramadan|register|seasons|services|services-map|setr|stories|takrim|tasbih|ten-days|terms|trust|verify-email|volunteer|volunteer-campaigns|water|zakat|zakat-al-fitr';
 
 /*
  | The language is a query (?lang=en), never a folder. Old /en/… and /ar/… links (and the soft-404

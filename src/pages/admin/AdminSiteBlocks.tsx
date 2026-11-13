@@ -27,7 +27,10 @@ import {
   type NavLink,
   type SiteBlockKey,
   type SiteBlocks,
+  type AboutTeaserBlock,
+  type TeaserStop,
 } from "@/data/siteBlocks";
+import { ABOUT_TEASER_DEFAULT } from "@/data/aboutTeaserDefault";
 
 type OrgField = { key: keyof RemoteOrgInfo; label: string; placeholder: string; ltr?: boolean; long?: boolean };
 
@@ -100,6 +103,7 @@ export default function AdminSiteBlocks() {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [header, setHeader] = useState<NavLink[]>([]);
   const [footer, setFooter] = useState<FooterLink[]>([]);
+  const [teaser, setTeaser] = useState<AboutTeaserBlock>({});
   const [busy, setBusy] = useState<SiteBlockKey | "">("");
 
   const load = async () => {
@@ -112,6 +116,7 @@ export default function AdminSiteBlocks() {
       setMilestones(b.about_milestones ?? []);
       setHeader(b.nav_links?.header ?? []);
       setFooter(b.nav_links?.footer ?? []);
+      setTeaser(b.about_teaser ?? {});
     } catch (e) {
       setLoadError(describeWriteError(e, "GET /site-blocks (حزمة deploy-2026-11-13-extras)"));
     } finally {
@@ -171,6 +176,14 @@ export default function AdminSiteBlocks() {
     return save("nav_links", { header, footer }, "اتحفظت روابط القوائم");
   };
 
+  const saveTeaser = () => {
+    const stops = (teaser.stops ?? []).map((x) => ({ ...x, title_ar: x.title_ar.trim() }));
+    if (stops.some((x) => !x.title_ar)) return toast.error("كل محطة محتاجة عنوان بالعربي.");
+    return save("about_teaser", { ...teaser, stops }, "اتحفظ قسم «من نحن» في الرئيسية");
+  };
+  const setStop = (i: number, patch: Partial<TeaserStop>) =>
+    setTeaser((t) => ({ ...t, stops: (t.stops ?? []).map((x, j) => (j === i ? { ...x, ...patch } : x)) }));
+
   const fillLinksFromSite = () => {
     // A starting point: the site's built-in menus as they are now.
     setHeader(BUILT_IN_HEADER);
@@ -185,7 +198,7 @@ export default function AdminSiteBlocks() {
         <div>
           <h1 className="text-xl font-black text-primary">بيانات الموقع العامة</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            بيانات المؤسسة، ومحطات «من نحن»، وروابط القوائم. الخانة الفاضية = النص الأصلي اللي في الموقع، فمفيش حاجة بتختفي لو سبتها.
+            بيانات المؤسسة، ومحطات «من نحن»، وقسم «من نحن» في الرئيسية، وروابط القوائم. الخانة الفاضية = النص الأصلي اللي في الموقع، فمفيش حاجة بتختفي لو سبتها.
           </p>
         </div>
 
@@ -199,6 +212,7 @@ export default function AdminSiteBlocks() {
           <TabsList className="flex-wrap">
             <TabsTrigger value="org">بيانات المؤسسة</TabsTrigger>
             <TabsTrigger value="milestones">محطات «من نحن»</TabsTrigger>
+            <TabsTrigger value="teaser">«من نحن» في الرئيسية</TabsTrigger>
             <TabsTrigger value="links">روابط القوائم</TabsTrigger>
           </TabsList>
 
@@ -258,6 +272,40 @@ export default function AdminSiteBlocks() {
               <Plus className="h-4 w-4" /> إضافة محطة
             </Button>
             <Actions busy={busy === "about_milestones"} onSave={saveMilestones} onReset={saved.about_milestones ? () => void reset("about_milestones", "المحطات") : undefined} />
+          </TabsContent>
+
+          <TabsContent value="teaser" className="space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-dashed border-border p-4 text-sm text-muted-foreground">
+              <span>{saved.about_teaser ? "القسم ده بيتعرض من هنا." : "مفيش نص محفوظ، فالرئيسية بتعرض النص الأصلي."}</span>
+              <Button type="button" size="sm" variant="outline" onClick={() => { setTeaser(JSON.parse(JSON.stringify(ABOUT_TEASER_DEFAULT))); toast.info("اتحط النص الحالي. عدّل واحفظ."); }}>ابدأ من النص الحالي</Button>
+            </div>
+            <Card className="space-y-2 p-3">
+              <Input className="h-10 text-sm font-bold" placeholder="العنوان بالعربي" value={teaser.title_ar ?? ""} onChange={(e) => setTeaser((t) => ({ ...t, title_ar: e.target.value }))} />
+              <Textarea rows={4} className="text-sm" placeholder="الفقرة بالعربي" value={teaser.text_ar ?? ""} onChange={(e) => setTeaser((t) => ({ ...t, text_ar: e.target.value }))} />
+              <Input dir="ltr" className="h-9 text-sm" placeholder="Title (EN)" value={teaser.title_en ?? ""} onChange={(e) => setTeaser((t) => ({ ...t, title_en: e.target.value }))} />
+              <Textarea dir="ltr" rows={3} className="text-sm" placeholder="Paragraph (EN)" value={teaser.text_en ?? ""} onChange={(e) => setTeaser((t) => ({ ...t, text_en: e.target.value }))} />
+            </Card>
+            <h3 className="pt-2 text-sm font-black text-primary">المحطات (4 بالكتير، السنة اختيارية)</h3>
+            {(teaser.stops ?? []).map((m, i, all) => (
+              <Card key={i} className="space-y-2 p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Input dir="ltr" className="h-9 w-24 text-sm font-mono" placeholder="2019" value={m.year ?? ""} onChange={(e) => setStop(i, { year: e.target.value })} />
+                  <Input className="h-9 min-w-0 flex-1 text-sm" placeholder="العنوان بالعربي *" value={m.title_ar} onChange={(e) => setStop(i, { title_ar: e.target.value })} />
+                  <RowMoves i={i} n={all.length} onMove={(a, b) => setTeaser((t) => ({ ...t, stops: move(t.stops ?? [], a, b) }))} onRemove={() => setTeaser((t) => ({ ...t, stops: (t.stops ?? []).filter((_, j) => j !== i) }))} />
+                </div>
+                <Textarea rows={2} className="text-sm" placeholder="سطر بالعربي" value={m.text_ar ?? ""} onChange={(e) => setStop(i, { text_ar: e.target.value })} />
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <Input dir="ltr" className="h-9 text-sm" placeholder="Title (EN)" value={m.title_en ?? ""} onChange={(e) => setStop(i, { title_en: e.target.value })} />
+                  <Input dir="ltr" className="h-9 text-sm" placeholder="Text (EN)" value={m.text_en ?? ""} onChange={(e) => setStop(i, { text_en: e.target.value })} />
+                </div>
+              </Card>
+            ))}
+            {(teaser.stops?.length ?? 0) < 4 && (
+              <Button type="button" variant="outline" className="gap-1.5" onClick={() => setTeaser((t) => ({ ...t, stops: [...(t.stops ?? []), { title_ar: "" }] }))}>
+                <Plus className="h-4 w-4" /> إضافة محطة
+              </Button>
+            )}
+            <Actions busy={busy === "about_teaser"} onSave={saveTeaser} onReset={saved.about_teaser ? () => void reset("about_teaser", "قسم «من نحن» في الرئيسية") : undefined} />
           </TabsContent>
 
           <TabsContent value="links" className="space-y-4">

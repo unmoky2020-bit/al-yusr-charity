@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, ShieldCheck, Sprout } from "lucide-react";
 import { useLang } from "@/i18n/LangContext";
+import { useSiteBlocks } from "@/data/siteBlocks";
+import { ABOUT_TEASER_DEFAULT } from "@/data/aboutTeaserDefault";
 
 /**
  * Home → About bridge. A short, formal origin story with a three-stop timeline
@@ -34,18 +36,17 @@ export const AboutTeaser = () => {
     return () => io.disconnect();
   }, []);
 
-  /** Two dated milestones, then a mark (not a number) for the journey that continues. */
-  const stops = isRTL
-    ? [
-        { y: "2019", t: "الإشهار الرسمي", d: "مؤسسة مشهرة في أكتوبر 2019 برقم 2665 بوزارة التضامن الاجتماعي." },
-        { y: "2020", t: "منظومة متكاملة للعطاء", d: "بداية العمل على محاور الغذاء والتعليم والصحة لخدمة الأسر المستحقة." },
-        { y: null, t: "والمسيرة مستمرة", d: "تتوسع المؤسسة ويستمر عطاؤها بانضمامك إلينا أو بتبرعك." },
-      ]
-    : [
-        { y: "2019", t: "Official registration", d: "Registered in October 2019 as foundation No. 2665 with the Ministry of Social Solidarity." },
-        { y: "2020", t: "A complete system of giving", d: "Work began on the food, education and health pillars for families in need." },
-        { y: null, t: "And the journey continues", d: "The foundation grows and lasts as you join us or give." },
-      ];
+  // From the dashboard («بيانات الموقع العامة» ← «من نحن» في الرئيسية); the built-in copy fills any gap.
+  const block = useSiteBlocks().about_teaser;
+  const D = ABOUT_TEASER_DEFAULT;
+  const pick = (ar: string | undefined, en: string | undefined, dAr: string, dEn: string) => (isRTL ? ar || dAr : en || dEn);
+  const title = pick(block?.title_ar, block?.title_en, D.title_ar, D.title_en);
+  const text = pick(block?.text_ar, block?.text_en, D.text_ar, D.text_en);
+  const stops = (block?.stops?.length ? block.stops : D.stops).map((s) => ({
+    y: s.year || null,
+    t: isRTL ? s.title_ar : s.title_en || s.title_ar,
+    d: (isRTL ? s.text_ar : s.text_en || s.text_ar) || "",
+  }));
 
   return (
     <section id="about-teaser" className="pattern-why relative overflow-hidden py-16 text-primary-foreground md:py-24">
@@ -55,12 +56,10 @@ export const AboutTeaser = () => {
             <ShieldCheck className="h-4 w-4" /> {isRTL ? "من نحن" : "Who we are"}
           </p>
           <h2 className="mt-2 text-3xl font-black leading-[1.3] md:text-4xl">
-            {isRTL ? "بدأنا فريقًا للخير، ثم أصبحنا مؤسسة مشهرة" : "We began as a team for good and grew into a registered foundation"}
+            {title}
           </h2>
           <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-primary-foreground/85 md:mx-0">
-            {isRTL
-              ? "بدأت اليسر فريقًا اجتمع على عمل الخير وخدمة الأسر المستحقة. ومع اتساع العمل تأسست مؤسسة مشهرة رسميًا بوزارة التضامن الاجتماعي برقم 2665 لسنة 2019، لكي ينمو الخير بنظام وحوكمة وشفافية. وما زالت المسيرة مستمرة."
-              : "Al-Yusr began as a team that came together to do good and serve families in need. As the work grew, it became a foundation officially registered with the Ministry of Social Solidarity (No. 2665, 2019), so the good could grow with order, governance and transparency. The journey continues."}
+            {text}
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-x-6 md:justify-start">
             <Link
