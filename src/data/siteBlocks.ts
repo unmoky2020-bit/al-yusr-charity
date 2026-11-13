@@ -15,7 +15,10 @@ export type Milestone = { year: string; title_ar: string; title_en?: string; tex
 export type NavLink = { label_ar: string; label_en?: string; href: string };
 export type FooterLink = NavLink & { column: "quick" | "campaigns" };
 export type NavLinks = { header?: NavLink[]; footer?: FooterLink[] };
-export type SiteBlocks = { org_info?: RemoteOrgInfo; about_milestones?: Milestone[]; nav_links?: NavLinks };
+/** The SEO map (dashboard «خريطة السيو»): keyword → Google position (null = not in the top 100). */
+export type SeoProgressEntry = { pos: number | null; date?: string; page?: string; note?: string };
+export type SeoProgress = Record<string, SeoProgressEntry>;
+export type SiteBlocks = { org_info?: RemoteOrgInfo; about_milestones?: Milestone[]; nav_links?: NavLinks; seo_progress?: SeoProgress };
 export type SiteBlockKey = keyof SiteBlocks;
 
 const str = (v: unknown, max: number) => (typeof v === "string" && v.trim() ? v.trim().slice(0, max) : undefined);
@@ -71,6 +74,23 @@ export function parseNavLinks(v: unknown): NavLinks {
   return out;
 }
 
+export function parseSeoProgress(v: unknown): SeoProgress {
+  if (!v || typeof v !== "object" || Array.isArray(v)) return {};
+  const out: SeoProgress = {};
+  for (const [kw, e] of Object.entries(v as Record<string, unknown>)) {
+    if (!kw.trim() || !e || typeof e !== "object") continue;
+    const r = e as Record<string, unknown>;
+    const n = Number(r.pos);
+    const row: SeoProgressEntry = { pos: r.pos === null || r.pos === undefined || r.pos === "" || !Number.isFinite(n) ? null : Math.max(1, Math.min(100, Math.round(n))) };
+    const d = str(r.date, 10), pg = str(r.page, 300), nt = str(r.note, 300);
+    if (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) row.date = d;
+    if (pg) row.page = pg;
+    if (nt) row.note = nt;
+    out[kw.trim()] = row;
+  }
+  return out;
+}
+
 export function parseSiteBlocks(res: unknown): SiteBlocks {
   const body = res && typeof res === "object" && "data" in (res as object) ? (res as { data: unknown }).data : res;
   if (!body || typeof body !== "object" || Array.isArray(body)) return {};
@@ -81,6 +101,8 @@ export function parseSiteBlocks(res: unknown): SiteBlocks {
   if (ms.length) out.about_milestones = ms;
   const nav = parseNavLinks(b.nav_links);
   if (nav.header?.length || nav.footer?.length) out.nav_links = nav;
+  const seo = parseSeoProgress(b.seo_progress);
+  if (Object.keys(seo).length) out.seo_progress = seo;
   return out;
 }
 

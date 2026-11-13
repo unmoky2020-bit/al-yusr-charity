@@ -11,13 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import { ApiError, projectsApi } from "@/data/laravelApi";
-import {
-  apiErrorMessageAr,
-  NEEDS_BACKEND_AR,
-  programsAdminApi,
-  projectsAdminApi,
-  type AdminProjectRecord,
-} from "@/data/api/programsAdminApi";
+import { apiErrorMessageAr, NEEDS_BACKEND_AR, programsAdminApi, projectsAdminApi, type AdminProjectRecord, recordExtrasApi, PROJECT_EXTRA_KEYS } from "@/data/api/programsAdminApi";
 import {
   BilingualField, Field, ImageUrlField, NeedsBackendBadge, SectionCard, StringListEditor, ToggleCard,
 } from "@/components/admin/programs/FormKit";
@@ -31,6 +25,7 @@ import {
   projectPayload,
   PROPOSED_PROJECT_KEYS,
   type ProjectForm,
+  projectExtrasPayload,
 } from "@/components/admin/programs/projectForm";
 import { publicUrls } from "@/lib/publicUrls";
 import { getProjectPageMeta, parsePageContent, projectPageColumn } from "@/data/projectPages";
@@ -112,6 +107,18 @@ export default function AdminProjectDetail() {
           throw new Error("المشروع غير موجود في الخادم");
         }
       }
+      // AI summary / FAQ live beside the project (record_extras); the keys are set even when empty
+      // so the editor knows these fields are saved.
+      if (rec?.id) {
+        try {
+          const extra = await recordExtrasApi.get("project", rec.id);
+          const withKeys: Record<string, unknown> = { ...rec };
+          for (const k of PROJECT_EXTRA_KEYS) withKeys[k] = extra[k] ?? null;
+          rec = withKeys as AdminProjectRecord;
+        } catch {
+          /* the extras endpoint is missing: the AI fields keep their "needs backend" badge */
+        }
+      }
       applyRecord(rec);
     } catch (err) {
       setLoadError(apiErrorMessageAr(err));
@@ -144,7 +151,12 @@ export default function AdminProjectDetail() {
     if (pageContent && JSON.stringify(projectPageColumn(pageContent)) !== origPageJson) base.page_content = projectPageColumn(pageContent);
     return base;
   }, [form, origForm, pageContent, origPageJson]);
-  const dirty = Object.keys(diff).length > 0;
+  const extrasDiff = useMemo(() => {
+    const now = projectExtrasPayload(form);
+    const was = projectExtrasPayload(origForm);
+    return Object.fromEntries(Object.entries(now).filter(([k, v]) => v !== was[k]).map(([k, v]) => [k, v ?? ""]));
+  }, [form, origForm]);
+  const dirty = Object.keys(diff).length > 0 || Object.keys(extrasDiff).length > 0;
 
   const save = async () => {
     if (!form.name.trim()) {
@@ -181,7 +193,16 @@ export default function AdminProjectDetail() {
       return;
     }
 
-    const missing = keysMissingFromResponse(sent, returned);
+    // AI summary / FAQ → record_extras (also right after creating a project).
+    if (projectId && Object.keys(extrasDiff).length) {
+      try {
+        await recordExtrasApi.save("project", projectId, isNew ? projectExtrasPayload(form) : extrasDiff);
+      } catch (err) {
+        toast({ variant: "destructive", title: "ملخص الذكاء الاصطناعي ما اتحفظش", description: apiErrorMessageAr(err) });
+      }
+    }
+
+    const missing = sent && Object.keys(sent).length ? keysMissingFromResponse(sent, returned) : [];
     setNotSaved(missing);
     if (missing.length) {
       toast({

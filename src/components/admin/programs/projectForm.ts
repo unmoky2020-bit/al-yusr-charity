@@ -85,7 +85,8 @@ export function projectFormFromRecord(p: AdminProjectRecord): ProjectForm {
     is_active: p.is_active !== false,
     hide_from_audience: Boolean(r.hide_from_audience),
     donation_available: r.donation_available === undefined ? true : Boolean(r.donation_available),
-    seo: seoFromRecord(r),
+    // The projects table names the card «x_card_type» (programs: «twitter_card»).
+    seo: seoFromRecord({ ...r, twitter_card: r.twitter_card ?? r.x_card_type }),
   };
 }
 
@@ -114,6 +115,20 @@ export function projectPayload(f: ProjectForm): Record<string, unknown> {
     benefits_en: benefitsEn,
     hide_from_audience: f.hide_from_audience,
     donation_available: f.donation_available,
-    ...seoToPayload(f.seo),
+    ...projectSeoPayload(f),
   };
+}
+
+/** The SEO part for /projects: x_card_type instead of twitter_card, and without the AI fields
+ *  (they live in record_extras: projectExtrasPayload). */
+function projectSeoPayload(f: ProjectForm): Record<string, unknown> {
+  const { twitter_card, ai_summary_ar: _a, ai_summary_en: _b, ai_faq_ar: _c, ai_faq_en: _d, ...rest } = seoToPayload(f.seo);
+  return { ...rest, x_card_type: twitter_card ?? null };
+}
+
+/** AI summary / FAQ of a project, as saved in record_extras (FAQ as a JSON string, "" = remove). */
+export function projectExtrasPayload(f: ProjectForm): Record<string, string | null> {
+  const p = seoToPayload(f.seo);
+  const s = (v: unknown) => (v === null || v === undefined ? null : typeof v === "string" ? v : JSON.stringify(v));
+  return { ai_summary_ar: s(p.ai_summary_ar), ai_summary_en: s(p.ai_summary_en), ai_faq_ar: s(p.ai_faq_ar), ai_faq_en: s(p.ai_faq_en) };
 }

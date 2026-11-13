@@ -176,7 +176,7 @@ export default function AdminProgramDetail() {
       }
     }
 
-    const missing = keysMissingFromResponse(sent, returned, ["season_ids", "name", "description"]);
+    const missing = keysMissingFromResponse(sent, returned, ["season_ids", "name", "description", "title_ar", "title_en"]);
     setNotSaved(missing);
 
     if (problems.length) {

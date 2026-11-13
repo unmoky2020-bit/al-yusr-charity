@@ -357,3 +357,19 @@ export const donationPackagesAdminApi = {
     return res;
   },
 };
+
+/**
+ * Fields kept beside a record because its own table doesn't have them yet (bundle
+ * deploy-2026-11-13c-admin): projects → ai_summary_ar/en, ai_faq_ar/en (FAQ stored as a JSON string).
+ */
+export const PROJECT_EXTRA_KEYS = ["ai_summary_ar", "ai_summary_en", "ai_faq_ar", "ai_faq_en"] as const;
+export const recordExtrasApi = {
+  async get(type: "project", id: number | string): Promise<Record<string, string>> {
+    const res = await apiFetch<{ data?: Record<string, string> }>(`/record-extras/${type}/${id}`, { method: "GET", useCache: false });
+    return res?.data ?? {};
+  },
+  async save(type: "project", id: number | string, body: Record<string, string | null>): Promise<Record<string, string>> {
+    const res = await apiFetch<{ data?: Record<string, string> }>(`/admin/record-extras/${type}/${id}`, { method: "PUT", body });
+    return res?.data ?? {};
+  },
+};

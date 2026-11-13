@@ -91,6 +91,18 @@ export const misbahaAdminApi = {
     }
     return out;
   },
+  /** PATCH /admin/misbaha-rooms/{id}/details (bundle deploy-2026-11-13c-admin). */
+  async update(id: number, body: { name?: string; created_by?: string | null; target_total?: number | null; kind?: MisbahaKind; gender?: MisbahaGender | null; is_hidden?: boolean; reset_count?: boolean }): Promise<void> {
+    await apiFetch(`/admin/misbaha-rooms/${id}/details`, { method: "PATCH", body });
+  },
+  /** Deletes for good (DELETE /admin/misbaha-rooms/{id}); hiding stays available. */
+  async remove(id: number): Promise<void> {
+    await apiFetch(`/admin/misbaha-rooms/${id}`, { method: "DELETE" });
+  },
+  async removeMany(ids: number[]): Promise<number> {
+    const res = await apiFetch<{ data?: { deleted?: number } }>("/admin/misbaha-rooms/bulk-delete", { method: "POST", body: { ids } });
+    return res?.data?.deleted ?? 0;
+  },
   async setHidden(id: number, hidden: boolean): Promise<void> {
     await apiFetch(`/admin/misbaha-rooms/${id}`, { method: "PATCH", body: { is_hidden: hidden } });
   },

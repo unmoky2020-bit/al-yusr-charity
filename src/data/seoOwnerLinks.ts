@@ -24,27 +24,35 @@ export const OWNER_PAGES: Record<string, OwnerPage> = {
   "/trust": { path: "/trust", ar: "هل مؤسسة اليسر موثوقة؟", en: "Is Al-Yusr trustworthy?" },
   "/donate-from-abroad": { path: "/donate-from-abroad", ar: "التبرع لمصر من الخارج", en: "Give to Egypt from abroad" },
   "/donate": { path: "/donate", ar: "تبرع أونلاين بالفيزا أو المحفظة", en: "Donate online" },
+  "/mosques": { path: "/mosques", ar: "إعمار مسجد في مصر", en: "Build a mosque in Egypt" },
+  "/nurseries": { path: "/nurseries", ar: "تحفيظ القرآن وحضانات خيرية", en: "Quran nurseries" },
+  "/athar": { path: "/athar", ar: "شنطة مدرسية وتعليم الأيتام", en: "School bags & orphans' education" },
+  "/farm": { path: "/farm", ar: "وقف خيري: مزرعة اليسر", en: "Charity endowment farm" },
 };
 
 /** Related owners per owner page (by topic and by the donor's next question). */
 export const OWNER_RELATED: Record<string, string[]> = {
   "/": ["/charity-mansoura", "/trust", "/cases", "/donate-from-abroad"],
   "/contact": ["/trust", "/charity-mansoura", "/volunteer", "/donate"],
-  "/charity-mansoura": ["/cases", "/volunteer", "/trust", "/charity-egypt"],
+  "/charity-mansoura": ["/nurseries", "/volunteer", "/trust", "/charity-egypt"],
   "/charity-egypt": ["/trust", "/donate-from-abroad", "/charity-mansoura", "/zakat"],
-  "/zakat": ["/cases", "/programs/orphans", "/programs/treatment", "/food-box"],
-  "/water": ["/programs/orphans", "/misbaha", "/programs/bride", "/donate-from-abroad"],
-  "/food-box": ["/zakat", "/cases", "/qurbani", "/charity-mansoura"],
-  "/programs/orphans": ["/programs/bride", "/zakat", "/water", "/trust"],
+  "/zakat": ["/farm", "/programs/orphans", "/programs/treatment", "/food-box"],
+  "/water": ["/mosques", "/misbaha", "/programs/bride", "/donate-from-abroad"],
+  "/food-box": ["/zakat", "/farm", "/qurbani", "/charity-mansoura"],
+  "/programs/orphans": ["/programs/bride", "/athar", "/water", "/trust"],
   "/programs/treatment": ["/cases", "/zakat", "/trust", "/donate-from-abroad"],
   "/programs/bride": ["/programs/orphans", "/cases", "/zakat", "/charity-mansoura"],
   "/qurbani": ["/food-box", "/donate-from-abroad", "/trust", "/zakat"],
   "/cases": ["/programs/treatment", "/zakat", "/trust", "/charity-mansoura"],
-  "/misbaha": ["/water", "/programs/orphans", "/cases", "/volunteer"],
-  "/volunteer": ["/charity-mansoura", "/cases", "/misbaha", "/contact"],
+  "/misbaha": ["/water", "/mosques", "/nurseries", "/programs/orphans"],
+  "/volunteer": ["/charity-mansoura", "/athar", "/misbaha", "/contact"],
   "/trust": ["/charity-egypt", "/contact", "/cases", "/donate"],
-  "/donate-from-abroad": ["/trust", "/zakat", "/water", "/qurbani"],
+  "/donate-from-abroad": ["/trust", "/zakat", "/mosques", "/qurbani"],
   "/donate": ["/trust", "/cases", "/zakat", "/donate-from-abroad"],
+  "/mosques": ["/water", "/nurseries", "/donate-from-abroad", "/zakat"],
+  "/nurseries": ["/mosques", "/athar", "/programs/orphans", "/charity-mansoura"],
+  "/athar": ["/programs/orphans", "/nurseries", "/zakat", "/volunteer"],
+  "/farm": ["/water", "/mosques", "/food-box", "/zakat"],
 };
 
 /** The related owner pages for a path (empty when the path owns no keywords). */

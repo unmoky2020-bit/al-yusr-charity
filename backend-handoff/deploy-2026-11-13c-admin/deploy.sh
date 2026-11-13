@@ -14,7 +14,7 @@ STAMP="$(date +%Y%m%d-%H%M%S)"; BK="$HOME/backups/admin-2026-11-13-$STAMP"
 CHECK_ONLY=0; [[ "${1:-}" == "--check" ]] && CHECK_ONLY=1
 REQUIRE_LINE="require __DIR__.'/api-2026-11-13c-admin.php';"
 MIG=database/migrations/2026_11_13_000002_create_record_extras.php
-FILES=(app/Http/Controllers/Api/V1/Extras/RecordExtrasController.php app/Http/Controllers/Api/V1/Extras/MisbahaAdminController.php routes/api-2026-11-13c-admin.php "$MIG")
+FILES=(app/Http/Controllers/Api/V1/Extras/SiteBlockController.php app/Http/Controllers/Api/V1/Extras/RecordExtrasController.php app/Http/Controllers/Api/V1/Extras/MisbahaAdminController.php routes/api-2026-11-13c-admin.php "$MIG")
 green() { printf '\033[32m%s\033[0m\n' "$*"; }; red() { printf '\033[31m%s\033[0m\n' "$*"; }; step() { printf '\n\033[1m▶ %s\033[0m\n' "$*"; }
 
 step "1/6 فحص"
@@ -30,7 +30,7 @@ envval() { { grep -E "^$1=" .env || true; } | tail -1 | cut -d= -f2- | sed -e 's
 green "الفحص تمام."; (( CHECK_ONLY )) && { green "(--check) مفيش تعديل."; exit 0; }
 
 step "2/6 نسخة احتياطية → $BK"
-mkdir -p "$BK"; cp routes/api.php "$BK/api.php"
+mkdir -p "$BK"; cp routes/api.php "$BK/api.php"; cp app/Http/Controllers/Api/V1/Extras/SiteBlockController.php "$BK/SiteBlockController.php"
 export MYSQL_PWD="$(envval DB_PASSWORD)"
 mysqldump --single-transaction --no-tablespaces -h "$(envval DB_HOST)" -P "$(envval DB_PORT)" -u "$(envval DB_USERNAME)" "$(envval DB_DATABASE)" misbaha_rooms | gzip > "$BK/misbaha_rooms.sql.gz"; unset MYSQL_PWD
 cat > "$BK/rollback.sh" <<RB
@@ -38,6 +38,7 @@ cat > "$BK/rollback.sh" <<RB
 cd "$APP"; php artisan migrate:rollback --path=$MIG --force --no-ansi || true
 cp "$BK/api.php" routes/api.php
 rm -f ${FILES[*]}
+cp "$BK/SiteBlockController.php" app/Http/Controllers/Api/V1/Extras/SiteBlockController.php
 php artisan optimize:clear; echo "رجع. (السبح المحذوفة: zcat $BK/misbaha_rooms.sql.gz | mysql …)"
 RB
 chmod +x "$BK/rollback.sh"; trap 'red "خطأ — برجّع"; bash "$BK/rollback.sh" || true' ERR

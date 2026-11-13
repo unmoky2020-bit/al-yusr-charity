@@ -20,7 +20,7 @@ class SiteBlockController extends Controller
 {
     private const CACHE_KEY = 'extras.site_blocks.v1';
 
-    public const KEYS = ['org_info', 'about_milestones', 'nav_links'];
+    public const KEYS = ['org_info', 'about_milestones', 'nav_links', 'seo_progress'];
 
     public function index(): JsonResponse
     {
@@ -39,6 +39,7 @@ class SiteBlockController extends Controller
             'org_info' => $this->orgInfo($value),
             'about_milestones' => $this->milestones($value),
             'nav_links' => $this->navLinks($value),
+            'seo_progress' => $this->seoProgress($value),
         };
 
         SiteBlock::updateOrCreate(['key' => $key], ['value' => $clean, 'updated_by' => optional($request->user())->id]);
@@ -138,6 +139,43 @@ class SiteBlockController extends Controller
                 }
                 $out[$group][] = $row;
             }
+        }
+
+        return $out;
+    }
+
+    /**
+     * The SEO map: keyword → {pos (Google position, null = not in the top 100), date, page, note}.
+     * Only what the team typed in the dashboard; the keyword list itself lives in docs/seo-keywords.csv.
+     */
+    private function seoProgress(mixed $v): array
+    {
+        $this->expect(is_array($v) && ! array_is_list($v) && count($v) <= 1500, 'value', 'لازم تكون خريطة كلمات (1500 بالكتير).');
+        $out = [];
+        foreach ($v as $kw => $e) {
+            $kw = trim((string) $kw);
+            if ($kw === '' || mb_strlen($kw) > 120 || ! is_array($e)) {
+                continue;
+            }
+            $row = [];
+            if (isset($e['pos']) && $e['pos'] !== null && $e['pos'] !== '') {
+                $this->expect(is_numeric($e['pos']) && (int) $e['pos'] >= 1 && (int) $e['pos'] <= 100, "value.$kw.pos", 'الترتيب لازم يكون من 1 لـ 100.');
+                $row['pos'] = (int) $e['pos'];
+            } else {
+                $row['pos'] = null;
+            }
+            $date = trim((string) ($e['date'] ?? ''));
+            if ($date !== '') {
+                $this->expect((bool) preg_match('/^\d{4}-\d{2}-\d{2}$/', $date), "value.$kw.date", 'التاريخ لازم يكون YYYY-MM-DD.');
+                $row['date'] = $date;
+            }
+            foreach (['page' => 300, 'note' => 300] as $f => $max) {
+                $s = trim((string) ($e[$f] ?? ''));
+                if ($s !== '') {
+                    $row[$f] = mb_substr($s, 0, $max);
+                }
+            }
+            $out[$kw] = $row;
         }
 
         return $out;

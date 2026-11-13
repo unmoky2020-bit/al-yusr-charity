@@ -27,6 +27,7 @@ export const PAGE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = {
   "/admin/axes": ["axes.update"],
   "/admin/site-stats": ["home_numbers.update", "achievements.update"],
   "/admin/site-blocks": ["settings.update"],
+  "/admin/seo-map": ["settings.update"],
   "/admin/stories": ["stories.create", "stories.update"],
   // Browsing the whole library is its own permission: "media.upload" alone only uploads
   // (the image pickers of the other pages), it doesn't open the library.
