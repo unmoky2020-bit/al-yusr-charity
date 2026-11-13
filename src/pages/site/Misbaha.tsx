@@ -4,7 +4,7 @@ import { RotateCcw, Vibrate, VibrateOff, Share2, Check, ImageDown, X, Plus, Flam
 import { DHIKR_GROUPS, ALL_DHIKR, MIXED_DHIKR, groupOfDhikr, type Dhikr as DhikrType } from "@/data/adhkar";
 import { misbahaRoomsApi, type MisbahaRoom } from "@/data/api/misbahaRoomsApi";
 import { roomShareText, roomTitle } from "@/data/memorialDuas";
-import { RoomHeader } from "@/components/misbaha/RoomHeader";
+import { RoomHeader, RoomShareActions } from "@/components/misbaha/RoomHeader";
 import { RoomExtras } from "@/components/misbaha/RoomExtras";
 import { MisbahaFollow } from "@/components/misbaha/MisbahaFollow";
 import { MisbahaGiveCarousel } from "@/components/misbaha/MisbahaGiveCarousel";
@@ -36,15 +36,20 @@ const BEADS = 33;
 const MIXED = MIXED_DHIKR;
 const MIXED_KEY = "__mixed";
 type Mode = "mixed" | "single";
-// One dhikr is the default: a phrase that changes on every tap is harder to follow. Varied is a choice.
+// «One kind» is the default (istighfar, tasbih, salawat…): its phrases take turns on every tap,
+// so the visitor picks a kind, not a phrase from a list. «Varied» mixes all kinds.
 const MODES: { id: Mode; ar: string; en: string; subAr: string; subEn: string }[] = [
-  { id: "single", ar: "ذكر واحد", en: "One dhikr", subAr: "تختاره وتكرّره", subEn: "pick one and repeat" },
+  { id: "single", ar: "نوع واحد", en: "One kind", subAr: "تختاره وأذكاره تتنوّع", subEn: "its phrases take turns" },
   { id: "mixed", ar: "أذكار متنوّعة", en: "Varied dhikr", subAr: "تتغيّر مع كل ضغطة", subEn: "changes with every tap" },
 ];
 
 type Tally = Partial<Record<(typeof GROUPS)[number]["id"], number>>;
 type Custom = { id: string; text: string };
-type Saved = { mode: Mode; selected: string; counts: Record<string, number>; tally: Tally; targets: Record<string, number>; day: string; today: number; vibrate: boolean; custom: Custom[] };
+type Saved = {
+  mode: Mode; selected: string; counts: Record<string, number>; tally: Tally; targets: Record<string, number>; day: string; today: number; vibrate: boolean; custom: Custom[];
+  /** the visitor chose a kind / mode themself: a shared sebha's suggested dhikr no longer overrides it */
+  picked?: boolean;
+};
 /** A phrase the visitor added themself (kept on this device). */
 const customToDhikr = (c: Custom): Dhikr => ({ id: c.id, text: c.text, en: c.text, virtue: "", virtueEn: "", source: "", sourceEn: "", target: 33 });
 const keyFor = (room?: string) => (room ? `yusr-misbaha-room-${room}` : "yusr-misbaha-v2");
@@ -220,27 +225,38 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
   const [params] = useSearchParams();
   useEffect(() => {
     const d = params.get("d");
-    if (d && ALL.some((x) => x.id === d)) setSt((s) => ({ ...s, mode: "single", selected: d }));
+    if (d && ALL.some((x) => x.id === d)) setSt((s) => ({ ...s, mode: "single", selected: d, picked: true }));
     // only on arrival
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // A shared misbaha can suggest a dhikr: used until the visitor picks something else.
+  // A shared sebha opens on what its creator chose: their dhikr (and its kind), or varied adhkar when
+  // they chose none. Kept until the visitor picks something themself.
   useEffect(() => {
-    const d = room?.dhikr_id;
-    if (d && ALL.some((x) => x.id === d)) setSt((s) => (s.today === 0 ? { ...s, mode: "single", selected: d } : s));
-  }, [room?.dhikr_id]);
+    if (!room) return;
+    const d = room.dhikr_id;
+    setSt((s) => {
+      if (s.picked) return s;
+      if (d && ALL.some((x) => x.id === d)) return s.mode === "single" && s.selected === d ? s : { ...s, mode: "single", selected: d };
+      return s.mode === "mixed" ? s : { ...s, mode: "mixed" };
+    });
+  }, [room]);
   const customDhikr = useMemo(() => st.custom.map(customToDhikr), [st.custom]);
   const findDhikr = (id: string) => ALL.find((d) => d.id === id) ?? customDhikr.find((d) => d.id === id);
 
   const isMixed = st.mode === "mixed";
-  // In mixed mode the counter is shared and the dhikr to say now follows the count.
-  const countKey = isMixed ? MIXED_KEY : st.selected;
+  // The visitor's own phrase is said as it is; everything else is a sequence that moves on every tap:
+  // all adhkar (varied), or the phrases of one kind starting from the chosen one.
+  const isCustom = !isMixed && st.selected.startsWith("my_");
+  const kind = groupOfDhikr(st.selected);
+  const seq: Dhikr[] | null = isMixed ? MIXED : isCustom ? null : kind.items;
+  const countKey = isMixed ? MIXED_KEY : isCustom ? st.selected : `kind:${kind.id}`;
   const count = st.counts[countKey] ?? 0;
-  const dhikr = isMixed ? MIXED[count % MIXED.length] : findDhikr(st.selected) ?? ALL[0];
-  const isCustom = dhikr.id.startsWith("my_");
-  const nextDhikr = isMixed ? MIXED[(count + 1) % MIXED.length] : null;
-  const group = groupOfDhikr(dhikr.id);
-  const target = st.targets[countKey] ?? (isMixed ? 100 : dhikr.target);
+  const seqStart = isMixed || !seq ? 0 : Math.max(0, seq.findIndex((d) => d.id === st.selected));
+  const seqAt = seq ? (seqStart + count) % seq.length : 0;
+  const dhikr = seq ? seq[seqAt] : findDhikr(st.selected) ?? ALL[0];
+  const nextDhikr = seq && seq.length > 1 ? seq[(seqAt + 1) % seq.length] : null;
+  const group = isCustom ? null : kind;
+  const target = st.targets[countKey] ?? (seq ? 100 : dhikr.target);
   const rounds = target ? Math.floor(count / target) : 0;
   const inRound = target ? count % target : count;
   // Beads lit: progress within the target, or within each 33 on an open count.
@@ -350,7 +366,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
     const text = customText.trim().replace(/\s+/g, " ").slice(0, 120);
     if (text.length < 2) return;
     const id = `my_${Date.now().toString(36)}`;
-    setSt((s) => ({ ...s, custom: [...s.custom, { id, text }].slice(-20), mode: "single", selected: id }));
+    setSt((s) => ({ ...s, custom: [...s.custom, { id, text }].slice(-20), mode: "single", selected: id, picked: true }));
     setCustomText("");
   };
   const removeCustom = (id: string) =>
@@ -373,8 +389,12 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
     setSt((s) => ({ ...s, counts: { ...s.counts, [countKey]: 0 } }));
     setDone(false);
   };
-  const choose = (id: string) => { setSt((s) => ({ ...s, mode: "single", selected: id })); setDone(false); };
-  const setMode = (mode: Mode) => { setSt((s) => ({ ...s, mode })); setDone(false); };
+  const choose = (id: string) => { setSt((s) => ({ ...s, mode: "single", selected: id, picked: true })); setDone(false); };
+  const setMode = (mode: Mode) => {
+    // back to «one kind» from a custom phrase or varied: keep the kind, start from its first phrase
+    setSt((s) => ({ ...s, mode, picked: true, selected: mode === "single" && s.selected.startsWith("my_") ? ALL[0].id : s.selected }));
+    setDone(false);
+  };
   const setTarget = (n: number) => setSt((s) => ({ ...s, targets: { ...s.targets, [countKey]: n } }));
 
   const pageUrl = roomSlug ? `https://elyusr.org/misbaha/${roomSlug}` : "https://elyusr.org/misbaha";
@@ -426,13 +446,14 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
       <section className="pattern-hero-luxe relative overflow-hidden text-primary-foreground">
         <div className="pointer-events-none absolute inset-0 leaf-bg opacity-20" />
         <div className="container relative mx-auto max-w-6xl px-4 pb-14 pt-5 sm:pt-10 md:pb-20 md:pt-14">
-          <div className="flex justify-center text-primary-foreground/80">
+          {/* A shared sebha is opened from a link: on phones its name and the beads come first. */}
+          <div className={`justify-center text-primary-foreground/80 ${roomSlug ? "hidden sm:flex" : "flex"}`}>
             <Breadcrumbs items={[{ name: isAr ? "الرئيسية" : "Home", href: "/" }, { name: isAr ? "السبحة الإلكترونية" : "Digital tasbih" }]} />
           </div>
-          <div className="mx-auto mt-3 max-w-2xl text-center sm:mt-6">
+          <div className={`mx-auto max-w-2xl text-center sm:mt-6 ${roomSlug ? "mt-0" : "mt-3"}`}>
             {roomSlug ? (
-              <RoomHeader isAr={isAr} state={roomState} room={room} waHref={waHref} copied={copied} onCopy={copyLink} onNativeShare={canNative ? nativeShare : null}
-                onStory={() => setStoryOpen(true)} live={roomState === "ok"} othersRecent={othersRecent} isNew={isNew} fmt={(n) => n.toLocaleString(isAr ? "ar-EG" : "en-US")} />
+              <RoomHeader isAr={isAr} state={roomState} room={room}
+                live={roomState === "ok"} othersRecent={othersRecent} isNew={isNew} fmt={(n) => n.toLocaleString(isAr ? "ar-EG" : "en-US")} />
             ) : (
               <>
                 <div className="mb-3 flex flex-wrap items-center justify-center gap-2 text-xs font-black sm:mb-4">
@@ -461,8 +482,8 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
             {/* ── Counter ── */}
             <div className="flex min-w-0 flex-col items-center">
               <div className="mb-4 flex min-h-[6.5rem] w-full min-w-0 max-w-md flex-col justify-center text-center sm:mb-5" aria-live="polite">
-                <p className="text-xs font-black text-secondary">{isMixed ? (isAr ? "قل الآن" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}<span className="hidden font-bold text-white/45 sm:inline">{isAr ? " (اضغط على السبحة أو زر المسافة)" : " (tap the beads or press Space)"}</span></p>
-                <p key={`${dhikr.id}-${isMixed ? count : 0}`} className="misbaha-fade mt-1 text-xl font-black leading-[1.7] text-white sm:text-2xl">{isAr ? dhikr.text : dhikr.en}</p>
+                <p className="text-xs font-black text-secondary">{seq ? (isAr ? "قل الآن" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}<span className="hidden font-bold text-white/45 sm:inline">{isAr ? " (اضغط على السبحة أو زر المسافة)" : " (tap the beads or press Space)"}</span></p>
+                <p key={`${dhikr.id}-${seq ? count : 0}`} className="misbaha-fade mt-1 text-xl font-black leading-[1.7] text-white sm:text-2xl">{isAr ? dhikr.text : dhikr.en}</p>
                 {nextDhikr && (
                   <p className="mt-1 truncate text-xs font-bold text-white/55">{isAr ? `التالي: ${nextDhikr.text}` : `Next: ${nextDhikr.en}`}</p>
                 )}
@@ -576,6 +597,10 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                   </button>
                 )}
               </div>
+              {roomSlug && room && roomState === "ok" && (
+                <RoomShareActions isAr={isAr} room={room} waHref={waHref} copied={copied} onCopy={copyLink}
+                  onNativeShare={canNative ? nativeShare : null} onStory={() => setStoryOpen(true)} />
+              )}
             </div>
 
             {/* ── Choice of dhikr ── */}
@@ -593,14 +618,27 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 })}
               </div>
 
-              {isMixed ? (
+              {!isMixed && (
+              <div role="tablist" aria-label={isAr ? "نوع الذكر" : "Type of dhikr"} className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {GROUPS.map((g) => {
+                  const on = !isCustom && g.id === group?.id;
+                  return (
+                    <button key={g.id} type="button" role="tab" aria-selected={on} onClick={() => choose(g.items[0].id)}
+                      className={`min-h-11 rounded-2xl px-3 py-2.5 text-sm font-black transition ${on ? "bg-primary text-primary-foreground shadow-soft" : "bg-muted/60 text-primary hover:bg-secondary/20"}`}>
+                      {isAr ? g.ar : g.en}
+                    </button>
+                  );
+                })}
+              </div>
+              )}
+
+              {seq && seq.length > 1 && (
                 <>
                 <ol className="grid grid-cols-1 gap-1.5 text-xs font-bold sm:grid-cols-2" aria-label={isAr ? "ترتيب الأذكار" : "Dhikr order"}>
-                  {MIXED.map((d, i) => {
-                    const at = count % MIXED.length;
-                    const on = i === at;
+                  {seq.map((d, i) => {
+                    const on = i === seqAt;
                     // Collapsed: only now and the next two, so the list does not overwhelm.
-                    const ahead = (i - at + MIXED.length) % MIXED.length;
+                    const ahead = (i - seqAt + seq.length) % seq.length;
                     if (!showAllMixed && ahead > 2) return null;
                     return (
                       <li key={`${d.id}-${i}`} className={`truncate rounded-lg px-2 py-1.5 text-center transition-colors ${on ? "bg-secondary/25 text-primary" : "bg-muted/40 text-muted-foreground"}`} title={d.text}>
@@ -610,44 +648,18 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                     );
                   })}
                 </ol>
-                <button type="button" onClick={() => setShowAllMixed((v) => !v)} aria-expanded={showAllMixed}
-                  className="mt-2 inline-flex items-center gap-1 text-xs font-black text-primary hover:text-secondary">
-                  <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showAllMixed ? "rotate-180" : ""}`} />
-                  {showAllMixed ? (isAr ? "اعرض الحالي فقط" : "Show fewer") : isAr ? `اعرض الترتيب كله (${fmt(MIXED.length)} ذكرًا)` : `Show the full order (${MIXED.length})`}
-                </button>
+                {seq.length > 3 && (
+                  <button type="button" onClick={() => setShowAllMixed((v) => !v)} aria-expanded={showAllMixed}
+                    className="mt-2 inline-flex items-center gap-1 text-xs font-black text-primary hover:text-secondary">
+                    <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showAllMixed ? "rotate-180" : ""}`} />
+                    {showAllMixed ? (isAr ? "اعرض الحالي فقط" : "Show fewer") : isAr ? `اعرض الترتيب كله (${fmt(seq.length)} أذكار)` : `Show the full order (${seq.length})`}
+                  </button>
+                )}
                 </>
-              ) : (
-              <>
-              <div role="tablist" aria-label={isAr ? "نوع الذكر" : "Type of dhikr"} className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                {GROUPS.map((g) => {
-                  const on = !isCustom && g.id === group.id;
-                  return (
-                    <button key={g.id} type="button" role="tab" aria-selected={on} onClick={() => choose(g.items[0].id)}
-                      className={`min-h-11 rounded-2xl px-3 py-2.5 text-sm font-black transition ${on ? "bg-primary text-primary-foreground shadow-soft" : "bg-muted/60 text-primary hover:bg-secondary/20"}`}>
-                      {isAr ? g.ar : g.en}
-                    </button>
-                  );
-                })}
-              </div>
-
-
-              {group.items.length > 1 && !isCustom && (
-                <div className="mt-4 space-y-2">
-                  {group.items.map((d) => {
-                    const on = d.id === dhikr.id;
-                    return (
-                      <button key={d.id} type="button" onClick={() => choose(d.id)} aria-pressed={on}
-                        className={`flex w-full items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-start transition ${on ? "border-secondary bg-secondary/10" : "border-border hover:border-secondary/50"}`}>
-                        <span className="flex min-w-0 items-center gap-2.5">
-                          <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 ${on ? "border-secondary bg-secondary text-slate-950" : "border-border"}`} aria-hidden>{on && <Check className="h-3 w-3" strokeWidth={3.5} />}</span>
-                          <span className="text-sm font-black leading-relaxed text-primary">{isAr ? d.text : d.en}</span>
-                        </span>
-                        <span className="shrink-0 rounded-full bg-muted px-2.5 py-0.5 font-mono text-xs font-black text-muted-foreground" title={isAr ? "عددك اليوم" : "Today"}>{fmt(st.counts[d.id] ?? 0)}</span>
-                      </button>
-                    );
-                  })}
-                </div>
               )}
+
+              {!isMixed && (
+              <>
               <div className="mt-5 rounded-2xl border border-dashed border-border p-4">
                 <p className="mb-1 text-sm font-black text-primary">{isAr ? "ذكرك أو دعاؤك الخاص" : "Your own dhikr or dua"}</p>
                 <p className="mb-3 text-xs font-bold leading-relaxed text-muted-foreground">{isAr ? "اكتبه مرة، ويفضل محفوظ على جهازك تختاره في أي وقت." : "Write it once; it stays on this device to pick any time."}</p>
@@ -674,7 +686,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
               </>
               )}
 
-              <div key={`${dhikr.id}-${isMixed ? count : 0}`} className="misbaha-fade mt-6 rounded-2xl bg-muted/40 p-5 text-center">
+              <div key={`${dhikr.id}-${seq ? count : 0}`} className="misbaha-fade mt-6 rounded-2xl bg-muted/40 p-5 text-center">
                 <p className="text-2xl font-black leading-[1.8] text-primary md:text-3xl">{dhikr.text}</p>
                 {!isAr && <p className="mt-2 text-sm text-muted-foreground">{dhikr.en}</p>}
               </div>

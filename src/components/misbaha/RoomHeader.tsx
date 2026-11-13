@@ -5,18 +5,13 @@ import { MISBAHA_ROOMS_PENDING_AR, type MisbahaRoom } from "@/data/api/misbahaRo
 import { AddToHome } from "@/components/misbaha/AddToHome";
 import { kindMeta, roomTagline, roomTitle } from "@/data/memorialDuas";
 
-/** Top of a shared misbaha page: whose it is, the live shared total, and the main share actions. */
+/** Top of a shared sebha page: whose it is, the intention, and the live shared total. */
 export function RoomHeader({
-  isAr, state, room, waHref, copied, onCopy, onNativeShare, onStory, live, othersRecent, isNew, fmt,
+  isAr, state, room, live, othersRecent, isNew, fmt,
 }: {
   isAr: boolean;
   state: "loading" | "ok" | "missing" | "pending" | "none";
   room: MisbahaRoom | null;
-  waHref: string;
-  copied: boolean;
-  onCopy: () => void;
-  onNativeShare: (() => void) | null;
-  onStory: () => void;
   /** the total is refreshed from the server */
   live: boolean;
   /** dhikr others added since the page opened */
@@ -43,27 +38,26 @@ export function RoomHeader({
   }
   const meta = kindMeta(room.kind);
   const pct = room.target_total ? Math.min(100, (room.total_count / room.target_total) * 100) : 0;
+  // Compact on purpose: whose sebha it is, the intention and the shared total, with the beads right
+  // under it on the first screen of a phone. The share buttons sit under the counter (RoomShareActions).
   return (
     <div>
       {isNew && (
-        <div className="misbaha-fade mx-auto mb-5 max-w-md rounded-2xl border border-secondary/40 bg-secondary/15 px-4 py-3 text-sm font-bold text-white">
+        <div className="misbaha-fade mx-auto mb-3 max-w-md rounded-2xl border border-secondary/40 bg-secondary/15 px-3 py-2 text-xs font-bold text-white sm:text-sm">
           <Sparkles className="me-1 inline h-4 w-4 text-secondary" />
-          {isAr ? "تم إنشاء السبحة. أرسلها الآن إلى مجموعات العائلة والأصدقاء، وكل من يدخل ويسبّح يزيد العدّاد." : "Created! Send it to family and friends now — everyone who joins adds to the count."}
+          {isAr ? "تم إنشاء السبحة. أرسلها الآن للعائلة والأصدقاء من الأزرار تحت السبحة." : "Created! Send it to family and friends with the buttons under the beads."}
         </div>
       )}
       <p className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-black text-secondary">{isAr ? `سبحة مشتركة · ${meta.ar}` : `Shared tasbih · ${meta.en}`}</p>
-      <h1 className="mt-3 text-3xl font-black leading-tight sm:text-4xl md:text-5xl">{roomTitle(room.kind, room.gender, room.name, isAr)}</h1>
-      <p className="mt-2 text-base font-bold text-white/80">{roomTagline(room.kind, room.gender, isAr)}</p>
+      <h1 className="mt-2 text-2xl font-black leading-tight sm:mt-3 sm:text-4xl md:text-5xl">{roomTitle(room.kind, room.gender, room.name, isAr)}</h1>
+      <p className="mt-1.5 text-sm font-bold text-white/80 sm:mt-2 sm:text-base">{roomTagline(room.kind, room.gender, isAr)}</p>
 
-      <div className="mx-auto mt-6 max-w-sm rounded-3xl bg-white/10 px-5 py-4 ring-1 ring-white/10">
-        <div className="flex flex-col items-center gap-1.5 sm:flex-row sm:justify-center sm:gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-secondary/15 sm:h-auto sm:w-auto sm:bg-transparent"><Users className="h-5 w-5 shrink-0 text-secondary sm:h-6 sm:w-6" /></span>
-          <span className="font-mono text-5xl font-black tabular-nums leading-none sm:text-4xl" aria-live="polite">{fmt(room.total_count)}</span>
-        </div>
-        <p className="mt-2 flex flex-col items-center gap-1.5 text-xs font-bold text-white/70 sm:mt-1 sm:flex-row sm:justify-center sm:gap-2">
-          <span>{isAr ? "ذكر قاله جميع المشاركين" : "dhikr said by everyone so far"}</span>
+      <div className="mx-auto mt-3 max-w-xs sm:mt-4">
+        <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm font-bold text-white/80">
+          <Users className="h-4 w-4 shrink-0 text-secondary" />
+          <span><b className="font-mono text-lg font-black tabular-nums text-white" aria-live="polite">{fmt(room.total_count)}</b> {isAr ? "ذكر من جميع المشاركين" : "dhikr from everyone"}</span>
           {live && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/15 px-2.5 py-0.5 text-secondary sm:bg-transparent sm:p-0">
+            <span className="inline-flex items-center gap-1.5 text-xs text-secondary">
               <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-secondary opacity-60 motion-reduce:hidden" /><span className="relative inline-flex h-2 w-2 rounded-full bg-secondary" /></span>
               {isAr ? "مباشر" : "live"}
             </span>
@@ -73,35 +67,53 @@ export function RoomHeader({
           <p className="misbaha-fade mt-1 text-xs font-black text-secondary">{isAr ? `+${fmt(othersRecent)} من مشاركين آخرين منذ أن فتحت الصفحة` : `+${fmt(othersRecent)} from others since you opened`}</p>
         )}
         {room.target_total ? (
-          <div className="mt-3">
-            <div className="h-2 overflow-hidden rounded-full bg-white/15" role="progressbar" aria-valuemin={0} aria-valuemax={room.target_total} aria-valuenow={Math.min(room.total_count, room.target_total)}
+          <div className="mt-2">
+            <div className="h-1.5 overflow-hidden rounded-full bg-white/15" role="progressbar" aria-valuemin={0} aria-valuemax={room.target_total} aria-valuenow={Math.min(room.total_count, room.target_total)}
               aria-label={isAr ? "التقدم نحو هدف السبحة" : "Progress to the goal"}>
               <div className="h-full rounded-full bg-secondary transition-[width] duration-500" style={{ width: `${pct}%` }} />
             </div>
-            <p className="mt-1.5 text-xs font-bold text-white/70">
+            <p className="mt-1 text-[11px] font-bold text-white/65">
               {room.total_count >= room.target_total
                 ? isAr ? `بلغنا الهدف (${fmt(room.target_total)}) والحمد لله. واصلوا، فالخير لا ينتهي.` : `Goal of ${fmt(room.target_total)} reached. Keep going.`
                 : isAr ? `الهدف ${fmt(room.target_total)} · المتبقي ${fmt(room.target_total - room.total_count)}` : `Goal ${fmt(room.target_total)} · ${fmt(room.target_total - room.total_count)} to go`}
             </p>
           </div>
         ) : null}
+        {room.created_by && <p className="mt-1 text-[11px] font-bold text-white/55">{isAr ? `أنشأها ${room.created_by}` : `Created by ${room.created_by}`}</p>}
       </div>
-      {room.created_by && <p className="mt-3 text-xs font-bold text-white/60">{isAr ? `أنشأها ${room.created_by}` : `Created by ${room.created_by}`}</p>}
+    </div>
+  );
+}
 
-      <div className="keep-flow mx-auto mt-5 grid max-w-md grid-cols-2 gap-2 sm:flex sm:max-w-none sm:flex-wrap sm:items-center sm:justify-center">
-        <a href={waHref} target="_blank" rel="noopener noreferrer" className="col-span-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 text-sm font-black text-white shadow-cta transition hover:brightness-95 sm:h-11">
+/** Under the counter of a shared sebha: send it (WhatsApp first), story image, copy, add to home screen. */
+export function RoomShareActions({
+  isAr, room, waHref, copied, onCopy, onNativeShare, onStory,
+}: {
+  isAr: boolean;
+  room: MisbahaRoom;
+  waHref: string;
+  copied: boolean;
+  onCopy: () => void;
+  onNativeShare: (() => void) | null;
+  onStory: () => void;
+}) {
+  return (
+    <div className="mt-5 w-full max-w-md text-center">
+      <p className="mb-2 text-xs font-black text-white/70">{isAr ? "شارك السبحة، والدال على الخير كفاعله" : "Share it — whoever guides to good shares its reward"}</p>
+      <div className="keep-flow grid grid-cols-2 gap-2">
+        <a href={waHref} target="_blank" rel="noopener noreferrer" className="col-span-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 text-sm font-black text-white shadow-cta transition hover:brightness-95">
           <WhatsAppIcon className="h-4 w-4" /> {isAr ? "أرسلها عبر واتساب" : "WhatsApp"}
         </a>
-        <button type="button" onClick={onStory} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-secondary px-3 text-sm font-black text-slate-950 shadow-cta transition hover:-translate-y-0.5 sm:px-5">
+        <button type="button" onClick={onStory} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-secondary px-3 text-sm font-black text-slate-950 shadow-cta transition hover:-translate-y-0.5">
           <ImageIcon className="h-4 w-4 shrink-0" /> {isAr ? "صورة للستوري" : "Story image"}
         </button>
-        <button type="button" onClick={onCopy} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-3 text-sm font-black text-white hover:bg-white/10 sm:px-4">
+        <button type="button" onClick={onCopy} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-3 text-sm font-black text-white hover:bg-white/10">
           {copied ? <Check className="h-4 w-4 shrink-0 text-secondary" /> : <Copy className="h-4 w-4 shrink-0" />} {copied ? (isAr ? "تم النسخ" : "Copied") : isAr ? "انسخ الرابط" : "Copy link"}
         </button>
         <AddToHome isAr={isAr} slug={room.slug} name={room.name} wide={!onNativeShare} />
         {onNativeShare && (
-          <button type="button" onClick={onNativeShare} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-3 text-sm font-black text-white hover:bg-white/10 sm:w-11 sm:px-0" aria-label={isAr ? "مشاركة" : "Share"}>
-            <Share2 className="h-4 w-4 shrink-0" /> <span className="sm:hidden">{isAr ? "مشاركة" : "Share"}</span>
+          <button type="button" onClick={onNativeShare} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/25 px-3 text-sm font-black text-white hover:bg-white/10" aria-label={isAr ? "مشاركة" : "Share"}>
+            <Share2 className="h-4 w-4 shrink-0" /> {isAr ? "مشاركة" : "Share"}
           </button>
         )}
       </div>
