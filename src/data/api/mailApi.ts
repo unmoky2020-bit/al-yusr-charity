@@ -91,9 +91,9 @@ export const MAIL_KIND_LABELS: Record<MailKind, string> = {
   volunteer: "طلب تطوع",
   newsletter: "نشرة بريدية",
   newsletter_confirm: "تأكيد اشتراك النشرة",
-  misbaha_goal: "المسبحة وصلت الهدف",
-  misbaha_weekly: "ملخص المسبحة الأسبوعي",
-  misbaha_confirm: "اشتراك المسبحة",
+  misbaha_goal: "السبحة وصلت الهدف",
+  misbaha_weekly: "ملخص السبحة الأسبوعي",
+  misbaha_confirm: "اشتراك السبحة",
   test: "تجربة",
 };
 
@@ -114,8 +114,8 @@ export const AUTOMATIONS: { key: keyof MailSettings; kind: MailKind; title: stri
   { key: "case_update", kind: "case_update", title: "تحديث الحالة", when: "لما يتنشر تحديث على حالة المتبرع ساهم فيها" },
   { key: "volunteer", kind: "volunteer", title: "طلب التطوع", when: "لما حد يسجل طلب تطوع" },
   { key: "failed", kind: "failed", title: "تبرع لم يكتمل", when: "لما الدفع يفشل أو يتلغى" },
-  { key: "misbaha_goal", kind: "misbaha_goal", title: "المسبحة وصلت الهدف", when: "لمتابعين السبحة، مرة واحدة لما العداد يكمل" },
-  { key: "misbaha_weekly", kind: "misbaha_weekly", title: "ملخص المسبحة الأسبوعي", when: "كل جمعة الساعة 9 الصبح، لو في ذكر جديد" },
+  { key: "misbaha_goal", kind: "misbaha_goal", title: "السبحة وصلت الهدف", when: "لمتابعين السبحة، مرة واحدة لما العداد يكمل" },
+  { key: "misbaha_weekly", kind: "misbaha_weekly", title: "ملخص السبحة الأسبوعي", when: "كل جمعة الساعة 9 الصبح، لو في ذكر جديد" },
 ];
 
 /** Other templates that always go out (no switch): previewable too. */

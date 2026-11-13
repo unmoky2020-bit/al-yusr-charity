@@ -120,7 +120,7 @@ export const Navbar = () => {
     { to: "/programs",  label: lang === "ar" ? "برامجنا" : "Programs" },
     { to: "/projects",  label: lang === "ar" ? "مشاريعنا" : "Projects", wide: true, Icon: FolderKanban, descAr: "مشاريع الخير الكبيرة", descEn: "Our larger projects" },
     { to: "/campaigns", label: lang === "ar" ? "حملاتنا" : "Campaigns" },
-    { to: "/misbaha",   label: lang === "ar" ? "المسبحة" : "Tasbih" },
+    { to: "/misbaha",   label: lang === "ar" ? "السبحة" : "Tasbih" },
     ...(hasCases ? [{ to: "/cases", label: lang === "ar" ? "الحالات" : "Cases" }] : []),
     { to: "/blog",      label: lang === "ar" ? "المدونة" : "Blog", wide: true, Icon: BookOpen, descAr: "قصص ومقالات", descEn: "Stories and articles" },
     { to: "/contact",   label: t.nav.contact, wide: true, Icon: Phone, descAr: "واتساب وهاتف وعنوان", descEn: "WhatsApp, phone, address" },

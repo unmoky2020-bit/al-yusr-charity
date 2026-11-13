@@ -53,7 +53,7 @@ export default function MisbahaMailAction({ action }: { action: "confirm" | "uns
                 {room?.slug && (
                   <Link to={`/misbaha/${room.slug}`} className="inline-flex h-11 items-center rounded-2xl bg-orange-grad px-5 text-sm font-black text-accent-foreground shadow-cta">سبّح دلوقتي</Link>
                 )}
-                <Link to="/misbaha" className="inline-flex h-11 items-center rounded-2xl border border-primary/15 bg-background px-5 text-sm font-extrabold text-primary">المسبحة</Link>
+                <Link to="/misbaha" className="inline-flex h-11 items-center rounded-2xl border border-primary/15 bg-background px-5 text-sm font-extrabold text-primary">السبحة</Link>
               </div>
             </>
           )}

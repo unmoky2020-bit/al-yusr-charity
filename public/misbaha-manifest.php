@@ -9,7 +9,7 @@ if (!$main && !preg_match('/^[A-Za-z0-9_-]{2,60}$/', $slug)) {
 }
 $name = isset($_GET['name']) ? trim(preg_replace('/[\x00-\x1F<>"]+/u', ' ', (string) $_GET['name'])) : '';
 $name = function_exists('mb_substr') ? mb_substr($name, 0, 40) : substr($name, 0, 80);
-$title = $main ? 'المسبحة الإلكترونية — اليسر' : ($name !== '' ? 'سبحة ' . $name : 'السبحة المشتركة');
+$title = $main ? 'السبحة الإلكترونية — اليسر' : ($name !== '' ? 'سبحة ' . $name : 'السبحة المشتركة');
 $start = $main ? '/misbaha' : '/misbaha/' . $slug;
 // "any": the round logo (transparent corners, shown on background_color in the splash screen);
 // "maskable": the logo inside the brand green with a safe margin, so launchers never crop it.
@@ -24,7 +24,7 @@ header('Cache-Control: public, max-age=3600');
 echo json_encode([
     'id' => $start,
     'name' => $title,
-    'short_name' => $main ? 'المسبحة' : ($name !== '' ? $name : 'السبحة'),
+    'short_name' => $main ? 'السبحة' : ($name !== '' ? $name : 'السبحة'),
     'description' => 'سبحة مشتركة على موقع مؤسسة اليسر الخيرية',
     'lang' => 'ar',
     'dir' => 'rtl',

@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { RotateCcw, Vibrate, VibrateOff, Share2, Check, Heart, Sparkles, ImageDown, X, Plus, Flame, CalendarDays, Users, Gift, ArrowLeft } from "lucide-react";
+import { RotateCcw, Vibrate, VibrateOff, Share2, Check, ImageDown, X, Plus, Flame, CalendarDays, Users, Gift, ArrowLeft, ArrowDown, Undo2, Maximize2, ChevronDown, Infinity as InfinityIcon } from "lucide-react";
 import { DHIKR_GROUPS, ALL_DHIKR, MIXED_DHIKR, groupOfDhikr, type Dhikr as DhikrType } from "@/data/adhkar";
 import { misbahaRoomsApi, type MisbahaRoom } from "@/data/api/misbahaRoomsApi";
 import { roomShareText, roomTitle } from "@/data/memorialDuas";
-import { RoomHeader } from "@/components/misbaha/RoomHeader";
+import { RoomHeader, RoomShareActions } from "@/components/misbaha/RoomHeader";
 import { RoomExtras } from "@/components/misbaha/RoomExtras";
 import { MisbahaFollow } from "@/components/misbaha/MisbahaFollow";
-import { MisbahaGiveCarousel } from "@/components/misbaha/MisbahaGiveCarousel";
 import { StoryDialog } from "@/components/misbaha/StoryDialog";
+import { FocusMode } from "@/components/misbaha/FocusMode";
+import { addToHistory, dayKey, lastWeek, readHistory } from "@/lib/sebhaHistory";
 import { MemorialCreate } from "@/components/misbaha/MemorialCreate";
 import { UMMAH_ROOM_SLUG, UmmahRoomCard } from "@/components/misbaha/UmmahRoomCard";
 import { track } from "@/lib/track";
@@ -34,14 +35,20 @@ const BEADS = 33;
 const MIXED = MIXED_DHIKR;
 const MIXED_KEY = "__mixed";
 type Mode = "mixed" | "single";
+// «One kind» is the default (istighfar, tasbih, salawat…): its phrases take turns on every tap,
+// so the visitor picks a kind, not a phrase from a list. «Varied» mixes all kinds.
 const MODES: { id: Mode; ar: string; en: string; subAr: string; subEn: string }[] = [
+  { id: "single", ar: "نوع واحد", en: "One kind", subAr: "تختاره وأذكاره تتنوّع", subEn: "its phrases take turns" },
   { id: "mixed", ar: "أذكار متنوّعة", en: "Varied dhikr", subAr: "تتغيّر مع كل ضغطة", subEn: "changes with every tap" },
-  { id: "single", ar: "ذكر واحد", en: "One dhikr", subAr: "تختاره وتكرّره", subEn: "pick one and repeat" },
 ];
 
 type Tally = Partial<Record<(typeof GROUPS)[number]["id"], number>>;
 type Custom = { id: string; text: string };
-type Saved = { mode: Mode; selected: string; counts: Record<string, number>; tally: Tally; targets: Record<string, number>; day: string; today: number; vibrate: boolean; custom: Custom[] };
+type Saved = {
+  mode: Mode; selected: string; counts: Record<string, number>; tally: Tally; targets: Record<string, number>; day: string; today: number; vibrate: boolean; custom: Custom[];
+  /** the visitor chose a kind / mode themself: a shared sebha's suggested dhikr no longer overrides it */
+  picked?: boolean;
+};
 /** A phrase the visitor added themself (kept on this device). */
 const customToDhikr = (c: Custom): Dhikr => ({ id: c.id, text: c.text, en: c.text, virtue: "", virtueEn: "", source: "", sourceEn: "", target: 33 });
 const keyFor = (room?: string) => (room ? `yusr-misbaha-room-${room}` : "yusr-misbaha-v2");
@@ -53,14 +60,14 @@ const todayStr = () => {
 /** Same day → everything as it was left. New day → counts and summary start from zero (settings stay). */
 const startDay = (s: Saved): Saved => (s.day === todayStr() ? s : { ...s, day: todayStr(), today: 0, counts: {}, tally: {} });
 const load = (room?: string): Saved => {
-  const fresh: Saved = { mode: "mixed", selected: ALL[0].id, counts: {}, tally: {}, targets: {}, day: todayStr(), today: 0, vibrate: true, custom: [] };
+  const fresh: Saved = { mode: "single", selected: ALL[0].id, counts: {}, tally: {}, targets: {}, day: todayStr(), today: 0, vibrate: true, custom: [] };
   try {
     const raw = localStorage.getItem(keyFor(room)) ?? (room ? null : localStorage.getItem("yusr-misbaha-v1"));
     const s = JSON.parse(raw || "null") as Partial<Saved> | null;
     if (!s || typeof s !== "object") return fresh;
     const out = { ...fresh, ...s, counts: { ...(s.counts || {}) }, tally: { ...(s.tally || {}) }, targets: { ...(s.targets || {}) }, custom: Array.isArray(s.custom) ? s.custom.slice(0, 20) : [] } as Saved;
     if (!ALL.some((d) => d.id === out.selected) && !out.custom.some((c) => c.id === out.selected)) out.selected = fresh.selected;
-    if (out.mode !== "single") out.mode = "mixed";
+    if (out.mode !== "single" && out.mode !== "mixed") out.mode = fresh.mode;
     return startDay(out);
   } catch {
     return fresh;
@@ -110,6 +117,8 @@ const BEAD_POS = Array.from({ length: BEADS }, (_, i) => {
   return { x: 150 + 118 * Math.cos(a), y: 150 + 118 * Math.sin(a) };
 });
 
+type UndoStep = { kind: "tap"; key: string; gid: string; room: boolean } | { kind: "reset"; key: string; value: number };
+
 const Misbaha = () => {
   const { lang } = useLang();
   const isAr = lang === "ar";
@@ -126,6 +135,21 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [storyOpen, setStoryOpen] = useState(false);
   const [streak, setStreak] = useState<number>(() => readStreak());
+  const [focus, setFocus] = useState(false);
+  const [showAllMixed, setShowAllMixed] = useState(false);
+  // Lifetime total and the last days (this device). Today's count from before this existed seeds it once.
+  const [hist, setHist] = useState(() => {
+    const h = readHistory();
+    const saved = load(roomSlug);
+    return h.days[dayKey()] === undefined && saved.today > 0 ? addToHistory(saved.today) : h;
+  });
+  /** What «تراجع» can take back: taps (newest last) and resets. */
+  const undoStack = useRef<UndoStep[]>([]);
+  const [undoCount, setUndoCount] = useState(0);
+  const pushUndo = (u: UndoStep) => {
+    undoStack.current = [...undoStack.current.slice(-199), u];
+    setUndoCount(undoStack.current.length);
+  };
   const [siteStats, setSiteStats] = useState<{ rooms: number; total: number } | null>(null);
   useEffect(() => {
     if (roomSlug) return;
@@ -200,27 +224,38 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
   const [params] = useSearchParams();
   useEffect(() => {
     const d = params.get("d");
-    if (d && ALL.some((x) => x.id === d)) setSt((s) => ({ ...s, mode: "single", selected: d }));
+    if (d && ALL.some((x) => x.id === d)) setSt((s) => ({ ...s, mode: "single", selected: d, picked: true }));
     // only on arrival
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // A shared misbaha can suggest a dhikr: used until the visitor picks something else.
+  // A shared sebha opens on what its creator chose: their dhikr (and its kind), or varied adhkar when
+  // they chose none. Kept until the visitor picks something themself.
   useEffect(() => {
-    const d = room?.dhikr_id;
-    if (d && ALL.some((x) => x.id === d)) setSt((s) => (s.today === 0 ? { ...s, mode: "single", selected: d } : s));
-  }, [room?.dhikr_id]);
+    if (!room) return;
+    const d = room.dhikr_id;
+    setSt((s) => {
+      if (s.picked) return s;
+      if (d && ALL.some((x) => x.id === d)) return s.mode === "single" && s.selected === d ? s : { ...s, mode: "single", selected: d };
+      return s.mode === "mixed" ? s : { ...s, mode: "mixed" };
+    });
+  }, [room]);
   const customDhikr = useMemo(() => st.custom.map(customToDhikr), [st.custom]);
   const findDhikr = (id: string) => ALL.find((d) => d.id === id) ?? customDhikr.find((d) => d.id === id);
 
   const isMixed = st.mode === "mixed";
-  // In mixed mode the counter is shared and the dhikr to say now follows the count.
-  const countKey = isMixed ? MIXED_KEY : st.selected;
+  // The visitor's own phrase is said as it is; everything else is a sequence that moves on every tap:
+  // all adhkar (varied), or the phrases of one kind starting from the chosen one.
+  const isCustom = !isMixed && st.selected.startsWith("my_");
+  const kind = groupOfDhikr(st.selected);
+  const seq: Dhikr[] | null = isMixed ? MIXED : isCustom ? null : kind.items;
+  const countKey = isMixed ? MIXED_KEY : isCustom ? st.selected : `kind:${kind.id}`;
   const count = st.counts[countKey] ?? 0;
-  const dhikr = isMixed ? MIXED[count % MIXED.length] : findDhikr(st.selected) ?? ALL[0];
-  const isCustom = dhikr.id.startsWith("my_");
-  const nextDhikr = isMixed ? MIXED[(count + 1) % MIXED.length] : null;
-  const group = groupOfDhikr(dhikr.id);
-  const target = st.targets[countKey] ?? (isMixed ? 100 : dhikr.target);
+  const seqStart = isMixed || !seq ? 0 : Math.max(0, seq.findIndex((d) => d.id === st.selected));
+  const seqAt = seq ? (seqStart + count) % seq.length : 0;
+  const dhikr = seq ? seq[seqAt] : findDhikr(st.selected) ?? ALL[0];
+  const nextDhikr = seq && seq.length > 1 ? seq[(seqAt + 1) % seq.length] : null;
+  const group = isCustom ? null : kind;
+  const target = st.targets[countKey] ?? (seq ? 100 : dhikr.target);
   const rounds = target ? Math.floor(count / target) : 0;
   const inRound = target ? count % target : count;
   // Beads lit: progress within the target, or within each 33 on an open count.
@@ -245,10 +280,13 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
         today: s.today + 1,
       };
     });
-    if (roomSlug && roomState === "ok") {
+    const toRoom = !!roomSlug && roomState === "ok";
+    if (toRoom) {
       pendingAdd.current += 1;
       setRoom((r) => (r ? { ...r, total_count: r.total_count + 1 } : r));
     }
+    pushUndo({ kind: "tap", key: countKey, gid, room: toRoom });
+    setHist(addToHistory(1));
     setPulse((p) => p + 1);
     if (st.today === 0 || streak === 0) setStreak(bumpStreak());
     if (completes) {
@@ -258,6 +296,31 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
     }
     vibrate(completes ? [40, 60, 40] : 8);
   }, [countKey, target, count, dhikr.id, roomSlug, roomState, st.today, streak]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /** Takes back the last tap (or the last reset). A tap already sent to a shared sebha stays counted there. */
+  const undo = useCallback(() => {
+    const u = undoStack.current[undoStack.current.length - 1];
+    if (!u) return;
+    undoStack.current = undoStack.current.slice(0, -1);
+    setUndoCount(undoStack.current.length);
+    setDone(false);
+    if (u.kind === "reset") {
+      setSt((s) => ({ ...s, counts: { ...s.counts, [u.key]: u.value } }));
+      return;
+    }
+    setSt((s) => ({
+      ...s,
+      counts: { ...s.counts, [u.key]: Math.max(0, (s.counts[u.key] ?? 0) - 1) },
+      tally: { ...s.tally, [u.gid]: Math.max(0, (s.tally[u.gid as keyof Tally] ?? 0) - 1) },
+      today: Math.max(0, s.today - 1),
+    }));
+    setHist(addToHistory(-1));
+    if (u.room && pendingAdd.current > 0) {
+      pendingAdd.current -= 1;
+      setRoom((r) => (r ? { ...r, total_count: Math.max(0, r.total_count - 1) } : r));
+    }
+    vibrate(15);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Phones count on the finger lifting, not on the browser's click: iPhone Safari drops or delays
   // clicks on fast repeated taps (and on the first tap after a hover change), so taps went missing.
@@ -283,6 +346,10 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (focus) return; // the focus screen has its own keys
+      const el = e.target as HTMLElement | null;
+      const typing = !!el && (!!el.closest("input, textarea, select, [contenteditable=true]") || el.isContentEditable);
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && !typing) { e.preventDefault(); undo(); return; }
       if (e.code !== "Space" || e.repeat) return;
       const t = e.target as HTMLElement | null;
       if (t && (t.closest("input, textarea, select, button, a, [contenteditable=true]") || t.isContentEditable)) return;
@@ -291,14 +358,14 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [tap]);
+  }, [tap, undo, focus]);
 
   const [customText, setCustomText] = useState("");
   const addCustom = () => {
     const text = customText.trim().replace(/\s+/g, " ").slice(0, 120);
     if (text.length < 2) return;
     const id = `my_${Date.now().toString(36)}`;
-    setSt((s) => ({ ...s, custom: [...s.custom, { id, text }].slice(-20), mode: "single", selected: id }));
+    setSt((s) => ({ ...s, custom: [...s.custom, { id, text }].slice(-20), mode: "single", selected: id, picked: true }));
     setCustomText("");
   };
   const removeCustom = (id: string) =>
@@ -316,15 +383,23 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
     } catch { /* dismissed */ }
   };
 
-  const reset = () => { setSt((s) => ({ ...s, counts: { ...s.counts, [countKey]: 0 } })); setDone(false); };
-  const choose = (id: string) => { setSt((s) => ({ ...s, mode: "single", selected: id })); setDone(false); };
-  const setMode = (mode: Mode) => { setSt((s) => ({ ...s, mode })); setDone(false); };
+  const reset = () => {
+    if (count > 0) pushUndo({ kind: "reset", key: countKey, value: count });
+    setSt((s) => ({ ...s, counts: { ...s.counts, [countKey]: 0 } }));
+    setDone(false);
+  };
+  const choose = (id: string) => { setSt((s) => ({ ...s, mode: "single", selected: id, picked: true })); setDone(false); };
+  const setMode = (mode: Mode) => {
+    // back to «one kind» from a custom phrase or varied: keep the kind, start from its first phrase
+    setSt((s) => ({ ...s, mode, picked: true, selected: mode === "single" && s.selected.startsWith("my_") ? ALL[0].id : s.selected }));
+    setDone(false);
+  };
   const setTarget = (n: number) => setSt((s) => ({ ...s, targets: { ...s.targets, [countKey]: n } }));
 
   const pageUrl = roomSlug ? `https://elyusr.org/misbaha/${roomSlug}` : "https://elyusr.org/misbaha";
   const shareText = room
     ? roomShareText(room.kind, room.gender, room.name, isAr)
-    : (isAr ? "مسبحة إلكترونية من مؤسسة اليسر: صلّ على النبي ﷺ، وسبّح، واستغفر" : "A digital tasbih from Al-Yusr");
+    : (isAr ? "سبحة إلكترونية من مؤسسة اليسر: صلّ على النبي ﷺ، وسبّح، واستغفر" : "A digital tasbih from Al-Yusr");
   const waHref = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${pageUrl}?utm_source=whatsapp&utm_medium=share&utm_campaign=misbaha`)}`;
   const copyLink = async () => {
     try {
@@ -337,11 +412,11 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
   const canNative = typeof navigator !== "undefined" && typeof navigator.share === "function";
   const nativeShare = async () => {
     try {
-      await navigator.share({ title: room ? roomTitle(room.kind, room.gender, room.name, isAr) : isAr ? "المسبحة الإلكترونية" : "Digital tasbih", text: shareText, url: pageUrl });
+      await navigator.share({ title: room ? roomTitle(room.kind, room.gender, room.name, isAr) : isAr ? "السبحة الإلكترونية" : "Digital tasbih", text: shareText, url: pageUrl });
       track("misbaha_share", { payload: { channel: "native", room: roomSlug ?? "personal" }, fbCustom: false });
     } catch { /* dismissed */ }
   };
-  const share = async () => (canNative ? nativeShare() : copyLink());
+  const openShare = () => setStoryOpen(true);
   const isNew = !!roomSlug && params.get("new") === "1";
 
   const fmt = (n: number) => n.toLocaleString(isAr ? "ar-EG" : "en-US");
@@ -355,33 +430,34 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
           title={roomSlug === UMMAH_ROOM_SLUG ? (isAr ? "سبحة جميع المسلمين والمسلمات | سبحة جماعية أونلاين — مؤسسة اليسر" : "The misbaha of all Muslims | shared online tasbih — Al-Yusr") : room ? `${isAr ? "سبحة" : "Tasbih"} ${roomTitle(room.kind, room.gender, room.name, isAr)} | ${isAr ? "مؤسسة اليسر" : "Al-Yusr"}` : (isAr ? "سبحة مشتركة | مؤسسة اليسر" : "Shared tasbih | Al-Yusr")}
           description={isAr ? "شارك بالتسبيح والاستغفار والصلاة على النبي ﷺ، ويُضاف كل ذكر إلى عدّاد واحد." : "Join in with tasbih, istighfar and salawat; every dhikr adds to one shared count."}
           path={`/misbaha/${roomSlug}`}
-          image={`https://elyusr.org/og/misbaha-${room?.kind ?? "deceased"}.jpg?v=2026.11`}
+          image={`https://elyusr.org/og/misbaha-${room?.kind ?? "deceased"}.jpg?v=2026.11b`}
         />
       ) : (
       <SEOHelmet
-        title={isAr ? "المسبحة الإلكترونية | صلاة على النبي وتسبيح واستغفار — مؤسسة اليسر" : "Digital tasbih | Salawat, tasbih & istighfar — Al-Yusr"}
-        description={isAr ? "مسبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وهدف يومي وفضل كل ذكر من الأحاديث الصحيحة. وأنشئ سبحة مشتركة لروح من تحب وشاركها." : "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter, daily goal and the virtue of each dhikr. Create a shared tasbih for a loved one who passed away."}
+        title={isAr ? "السبحة الإلكترونية | صلاة على النبي وتسبيح واستغفار — مؤسسة اليسر" : "Digital tasbih | Salawat, tasbih & istighfar — Al-Yusr"}
+        description={isAr ? "سبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وهدف يومي وفضل كل ذكر من الأحاديث الصحيحة. وأنشئ سبحة مشتركة لروح من تحب وشاركها." : "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter, daily goal and the virtue of each dhikr. Create a shared tasbih for a loved one who passed away."}
         path="/misbaha"
-        image="https://elyusr.org/og/misbaha.jpg?v=2026.11"
+        image="https://elyusr.org/og/misbaha.jpg?v=2026.11b"
       />
       )}
-      <BreadcrumbSchema items={[{ name: isAr ? "الرئيسية" : "Home", url: "https://elyusr.org/" }, { name: isAr ? "المسبحة الإلكترونية" : "Digital tasbih", url: "https://elyusr.org/misbaha" }]} />
+      <BreadcrumbSchema items={[{ name: isAr ? "الرئيسية" : "Home", url: "https://elyusr.org/" }, { name: isAr ? "السبحة الإلكترونية" : "Digital tasbih", url: "https://elyusr.org/misbaha" }]} />
 
       <section className="pattern-hero-luxe relative overflow-hidden text-primary-foreground">
         <div className="pointer-events-none absolute inset-0 leaf-bg opacity-20" />
-        <div className="container relative mx-auto max-w-6xl px-4 pb-14 pt-10 md:pb-20 md:pt-14">
-          <div className="flex justify-center text-primary-foreground/80">
-            <Breadcrumbs items={[{ name: isAr ? "الرئيسية" : "Home", href: "/" }, { name: isAr ? "المسبحة الإلكترونية" : "Digital tasbih" }]} />
+        <div className="container relative mx-auto max-w-6xl px-4 pb-14 pt-5 sm:pt-10 md:pb-20 md:pt-14">
+          {/* A shared sebha is opened from a link: on phones its name and the beads come first. */}
+          <div className={`justify-center text-primary-foreground/80 ${roomSlug ? "hidden sm:flex" : "flex"}`}>
+            <Breadcrumbs items={[{ name: isAr ? "الرئيسية" : "Home", href: "/" }, { name: isAr ? "السبحة الإلكترونية" : "Digital tasbih" }]} />
           </div>
-          <div className="mx-auto mt-6 max-w-2xl text-center">
+          <div className={`mx-auto max-w-2xl text-center sm:mt-6 ${roomSlug ? "mt-0" : "mt-3"}`}>
             {roomSlug ? (
-              <RoomHeader isAr={isAr} state={roomState} room={room} waHref={waHref} copied={copied} onCopy={copyLink} onNativeShare={canNative ? nativeShare : null}
-                onStory={() => setStoryOpen(true)} live={roomState === "ok"} othersRecent={othersRecent} isNew={isNew} fmt={(n) => n.toLocaleString(isAr ? "ar-EG" : "en-US")} />
+              <RoomHeader isAr={isAr} state={roomState} room={room}
+                live={roomState === "ok"} othersRecent={othersRecent} fmt={(n) => n.toLocaleString(isAr ? "ar-EG" : "en-US")} />
             ) : (
               <>
-                <div className="mb-4 flex flex-wrap items-center justify-center gap-2 text-xs font-black">
+                <div className="mb-3 flex flex-wrap items-center justify-center gap-2 text-xs font-black sm:mb-4">
                   {todayLabel(isAr) && (
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white/85"><CalendarDays className="h-3.5 w-3.5 text-secondary" /> {todayLabel(isAr)}</span>
+                    <span className="hidden items-center sm:inline-flex gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white/85"><CalendarDays className="h-3.5 w-3.5 text-secondary" /> {todayLabel(isAr)}</span>
                   )}
                   {siteStats && siteStats.total > 0 && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-white/85">
@@ -389,20 +465,28 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                     </span>
                   )}
                 </div>
-                <h1 className="text-3xl font-black sm:text-4xl md:text-5xl">{isAr ? "المسبحة الإلكترونية" : "Digital tasbih"}</h1>
-                <p className="mt-3 text-base text-primary-foreground/85 md:text-lg">
-                  {isAr ? "قل الذكر واضغط على المسبحة. يتغيّر الذكر مع كل ضغطة لتجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، ويمكنك أن تختار ذكرًا واحدًا إن أردت. يُحفظ عدّادك على جهازك طوال اليوم، ويبدأ من جديد مع كل يوم." : "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count stays on this device for the day and starts fresh each new day."}
+                <h1 className="text-2xl font-black sm:text-4xl md:text-5xl">{isAr ? "السبحة الإلكترونية" : "Digital tasbih"}</h1>
+                {/* Phones: one short line, so the sebha itself is on the first screen. */}
+                <p className="mt-2 text-sm font-bold text-primary-foreground/80 sm:hidden">
+                  {isAr ? "قل الذكر واضغط على السبحة، وعدّادك محفوظ على جهازك طوال اليوم." : "Say the dhikr and tap the beads; your count stays on this device for the day."}
+                </p>
+                <p className="mt-3 hidden text-base text-primary-foreground/85 sm:block md:text-lg">
+                  {isAr ? "قل الذكر واضغط على السبحة. يتغيّر الذكر مع كل ضغطة لتجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، ويمكنك أن تختار ذكرًا واحدًا إن أردت. يُحفظ عدّادك على جهازك طوال اليوم، ويبدأ من جديد مع كل يوم." : "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count stays on this device for the day and starts fresh each new day."}
                 </p>
               </>
             )}
           </div>
 
-          <div className="mt-10 grid grid-cols-[minmax(0,1fr)] items-start gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+          <div className="mt-5 grid grid-cols-[minmax(0,1fr)] items-start gap-8 sm:mt-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
             {/* ── Counter ── */}
             <div className="flex min-w-0 flex-col items-center">
-              <div className="mb-5 flex min-h-[8.75rem] w-full min-w-0 max-w-md flex-col justify-center text-center sm:min-h-[6.5rem]" aria-live="polite">
-                <p className="text-xs font-black text-secondary">{isMixed ? (isAr ? "قل الآن" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}<span className="hidden font-bold text-white/45 sm:inline">{isAr ? " (اضغط على المسبحة أو زر المسافة)" : " (tap the beads or press Space)"}</span></p>
-                <p key={`${dhikr.id}-${isMixed ? count : 0}`} className="misbaha-fade mt-1 text-xl font-black leading-[1.7] text-white sm:text-2xl">{isAr ? dhikr.text : dhikr.en}</p>
+              <div className="mb-4 flex min-h-[6.5rem] w-full min-w-0 max-w-md flex-col justify-center text-center sm:mb-5" aria-live="polite">
+                <button type="button" onClick={() => document.getElementById("dhikr-choice")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="mx-auto mb-2 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold text-white/80 transition hover:bg-white/15">
+                  <ArrowDown className="h-3.5 w-3.5 text-secondary" /> {isAr ? "يمكنك النزول واختيار الذكر الذي تحبه" : "Scroll down to pick the dhikr you like"}
+                </button>
+                <p className="text-xs font-black text-secondary">{seq ? (isAr ? "قل الآن" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}<span className="hidden font-bold text-white/45 sm:inline">{isAr ? " (اضغط على السبحة أو زر المسافة)" : " (tap the beads or press Space)"}</span></p>
+                <p key={`${dhikr.id}-${seq ? count : 0}`} className="misbaha-fade mt-1 text-xl font-black leading-[1.7] text-white sm:text-2xl">{isAr ? dhikr.text : dhikr.en}</p>
                 {nextDhikr && (
                   <p className="mt-1 truncate text-xs font-bold text-white/55">{isAr ? `التالي: ${nextDhikr.text}` : `Next: ${nextDhikr.en}`}</p>
                 )}
@@ -414,7 +498,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 onPointerCancel={() => { ringTouch.current = null; }}
                 onClick={onRingClick}
                 onContextMenu={(e) => e.preventDefault()}
-                className={`misbaha-ring relative aspect-square w-full max-w-[340px] select-none rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary/60 ${done ? "misbaha-done" : ""}`}
+                className={`misbaha-ring relative aspect-square w-full max-w-[min(340px,72vw)] select-none sm:max-w-[340px] rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary/60 ${done ? "misbaha-done" : ""}`}
                 style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", WebkitTouchCallout: "none" }}
                 aria-label={isAr ? `اضغط بعد أن تقول: ${dhikr.text}. العدد ${count}` : `Tap after saying: ${dhikr.en}. Count ${count}`}
               >
@@ -453,7 +537,22 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 </span>
               </button>
 
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+              {/* Progress toward the target (the ring shows it too; the bar says how much is left) */}
+              {target > 0 && (
+                <div className="mt-5 w-full max-w-xs">
+                  <div className="h-2 overflow-hidden rounded-full bg-white/10" role="progressbar" aria-valuemin={0} aria-valuemax={target} aria-valuenow={showFull ? target : inRound}
+                    aria-label={isAr ? "التقدم نحو الهدف" : "Progress to the goal"}>
+                    <div className="h-full rounded-full bg-secondary transition-[width] duration-200" style={{ width: `${((showFull ? target : inRound) / target) * 100}%` }} />
+                  </div>
+                  <p className="mt-1.5 text-center text-xs font-bold text-white/65">
+                    {showFull
+                      ? (isAr ? "أتممت الهدف، تقبّل الله منك" : "Goal reached, may Allah accept it")
+                      : isAr ? `باقي ${fmt(target - inRound)} للوصول إلى ${fmt(target)}` : `${fmt(target - inRound)} left to ${fmt(target)}`}
+                  </p>
+                </div>
+              )}
+
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2" role="group" aria-label={isAr ? "الهدف" : "Target"}>
                 {TARGETS.map((n) => (
                   <button key={n} type="button" onClick={() => setTarget(n)} aria-pressed={target === n}
                     className={`rounded-full px-4 py-1.5 text-sm font-black transition ${target === n ? "bg-secondary text-slate-950" : "bg-white/10 text-white hover:bg-white/20"}`}>
@@ -462,7 +561,12 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 ))}
               </div>
               <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm font-bold">
-                <button type="button" onClick={reset} className="inline-flex items-center gap-1.5 rounded-full border border-white/20 px-4 py-1.5 text-white/90 transition hover:bg-white/10">
+                <button type="button" onClick={undo} disabled={undoCount === 0} title={isAr ? "تراجع عن آخر ضغطة (Ctrl+Z)" : "Undo the last tap (Ctrl+Z)"}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/20 px-4 py-1.5 text-white/90 transition hover:bg-white/10 disabled:opacity-35">
+                  <Undo2 className="h-4 w-4" /> {isAr ? "تراجع" : "Undo"}
+                </button>
+                <button type="button" onClick={reset} disabled={count === 0} aria-label={isAr ? "تصفير عدّاد هذا الذكر (يمكنك التراجع)" : "Reset this counter (can be undone)"}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/20 px-4 py-1.5 text-white/90 transition hover:bg-white/10 disabled:opacity-35">
                   <RotateCcw className="h-4 w-4" /> {isAr ? "تصفير" : "Reset"}
                 </button>
                 <button type="button" onClick={() => setSt((s) => ({ ...s, vibrate: !s.vibrate }))} aria-pressed={st.vibrate}
@@ -470,15 +574,25 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                   {st.vibrate ? <Vibrate className="h-4 w-4" /> : <VibrateOff className="h-4 w-4" />} {isAr ? (st.vibrate ? "الاهتزاز مفعّل" : "الاهتزاز متوقف") : st.vibrate ? "Vibration on" : "Vibration off"}
                 </button>
               </div>
+              <button type="button" onClick={() => setFocus(true)}
+                className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 text-sm font-black text-white transition hover:bg-white/20">
+                <Maximize2 className="h-4 w-4 text-secondary" /> {isAr ? "وضع التركيز: الشاشة كلها سبحة" : "Focus mode: the whole screen counts"}
+              </button>
               <div className="mt-4 flex flex-col items-center gap-2">
                 <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm font-bold text-white/75">
                   <span>{isAr ? `ذكرك اليوم: ${fmt(st.today)}` : `Today's dhikr: ${fmt(st.today)}`}</span>
-                  {streak >= 2 && (
+                  {streak >= 1 && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-black text-secondary">
-                      <Flame className="h-3.5 w-3.5" /> {isAr ? `${fmt(streak)} أيام متتالية` : `${fmt(streak)}-day streak`}
+                      <Flame className="h-3.5 w-3.5" /> {isAr ? (streak === 1 ? "اليوم الأول، ارجع بكرة" : streak === 2 ? "يومان متتاليان" : `${fmt(streak)} ${streak <= 10 ? "أيام" : "يومًا"} متتالية`) : `${fmt(streak)}-day streak`}
+                    </span>
+                  )}
+                  {hist.total > st.today && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-black text-white/85">
+                      <InfinityIcon className="h-3.5 w-3.5 text-secondary" /> {isAr ? `${fmt(hist.total)} ذكر منذ بدأت` : `${fmt(hist.total)} in total`}
                     </span>
                   )}
                 </p>
+                <WeekStrip isAr={isAr} days={lastWeek(hist)} fmt={fmt} />
                 {st.today > 0 && (
                   <button type="button" onClick={() => setSummaryOpen(true)}
                     className="inline-flex items-center gap-2 rounded-full bg-secondary px-5 py-2 text-sm font-black text-slate-950 shadow-cta transition hover:-translate-y-0.5">
@@ -486,10 +600,14 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                   </button>
                 )}
               </div>
+              {roomSlug && room && roomState === "ok" && (
+                <RoomShareActions isAr={isAr} room={room} waHref={waHref} copied={copied} onCopy={copyLink}
+                  onNativeShare={canNative ? nativeShare : null} onStory={() => setStoryOpen(true)} />
+              )}
             </div>
 
             {/* ── Choice of dhikr ── */}
-            <div className="rounded-3xl bg-card p-5 text-foreground shadow-card sm:p-7">
+            <div id="dhikr-choice" className="scroll-mt-24 rounded-3xl bg-card p-5 text-foreground shadow-card sm:p-7">
               <div className="mb-4 grid grid-cols-2 gap-1 rounded-2xl bg-muted/60 p-1" role="radiogroup" aria-label={isAr ? "طريقة الذكر" : "Dhikr mode"}>
                 {MODES.map((m) => {
                   const on = st.mode === m.id;
@@ -503,22 +621,10 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                 })}
               </div>
 
-              {isMixed ? (
-                <ol className="grid max-h-48 grid-cols-2 gap-1.5 overflow-y-auto pe-1 text-xs font-bold sm:grid-cols-3" aria-label={isAr ? "ترتيب الأذكار" : "Dhikr order"}>
-                  {MIXED.map((d, i) => {
-                    const on = i === count % MIXED.length;
-                    return (
-                      <li key={`${d.id}-${i}`} className={`truncate rounded-lg px-2 py-1.5 text-center transition-colors ${on ? "bg-secondary/25 text-primary" : "bg-muted/40 text-muted-foreground"}`} title={d.text}>
-                        {(i + 1).toLocaleString(isAr ? "ar-EG" : "en-US")}. {isAr ? d.text : d.en}
-                      </li>
-                    );
-                  })}
-                </ol>
-              ) : (
-              <>
-              <div role="tablist" aria-label={isAr ? "نوع الذكر" : "Type of dhikr"} className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {!isMixed && (
+              <div role="tablist" aria-label={isAr ? "نوع الذكر" : "Type of dhikr"} className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {GROUPS.map((g) => {
-                  const on = !isCustom && g.id === group.id;
+                  const on = !isCustom && g.id === group?.id;
                   return (
                     <button key={g.id} type="button" role="tab" aria-selected={on} onClick={() => choose(g.items[0].id)}
                       className={`min-h-11 rounded-2xl px-3 py-2.5 text-sm font-black transition ${on ? "bg-primary text-primary-foreground shadow-soft" : "bg-muted/60 text-primary hover:bg-secondary/20"}`}>
@@ -527,25 +633,36 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                   );
                 })}
               </div>
+              )}
 
-
-              {group.items.length > 1 && !isCustom && (
-                <div className="mt-4 space-y-2">
-                  {group.items.map((d) => {
-                    const on = d.id === dhikr.id;
+              {seq && seq.length > 1 && (
+                <>
+                <ol className="grid grid-cols-1 gap-1.5 text-xs font-bold sm:grid-cols-2" aria-label={isAr ? "ترتيب الأذكار" : "Dhikr order"}>
+                  {seq.map((d, i) => {
+                    const on = i === seqAt;
+                    // Collapsed: only now and the next two, so the list does not overwhelm.
+                    const ahead = (i - seqAt + seq.length) % seq.length;
+                    if (!showAllMixed && ahead > 2) return null;
                     return (
-                      <button key={d.id} type="button" onClick={() => choose(d.id)} aria-pressed={on}
-                        className={`flex w-full items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-start transition ${on ? "border-secondary bg-secondary/10" : "border-border hover:border-secondary/50"}`}>
-                        <span className="flex min-w-0 items-center gap-2.5">
-                          <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 ${on ? "border-secondary bg-secondary text-slate-950" : "border-border"}`} aria-hidden>{on && <Check className="h-3 w-3" strokeWidth={3.5} />}</span>
-                          <span className="text-sm font-black leading-relaxed text-primary">{isAr ? d.text : d.en}</span>
-                        </span>
-                        <span className="shrink-0 rounded-full bg-muted px-2.5 py-0.5 font-mono text-xs font-black text-muted-foreground" title={isAr ? "عددك اليوم" : "Today"}>{fmt(st.counts[d.id] ?? 0)}</span>
-                      </button>
+                      <li key={`${d.id}-${i}`} className={`truncate rounded-lg px-2 py-1.5 text-center transition-colors ${on ? "bg-secondary/25 text-primary" : "bg-muted/40 text-muted-foreground"}`} title={d.text}>
+                        {!showAllMixed && <span className="me-1 text-[10px] font-black text-secondary">{ahead === 0 ? (isAr ? "الآن" : "Now") : isAr ? "ثم" : "Then"}</span>}
+                        {showAllMixed && `${(i + 1).toLocaleString(isAr ? "ar-EG" : "en-US")}. `}{isAr ? d.text : d.en}
+                      </li>
                     );
                   })}
-                </div>
+                </ol>
+                {seq.length > 3 && (
+                  <button type="button" onClick={() => setShowAllMixed((v) => !v)} aria-expanded={showAllMixed}
+                    className="mt-2 inline-flex items-center gap-1 text-xs font-black text-primary hover:text-secondary">
+                    <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showAllMixed ? "rotate-180" : ""}`} />
+                    {showAllMixed ? (isAr ? "اعرض الحالي فقط" : "Show fewer") : isAr ? `اعرض الترتيب كله (${fmt(seq.length)} أذكار)` : `Show the full order (${seq.length})`}
+                  </button>
+                )}
+                </>
               )}
+
+              {!isMixed && (
+              <>
               <div className="mt-5 rounded-2xl border border-dashed border-border p-4">
                 <p className="mb-1 text-sm font-black text-primary">{isAr ? "ذكرك أو دعاؤك الخاص" : "Your own dhikr or dua"}</p>
                 <p className="mb-3 text-xs font-bold leading-relaxed text-muted-foreground">{isAr ? "اكتبه مرة، ويفضل محفوظ على جهازك تختاره في أي وقت." : "Write it once; it stays on this device to pick any time."}</p>
@@ -572,7 +689,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
               </>
               )}
 
-              <div key={`${dhikr.id}-${isMixed ? count : 0}`} className="misbaha-fade mt-6 rounded-2xl bg-muted/40 p-5 text-center">
+              <div key={`${dhikr.id}-${seq ? count : 0}`} className="misbaha-fade mt-6 rounded-2xl bg-muted/40 p-5 text-center">
                 <p className="text-2xl font-black leading-[1.8] text-primary md:text-3xl">{dhikr.text}</p>
                 {!isAr && <p className="mt-2 text-sm text-muted-foreground">{dhikr.en}</p>}
               </div>
@@ -590,9 +707,9 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
               )}
 
               <div className="keep-flow mt-6 grid gap-2 border-t sm:flex sm:flex-wrap border-border pt-5">
-                <button type="button" onClick={share} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
+                <button type="button" onClick={openShare} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
                   {copied ? <Check className="h-4 w-4 text-secondary" /> : <Share2 className="h-4 w-4" />}
-                  {copied ? (isAr ? "تم نسخ الرابط" : "Link copied") : isAr ? "شارك المسبحة، والدال على الخير كفاعله" : "Share the tasbih"}
+                  {copied ? (isAr ? "تم نسخ الرابط" : "Link copied") : isAr ? "شارك السبحة، والدال على الخير كفاعله" : "Share the tasbih"}
                 </button>
                 {!isCustom && (
                   <button type="button" onClick={shareDhikr} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
@@ -615,9 +732,27 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
         </div>
       )}
       {!roomSlug && <MemorialCreate isAr={isAr} onCreated={(slug) => navigate(`/misbaha/${slug}?new=1`)} />}
-      {/* Real open cases only (nothing when there are none); below the seam strip so it stays on the hero edge. */}
-      <MisbahaGiveCarousel isAr={isAr} roomSlug={roomSlug} roomName={roomSlug && room ? room.name : undefined} kind={room?.kind ?? "deceased"} />
-      {storyOpen && room && <StoryDialog isAr={isAr} room={room} pageUrl={pageUrl} onClose={() => setStoryOpen(false)} />}
+      {storyOpen && (room || !roomSlug) && <StoryDialog isAr={isAr} room={room} personal={{ today: st.today }} pageUrl={pageUrl} onClose={() => setStoryOpen(false)} />}
+
+      {isNew && room && roomState === "ok" && <NewRoomHint isAr={isAr} />}
+
+      {focus && (
+        <FocusMode
+          isAr={isAr}
+          text={isAr ? dhikr.text : dhikr.en}
+          next={nextDhikr ? (isAr ? nextDhikr.text : nextDhikr.en) : null}
+          shown={fmt(target ? inRound || (showFull ? target : 0) : count)}
+          target={target ? (isAr ? `من ${fmt(target)}` : `of ${fmt(target)}`) : isAr ? "عدّ مفتوح" : "open count"}
+          rounds={rounds > 0 ? (isAr ? `${fmt(rounds)} دورة` : `${fmt(rounds)} rounds`) : null}
+          progress={target ? (showFull ? 1 : inRound / target) : 0}
+          done={done}
+          today={isAr ? `ذكرك اليوم: ${fmt(st.today)}` : `Today: ${fmt(st.today)}`}
+          onTap={tap}
+          onUndo={undo}
+          canUndo={undoCount > 0}
+          onClose={() => setFocus(false)}
+        />
+      )}
 
       {summaryOpen && (
         <SummaryDialog
@@ -654,6 +789,74 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
     </PageLayout>
   );
 };
+
+/**
+ * Right after creating a shared sebha: a note at the bottom of the screen that the share link is
+ * under the beads. It stays until the visitor scrolls down to the share buttons; if they never do,
+ * it stays at least 20 seconds. Tapping it scrolls there.
+ */
+function NewRoomHint({ isAr }: { isAr: boolean }) {
+  const [shown, setShown] = useState(true);
+  useEffect(() => {
+    const MIN_MS = 20000;
+    const target = () => document.getElementById("room-share");
+    let io: IntersectionObserver | null = null;
+    const watch = () => {
+      const el = target();
+      if (!el || typeof IntersectionObserver === "undefined") return;
+      io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) setShown(false);
+      }, { threshold: 0.5 });
+      io.observe(el);
+    };
+    const t = window.setTimeout(watch, 300); // the buttons render with the room
+    const done = window.setTimeout(() => setShown(false), MIN_MS);
+    return () => { window.clearTimeout(t); window.clearTimeout(done); io?.disconnect(); };
+  }, []);
+  if (!shown) return null;
+  return (
+    <div className="pointer-events-none fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[120] flex justify-center px-4">
+      <button type="button" onClick={() => document.getElementById("room-share")?.scrollIntoView({ behavior: "smooth", block: "center" })}
+        className="misbaha-fade pointer-events-auto flex max-w-md items-center gap-3 rounded-2xl bg-secondary px-4 py-3 text-start text-sm font-black text-slate-950 shadow-cta" role="status">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-950/10"><ArrowDown className="h-5 w-5 animate-bounce motion-reduce:animate-none" /></span>
+        <span>
+          {isAr ? "تم إنشاء السبحة. رابط المشاركة تحت السبحة، أرسله لأهلك وأصحابك." : "Created! The share link is under the beads — send it to family and friends."}
+          <span className="block text-xs font-bold text-slate-950/70">{isAr ? "اضغط هنا للنزول إليه" : "Tap to go there"}</span>
+        </span>
+      </button>
+    </div>
+  );
+}
+
+/** The last 7 days as small bars (this device), so coming back every day shows. */
+function WeekStrip({ isAr, days, fmt }: { isAr: boolean; days: { day: string; date: Date; count: number }[]; fmt: (n: number) => string }) {
+  if (!days.some((d) => d.count > 0)) return null;
+  const max = Math.max(...days.map((d) => d.count), 1);
+  const name = (d: Date) => {
+    try { return new Intl.DateTimeFormat(isAr ? "ar-EG" : "en-GB", { weekday: "long" }).format(d); } catch { return ""; }
+  };
+  // Under the bars: one letter per day (full names don't fit at 360px), «اليوم» for today.
+  const short = (d: Date, i: number) => {
+    if (i === days.length - 1) return isAr ? "اليوم" : "Today";
+    try { return new Intl.DateTimeFormat(isAr ? "ar-EG" : "en-GB", { weekday: "narrow" }).format(d); } catch { return ""; }
+  };
+  const label = days.map((d) => `${name(d.date)}: ${fmt(d.count)}`).join("، ");
+  return (
+    <div className="mt-1 w-full max-w-xs" role="img" aria-label={`${isAr ? "ذكرك في آخر ٧ أيام" : "Your dhikr in the last 7 days"} — ${label}`}>
+      <div className="flex h-12 items-end justify-between gap-1.5">
+        {days.map((d, i) => (
+          <div key={d.day} className="flex h-full flex-1 items-end" title={`${name(d.date)}: ${fmt(d.count)}`}>
+            <div className={`w-full rounded-t-md ${i === days.length - 1 ? "bg-secondary" : d.count ? "bg-secondary/55" : "bg-white/10"}`}
+              style={{ height: `${d.count ? Math.max(12, (d.count / max) * 100) : 8}%` }} />
+          </div>
+        ))}
+      </div>
+      <div className="mt-1 flex justify-between gap-1.5 text-[10px] font-bold text-white/50">
+        {days.map((d, i) => <span key={d.day} className={`flex-1 text-center ${i === days.length - 1 ? "text-secondary" : ""}`}>{short(d.date, i)}</span>)}
+      </div>
+    </div>
+  );
+}
 
 /** «حصيلتك»: an image of today's dhikr by kind, ready to save or share. */
 function SummaryDialog({ isAr, tally, total, roomTitle: title, pageUrl, onClose }: {

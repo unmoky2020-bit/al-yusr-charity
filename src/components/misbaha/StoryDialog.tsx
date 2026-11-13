@@ -16,21 +16,33 @@ const XIcon = ({ className = "" }: { className?: string }) => (
  * «شارك السبحة»: a story-size image (WhatsApp status, Instagram / Facebook stories) with a QR code,
  * plus every way to send the link. Above the site header (z-[150]) and sized to any screen.
  */
-export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; room: MisbahaRoom; pageUrl: string; onClose: () => void }) {
+export function StoryDialog({ isAr, room, personal, pageUrl, onClose }: {
+  isAr: boolean;
+  /** a shared sebha; without one the card is for the personal sebha (/misbaha) */
+  room?: MisbahaRoom | null;
+  /** the visitor's own count today, shown on the personal card */
+  personal?: { today: number };
+  pageUrl: string;
+  onClose: () => void;
+}) {
   const [url, setUrl] = useState<string | null>(null);
   const [blob, setBlob] = useState<Blob | null>(null);
   const [failed, setFailed] = useState(false);
   const [copied, setCopied] = useState(false);
   const locale = isAr ? "ar-EG" : "en-US";
-  const title = roomTitle(room.kind, room.gender, room.name, isAr);
+  const title = room ? roomTitle(room.kind, room.gender, room.name, isAr) : isAr ? "السبحة الإلكترونية" : "Digital tasbih";
+  const slug = room?.slug ?? "personal";
   const link = (source: string) => `${pageUrl}?utm_source=${source}&utm_medium=share&utm_campaign=misbaha`;
-  const text = roomShareText(room.kind, room.gender, room.name, isAr);
+  const text = room
+    ? roomShareText(room.kind, room.gender, room.name, isAr)
+    : isAr ? "سبّح معي: صلِّ على النبي ﷺ، وسبّح، واستغفر — سبحة إلكترونية من مؤسسة اليسر" : "Do dhikr with me: a digital tasbih from Al-Yusr";
 
   useEffect(() => {
     let alive = true;
     let objectUrl: string | null = null;
-    const meta = kindMeta(room.kind);
-    drawMisbahaStory({
+    const meta = kindMeta(room?.kind);
+    const today = personal?.today ?? 0;
+    drawMisbahaStory(room ? {
       kicker: isAr ? `سبحة مشتركة · ${meta.ar}` : `Shared tasbih · ${meta.en}`,
       title,
       tagline: roomTagline(room.kind, room.gender, isAr),
@@ -39,6 +51,20 @@ export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; r
       zeroText: isAr ? "كن أول من يسبّح" : "Be the first",
       progress: room.target_total ? room.total_count / room.target_total : 0,
       goalLine: room.target_total ? (isAr ? `الهدف ${room.target_total.toLocaleString(locale)} ذكر — شاركنا` : `Goal: ${room.target_total.toLocaleString(locale)} — join us`) : undefined,
+      cta: isAr ? "امسح الرمز وسبّح معنا" : "Scan and join in",
+      url: link("story"),
+      rtl: isAr,
+      locale,
+      emblem: room.kind === "sick" ? "healing" : undefined,
+    } : {
+      kicker: isAr ? "مؤسسة اليسر الخيرية" : "Al-Yusr Charity",
+      title,
+      tagline: isAr ? "صلِّ على النبي ﷺ، وسبّح، واستغفر — وردك اليومي في جيبك" : "Salawat, tasbih and istighfar — your daily dhikr in your pocket",
+      total: today,
+      totalLabel: isAr ? "ذكرتُ الله اليوم" : "my dhikr today",
+      zeroText: isAr ? "سبّح معي" : "Join me",
+      progress: Math.min(1, today / 100),
+      goalLine: isAr ? "والدال على الخير كفاعله" : "Whoever guides to good shares its reward",
       cta: isAr ? "امسح الرمز وسبّح معنا" : "Scan and join in",
       url: link("story"),
       rtl: isAr,
@@ -70,8 +96,8 @@ export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; r
     };
   }, [onClose]);
 
-  const sent = (channel: string) => track("misbaha_share", { payload: { channel, room: room.slug }, fbCustom: false });
-  const fileName = `misbaha-${room.slug}.png`;
+  const sent = (channel: string) => track("misbaha_share", { payload: { channel, room: slug }, fbCustom: false });
+  const fileName = `sebha-${slug}.png`;
   const file = blob ? new File([blob], fileName, { type: "image/png" }) : null;
   const canShareFile = !!file && typeof navigator !== "undefined" && !!navigator.canShare && navigator.canShare({ files: [file] });
   const shareImage = async () => {
@@ -126,7 +152,9 @@ export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; r
         <div className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-6">
           <h2 className="pe-10 text-lg font-black text-primary">{isAr ? "شارك السبحة" : "Share the tasbih"}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {isAr ? "كل من يدخل من رابطك ويسبّح يُضاف ذكره إلى العدّاد. والدال على الخير كفاعله." : "Everyone who joins from your link adds to the count."}
+            {room
+              ? (isAr ? "كل من يدخل من رابطك ويسبّح يُضاف ذكره إلى العدّاد. والدال على الخير كفاعله." : "Everyone who joins from your link adds to the count.")
+              : (isAr ? "شارك السبحة مع أحبابك، ولك أجر كل من يذكر الله بها. والدال على الخير كفاعله." : "Share it with your loved ones and share the reward of their dhikr.")}
           </p>
 
           <p className="mt-5 text-xs font-black text-muted-foreground">{isAr ? "صورة للستوري والحالة" : "Story & status image"}</p>

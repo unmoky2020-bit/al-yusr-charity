@@ -6,13 +6,9 @@ import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import type { MisbahaRoom } from "@/data/api/misbahaRoomsApi";
 import { roomDuas, roomShareText } from "@/data/memorialDuas";
 import { track } from "@/lib/track";
+import { QuranReader } from "@/components/misbaha/QuranReader";
+import { READER_SURAHS } from "@/data/quranSurahs";
 
-const SURAHS = [
-  { n: 1, ar: "الفاتحة", en: "Al-Fatiha" },
-  { n: 36, ar: "يس", en: "Ya-Sin" },
-  { n: 67, ar: "الملك", en: "Al-Mulk" },
-  { n: 112, ar: "الإخلاص", en: "Al-Ikhlas" },
-];
 
 /** Below the counter on a shared misbaha: duas to say, Quran, ready share message, ongoing charity. */
 export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: MisbahaRoom; pageUrl: string }) {
@@ -20,6 +16,8 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
   const hasCases = useHasCases();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [reps, setReps] = useState<Record<string, number>>({});
+  /** the surah open in the reader (on this page, Mushaf style) */
+  const [reading, setReading] = useState<number | null>(null);
   const message = `${roomShareText(room.kind, room.gender, room.name, isAr)}\n${pageUrl}`;
   const copy = async (id: string, text: string) => {
     try {
@@ -37,6 +35,7 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
 
   return (
     <section className="bg-background py-12 md:py-16" aria-label={isAr ? "أدعية ومشاركة" : "Duas and sharing"}>
+      {reading !== null && <QuranReader isAr={isAr} initial={reading} onClose={() => setReading(null)} />}
       <div className="container mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 lg:grid-cols-[1.25fr_1fr] [&>*]:min-w-0">
         <div>
           <h2 className="text-2xl font-black text-primary md:text-3xl">
@@ -69,11 +68,11 @@ export function RoomExtras({ isAr, room, pageUrl }: { isAr: boolean; room: Misba
             <div className="mt-6 rounded-3xl bg-muted/50 p-5">
               <p className="flex items-center gap-2 text-sm font-black text-primary"><BookOpen className="h-4 w-4 text-secondary" /> {isAr ? `اقرأ ما تيسّر وادعُ ${him}` : "Read some Quran and pray for them"}</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {SURAHS.map((s) => (
-                  <a key={s.n} href={`https://quran.com/${s.n}`} target="_blank" rel="noopener noreferrer"
+                {READER_SURAHS.map((s) => (
+                  <button key={s.n} type="button" onClick={() => { setReading(s.n); track("misbaha_quran_open", { payload: { surah: s.n, room: room.slug }, fbCustom: false }); }}
                     className="rounded-full border border-border bg-card px-4 py-2 text-sm font-black text-primary transition hover:border-secondary">
                     {isAr ? `سورة ${s.ar}` : `Surah ${s.en}`}
-                  </a>
+                  </button>
                 ))}
               </div>
             </div>

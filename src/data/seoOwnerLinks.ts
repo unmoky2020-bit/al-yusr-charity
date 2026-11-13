@@ -19,7 +19,7 @@ export const OWNER_PAGES: Record<string, OwnerPage> = {
   "/programs/bride": { path: "/programs/bride", ar: "تجهيز عرائس يتيمات", en: "Help a bride's trousseau" },
   "/qurbani": { path: "/qurbani", ar: "صك الأضحية أونلاين", en: "Qurbani share online" },
   "/cases": { path: "/cases", ar: "حالات إنسانية تحتاج مساعدة", en: "Cases that need help" },
-  "/misbaha": { path: "/misbaha", ar: "مسبحة إلكترونية جماعية", en: "Shared online tasbih" },
+  "/misbaha": { path: "/misbaha", ar: "سبحة إلكترونية جماعية", en: "Shared online tasbih" },
   "/volunteer": { path: "/volunteer", ar: "فرص تطوع في المنصورة", en: "Volunteer in Mansoura" },
   "/trust": { path: "/trust", ar: "هل مؤسسة اليسر موثوقة؟", en: "Is Al-Yusr trustworthy?" },
   "/donate-from-abroad": { path: "/donate-from-abroad", ar: "التبرع لمصر من الخارج", en: "Give to Egypt from abroad" },

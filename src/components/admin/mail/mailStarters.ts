@@ -6,7 +6,7 @@ export const EMAIL_HEROES: { url: string; label: string }[] = [
   { url: "/email/hero-water.jpg", label: "سقيا الماء" },
   { url: "/email/hero-orphans.jpg", label: "الأيتام" },
   { url: "/email/hero-sprout.jpg", label: "صدقة جارية" },
-  { url: "/email/hero-misbaha.jpg", label: "المسبحة" },
+  { url: "/email/hero-misbaha.jpg", label: "السبحة" },
   { url: "/email/hero-volunteers.jpg", label: "المتطوعين" },
   { url: "/email/hero-farm.jpg", label: "المزرعة" },
 ];
