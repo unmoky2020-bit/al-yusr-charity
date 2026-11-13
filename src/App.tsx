@@ -110,6 +110,8 @@ const AdLanding = lazy(() => import("./pages/AdLanding.tsx"));
 const HeroBreakpointTest = lazy(() => import("./pages/HeroBreakpointTest.tsx"));
 const DonationStatus = lazy(() => import("./pages/DonationStatus.tsx"));
 const NewsletterAction = lazy(() => import("./pages/NewsletterAction.tsx"));
+const MisbahaMailAction = lazy(() => import("./pages/MisbahaMailAction.tsx"));
+const AdminMailCenter = lazy(() => import("./pages/admin/AdminMailCenter.tsx"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon.tsx"));
 const Campaigns = lazy(() => import("./pages/site/Campaigns.tsx"));
 const CampaignDetail = lazy(() => import("./pages/site/CampaignDetail.tsx"));
@@ -375,6 +377,8 @@ const App = () => (
                   <Route path="/ten-days" element={<AshrLanding />} />
                   <Route path="/ashr" element={<Navigate to="/ten-days" replace />} />
                   <Route path="/misbaha" element={<Misbaha />} />
+                  <Route path="/misbaha/confirm" element={<MisbahaMailAction action="confirm" />} />
+                  <Route path="/misbaha/unsubscribe" element={<MisbahaMailAction action="unsubscribe" />} />
                   <Route path="/misbaha/:slug" element={<Misbaha />} />
                   <Route path="/tasbih" element={<Navigate to="/misbaha" replace />} />
                   <Route path="/freelancers" element={<ArbounLanding />} />
@@ -457,6 +461,7 @@ const App = () => (
                   <Route path="/admin/campaign-results" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignResults /></RequireAuth>} />
                   <Route path="/admin/site-stats" element={<RequireAuth roles={["admin", "editor"]}><AdminSiteStats /></RequireAuth>} />
                   <Route path="/admin/site-blocks" element={<RequireAuth roles={["admin", "editor"]}><AdminSiteBlocks /></RequireAuth>} />
+                  <Route path="/admin/mail" element={<RequireAuth roles={["admin", "editor"]}><AdminMailCenter /></RequireAuth>} />
                   <Route path="/admin/seo-map" element={<RequireAuth roles={["admin", "editor"]}><AdminSeoMap /></RequireAuth>} />
                   <Route path="/admin/gallery" element={<RequireAuth roles={["admin"]}><AdminGallery /></RequireAuth>} />
                   <Route path="/admin/page-galleries" element={<RequireAuth roles={["admin", "editor"]}><AdminPageGalleries /></RequireAuth>} />

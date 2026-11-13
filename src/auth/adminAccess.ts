@@ -40,6 +40,7 @@ export const PAGE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = {
   "/admin/misbaha": ["content.view"],
   "/admin/inbox": ["contact_messages.view"],
   "/admin/newsletter": ["newsletter.view"],
+  "/admin/mail": ["newsletter.view"],
   "/admin/review": ["content_change_requests.view"],
   "/admin/volunteers": ["volunteers.view"],
   "/admin/donors": ["donors.view"],

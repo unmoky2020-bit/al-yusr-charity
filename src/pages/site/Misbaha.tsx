@@ -6,6 +6,7 @@ import { misbahaRoomsApi, type MisbahaRoom } from "@/data/api/misbahaRoomsApi";
 import { roomShareText, roomTitle } from "@/data/memorialDuas";
 import { RoomHeader } from "@/components/misbaha/RoomHeader";
 import { RoomExtras } from "@/components/misbaha/RoomExtras";
+import { MisbahaFollow } from "@/components/misbaha/MisbahaFollow";
 import { MisbahaGiveCarousel } from "@/components/misbaha/MisbahaGiveCarousel";
 import { StoryDialog } from "@/components/misbaha/StoryDialog";
 import { MemorialCreate } from "@/components/misbaha/MemorialCreate";
@@ -574,6 +575,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
       </section>
 
       {roomSlug && room && roomState === "ok" && <RoomExtras isAr={isAr} room={room} pageUrl={pageUrl} />}
+      {roomSlug && room && roomState === "ok" && <MisbahaFollow slug={roomSlug} name={room.name} hasTarget={Boolean(room.target_total)} isAr={isAr} />}
       {/* Cases in need (or ongoing-charity programs while there are none), for the visitors of this misbaha. */}
       <MisbahaGiveCarousel isAr={isAr} roomSlug={roomSlug} roomName={roomSlug && room ? room.name : undefined} kind={room?.kind ?? "deceased"} />
       {/* The all-Muslims room rides the seam: half on the green hero, half on the light section below. */}
