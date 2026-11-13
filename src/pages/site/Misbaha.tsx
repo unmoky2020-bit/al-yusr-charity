@@ -324,7 +324,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
   const pageUrl = roomSlug ? `https://elyusr.org/misbaha/${roomSlug}` : "https://elyusr.org/misbaha";
   const shareText = room
     ? roomShareText(room.kind, room.gender, room.name, isAr)
-    : (isAr ? "مسبحة إلكترونية من مؤسسة اليسر: صلّ على النبي ﷺ، وسبّح، واستغفر" : "A digital tasbih from Al-Yusr");
+    : (isAr ? "سبحة إلكترونية من مؤسسة اليسر: صلّ على النبي ﷺ، وسبّح، واستغفر" : "A digital tasbih from Al-Yusr");
   const waHref = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${pageUrl}?utm_source=whatsapp&utm_medium=share&utm_campaign=misbaha`)}`;
   const copyLink = async () => {
     try {
@@ -337,7 +337,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
   const canNative = typeof navigator !== "undefined" && typeof navigator.share === "function";
   const nativeShare = async () => {
     try {
-      await navigator.share({ title: room ? roomTitle(room.kind, room.gender, room.name, isAr) : isAr ? "المسبحة الإلكترونية" : "Digital tasbih", text: shareText, url: pageUrl });
+      await navigator.share({ title: room ? roomTitle(room.kind, room.gender, room.name, isAr) : isAr ? "السبحة الإلكترونية" : "Digital tasbih", text: shareText, url: pageUrl });
       track("misbaha_share", { payload: { channel: "native", room: roomSlug ?? "personal" }, fbCustom: false });
     } catch { /* dismissed */ }
   };
@@ -355,23 +355,23 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
           title={roomSlug === UMMAH_ROOM_SLUG ? (isAr ? "سبحة جميع المسلمين والمسلمات | سبحة جماعية أونلاين — مؤسسة اليسر" : "The misbaha of all Muslims | shared online tasbih — Al-Yusr") : room ? `${isAr ? "سبحة" : "Tasbih"} ${roomTitle(room.kind, room.gender, room.name, isAr)} | ${isAr ? "مؤسسة اليسر" : "Al-Yusr"}` : (isAr ? "سبحة مشتركة | مؤسسة اليسر" : "Shared tasbih | Al-Yusr")}
           description={isAr ? "شارك بالتسبيح والاستغفار والصلاة على النبي ﷺ، ويُضاف كل ذكر إلى عدّاد واحد." : "Join in with tasbih, istighfar and salawat; every dhikr adds to one shared count."}
           path={`/misbaha/${roomSlug}`}
-          image={`https://elyusr.org/og/misbaha-${room?.kind ?? "deceased"}.jpg?v=2026.11`}
+          image={`https://elyusr.org/og/misbaha-${room?.kind ?? "deceased"}.jpg?v=2026.11b`}
         />
       ) : (
       <SEOHelmet
-        title={isAr ? "المسبحة الإلكترونية | صلاة على النبي وتسبيح واستغفار — مؤسسة اليسر" : "Digital tasbih | Salawat, tasbih & istighfar — Al-Yusr"}
-        description={isAr ? "مسبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وهدف يومي وفضل كل ذكر من الأحاديث الصحيحة. وأنشئ سبحة مشتركة لروح من تحب وشاركها." : "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter, daily goal and the virtue of each dhikr. Create a shared tasbih for a loved one who passed away."}
+        title={isAr ? "السبحة الإلكترونية | صلاة على النبي وتسبيح واستغفار — مؤسسة اليسر" : "Digital tasbih | Salawat, tasbih & istighfar — Al-Yusr"}
+        description={isAr ? "سبحة إلكترونية سهلة: صلِّ على النبي ﷺ، وسبّح، واستغفر، واذكر الله، مع عدّاد وهدف يومي وفضل كل ذكر من الأحاديث الصحيحة. وأنشئ سبحة مشتركة لروح من تحب وشاركها." : "An easy digital tasbih: salawat, tasbih, istighfar and dhikr with a counter, daily goal and the virtue of each dhikr. Create a shared tasbih for a loved one who passed away."}
         path="/misbaha"
-        image="https://elyusr.org/og/misbaha.jpg?v=2026.11"
+        image="https://elyusr.org/og/misbaha.jpg?v=2026.11b"
       />
       )}
-      <BreadcrumbSchema items={[{ name: isAr ? "الرئيسية" : "Home", url: "https://elyusr.org/" }, { name: isAr ? "المسبحة الإلكترونية" : "Digital tasbih", url: "https://elyusr.org/misbaha" }]} />
+      <BreadcrumbSchema items={[{ name: isAr ? "الرئيسية" : "Home", url: "https://elyusr.org/" }, { name: isAr ? "السبحة الإلكترونية" : "Digital tasbih", url: "https://elyusr.org/misbaha" }]} />
 
       <section className="pattern-hero-luxe relative overflow-hidden text-primary-foreground">
         <div className="pointer-events-none absolute inset-0 leaf-bg opacity-20" />
         <div className="container relative mx-auto max-w-6xl px-4 pb-14 pt-10 md:pb-20 md:pt-14">
           <div className="flex justify-center text-primary-foreground/80">
-            <Breadcrumbs items={[{ name: isAr ? "الرئيسية" : "Home", href: "/" }, { name: isAr ? "المسبحة الإلكترونية" : "Digital tasbih" }]} />
+            <Breadcrumbs items={[{ name: isAr ? "الرئيسية" : "Home", href: "/" }, { name: isAr ? "السبحة الإلكترونية" : "Digital tasbih" }]} />
           </div>
           <div className="mx-auto mt-6 max-w-2xl text-center">
             {roomSlug ? (
@@ -389,9 +389,9 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                     </span>
                   )}
                 </div>
-                <h1 className="text-3xl font-black sm:text-4xl md:text-5xl">{isAr ? "المسبحة الإلكترونية" : "Digital tasbih"}</h1>
+                <h1 className="text-3xl font-black sm:text-4xl md:text-5xl">{isAr ? "السبحة الإلكترونية" : "Digital tasbih"}</h1>
                 <p className="mt-3 text-base text-primary-foreground/85 md:text-lg">
-                  {isAr ? "قل الذكر واضغط على المسبحة. يتغيّر الذكر مع كل ضغطة لتجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، ويمكنك أن تختار ذكرًا واحدًا إن أردت. يُحفظ عدّادك على جهازك طوال اليوم، ويبدأ من جديد مع كل يوم." : "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count stays on this device for the day and starts fresh each new day."}
+                  {isAr ? "قل الذكر واضغط على السبحة. يتغيّر الذكر مع كل ضغطة لتجمع بين الصلاة على النبي ﷺ والتسبيح والاستغفار، ويمكنك أن تختار ذكرًا واحدًا إن أردت. يُحفظ عدّادك على جهازك طوال اليوم، ويبدأ من جديد مع كل يوم." : "Say the dhikr and tap the beads. It changes with every tap so you combine salawat, tasbih and istighfar; you can also pick a single dhikr. Your count stays on this device for the day and starts fresh each new day."}
                 </p>
               </>
             )}
@@ -401,7 +401,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
             {/* ── Counter ── */}
             <div className="flex min-w-0 flex-col items-center">
               <div className="mb-5 flex min-h-[8.75rem] w-full min-w-0 max-w-md flex-col justify-center text-center sm:min-h-[6.5rem]" aria-live="polite">
-                <p className="text-xs font-black text-secondary">{isMixed ? (isAr ? "قل الآن" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}<span className="hidden font-bold text-white/45 sm:inline">{isAr ? " (اضغط على المسبحة أو زر المسافة)" : " (tap the beads or press Space)"}</span></p>
+                <p className="text-xs font-black text-secondary">{isMixed ? (isAr ? "قل الآن" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}<span className="hidden font-bold text-white/45 sm:inline">{isAr ? " (اضغط على السبحة أو زر المسافة)" : " (tap the beads or press Space)"}</span></p>
                 <p key={`${dhikr.id}-${isMixed ? count : 0}`} className="misbaha-fade mt-1 text-xl font-black leading-[1.7] text-white sm:text-2xl">{isAr ? dhikr.text : dhikr.en}</p>
                 {nextDhikr && (
                   <p className="mt-1 truncate text-xs font-bold text-white/55">{isAr ? `التالي: ${nextDhikr.text}` : `Next: ${nextDhikr.en}`}</p>
@@ -592,7 +592,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
               <div className="keep-flow mt-6 grid gap-2 border-t sm:flex sm:flex-wrap border-border pt-5">
                 <button type="button" onClick={share} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">
                   {copied ? <Check className="h-4 w-4 text-secondary" /> : <Share2 className="h-4 w-4" />}
-                  {copied ? (isAr ? "تم نسخ الرابط" : "Link copied") : isAr ? "شارك المسبحة، والدال على الخير كفاعله" : "Share the tasbih"}
+                  {copied ? (isAr ? "تم نسخ الرابط" : "Link copied") : isAr ? "شارك السبحة، والدال على الخير كفاعله" : "Share the tasbih"}
                 </button>
                 {!isCustom && (
                   <button type="button" onClick={shareDhikr} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-bold text-primary transition hover:border-secondary hover:bg-secondary/10">

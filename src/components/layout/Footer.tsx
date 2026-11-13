@@ -385,7 +385,7 @@ export const Footer = () => {
               <li><Link to="/water" {...prefetchHandlers("/water")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "سقيا الماء" : "Clean water"}</Link></li>
               <li><Link to="/medical" {...prefetchHandlers("/medical")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المساعدات الطبية" : "Medical aid"}</Link></li>
               <li><Link to="/ten-days" {...prefetchHandlers("/ten-days")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "صدقات العشر الأوائل" : "The ten days"}</Link></li>
-              <li><Link to="/misbaha" {...prefetchHandlers("/misbaha")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "المسبحة الإلكترونية" : "Digital tasbih"}</Link></li>
+              <li><Link to="/misbaha" {...prefetchHandlers("/misbaha")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "السبحة الإلكترونية" : "Digital tasbih"}</Link></li>
               <li><Link to="/nurseries" {...prefetchHandlers("/nurseries")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حضانات اليسر" : "Nurseries & Qur'an houses"}</Link></li>
               <li><Link to="/athar" {...prefetchHandlers("/athar")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "حملة أَثَر التعليمية" : "Athar Education"}</Link></li>
               <li><Link to="/ramadan" {...prefetchHandlers("/ramadan")} className="block text-primary-foreground/85 hover:text-secondary">{lang === "ar" ? "موسم رمضان المبارك" : "Ramadan Season"}</Link></li>

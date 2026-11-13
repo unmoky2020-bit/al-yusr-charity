@@ -49,6 +49,8 @@ export async function drawMisbahaStory(opts: {
   url: string;
   rtl: boolean;
   locale: string;
+  /** «healing»: a heart with a medical cross above the title (sebha for someone sick). */
+  emblem?: "healing";
 }): Promise<Blob> {
   try {
     await document.fonts?.ready;
@@ -81,10 +83,11 @@ export async function drawMisbahaStory(opts: {
   g.fillStyle = glow;
   g.fillRect(0, 0, W, 1100);
 
-  // kicker
+  // kicker (with the healing emblem above it for a sick person's sebha)
+  if (opts.emblem === "healing") drawHealingHeart(g, cx, 92, 1);
   g.fillStyle = LIME;
   g.font = `800 38px ${font}`;
-  g.fillText(opts.kicker, cx, 150);
+  g.fillText(opts.kicker, cx, opts.emblem ? 196 : 150);
 
   // bead ring: lit beads show the share of the goal reached
   const lit = Math.round(Math.max(0, Math.min(1, opts.progress ?? 0)) * 33);
@@ -161,6 +164,38 @@ export async function drawMisbahaStory(opts: {
   g.fillText(opts.rtl ? "مؤسسة اليسر الخيرية · elyusr.org" : "Al-Yusr Charity · elyusr.org", cx, H - 56);
 
   return await new Promise<Blob>((resolve, reject) => c.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/png"));
+}
+
+/** A rose heart with a white medical cross; `cy` is the heart's middle, ~110 px wide at scale 1. */
+export function drawHealingHeart(g: CanvasRenderingContext2D, cx: number, cy: number, scale: number) {
+  g.save();
+  g.translate(cx, cy);
+  g.scale(scale * 0.75, scale * 0.75);
+  g.translate(-100, -100);
+  const grad = g.createLinearGradient(0, 36, 0, 168);
+  grad.addColorStop(0, "#fb7185");
+  grad.addColorStop(1, "#e11d48");
+  g.shadowColor = "rgba(0,0,0,0.35)";
+  g.shadowBlur = 16;
+  g.shadowOffsetY = 6;
+  g.fillStyle = grad;
+  g.beginPath();
+  g.moveTo(100, 168);
+  g.bezierCurveTo(58, 138, 26, 112, 26, 78);
+  g.bezierCurveTo(26, 54, 44, 36, 67, 36);
+  g.bezierCurveTo(82, 36, 94, 44, 100, 56);
+  g.bezierCurveTo(106, 44, 118, 36, 133, 36);
+  g.bezierCurveTo(156, 36, 174, 54, 174, 78);
+  g.bezierCurveTo(174, 112, 142, 138, 100, 168);
+  g.closePath();
+  g.fill();
+  g.shadowColor = "transparent";
+  g.fillStyle = "#fff";
+  roundRect(g, 88, 62, 24, 70, 5);
+  g.fill();
+  roundRect(g, 65, 85, 70, 24, 5);
+  g.fill();
+  g.restore();
 }
 
 function roundRect(g: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {

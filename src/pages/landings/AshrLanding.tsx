@@ -248,7 +248,7 @@ const AshrLanding = () => {
         { href: "/qurbani", ar: "صك الأضحية", en: "Qurbani share" },
         { href: "/farm", ar: "المزرعة الوقفية", en: "Waqf farm" },
         { href: "/water", ar: "سقيا الماء", en: "Clean water" },
-        { href: "/misbaha", ar: "المسبحة الإلكترونية", en: "Digital tasbih" },
+        { href: "/misbaha", ar: "السبحة الإلكترونية", en: "Digital tasbih" },
       ]}
       faq={{
         ar: c.faq.map((f) => ({ q: f.q.ar, a: f.a.ar })),

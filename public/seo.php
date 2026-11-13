@@ -158,12 +158,12 @@ function misbaha_room_page(string $slug, string $lang): array
             'description' => $lang === 'en'
                 ? 'One shared tasbih for everyone: remember Allah and pray for all Muslims, living and dead. Every dhikr adds to one count.'
                 : 'سبحة إلكترونية جماعية مفتوحة للجميع: اذكر الله وادعُ للمسلمين والمسلمات، الأحياء منهم والأموات، وكل ذكر بيتضاف لعدّاد واحد يشارك فيه الكل.',
-            'image' => SITE . '/og/misbaha-group.jpg?v=2026.11',
+            'image' => SITE . '/og/misbaha-group.jpg?v=2026.11b',
             'app' => ['manifest' => '/misbaha-manifest.php?slug=ummah&name=' . rawurlencode('المسلمين'), 'title' => 'سبحة المسلمين'],
         ], 200];
     }
     $kind = in_array($room['kind'] ?? '', ['deceased', 'sick', 'group'], true) ? $room['kind'] : 'deceased';
-    $image = SITE . '/og/misbaha-' . $kind . '.jpg?v=2026.11';
+    $image = SITE . '/og/misbaha-' . $kind . '.jpg?v=2026.11b';
     if (! is_array($room) || empty($room['name'])) {
         return [['title' => 'سبحة مشتركة | مؤسسة اليسر', 'description' => 'شارك بالتسبيح والاستغفار والصلاة على النبي ﷺ، وكل ذكر بيتضاف لعدّاد واحد.', 'image' => $image, 'robots' => 'noindex,follow'], 200];
     }
@@ -261,7 +261,9 @@ function render(string $html, array $p, string $path, string $lang): string
     $canonical = $lang === 'en' ? $en : $ar;
     $title = (string) ($p['title'] ?? '');
     $desc = (string) ($p['description'] ?? '');
-    $image = (string) ($p['image'] ?? '') ?: SITE . '/og-cover.jpg?v=2026.1';
+    // The plain sebha page has its own link preview (not the site's general cover photo).
+    $fallback = $path === '/misbaha' ? SITE . '/og/misbaha.jpg?v=2026.11b' : SITE . '/og-cover.jpg?v=2026.1';
+    $image = (string) ($p['image'] ?? '') ?: $fallback;
 
     // Replace the defaults of index.html (they carry data-rh, so react-helmet takes them over later).
     // A page without its own title keeps the defaults; the canonical and links below are always set.
@@ -288,7 +290,7 @@ function render(string $html, array $p, string $path, string $lang): string
         $set['#<meta\b[^>]*\bname="robots"[^>]*>#s'] = '<meta data-rh="true" name="robots" content="' . e((string) $p['robots']) . '" />';
     }
     // Home-screen app for the misbaha pages: its own manifest (start page) and iPhone title.
-    $app = $p['app'] ?? ($path === '/misbaha' ? ['manifest' => '/misbaha-manifest.php?main=1', 'title' => 'المسبحة'] : null);
+    $app = $p['app'] ?? ($path === '/misbaha' ? ['manifest' => '/misbaha-manifest.php?main=1', 'title' => 'السبحة'] : null);
     if (is_array($app)) {
         $set['#<link\b[^>]*\brel="manifest"[^>]*>#s'] = '<link rel="manifest" href="' . e((string) $app['manifest']) . '" />';
         $set['#<meta\b[^>]*\bname="apple-mobile-web-app-title"[^>]*>#s'] = '<meta name="apple-mobile-web-app-title" content="' . e((string) $app['title']) . '" />';

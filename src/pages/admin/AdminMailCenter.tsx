@@ -28,7 +28,7 @@ const TABS: { id: Tab; label: string; icon: typeof Mail }[] = [
   { id: "overview", label: "نظرة عامة", icon: Inbox },
   { id: "automations", label: "الرسائل التلقائية", icon: Zap },
   { id: "log", label: "سجل الإيميلات", icon: Mail },
-  { id: "misbaha", label: "متابعين المسبحة", icon: Sparkles },
+  { id: "misbaha", label: "متابعين السبحة", icon: Sparkles },
   { id: "settings", label: "الإعدادات", icon: Settings2 },
 ];
 

@@ -43,6 +43,7 @@ export function StoryDialog({ isAr, room, pageUrl, onClose }: { isAr: boolean; r
       url: link("story"),
       rtl: isAr,
       locale,
+      emblem: room.kind === "sick" ? "healing" : undefined,
     })
       .then((b) => {
         if (!alive) return;
