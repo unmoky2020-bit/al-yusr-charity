@@ -1999,11 +1999,12 @@ export const contentChangeRequestsApi = {
     return res;
   },
   async reject(id: number | string, reason?: string) {
+    // The server saves `review_note` (it ignores `reason`): send both so the editor sees why.
     const res = await apiFetch<{ message: string; request?: LaravelContentChangeRequest }>(
       `/content-change-requests/${id}/reject`,
       {
         method: "POST",
-        body: reason ? { reason } : {},
+        body: reason ? { review_note: reason, reason } : {},
       }
     );
     invalidateApiCache("/content-change-requests");
@@ -3360,3 +3361,27 @@ export async function checkAllEndpoints(): Promise<EndpointCheck[]> {
   return checks;
 }
 
+
+// ── Change request details (bundle deploy-2026-11-13b-review) ──
+export type ChangeRequestField = { field: string; before: string | null; after: string | null; changed: boolean };
+export type ChangeRequestDetails = {
+  author: { id: number; name: string; email: string; roles: string[]; deleted?: boolean; active?: boolean } | null;
+  target: { table: string | null; id: number | string | null; title: string | null; exists: boolean };
+  changes: ChangeRequestField[];
+  files: { field: string; original_name: string; mime_type?: string; size?: number }[];
+};
+export const changeRequestDetailsApi = {
+  /** GET /admin/change-requests/details?ids=… → id → details (empty when the bundle is missing). */
+  async get(ids: (string | number)[]): Promise<Record<string, ChangeRequestDetails>> {
+    if (!ids.length) return {};
+    const out: Record<string, ChangeRequestDetails> = {};
+    for (let i = 0; i < ids.length; i += 100) {
+      const res = await apiFetch<{ data?: Record<string, ChangeRequestDetails> }>(
+        `/admin/change-requests/details?ids=${ids.slice(i, i + 100).join(",")}`,
+        { method: "GET", useCache: false },
+      );
+      Object.assign(out, res?.data ?? {});
+    }
+    return out;
+  },
+};
