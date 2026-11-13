@@ -5,7 +5,15 @@
 import csvRaw from "../../docs/seo-keywords.csv?raw";
 import type { SeoProgress, SeoProgressEntry } from "@/data/siteBlocks";
 
-export type SeoKeyword = { keyword: string; group: string; page: string; seenInGsc: boolean; volume: string; note: string };
+export type SeoKeyword = {
+  keyword: string; group: string; page: string;
+  /** Column 4 (impressions / clicks from Search Console) is filled. */
+  seenInGsc: boolean;
+  gscText: string;
+  volume: string;
+  /** Column 6: Search Console average position at the last snapshot (docs/SEO-TRACKER.md), if any. */
+  gscPos: number | null;
+};
 export type SeoTier = "top3" | "top10" | "top20" | "far" | "untracked";
 
 /** Minimal CSV reader (quotes, commas inside quotes, BOM). */
@@ -40,9 +48,10 @@ export function keywordsFromCsv(text: string): SeoKeyword[] {
     keyword: (r[0] ?? "").trim(),
     group: (r[1] ?? "").trim(),
     page: (r[2] ?? "").trim(),
-    seenInGsc: /نعم|yes|✓/i.test(r[3] ?? ""),
+    seenInGsc: (r[3] ?? "").trim() !== "",
+    gscText: (r[3] ?? "").trim(),
     volume: (r[4] ?? "").trim(),
-    note: (r[5] ?? "").trim(),
+    gscPos: Number.isFinite(parseFloat(r[5] ?? "")) ? parseFloat(r[5]) : null,
   })).filter((k) => k.keyword);
 }
 

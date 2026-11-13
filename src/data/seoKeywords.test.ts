@@ -9,7 +9,9 @@ describe("seo keyword map", () => {
     expect(SEO_KEYWORDS.length).toBeGreaterThan(400);
     const mosque = SEO_KEYWORDS.find((k) => k.keyword === "إعمار مسجد في مصر");
     expect(mosque?.page).toBe("/mosques");
-    expect(mosque?.seenInGsc).toBe(true);
+    const name = SEO_KEYWORDS.find((k) => k.keyword === "مؤسسة اليسر الخيرية");
+    expect(name?.seenInGsc).toBe(true);
+    expect(name?.gscPos).toBeCloseTo(2.5);
   });
   it("puts each keyword in a tier", () => {
     expect(tierOf({ pos: 2 })).toBe("top3");

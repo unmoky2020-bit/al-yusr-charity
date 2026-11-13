@@ -15,6 +15,9 @@ import { describeWriteError } from "@/data/api/backendPending";
 import { SITE_BLOCKS_QUERY, siteBlocksAdminApi, type SeoProgress } from "@/data/siteBlocks";
 import { SEO_KEYWORDS, TIER_AR, summarize, tierOf, type SeoTier } from "@/data/seoKeywords";
 
+/** Date of the last Search Console snapshot written into docs/seo-keywords.csv (docs/SEO-TRACKER.md). */
+const GSC_SNAPSHOT = "2026-11-10";
+
 const TIER_CLS: Record<SeoTier, string> = {
   top3: "bg-emerald-600 text-white",
   top10: "bg-emerald-100 text-emerald-800",
@@ -44,10 +47,11 @@ export default function AdminSeoMap() {
     void (async () => {
       try {
         const b = await siteBlocksAdminApi.load();
-        // Keywords the plan already marks as found in Google count as page one until a position is typed.
+        // Until the team types a position, a keyword shows its Search Console average position from
+        // the last snapshot in docs/seo-keywords.csv (rounded), dated with that snapshot.
         const seed: SeoProgress = { ...(b.seo_progress ?? {}) };
         for (const k of SEO_KEYWORDS) {
-          if (!seed[k.keyword] && k.seenInGsc && /الصفحة الأولى/.test(k.note)) seed[k.keyword] = { pos: 10, date: "2026-11-13", note: k.note };
+          if (!seed[k.keyword] && k.gscPos !== null) seed[k.keyword] = { pos: Math.max(1, Math.min(100, Math.round(k.gscPos))), date: GSC_SNAPSHOT, note: `Search Console: ${k.gscText}` };
         }
         setProgress(seed);
         setSaved(JSON.stringify(b.seo_progress ?? {}));
@@ -106,7 +110,7 @@ export default function AdminSeoMap() {
           <div>
             <h1 className="text-2xl font-black text-primary">خريطة السيو</h1>
             <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-              {total} كلمة في {groups.length} مجموعة، لكل مجموعة صفحة مالكة. اكتب ترتيب كل كلمة من Search Console (الأداء ← الاستعلامات ← «الموضع») مرة كل أسبوع، والصفحة دي بتقولك إحنا فين ورايحين فين.
+              {total} كلمة في {groups.length} مجموعة، لكل مجموعة صفحة مالكة. اكتب ترتيب كل كلمة من Search Console (الأداء ← الاستعلامات ← «الموضع») مرة كل أسبوع، والصفحة دي بتقولك إحنا فين ورايحين فين. الأرقام المبدئية من لقطة 10 نوفمبر (docs/SEO-TRACKER.md). البحث من موبايلك بيتأثر بمكانك، فالرقم المعتمد هو «الموضع» في Search Console.
             </p>
           </div>
           <Button onClick={() => void save()} disabled={!dirty || saving} className="gap-1.5">
@@ -195,7 +199,7 @@ export default function AdminSeoMap() {
                     <td className="p-2"><Input value={e?.pos ?? ""} onChange={(ev) => setPos(k.keyword, ev.target.value)} inputMode="numeric" dir="ltr" placeholder="—" className="h-8 text-center font-mono" aria-label={`ترتيب ${k.keyword}`} /></td>
                     <td className="p-2 text-center"><span className={`rounded-full px-2 py-0.5 text-[11px] font-black ${TIER_CLS[t]}`}>{TIER_AR[t]}</span></td>
                     <td className="p-2 text-center font-mono text-[11px] text-muted-foreground" dir="ltr">{e?.date ?? ""}</td>
-                    <td className="p-2"><Input value={e?.note ?? ""} onChange={(ev) => setNote(k.keyword, ev.target.value)} className="h-8 text-xs" placeholder={k.note || ""} /></td>
+                    <td className="p-2"><Input value={e?.note ?? ""} onChange={(ev) => setNote(k.keyword, ev.target.value)} className="h-8 text-xs" placeholder={k.gscText || ""} /></td>
                   </tr>
                 );
               })}
