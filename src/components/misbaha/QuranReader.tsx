@@ -119,6 +119,11 @@ export function QuranReader({ isAr, initial, onClose }: { isAr: boolean; initial
             )}
           </div>
         </article>
+        {/* Tanzil's terms: the text is used unchanged and its source is shown. */}
+        <p className="mx-auto mt-3 max-w-2xl text-center text-[11px] font-bold text-[#7a6435]/80">
+          {isAr ? "نص المصحف بالرسم العثماني من " : "Uthmani Quran text from "}
+          <a href="https://tanzil.net" target="_blank" rel="noopener noreferrer" className="underline">Tanzil.net</a>
+        </p>
       </div>
     </div>
   );
