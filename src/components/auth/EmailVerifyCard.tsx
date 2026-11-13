@@ -93,8 +93,8 @@ export function EmailVerifyCard({ className, layout = "stack" }: {
       {sent ? (
         <div className="mt-4 space-y-3">
           <p className="text-center text-xs leading-relaxed text-muted-foreground">
-            {ar ? <>الرمز اتبعت لـ <b dir="ltr">{user.email}</b>. لو مش في الوارد، بص في «Spam / الرسائل غير المرغوب فيها» أو «الترويج»، واضغط «ليس رسالة غير مرغوب فيها». آخر 3 رموز كلهم شغالين 15 دقيقة.</>
-              : <>The code went to <b dir="ltr">{user.email}</b>. Not in your inbox? Check Spam or Promotions. The last 3 codes all work for 15 minutes.</>}
+            {ar ? <>الرمز اتبعت لـ <b dir="ltr">{user.email}</b>. لو مش في الوارد، بص في «Spam / الرسائل غير المرغوب فيها» أو «الترويج»، واضغط «ليس رسالة غير مرغوب فيها». آخر 3 رموز كلهم شغالين 30 دقيقة.</>
+              : <>The code went to <b dir="ltr">{user.email}</b>. Not in your inbox? Check Spam or Promotions. The last 3 codes all work for 30 minutes.</>}
           </p>
           <CodeInput value={code} onChange={setCode} onComplete={(v) => void verify(v)} disabled={busy} autoFocus />
           <div className="flex flex-wrap items-center justify-center gap-2">

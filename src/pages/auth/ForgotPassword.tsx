@@ -14,7 +14,7 @@ import { CODE_LENGTH, MIN_PASSWORD, newPasswordProblem } from "@/lib/passwordRul
 import { errorReason, toast } from "@/lib/notify";
 
 /**
- * Forgotten password in two steps: the email receives a 6-digit code (15 minutes, 5 tries), then
+ * Forgotten password in two steps: the email receives a 6-digit code (30 minutes, 5 tries), then
  * the code and the new password. Step 1 answers the same for every email, so it never reveals who
  * has an account; the account is signed out everywhere after the change.
  */
@@ -106,7 +106,7 @@ export default function ForgotPassword() {
                   <>
                     {ar ? "اكتب الرمز اللي وصل على " : "Enter the code sent to "}
                     <bdi className="font-bold text-foreground">{email}</bdi>
-                    {ar ? " — صالح 15 دقيقة." : " — valid for 15 minutes."}
+                    {ar ? " — صالح 30 دقيقة." : " — valid for 30 minutes."}
                   </>
                 )}
               </p>
