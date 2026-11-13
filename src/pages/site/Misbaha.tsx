@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { RotateCcw, Vibrate, VibrateOff, Share2, Check, ImageDown, X, Plus, Flame, CalendarDays, Users, Gift, ArrowLeft, Undo2, Maximize2, ChevronDown, Infinity as InfinityIcon } from "lucide-react";
+import { RotateCcw, Vibrate, VibrateOff, Share2, Check, ImageDown, X, Plus, Flame, CalendarDays, Users, Gift, ArrowLeft, ArrowDown, Undo2, Maximize2, ChevronDown, Infinity as InfinityIcon } from "lucide-react";
 import { DHIKR_GROUPS, ALL_DHIKR, MIXED_DHIKR, groupOfDhikr, type Dhikr as DhikrType } from "@/data/adhkar";
 import { misbahaRoomsApi, type MisbahaRoom } from "@/data/api/misbahaRoomsApi";
 import { roomShareText, roomTitle } from "@/data/memorialDuas";
 import { RoomHeader, RoomShareActions } from "@/components/misbaha/RoomHeader";
 import { RoomExtras } from "@/components/misbaha/RoomExtras";
 import { MisbahaFollow } from "@/components/misbaha/MisbahaFollow";
-import { MisbahaGiveCarousel } from "@/components/misbaha/MisbahaGiveCarousel";
 import { StoryDialog } from "@/components/misbaha/StoryDialog";
 import { FocusMode } from "@/components/misbaha/FocusMode";
 import { addToHistory, dayKey, lastWeek, readHistory } from "@/lib/sebhaHistory";
@@ -453,7 +452,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
           <div className={`mx-auto max-w-2xl text-center sm:mt-6 ${roomSlug ? "mt-0" : "mt-3"}`}>
             {roomSlug ? (
               <RoomHeader isAr={isAr} state={roomState} room={room}
-                live={roomState === "ok"} othersRecent={othersRecent} isNew={isNew} fmt={(n) => n.toLocaleString(isAr ? "ar-EG" : "en-US")} />
+                live={roomState === "ok"} othersRecent={othersRecent} fmt={(n) => n.toLocaleString(isAr ? "ar-EG" : "en-US")} />
             ) : (
               <>
                 <div className="mb-3 flex flex-wrap items-center justify-center gap-2 text-xs font-black sm:mb-4">
@@ -482,6 +481,10 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
             {/* ── Counter ── */}
             <div className="flex min-w-0 flex-col items-center">
               <div className="mb-4 flex min-h-[6.5rem] w-full min-w-0 max-w-md flex-col justify-center text-center sm:mb-5" aria-live="polite">
+                <button type="button" onClick={() => document.getElementById("dhikr-choice")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="mx-auto mb-2 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold text-white/80 transition hover:bg-white/15">
+                  <ArrowDown className="h-3.5 w-3.5 text-secondary" /> {isAr ? "يمكنك النزول واختيار الذكر الذي تحبه" : "Scroll down to pick the dhikr you like"}
+                </button>
                 <p className="text-xs font-black text-secondary">{seq ? (isAr ? "قل الآن" : "Say now") : (isAr ? "ذكرك" : "Your dhikr")}<span className="hidden font-bold text-white/45 sm:inline">{isAr ? " (اضغط على السبحة أو زر المسافة)" : " (tap the beads or press Space)"}</span></p>
                 <p key={`${dhikr.id}-${seq ? count : 0}`} className="misbaha-fade mt-1 text-xl font-black leading-[1.7] text-white sm:text-2xl">{isAr ? dhikr.text : dhikr.en}</p>
                 {nextDhikr && (
@@ -604,7 +607,7 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
             </div>
 
             {/* ── Choice of dhikr ── */}
-            <div className="rounded-3xl bg-card p-5 text-foreground shadow-card sm:p-7">
+            <div id="dhikr-choice" className="scroll-mt-24 rounded-3xl bg-card p-5 text-foreground shadow-card sm:p-7">
               <div className="mb-4 grid grid-cols-2 gap-1 rounded-2xl bg-muted/60 p-1" role="radiogroup" aria-label={isAr ? "طريقة الذكر" : "Dhikr mode"}>
                 {MODES.map((m) => {
                   const on = st.mode === m.id;
@@ -729,9 +732,9 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
         </div>
       )}
       {!roomSlug && <MemorialCreate isAr={isAr} onCreated={(slug) => navigate(`/misbaha/${slug}?new=1`)} />}
-      {/* Real open cases only (nothing when there are none); below the seam strip so it stays on the hero edge. */}
-      <MisbahaGiveCarousel isAr={isAr} roomSlug={roomSlug} roomName={roomSlug && room ? room.name : undefined} kind={room?.kind ?? "deceased"} />
       {storyOpen && (room || !roomSlug) && <StoryDialog isAr={isAr} room={room} personal={{ today: st.today }} pageUrl={pageUrl} onClose={() => setStoryOpen(false)} />}
+
+      {isNew && room && roomState === "ok" && <NewRoomHint isAr={isAr} />}
 
       {focus && (
         <FocusMode
@@ -786,6 +789,44 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
     </PageLayout>
   );
 };
+
+/**
+ * Right after creating a shared sebha: a note at the bottom of the screen that the share link is
+ * under the beads. It stays until the visitor scrolls down to the share buttons; if they never do,
+ * it stays at least 20 seconds. Tapping it scrolls there.
+ */
+function NewRoomHint({ isAr }: { isAr: boolean }) {
+  const [shown, setShown] = useState(true);
+  useEffect(() => {
+    const MIN_MS = 20000;
+    const target = () => document.getElementById("room-share");
+    let io: IntersectionObserver | null = null;
+    const watch = () => {
+      const el = target();
+      if (!el || typeof IntersectionObserver === "undefined") return;
+      io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) setShown(false);
+      }, { threshold: 0.5 });
+      io.observe(el);
+    };
+    const t = window.setTimeout(watch, 300); // the buttons render with the room
+    const done = window.setTimeout(() => setShown(false), MIN_MS);
+    return () => { window.clearTimeout(t); window.clearTimeout(done); io?.disconnect(); };
+  }, []);
+  if (!shown) return null;
+  return (
+    <div className="pointer-events-none fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[120] flex justify-center px-4">
+      <button type="button" onClick={() => document.getElementById("room-share")?.scrollIntoView({ behavior: "smooth", block: "center" })}
+        className="misbaha-fade pointer-events-auto flex max-w-md items-center gap-3 rounded-2xl bg-secondary px-4 py-3 text-start text-sm font-black text-slate-950 shadow-cta" role="status">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-950/10"><ArrowDown className="h-5 w-5 animate-bounce motion-reduce:animate-none" /></span>
+        <span>
+          {isAr ? "تم إنشاء السبحة. رابط المشاركة تحت السبحة، أرسله لأهلك وأصحابك." : "Created! The share link is under the beads — send it to family and friends."}
+          <span className="block text-xs font-bold text-slate-950/70">{isAr ? "اضغط هنا للنزول إليه" : "Tap to go there"}</span>
+        </span>
+      </button>
+    </div>
+  );
+}
 
 /** The last 7 days as small bars (this device), so coming back every day shows. */
 function WeekStrip({ isAr, days, fmt }: { isAr: boolean; days: { day: string; date: Date; count: number }[]; fmt: (n: number) => string }) {

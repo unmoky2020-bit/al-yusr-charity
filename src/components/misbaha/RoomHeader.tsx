@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Check, Copy, Image as ImageIcon, Plus, Share2, Sparkles, Users } from "lucide-react";
+import { Check, Copy, Image as ImageIcon, Plus, Share2, Users } from "lucide-react";
 import { WhatsAppIcon } from "@/components/common/icons/WhatsAppIcon";
 import { MISBAHA_ROOMS_PENDING_AR, type MisbahaRoom } from "@/data/api/misbahaRoomsApi";
 import { AddToHome } from "@/components/misbaha/AddToHome";
@@ -7,7 +7,7 @@ import { kindMeta, roomTagline, roomTitle } from "@/data/memorialDuas";
 
 /** Top of a shared sebha page: whose it is, the intention, and the live shared total. */
 export function RoomHeader({
-  isAr, state, room, live, othersRecent, isNew, fmt,
+  isAr, state, room, live, othersRecent, fmt,
 }: {
   isAr: boolean;
   state: "loading" | "ok" | "missing" | "pending" | "none";
@@ -16,8 +16,6 @@ export function RoomHeader({
   live: boolean;
   /** dhikr others added since the page opened */
   othersRecent: number;
-  /** just created: nudge to send it now */
-  isNew: boolean;
   fmt: (n: number) => string;
 }) {
   if (state === "loading") return <div className="mx-auto h-40 max-w-md animate-pulse rounded-3xl bg-white/10" />;
@@ -42,12 +40,6 @@ export function RoomHeader({
   // under it on the first screen of a phone. The share buttons sit under the counter (RoomShareActions).
   return (
     <div>
-      {isNew && (
-        <div className="misbaha-fade mx-auto mb-3 max-w-md rounded-2xl border border-secondary/40 bg-secondary/15 px-3 py-2 text-xs font-bold text-white sm:text-sm">
-          <Sparkles className="me-1 inline h-4 w-4 text-secondary" />
-          {isAr ? "تم إنشاء السبحة. أرسلها الآن للعائلة والأصدقاء من الأزرار تحت السبحة." : "Created! Send it to family and friends with the buttons under the beads."}
-        </div>
-      )}
       <p className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-black text-secondary">{isAr ? `سبحة مشتركة · ${meta.ar}` : `Shared tasbih · ${meta.en}`}</p>
       <h1 className="mt-2 text-2xl font-black leading-tight sm:mt-3 sm:text-4xl md:text-5xl">{roomTitle(room.kind, room.gender, room.name, isAr)}</h1>
       <p className="mt-1.5 text-sm font-bold text-white/80 sm:mt-2 sm:text-base">{roomTagline(room.kind, room.gender, isAr)}</p>
@@ -98,7 +90,7 @@ export function RoomShareActions({
   onStory: () => void;
 }) {
   return (
-    <div className="mt-5 w-full max-w-md text-center">
+    <div id="room-share" className="mt-5 w-full max-w-md scroll-mt-24 text-center">
       <p className="mb-2 text-xs font-black text-white/70">{isAr ? "شارك السبحة، والدال على الخير كفاعله" : "Share it — whoever guides to good shares its reward"}</p>
       <div className="keep-flow grid grid-cols-2 gap-2">
         <a href={waHref} target="_blank" rel="noopener noreferrer" className="col-span-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 text-sm font-black text-white shadow-cta transition hover:brightness-95">
