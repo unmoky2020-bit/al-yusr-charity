@@ -9,7 +9,7 @@ LOG="$HOME/ops-run.log"; PUB="$HOME/domains/elyusr.org/public_html/.well-known/o
 touch "$HOME/.ops-run-13h.done"
 exec >"$LOG" 2>&1
 REPO="https://codeload.github.com/unmoky2020-bit/al-yusr-charity/tar.gz"
-SHA="__SHA__"; ART="494eb871caf7e3ad8e7c7b2bf4043377863e67ab"
+SHA="f2ceda771d419ca4f44be0a24d776eb58fd238d5"; ART="494eb871caf7e3ad8e7c7b2bf4043377863e67ab"
 API="$HOME/domains/api.elyusr.org/public_html"
 echo "== $(date) =="
 
