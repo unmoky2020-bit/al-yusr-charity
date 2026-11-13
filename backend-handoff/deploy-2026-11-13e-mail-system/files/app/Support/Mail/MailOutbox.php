@@ -99,7 +99,14 @@ final class MailOutbox
             report($e); // logging must never block a code
         }
         try {
-            self::deliver($to, $subject, $data + ($track ? ['track' => $token] : []));
+            try {
+                self::deliver($to, $subject, $data + ($track ? ['track' => $token] : []));
+            } catch (\Symfony\Component\Mailer\Exception\TransportExceptionInterface $first) {
+                // The SMTP server sometimes drops the first connection: one quick retry, so a code still arrives.
+                usleep(800000);
+                app('mail.manager')->forgetMailers();
+                self::deliver($to, $subject, $data + ($track ? ['track' => $token] : []));
+            }
             if ($id) {
                 DB::table('mail_outbox')->where('id', $id)->update(['status' => 'sent', 'sent_at' => now(), 'updated_at' => now()]);
             }
