@@ -39,7 +39,7 @@ export function MisbahaFollow({ slug, name, hasTarget, isAr }: { slug: string; n
         <div className="flex items-start gap-3">
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground"><BellRing className="h-5 w-5" /></span>
           <div>
-            <h2 className="text-lg font-black text-primary sm:text-xl">{isAr ? "تابع السبحة على الإيميل" : "Follow this misbaha by email"}</h2>
+            <p role="heading" aria-level={2} className="text-base font-black leading-7 text-primary sm:text-xl">{isAr ? "تابع السبحة على الإيميل" : "Follow this misbaha by email"}</p>
             <p className="mt-1 text-sm leading-6 text-muted-foreground">
               {isAr ? `هنبعتلك ${hasTarget ? "لما «" + name + "» توصل للهدف، و" : ""}ملخص صغير كل جمعة بالعدد ودعاء. من غير إزعاج، وتقدر تلغي في أي وقت.` : "We'll email you when it reaches its goal and a short Friday summary. Unsubscribe anytime."}
             </p>
