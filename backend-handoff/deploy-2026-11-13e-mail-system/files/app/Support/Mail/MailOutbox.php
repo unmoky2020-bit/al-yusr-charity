@@ -50,7 +50,7 @@ final class MailOutbox
     public static function queue(string $to, string $subject, array $data, string $kind, int $priority = 5, ?string $dedupe = null, array $extra = []): ?int
     {
         $to = Str::lower(trim($to));
-        if (! filter_var($to, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($to, FILTER_VALIDATE_EMAIL) || self::undeliverable($to)) {
             return null;
         }
         if ($dedupe && DB::table('mail_outbox')->where('dedupe_key', $dedupe)->exists()) {
@@ -76,6 +76,12 @@ final class MailOutbox
         } catch (\Illuminate\Database\QueryException $e) {
             return null; // unique dedupe_key raced
         }
+    }
+
+    /** Test and placeholder addresses never get mail (they only bounce and hurt the mailbox's reputation). */
+    public static function undeliverable(string $email): bool
+    {
+        return (bool) preg_match('/@(example\.(com|org|net)|test\.com|.*\.(test|invalid|local|example))$/i', $email);
     }
 
     /** Send at once (codes, tests) and log it. Throws when the mail server refuses. */

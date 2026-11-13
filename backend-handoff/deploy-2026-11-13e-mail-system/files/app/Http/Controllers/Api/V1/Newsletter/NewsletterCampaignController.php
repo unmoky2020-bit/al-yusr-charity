@@ -152,6 +152,9 @@ class NewsletterCampaignController extends Controller
             return null;
         }
         $campaign->refresh();
+        // Subscribers confirmed by hand (dashboard / old flow) have no token yet: they need one for their unsubscribe link.
+        NewsletterSubscriber::query()->where('status', 'confirmed')->whereNull('confirmation_token')->get()
+            ->each(fn ($s) => $s->forceFill(['confirmation_token' => \Illuminate\Support\Str::random(64)])->save());
         $self = new self();
         $count = 0;
         NewsletterSubscriber::query()->where('status', 'confirmed')->whereNotNull('confirmation_token')->orderBy('id')
@@ -235,8 +238,10 @@ class NewsletterCampaignController extends Controller
             'blocks.items.max' => 'الرسالة فيها أجزاء كتير (60 بالكتير).',
             'blocks.items.*.type.in' => 'في جزء نوعه مش معروف.',
         ]);
+        // validate() keeps only the nested keys that have rules; the blocks are stored as sent.
         if (array_key_exists('blocks', $data)) {
-            $data['blocks'] = $data['blocks'] === null ? null : json_encode($data['blocks'], JSON_UNESCAPED_UNICODE);
+            $blocks = $request->input('blocks');
+            $data['blocks'] = is_array($blocks) ? json_encode($blocks, JSON_UNESCAPED_UNICODE) : null;
         }
         // html column is NOT NULL in the table: keep a rendered copy for the archive.
         if (! $partial || (array_key_exists('html', $data) && $data['html'] === null)) {
