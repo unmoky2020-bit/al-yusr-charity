@@ -14,7 +14,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 $yes = in_array('--yes', $argv, true);
-$users = App\Models\User::onlyTrashed()->with('roles')->orderBy('id')->get();
+// --keep=5,9,25 : leave these deleted accounts (their review history / activity log stays readable)
+$keep = [];
+foreach ($argv as $a) {
+    if (str_starts_with($a, '--keep=')) {
+        $keep = array_map('intval', explode(',', substr($a, 7)));
+    }
+}
+$users = App\Models\User::onlyTrashed()->with('roles')->whereNotIn('id', $keep ?: [0])->orderBy('id')->get();
 echo "حسابات ممسوحة: " . $users->count() . "\n";
 $linked = [];
 $tables = array_map(fn ($t) => array_values((array) $t)[0], DB::select('SHOW TABLES'));
