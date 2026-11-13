@@ -23,7 +23,7 @@ step "1/5 فحص"
 cd "$APP"; php artisan --version
 P=0
 for f in "${NEW_FILES[@]}"; do
-  if [[ -f "$APP/$f" ]] && ! cmp -s "$APP/$f" "$SRC/$f"; then red "  موجود ومختلف: $f"; P=$((P+1)); fi
+  if [[ -f "$APP/$f" ]] && ! cmp -s "$APP/$f" "$SRC/$f"; then echo "  هيتحدّث (ملف البندل ده): $f"; fi
 done
 [[ -f "$APP/app/Support/StaffAccess.php" ]] || { red "  ناقص: app/Support/StaffAccess.php"; P=$((P+1)); }
 if grep -q "'in:donor,editor,volunteer'" "$APP/$REG"; then echo "  RegisterRequest: المتطوع مسموح بالفعل";

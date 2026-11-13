@@ -35,7 +35,12 @@ class ChangeRequestDetailsController extends Controller
         }
 
         $rows = DB::table('content_change_requests')->whereIn('id', $ids)->get();
-        $authors = User::with('roles')->whereIn('id', $rows->pluck('user_id')->filter()->unique())->get()->keyBy('id');
+        // Authors may have been deleted since (soft delete): still show who sent the change.
+        $q = User::with('roles');
+        if (method_exists(User::class, 'bootSoftDeletes')) {
+            $q->withTrashed();
+        }
+        $authors = $q->whereIn('id', $rows->pluck('user_id')->filter()->unique())->get()->keyBy('id');
 
         $out = [];
         foreach ($rows as $r) {
@@ -51,6 +56,8 @@ class ChangeRequestDetailsController extends Controller
                     'name' => $a->name,
                     'email' => $a->email,
                     'roles' => $a->roles->pluck('slug')->values(),
+                    'deleted' => ! empty($a->deleted_at),
+                    'active' => ($a->status ?? 'active') === 'active',
                 ] : null,
                 'target' => [
                     'table' => $model?->getTable() ?? $this->tableFromUri((string) $r->route_uri),
