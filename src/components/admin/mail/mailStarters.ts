@@ -58,8 +58,8 @@ export const STARTERS: { id: string; name: string; hint: string; subject: string
       hero: { image: "/email/hero-food.jpg", alt: "توزيع كراتين الخير" },
       items: [
         { type: "text", text: "**أهلًا بيك،**" },
-        { type: "text", text: "الشهر ده وصلنا بفضل الله ثم بدعمك لأسر جديدة في المنصورة والقرى حواليها. دي أهم الأرقام:" },
-        { type: "stats", items: [{ value: "1,200", label: "كرتونة خير" }, { value: "6", label: "آبار مياه" }, { value: "85", label: "يتيم مكفول" }] },
+        { type: "text", text: "اكتب هنا ملخص الشهر. الأرقام تحت اكتبها من تقارير التوزيع الحقيقية:" },
+        { type: "stats", items: [{ value: "", label: "كرتونة خير" }, { value: "", label: "بئر مياه" }, { value: "", label: "يتيم مكفول" }] },
         { type: "heading", text: "قصة من الميدان" },
         { type: "text", text: "اكتب هنا قصة قصيرة لأسرة أو طفل، وإيه اللي اتغير في حياتهم." },
         { type: "button", label: "اقرأ القصص كلها", url: "https://elyusr.org/stories" },
@@ -84,7 +84,7 @@ export const STARTERS: { id: string; name: string; hint: string; subject: string
       items: [
         { type: "text", text: "**أهلًا بيك،**" },
         { type: "text", text: "اكتب هنا الاحتياج باختصار: مين، وإيه المطلوب، وليه دلوقتي." },
-        { type: "card", title: "اسم الحملة", text: "سطرين عن الحملة.", image: "/email/hero-water.jpg", url: "https://elyusr.org/campaigns", cta: "ساهم الآن", raised: 32000, target: 50000, badge: "عاجل" },
+        { type: "card", title: "اسم الحملة", text: "سطرين عن الحملة.", image: "/email/hero-water.jpg", url: "https://elyusr.org/campaigns", cta: "ساهم الآن", badge: "عاجل" },
         { type: "button", label: "تبرع الآن", url: "https://elyusr.org/donate", align: "center" },
         { type: "note", text: "كل جنيه بيوصل، وهنبعتلك صور التسليم." },
       ],

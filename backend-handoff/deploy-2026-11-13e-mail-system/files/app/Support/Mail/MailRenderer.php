@@ -305,7 +305,7 @@ final class MailRenderer
                 return '<div style="height:' . $h . 'px;line-height:' . $h . 'px;font-size:0;">&nbsp;</div>';
 
             case 'stats':
-                $items = array_slice(array_values((array) ($b['items'] ?? [])), 0, 3);
+                $items = array_slice(array_values(array_filter((array) ($b['items'] ?? []), fn ($i) => trim((string) ($i['value'] ?? '')) !== '')), 0, 3);
                 if (! $items) {
                     return '';
                 }
