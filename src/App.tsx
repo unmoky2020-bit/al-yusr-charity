@@ -112,6 +112,7 @@ const DonationStatus = lazy(() => import("./pages/DonationStatus.tsx"));
 const NewsletterAction = lazy(() => import("./pages/NewsletterAction.tsx"));
 const VerifyEmail = lazy(() => import("./pages/auth/VerifyEmail.tsx"));
 const MisbahaMailAction = lazy(() => import("./pages/MisbahaMailAction.tsx"));
+const AdminBackups = lazy(() => import("./pages/admin/AdminBackups.tsx"));
 const AdminMailCenter = lazy(() => import("./pages/admin/AdminMailCenter.tsx"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon.tsx"));
 const Campaigns = lazy(() => import("./pages/site/Campaigns.tsx"));
@@ -463,6 +464,7 @@ const App = () => (
                   <Route path="/admin/campaign-results" element={<RequireAuth roles={["admin", "editor"]}><AdminCampaignResults /></RequireAuth>} />
                   <Route path="/admin/site-stats" element={<RequireAuth roles={["admin", "editor"]}><AdminSiteStats /></RequireAuth>} />
                   <Route path="/admin/site-blocks" element={<RequireAuth roles={["admin", "editor"]}><AdminSiteBlocks /></RequireAuth>} />
+                  <Route path="/admin/backups" element={<RequireAuth roles={["admin"]}><AdminBackups /></RequireAuth>} />
                   <Route path="/admin/mail" element={<RequireAuth roles={["admin", "editor"]}><AdminMailCenter /></RequireAuth>} />
                   <Route path="/admin/seo-map" element={<RequireAuth roles={["admin", "editor"]}><AdminSeoMap /></RequireAuth>} />
                   <Route path="/admin/gallery" element={<RequireAuth roles={["admin"]}><AdminGallery /></RequireAuth>} />

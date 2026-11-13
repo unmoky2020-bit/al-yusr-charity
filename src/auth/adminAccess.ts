@@ -41,6 +41,8 @@ export const PAGE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = {
   "/admin/inbox": ["contact_messages.view"],
   "/admin/newsletter": ["newsletter.view"],
   "/admin/mail": ["newsletter.view"],
+  // Super admin only (no permission opens it; the server checks too).
+  "/admin/backups": ["__super_admin_only__"],
   "/admin/review": ["content_change_requests.view"],
   "/admin/volunteers": ["volunteers.view"],
   "/admin/donors": ["donors.view"],
