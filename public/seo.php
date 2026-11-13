@@ -159,6 +159,7 @@ function misbaha_room_page(string $slug, string $lang): array
                 ? 'One shared tasbih for everyone: remember Allah and pray for all Muslims, living and dead. Every dhikr adds to one count.'
                 : 'سبحة إلكترونية جماعية مفتوحة للجميع: اذكر الله وادعُ للمسلمين والمسلمات، الأحياء منهم والأموات، وكل ذكر بيتضاف لعدّاد واحد يشارك فيه الكل.',
             'image' => SITE . '/og/misbaha-group.jpg?v=2026.11',
+            'app' => ['manifest' => '/misbaha-manifest.php?slug=ummah&name=' . rawurlencode('المسلمين'), 'title' => 'سبحة المسلمين'],
         ], 200];
     }
     $kind = in_array($room['kind'] ?? '', ['deceased', 'sick', 'group'], true) ? $room['kind'] : 'deceased';
@@ -181,7 +182,12 @@ function misbaha_room_page(string $slug, string $lang): array
         $desc = $ask . '، وكل ذكر بيتضاف لعدّاد واحد' . ($count > 0 ? ' (اتقال لحد دلوقتي ' . number_format($count) . ' ذكر)' : '') . '. والدال على الخير كفاعله.';
     }
 
-    return [['title' => ($lang === 'en' ? 'Tasbih ' : 'سبحة ') . $title, 'description' => $desc, 'image' => $image, 'robots' => 'noindex,follow'], 200];
+    // «Add to Home Screen» on iPhone reads the manifest and title from this HTML (not from later
+    // JavaScript), so the room's own ones are written here: the icon opens this room, named after it.
+    $short = function_exists('mb_substr') ? mb_substr($name, 0, 24) : $name;
+    $app = ['manifest' => '/misbaha-manifest.php?slug=' . rawurlencode($slug) . '&name=' . rawurlencode($short), 'title' => 'سبحة ' . $short];
+
+    return [['title' => ($lang === 'en' ? 'Tasbih ' : 'سبحة ') . $title, 'description' => $desc, 'image' => $image, 'robots' => 'noindex,follow', 'app' => $app], 200];
 }
 
 function static_page(string $path, string $lang): ?array
@@ -280,6 +286,12 @@ function render(string $html, array $p, string $path, string $lang): string
     $set['#<meta\b[^>]*\bname="twitter:image"[^>]*>#s'] = '<meta data-rh="true" name="twitter:image" content="' . e($image) . '" />';
     if (! empty($p['robots'])) {
         $set['#<meta\b[^>]*\bname="robots"[^>]*>#s'] = '<meta data-rh="true" name="robots" content="' . e((string) $p['robots']) . '" />';
+    }
+    // Home-screen app for the misbaha pages: its own manifest (start page) and iPhone title.
+    $app = $p['app'] ?? ($path === '/misbaha' ? ['manifest' => '/misbaha-manifest.php?main=1', 'title' => 'المسبحة'] : null);
+    if (is_array($app)) {
+        $set['#<link\b[^>]*\brel="manifest"[^>]*>#s'] = '<link rel="manifest" href="' . e((string) $app['manifest']) . '" />';
+        $set['#<meta\b[^>]*\bname="apple-mobile-web-app-title"[^>]*>#s'] = '<meta name="apple-mobile-web-app-title" content="' . e((string) $app['title']) . '" />';
     }
     foreach ($set as $re => $tag) {
         $html = preg_replace($re, str_replace(['\\', '$'], ['\\\\', '\\$'], $tag), $html, 1);

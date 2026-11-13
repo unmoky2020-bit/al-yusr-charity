@@ -521,35 +521,13 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                   const on = !isCustom && g.id === group.id;
                   return (
                     <button key={g.id} type="button" role="tab" aria-selected={on} onClick={() => choose(g.items[0].id)}
-                      className={`rounded-2xl px-3 py-2.5 text-sm font-black transition ${on ? "bg-primary text-primary-foreground" : "bg-muted/60 text-primary hover:bg-secondary/20"}`}>
+                      className={`min-h-11 rounded-2xl px-3 py-2.5 text-sm font-black transition ${on ? "bg-primary text-primary-foreground shadow-soft" : "bg-muted/60 text-primary hover:bg-secondary/20"}`}>
                       {isAr ? g.ar : g.en}
                     </button>
                   );
                 })}
               </div>
 
-              {customDhikr.length > 0 && (
-                <div className="mt-4">
-                  <p className="mb-2 text-xs font-black text-muted-foreground">{isAr ? "أذكارك الخاصة" : "Your own dhikr"}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {customDhikr.map((d) => (
-                      <span key={d.id} className={`inline-flex items-center gap-1 rounded-full border ps-3 text-sm font-black ${d.id === dhikr.id ? "border-secondary bg-secondary/10 text-primary" : "border-border text-primary"}`}>
-                        <button type="button" onClick={() => choose(d.id)} aria-pressed={d.id === dhikr.id} className="py-1.5">{d.text}</button>
-                        <button type="button" onClick={() => removeCustom(d.id)} className="grid h-7 w-7 place-items-center rounded-full text-muted-foreground hover:text-destructive" aria-label={isAr ? `احذف ${d.text}` : `Remove ${d.text}`}><X className="h-3.5 w-3.5" /></button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              <form className="mt-4 flex gap-2" onSubmit={(e) => { e.preventDefault(); addCustom(); }}>
-                <label htmlFor="custom-dhikr" className="sr-only">{isAr ? "اكتب ذكرًا خاصًا بك" : "Add your own dhikr"}</label>
-                <input id="custom-dhikr" value={customText} onChange={(e) => setCustomText(e.target.value)} maxLength={120}
-                  placeholder={isAr ? "اكتب ذكرًا أو دعاءً خاصًا بك" : "Write your own dhikr or dua"}
-                  className="h-11 min-w-0 flex-1 rounded-xl border border-border bg-background px-3 text-sm font-bold outline-none focus:border-secondary" />
-                <button type="submit" disabled={customText.trim().length < 2} className="inline-flex h-11 shrink-0 items-center gap-1 rounded-xl bg-primary px-4 text-sm font-black text-primary-foreground disabled:opacity-40">
-                  <Plus className="h-4 w-4" /> {isAr ? "أضف" : "Add"}
-                </button>
-              </form>
 
               {group.items.length > 1 && !isCustom && (
                 <div className="mt-4 space-y-2">
@@ -558,13 +536,39 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
                     return (
                       <button key={d.id} type="button" onClick={() => choose(d.id)} aria-pressed={on}
                         className={`flex w-full items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-start transition ${on ? "border-secondary bg-secondary/10" : "border-border hover:border-secondary/50"}`}>
-                        <span className="text-sm font-black leading-relaxed text-primary">{isAr ? d.text : d.en}</span>
-                        <span className="shrink-0 rounded-full bg-muted px-2.5 py-0.5 font-mono text-xs font-black text-muted-foreground">{fmt(st.counts[d.id] ?? 0)}</span>
+                        <span className="flex min-w-0 items-center gap-2.5">
+                          <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 ${on ? "border-secondary bg-secondary text-slate-950" : "border-border"}`} aria-hidden>{on && <Check className="h-3 w-3" strokeWidth={3.5} />}</span>
+                          <span className="text-sm font-black leading-relaxed text-primary">{isAr ? d.text : d.en}</span>
+                        </span>
+                        <span className="shrink-0 rounded-full bg-muted px-2.5 py-0.5 font-mono text-xs font-black text-muted-foreground" title={isAr ? "عددك اليوم" : "Today"}>{fmt(st.counts[d.id] ?? 0)}</span>
                       </button>
                     );
                   })}
                 </div>
               )}
+              <div className="mt-5 rounded-2xl border border-dashed border-border p-4">
+                <p className="mb-1 text-sm font-black text-primary">{isAr ? "ذكرك أو دعاؤك الخاص" : "Your own dhikr or dua"}</p>
+                <p className="mb-3 text-xs font-bold leading-relaxed text-muted-foreground">{isAr ? "اكتبه مرة، ويفضل محفوظ على جهازك تختاره في أي وقت." : "Write it once; it stays on this device to pick any time."}</p>
+                {customDhikr.length > 0 && (
+                  <div className="mb-3 flex flex-wrap gap-2">
+                    {customDhikr.map((d) => (
+                      <span key={d.id} className={`inline-flex max-w-full items-center gap-1 rounded-full border ps-3 text-sm font-black ${d.id === dhikr.id ? "border-secondary bg-secondary/10 text-primary" : "border-border text-primary"}`}>
+                        <button type="button" onClick={() => choose(d.id)} aria-pressed={d.id === dhikr.id} className="min-h-9 truncate py-1.5">{d.text}</button>
+                        <button type="button" onClick={() => removeCustom(d.id)} className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-muted-foreground hover:text-destructive" aria-label={isAr ? `احذف ${d.text}` : `Remove ${d.text}`}><X className="h-3.5 w-3.5" /></button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); addCustom(); }}>
+                  <label htmlFor="custom-dhikr" className="sr-only">{isAr ? "اكتب ذكرًا خاصًا بك" : "Add your own dhikr"}</label>
+                  <input id="custom-dhikr" value={customText} onChange={(e) => setCustomText(e.target.value)} maxLength={120} enterKeyHint="done"
+                    placeholder={isAr ? "مثلًا: اللهم اغفر لأبي وارحمه" : "e.g. O Allah, forgive my father"}
+                    className="h-11 min-w-0 flex-1 rounded-xl border border-border bg-background px-3 text-base font-bold outline-none focus:border-secondary sm:text-sm" />
+                  <button type="submit" disabled={customText.trim().length < 2} className="inline-flex h-11 shrink-0 items-center gap-1 rounded-xl bg-primary px-4 text-sm font-black text-primary-foreground disabled:opacity-40">
+                    <Plus className="h-4 w-4" /> {isAr ? "أضف" : "Add"}
+                  </button>
+                </form>
+              </div>
               </>
               )}
 
@@ -604,8 +608,6 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
 
       {roomSlug && room && roomState === "ok" && <RoomExtras isAr={isAr} room={room} pageUrl={pageUrl} />}
       {roomSlug && room && roomState === "ok" && <MisbahaFollow slug={roomSlug} name={room.name} hasTarget={Boolean(room.target_total)} isAr={isAr} />}
-      {/* Cases in need (or ongoing-charity programs while there are none), for the visitors of this misbaha. */}
-      <MisbahaGiveCarousel isAr={isAr} roomSlug={roomSlug} roomName={roomSlug && room ? room.name : undefined} kind={room?.kind ?? "deceased"} />
       {/* The all-Muslims room rides the seam: half on the green hero, half on the light section below. */}
       {!roomSlug && (
         <div className="relative z-10 -mt-10 bg-gradient-to-b from-transparent from-50% to-muted/40 to-50% px-4">
@@ -613,6 +615,8 @@ const MisbahaView = ({ roomSlug, isAr }: { roomSlug?: string; isAr: boolean }) =
         </div>
       )}
       {!roomSlug && <MemorialCreate isAr={isAr} onCreated={(slug) => navigate(`/misbaha/${slug}?new=1`)} />}
+      {/* Real open cases only (nothing when there are none); below the seam strip so it stays on the hero edge. */}
+      <MisbahaGiveCarousel isAr={isAr} roomSlug={roomSlug} roomName={roomSlug && room ? room.name : undefined} kind={room?.kind ?? "deceased"} />
       {storyOpen && room && <StoryDialog isAr={isAr} room={room} pageUrl={pageUrl} onClose={() => setStoryOpen(false)} />}
 
       {summaryOpen && (
