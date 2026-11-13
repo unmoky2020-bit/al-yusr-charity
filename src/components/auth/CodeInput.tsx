@@ -26,7 +26,9 @@ export function CodeInput({ value, onChange, onComplete, disabled, invalid, auto
         maxLength={CODE_LENGTH}
         value={value}
         onChange={(v) => onChange(digitsOf(v).slice(0, CODE_LENGTH))}
-        onComplete={onComplete}
+        // input-otp hands onComplete the raw typed value: Arabic-Indic digits must become 0-9 here too,
+        // or the server rejects the code ("digits:6").
+        onComplete={onComplete ? (v) => onComplete(digitsOf(v).slice(0, CODE_LENGTH)) : undefined}
         disabled={disabled}
         autoFocus={autoFocus}
         inputMode="numeric"

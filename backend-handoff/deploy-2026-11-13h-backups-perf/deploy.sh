@@ -6,6 +6,7 @@
 #    • speed: perf:recache keeps config/route caches fresh (rebuilt within a minute of any edit),
 #      web requests stop sending mail when cron runs, the log rotates daily (14 days)
 #    • mail footer takes the foundation's contact data from the dashboard (org_info)
+#    • email codes: the last 3 sent stay valid (pressing «ابعت رمز جديد» no longer kills the first one)
 #  bash deploy.sh --check  /  bash deploy.sh
 # ─────────────────────────────────────────────────────────────────────────────
 set -Eeuo pipefail
@@ -17,8 +18,8 @@ MIG=database/migrations/2026_11_13_320000_create_backup_runs.php
 REQ_API="require __DIR__.'/api-2026-11-13h-backups.php';"; REQ_CON="require __DIR__.'/console-ops.php';"
 NEW=(app/Support/Backup/BackupRunner.php app/Console/Commands/BackupRun.php app/Console/Commands/PerfRecache.php
      app/Http/Controllers/Api/V1/Backup/BackupController.php routes/api-2026-11-13h-backups.php routes/console-ops.php "$MIG")
-REPLACED=(app/Providers/MailSystemServiceProvider.php app/Support/Mail/MailRenderer.php)
-declare -A EXPECT=([app/Providers/MailSystemServiceProvider.php]=0016330f3ade4b62b3b595ce940a7a45 [app/Support/Mail/MailRenderer.php]=a87b983c44c52971aefec18fe7a81d7c)
+REPLACED=(app/Providers/MailSystemServiceProvider.php app/Support/Mail/MailRenderer.php app/Support/EmailCode.php)
+declare -A EXPECT=([app/Providers/MailSystemServiceProvider.php]=0016330f3ade4b62b3b595ce940a7a45 [app/Support/Mail/MailRenderer.php]=a87b983c44c52971aefec18fe7a81d7c [app/Support/EmailCode.php]=2dc2166c99049bab8843d0f315fef2e0)
 green() { printf '\033[32m%s\033[0m\n' "$*"; }; red() { printf '\033[31m%s\033[0m\n' "$*"; }; step() { printf '\n\033[1m▶ %s\033[0m\n' "$*"; }
 
 step "1/6 فحص"; cd "$APP"; P=0
@@ -67,4 +68,5 @@ last=$(ls -1t storage/app/backups | grep -- '-db-' | head -1)
 [[ -n "$last" ]] && gzip -t "storage/app/backups/$last/database.sql.gz" && echo "  ✓ أول نسخة سليمة: $last ($(du -sh storage/app/backups/$last | cut -f1))" || ok=0
 c=$(curl -s -o /dev/null -w '%{http_code}' -H 'Accept: application/json' https://api.elyusr.org/api/v1/admin/backups || true); echo "  admin/backups بدون دخول → $c (401)"
 php ~/dep-mail/deploy-2026-11-13e-mail-system/selftest.php | tail -1 || true
+php -r 'require "vendor/autoload.php"; $a=require "bootstrap/app.php"; $a->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap(); $e="selftest-code@elyusr.org"; $c1=App\Support\EmailCode::issue("selftest",$e); $c2=App\Support\EmailCode::issue("selftest",$e); echo (App\Support\EmailCode::check("selftest",$e,$c1) ? "  ✓ الرمز الأول لسه شغال بعد ما اتبعت رمز جديد\n" : "  ✗ الرمز الأول اترفض\n"); Illuminate\Support\Facades\Cache::forget("email-code:selftest:".sha1($e));' || ok=0
 (( ok )) && green "✅ خلص. الرجوع: bash $BK/rollback.sh" || red "⚠️ الرجوع: bash $BK/rollback.sh"

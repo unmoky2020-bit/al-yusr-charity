@@ -5,6 +5,7 @@
  * Authentication: Laravel Sanctum Bearer Token stored in localStorage (`alyusr_api_token`).
  * Performance: In-memory cache + Request deduplication + Fast SWR (Stale-While-Revalidate).
  */
+import { digitsOf } from "@/lib/digits";
 import { arabicServerMessage } from "@/lib/serverMessages";
 import { SUGGESTED_ACTIVITIES, SUGGESTED_WHY_US } from "@/data/aboutSuggestions";
 import { announceHeldWrite, isHeldForApproval } from "@/data/api/approval";
@@ -1308,7 +1309,7 @@ export const authApi = {
   async resetPassword(data: { email: string; code: string; password: string }): Promise<{ message?: string }> {
     return apiFetch("/reset-password", {
       method: "POST",
-      body: { ...data, password_confirmation: data.password },
+      body: { ...data, code: digitsOf(data.code), password_confirmation: data.password },
       skipAuthClear: true,
     });
   },
@@ -1328,7 +1329,7 @@ export const authApi = {
 
   /** Confirms the signed-in account's email with the code. */
   async verifyEmail(code: string): Promise<{ message?: string; verified?: boolean }> {
-    return apiFetch("/email/verify", { method: "POST", body: { code } });
+    return apiFetch("/email/verify", { method: "POST", body: { code: digitsOf(code) } });
   },
 
   /** Role slugs + permission slugs of the signed-in account (the dashboard menu follows them). */
