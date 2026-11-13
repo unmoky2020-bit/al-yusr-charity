@@ -20,13 +20,16 @@ use Illuminate\Support\Facades\Mail;
  */
 class BrandMail
 {
+    /** Replies from donors land in the support mailbox, not in info@. */
+    public const REPLY_TO = 'support@elyusr.org';
+
     public static function send(string $to, string $subject, array $data): void
     {
         $data = self::normalize($subject, $data);
         Mail::send(
             ['html' => 'emails.brand', 'text' => 'emails.brand-text'],
             ['m' => $data],
-            fn ($message) => $message->to($to)->subject($subject)
+            fn ($message) => $message->to($to)->subject($subject)->replyTo(self::REPLY_TO, 'دعم مؤسسة اليسر')
         );
     }
 
