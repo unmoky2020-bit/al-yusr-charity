@@ -5,6 +5,7 @@
  * Authentication: Laravel Sanctum Bearer Token stored in localStorage (`alyusr_api_token`).
  * Performance: In-memory cache + Request deduplication + Fast SWR (Stale-While-Revalidate).
  */
+import { arabicServerMessage } from "@/lib/serverMessages";
 import { SUGGESTED_ACTIVITIES, SUGGESTED_WHY_US } from "@/data/aboutSuggestions";
 import { announceHeldWrite, isHeldForApproval } from "@/data/api/approval";
 
@@ -398,13 +399,10 @@ export async function apiFetch<T = unknown>(endpoint: string, options: RequestOp
 
     if (!res.ok) {
       const errorObj = json as { message?: string; error?: string; errors?: Record<string, string[]> } | null;
-      let message = errorObj?.message || errorObj?.error || `HTTP error ${res.status}`;
-      if (errorObj?.errors) {
-        const firstKey = Object.keys(errorObj.errors)[0];
-        if (firstKey && errorObj.errors[firstKey]?.length) {
-          message = `${message}: ${errorObj.errors[firstKey][0]}`;
-        }
-      }
+      // In Arabic for the screen (the API answers in English or with untranslated keys);
+      // the original answer stays in `data`.
+      const raw = errorObj?.message || errorObj?.error || `HTTP error ${res.status}`;
+      const message = arabicServerMessage(raw, errorObj?.errors) || raw;
       throw new ApiError(message, res.status, errorObj?.errors, json);
     }
 

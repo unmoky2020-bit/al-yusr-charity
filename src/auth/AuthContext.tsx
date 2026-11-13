@@ -13,7 +13,7 @@ export type { Role, User };
 export type DbRole = "admin" | "editor" | "case_manager" | "volunteer" | "delegate" | "donor";
 export type VolunteerStatus = NonNullable<User["volunteerStatus"]>;
 
-type LoginResult = { ok: boolean; error?: string };
+type LoginResult = { ok: boolean; error?: string; /** Editor sign-up: the account waits for the team's approval (no session yet). */ pending?: boolean };
 
 type Ctx = {
   user: User | null;
@@ -198,12 +198,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   /**
-   * The server never lets a sign-up choose a team role, so an editor application is a normal account
-   * plus a message in the team inbox; the super admin gives the Editor role from the user's page.
+   * Editor sign-up: POST /register with role "editor". The server creates the account inactive and
+   * a request «editor-registration» in /admin/review; the account works after the team approves it.
+   * City and experience go to the team inbox as a note on the request.
    */
   const registerEditor: Ctx["registerEditor"] = async (data) => {
-    const res = await registerDonor({ name: data.name, email: data.email, password: data.password, phone: data.phone });
-    if (!res.ok) return res;
+    try {
+      await authApi.register({ name: data.name, email: data.email, phone: data.phone, password: data.password, role: "editor" });
+    } catch (err: unknown) {
+      return { ok: false, error: err instanceof Error ? err.message : "فشل التسجيل" };
+    }
     try {
       await submitContactMessage({
         name: data.name,
@@ -211,12 +215,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         phone: data.phone || null,
         section: "general",
         source: "editor-application",
-        message: ["طلب الانضمام كمحرر محتوى (المدونة).", data.city ? `المدينة: ${data.city}` : "", data.bio ? `الخبرة: ${data.bio}` : ""].filter(Boolean).join("\n"),
+        message: ["طلب الانضمام كمحرر محتوى (الطلب في «مراجعة المحتوى»).", data.city ? `المدينة: ${data.city}` : "", data.bio ? `الخبرة: ${data.bio}` : ""].filter(Boolean).join("\n"),
       });
     } catch {
-      /* the account exists; the team still sees the new user in its notifications */
+      /* the request is already in the review queue */
     }
-    return { ok: true };
+    return { ok: true, pending: true };
   };
 
   const applyServerUser = useCallback((lUser: LaravelUser) => {

@@ -56,10 +56,12 @@ const Register = () => {
       return;
     }
     if (role === "editor") {
-      toast({ title: isRTL ? "تم إنشاء حسابك وإرسال طلب المحرر" : "Account created and editor request sent", description: isRTL ? "هتوصلك صلاحية المحرر بعد موافقة الإدارة." : "You'll get editor access once the team approves." });
-    } else {
-      toast({ title: isRTL ? "أهلًا بك في عائلة اليسر" : "Welcome to Al-Yusr" });
+      // The editor account stays inactive until the team approves it in «مراجعة المحتوى».
+      toast({ title: isRTL ? "وصل طلبك كمحرر" : "Editor request received", description: isRTL ? "الحساب هيتفعّل بعد موافقة الإدارة، وبعدها تقدر تسجّل دخول." : "Your account works once the team approves it; then sign in." });
+      nav("/login");
+      return;
     }
+    toast({ title: isRTL ? "أهلًا بك في عائلة اليسر" : "Welcome to Al-Yusr" });
     nav(role === "donor" ? "/dashboard" : "/profile");
   };
 
