@@ -66,6 +66,11 @@ class MailSystemServiceProvider extends ServiceProvider
 
         if (! $this->app->runningInConsole()) {
             $this->app->terminating(function () {
+                // A confirmation or receipt queued by this very request goes out right after the response.
+                if (MailOutbox::$urgent) {
+                    MailOutbox::$urgent = false;
+                    self::guard(fn () => MailOutbox::pump(3));
+                }
                 // At most once a minute (not on every request): keeps the database calm on shared hosting.
                 try {
                     if (! \Illuminate\Support\Facades\Cache::add('mail-hooks-minute', 1, 60)) {

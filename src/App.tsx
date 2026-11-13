@@ -110,6 +110,7 @@ const AdLanding = lazy(() => import("./pages/AdLanding.tsx"));
 const HeroBreakpointTest = lazy(() => import("./pages/HeroBreakpointTest.tsx"));
 const DonationStatus = lazy(() => import("./pages/DonationStatus.tsx"));
 const NewsletterAction = lazy(() => import("./pages/NewsletterAction.tsx"));
+const VerifyEmail = lazy(() => import("./pages/auth/VerifyEmail.tsx"));
 const MisbahaMailAction = lazy(() => import("./pages/MisbahaMailAction.tsx"));
 const AdminMailCenter = lazy(() => import("./pages/admin/AdminMailCenter.tsx"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon.tsx"));
@@ -392,6 +393,7 @@ const App = () => (
                   <Route path="/faqs" element={<FaqCenter />} />
                   <Route path="/faq" element={<Navigate to="/faqs" replace />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/verify-email" element={<VerifyEmail />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/register/volunteer" element={<RegisterVolunteer />} />
                   <Route path="/register/donor" element={<RegisterDonor />} />

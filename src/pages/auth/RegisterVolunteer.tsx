@@ -9,6 +9,8 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { registerProblem } from "@/lib/registerErrors";
+import { MIN_PASSWORD, newPasswordProblem } from "@/lib/passwordRules";
 import { PhoneInput } from "@/components/common/PhoneInput";
 
 const SKILLS_AR = ["ميدان", "توزيع", "تصوير", "محتوى", "تصميم", "ترجمة", "لوجستيات", "تعليم", "صحة"];
@@ -25,17 +27,19 @@ const RegisterVolunteer = () => {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.password.length < 6) {
-      toast({ title: isAR ? "كلمة المرور قصيرة (٦ أحرف على الأقل)" : "Password too short (6+ chars)", variant: "destructive" });
+    const problem = newPasswordProblem(form.password, form.password, isAR ? "ar" : "en");
+    if (problem) {
+      toast({ title: problem, variant: "destructive" });
       return;
     }
     const res = await registerVolunteer({ ...form, skills });
     if (!res.ok) {
-      toast({ title: isAR ? "البريد مسجل بالفعل" : "Email already exists", variant: "destructive" });
+      const p = registerProblem(res.error, isAR);
+      toast({ title: p.title, description: p.description, variant: "destructive" });
       return;
     }
     toast({ title: isAR ? " تم استلام طلبك" : " Application received", description: isAR ? "سيراجع فريق اليسر طلبك خلال 48 ساعة." : "Our team will review within 48 hours.", });
-    nav("/login");
+    nav("/verify-email?next=%2Fprofile");
   };
 
   const skillsList = isAR ? SKILLS_AR : SKILLS_EN;
@@ -140,8 +144,10 @@ const RegisterVolunteer = () => {
                 <Input
                   required
                   type="password"
+                  minLength={MIN_PASSWORD}
+                  autoComplete="new-password"
                   dir={isAR ? "rtl" : "ltr"}
-                  placeholder={isAR ? "كلمة مرور (٦ أحرف+)" : "Password (6+ chars)"}
+                  placeholder={isAR ? `كلمة مرور (${MIN_PASSWORD} أحرف أو أكتر)` : `Password (${MIN_PASSWORD}+ chars)`}
                   className="h-12 ps-10 text-start rounded-xl"
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}

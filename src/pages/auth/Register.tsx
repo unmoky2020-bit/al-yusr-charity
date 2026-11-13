@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { registerProblem } from "@/lib/registerErrors";
 import { PhoneInput } from "@/components/common/PhoneInput";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { SocialSignIn } from "@/components/auth/SocialSignIn";
@@ -47,12 +48,8 @@ const Register = () => {
     }
     setLoading(false);
     if (!res.ok) {
-      const taken = /registered|exists|taken|مسجل|مستخدم/i.test(res.error ?? "");
-      toast({
-        title: taken ? (isRTL ? "هذا البريد مسجّل بالفعل" : "Email already registered") : isRTL ? "تعذّر إنشاء الحساب" : "Could not create the account",
-        description: taken ? (isRTL ? "سجّل الدخول، أو استعد كلمة المرور لو نسيتها." : "Sign in, or reset your password if you forgot it.") : res.error,
-        variant: "destructive",
-      });
+      const p = registerProblem(res.error, isRTL);
+      toast({ title: p.title, description: p.description, variant: "destructive" });
       return;
     }
     if (role === "editor") {
@@ -62,7 +59,7 @@ const Register = () => {
       return;
     }
     toast({ title: isRTL ? "أهلًا بك في عائلة اليسر" : "Welcome to Al-Yusr" });
-    nav(role === "donor" ? "/dashboard" : "/profile");
+    nav(`/verify-email?next=${encodeURIComponent(role === "donor" ? "/dashboard" : "/profile")}`);
   };
 
   const roles: { id: Role; ar: string; en: string; desc: { ar: string; en: string }; icon: typeof Heart }[] = [
@@ -134,7 +131,7 @@ const Register = () => {
                   <Input required type="email" placeholder={isRTL ? "البريد الإلكتروني" : "Email"} className="h-12 ps-9" value={form.email} onChange={(e) => set("email", e.target.value)} />
                 </div>
                 <div className="relative">
-                  <PhoneInput value={form.phone} onChange={(v) => set("phone", v)} />
+                  <PhoneInput required value={form.phone} onChange={(v) => set("phone", v)} />
                 </div>
               </div>
               {(role === "volunteer" || role === "editor") && (

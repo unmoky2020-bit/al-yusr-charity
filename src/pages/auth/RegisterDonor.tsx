@@ -11,6 +11,7 @@ import { useLang } from "@/i18n/LangContext";
 import { useAuth } from "@/auth/AuthContext";
 import { programs } from "@/data/programs";
 import { toast } from "@/hooks/use-toast";
+import { registerProblem } from "@/lib/registerErrors";
 import { PhoneInput } from "@/components/common/PhoneInput";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { SocialSignIn } from "@/components/auth/SocialSignIn";
@@ -31,16 +32,12 @@ const RegisterDonor = () => {
     }
     const res = await registerDonor(form);
     if (!res.ok) {
-      const taken = /registered|exists|taken|مسجل|مستخدم/i.test(res.error ?? "");
-      toast({
-        title: taken ? (lang === "ar" ? "البريد مسجل بالفعل" : "Email already exists") : lang === "ar" ? "تعذّر إنشاء الحساب" : "Could not create the account",
-        description: taken ? (lang === "ar" ? "سجّل الدخول، أو استعد كلمة المرور لو نسيتها." : "Sign in, or reset your password.") : res.error,
-        variant: "destructive",
-      });
+      const p = registerProblem(res.error, lang === "ar");
+      toast({ title: p.title, description: p.description, variant: "destructive" });
       return;
     }
     toast({ title: lang === "ar" ? "أهلًا بك في عائلة اليسر" : "Welcome to the Al-Yusr family" });
-    nav("/dashboard");
+    nav("/verify-email?next=%2Fdashboard");
   };
 
   return (
